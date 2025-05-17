@@ -1,5 +1,4 @@
-#ifndef WINDOW_HPP
-#define WINDOW_HPP
+#pragma once
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
@@ -17,5 +16,3 @@ namespace vex {
             SDL_Window* GetSDLWindow();
     };
 }
-
-#endif

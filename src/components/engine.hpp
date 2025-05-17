@@ -1,9 +1,8 @@
-#ifndef ENGINE_HPP
-#define ENGINE_HPP
-
 #pragma once
+
 #include <memory>
 #include <SDL3/SDL.h>
+
 #include "window.hpp"
 #include "backends/vulkan/interface.hpp"
 
@@ -32,5 +31,3 @@ protected:
     bool m_running = true;
 };
 }
-
-#endif

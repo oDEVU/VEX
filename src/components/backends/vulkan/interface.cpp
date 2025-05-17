@@ -204,14 +204,10 @@ namespace vex {
         }
 
         // Initialize rendering resources
-        SDL_Log("Initializing all Vulkan objects needed for rendering...");
-        createSwapchain();
-        createImageViews();
-        createRenderPass();
-        createFramebuffers();
-        createCommandPool();
-        createCommandBuffers();
-        createSyncObjects();
+        SDL_Log("Initializing Swapchain Manager...");
+
+        m_swapchain_manager = std::make_unique<VulkanSwapchainManager>(context,m_window);
+        m_swapchain_manager->createSwapchain();
 
         SDL_Log("Vulkan interface initialized successfully");
     }
@@ -219,7 +215,7 @@ namespace vex {
     Interface::~Interface() {
         vkDeviceWaitIdle(context.device);
 
-        cleanupSwapchain();
+        m_swapchain_manager->cleanupSwapchain();
 
         // Destroy sync objects
         if (context.imageAvailableSemaphore) {
@@ -297,23 +293,15 @@ namespace vex {
 
         m_window = window;
 
-        // Initialize all Vulkan objects needed for rendering
-
-        SDL_Log("Initializing all Vulkan objects needed for rendering...");
-        createSwapchain();
-        createImageViews();
-        createRenderPass();
-        createFramebuffers();
-        createCommandPool();
-        createCommandBuffers();
-        createSyncObjects();
+        SDL_Log("Initializing Swapchain...");
+        m_swapchain_manager->createSwapchain();
     }
 
     void Interface::unbindWindow() {
         if (!context.surface) return;
 
         vkDeviceWaitIdle(context.device);
-        cleanupSwapchain();
+        m_swapchain_manager->cleanupSwapchain();
 
         vkDestroySurfaceKHR(context.instance, context.surface, nullptr);
         context.surface = VK_NULL_HANDLE;
@@ -345,7 +333,7 @@ namespace vex {
         );
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-            recreateSwapchain();
+            m_swapchain_manager->createSwapchain();
             return;
         } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
             throw std::runtime_error("Failed to acquire swapchain image");
@@ -417,306 +405,9 @@ namespace vex {
         result = vkQueuePresentKHR(context.presentQueue, &presentInfo);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-            recreateSwapchain();
+            m_swapchain_manager->recreateSwapchain();
         } else if (result != VK_SUCCESS) {
             throw std::runtime_error("Failed to present swapchain image");
-        }
-    }
-
-    // Helper methods implementation
-    void Interface::createSwapchain() {
-        SDL_Log("Creating Swapchain");
-        // Query swapchain support
-        VkSurfaceCapabilitiesKHR capabilities;
-        if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(context.physicalDevice, context.surface, &capabilities) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to get surface capabilities");
-        }
-
-        uint32_t formatCount;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(context.physicalDevice, context.surface, &formatCount, nullptr);
-        if (formatCount == 0) {
-            throw std::runtime_error("No surface formats supported");
-        }
-        std::vector<VkSurfaceFormatKHR> formats(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(context.physicalDevice, context.surface, &formatCount, formats.data());
-
-        uint32_t presentModeCount;
-        vkGetPhysicalDeviceSurfacePresentModesKHR(context.physicalDevice, context.surface, &presentModeCount, nullptr);
-        if (presentModeCount == 0) {
-            throw std::runtime_error("No present modes supported");
-        }
-
-        std::vector<VkPresentModeKHR> presentModes(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(context.physicalDevice, context.surface, &presentModeCount, presentModes.data());
-
-        // Choose swapchain settings
-        VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(formats);
-        VkPresentModeKHR presentMode = chooseSwapPresentMode(presentModes);
-        VkExtent2D extent = chooseSwapExtent(capabilities);
-
-        uint32_t imageCount = capabilities.minImageCount + 1;
-        if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
-            imageCount = capabilities.maxImageCount;
-        }
-
-        // Create swapchain
-        VkSwapchainCreateInfoKHR createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        createInfo.surface = context.surface;
-        createInfo.minImageCount = imageCount;
-        createInfo.imageFormat = surfaceFormat.format;
-        createInfo.imageColorSpace = surfaceFormat.colorSpace;
-        createInfo.imageExtent = extent;
-        createInfo.imageArrayLayers = 1;
-        createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-
-        uint32_t queueFamilyIndices[] = {context.graphicsQueueFamily, context.presentQueueFamily};
-        if (context.graphicsQueueFamily != context.presentQueueFamily) {
-            createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-            createInfo.queueFamilyIndexCount = 2;
-            createInfo.pQueueFamilyIndices = queueFamilyIndices;
-        } else {
-            createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            createInfo.queueFamilyIndexCount = 0;
-            createInfo.pQueueFamilyIndices = nullptr;
-        }
-
-        createInfo.preTransform = capabilities.currentTransform;
-        createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-        createInfo.presentMode = presentMode;
-        createInfo.clipped = VK_TRUE;
-        createInfo.oldSwapchain = VK_NULL_HANDLE;
-
-        if (vkCreateSwapchainKHR(context.device, &createInfo, nullptr, &context.swapchain) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create swapchain");
-        }
-
-        // Get swapchain images
-        vkGetSwapchainImagesKHR(context.device, context.swapchain, &imageCount, nullptr);
-        context.swapchainImages.resize(imageCount);
-        vkGetSwapchainImagesKHR(context.device, context.swapchain, &imageCount, context.swapchainImages.data());
-
-        context.swapchainImageFormat = surfaceFormat.format;
-        context.swapchainExtent = extent;
-    }
-
-    void Interface::createImageViews() {
-        SDL_Log("creating imageviews");
-        context.swapchainImageViews.resize(context.swapchainImages.size());
-
-        for (size_t i = 0; i < context.swapchainImages.size(); i++) {
-            VkImageViewCreateInfo createInfo = {};
-            createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            createInfo.image = context.swapchainImages[i];
-            createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format = context.swapchainImageFormat;
-            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            createInfo.subresourceRange.baseMipLevel = 0;
-            createInfo.subresourceRange.levelCount = 1;
-            createInfo.subresourceRange.baseArrayLayer = 0;
-            createInfo.subresourceRange.layerCount = 1;
-
-            if (vkCreateImageView(context.device, &createInfo, nullptr, &context.swapchainImageViews[i]) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create image views");
-            }
-        }
-    }
-
-    void Interface::createRenderPass() {
-        SDL_Log("creating renderpass");
-        VkAttachmentDescription colorAttachment = {};
-        colorAttachment.format = context.swapchainImageFormat;
-        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-        VkAttachmentReference colorAttachmentRef = {};
-        colorAttachmentRef.attachment = 0;
-        colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-        VkSubpassDescription subpass = {};
-        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-        subpass.colorAttachmentCount = 1;
-        subpass.pColorAttachments = &colorAttachmentRef;
-
-        VkSubpassDependency dependency = {};
-        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-        dependency.dstSubpass = 0;
-        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.srcAccessMask = 0;
-        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-        VkRenderPassCreateInfo renderPassInfo = {};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-        renderPassInfo.attachmentCount = 1;
-        renderPassInfo.pAttachments = &colorAttachment;
-        renderPassInfo.subpassCount = 1;
-        renderPassInfo.pSubpasses = &subpass;
-        renderPassInfo.dependencyCount = 1;
-        renderPassInfo.pDependencies = &dependency;
-
-        if (vkCreateRenderPass(context.device, &renderPassInfo, nullptr, &context.renderPass) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create render pass");
-        }
-    }
-
-    void Interface::createFramebuffers() {
-        SDL_Log("creating framebuffers");
-        context.swapchainFramebuffers.resize(context.swapchainImageViews.size());
-
-        for (size_t i = 0; i < context.swapchainImageViews.size(); i++) {
-            VkImageView attachments[] = {context.swapchainImageViews[i]};
-
-            VkFramebufferCreateInfo framebufferInfo = {};
-            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            framebufferInfo.renderPass = context.renderPass;
-            framebufferInfo.attachmentCount = 1;
-            framebufferInfo.pAttachments = attachments;
-            framebufferInfo.width = context.swapchainExtent.width;
-            framebufferInfo.height = context.swapchainExtent.height;
-            framebufferInfo.layers = 1;
-
-            if (vkCreateFramebuffer(context.device, &framebufferInfo, nullptr, &context.swapchainFramebuffers[i]) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create framebuffer");
-            }
-        }
-    }
-
-    void Interface::createCommandPool() {
-        SDL_Log("creating command pools");
-        VkCommandPoolCreateInfo poolInfo = {};
-        poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-        poolInfo.queueFamilyIndex = context.graphicsQueueFamily;
-
-        if (vkCreateCommandPool(context.device, &poolInfo, nullptr, &context.commandPool) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create command pool");
-        }
-    }
-
-    void Interface::createCommandBuffers() {
-        SDL_Log("creating command buffers");
-        context.commandBuffers.resize(context.swapchainFramebuffers.size());
-
-        VkCommandBufferAllocateInfo allocInfo = {};
-        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.commandPool = context.commandPool;
-        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount = (uint32_t)context.commandBuffers.size();
-
-        if (vkAllocateCommandBuffers(context.device, &allocInfo, context.commandBuffers.data()) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to allocate command buffers");
-        }
-    }
-
-    void Interface::createSyncObjects() {
-        SDL_Log("Creating synchronization objects...");
-
-        VkSemaphoreCreateInfo semaphoreInfo = {};
-        semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-        VkFenceCreateInfo fenceInfo = {};
-        fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-        fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;  // Start signaled
-
-        VkResult result;
-
-        result = vkCreateSemaphore(context.device, &semaphoreInfo, nullptr, &context.imageAvailableSemaphore);
-        if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create image available semaphore");
-        }
-
-        result = vkCreateSemaphore(context.device, &semaphoreInfo, nullptr, &context.renderFinishedSemaphore);
-        if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create render finished semaphore");
-        }
-
-        result = vkCreateFence(context.device, &fenceInfo, nullptr, &context.inFlightFence);
-        if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create in-flight fence");
-        }
-
-        SDL_Log("Created sync objects: fence=%p", (void*)context.inFlightFence);
-    }
-
-    void Interface::cleanupSwapchain() {
-        SDL_Log("cleaning up swapchains");
-        for (auto framebuffer : context.swapchainFramebuffers) {
-            vkDestroyFramebuffer(context.device, framebuffer, nullptr);
-        }
-
-        for (auto imageView : context.swapchainImageViews) {
-            vkDestroyImageView(context.device, imageView, nullptr);
-        }
-
-        vkDestroySwapchainKHR(context.device, context.swapchain, nullptr);
-    }
-
-    void Interface::recreateSwapchain() {
-        SDL_Log("recreating swapchains");
-        vkDeviceWaitIdle(context.device);
-        cleanupSwapchain();
-
-        createSwapchain();
-        createImageViews();
-        createRenderPass();
-        createFramebuffers();
-        createCommandBuffers();
-    }
-
-    VkSurfaceFormatKHR Interface::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
-        SDL_Log("choosing swapsurface format");
-        for (const auto& availableFormat : availableFormats) {
-            if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
-                availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-                return availableFormat;
-            }
-        }
-        return availableFormats[0];
-    }
-
-    VkPresentModeKHR Interface::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
-        SDL_Log("choosing swap present mode");
-        for (const auto& availablePresentMode : availablePresentModes) {
-            if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
-                return availablePresentMode;
-            }
-        }
-        return VK_PRESENT_MODE_FIFO_KHR;
-    }
-
-    VkExtent2D Interface::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
-        SDL_Log("choosing swap extent");
-        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-            return capabilities.currentExtent;
-        } else {
-            int width, height;
-            SDL_GetWindowSizeInPixels(m_window, &width, &height);
-
-            VkExtent2D actualExtent = {
-                static_cast<uint32_t>(width),
-                static_cast<uint32_t>(height)
-            };
-
-            actualExtent.width = std::clamp(
-                actualExtent.width,
-                capabilities.minImageExtent.width,
-                capabilities.maxImageExtent.width);
-            actualExtent.height = std::clamp(
-                actualExtent.height,
-                capabilities.minImageExtent.height,
-                capabilities.maxImageExtent.height);
-
-            return actualExtent;
         }
     }
 }
