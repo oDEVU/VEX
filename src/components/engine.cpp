@@ -60,7 +60,15 @@ Engine::~Engine() {
 void Engine::processEvent(const SDL_Event& event) {}
 void Engine::update(float deltaTime) {}
 void Engine::render() {
-    m_interface->renderFrame();
+
+    /* Temponary matrixes FIX */
+    int drawableWidth = 0, drawableHeight = 0;
+    SDL_GetWindowSizeInPixels(m_window->GetSDLWindow(), &drawableWidth, &drawableHeight);
+
+    glm::mat4 view = glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), drawableWidth / (float)drawableHeight, 0.1f, 100.0f);
+    proj[1][1] *= -1;
+    m_interface->renderFrame(view, proj);
 }
 
 }

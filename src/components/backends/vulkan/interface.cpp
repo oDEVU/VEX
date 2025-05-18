@@ -9,7 +9,7 @@
 #include <set>
 
 namespace vex {
-    Interface::Interface(SDL_Window* window) {
+    Interface::Interface(SDL_Window* window) : window_(window) {
         constexpr uint32_t apiVersion = VK_API_VERSION_1_3;
 
         // Initialize Volk with SDL's loader
@@ -73,8 +73,6 @@ namespace vex {
         if (!SDL_Vulkan_CreateSurface(window, context.instance, nullptr, &context.surface)) {
             throw std::runtime_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
-
-        m_window = window;
 
         // Pick physical device
         uint32_t deviceCount = 0;
@@ -206,8 +204,32 @@ namespace vex {
         // Initialize rendering resources
         SDL_Log("Initializing Swapchain Manager...");
 
-        m_swapchain_manager = std::make_unique<VulkanSwapchainManager>(context,m_window);
-        m_swapchain_manager->createSwapchain();
+        swapchainManager_ = std::make_unique<VulkanSwapchainManager>(context,window_);
+        swapchainManager_->createSwapchain();
+
+        // Initialize rendering resources
+        SDL_Log("Initializing Resources...");
+        resources_ = std::make_unique<VulkanResources>(context);
+        SDL_Log("Initializing Pipeline...");
+        pipeline_ = std::make_unique<VulkanPipeline>(context);
+
+        // Define vertex layout
+        VkVertexInputBindingDescription bindingDesc{};
+        bindingDesc.binding = 0;
+        bindingDesc.stride = sizeof(Vertex);
+        bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+        std::vector<VkVertexInputAttributeDescription> attributes(3);
+        attributes[0] = {0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position)};
+        attributes[1] = {1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)};
+        attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)};
+
+        pipeline_->createGraphicsPipeline(
+            "shaders/basic.vert.spv",
+            "shaders/basic.frag.spv",
+            bindingDesc,
+            attributes
+        );
 
         SDL_Log("Vulkan interface initialized successfully");
     }
@@ -215,20 +237,23 @@ namespace vex {
     Interface::~Interface() {
         vkDeviceWaitIdle(context.device);
 
-        m_swapchain_manager->cleanupSwapchain();
+        swapchainManager_->cleanupSwapchain();
 
-        // Destroy sync objects
-        if (context.imageAvailableSemaphore) {
-            vkDestroySemaphore(context.device, context.imageAvailableSemaphore, nullptr);
-            context.imageAvailableSemaphore = VK_NULL_HANDLE;
-        }
-        if (context.renderFinishedSemaphore) {
-            vkDestroySemaphore(context.device, context.renderFinishedSemaphore, nullptr);
-            context.renderFinishedSemaphore = VK_NULL_HANDLE;
-        }
-        if (context.inFlightFence) {
-            vkDestroyFence(context.device, context.inFlightFence, nullptr);
-            context.inFlightFence = VK_NULL_HANDLE;
+
+        // Cleanup synchronization objects
+        for (size_t i = 0; i < context.MAX_FRAMES_IN_FLIGHT; i++) {
+            if (context.imageAvailableSemaphores[i]) {
+                vkDestroySemaphore(context.device, context.imageAvailableSemaphores[i], nullptr);
+                context.imageAvailableSemaphores[i] = VK_NULL_HANDLE;
+            }
+            if (context.renderFinishedSemaphores[i]) {
+                vkDestroySemaphore(context.device, context.renderFinishedSemaphores[i], nullptr);
+                context.renderFinishedSemaphores[i] = VK_NULL_HANDLE;
+            }
+            if (context.inFlightFences[i]) {
+                vkDestroyFence(context.device, context.inFlightFences[i], nullptr);
+                context.inFlightFences[i] = VK_NULL_HANDLE;
+            }
         }
 
         context.commandBuffers.clear();
@@ -281,6 +306,61 @@ namespace vex {
         SDL_Vulkan_UnloadLibrary();
     }
 
+    Model& Interface::loadModel(const std::string& path, const std::string& name) {
+        SDL_Log("Loading model: %s...", name);
+        if (modelRegistry_.count(name)) {
+            throw std::runtime_error("Model '" + name + "' already exists");
+        }
+
+        MeshData meshData;
+        meshData.loadFromFile(path);
+
+        models_.emplace_back();
+        Model& model = models_.back();
+        model.textureName = name;  // Set texture name to model name
+        model.meshData = std::move(meshData);
+
+        vulkanMeshes_.push_back(std::make_unique<VulkanMesh>(context));
+        vulkanMeshes_.back()->upload(model.meshData);
+
+        if (!model.meshData.texturePath.empty()) {
+            SDL_Log("Loading texture...");
+            resources_->loadTexture(model.meshData.texturePath, name);
+        }
+
+        modelRegistry_[name] = models_.size() - 1;
+        return model;
+    }
+
+    void Interface::unloadModel(const std::string& name) {
+        auto it = modelRegistry_.find(name);
+        if (it == modelRegistry_.end()) return;
+
+        const size_t index = it->second;
+
+        // Remove GPU resources
+        vulkanMeshes_[index].reset();
+        models_.erase(models_.begin() + index);
+        vulkanMeshes_.erase(vulkanMeshes_.begin() + index);
+
+        // Update registry
+        modelRegistry_.erase(name);
+        for (auto& pair : modelRegistry_) {
+            if (pair.second > index) pair.second--;
+        }
+
+        // Unload texture
+        resources_->unloadTexture(name);
+    }
+
+    Model* Interface::getModel(const std::string& name) {
+        auto it = modelRegistry_.find(name);
+        return (it != modelRegistry_.end()) ? &models_[it->second] : nullptr;
+    }
+    void Interface::createDefaultTexture() {
+        resources_->createDefaultTexture();
+    }
+
     void Interface::bindWindow(SDL_Window* window) {
 
         SDL_Log("Binding window...");
@@ -291,107 +371,221 @@ namespace vex {
             throw std::runtime_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
 
-        m_window = window;
+        window_ = window;
 
         SDL_Log("Initializing Swapchain...");
-        m_swapchain_manager->createSwapchain();
+        swapchainManager_->createSwapchain();
     }
 
     void Interface::unbindWindow() {
         if (!context.surface) return;
 
         vkDeviceWaitIdle(context.device);
-        m_swapchain_manager->cleanupSwapchain();
+        swapchainManager_->cleanupSwapchain();
 
         vkDestroySurfaceKHR(context.instance, context.surface, nullptr);
         context.surface = VK_NULL_HANDLE;
     }
 
-    void Interface::renderFrame() {
-        // Wait for previous frame to finish
-        VkResult result = vkWaitForFences(context.device, 1, &context.inFlightFence, VK_TRUE, UINT64_MAX);
-        if (result != VK_SUCCESS) {
-            SDL_Log("Failed to wait for fence: %d", result);
-            throw std::runtime_error("Failed to wait for fence");
-        }
+    void Interface::renderFrame(const glm::mat4& view, const glm::mat4& proj) {
+        // Wait for previous frame
+        vkWaitForFences(
+            context.device,
+            1,
+            &context.inFlightFences[context.currentFrame],
+            VK_TRUE,
+            UINT64_MAX
+        );
 
-        // Reset the fence before use
-        result = vkResetFences(context.device, 1, &context.inFlightFence);
-        if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to reset fence");
-        }
-
-        // Acquire next image from swapchain
-        uint32_t imageIndex;
-        result = vkAcquireNextImageKHR(
+        // Acquire next image
+        VkResult result = vkAcquireNextImageKHR(
             context.device,
             context.swapchain,
             UINT64_MAX,
-            context.imageAvailableSemaphore,
+            context.imageAvailableSemaphores[context.currentFrame],
             VK_NULL_HANDLE,
-            &imageIndex
+            &context.currentImageIndex
         );
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-            m_swapchain_manager->createSwapchain();
+            swapchainManager_->recreateSwapchain();
             return;
-        } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
-            throw std::runtime_error("Failed to acquire swapchain image");
         }
 
-        // Reset command buffer
-        vkResetCommandBuffer(context.commandBuffers[imageIndex], 0);
+        // Reset fence
+        vkResetFences(context.device, 1, &context.inFlightFences[context.currentFrame]);
+
+        // Update camera UBO
+        resources_->updateCameraUBO({view, proj});
+
+        // Bind default texture explicitly
+        VkImageView textureView = resources_->getTextureView("default");
+        resources_->updateTextureDescriptor(context.currentFrame, textureView);
+
+        if (vulkanMeshes_.empty()) {
+
+            // Record command buffer
+            VkCommandBuffer commandBuffer = context.commandBuffers[context.currentImageIndex];
+            vkResetCommandBuffer(commandBuffer, 0);
+
+            // Still submit minimal command buffer
+            VkCommandBufferBeginInfo beginInfo{};
+            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+            vkBeginCommandBuffer(context.commandBuffers[context.currentImageIndex], &beginInfo);
+
+            VkRenderPassBeginInfo renderPassInfo = {};
+                    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+                    renderPassInfo.renderPass = context.renderPass;
+                    renderPassInfo.framebuffer = context.swapchainFramebuffers[context.currentImageIndex];
+                    renderPassInfo.renderArea.offset = {0, 0};
+                    renderPassInfo.renderArea.extent = context.swapchainExtent;
+
+                    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+                    renderPassInfo.clearValueCount = 1;
+                    renderPassInfo.pClearValues = &clearColor;
+
+                    vkCmdBeginRenderPass(context.commandBuffers[context.currentImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+                    vkCmdEndRenderPass(context.commandBuffers[context.currentImageIndex]);
+
+                    if (vkEndCommandBuffer(context.commandBuffers[context.currentImageIndex]) != VK_SUCCESS) {
+                        throw std::runtime_error("Failed to record command buffer");
+                    }
+
+                    // Submit command buffer
+                    VkSubmitInfo submitInfo = {};
+                    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+                    VkSemaphore waitSemaphores[] = {context.imageAvailableSemaphores[context.currentFrame]};
+                    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+                    submitInfo.waitSemaphoreCount = 1;
+                    submitInfo.pWaitSemaphores = waitSemaphores;
+                    submitInfo.pWaitDstStageMask = waitStages;
+                    submitInfo.commandBufferCount = 1;
+                    submitInfo.pCommandBuffers = &context.commandBuffers[context.currentImageIndex];
+
+                    VkSemaphore signalSemaphores[] = {context.renderFinishedSemaphores[context.currentFrame]};
+                    submitInfo.signalSemaphoreCount = 1;
+                    submitInfo.pSignalSemaphores = signalSemaphores;
+
+                    if (vkQueueSubmit(context.graphicsQueue, 1, &submitInfo, context.inFlightFences[context.currentFrame]) != VK_SUCCESS) {
+                        throw std::runtime_error("Failed to submit draw command buffer");
+                    }
+
+                    // Present the frame
+                    VkPresentInfoKHR presentInfo = {};
+                    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+                    presentInfo.waitSemaphoreCount = 1;
+                    presentInfo.pWaitSemaphores = signalSemaphores;
+
+                    VkSwapchainKHR swapchains[] = {context.swapchain};
+                    presentInfo.swapchainCount = 1;
+                    presentInfo.pSwapchains = swapchains;
+                    presentInfo.pImageIndices = &context.currentImageIndex;
+                    presentInfo.pResults = nullptr;
+
+                    result = vkQueuePresentKHR(context.presentQueue, &presentInfo);
+
+                    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+                        swapchainManager_->recreateSwapchain();
+                    } else if (result != VK_SUCCESS) {
+                        throw std::runtime_error("Failed to present swapchain image");
+                    }
+            return;
+        }
 
         // Record command buffer
-        VkCommandBufferBeginInfo beginInfo = {};
+        VkCommandBuffer commandBuffer = context.commandBuffers[context.currentImageIndex];
+        vkResetCommandBuffer(commandBuffer, 0);
+
+        VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        beginInfo.flags = 0;
-        beginInfo.pInheritanceInfo = nullptr;
+        vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
-        if (vkBeginCommandBuffer(context.commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to begin recording command buffer");
-        }
-
-        VkRenderPassBeginInfo renderPassInfo = {};
+        // Render pass
+        VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         renderPassInfo.renderPass = context.renderPass;
-        renderPassInfo.framebuffer = context.swapchainFramebuffers[imageIndex];
-        renderPassInfo.renderArea.offset = {0, 0};
+        renderPassInfo.framebuffer = context.swapchainFramebuffers[context.currentImageIndex];
         renderPassInfo.renderArea.extent = context.swapchainExtent;
 
-        VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+        VkClearValue clearColor = {{{0.1f, 0.1f, 0.1f, 1.0f}}};
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 
-        vkCmdBeginRenderPass(context.commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        vkCmdEndRenderPass(context.commandBuffers[imageIndex]);
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-        if (vkEndCommandBuffer(context.commandBuffers[imageIndex]) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to record command buffer");
+        // Draw models
+        for (size_t i = 0; i < models_.size(); i++) {
+
+            std::string texName;
+
+            // First try model's texture
+            if (!models_[i].textureName.empty() &&
+                resources_->textureExists(models_[i].textureName))
+            {
+                texName = models_[i].textureName;
+            }
+            // Fallback to default
+            else {
+                texName = resources_->getDefaultTextureName();
+            }
+
+            // Get texture for this model
+            VkImageView textureView = resources_->getTextureView(texName);
+            resources_->updateTextureDescriptor(context.currentFrame, textureView);
+
+            // Update model UBO
+            resources_->updateModelUBO(context.currentFrame,
+                                     {models_[i].transform.matrix()});
+
+            // Bind pipeline and descriptors
+            vkCmdBindPipeline(
+                commandBuffer,
+                VK_PIPELINE_BIND_POINT_GRAPHICS,
+                pipeline_->get()
+            );
+
+            vkCmdBindDescriptorSets(
+                commandBuffer,
+                VK_PIPELINE_BIND_POINT_GRAPHICS,
+                pipeline_->layout(),
+                0, 1,
+                resources_->getDescriptorSetPtr(context.currentFrame), // Use pointer getter
+                0, nullptr
+            );
+
+            // Draw
+            vulkanMeshes_[i]->draw(commandBuffer);
         }
 
-        // Submit command buffer
-        VkSubmitInfo submitInfo = {};
+        vkCmdEndRenderPass(commandBuffer);
+        vkEndCommandBuffer(commandBuffer);
+
+        // Submit
+        VkSubmitInfo submitInfo{};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-        VkSemaphore waitSemaphores[] = {context.imageAvailableSemaphore};
+        VkSemaphore waitSemaphores[] = {context.imageAvailableSemaphores[context.currentFrame]};
         VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
         submitInfo.waitSemaphoreCount = 1;
         submitInfo.pWaitSemaphores = waitSemaphores;
         submitInfo.pWaitDstStageMask = waitStages;
         submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &context.commandBuffers[imageIndex];
+        submitInfo.pCommandBuffers = &commandBuffer;
 
-        VkSemaphore signalSemaphores[] = {context.renderFinishedSemaphore};
+        VkSemaphore signalSemaphores[] = {context.renderFinishedSemaphores[context.currentFrame]};
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
-        if (vkQueueSubmit(context.graphicsQueue, 1, &submitInfo, context.inFlightFence) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to submit draw command buffer");
-        }
+        vkQueueSubmit(
+            context.graphicsQueue,
+            1,
+            &submitInfo,
+            context.inFlightFences[context.currentFrame]
+        );
 
-        // Present the frame
-        VkPresentInfoKHR presentInfo = {};
+        // Present
+        VkPresentInfoKHR presentInfo{};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores = signalSemaphores;
@@ -399,15 +593,16 @@ namespace vex {
         VkSwapchainKHR swapchains[] = {context.swapchain};
         presentInfo.swapchainCount = 1;
         presentInfo.pSwapchains = swapchains;
-        presentInfo.pImageIndices = &imageIndex;
-        presentInfo.pResults = nullptr;
+        presentInfo.pImageIndices = &context.currentImageIndex;
 
         result = vkQueuePresentKHR(context.presentQueue, &presentInfo);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-            m_swapchain_manager->recreateSwapchain();
+            swapchainManager_->recreateSwapchain();
         } else if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to present swapchain image");
+            throw std::runtime_error("Failed to present swap chain image!");
         }
+
+        context.currentFrame = (context.currentFrame + 1) % context.MAX_FRAMES_IN_FLIGHT;
     }
 }

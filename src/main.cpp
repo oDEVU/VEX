@@ -1,10 +1,13 @@
 #include "components/engine.hpp"
 
 #include <cstdlib>
+#include <sys/types.h>
 
 class MyGame : public vex::Engine {
 public:
     using vex::Engine::Engine; // Inherit constructor
+
+    u_int64_t frame = 0;
 
     void processEvent(const SDL_Event& event) {
         if (event.type == SDL_EVENT_KEY_DOWN) {
@@ -24,6 +27,13 @@ public:
 
     void update(float deltaTime) override {
         // Custom game logic
+        if(frame == 5){
+            SDL_Log("Main loop: Trying to loaf model...");
+            //Engine::getInterface()->loadModel("assets/scene.gltf", "viper");
+            m_interface->loadModel("assets/scene.gltf", "viper");
+        }
+
+        frame++;
     }
 
     void render() override {

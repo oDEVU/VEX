@@ -1,5 +1,13 @@
 #pragma once
 
+
+#include <volk.h>
+#include <vk_mem_alloc.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_vulkan.h>
+#include <vector>
+#include <memory>
+
 namespace vex {
     typedef struct {
         VkInstance instance;
@@ -23,13 +31,20 @@ namespace vex {
         VkCommandPool commandPool;
         std::vector<VkCommandBuffer> commandBuffers;
 
-        // Synchronization
-        VkSemaphore imageAvailableSemaphore;
-        VkSemaphore renderFinishedSemaphore;
-        VkFence inFlightFence;
-
         // Queue family indices
         uint32_t graphicsQueueFamily;
         uint32_t presentQueueFamily;
+
+        // Frame management
+        uint32_t currentFrame = 0;
+        uint32_t currentImageIndex = 0;
+        const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
+
+        // Synchronization (expanded)
+        std::vector<VkSemaphore> imageAvailableSemaphores;
+        std::vector<VkSemaphore> renderFinishedSemaphores;
+        std::vector<VkFence> inFlightFences;
+
+        VkDescriptorSetLayout descriptorSetLayout;
     } VulkanContext;
 }

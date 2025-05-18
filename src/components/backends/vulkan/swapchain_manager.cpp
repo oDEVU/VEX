@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <set>
 #include <limits>
+#include <cassert>
 
 namespace vex {
     VulkanSwapchainManager::VulkanSwapchainManager(VulkanContext& context, SDL_Window* window) : context_(context) {
@@ -219,6 +220,11 @@ namespace vex {
     void VulkanSwapchainManager::createSyncObjects() {
         SDL_Log("Creating synchronization objects...");
 
+        // Initialize synchronization objects
+        context_.imageAvailableSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
+        context_.renderFinishedSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
+        context_.inFlightFences.resize(context_.MAX_FRAMES_IN_FLIGHT);
+
         VkSemaphoreCreateInfo semaphoreInfo = {};
         semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
@@ -228,22 +234,27 @@ namespace vex {
 
         VkResult result;
 
-        result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.imageAvailableSemaphore);
-        if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create image available semaphore");
+        for (size_t i = 0; i < context_.MAX_FRAMES_IN_FLIGHT; i++) {
+            result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.imageAvailableSemaphores[i]);
+            if (result != VK_SUCCESS) {
+                throw std::runtime_error("Failed to create image available semaphore");
+            }
+
+            result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.renderFinishedSemaphores[i]);
+            if (result != VK_SUCCESS) {
+                throw std::runtime_error("Failed to create render finished semaphore");
+            }
+
+            result = vkCreateFence(context_.device, &fenceInfo, nullptr, &context_.inFlightFences[i]);
+            if (result != VK_SUCCESS) {
+                throw std::runtime_error("Failed to create fence");
+            }
+
+            assert(context_.inFlightFences[i] != VK_NULL_HANDLE);
+
+            SDL_Log("Created sync objects: fence=%p", (void*)context_.inFlightFences[i]);
         }
 
-        result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.renderFinishedSemaphore);
-        if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create render finished semaphore");
-        }
-
-        result = vkCreateFence(context_.device, &fenceInfo, nullptr, &context_.inFlightFence);
-        if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create in-flight fence");
-        }
-
-        SDL_Log("Created sync objects: fence=%p", (void*)context_.inFlightFence);
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {

@@ -7,14 +7,6 @@ set(SDL_VIDEO_X11 ON CACHE BOOL "Enable X11")
 set(SDL_VULKAN ON CACHE BOOL "Enable Vulkan")
 add_subdirectory(SDL)
 
-# After SDL is configured
-#message(STATUS "SDL Video Drivers: ${SDL_VIDEO_DRIVERS}")
-#file(READ "${SDL_BINARY_DIR}/SDL_config.h" SDL_CONFIG_H)
-#string(FIND "${SDL_CONFIG_H}" "#define SDL_VIDEO_DRIVER_WAYLAND 1" HAVE_WAYLAND)
-#if(HAVE_WAYLAND EQUAL -1)
-#    message(FATAL_ERROR "SDL was not built with Wayland support!")
-#endif()
-
 # volk with multi-platform support
 if(WIN32)
     set(VOLK_STATIC_DEFINES VK_USE_PLATFORM_WIN32_KHR)
@@ -45,6 +37,19 @@ set(VMA_DYNAMIC_VULKAN_FUNCTIONS ON)
 find_package(Vulkan REQUIRED)
 add_subdirectory(VulkanMemoryAllocator)
 
+# assimp
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(assimp)
+
+# glm
+set(GLM_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+add_subdirectory(glm)
+
+
 # Final interface library
 add_library(thirdparty INTERFACE)
 target_link_libraries(thirdparty INTERFACE
@@ -52,6 +57,8 @@ target_link_libraries(thirdparty INTERFACE
     volk
     VulkanMemoryAllocator
     Vulkan::Vulkan
+    assimp
+    glm::glm
 )
 
 # Linux-specific linking

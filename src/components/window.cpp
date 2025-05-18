@@ -3,6 +3,13 @@
 namespace vex {
     Window::Window(std::string title, int resx, int resy){
         SDL_Log("Initializing SDL...");
+
+        // Only set Wayland preference on Linux
+        #ifdef __linux__
+            SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "wayland,x11", SDL_HINT_OVERRIDE);
+            setenv("SDL_VIDEODRIVER", "wayland,x11", 1);
+        #endif
+
         if (!SDL_Init(SDL_INIT_VIDEO)) {
             const char* error = SDL_GetError();
             SDL_Log("SDL_Init failed: %s", error);
