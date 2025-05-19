@@ -2,6 +2,8 @@
 #include <fstream>
 #include <stdexcept>
 
+#include "uniforms.hpp"
+
 namespace vex {
     VulkanPipeline::VulkanPipeline(VulkanContext& context) : ctx_(context) {}
 
@@ -175,10 +177,19 @@ namespace vex {
 
         // 2. Pipeline Layout
         SDL_Log("Creating Pipeline layout...");
+
+
+        VkPushConstantRange pushConstantRange{};
+        pushConstantRange.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        pushConstantRange.offset = 0;
+        pushConstantRange.size = sizeof(PushConstants);
+
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         pipelineLayoutInfo.setLayoutCount = 1;
-        pipelineLayoutInfo.pSetLayouts = &ctx_.descriptorSetLayout; // From VulkanContext
+        pipelineLayoutInfo.pSetLayouts = &ctx_.descriptorSetLayout;
+        pipelineLayoutInfo.pushConstantRangeCount = 1;
+        pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 
         if (vkCreatePipelineLayout(ctx_.device, &pipelineLayoutInfo, nullptr, &layout_) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create pipeline layout!");

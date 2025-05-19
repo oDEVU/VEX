@@ -4,6 +4,9 @@ project(VEX)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_STANDARD 23)
 
+# So zed would no longer show false errors you need to copy or link compile_commands.json file to root.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_subdirectory(thirdparty)
 add_subdirectory(src)
 

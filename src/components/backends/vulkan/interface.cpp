@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <algorithm>
 #include <set>
+#include <fstream>
+#include <unordered_set>
 
 namespace vex {
     Interface::Interface(SDL_Window* window) : window_(window) {
@@ -148,6 +150,7 @@ namespace vex {
         };
 
         VkPhysicalDeviceFeatures deviceFeatures = {};
+        deviceFeatures.samplerAnisotropy = VK_TRUE; // Add this line
 
         VkDeviceCreateInfo deviceCreateInfo = {};
         deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -306,29 +309,74 @@ namespace vex {
         SDL_Vulkan_UnloadLibrary();
     }
 
+
     Model& Interface::loadModel(const std::string& path, const std::string& name) {
-        SDL_Log("Loading model: %s...", name);
+        SDL_Log("Loading model: %s...", name.c_str());
         if (modelRegistry_.count(name)) {
             throw std::runtime_error("Model '" + name + "' already exists");
         }
 
         MeshData meshData;
-        meshData.loadFromFile(path);
-
-        models_.emplace_back();
-        Model& model = models_.back();
-        model.textureName = name;  // Set texture name to model name
-        model.meshData = std::move(meshData);
-
-        vulkanMeshes_.push_back(std::make_unique<VulkanMesh>(context));
-        vulkanMeshes_.back()->upload(model.meshData);
-
-        if (!model.meshData.texturePath.empty()) {
-            SDL_Log("Loading texture...");
-            resources_->loadTexture(model.meshData.texturePath, name);
+        try {
+            SDL_Log("Loading mesh data from: %s", path.c_str());
+            std::ifstream fileCheck(path);
+            if (!fileCheck.is_open()) {
+                throw std::runtime_error("File not found: " + path);
+            }
+            fileCheck.close();
+            meshData.loadFromFile(path);
+        } catch (const std::exception& e) {
+            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Model load failed: %s", e.what());
+            throw;
         }
 
+        // Create new model entry
+        models_.emplace_back();
+        Model& model = models_.back();
+        model.meshData = std::move(meshData);
+
+        // Collect unique texture paths from all submeshes
+        std::unordered_set<std::string> uniqueTextures;
+        for (const auto& submesh : model.meshData.submeshes) {
+            if (!submesh.texturePath.empty()) {
+                uniqueTextures.insert(submesh.texturePath);
+            }
+        }
+
+        // Load all required textures
+        SDL_Log("Loading %zu submesh textures", uniqueTextures.size());
+        for (const auto& texPath : uniqueTextures) {
+            SDL_Log("Processing texture: %s", texPath.c_str());
+            if (!resources_->textureExists(texPath)) {
+                try {
+                    resources_->loadTexture(texPath, texPath);
+                    SDL_Log("Loaded texture: %s", texPath.c_str());
+                } catch (const std::exception& e) {
+                    SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                                "Failed to load texture %s: %s",
+                                texPath.c_str(), e.what());
+                    throw;
+                }
+            } else {
+                SDL_Log("Texture already exists: %s", texPath.c_str());
+            }
+        }
+
+        // Upload mesh to GPU
+        try {
+            SDL_Log("Creating Vulkan mesh for %s", name.c_str());
+            vulkanMeshes_.push_back(std::make_unique<VulkanMesh>(context));
+            vulkanMeshes_.back()->upload(model.meshData);
+            SDL_Log("Mesh upload successful");
+        } catch (const std::exception& e) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed: %s", e.what());
+            vulkanMeshes_.pop_back();
+            throw;
+        }
+
+        // Register model
         modelRegistry_[name] = models_.size() - 1;
+        SDL_Log("Model %s registered successfully", name.c_str());
         return model;
     }
 
@@ -440,7 +488,7 @@ namespace vex {
                     renderPassInfo.renderArea.offset = {0, 0};
                     renderPassInfo.renderArea.extent = context.swapchainExtent;
 
-                    VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+                    VkClearValue clearColor = {{{0.1f, 0.1f, 0.1f, 1.0f}}};
                     renderPassInfo.clearValueCount = 1;
                     renderPassInfo.pClearValues = &clearColor;
 
@@ -514,49 +562,31 @@ namespace vex {
 
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-        // Draw models
+        // Bind default texture initially
+        VkImageView defaultTexture = resources_->getTextureView("default");
+        resources_->updateTextureDescriptor(context.currentFrame, defaultTexture);
+        //SDL_Log("Bound default texture");
+
         for (size_t i = 0; i < models_.size(); i++) {
+            auto& model = models_[i];
+            auto& vulkanMesh = vulkanMeshes_[i];
 
-            std::string texName;
+            // Update UBOs
+            resources_->updateCameraUBO({view, proj});
+            resources_->updateModelUBO(context.currentFrame, {model.transform.matrix()});
+            //SDL_Log("Updated UBOs for model %zu", i);
 
-            // First try model's texture
-            if (!models_[i].textureName.empty() &&
-                resources_->textureExists(models_[i].textureName))
-            {
-                texName = models_[i].textureName;
-            }
-            // Fallback to default
-            else {
-                texName = resources_->getDefaultTextureName();
-            }
+            // Bind pipeline
+            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_->get());
+            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                  pipeline_->layout(), 0, 1,
+                                  resources_->getDescriptorSetPtr(context.currentFrame), 0, nullptr);
+            //SDL_Log("Bound pipeline and descriptor sets");
 
-            // Get texture for this model
-            VkImageView textureView = resources_->getTextureView(texName);
-            resources_->updateTextureDescriptor(context.currentFrame, textureView);
-
-            // Update model UBO
-            resources_->updateModelUBO(context.currentFrame,
-                                     {models_[i].transform.matrix()});
-
-            // Bind pipeline and descriptors
-            vkCmdBindPipeline(
-                commandBuffer,
-                VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipeline_->get()
-            );
-
-            vkCmdBindDescriptorSets(
-                commandBuffer,
-                VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipeline_->layout(),
-                0, 1,
-                resources_->getDescriptorSetPtr(context.currentFrame), // Use pointer getter
-                0, nullptr
-            );
-
-            // Draw
-            vulkanMeshes_[i]->draw(commandBuffer);
+            // Draw all submeshes
+            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame);
         }
+
 
         vkCmdEndRenderPass(commandBuffer);
         vkEndCommandBuffer(commandBuffer);

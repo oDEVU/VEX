@@ -258,16 +258,57 @@ namespace vex {
         }
 
         void VulkanResources::loadTexture(const std::string& path, const std::string& name) {
-            // Load image data
-            int texWidth, texHeight, texChannels;
-            stbi_uc* pixels = stbi_load(path.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+            std::string fullPath = "assets/" + std::string(path.c_str());
 
-            SDL_Log("Loading texture from path: %s", path);
+            // 1. File existence check
+            std::ifstream test(fullPath);
+            if (!test.is_open()) {
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Texture file not found!");
+                throw std::runtime_error("Missing texture: " + fullPath);
+            }
+            test.close();
+
+            // Load image data
+            SDL_Log("STBI loading image...");
+            int texWidth, texHeight, texChannels;
+            stbi_uc* pixels = stbi_load(fullPath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+
             if (!pixels) {
-                throw std::runtime_error("Failed to load texture: " + path);
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR, "STBI failed: %s", stbi_failure_reason());
+                throw std::runtime_error("Failed to load texture pixels");
+            }
+            SDL_Log("Image loaded: %dx%d, %d channels", texWidth, texHeight, texChannels);
+
+            VkDeviceSize imageSize = texWidth * texHeight * 4;
+
+            if (!pixels) {
+                throw std::runtime_error("Failed to load texture: " + fullPath);
             }
 
+            // Create staging buffer
+            SDL_Log("Creating staging buffer (%zu bytes)...",
+                  static_cast<size_t>(texWidth * texHeight * 4));
+            VkBuffer stagingBuffer;
+            VmaAllocation stagingAlloc;
+            VkBufferCreateInfo bufferInfo{};
+            bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufferInfo.size = imageSize;
+            bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+
+            VmaAllocationCreateInfo allocInfo{};
+            allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+
+            vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo, &stagingBuffer, &stagingAlloc, nullptr);
+
+            // Copy pixel data to staging buffer
+            void* data;
+            vmaMapMemory(ctx_.allocator, stagingAlloc, &data);
+            memcpy(data, pixels, static_cast<size_t>(imageSize));
+            vmaUnmapMemory(ctx_.allocator, stagingAlloc);
+            stbi_image_free(pixels);
+
             // Create Vulkan image
+            SDL_Log("Creating Vulkan image...");
             VkImageCreateInfo imageInfo{};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
             imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -280,15 +321,65 @@ namespace vex {
             imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
             imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 
+            VmaAllocationCreateInfo imageAllocInfo{};
+            imageAllocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+
             VkImage textureImage;
             VmaAllocation textureAlloc;
+            vmaCreateImage(ctx_.allocator, &imageInfo, &imageAllocInfo, &textureImage, &textureAlloc, nullptr);
 
-            VmaAllocationCreateInfo allocInfo{};
-            allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+            // Transition image layout and copy buffer
+            VkCommandBuffer commandBuffer = ctx_.beginSingleTimeCommands();
 
-            SDL_Log("Creating vulkan image for texture...");
-            vmaCreateImage(ctx_.allocator, &imageInfo, &allocInfo,
-                          &textureImage, &textureAlloc, nullptr);
+            VkImageMemoryBarrier barrier{};
+            barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+            barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+            barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.image = textureImage;
+            barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            barrier.subresourceRange.levelCount = 1;
+            barrier.subresourceRange.layerCount = 1;
+
+            vkCmdPipelineBarrier(commandBuffer,
+                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                VK_PIPELINE_STAGE_TRANSFER_BIT,
+                0,
+                0, nullptr,
+                0, nullptr,
+                1, &barrier);
+
+            VkBufferImageCopy region{};
+            region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            region.imageSubresource.layerCount = 1;
+            region.imageExtent = imageInfo.extent;
+
+            vkCmdCopyBufferToImage(commandBuffer,
+                stagingBuffer,
+                textureImage,
+                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                1,
+                &region);
+
+            // Transition to shader-read layout
+            barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+            barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+            barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+            vkCmdPipelineBarrier(commandBuffer,
+                VK_PIPELINE_STAGE_TRANSFER_BIT,
+                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                0,
+                0, nullptr,
+                0, nullptr,
+                1, &barrier);
+
+            ctx_.endSingleTimeCommands(commandBuffer);
+
+            // Cleanup staging
+            vmaDestroyBuffer(ctx_.allocator, stagingBuffer, stagingAlloc);
 
             // Create image view
             VkImageViewCreateInfo viewInfo{};
@@ -310,7 +401,6 @@ namespace vex {
             textureImages_[name] = textureImage;
             textureAllocations_[name] = textureAlloc;
             textureViews_[name] = textureView;
-            stbi_image_free(pixels);
         }
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;

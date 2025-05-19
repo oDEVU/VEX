@@ -3,6 +3,7 @@
 #include "context.hpp"
 #include <unordered_map>
 #include <string>
+#include <fstream>
 
 namespace vex {
     class VulkanResources {
@@ -32,6 +33,13 @@ namespace vex {
         VkDescriptorSet* getDescriptorSetPtr(uint32_t frameIndex) {
             return &descriptorSets_[frameIndex];
         }
+        VkDescriptorSet getUBODescriptorSet(uint32_t frameIndex) const {
+            return descriptorSets_[frameIndex];
+        }
+
+        VkDescriptorSet getTextureDescriptorSet(const std::string& name) const {
+            return textureDescriptorSets_.at(name);
+        }
 
         VkDescriptorSetLayout getDescriptorLayout() const { return descriptorSetLayout_; }
 
@@ -52,6 +60,7 @@ namespace vex {
         VkDescriptorSetLayout descriptorSetLayout_;
         std::vector<VkDescriptorSet> descriptorSets_;
         VkDescriptorPool descriptorPool_;
+        std::unordered_map<std::string, VkDescriptorSet> textureDescriptorSets_;
 
         // Textures
         std::unordered_map<std::string, VkImageView> textures_;

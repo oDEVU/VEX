@@ -12,6 +12,6 @@ namespace vex {
     };
 
     struct PushConstants {
-        alignas(16) glm::vec3 color; // Optional material color
+        alignas(16) glm::vec4 color = glm::vec4(1.0f); // Default white
     };
 }

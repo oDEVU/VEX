@@ -1,68 +1,130 @@
 #include "vulkan_mesh.hpp"
 #include "../../mesh.hpp" // Add this include
 
+#include <SDL3/SDL.h>
+
 namespace vex {
-    VulkanMesh::VulkanMesh(VulkanContext& context) : ctx_(context) {}
+    VulkanMesh::VulkanMesh(VulkanContext& context) : ctx_(context) {
+        SDL_Log("VulkanMesh created");
+    }
 
     VulkanMesh::~VulkanMesh() {
-        if (vertexBuffer_) {
-            vmaDestroyBuffer(ctx_.allocator, vertexBuffer_, vertexAlloc_);
-            vertexBuffer_ = VK_NULL_HANDLE;
-        }
-        if (indexBuffer_) {
-            vmaDestroyBuffer(ctx_.allocator, indexBuffer_, indexAlloc_);
-            indexBuffer_ = VK_NULL_HANDLE;
+        SDL_Log("Destroying VulkanMesh");
+        for (auto& submesh : submeshBuffers_) {
+            vmaDestroyBuffer(ctx_.allocator, submesh.vertexBuffer, submesh.vertexAlloc);
+            vmaDestroyBuffer(ctx_.allocator, submesh.indexBuffer, submesh.indexAlloc);
         }
     }
 
     void VulkanMesh::upload(const MeshData& meshData) {
-        // Cleanup old buffers if they exist
-        if (vertexBuffer_) vmaDestroyBuffer(ctx_.allocator, vertexBuffer_, vertexAlloc_);
-        if (indexBuffer_) vmaDestroyBuffer(ctx_.allocator, indexBuffer_, indexAlloc_);
+        SDL_Log("Uploading mesh with %zu submeshes", meshData.submeshes.size());
 
-        // Vertex buffer
-        VkBufferCreateInfo bufferInfo{};
-        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        bufferInfo.size = meshData.vertices.size() * sizeof(Vertex);
-        bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        submeshBuffers_.reserve(meshData.submeshes.size());
+        submeshTextures_.reserve(meshData.submeshes.size());
 
-        VmaAllocationCreateInfo allocInfo{};
-        allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+        for (const auto& srcSubmesh : meshData.submeshes) {
+            SubmeshBuffers buffers{};
 
-        if (vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
-                          &vertexBuffer_, &vertexAlloc_, nullptr) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create vertex buffer");
+            // Create vertex buffer
+            VkBufferCreateInfo bufferInfo{};
+            bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            bufferInfo.size = srcSubmesh.vertices.size() * sizeof(Vertex);
+            bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+
+            VmaAllocationCreateInfo allocInfo{};
+            allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+            vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
+                            &buffers.vertexBuffer, &buffers.vertexAlloc, nullptr);
+
+            // Upload vertices
+            void* data;
+            vmaMapMemory(ctx_.allocator, buffers.vertexAlloc, &data);
+            memcpy(data, srcSubmesh.vertices.data(), bufferInfo.size);
+            vmaUnmapMemory(ctx_.allocator, buffers.vertexAlloc);
+
+            // Create index buffer
+            bufferInfo.size = srcSubmesh.indices.size() * sizeof(uint32_t);
+            bufferInfo.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+            vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
+                            &buffers.indexBuffer, &buffers.indexAlloc, nullptr);
+
+            // Upload indices
+            vmaMapMemory(ctx_.allocator, buffers.indexAlloc, &data);
+            memcpy(data, srcSubmesh.indices.data(), bufferInfo.size);
+            vmaUnmapMemory(ctx_.allocator, buffers.indexAlloc);
+
+            buffers.indexCount = static_cast<uint32_t>(srcSubmesh.indices.size());
+
+            submeshBuffers_.push_back(buffers);
+            submeshTextures_.push_back(srcSubmesh.texturePath);
+
+            SDL_Log("Uploaded submesh: %zu vertices, %u indices, texture: '%s'",
+                   srcSubmesh.vertices.size(), buffers.indexCount,
+                   srcSubmesh.texturePath.c_str());
         }
-
-        // Upload vertices
-        void* data;
-        vmaMapMemory(ctx_.allocator, vertexAlloc_, &data);
-        memcpy(data, meshData.vertices.data(), bufferInfo.size);
-        vmaUnmapMemory(ctx_.allocator, vertexAlloc_);
-
-        // Index buffer
-        bufferInfo.size = meshData.indices.size() * sizeof(uint32_t);
-        bufferInfo.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
-        indexCount_ = static_cast<uint32_t>(meshData.indices.size());
-
-        if (vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
-                          &indexBuffer_, &indexAlloc_, nullptr) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create index buffer");
-        }
-
-        // Upload indices
-        vmaMapMemory(ctx_.allocator, indexAlloc_, &data);
-        memcpy(data, meshData.indices.data(), bufferInfo.size);
-        vmaUnmapMemory(ctx_.allocator, indexAlloc_);
     }
 
-    void VulkanMesh::draw(VkCommandBuffer cmd) const {
-        if (indexCount_ == 0) return;
+    void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
+                         VulkanResources& resources, uint32_t frameIndex) const {
+        if(!debugDraw) SDL_Log("Drawing mesh with %zu submeshes", submeshBuffers_.size());
 
-        VkBuffer vertexBuffers[] = {vertexBuffer_};
-        VkDeviceSize offsets[] = {0};
-        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
-        vkCmdBindIndexBuffer(cmd, indexBuffer_, 0, VK_INDEX_TYPE_UINT32);
-        vkCmdDrawIndexed(cmd, indexCount_, 1, 0, 0, 0);
+        std::string currentTexture = "";
+        for (size_t i = 0; i < submeshBuffers_.size(); i++) {
+            const auto& buffers = submeshBuffers_[i];
+            const auto& textureName = submeshTextures_[i];
+
+            // Texture validation and logging
+            const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
+            if(!debugDraw) SDL_Log("Submesh %zu texture: '%s' (exists: %s)",
+                   i,
+                   textureName.c_str(),
+                   textureExists ? "true" : "false");
+
+            if (textureExists) {
+                if (currentTexture != textureName) {
+                    VkImageView textureView = resources.getTextureView(textureName);
+                    if (textureView != VK_NULL_HANDLE) {
+                        resources.updateTextureDescriptor(frameIndex, textureView);
+                        // Rebind the descriptor set after updating
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                              pipelineLayout, 0, 1,
+                                              resources.getDescriptorSetPtr(frameIndex),
+                                              0, nullptr);
+                        currentTexture = textureName;
+                    }
+                }
+            }
+
+            PushConstants push{};
+            if (textureExists) {
+                // Only update descriptor if texture actually exists
+                if (currentTexture != textureName) {
+                    VkImageView textureView = resources.getTextureView(textureName);
+                    if(textureView != VK_NULL_HANDLE) {
+                        resources.updateTextureDescriptor(frameIndex, textureView);
+                        currentTexture = textureName;
+                        if(!debugDraw) SDL_Log("Bound texture: %s", textureName.c_str());
+                    }
+                }
+                push.color = glm::vec4(1.0f); // Neutral multiplier
+            } else {
+                push.color = glm::vec4(0.8f, 0.2f, 0.5f, 1.0f); // Debug pink
+                if(!textureName.empty()) {
+                    if(!debugDraw) SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
+                              "Missing texture: %s", textureName.c_str());
+                }
+            }
+
+            vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT,
+                             0, sizeof(PushConstants), &push);
+
+            // Buffer binding
+            VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
+            VkDeviceSize offsets[] = {0};
+            vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
+            vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+
+            vkCmdDrawIndexed(cmd, buffers.indexCount, 1, 0, 0, 0);
+        }
     }
 }

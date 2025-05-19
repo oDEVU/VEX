@@ -28,8 +28,10 @@ public:
     void update(float deltaTime) override {
         // Custom game logic
         if(frame == 5){
-            SDL_Log("Main loop: Trying to loaf model...");
-            //Engine::getInterface()->loadModel("assets/scene.gltf", "viper");
+            SDL_Log("Main loop: Trying to load models...");
+            m_interface->loadModel("assets/cube.obj", "cube");
+            //m_interface->loadModel("assets/human.obj", "human");
+            m_interface->loadModel("assets/PenguinBaseMesh.obj", "penguin");
             m_interface->loadModel("assets/scene.gltf", "viper");
         }
 

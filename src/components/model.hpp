@@ -8,12 +8,15 @@ namespace vex {
     public:
         MeshData meshData;
         Transform transform;
-        std::string textureName;  // Changed from texturePath to textureName
+        std::vector<std::string> textureNames;  // Changed from texturePath to textureName
 
         void loadFromFile(const std::string& path) {
             meshData.loadFromFile(path);
-            // If you want to keep texture path separate
-            textureName = path;  // Or use meshData.texturePath if needed
+            for (const auto& submesh : meshData.submeshes) {
+                if (!submesh.texturePath.empty()) {
+                    textureNames.push_back(submesh.texturePath);
+                }
+            }
         }
     };
 }

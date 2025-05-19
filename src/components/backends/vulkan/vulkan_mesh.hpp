@@ -1,6 +1,7 @@
 #pragma once
 #include "context.hpp"
-#include "../../mesh.hpp" // Add this include
+#include "../../mesh.hpp"
+#include "resources.hpp"
 
 namespace vex {
     class VulkanMesh {
@@ -8,15 +9,25 @@ namespace vex {
         VulkanMesh(VulkanContext& context);
         ~VulkanMesh();
 
-        void upload(const MeshData& meshData); // Fixed parameter type
-        void draw(VkCommandBuffer cmd) const;
+        void upload(const MeshData& meshData);
+        // Add pipeline layout parameter for push constants
+        void draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
+                VulkanResources& resources, uint32_t frameIndex) const;
 
     private:
+        struct SubmeshBuffers {
+            VkBuffer vertexBuffer;
+            VmaAllocation vertexAlloc;
+            VkBuffer indexBuffer;
+            VmaAllocation indexAlloc;
+            uint32_t indexCount;
+        };
+
+        void disableDebug();
+
         VulkanContext& ctx_;
-        VkBuffer vertexBuffer_ = VK_NULL_HANDLE;
-        VkBuffer indexBuffer_ = VK_NULL_HANDLE;
-        VmaAllocation vertexAlloc_ = VK_NULL_HANDLE;
-        VmaAllocation indexAlloc_ = VK_NULL_HANDLE;
-        uint32_t indexCount_ = 0;
+        std::vector<SubmeshBuffers> submeshBuffers_;
+        std::vector<std::string> submeshTextures_;  // Parallel to submeshBuffers_
+        bool debugDraw = true; // set to true when not debuging lmao
     };
 }

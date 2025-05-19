@@ -258,16 +258,21 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {
-        SDL_Log("cleaning up swapchains");
-        for (auto framebuffer : context_.swapchainFramebuffers) {
+        for (auto& framebuffer : context_.swapchainFramebuffers) {
             vkDestroyFramebuffer(context_.device, framebuffer, nullptr);
         }
+        context_.swapchainFramebuffers.clear();
 
-        for (auto imageView : context_.swapchainImageViews) {
+        for (auto& imageView : context_.swapchainImageViews) {
             vkDestroyImageView(context_.device, imageView, nullptr);
         }
+        context_.swapchainImageViews.clear();
 
         vkDestroySwapchainKHR(context_.device, context_.swapchain, nullptr);
+        context_.swapchain = VK_NULL_HANDLE;
+
+        vkDestroyRenderPass(context_.device, context_.renderPass, nullptr);
+        context_.renderPass = VK_NULL_HANDLE;
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
