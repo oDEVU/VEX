@@ -234,6 +234,7 @@ namespace vex {
             attributes
         );
 
+        startTime = std::chrono::high_resolution_clock::now();
         SDL_Log("Vulkan interface initialized successfully");
     }
 
@@ -599,6 +600,8 @@ namespace vex {
                         nullptr
                     );
 
+        auto now = std::chrono::high_resolution_clock::now();
+        currentTime = std::chrono::duration<float>(now - startTime).count();
 
         for (size_t i = 0; i < models_.size(); i++) {
             auto& model = models_[i];
@@ -609,7 +612,7 @@ namespace vex {
             resources_->updateModelUBO(context.currentFrame, {model.transform.matrix()});
             //SDL_Log("Updated UBOs for model %zu", i);
             // Draw all submeshes
-            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame);
+            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, currentTime);
         }
 
 

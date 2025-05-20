@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include <glm/glm.hpp>
+#include <chrono>
 
 //Renderer
 #include "context.hpp"
@@ -40,6 +41,9 @@ namespace vex {
         Model& loadModel(const std::string& modelPath, const std::string& name);
         void unloadModel(const std::string& name);
         Model* getModel(const std::string& name);
+
+        std::chrono::high_resolution_clock::time_point startTime;
+        float currentTime = 0.0f;
 
         void bindWindow(SDL_Window* window);
         void unbindWindow();

@@ -1,6 +1,12 @@
 #include "vulkan_mesh.hpp"
 #include "../../mesh.hpp" // Add this include
 
+
+// debug
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+
 #include <SDL3/SDL.h>
 
 namespace vex {
@@ -65,7 +71,7 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-                         VulkanResources& resources, uint32_t frameIndex) const {
+                         VulkanResources& resources, uint32_t frameIndex, float currentTime) const {
         if(!debugDraw) SDL_Log("Drawing mesh with %zu submeshes", submeshBuffers_.size());
 
         std::string currentTexture = "";
@@ -122,6 +128,21 @@ namespace vex {
                               "Missing texture: %s", textureName.c_str());
                 }
             }
+
+            glm::mat3 warpMatrix = glm::mat3(1.0f);
+            push.setAffineTransform(warpMatrix);
+
+            // Vertex snap parameters
+            push.time = currentTime;
+            push.snapResolution = 1.f;
+            push.screenSize = {ctx_.swapchainExtent.width, ctx_.swapchainExtent.height};
+            push.jitterIntensity = 0.5f;
+            push.enablePS1Effects =
+                PS1Effects::VERTEX_SNAPPING |
+                PS1Effects::AFFINE_WARPING |
+                PS1Effects::COLOR_QUANTIZATION |
+                PS1Effects::VERTEX_JITTER |
+                PS1Effects::NTSC_ARTIFACTS;
 
             vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT,
                              0, sizeof(PushConstants), &push);
