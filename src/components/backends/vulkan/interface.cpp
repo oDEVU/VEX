@@ -468,7 +468,7 @@ namespace vex {
 
         // Bind default texture explicitly
         VkImageView textureView = resources_->getTextureView("default");
-        resources_->updateTextureDescriptor(context.currentFrame, textureView);
+        resources_->updateTextureDescriptor(context.currentFrame, textureView, 0);
 
         if (vulkanMeshes_.empty()) {
 
@@ -488,9 +488,13 @@ namespace vex {
                     renderPassInfo.renderArea.offset = {0, 0};
                     renderPassInfo.renderArea.extent = context.swapchainExtent;
 
-                    VkClearValue clearColor = {{{0.1f, 0.1f, 0.1f, 1.0f}}};
-                    renderPassInfo.clearValueCount = 1;
-                    renderPassInfo.pClearValues = &clearColor;
+
+                    VkClearValue clearValues[2];
+                    clearValues[0].color = {{0.1f, 0.1f, 0.1f, 1.0f}};
+                    clearValues[1].depthStencil = {1.0f, 0};  // Clear depth to 1.0 (far plane)
+
+                    renderPassInfo.clearValueCount = 2;
+                    renderPassInfo.pClearValues = clearValues;
 
                     vkCmdBeginRenderPass(context.commandBuffers[context.currentImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
                     vkCmdEndRenderPass(context.commandBuffers[context.currentImageIndex]);
@@ -556,16 +560,45 @@ namespace vex {
         renderPassInfo.framebuffer = context.swapchainFramebuffers[context.currentImageIndex];
         renderPassInfo.renderArea.extent = context.swapchainExtent;
 
-        VkClearValue clearColor = {{{0.1f, 0.1f, 0.1f, 1.0f}}};
-        renderPassInfo.clearValueCount = 1;
-        renderPassInfo.pClearValues = &clearColor;
+
+
+
+                            VkClearValue clearValues[2];
+                            clearValues[0].color = {{0.1f, 0.1f, 0.1f, 1.0f}};
+                            clearValues[1].depthStencil = {1.0f, 0};  // Clear depth to 1.0 (far plane)
+
+                            renderPassInfo.clearValueCount = 2;
+                            renderPassInfo.pClearValues = clearValues;
 
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
         // Bind default texture initially
         VkImageView defaultTexture = resources_->getTextureView("default");
-        resources_->updateTextureDescriptor(context.currentFrame, defaultTexture);
+        resources_->updateTextureDescriptor(context.currentFrame, defaultTexture, 0);
         //SDL_Log("Bound default texture");
+
+
+
+                    // Bind pipeline
+                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_->get());
+
+                    // Bind BOTH descriptor sets
+                    std::array<VkDescriptorSet, 2> descriptorSets = {
+                        resources_->getDescriptorSet(context.currentFrame),  // Set 0: UBOs
+                        resources_->getTextureDescriptorSet(context.currentFrame, 0)  // Set 1: Textures (default)
+                    };
+
+                    vkCmdBindDescriptorSets(
+                        commandBuffer,
+                        VK_PIPELINE_BIND_POINT_GRAPHICS,
+                        pipeline_->layout(),
+                        0,  // First set index
+                        descriptorSets.size(),
+                        descriptorSets.data(),
+                        0,
+                        nullptr
+                    );
+
 
         for (size_t i = 0; i < models_.size(); i++) {
             auto& model = models_[i];
@@ -575,14 +608,6 @@ namespace vex {
             resources_->updateCameraUBO({view, proj});
             resources_->updateModelUBO(context.currentFrame, {model.transform.matrix()});
             //SDL_Log("Updated UBOs for model %zu", i);
-
-            // Bind pipeline
-            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_->get());
-            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                  pipeline_->layout(), 0, 1,
-                                  resources_->getDescriptorSetPtr(context.currentFrame), 0, nullptr);
-            //SDL_Log("Bound pipeline and descriptor sets");
-
             // Draw all submeshes
             vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame);
         }

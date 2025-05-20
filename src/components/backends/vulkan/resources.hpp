@@ -18,9 +18,9 @@ namespace vex {
         void updateModelUBO(uint32_t frameIndex, const ModelUBO& data);
 
         void createDefaultTexture();
-        void updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView);
+        void updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex);
         const std::string& getDefaultTextureName() const {
-            return "default";  // Return const reference
+            return defaultTextureName;
         }
 
         // Texture management
@@ -28,7 +28,15 @@ namespace vex {
         void unloadTexture(const std::string& name);
         VkImageView getTextureView(const std::string& name) const;
 
-        VkDescriptorSet getDescriptorSet(uint32_t frameIndex) const;
+        VkDescriptorSet getDescriptorSet(uint32_t frameIndex) const {
+            if (frameIndex >= descriptorSets_.size()) {
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                           "Invalid frame index %u (Max %zu)",
+                           frameIndex, descriptorSets_.size());
+                return VK_NULL_HANDLE;
+            }
+            return descriptorSets_[frameIndex];
+        }
 
         VkDescriptorSet* getDescriptorSetPtr(uint32_t frameIndex) {
             return &descriptorSets_[frameIndex];
@@ -36,18 +44,22 @@ namespace vex {
         VkDescriptorSet getUBODescriptorSet(uint32_t frameIndex) const {
             return descriptorSets_[frameIndex];
         }
-
-        VkDescriptorSet getTextureDescriptorSet(const std::string& name) const {
-            return textureDescriptorSets_.at(name);
-        }
+        VkDescriptorSet getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex);
 
         VkDescriptorSetLayout getDescriptorLayout() const { return descriptorSetLayout_; }
 
         bool textureExists(const std::string& name) const {
             return textures_.find(name) != textures_.end();
         }
+        uint32_t getTextureIndex(const std::string& name) const {
+            auto it = ctx_.textureIndices.find(name);
+            if (it != ctx_.textureIndices.end()) return it->second;
+            return 0; // Default texture index
+        }
 
     private:
+        const std::string defaultTextureName = "default";
+
         VulkanContext& ctx_;
 
         // Uniform buffers
@@ -60,7 +72,7 @@ namespace vex {
         VkDescriptorSetLayout descriptorSetLayout_;
         std::vector<VkDescriptorSet> descriptorSets_;
         VkDescriptorPool descriptorPool_;
-        std::unordered_map<std::string, VkDescriptorSet> textureDescriptorSets_;
+        std::vector<VkDescriptorSet> textureDescriptorSets_;
 
         // Textures
         std::unordered_map<std::string, VkImageView> textures_;
@@ -72,5 +84,6 @@ namespace vex {
 
         void createDescriptorResources();
         void createTextureSampler();
+        void createPerMeshTextureSets();
     };
 }

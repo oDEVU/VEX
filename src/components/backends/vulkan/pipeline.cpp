@@ -140,61 +140,43 @@ namespace vex {
         colorBlending.attachmentCount = 1;
         colorBlending.pAttachments = &colorBlendAttachment;
 
-        // Descriptors set layout
-        SDL_Log("Creating Descriptors set layout...");
-        std::array<VkDescriptorSetLayoutBinding, 3> bindings{};
-
-        SDL_Log("Binding camera UBO...");
-        // Camera UBO (binding 0)
-        bindings[0].binding = 0;
-        bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[0].descriptorCount = 1;
-        bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-
-        SDL_Log("Binding model UBO...");
-        // Model UBO (binding 1)
-        bindings[1].binding = 1;
-        bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[1].descriptorCount = 1;
-        bindings[1].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-
-        SDL_Log("Binding sampler...");
-        // Sampler (binding 2)
-        bindings[2].binding = 2;
-        bindings[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        bindings[2].descriptorCount = 1;
-        bindings[2].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
-        VkDescriptorSetLayoutCreateInfo layoutInfo{};
-        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-        layoutInfo.pBindings = bindings.data();
-
-        VkDescriptorSetLayout descriptorSetLayout;
-        if (vkCreateDescriptorSetLayout(ctx_.device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create descriptor set layout!");
-        }
-
-        // 2. Pipeline Layout
-        SDL_Log("Creating Pipeline layout...");
 
 
-        VkPushConstantRange pushConstantRange{};
-        pushConstantRange.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        pushConstantRange.offset = 0;
-        pushConstantRange.size = sizeof(PushConstants);
+            // 2. Pipeline Layout
+            SDL_Log("Creating Pipeline layout...");
 
-        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipelineLayoutInfo.setLayoutCount = 1;
-        pipelineLayoutInfo.pSetLayouts = &ctx_.descriptorSetLayout;
-        pipelineLayoutInfo.pushConstantRangeCount = 1;
-        pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+            VkPushConstantRange pushConstantRange{};
+            pushConstantRange.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+            pushConstantRange.offset = 0;
+            pushConstantRange.size = sizeof(PushConstants);
 
-        if (vkCreatePipelineLayout(ctx_.device, &pipelineLayoutInfo, nullptr, &layout_) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create pipeline layout!");
-        }
+            // Pipeline layout with both descriptor sets
+            std::array<VkDescriptorSetLayout, 2> setLayouts = {
+                ctx_.uboDescriptorSetLayout,
+                ctx_.textureDescriptorSetLayout
+            };
 
+            VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+            pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pipelineLayoutInfo.setLayoutCount = setLayouts.size();
+            pipelineLayoutInfo.pSetLayouts = setLayouts.data();
+            pipelineLayoutInfo.pushConstantRangeCount = 1;
+            pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+
+            SDL_Log("Creating pipeline layout with %d descriptor sets", setLayouts.size());
+            if (vkCreatePipelineLayout(ctx_.device, &pipelineLayoutInfo, nullptr, &layout_) != VK_SUCCESS) {
+                throw std::runtime_error("Failed to create pipeline layout!");
+            }
+
+        VkPipelineDepthStencilStateCreateInfo depthStencil{};
+        depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+        depthStencil.depthTestEnable = VK_TRUE;
+        depthStencil.depthWriteEnable = VK_TRUE;
+        depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+        depthStencil.depthBoundsTestEnable = VK_FALSE;
+        depthStencil.minDepthBounds = 0.0f;
+        depthStencil.maxDepthBounds = 1.0f;
+        depthStencil.stencilTestEnable = VK_FALSE;
 
         // 7. Create graphics pipeline
         SDL_Log("Creating Graphics pipeline...");
@@ -208,6 +190,7 @@ namespace vex {
         pipelineInfo.pRasterizationState = &rasterizer;
         pipelineInfo.pMultisampleState = &multisampling;
         pipelineInfo.pColorBlendState = &colorBlending;
+        pipelineInfo.pDepthStencilState = &depthStencil;
         pipelineInfo.layout = layout_;
         pipelineInfo.renderPass = ctx_.renderPass;
         pipelineInfo.subpass = 0;

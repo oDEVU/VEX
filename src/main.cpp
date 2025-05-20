@@ -1,4 +1,5 @@
 #include "components/engine.hpp"
+#include "components/model.hpp"
 
 #include <cstdlib>
 #include <sys/types.h>

@@ -7,6 +7,7 @@
 #include <SDL3/SDL_vulkan.h>
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 namespace vex {
     typedef struct {
@@ -24,6 +25,11 @@ namespace vex {
         VkFormat swapchainImageFormat;
         VkExtent2D swapchainExtent;
         std::vector<VkImageView> swapchainImageViews;
+
+        VkImage depthImage = VK_NULL_HANDLE;
+        VmaAllocation depthAllocation = VK_NULL_HANDLE;
+        VkImageView depthImageView;
+        VkFormat depthFormat;
 
         // Rendering members
         VkRenderPass renderPass;
@@ -72,6 +78,7 @@ namespace vex {
         uint32_t currentFrame = 0;
         uint32_t currentImageIndex = 0;
         const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
+        const uint32_t MAX_TEXTURES = 1024;
 
         // Synchronization (expanded)
         std::vector<VkSemaphore> imageAvailableSemaphores;
@@ -81,5 +88,16 @@ namespace vex {
         VkDescriptorSetLayout descriptorSetLayout;
         VkDescriptorSetLayout uboDescriptorSetLayout; // Set 0: UBOs
         VkDescriptorSetLayout textureDescriptorSetLayout; // Set 1: Textures
+
+        std::unordered_map<std::string, uint32_t> textureIndices;
+        uint32_t nextTextureIndex = 0;
+
+        // Frame management
+        struct FrameData {
+            VkDescriptorSet uboSet;
+            std::vector<VkDescriptorSet> textureSets;
+            // ... other frame resources ...
+        };
+        std::vector<FrameData> frames;
     } VulkanContext;
 }

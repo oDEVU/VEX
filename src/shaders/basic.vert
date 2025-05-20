@@ -14,9 +14,15 @@ layout(set = 0, binding = 1) uniform ModelUBO {
 
 layout(location = 0) out vec3 fragNormal;
 layout(location = 1) out vec2 fragUV;
+layout(location = 2) out float fragDepth; // Added for depth visualization if needed
 
 void main() {
-    gl_Position = camera.proj * camera.view * object.model * vec4(inPosition, 1.0);
+    vec4 worldPosition = object.model * vec4(inPosition, 1.0);
+    vec4 viewPosition = camera.view * worldPosition;
+    vec4 clipPosition = camera.proj * viewPosition;
+
+    gl_Position = clipPosition;
     fragNormal = mat3(transpose(inverse(object.model))) * inNormal;
     fragUV = inUV;
+    fragDepth = viewPosition.z; // Linear depth in view space
 }

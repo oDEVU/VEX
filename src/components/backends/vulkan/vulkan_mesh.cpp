@@ -72,6 +72,16 @@ namespace vex {
         for (size_t i = 0; i < submeshBuffers_.size(); i++) {
             const auto& buffers = submeshBuffers_[i];
             const auto& textureName = submeshTextures_[i];
+            uint32_t textureIndex = resources.getTextureIndex(textureName);
+
+
+            if (textureIndex >= ctx_.MAX_TEXTURES) {
+                SDL_LogError(SDL_LOG_CATEGORY_RENDER,
+                           "Invalid texture index %u for '%s' (Max: %u)",
+                           textureIndex, textureName.c_str(), ctx_.MAX_TEXTURES);
+                textureIndex = 0; // Fallback to default
+            }
+
 
             // Texture validation and logging
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
@@ -84,11 +94,9 @@ namespace vex {
                 if (currentTexture != textureName) {
                     VkImageView textureView = resources.getTextureView(textureName);
                     if (textureView != VK_NULL_HANDLE) {
-                        resources.updateTextureDescriptor(frameIndex, textureView);
-                        // Rebind the descriptor set after updating
+                        VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
                         vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                              pipelineLayout, 0, 1,
-                                              resources.getDescriptorSetPtr(frameIndex),
+                                              pipelineLayout, 1, 1, &texSet,
                                               0, nullptr);
                         currentTexture = textureName;
                     }
@@ -101,14 +109,14 @@ namespace vex {
                 if (currentTexture != textureName) {
                     VkImageView textureView = resources.getTextureView(textureName);
                     if(textureView != VK_NULL_HANDLE) {
-                        resources.updateTextureDescriptor(frameIndex, textureView);
+                        resources.updateTextureDescriptor(frameIndex, textureView, i);
                         currentTexture = textureName;
                         if(!debugDraw) SDL_Log("Bound texture: %s", textureName.c_str());
                     }
                 }
                 push.color = glm::vec4(1.0f); // Neutral multiplier
             } else {
-                push.color = glm::vec4(0.8f, 0.2f, 0.5f, 1.0f); // Debug pink
+                push.color = glm::vec4(1.0f); // Debug color (later replace with vertex color if possible)
                 if(!textureName.empty()) {
                     if(!debugDraw) SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
                               "Missing texture: %s", textureName.c_str());

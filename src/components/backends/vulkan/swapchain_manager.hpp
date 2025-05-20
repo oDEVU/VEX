@@ -28,11 +28,13 @@ namespace vex {
         void createCommandPool();
         void createCommandBuffers();
         void createSyncObjects();
+        void createDepthResources();
 
         // Swapchain utilities
         VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
         VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+        VkFormat findDepthFormat();
 
         VulkanContext& context_;
         SDL_Window *m_window;

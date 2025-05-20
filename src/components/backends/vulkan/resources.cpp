@@ -46,127 +46,125 @@ namespace vex {
     }
 
     void VulkanResources::createDescriptorResources() {
-        // Descriptor set layout
+        // Uniform buffer bindings (set 0)
         SDL_Log("Setting up VkDescriptorSetLayoutBinding...");
-        std::array<VkDescriptorSetLayoutBinding, 3> bindings{};
+        std::array<VkDescriptorSetLayoutBinding, 2> uboBindings{};
+        uboBindings[0].binding = 0;
+        uboBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        uboBindings[0].descriptorCount = 1;
+        uboBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-        // Camera UBO (binding 0)
-        bindings[0].binding = 0;
-        bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[0].descriptorCount = 1;
-        bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        uboBindings[1].binding = 1;
+        uboBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        uboBindings[1].descriptorCount = 1;
+        uboBindings[1].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-        // Model UBO (binding 1)
-        bindings[1].binding = 1;
-        bindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        bindings[1].descriptorCount = 1;
-        bindings[1].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        VkDescriptorSetLayoutCreateInfo uboLayoutInfo{};
+        uboLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        uboLayoutInfo.bindingCount = static_cast<uint32_t>(uboBindings.size());
+        uboLayoutInfo.pBindings = uboBindings.data();
 
-        // Texture sampler (binding 2)
-        bindings[2].binding = 2;
-        bindings[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        bindings[2].descriptorCount = 1;
-        bindings[2].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        SDL_Log("Creating Uniform buffer bindings...");
+        if (vkCreateDescriptorSetLayout(ctx_.device, &uboLayoutInfo, nullptr, &ctx_.uboDescriptorSetLayout) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create descriptor set layout");
+        }
 
-        VkDescriptorSetLayoutCreateInfo layoutInfo{};
-        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-        layoutInfo.pBindings = bindings.data();
+        // Texture bindings (set 1)
+    // Texture Descriptor Set Layout (Set 1)
+    VkDescriptorSetLayoutBinding texBinding{};
+    texBinding.binding = 0;
+    texBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    texBinding.descriptorCount = 1;
+    texBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-        SDL_Log("Creating up Descriptor set layout...");
-        vkCreateDescriptorSetLayout(ctx_.device, &layoutInfo, nullptr, &descriptorSetLayout_);
+    VkDescriptorSetLayoutCreateInfo texLayoutInfo{};
+    texLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    texLayoutInfo.bindingCount = 1;
+    texLayoutInfo.pBindings = &texBinding;
+
+        SDL_Log("Creating Texture bindings...");
+        if (vkCreateDescriptorSetLayout(ctx_.device, &texLayoutInfo, nullptr, &ctx_.textureDescriptorSetLayout) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create descriptor set layout");
+        }
+
         ctx_.descriptorSetLayout = descriptorSetLayout_;
 
-        // Descriptor pool
-        std::array<VkDescriptorPoolSize, 3> poolSizes{};
+        // Descriptor Pool
+        std::array<VkDescriptorPoolSize, 2> poolSizes{};
         poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         poolSizes[0].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * 2; // Camera + Model
-        poolSizes[1].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSizes[1].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * 2;
-        poolSizes[2].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[2].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT;
+        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        poolSizes[1].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES;
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
         poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = ctx_.MAX_FRAMES_IN_FLIGHT;
+        poolInfo.maxSets = ctx_.MAX_FRAMES_IN_FLIGHT * (2 + ctx_.MAX_TEXTURES); // UBO sets + texture sets
 
-        SDL_Log("Creating up Descriptor pool...");
-        vkCreateDescriptorPool(ctx_.device, &poolInfo, nullptr, &descriptorPool_);
+        SDL_Log("Creating descriptor pool with %d max sets", poolInfo.maxSets);
+        if (vkCreateDescriptorPool(ctx_.device, &poolInfo, nullptr, &descriptorPool_) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create descriptor pool");
+        }
 
-        // Allocate descriptor sets
-        std::vector<VkDescriptorSetLayout> layouts(ctx_.MAX_FRAMES_IN_FLIGHT, descriptorSetLayout_);
-        VkDescriptorSetAllocateInfo allocInfo{};
-        allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = descriptorPool_;
-        allocInfo.descriptorSetCount = ctx_.MAX_FRAMES_IN_FLIGHT;
-        allocInfo.pSetLayouts = layouts.data();
+        // Allocate UBO descriptor sets
+        std::vector<VkDescriptorSetLayout> uboLayouts(ctx_.MAX_FRAMES_IN_FLIGHT, ctx_.uboDescriptorSetLayout);
+        VkDescriptorSetAllocateInfo uboAllocInfo{};
+        uboAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        uboAllocInfo.descriptorPool = descriptorPool_;
+        uboAllocInfo.descriptorSetCount = ctx_.MAX_FRAMES_IN_FLIGHT;
+        uboAllocInfo.pSetLayouts = uboLayouts.data();
 
-        SDL_Log("Allocating Descriptor sets...");
+        SDL_Log("Allocating %d UBO descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT);
         descriptorSets_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
-        vkAllocateDescriptorSets(ctx_.device, &allocInfo, descriptorSets_.data());
+        if (vkAllocateDescriptorSets(ctx_.device, &uboAllocInfo, descriptorSets_.data()) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to allocate UBO descriptor sets");
+        }
 
-        // Update descriptor sets
+        // Allocate texture descriptor sets
+        createPerMeshTextureSets();
+        // Update descriptor sets (UBO and default texture)
         for (size_t i = 0; i < ctx_.MAX_FRAMES_IN_FLIGHT; i++) {
-            std::array<VkWriteDescriptorSet, 3> descriptorWrites{};
+            std::array<VkWriteDescriptorSet, 2> uboWrites{};
 
-            // Camera UBO (binding 0)
+            // Camera UBO
             VkDescriptorBufferInfo cameraBufferInfo{};
             cameraBufferInfo.buffer = cameraBuffers_[i];
             cameraBufferInfo.range = sizeof(CameraUBO);
 
-            descriptorWrites[0] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-            descriptorWrites[0].dstSet = descriptorSets_[i];
-            descriptorWrites[0].dstBinding = 0;
-            descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            descriptorWrites[0].descriptorCount = 1;
-            descriptorWrites[0].pBufferInfo = &cameraBufferInfo;
+            uboWrites[0] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+            uboWrites[0].dstSet = descriptorSets_[i];
+            uboWrites[0].dstBinding = 0;
+            uboWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            uboWrites[0].descriptorCount = 1;
+            uboWrites[0].pBufferInfo = &cameraBufferInfo;
 
-            // Model UBO (binding 1)
+            // Model UBO
             VkDescriptorBufferInfo modelBufferInfo{};
             modelBufferInfo.buffer = modelBuffers_[i];
             modelBufferInfo.range = sizeof(ModelUBO);
 
-            descriptorWrites[1] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-            descriptorWrites[1].dstSet = descriptorSets_[i];
-            descriptorWrites[1].dstBinding = 1;
-            descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            descriptorWrites[1].descriptorCount = 1;
-            descriptorWrites[1].pBufferInfo = &modelBufferInfo;
+            uboWrites[1] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+            uboWrites[1].dstSet = descriptorSets_[i];
+            uboWrites[1].dstBinding = 1;
+            uboWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            uboWrites[1].descriptorCount = 1;
+            uboWrites[1].pBufferInfo = &modelBufferInfo;
 
-            // Texture sampler (binding 2) - Use default texture
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            imageInfo.sampler = textureSampler_;
-            imageInfo.imageView = textures_["default"]; // Guaranteed to exist
-
-            descriptorWrites[2] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-            descriptorWrites[2].dstSet = descriptorSets_[i];
-            descriptorWrites[2].dstBinding = 2;
-            descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            descriptorWrites[2].descriptorCount = 1;
-            descriptorWrites[2].pImageInfo = &imageInfo;
-
-            SDL_Log("Updating Descriptor sets... frame: %i", i);
-            vkUpdateDescriptorSets(ctx_.device,
-                                 static_cast<uint32_t>(descriptorWrites.size()),
-                                 descriptorWrites.data(),
-                                 0, nullptr);
+            vkUpdateDescriptorSets(ctx_.device, uboWrites.size(), uboWrites.data(), 0, nullptr);
         }
     }
 
-
-    void VulkanResources::updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView) {
+    void VulkanResources::updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex){
         VkDescriptorImageInfo imageInfo{};
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        imageInfo.sampler = textureSampler_;
         imageInfo.imageView = textureView;
+        imageInfo.sampler = textureSampler_;
 
         VkWriteDescriptorSet write{};
         write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet = descriptorSets_[frameIndex];
-        write.dstBinding = 2;
+        write.dstSet = getTextureDescriptorSet(frameIndex, textureIndex);
+        write.dstBinding = 0;
         write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         write.descriptorCount = 1;
         write.pImageInfo = &imageInfo;
@@ -235,6 +233,66 @@ namespace vex {
         textureImages_["default"] = image;
         textureAllocations_["default"] = allocation;
         textureViews_["default"] = imageView;
+
+        ctx_.textureIndices["default"] = 0;
+        ctx_.nextTextureIndex = 1;
+        SDL_Log("Created default texture with index 0");
+    }
+
+    void VulkanResources::createPerMeshTextureSets() {
+        SDL_Log("Creating %d texture descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES);
+
+        textureDescriptorSets_.resize(ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES);
+
+        std::vector<VkDescriptorSetLayout> layouts(
+            ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES,
+            ctx_.textureDescriptorSetLayout
+        );
+
+        VkDescriptorSetAllocateInfo allocInfo{};
+        allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        allocInfo.descriptorPool = descriptorPool_;
+        allocInfo.descriptorSetCount = static_cast<uint32_t>(layouts.size());
+        allocInfo.pSetLayouts = layouts.data();
+
+        VkResult result = vkAllocateDescriptorSets(ctx_.device, &allocInfo, textureDescriptorSets_.data());
+        if (result != VK_SUCCESS) {
+            throw std::runtime_error("Failed to allocate texture descriptor sets: " + std::to_string(result));
+        }
+
+        // Update default texture for all slots
+        VkDescriptorImageInfo defaultImageInfo{};
+        defaultImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        defaultImageInfo.sampler = textureSampler_;
+        defaultImageInfo.imageView = getTextureView("default");
+
+        std::vector<VkWriteDescriptorSet> writes;
+        for (uint32_t frame = 0; frame < ctx_.MAX_FRAMES_IN_FLIGHT; ++frame) {
+            for (uint32_t texIdx = 0; texIdx < ctx_.MAX_TEXTURES; ++texIdx) {
+                VkWriteDescriptorSet write{};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = getTextureDescriptorSet(frame, texIdx);
+                write.dstBinding = 0;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                write.descriptorCount = 1;
+                write.pImageInfo = &defaultImageInfo;
+                writes.push_back(write);
+            }
+        }
+        vkUpdateDescriptorSets(ctx_.device, writes.size(), writes.data(), 0, nullptr);
+        SDL_Log("Initialized %d texture descriptor sets with default texture", writes.size());
+    }
+
+
+    VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) {
+        const uint32_t index = frameIndex * ctx_.MAX_TEXTURES + textureIndex;
+        if (index >= textureDescriptorSets_.size()) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                       "Texture index out of bounds (Frame: %u, TexIndex: %u, Max: %u)",
+                       frameIndex, textureIndex, ctx_.MAX_TEXTURES);
+            return VK_NULL_HANDLE;
+        }
+        return textureDescriptorSets_[index];
     }
 
     void VulkanResources::createTextureSampler() {
@@ -260,6 +318,12 @@ namespace vex {
         void VulkanResources::loadTexture(const std::string& path, const std::string& name) {
             std::string fullPath = "assets/" + std::string(path.c_str());
 
+            if (ctx_.textureIndices.size() >= ctx_.MAX_TEXTURES) {
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                           "Maximum texture count (%u) reached!",
+                           ctx_.MAX_TEXTURES);
+                return;
+            }
             // 1. File existence check
             std::ifstream test(fullPath);
             if (!test.is_open()) {
@@ -397,10 +461,44 @@ namespace vex {
                 throw std::runtime_error("Failed to create texture image view!");
             }
 
+            if (ctx_.textureIndices.contains(name)) {
+                SDL_Log("Texture '%s' already exists at index %u", name.c_str(), ctx_.textureIndices[name]);
+                return;
+            }
+
+            ctx_.textureIndices[name] = ctx_.nextTextureIndex++;
+            SDL_Log("Assigned texture '%s' to index %u", name.c_str(), ctx_.textureIndices[name]);
+
             textures_[name] = textureView;
             textureImages_[name] = textureImage;
             textureAllocations_[name] = textureAlloc;
             textureViews_[name] = textureView;
+
+                // Assign texture index
+                if (ctx_.textureIndices.size() >= ctx_.MAX_TEXTURES) {
+                    throw std::runtime_error("Exceeded maximum texture count");
+                }
+                ctx_.textureIndices[name] = ctx_.textureIndices.size();
+                SDL_Log("Assigned texture '%s' to index %d", name.c_str(), ctx_.textureIndices[name]);
+
+                // Update descriptor sets for all frames
+                VkDescriptorImageInfo imageDescInfo{};
+                imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageDescInfo.sampler = textureSampler_;
+                imageDescInfo.imageView = textureView;
+
+                for (uint32_t frame = 0; frame < ctx_.MAX_FRAMES_IN_FLIGHT; ++frame) {
+                    VkWriteDescriptorSet write{};
+                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet = getTextureDescriptorSet(frame, ctx_.textureIndices[name]);
+                    write.dstBinding = 0;
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                    write.descriptorCount = 1;
+                    write.pImageInfo = &imageDescInfo;
+
+                    vkUpdateDescriptorSets(ctx_.device, 1, &write, 0, nullptr);
+                }
+                SDL_Log("Updated texture descriptors for '%s'", name.c_str());
         }
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;
