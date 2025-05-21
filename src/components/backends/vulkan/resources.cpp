@@ -212,6 +212,37 @@ namespace vex {
             throw std::runtime_error("Failed to create default texture image");
         }
 
+        // After creating the image and before creating the image view:
+        VkCommandBuffer commandBuffer = ctx_.beginSingleTimeCommands();
+
+        // Transition from UNDEFINED to SHADER_READ_ONLY_OPTIMAL
+        VkImageMemoryBarrier barrier{};
+        barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.image = image;
+        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        barrier.subresourceRange.baseMipLevel = 0;
+        barrier.subresourceRange.levelCount = 1;
+        barrier.subresourceRange.baseArrayLayer = 0;
+        barrier.subresourceRange.layerCount = 1;
+        barrier.srcAccessMask = 0;
+        barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+        vkCmdPipelineBarrier(
+            commandBuffer,
+            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+            0,
+            0, nullptr,
+            0, nullptr,
+            1, &barrier
+        );
+
+        ctx_.endSingleTimeCommands(commandBuffer);
+
         // Create image view
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -403,8 +434,13 @@ namespace vex {
             barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
             barrier.image = textureImage;
             barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            barrier.subresourceRange.baseMipLevel = 0;
             barrier.subresourceRange.levelCount = 1;
+            barrier.subresourceRange.baseArrayLayer = 0;
             barrier.subresourceRange.layerCount = 1;
+            barrier.srcAccessMask = 0;
+            barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
 
             vkCmdPipelineBarrier(commandBuffer,
                 VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
@@ -416,8 +452,11 @@ namespace vex {
 
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            region.imageSubresource.mipLevel = 0;
+            region.imageSubresource.baseArrayLayer = 0;
             region.imageSubresource.layerCount = 1;
             region.imageExtent = imageInfo.extent;
+
 
             vkCmdCopyBufferToImage(commandBuffer,
                 stagingBuffer,
@@ -441,6 +480,9 @@ namespace vex {
                 1, &barrier);
 
             ctx_.endSingleTimeCommands(commandBuffer);
+
+            // Ensure the command buffer completes execution before proceeding
+            vkDeviceWaitIdle(ctx_.device);
 
             // Cleanup staging
             vmaDestroyBuffer(ctx_.allocator, stagingBuffer, stagingAlloc);

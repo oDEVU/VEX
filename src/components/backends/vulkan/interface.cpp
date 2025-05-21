@@ -234,6 +234,9 @@ namespace vex {
             attributes
         );
 
+        //setObjectName(context.device, (uint64_t)context.depthImage,
+        //             VK_OBJECT_TYPE_IMAGE, "Depth Buffer");
+
         startTime = std::chrono::high_resolution_clock::now();
         SDL_Log("Vulkan interface initialized successfully");
     }

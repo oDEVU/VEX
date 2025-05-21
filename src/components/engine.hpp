@@ -29,5 +29,6 @@ protected:
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Interface> m_interface;
     bool m_running = true;
+    u_int64_t frame = 0;
 };
 }

@@ -144,8 +144,9 @@ namespace vex {
                 PS1Effects::VERTEX_JITTER |
                 PS1Effects::NTSC_ARTIFACTS;
 
-            vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_FRAGMENT_BIT,
-                             0, sizeof(PushConstants), &push);
+            vkCmdPushConstants(cmd, pipelineLayout,
+                              VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                              0, sizeof(PushConstants), &push);
 
             // Buffer binding
             VkBuffer vertexBuffers[] = {buffers.vertexBuffer};

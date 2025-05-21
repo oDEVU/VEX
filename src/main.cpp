@@ -8,8 +8,6 @@ class MyGame : public vex::Engine {
 public:
     using vex::Engine::Engine; // Inherit constructor
 
-    u_int64_t frame = 0;
-
     void processEvent(const SDL_Event& event) {
         if (event.type == SDL_EVENT_KEY_DOWN) {
             const SDL_KeyboardEvent& key_event = event.key;
@@ -28,15 +26,11 @@ public:
 
     void update(float deltaTime) override {
         // Custom game logic
-        if(frame == 5){
-            SDL_Log("Main loop: Trying to load models...");
-            m_interface->loadModel("assets/cube.obj", "cube");
-            //m_interface->loadModel("assets/human.obj", "human");
-            m_interface->loadModel("assets/PenguinBaseMesh.obj", "penguin");
-            m_interface->loadModel("assets/scene.gltf", "viper");
-        }
-
-        frame++;
+        SDL_Log("Main loop: Trying to load models...");
+        m_interface->loadModel("assets/cube.obj", "cube");
+        //m_interface->loadModel("assets/human.obj", "human");
+        m_interface->loadModel("assets/PenguinBaseMesh.obj", "penguin");
+        m_interface->loadModel("assets/scene.gltf", "viper");
     }
 
     void render() override {

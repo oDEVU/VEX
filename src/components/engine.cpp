@@ -44,8 +44,13 @@ void Engine::run() {
         lastTime = now;
 
         // Update and render
-        update(deltaTime);
+
+        if(frame == 1){
+            update(deltaTime);
+        }
+
         render();
+        frame++;
     }
 }
 
