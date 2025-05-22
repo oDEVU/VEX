@@ -24,13 +24,24 @@ public:
         }
     }
 
+    bool modelsLoaded = false;
+    vex::Model* viper;
+
     void update(float deltaTime) override {
         // Custom game logic
-        SDL_Log("Main loop: Trying to load models...");
-        m_interface->loadModel("assets/cube.obj", "cube");
-        //m_interface->loadModel("assets/human.obj", "human");
-        m_interface->loadModel("assets/PenguinBaseMesh.obj", "penguin");
-        m_interface->loadModel("assets/scene.gltf", "viper");
+        if(!modelsLoaded){
+            SDL_Log("Main loop: Trying to load models...");
+            m_interface->loadModel("assets/cube.obj", "cube");
+            //m_interface->loadModel("assets/human.obj", "human");
+            m_interface->loadModel("assets/PenguinBaseMesh.obj", "penguin");
+            m_interface->loadModel("assets/scene.gltf", "viper");
+            viper = m_interface->getModel("viper");
+            modelsLoaded = true;
+        }
+
+        if (viper) {
+            viper->transform.rotation.y = frame; // Modify the original model
+        }
     }
 
     void render() override {

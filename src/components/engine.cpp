@@ -45,7 +45,7 @@ void Engine::run() {
 
         // Update and render
 
-        if(frame == 1){
+        if(frame > 0){
             update(deltaTime);
         }
 
