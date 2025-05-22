@@ -39,7 +39,7 @@ namespace vex {
                           &cameraBuffers_[i], &cameraAllocs_[i], nullptr);
 
             // Model UBO (per-frame)
-            bufferInfo.size = sizeof(ModelUBO); // Set explicitly
+            bufferInfo.size = sizeof(ModelUBO) * ctx_.MAX_MODELS; // Set explicitly
             vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
                           &modelBuffers_[i], &modelAllocs_[i], nullptr);
         }
@@ -55,7 +55,7 @@ namespace vex {
         uboBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
         uboBindings[1].binding = 1;
-        uboBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        uboBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         uboBindings[1].descriptorCount = 1;
         uboBindings[1].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
@@ -90,11 +90,19 @@ namespace vex {
         ctx_.descriptorSetLayout = descriptorSetLayout_;
 
         // Descriptor Pool
-        std::array<VkDescriptorPoolSize, 2> poolSizes{};
+        std::array<VkDescriptorPoolSize, 3> poolSizes{}; // Increased to 3
+
+        // Camera UBO (static)
         poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSizes[0].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * 2; // Camera + Model
-        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[1].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES;
+        poolSizes[0].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT;
+
+        // Model UBO (dynamic)
+        poolSizes[1].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+        poolSizes[1].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_MODELS;
+
+        // Textures
+        poolSizes[2].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        poolSizes[2].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES;
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -147,7 +155,7 @@ namespace vex {
             uboWrites[1] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
             uboWrites[1].dstSet = descriptorSets_[i];
             uboWrites[1].dstBinding = 1;
-            uboWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            uboWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
             uboWrites[1].descriptorCount = 1;
             uboWrites[1].pBufferInfo = &modelBufferInfo;
 
@@ -179,10 +187,17 @@ namespace vex {
         vmaUnmapMemory(ctx_.allocator, cameraAllocs_[ctx_.currentFrame]);
     }
 
-    void VulkanResources::updateModelUBO(uint32_t frameIndex, const ModelUBO& data) {
+    void VulkanResources::updateModelUBO(uint32_t frameIndex, uint32_t modelIndex, const ModelUBO& data) {
+        if (modelIndex >= ctx_.MAX_MODELS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                         "Model index %u exceeds MAX_MODELS (%u)",
+                         modelIndex, ctx_.MAX_MODELS);
+            return;
+        }
         void* mapped;
         vmaMapMemory(ctx_.allocator, modelAllocs_[frameIndex], &mapped);
-        memcpy(mapped, &data, sizeof(data));
+        char* modelData = static_cast<char*>(mapped) + modelIndex * sizeof(ModelUBO);
+        memcpy(modelData, &data, sizeof(ModelUBO));
         vmaUnmapMemory(ctx_.allocator, modelAllocs_[frameIndex]);
     }
 

@@ -15,7 +15,7 @@ namespace vex {
         void createUniformBuffers();
 
         void updateCameraUBO(const CameraUBO& data);
-        void updateModelUBO(uint32_t frameIndex, const ModelUBO& data);
+        void updateModelUBO(uint32_t frameIndex, uint32_t modelIndex, const ModelUBO& data);
 
         void createDefaultTexture();
         void updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex);

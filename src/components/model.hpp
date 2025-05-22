@@ -8,6 +8,7 @@ namespace vex {
     public:
         MeshData meshData;
         Transform transform;
+        uint32_t id = UINT32_MAX;
         std::vector<std::string> textureNames;  // Changed from texturePath to textureName
 
         void loadFromFile(const std::string& path) {

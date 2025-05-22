@@ -80,6 +80,7 @@ namespace vex {
         uint32_t currentImageIndex = 0;
         const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
         const uint32_t MAX_TEXTURES = 1024;
+        const uint32_t MAX_MODELS = 1024;
 
         // Synchronization (expanded)
         std::vector<VkSemaphore> imageAvailableSemaphores;

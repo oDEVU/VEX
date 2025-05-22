@@ -334,9 +334,22 @@ namespace vex {
             throw;
         }
 
+            // Assign a stable ID
+            uint32_t newId;
+            if (!freeModelIds_.empty()) {
+                newId = freeModelIds_.back();
+                freeModelIds_.pop_back();
+            } else {
+                newId = nextModelId_++;
+                if (newId >= context.MAX_MODELS) {
+                    throw std::runtime_error("Maximum model count exceeded");
+                }
+            }
+
         // Create new model entry
-        models_.emplace_back();
-        Model& model = models_.back();
+        models_.emplace_back(std::make_unique<Model>());
+        Model& model = *models_.back();
+        model.id = newId;
         model.meshData = std::move(meshData);
 
         // Collect unique texture paths from all submeshes
@@ -379,27 +392,30 @@ namespace vex {
         }
 
         // Register model
-        modelRegistry_[name] = models_.size() - 1;
+        modelRegistry_[name] = &model;
         SDL_Log("Model %s registered successfully", name.c_str());
         return model;
     }
 
     void Interface::unloadModel(const std::string& name) {
+
         auto it = modelRegistry_.find(name);
         if (it == modelRegistry_.end()) return;
 
-        const size_t index = it->second;
+            // Reclaim the ID
+            freeModelIds_.push_back(it->second->id);
 
-        // Remove GPU resources
-        vulkanMeshes_[index].reset();
-        models_.erase(models_.begin() + index);
-        vulkanMeshes_.erase(vulkanMeshes_.begin() + index);
+        // Find the model in the deque
 
-        // Update registry
+            // Erase from deque
+            auto modelIter = std::find_if(
+                models_.begin(), models_.end(),
+                [&](const auto& m) { return m.get() == it->second; }
+            );
+            if (modelIter != models_.end()) models_.erase(modelIter);
+
+        // Remove from registry
         modelRegistry_.erase(name);
-        for (auto& pair : modelRegistry_) {
-            if (pair.second > index) pair.second--;
-        }
 
         // Unload texture
         resources_->unloadTexture(name);
@@ -407,7 +423,7 @@ namespace vex {
 
     Model* Interface::getModel(const std::string& name) {
         auto it = modelRegistry_.find(name);
-        return (it != modelRegistry_.end()) ? &models_[it->second] : nullptr;
+        return (it != modelRegistry_.end()) ? it->second : nullptr;
     }
     void Interface::createDefaultTexture() {
         resources_->createDefaultTexture();
@@ -586,36 +602,20 @@ namespace vex {
                     // Bind pipeline
                     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_->get());
 
-                    // Bind BOTH descriptor sets
-                    std::array<VkDescriptorSet, 2> descriptorSets = {
-                        resources_->getDescriptorSet(context.currentFrame),  // Set 0: UBOs
-                        resources_->getTextureDescriptorSet(context.currentFrame, 0)  // Set 1: Textures (default)
-                    };
-
-                    vkCmdBindDescriptorSets(
-                        commandBuffer,
-                        VK_PIPELINE_BIND_POINT_GRAPHICS,
-                        pipeline_->layout(),
-                        0,  // First set index
-                        descriptorSets.size(),
-                        descriptorSets.data(),
-                        0,
-                        nullptr
-                    );
 
         auto now = std::chrono::high_resolution_clock::now();
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
-        for (size_t i = 0; i < models_.size(); i++) {
-            auto& model = models_[i];
-            auto& vulkanMesh = vulkanMeshes_[i];
+        for (auto& modelPtr : models_) {
+            auto& model = *modelPtr;
+            auto& vulkanMesh = vulkanMeshes_[model.id];
 
             // Update UBOs
             resources_->updateCameraUBO({view, proj});
-            resources_->updateModelUBO(context.currentFrame, {model.transform.matrix()});
+            resources_->updateModelUBO(context.currentFrame, model.id, ModelUBO{model.transform.matrix()});
             //SDL_Log("Updated UBOs for model %zu", i);
             // Draw all submeshes
-            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, currentTime);
+            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, model.id, currentTime);
         }
 
 

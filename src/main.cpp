@@ -26,12 +26,15 @@ public:
 
     bool modelsLoaded = false;
     vex::Model* viper;
+    vex::Model* penguin;
+    vex::Model* cube;
 
     void update(float deltaTime) override {
         // Custom game logic
         if(!modelsLoaded){
             SDL_Log("Main loop: Trying to load models...");
             m_interface->loadModel("assets/cube.obj", "cube");
+            cube = m_interface->getModel("cube");
             //m_interface->loadModel("assets/human.obj", "human");
             m_interface->loadModel("assets/PenguinBaseMesh.obj", "penguin");
             m_interface->loadModel("assets/scene.gltf", "viper");
@@ -39,8 +42,20 @@ public:
             modelsLoaded = true;
         }
 
+        if(frame == 100){
+            penguin = m_interface->getModel("penguin");
+        }
+
         if (viper) {
-            viper->transform.rotation.y = frame; // Modify the original model
+            viper->transform.rotation.y = (frame/100);
+        }
+
+        if (penguin && frame > 100) {
+            penguin->transform.position.y = (sin(frame/100)/2)+1;
+        }
+
+        if (cube) {
+            cube->transform.scale = glm::vec3{sin(float(frame)/1000), sin(float(frame)/1000), sin(float(frame)/1000)};
         }
     }
 

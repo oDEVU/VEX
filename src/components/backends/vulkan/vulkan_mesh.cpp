@@ -71,7 +71,7 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-                         VulkanResources& resources, uint32_t frameIndex, float currentTime) const {
+                         VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime) const {
         if(!debugDraw) SDL_Log("Drawing mesh with %zu submeshes", submeshBuffers_.size());
 
         std::string currentTexture = "";
@@ -88,6 +88,25 @@ namespace vex {
                 textureIndex = 0; // Fallback to default
             }
 
+            // Calculate dynamic offset for this model
+            uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+
+            // Bind descriptor sets with dynamic offset
+            std::array<VkDescriptorSet, 2> descriptorSets = {
+                resources.getDescriptorSet(frameIndex),
+                resources.getTextureDescriptorSet(frameIndex, textureIndex)
+            };
+
+            vkCmdBindDescriptorSets(
+                cmd,
+                VK_PIPELINE_BIND_POINT_GRAPHICS,
+                pipelineLayout,
+                0,  // First set index
+                descriptorSets.size(),
+                descriptorSets.data(),
+                1,  // Number of dynamic offsets
+                &dynamicOffset  // Pointer to offsets array
+            );
 
             // Texture validation and logging
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);

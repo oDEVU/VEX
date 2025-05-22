@@ -6,6 +6,7 @@
 #include <SDL3/SDL_vulkan.h>
 #include <vector>
 #include <memory>
+#include <deque>
 #include <glm/glm.hpp>
 #include <chrono>
 
@@ -29,8 +30,13 @@ namespace vex {
         std::unique_ptr<VulkanResources> resources_;
         std::unique_ptr<VulkanPipeline> pipeline_;
 
-        std::vector<Model> models_;
-        std::unordered_map<std::string, size_t> modelRegistry_;
+        std::deque<std::unique_ptr<Model>> models_;
+        std::unordered_map<std::string, Model*> modelRegistry_;
+
+        std::vector<uint32_t> freeModelIds_;
+        uint32_t nextModelId_ = 0;
+        static constexpr uint32_t INVALID_MODEL_ID = UINT32_MAX;
+
         std::vector<std::unique_ptr<VulkanMesh>> vulkanMeshes_;
 
         void createDefaultTexture();
