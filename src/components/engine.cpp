@@ -1,5 +1,6 @@
 // engine.cpp
 #include "engine.hpp"
+#include "SDL3/SDL_events.h"
 
 namespace vex {
 
@@ -8,9 +9,15 @@ Engine::Engine(const char* title, int width, int height) {
     // Create window
     m_window = std::make_unique<Window>(title, width, height);
 
+    // Create resolution manager
+    resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
+
     // Create renderer (could be Vulkan or OpenGL)
+    //
+    // Pass initial render resolution to interface
+    auto renderRes = resolutionManager->getRenderResolution();
     SDL_Log("Initializing Vulkan interface...");
-    m_interface = std::make_unique<Interface>(m_window->GetSDLWindow());
+    m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes);
 
 
     SDL_Log("Engine initialized successfully");
@@ -34,6 +41,11 @@ void Engine::run() {
                     break;
                 case SDL_EVENT_WILL_ENTER_BACKGROUND:
                     m_interface->unbindWindow();
+                    break;
+                case SDL_EVENT_WINDOW_RESIZED:
+                    resolutionManager->update();
+                    auto renderRes = resolutionManager->getRenderResolution();
+                    m_interface->setRenderResolution(renderRes);
                     break;
             }
         }
@@ -65,15 +77,18 @@ Engine::~Engine() {
 void Engine::processEvent(const SDL_Event& event) {}
 void Engine::update(float deltaTime) {}
 void Engine::render() {
-
-    /* Temponary matrixes FIX */
-    int drawableWidth = 0, drawableHeight = 0;
-    SDL_GetWindowSizeInPixels(m_window->GetSDLWindow(), &drawableWidth, &drawableHeight);
+    auto renderRes = resolutionManager->getRenderResolution();
 
     glm::mat4 view = glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
-    glm::mat4 proj = glm::perspective(glm::radians(45.0f), drawableWidth / (float)drawableHeight, 0.1f, 100.0f);
+    glm::mat4 proj = glm::perspective(
+        glm::radians(45.0f),
+        renderRes.x / static_cast<float>(renderRes.y),
+        0.1f,
+        100.0f
+    );
     proj[1][1] *= -1;
-    m_interface->renderFrame(view, proj);
+
+    m_interface->renderFrame(view, proj, renderRes);
 }
 
 }

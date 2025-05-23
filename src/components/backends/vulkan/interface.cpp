@@ -11,8 +11,10 @@
 #include <unordered_set>
 
 namespace vex {
-    Interface::Interface(SDL_Window* window) : window_(window) {
+    Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution) : window_(window){
         constexpr uint32_t apiVersion = VK_API_VERSION_1_3;
+
+         context.currentRenderResolution = initialResolution;
 
         // Initialize Volk with SDL's loader
         SDL_Log("Loading Vulkan library...");
@@ -455,7 +457,20 @@ namespace vex {
         context.surface = VK_NULL_HANDLE;
     }
 
-    void Interface::renderFrame(const glm::mat4& view, const glm::mat4& proj) {
+    void Interface::setRenderResolution(glm::uvec2 resolution) {
+        context.currentRenderResolution = resolution;
+        // Recreate swapchain with new resolution
+        swapchainManager_->recreateSwapchain();
+
+        // Update viewport and scissor in pipeline
+        pipeline_->updateViewport(resolution);
+    }
+
+    void Interface::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution) {
+        if (renderResolution != context.currentRenderResolution) {
+            context.currentRenderResolution = renderResolution;
+            pipeline_->updateViewport(renderResolution);
+        }
         // Wait for previous frame
         vkWaitForFences(
             context.device,
@@ -500,6 +515,20 @@ namespace vex {
             VkCommandBufferBeginInfo beginInfo{};
             beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
             vkBeginCommandBuffer(context.commandBuffers[context.currentImageIndex], &beginInfo);
+
+            VkViewport viewport{};
+            viewport.x = 0.0f;
+            viewport.y = 0.0f;
+            viewport.width = static_cast<float>(context.currentRenderResolution.x);
+            viewport.height = static_cast<float>(context.currentRenderResolution.y);
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(context.commandBuffers[context.currentImageIndex], 0, 1, &viewport);
+
+            VkRect2D scissor{};
+            scissor.offset = {0, 0};
+            scissor.extent = {context.currentRenderResolution.x, context.currentRenderResolution.y};
+            vkCmdSetScissor(context.commandBuffers[context.currentImageIndex], 0, 1, &scissor);
 
             VkRenderPassBeginInfo renderPassInfo = {};
                     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -615,7 +644,7 @@ namespace vex {
             resources_->updateModelUBO(context.currentFrame, model.id, ModelUBO{model.transform.matrix()});
             //SDL_Log("Updated UBOs for model %zu", i);
             // Draw all submeshes
-            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, model.id, currentTime);
+            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, model.id, currentTime, context.currentRenderResolution);
         }
 
 

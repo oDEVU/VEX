@@ -1,6 +1,7 @@
 #pragma once
 #include "context.hpp"
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace vex {
     class VulkanPipeline {
@@ -17,11 +18,14 @@ namespace vex {
 
         VkPipeline get() const { return pipeline_; }
         VkPipelineLayout layout() const { return layout_; }
+        void updateViewport(glm::uvec2 resolution);
 
     private:
         VulkanContext& ctx_;
         VkPipeline pipeline_ = VK_NULL_HANDLE;
         VkPipelineLayout layout_ = VK_NULL_HANDLE;
+
+        glm::uvec2 currentRenderResolution;
 
         std::vector<char> readFile(const std::string& filename);
     };

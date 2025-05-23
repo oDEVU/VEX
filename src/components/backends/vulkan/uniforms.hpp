@@ -12,29 +12,34 @@ namespace vex {
     };
 
     struct PushConstants {
-        // Time and Matrix
-        alignas(16) float time;
+        // Matrix
         alignas(16) glm::vec4 affineTransformX;
         alignas(16) glm::vec4 affineTransformY;
         alignas(16) glm::vec4 affineTransformZ;
 
         // Vertex snapping
-        alignas(8) glm::vec2 screenSize;
         alignas(4) float snapResolution;
 
         // PS1 Effects
-        alignas(4) float jitterIntensity; // <-- REINSTATED
+        alignas(4) float jitterIntensity;
         alignas(4) int enablePS1Effects;
 
         // Color
         alignas(16) glm::vec4 color;
 
-        // Helper method
-        void setAffineTransform(const glm::mat3& m) {
-            affineTransformX = glm::vec4(m[0], 0.0f);
-            affineTransformY = glm::vec4(m[1], 0.0f);
-            affineTransformZ = glm::vec4(m[2], 0.0f);
-        }
+        alignas(16) float time;
+        alignas(8) glm::vec2 renderResolution;
+        alignas(8) glm::vec2 windowResolution;
+        alignas(16) float upscaleRatio;
+        alignas(4) int renderingMode;
+        // Add padding if needed
+
+                // Helper method
+                void setAffineTransform(const glm::mat3& m) {
+                    affineTransformX = glm::vec4(m[0], 0.0f);
+                    affineTransformY = glm::vec4(m[1], 0.0f);
+                    affineTransformZ = glm::vec4(m[2], 0.0f);
+                }
     };
 
     namespace PS1Effects {

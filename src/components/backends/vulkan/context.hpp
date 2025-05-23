@@ -8,6 +8,7 @@
 #include <SDL3/SDL_vulkan.h>
 #include <vector>
 #include <memory>
+#include <glm/glm.hpp>
 #include <unordered_map>
 
 namespace vex {
@@ -26,6 +27,11 @@ namespace vex {
         VkFormat swapchainImageFormat;
         VkExtent2D swapchainExtent;
         std::vector<VkImageView> swapchainImageViews;
+
+        VkImage renderTargetImage = VK_NULL_HANDLE;
+        VmaAllocation renderTargetAllocation = VK_NULL_HANDLE;
+        VkImageView renderTargetView = VK_NULL_HANDLE;
+        VkExtent2D renderResolution;
 
         VkImage depthImage = VK_NULL_HANDLE;
         VmaAllocation depthAllocation = VK_NULL_HANDLE;
@@ -101,5 +107,6 @@ namespace vex {
             // ... other frame resources ...
         };
         std::vector<FrameData> frames;
+        glm::uvec2 currentRenderResolution;
     } VulkanContext;
 }

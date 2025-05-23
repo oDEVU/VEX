@@ -7,6 +7,7 @@
 class MyGame : public vex::Engine {
 public:
     using vex::Engine::Engine; // Inherit constructor
+    bool animate = true;
 
     void processEvent(const SDL_Event& event) {
         if (event.type == SDL_EVENT_KEY_DOWN) {
@@ -15,6 +16,10 @@ public:
             // Physical key position (recommended for games)
             if (key_event.scancode == SDL_SCANCODE_ESCAPE) {
                 m_running = false;
+            }
+
+            if (key_event.scancode == SDL_SCANCODE_P) {
+                animate = !animate;
             }
 
             // Virtual key (respects keyboard layout)
@@ -46,16 +51,19 @@ public:
             penguin = m_interface->getModel("penguin");
         }
 
-        if (viper) {
-            viper->transform.rotation.y = (frame/100);
-        }
+        if(animate){
 
-        if (penguin && frame > 100) {
-            penguin->transform.position.y = (sin(frame/100)/2)+1;
-        }
+                    if (viper) {
+                        viper->transform.rotation.y = (frame/100);
+                    }
 
-        if (cube) {
-            cube->transform.scale = glm::vec3{sin(float(frame)/1000), sin(float(frame)/1000), sin(float(frame)/1000)};
+                    if (penguin && frame > 100) {
+                        penguin->transform.position.y = (sin(frame/100)/2)+1;
+                    }
+
+                    if (cube) {
+                        cube->transform.scale = glm::vec3{sin(float(frame)/1000), sin(float(frame)/1000), sin(float(frame)/1000)};
+                    }
         }
     }
 

@@ -41,7 +41,7 @@ namespace vex {
 
         void createDefaultTexture();
     public:
-        Interface(SDL_Window* window);
+        Interface(SDL_Window* window, glm::uvec2 initialResolution);
         ~Interface();
 
         Model& loadModel(const std::string& modelPath, const std::string& name);
@@ -53,6 +53,7 @@ namespace vex {
 
         void bindWindow(SDL_Window* window);
         void unbindWindow();
-        void renderFrame(const glm::mat4& view, const glm::mat4& proj);
+        void setRenderResolution(glm::uvec2 resolution);
+        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution);
     };
 }

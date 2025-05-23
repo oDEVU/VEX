@@ -12,7 +12,7 @@ namespace vex {
         void upload(const MeshData& meshData);
         // Add pipeline layout parameter for push constants
         void draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-                VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime) const;
+                VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const;
 
     private:
         struct SubmeshBuffers {

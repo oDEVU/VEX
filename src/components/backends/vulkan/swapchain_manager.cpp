@@ -57,7 +57,7 @@ namespace vex {
         createInfo.imageColorSpace = surfaceFormat.colorSpace;
         createInfo.imageExtent = extent;
         createInfo.imageArrayLayers = 1;
-        createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 
         uint32_t queueFamilyIndices[] = {context_.graphicsQueueFamily, context_.presentQueueFamily};
         if (context_.graphicsQueueFamily != context_.presentQueueFamily) {
@@ -401,8 +401,8 @@ namespace vex {
             SDL_GetWindowSizeInPixels(m_window, &width, &height);
 
             VkExtent2D actualExtent = {
-                static_cast<uint32_t>(width),
-                static_cast<uint32_t>(height)
+                static_cast<uint32_t>(context_.currentRenderResolution.x),
+                static_cast<uint32_t>(context_.currentRenderResolution.y)
             };
 
             actualExtent.width = std::clamp(

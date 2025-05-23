@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 
 #include "window.hpp"
+#include "resolution_manager.hpp"
 #include "backends/vulkan/interface.hpp"
 
 namespace vex {
@@ -20,6 +21,9 @@ public:
     SDL_Window* getWindow() const;
     Interface* getInterface() const;
 
+    void setResolutionMode(ResolutionMode mode) { resolutionManager->setMode(mode); }
+    ResolutionMode getResolutionMode() const { return resolutionManager->getCurrentMode(); }
+
     // Event handling hooks
     virtual void processEvent(const SDL_Event& event);
     virtual void update(float deltaTime);
@@ -28,6 +32,7 @@ public:
 protected:
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Interface> m_interface;
+    std::unique_ptr<ResolutionManager> resolutionManager;
     bool m_running = true;
     u_int64_t frame = 0;
 };

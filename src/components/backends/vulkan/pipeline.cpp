@@ -29,6 +29,10 @@ namespace vex {
         return buffer;
     }
 
+    void VulkanPipeline::updateViewport(glm::uvec2 resolution) {
+        currentRenderResolution = resolution;
+    }
+
     void VulkanPipeline::createGraphicsPipeline(
         const std::string& vertShaderPath,
         const std::string& fragShaderPath,
@@ -92,14 +96,14 @@ namespace vex {
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float)ctx_.swapchainExtent.width;
-        viewport.height = (float)ctx_.swapchainExtent.height;
+        viewport.width = static_cast<float>(ctx_.currentRenderResolution.x);
+        viewport.height = static_cast<float>(ctx_.currentRenderResolution.y);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
         scissor.offset = {0, 0};
-        scissor.extent = ctx_.swapchainExtent;
+        scissor.extent = {currentRenderResolution.x, currentRenderResolution.y};
 
         SDL_Log("Creating viewport state...");
         VkPipelineViewportStateCreateInfo viewportState{};
@@ -178,6 +182,18 @@ namespace vex {
         depthStencil.maxDepthBounds = 1.0f;
         depthStencil.stencilTestEnable = VK_FALSE;
 
+
+        // Add dynamic state
+        std::vector<VkDynamicState> dynamicStates = {
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR
+        };
+
+        VkPipelineDynamicStateCreateInfo dynamicState{};
+        dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+        dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+        dynamicState.pDynamicStates = dynamicStates.data();
+
         // 7. Create graphics pipeline
         SDL_Log("Creating Graphics pipeline...");
         VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -191,6 +207,7 @@ namespace vex {
         pipelineInfo.pMultisampleState = &multisampling;
         pipelineInfo.pColorBlendState = &colorBlending;
         pipelineInfo.pDepthStencilState = &depthStencil;
+        pipelineInfo.pDynamicState = &dynamicState;
         pipelineInfo.layout = layout_;
         pipelineInfo.renderPass = ctx_.renderPass;
         pipelineInfo.subpass = 0;

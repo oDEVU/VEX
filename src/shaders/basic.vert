@@ -18,17 +18,22 @@ layout(location = 0) out vec3 fragNormal;
 layout(location = 1) out vec2 fragUV;
 layout(location = 2) out float fragDepth;
 
-// Push constants with proper alignment
 layout(push_constant) uniform PushConsts {
-    float time;
+    // Model properties
     vec4 affineTransformX;
     vec4 affineTransformY;
     vec4 affineTransformZ;
-    vec2 screenSize;
     float snapResolution;
     float jitterIntensity;
     int enablePS1Effects;
     vec4 color;
+
+    // Resolution control
+    float time;
+    vec2 renderResolution;
+    vec2 windowResolution;
+    float upscaleRatio;
+    int renderingMode;
 } push;
 
 // PS1-style noise function
@@ -37,20 +42,20 @@ float ps1_noise(vec2 pos, float seed) {
 }
 
 void main() {
-    // 1. PROPER vertex snapping (adjusted scale)
-    vec3 processedPos = inPosition;
+    vec4 worldPos = object.model * vec4(inPosition, 1.0);
+
+    // 1. PROPER vertex snapping
     if (bool(push.enablePS1Effects & 0x1)) {
-        processedPos = floor(inPosition / 0.01) * 0.01; // 1cm grid
+        worldPos.xyz = floor(worldPos.xyz / 0.01) * 0.01; // 1cm grid
     }
 
     // 2. Transform to clip space
-    vec4 worldPos = object.model * vec4(processedPos, 1.0);
     vec4 viewPos = camera.view * worldPos;
     vec4 clipPos = camera.proj * viewPos;
 
     // 3. PS1 JITTER
     if (bool(push.enablePS1Effects & 0x8)) {
-        vec2 screenPos = (clipPos.xy / clipPos.w * 0.5 + 0.5) * push.screenSize;
+        vec2 screenPos = (clipPos.xy / clipPos.w * 0.5 + 0.5) * push.renderResolution;
 
         // Time parameters
         float jitterSpeed = 8.0; // Jitter cycles per second
@@ -66,7 +71,7 @@ void main() {
             ) * 2.0;
 
         screenPos += jitter * push.jitterIntensity;
-        clipPos.xy = ((screenPos / push.screenSize) * 2.0 - 1.0) * clipPos.w;
+        clipPos.xy = ((screenPos / push.windowResolution) * 2.0 - 1.0) * clipPos.w;
     }
 
     gl_Position = clipPos;

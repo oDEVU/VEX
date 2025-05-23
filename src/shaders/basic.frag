@@ -7,15 +7,21 @@ layout(set = 1, binding = 0) uniform sampler2D texSampler;
 
 // Push constants match vertex shader
 layout(push_constant) uniform PushConsts {
-    float time;
+    // Model properties
     vec4 affineTransformX;
     vec4 affineTransformY;
     vec4 affineTransformZ;
-    vec2 screenSize;
     float snapResolution;
     float jitterIntensity;
     int enablePS1Effects;
     vec4 color;
+
+    // Resolution control
+    float time;
+    vec2 renderResolution;
+    vec2 windowResolution;
+    float upscaleRatio;
+    int renderingMode;
 } push;
 
 // PS1's 4x4 Bayer dither matrix

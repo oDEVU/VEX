@@ -1,5 +1,6 @@
 #include "vulkan_mesh.hpp"
 #include "../../mesh.hpp" // Add this include
+#include "glm/fwd.hpp"
 
 
 // debug
@@ -71,8 +72,22 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-                         VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime) const {
+                         VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const {
         if(!debugDraw) SDL_Log("Drawing mesh with %zu submeshes", submeshBuffers_.size());
+
+        VkViewport viewport{};
+        viewport.x = 0.0f;
+        viewport.y = 0.0f;
+        viewport.width = static_cast<float>(currentRenderResolution.x);
+        viewport.height = static_cast<float>(currentRenderResolution.y);
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+        VkRect2D scissor{};
+        scissor.offset = {0, 0};
+        scissor.extent = {currentRenderResolution.x, currentRenderResolution.y};
+        vkCmdSetScissor(cmd, 0, 1, &scissor);
 
         std::string currentTexture = "";
         for (size_t i = 0; i < submeshBuffers_.size(); i++) {
@@ -128,7 +143,7 @@ namespace vex {
                 }
             }
 
-            PushConstants push{};
+            PushConstants modelPush{};
             if (textureExists) {
                 // Only update descriptor if texture actually exists
                 if (currentTexture != textureName) {
@@ -139,9 +154,9 @@ namespace vex {
                         if(!debugDraw) SDL_Log("Bound texture: %s", textureName.c_str());
                     }
                 }
-                push.color = glm::vec4(1.0f); // Neutral multiplier
+                modelPush.color = glm::vec4(1.0f); // Neutral multiplier
             } else {
-                push.color = glm::vec4(1.0f); // Debug color (later replace with vertex color if possible)
+                modelPush.color = glm::vec4(1.0f); // Debug color (later replace with vertex color if possible)
                 if(!textureName.empty()) {
                     if(!debugDraw) SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
                               "Missing texture: %s", textureName.c_str());
@@ -149,23 +164,33 @@ namespace vex {
             }
 
             glm::mat3 warpMatrix = glm::mat3(1.0f);
-            push.setAffineTransform(warpMatrix);
+            modelPush.setAffineTransform(warpMatrix);
 
             // Vertex snap parameters
-            push.time = currentTime;
-            push.snapResolution = 1.f;
-            push.screenSize = {ctx_.swapchainExtent.width, ctx_.swapchainExtent.height};
-            push.jitterIntensity = 0.5f;
-            push.enablePS1Effects =
+            //modelPush.time = currentTime;
+            modelPush.snapResolution = 1.f;
+            //modelPush.screenSize = {ctx_.swapchainExtent.width, ctx_.swapchainExtent.height};
+            modelPush.jitterIntensity = 0.5f;
+            modelPush.enablePS1Effects =
                 PS1Effects::VERTEX_SNAPPING |
                 PS1Effects::AFFINE_WARPING |
                 PS1Effects::COLOR_QUANTIZATION |
                 PS1Effects::VERTEX_JITTER |
                 PS1Effects::NTSC_ARTIFACTS;
 
-            vkCmdPushConstants(cmd, pipelineLayout,
-                              VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                              0, sizeof(PushConstants), &push);
+            modelPush.renderResolution = currentRenderResolution;
+            modelPush.windowResolution = {ctx_.swapchainExtent.width, ctx_.swapchainExtent.height};
+            modelPush.time = currentTime;
+            modelPush.upscaleRatio = ctx_.swapchainExtent.height / static_cast<float>(currentRenderResolution.y);
+
+            vkCmdPushConstants(
+                cmd,
+                pipelineLayout,
+                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                0,  // Offset for first block
+                sizeof(PushConstants),
+                &modelPush
+            );
 
             // Buffer binding
             VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
