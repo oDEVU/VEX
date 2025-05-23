@@ -29,6 +29,9 @@ namespace vex {
         void createCommandBuffers();
         void createSyncObjects();
         void createDepthResources();
+        void createLowResResources();
+
+        void cleanupLowResResources();
 
         // Swapchain utilities
         VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);

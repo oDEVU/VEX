@@ -505,121 +505,51 @@ namespace vex {
         VkImageView textureView = resources_->getTextureView("default");
         resources_->updateTextureDescriptor(context.currentFrame, textureView, 0);
 
-        if (vulkanMeshes_.empty()) {
 
-            // Record command buffer
-            VkCommandBuffer commandBuffer = context.commandBuffers[context.currentImageIndex];
-            vkResetCommandBuffer(commandBuffer, 0);
-
-            // Still submit minimal command buffer
-            VkCommandBufferBeginInfo beginInfo{};
-            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-            vkBeginCommandBuffer(context.commandBuffers[context.currentImageIndex], &beginInfo);
-
-            VkViewport viewport{};
-            viewport.x = 0.0f;
-            viewport.y = 0.0f;
-            viewport.width = static_cast<float>(context.currentRenderResolution.x);
-            viewport.height = static_cast<float>(context.currentRenderResolution.y);
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
-            vkCmdSetViewport(context.commandBuffers[context.currentImageIndex], 0, 1, &viewport);
-
-            VkRect2D scissor{};
-            scissor.offset = {0, 0};
-            scissor.extent = {context.currentRenderResolution.x, context.currentRenderResolution.y};
-            vkCmdSetScissor(context.commandBuffers[context.currentImageIndex], 0, 1, &scissor);
-
-            VkRenderPassBeginInfo renderPassInfo = {};
-                    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-                    renderPassInfo.renderPass = context.renderPass;
-                    renderPassInfo.framebuffer = context.swapchainFramebuffers[context.currentImageIndex];
-                    renderPassInfo.renderArea.offset = {0, 0};
-                    renderPassInfo.renderArea.extent = context.swapchainExtent;
-
-
-                    VkClearValue clearValues[2];
-                    clearValues[0].color = {{0.1f, 0.1f, 0.1f, 1.0f}};
-                    clearValues[1].depthStencil = {1.0f, 0};  // Clear depth to 1.0 (far plane)
-
-                    renderPassInfo.clearValueCount = 2;
-                    renderPassInfo.pClearValues = clearValues;
-
-                    vkCmdBeginRenderPass(context.commandBuffers[context.currentImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-                    vkCmdEndRenderPass(context.commandBuffers[context.currentImageIndex]);
-
-                    if (vkEndCommandBuffer(context.commandBuffers[context.currentImageIndex]) != VK_SUCCESS) {
-                        throw std::runtime_error("Failed to record command buffer");
-                    }
-
-                    // Submit command buffer
-                    VkSubmitInfo submitInfo = {};
-                    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-                    VkSemaphore waitSemaphores[] = {context.imageAvailableSemaphores[context.currentFrame]};
-                    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-                    submitInfo.waitSemaphoreCount = 1;
-                    submitInfo.pWaitSemaphores = waitSemaphores;
-                    submitInfo.pWaitDstStageMask = waitStages;
-                    submitInfo.commandBufferCount = 1;
-                    submitInfo.pCommandBuffers = &context.commandBuffers[context.currentImageIndex];
-
-                    VkSemaphore signalSemaphores[] = {context.renderFinishedSemaphores[context.currentFrame]};
-                    submitInfo.signalSemaphoreCount = 1;
-                    submitInfo.pSignalSemaphores = signalSemaphores;
-
-                    if (vkQueueSubmit(context.graphicsQueue, 1, &submitInfo, context.inFlightFences[context.currentFrame]) != VK_SUCCESS) {
-                        throw std::runtime_error("Failed to submit draw command buffer");
-                    }
-
-                    // Present the frame
-                    VkPresentInfoKHR presentInfo = {};
-                    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-                    presentInfo.waitSemaphoreCount = 1;
-                    presentInfo.pWaitSemaphores = signalSemaphores;
-
-                    VkSwapchainKHR swapchains[] = {context.swapchain};
-                    presentInfo.swapchainCount = 1;
-                    presentInfo.pSwapchains = swapchains;
-                    presentInfo.pImageIndices = &context.currentImageIndex;
-                    presentInfo.pResults = nullptr;
-
-                    result = vkQueuePresentKHR(context.presentQueue, &presentInfo);
-
-                    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-                        swapchainManager_->recreateSwapchain();
-                    } else if (result != VK_SUCCESS) {
-                        throw std::runtime_error("Failed to present swapchain image");
-                    }
+        if (!context.lowResFramebuffer || !context.lowResColorImage) {
+            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Low-res resources not ready - skipping frame");
             return;
         }
 
+
         // Record command buffer
         VkCommandBuffer commandBuffer = context.commandBuffers[context.currentImageIndex];
-        vkResetCommandBuffer(commandBuffer, 0);
+           vkResetCommandBuffer(commandBuffer, 0);
 
-        VkCommandBufferBeginInfo beginInfo{};
-        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        vkBeginCommandBuffer(commandBuffer, &beginInfo);
+           VkCommandBufferBeginInfo beginInfo{};
+           beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+           vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
-        // Render pass
-        VkRenderPassBeginInfo renderPassInfo{};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = context.renderPass;
-        renderPassInfo.framebuffer = context.swapchainFramebuffers[context.currentImageIndex];
-        renderPassInfo.renderArea.extent = context.swapchainExtent;
+           // First render pass - render to low-res framebuffer
+           VkRenderPassBeginInfo renderPassInfo{};
+           renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+           renderPassInfo.renderPass = context.lowResRenderPass;
+           renderPassInfo.framebuffer = context.lowResFramebuffer;
+           renderPassInfo.renderArea.offset = {0, 0};
+           renderPassInfo.renderArea.extent = {renderResolution.x, renderResolution.y};
 
+               VkClearValue clearValues[2];
+               clearValues[0].color = {{0.1f, 0.1f, 0.1f, 1.0f}};
+               clearValues[1].depthStencil = {1.0f, 0};
+               renderPassInfo.clearValueCount = 2;
+               renderPassInfo.pClearValues = clearValues;
 
+               vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+                  // Set viewport and scissor for low-res rendering
+                  VkViewport viewport{};
+                  viewport.x = 0.0f;
+                  viewport.y = 0.0f;
+                  viewport.width = static_cast<float>(context.swapchainExtent.width);
+                  viewport.height = static_cast<float>(context.swapchainExtent.height);
+                  viewport.minDepth = 0.0f;
+                  viewport.maxDepth = 1.0f;
+                  vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 
-                            VkClearValue clearValues[2];
-                            clearValues[0].color = {{0.1f, 0.1f, 0.1f, 1.0f}};
-                            clearValues[1].depthStencil = {1.0f, 0};  // Clear depth to 1.0 (far plane)
-
-                            renderPassInfo.clearValueCount = 2;
-                            renderPassInfo.pClearValues = clearValues;
-
-        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+                  VkRect2D scissor{};
+                  scissor.offset = {0, 0};
+                  scissor.extent = {context.swapchainExtent.width, context.swapchainExtent.height};
+                  vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
         // Bind default texture initially
         VkImageView defaultTexture = resources_->getTextureView("default");
@@ -649,7 +579,105 @@ namespace vex {
 
 
         vkCmdEndRenderPass(commandBuffer);
-        vkEndCommandBuffer(commandBuffer);
+
+        // Transition low-res image for transfer
+        VkImageMemoryBarrier lowResBarrier{};
+        lowResBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        lowResBarrier.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        lowResBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+        lowResBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        lowResBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        lowResBarrier.image = context.lowResColorImage;
+        lowResBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        lowResBarrier.subresourceRange.levelCount = 1;
+        lowResBarrier.subresourceRange.layerCount = 1;
+        lowResBarrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        lowResBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+
+        VkImageMemoryBarrier swapchainBarrier{};
+        swapchainBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        swapchainBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        swapchainBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        swapchainBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        swapchainBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        swapchainBarrier.image = context.swapchainImages[context.currentImageIndex];
+        swapchainBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        swapchainBarrier.subresourceRange.levelCount = 1;
+        swapchainBarrier.subresourceRange.layerCount = 1;
+        swapchainBarrier.srcAccessMask = 0;
+        swapchainBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+        // Issue both barriers together
+        vkCmdPipelineBarrier(
+            commandBuffer,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,  // Source stage
+            VK_PIPELINE_STAGE_TRANSFER_BIT,                 // Destination stage
+            0,
+            0, nullptr,
+            0, nullptr,
+            2, (VkImageMemoryBarrier[]){lowResBarrier, swapchainBarrier}
+        );
+
+        // Perform the blit with nearest-neighbor filtering
+        VkImageBlit blit{};
+        blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        blit.srcSubresource.mipLevel = 0;
+        blit.srcSubresource.baseArrayLayer = 0;
+        blit.srcSubresource.layerCount = 1;
+        blit.srcOffsets[0] = {0, 0, 0};
+        blit.srcOffsets[1] = {(int)renderResolution.x, (int)renderResolution.y, 1};
+
+        blit.dstSubresource = blit.srcSubresource;
+        blit.dstOffsets[0] = {0, 0, 0};
+        blit.dstOffsets[1] = {(int)context.swapchainExtent.width, (int)context.swapchainExtent.height, 1};
+
+        vkCmdBlitImage(
+            commandBuffer,
+            context.lowResColorImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+            context.swapchainImages[context.currentImageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            1, &blit,
+            VK_FILTER_NEAREST // Critical for pixel-perfect upscaling
+        );
+
+        // Transition swapchain image for presentation
+        VkImageMemoryBarrier presentBarrier{};
+        presentBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        presentBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        presentBarrier.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+        presentBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        presentBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        presentBarrier.image = context.swapchainImages[context.currentImageIndex];
+        presentBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        presentBarrier.subresourceRange.levelCount = 1;
+        presentBarrier.subresourceRange.layerCount = 1;
+        presentBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        presentBarrier.dstAccessMask = 0;
+
+        // Transition low-res image back for rendering
+        VkImageMemoryBarrier lowResRestoreBarrier{};
+        lowResRestoreBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        lowResRestoreBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
+        lowResRestoreBarrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        lowResRestoreBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        lowResRestoreBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        lowResRestoreBarrier.image = context.lowResColorImage;
+        lowResRestoreBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        lowResRestoreBarrier.subresourceRange.levelCount = 1;
+        lowResRestoreBarrier.subresourceRange.layerCount = 1;
+        lowResRestoreBarrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+        lowResRestoreBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+        vkCmdPipelineBarrier(
+            commandBuffer,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,                 // Source stage
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,   // Destination stage
+            0,
+            0, nullptr,
+            0, nullptr,
+            2, (VkImageMemoryBarrier[]){presentBarrier, lowResRestoreBarrier}
+        );
+
+            vkEndCommandBuffer(commandBuffer);
 
         // Submit
         VkSubmitInfo submitInfo{};

@@ -43,6 +43,14 @@ namespace vex {
         VkPresentModeKHR presentMode = chooseSwapPresentMode(presentModes);
         VkExtent2D extent = chooseSwapExtent(capabilities);
 
+        VkFormatProperties formatProps;
+        vkGetPhysicalDeviceFormatProperties(context_.physicalDevice, surfaceFormat.format, &formatProps);
+
+        if (!(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) ||
+            !(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)) {
+            throw std::runtime_error("Swapchain format doesn't support blitting!");
+        }
+
         uint32_t imageCount = capabilities.minImageCount + 1;
         if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
             imageCount = capabilities.maxImageCount;
@@ -57,7 +65,7 @@ namespace vex {
         createInfo.imageColorSpace = surfaceFormat.colorSpace;
         createInfo.imageExtent = extent;
         createInfo.imageArrayLayers = 1;
-        createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+        createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
         uint32_t queueFamilyIndices[] = {context_.graphicsQueueFamily, context_.presentQueueFamily};
         if (context_.graphicsQueueFamily != context_.presentQueueFamily) {
@@ -89,6 +97,34 @@ namespace vex {
         context_.swapchainExtent = extent;
 
         createImageViews();
+
+
+        VkCommandBuffer cmd = context_.beginSingleTimeCommands();
+
+        for (auto& image : context_.swapchainImages) {
+            VkImageMemoryBarrier barrier{};
+            barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+            barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            barrier.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+            barrier.image = image;
+            barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            barrier.subresourceRange.levelCount = 1;
+            barrier.subresourceRange.layerCount = 1;
+
+            vkCmdPipelineBarrier(
+                cmd,
+                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                0,
+                0, nullptr,
+                0, nullptr,
+                1, &barrier
+            );
+        }
+
+        context_.endSingleTimeCommands(cmd);
     }
 
     void VulkanSwapchainManager::createDepthResources() {
@@ -99,7 +135,7 @@ namespace vex {
         VkImageCreateInfo imageInfo{};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
-        imageInfo.extent = {context_.swapchainExtent.width, context_.swapchainExtent.height, 1};
+        imageInfo.extent = {context_.currentRenderResolution.x, context_.currentRenderResolution.y, 1};
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
         imageInfo.format = depthFormat;
@@ -223,6 +259,33 @@ namespace vex {
             throw std::runtime_error("Failed to create render pass");
         }
 
+            // Create separate render pass for low-res
+
+            VkAttachmentDescription lowColorAttachment = {};
+            lowColorAttachment.format = context_.swapchainImageFormat;
+            lowColorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+            lowColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            lowColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            lowColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            lowColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            lowColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            lowColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            std::array<VkAttachmentDescription, 2> lowAttachments = {lowColorAttachment, depthAttachment};
+
+            VkRenderPassCreateInfo lowResRenderPassInfo = {};
+            lowResRenderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            lowResRenderPassInfo.attachmentCount = static_cast<uint32_t>(lowAttachments.size());
+            lowResRenderPassInfo.pAttachments = lowAttachments.data();
+            lowResRenderPassInfo.subpassCount = 1;
+            lowResRenderPassInfo.pSubpasses = &subpass;
+            lowResRenderPassInfo.dependencyCount = 1;
+            lowResRenderPassInfo.pDependencies = &dependency;
+
+            if (vkCreateRenderPass(context_.device, &lowResRenderPassInfo, nullptr, &context_.lowResRenderPass) != VK_SUCCESS) {
+                throw std::runtime_error("Failed to create low-res render pass");
+            }
+
         createFramebuffers();
     }
 
@@ -323,9 +386,127 @@ namespace vex {
             SDL_Log("Created sync objects: fence=%p", (void*)context_.inFlightFences[i]);
         }
 
+        if (context_.renderPass && context_.depthImageView) {
+            createLowResResources();
+        } else {
+            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
+                       "Deferring low-res resource creation - renderPass or depth image not ready");
+        }
+    }
+
+    void VulkanSwapchainManager::createLowResResources() {
+        // Only create if we have valid dimensions
+        if (context_.currentRenderResolution.x == 0 || context_.currentRenderResolution.y == 0) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Invalid render resolution for low-res resources");
+            return;
+        }
+
+        if (!context_.lowResRenderPass) {
+            throw std::runtime_error("Low-res render pass not created!");
+        }
+
+        // Cleanup old resources if they exist
+        cleanupLowResResources();
+
+        // Create low-res color image
+        VkImageCreateInfo imageInfo{};
+        imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        imageInfo.imageType = VK_IMAGE_TYPE_2D;
+        imageInfo.extent = {context_.currentRenderResolution.x, context_.currentRenderResolution.y, 1};
+        imageInfo.mipLevels = 1;
+        imageInfo.arrayLayers = 1;
+        imageInfo.format = context_.swapchainImageFormat;
+        imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+        imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        imageInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+        imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+
+        VmaAllocationCreateInfo allocInfo{};
+        allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+
+        if (vmaCreateImage(context_.allocator, &imageInfo, &allocInfo,
+                          &context_.lowResColorImage, &context_.lowResColorAlloc, nullptr) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image");
+            return;
+        }
+
+        // Create image view
+        VkImageViewCreateInfo viewInfo{};
+        viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        viewInfo.image = context_.lowResColorImage;
+        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        viewInfo.format = context_.swapchainImageFormat;
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        viewInfo.subresourceRange.levelCount = 1;
+        viewInfo.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(context_.device, &viewInfo, nullptr, &context_.lowResColorView) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image view");
+            vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
+            context_.lowResColorImage = VK_NULL_HANDLE;
+            context_.lowResColorAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        // Create framebuffer
+        std::array<VkImageView, 2> attachments = {
+            context_.lowResColorView,
+            context_.depthImageView
+        };
+
+        VkFramebufferCreateInfo fbInfo{};
+        fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        fbInfo.renderPass = context_.lowResRenderPass;
+        fbInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+        fbInfo.pAttachments = attachments.data();
+        fbInfo.width = context_.currentRenderResolution.x;
+        fbInfo.height = context_.currentRenderResolution.y;
+        fbInfo.layers = 1;
+        if (vkCreateFramebuffer(context_.device, &fbInfo, nullptr, &context_.lowResFramebuffer) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res framebuffer");
+            vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
+            vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
+            context_.lowResColorView = VK_NULL_HANDLE;
+            context_.lowResColorImage = VK_NULL_HANDLE;
+            context_.lowResColorAlloc = VK_NULL_HANDLE;
+            return;
+        }
+    }
+
+    void VulkanSwapchainManager::cleanupLowResResources() {
+        if (context_.lowResFramebuffer != VK_NULL_HANDLE) {
+            vkDestroyFramebuffer(context_.device, context_.lowResFramebuffer, nullptr);
+            context_.lowResFramebuffer = VK_NULL_HANDLE;
+        }
+
+        if (context_.lowResColorView != VK_NULL_HANDLE) {
+            vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
+            context_.lowResColorView = VK_NULL_HANDLE;
+        }
+
+        if (context_.lowResColorImage != VK_NULL_HANDLE && context_.lowResColorAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
+            context_.lowResColorImage = VK_NULL_HANDLE;
+            context_.lowResColorAlloc = VK_NULL_HANDLE;
+        }
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {
+
+
+                    // Cleanup low-res resources
+                    if (context_.lowResColorView) {
+                        vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
+                    }
+                    if (context_.lowResColorImage) {
+                        vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
+                    }
+                    if (context_.lowResFramebuffer) {
+                        vkDestroyFramebuffer(context_.device, context_.lowResFramebuffer, nullptr);
+                    }
+                    if (context_.lowResRenderPass) {
+                        vkDestroyRenderPass(context_.device, context_.lowResRenderPass, nullptr);
+                    }
 
         if (context_.depthImageView) {
             vkDestroyImageView(context_.device, context_.depthImageView, nullptr);
@@ -356,13 +537,22 @@ namespace vex {
     void VulkanSwapchainManager::recreateSwapchain() {
         SDL_Log("recreating swapchains");
         vkDeviceWaitIdle(context_.device);
+        SDL_Log("cleanupLowResResources");
+        cleanupLowResResources();
+        SDL_Log("cleanupSwapchain");
         cleanupSwapchain();
 
         createSwapchain();
+        SDL_Log("createImageViews");
         createImageViews();
+        SDL_Log("createRenderPass");
         createRenderPass();
+        SDL_Log("createFramebuffers");
         createFramebuffers();
+        SDL_Log("createCommandBuffers");
         createCommandBuffers();
+        SDL_Log("createLowResResources");
+        createLowResResources();
     }
 
     VkSurfaceFormatKHR VulkanSwapchainManager::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {

@@ -6,6 +6,13 @@ namespace vex {
 
         // Only set Wayland preference on Linux
         #ifdef __linux__
+            SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "1");
+            SDL_SetHint("SDL_HINT_RENDER_SCALE_QUALITY", "nearest");
+            SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
+            SDL_SetHint("SDL_RENDER_DRIVER", "vulkan");
+            SDL_SetHint("SDL_VIDEO_FORCE_PIXEL_SIZE", "1");
+            SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");  // Disable auto-scaling
+            SDL_SetHint("SDL_VIDEO_WAYLAND_MODE_EMULATION", "1");    // Enable legacy mode
             SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "wayland,x11", SDL_HINT_OVERRIDE);
             setenv("SDL_VIDEODRIVER", "wayland,x11", 1);
         #endif
@@ -25,7 +32,7 @@ namespace vex {
             title.c_str(),                  // window title
             resx,                               // width, in pixels
             resy,                               // height, in pixels
-            SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE // currently vulkan hardcoded
+            SDL_WINDOW_VULKAN | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_RESIZABLE // currently vulkan hardcoded
         );
         if (!window) {
             throw std::runtime_error(SDL_GetError());

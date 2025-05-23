@@ -75,20 +75,6 @@ namespace vex {
                          VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const {
         if(!debugDraw) SDL_Log("Drawing mesh with %zu submeshes", submeshBuffers_.size());
 
-        VkViewport viewport{};
-        viewport.x = 0.0f;
-        viewport.y = 0.0f;
-        viewport.width = static_cast<float>(currentRenderResolution.x);
-        viewport.height = static_cast<float>(currentRenderResolution.y);
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
-        vkCmdSetViewport(cmd, 0, 1, &viewport);
-
-        VkRect2D scissor{};
-        scissor.offset = {0, 0};
-        scissor.extent = {currentRenderResolution.x, currentRenderResolution.y};
-        vkCmdSetScissor(cmd, 0, 1, &scissor);
-
         std::string currentTexture = "";
         for (size_t i = 0; i < submeshBuffers_.size(); i++) {
             const auto& buffers = submeshBuffers_[i];

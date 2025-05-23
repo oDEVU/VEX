@@ -53,7 +53,7 @@ void ResolutionManager::update() {
 
 void ResolutionManager::calculatePS1SharpResolution() {
     // Find the largest integer scale factor that gives us at least 240p
-    int yscale = windowResolution.y / 240;
+    int yscale = floor(windowResolution.y / 240);
     int maxScale = std::max(1, yscale);
 
     // Clamp between 1x and 4x scaling
@@ -63,7 +63,7 @@ void ResolutionManager::calculatePS1SharpResolution() {
     upscaleRatio = maxScale;
 
     // Ensure minimum size of 320x240 (PS1 common resolution)
-    if (renderResolution.x < 320 || renderResolution.y < 240) {
+    if (renderResolution.y < 240) {
         float aspect = windowResolution.x / static_cast<float>(windowResolution.y);
         renderResolution.y = 240;
         renderResolution.x = static_cast<uint32_t>(240 * aspect);

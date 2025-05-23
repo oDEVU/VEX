@@ -12,6 +12,13 @@ Engine::Engine(const char* title, int width, int height) {
     // Create resolution manager
     resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
 
+    // Testing resolution modes
+    //resolutionManager->setMode(ResolutionMode::NATIVE);       // Native
+    //resolutionManager->setMode(ResolutionMode::PS1_SHARP);    // Close to original intiger scaled
+    //resolutionManager->setMode(ResolutionMode::RES_240P);     // Height same as original but not intiger scaled (wierd scaling)
+    //resolutionManager->setMode(ResolutionMode::RES_480P);     // Height same as original but not intiger scaled (wierd scaling)
+    //resolutionManager->update();
+
     // Create renderer (could be Vulkan or OpenGL)
     //
     // Pass initial render resolution to interface

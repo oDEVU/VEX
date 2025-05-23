@@ -38,6 +38,13 @@ namespace vex {
         VkImageView depthImageView;
         VkFormat depthFormat;
 
+        // Low-resolution rendering resources
+        VkImage lowResColorImage = VK_NULL_HANDLE;
+        VmaAllocation lowResColorAlloc = VK_NULL_HANDLE;
+        VkImageView lowResColorView = VK_NULL_HANDLE;
+        VkFramebuffer lowResFramebuffer = VK_NULL_HANDLE;
+        VkRenderPass lowResRenderPass = VK_NULL_HANDLE;
+
         // Rendering members
         VkRenderPass renderPass;
         VkPipelineLayout pipelineLayout;
