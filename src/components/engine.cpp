@@ -14,7 +14,7 @@ Engine::Engine(const char* title, int width, int height) {
 
     // Testing resolution modes
     //resolutionManager->setMode(ResolutionMode::NATIVE);       // Native
-    //resolutionManager->setMode(ResolutionMode::PS1_SHARP);    // Close to original intiger scaled
+    //resolutionManager->setMode(ResolutionMode::PS1_SHARP);    // Close to ps1 resolution but intiger scaled
     //resolutionManager->setMode(ResolutionMode::RES_240P);     // Height same as original but not intiger scaled (wierd scaling)
     //resolutionManager->setMode(ResolutionMode::RES_480P);     // Height same as original but not intiger scaled (wierd scaling)
     //resolutionManager->update();
