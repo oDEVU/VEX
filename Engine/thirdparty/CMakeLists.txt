@@ -61,10 +61,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     )
 endif()
 
-# Create consolidated interface for all third-party dependencies
 add_library(thirdparty_engine INTERFACE)
 
-# Link all static dependencies to the interface
 target_link_libraries(thirdparty_engine INTERFACE
     SDL3-static
     volk
@@ -73,7 +71,6 @@ target_link_libraries(thirdparty_engine INTERFACE
     thirdparty_glm
 )
 
-# Conditionally add Linux deps
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(thirdparty_engine INTERFACE linux_deps)
 endif()

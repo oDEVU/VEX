@@ -1,7 +1,6 @@
 // resolution.cpp
-#include "components/resolution_manager.hpp"
-
-#include "window.hpp"
+#include "components/ResolutionManager.hpp"
+#include "Window.hpp"
 
 namespace vex {
 
@@ -15,7 +14,6 @@ void ResolutionManager::setMode(ResolutionMode mode) {
 }
 
 void ResolutionManager::update() {
-    // Get current window size
     int width, height;
     SDL_GetWindowSizeInPixels(window, &width, &height);
     windowResolution = {width, height};
@@ -54,17 +52,14 @@ void ResolutionManager::update() {
 }
 
 void ResolutionManager::calculatePS1SharpResolution() {
-    // Find the largest integer scale factor that gives us at least 240p
     int yscale = floor(windowResolution.y / 240);
     int maxScale = std::max(1, yscale);
 
-    // Clamp between 1x and 4x scaling
     maxScale = std::clamp(maxScale, 1, 4);
 
     renderResolution = windowResolution / static_cast<unsigned int>(maxScale);
     upscaleRatio = maxScale;
 
-    // Ensure minimum size of 320x240 (PS1 common resolution)
     if (renderResolution.y < 240) {
         float aspect = windowResolution.x / static_cast<float>(windowResolution.y);
         renderResolution.y = 240;

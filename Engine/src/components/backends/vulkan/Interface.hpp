@@ -10,14 +10,14 @@
 #include <glm/glm.hpp>
 #include <chrono>
 
-//Renderer
+//VEX components
 #include "context.hpp"
-#include "swapchain_manager.hpp"
-#include "pipeline.hpp"
-#include "resources.hpp"
-#include "components/mesh.hpp"
-#include "components/model.hpp"
-#include "vulkan_mesh.hpp"
+#include "SwapchainManager.hpp"
+#include "Pipeline.hpp"
+#include "Resources.hpp"
+#include "components/Mesh.hpp"
+#include "components/Model.hpp"
+#include "VulkanMesh.hpp"
 
 namespace vex {
     class Interface {

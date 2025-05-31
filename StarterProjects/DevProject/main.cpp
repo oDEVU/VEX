@@ -1,5 +1,5 @@
-#include "engine.hpp"
-#include "components/model.hpp"
+#include "Engine.hpp"
+#include "components/Model.hpp"
 
 #include <cstdlib>
 #include <sys/types.h>
@@ -54,11 +54,11 @@ public:
         if(animate){
 
                     if (viper) {
-                        viper->transform.rotation.y = (frame/100);
+                        viper->transform.rotation.y = (float(frame)/100);
                     }
 
                     if (penguin && frame > 100) {
-                        penguin->transform.position.y = (sin(frame/100)/2)+1;
+                        penguin->transform.position.y = (sin(float(frame)/100)/2)+1;
                     }
 
                     if (cube) {

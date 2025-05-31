@@ -29,31 +29,31 @@ generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(public_header_files
-    include/engine.hpp
-    include/components/mesh.hpp
-    include/components/model.hpp
+    include/Engine.hpp
+    include/components/Mesh.hpp
+    include/components/Model.hpp
     include/components/transform.hpp
-    include/components/resolution_manager.hpp
+    include/components/ResolutionManager.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(source_files
-        src/engine.cpp
-        src/components/mesh.cpp
-        src/components/resolution_manager.cpp
-        src/components/window.cpp
-        src/components/window.hpp
+        src/Engine.cpp
+        src/components/Mesh.cpp
+        src/components/ResolutionManager.cpp
+        src/components/Window.cpp
+        src/components/Window.hpp
         src/components/backends/vulkan/context.hpp
-        src/components/backends/vulkan/interface.cpp
-        src/components/backends/vulkan/interface.hpp
-        src/components/backends/vulkan/pipeline.cpp
-        src/components/backends/vulkan/pipeline.hpp
-        src/components/backends/vulkan/resources.cpp
-        src/components/backends/vulkan/resources.hpp
-        src/components/backends/vulkan/swapchain_manager.cpp
-        src/components/backends/vulkan/swapchain_manager.hpp
+        src/components/backends/vulkan/Interface.cpp
+        src/components/backends/vulkan/Interface.hpp
+        src/components/backends/vulkan/Pipeline.cpp
+        src/components/backends/vulkan/Pipeline.hpp
+        src/components/backends/vulkan/Resources.cpp
+        src/components/backends/vulkan/Resources.hpp
+        src/components/backends/vulkan/SwapchainManager.cpp
+        src/components/backends/vulkan/SwapchainManager.hpp
         src/components/backends/vulkan/uniforms.hpp
-        src/components/backends/vulkan/vulkan_mesh.cpp
-        src/components/backends/vulkan/vulkan_mesh.hpp
+        src/components/backends/vulkan/VulkanMesh.cpp
+        src/components/backends/vulkan/VulkanMesh.hpp
     )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -134,7 +134,7 @@ endif()
 
 #==============================================================================
 # COMPILE SHADERS
-#
+#==============================================================================
 set(SHADER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders)
 set(SHADER_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/shaders)
 

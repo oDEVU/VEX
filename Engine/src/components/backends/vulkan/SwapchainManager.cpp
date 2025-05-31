@@ -1,4 +1,4 @@
-#include "swapchain_manager.hpp"
+#include "SwapchainManager.hpp"
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
@@ -15,7 +15,6 @@ namespace vex {
 
     void VulkanSwapchainManager::createSwapchain() {
         SDL_Log("Creating Swapchain");
-        // Query swapchain support
         VkSurfaceCapabilitiesKHR capabilities;
         if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(context_.physicalDevice, context_.surface, &capabilities) != VK_SUCCESS) {
             throw std::runtime_error("Failed to get surface capabilities");
@@ -38,7 +37,6 @@ namespace vex {
         std::vector<VkPresentModeKHR> presentModes(presentModeCount);
         vkGetPhysicalDeviceSurfacePresentModesKHR(context_.physicalDevice, context_.surface, &presentModeCount, presentModes.data());
 
-        // Choose swapchain settings
         VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(formats);
         VkPresentModeKHR presentMode = chooseSwapPresentMode(presentModes);
         VkExtent2D extent = chooseSwapExtent(capabilities);
@@ -56,7 +54,6 @@ namespace vex {
             imageCount = capabilities.maxImageCount;
         }
 
-        // Create swapchain
         VkSwapchainCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         createInfo.surface = context_.surface;
@@ -88,7 +85,6 @@ namespace vex {
             throw std::runtime_error("Failed to create swapchain");
         }
 
-        // Get swapchain images
         vkGetSwapchainImagesKHR(context_.device, context_.swapchain, &imageCount, nullptr);
         context_.swapchainImages.resize(imageCount);
         vkGetSwapchainImagesKHR(context_.device, context_.swapchain, &imageCount, context_.swapchainImages.data());
@@ -97,7 +93,6 @@ namespace vex {
         context_.swapchainExtent = extent;
 
         createImageViews();
-
 
         VkCommandBuffer cmd = context_.beginSingleTimeCommands();
 
@@ -153,7 +148,6 @@ namespace vex {
             throw std::runtime_error("Failed to create depth image");
         }
 
-        // Create depth image view
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         viewInfo.image = context_.depthImage;
@@ -196,7 +190,6 @@ namespace vex {
                 throw std::runtime_error("Failed to create image views");
             }
         }
-
         createDepthResources();
     }
 
@@ -258,9 +251,6 @@ namespace vex {
         if (vkCreateRenderPass(context_.device, &renderPassInfo, nullptr, &context_.renderPass) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create render pass");
         }
-
-            // Create separate render pass for low-res
-
             VkAttachmentDescription lowColorAttachment = {};
             lowColorAttachment.format = context_.swapchainImageFormat;
             lowColorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -351,7 +341,6 @@ namespace vex {
     void VulkanSwapchainManager::createSyncObjects() {
         SDL_Log("Creating synchronization objects...");
 
-        // Initialize synchronization objects
         context_.imageAvailableSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
         context_.renderFinishedSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
         context_.inFlightFences.resize(context_.MAX_FRAMES_IN_FLIGHT);
@@ -361,7 +350,7 @@ namespace vex {
 
         VkFenceCreateInfo fenceInfo = {};
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-        fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;  // Start signaled
+        fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
         VkResult result;
 
@@ -395,7 +384,6 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createLowResResources() {
-        // Only create if we have valid dimensions
         if (context_.currentRenderResolution.x == 0 || context_.currentRenderResolution.y == 0) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Invalid render resolution for low-res resources");
             return;
@@ -405,10 +393,8 @@ namespace vex {
             throw std::runtime_error("Low-res render pass not created!");
         }
 
-        // Cleanup old resources if they exist
         cleanupLowResResources();
 
-        // Create low-res color image
         VkImageCreateInfo imageInfo{};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -430,7 +416,6 @@ namespace vex {
             return;
         }
 
-        // Create image view
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         viewInfo.image = context_.lowResColorImage;
@@ -448,7 +433,6 @@ namespace vex {
             return;
         }
 
-        // Create framebuffer
         std::array<VkImageView, 2> attachments = {
             context_.lowResColorView,
             context_.depthImageView
@@ -492,9 +476,6 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {
-
-
-                    // Cleanup low-res resources
                     if (context_.lowResColorView) {
                         vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
                     }

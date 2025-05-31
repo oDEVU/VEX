@@ -1,15 +1,14 @@
-#include "vulkan_mesh.hpp"
-#include "components/mesh.hpp"
-#include "components/model.hpp"
+#include "VulkanMesh.hpp"
+#include "components/Mesh.hpp"
+#include "components/Model.hpp"
 #include "glm/fwd.hpp"
 
+#include <SDL3/SDL.h>
 
 // debug
 #include <cstdint>
 #include <cstring>
 #include <iostream>
-
-#include <SDL3/SDL.h>
 
 namespace vex {
     VulkanMesh::VulkanMesh(VulkanContext& context) : ctx_(context) {
@@ -33,7 +32,6 @@ namespace vex {
         for (const auto& srcSubmesh : meshData.submeshes) {
             SubmeshBuffers buffers{};
 
-            // Create vertex buffer
             VkBufferCreateInfo bufferInfo{};
             bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
             bufferInfo.size = srcSubmesh.vertices.size() * sizeof(Vertex);
@@ -44,19 +42,16 @@ namespace vex {
             vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
                             &buffers.vertexBuffer, &buffers.vertexAlloc, nullptr);
 
-            // Upload vertices
             void* data;
             vmaMapMemory(ctx_.allocator, buffers.vertexAlloc, &data);
             memcpy(data, srcSubmesh.vertices.data(), bufferInfo.size);
             vmaUnmapMemory(ctx_.allocator, buffers.vertexAlloc);
 
-            // Create index buffer
             bufferInfo.size = srcSubmesh.indices.size() * sizeof(uint32_t);
             bufferInfo.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
             vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
                             &buffers.indexBuffer, &buffers.indexAlloc, nullptr);
 
-            // Upload indices
             vmaMapMemory(ctx_.allocator, buffers.indexAlloc, &data);
             memcpy(data, srcSubmesh.indices.data(), bufferInfo.size);
             vmaUnmapMemory(ctx_.allocator, buffers.indexAlloc);
@@ -87,13 +82,11 @@ namespace vex {
                 SDL_LogError(SDL_LOG_CATEGORY_RENDER,
                            "Invalid texture index %u for '%s' (Max: %u)",
                            textureIndex, textureName.c_str(), ctx_.MAX_TEXTURES);
-                textureIndex = 0; // Fallback to default
+                textureIndex = 0;
             }
 
-            // Calculate dynamic offset for this model
             uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
 
-            // Bind descriptor sets with dynamic offset
             std::array<VkDescriptorSet, 2> descriptorSets = {
                 resources.getDescriptorSet(frameIndex),
                 resources.getTextureDescriptorSet(frameIndex, textureIndex)
@@ -103,14 +96,13 @@ namespace vex {
                 cmd,
                 VK_PIPELINE_BIND_POINT_GRAPHICS,
                 pipelineLayout,
-                0,  // First set index
+                0,
                 descriptorSets.size(),
                 descriptorSets.data(),
-                1,  // Number of dynamic offsets
-                &dynamicOffset  // Pointer to offsets array
+                1,
+                &dynamicOffset
             );
 
-            // Texture validation and logging
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
             if(!debugDraw) SDL_Log("Submesh %zu texture: '%s' (exists: %s)",
                    i,
@@ -132,7 +124,6 @@ namespace vex {
 
             PushConstants modelPush{};
             if (textureExists) {
-                // Only update descriptor if texture actually exists
                 if (currentTexture != textureName) {
                     VkImageView textureView = resources.getTextureView(textureName);
                     if(textureView != VK_NULL_HANDLE) {
@@ -141,9 +132,9 @@ namespace vex {
                         if(!debugDraw) SDL_Log("Bound texture: %s", textureName.c_str());
                     }
                 }
-                modelPush.color = glm::vec4(1.0f); // Neutral multiplier
+                modelPush.color = glm::vec4(1.0f);
             } else {
-                modelPush.color = glm::vec4(1.0f); // Debug color (later replace with vertex color if possible)
+                modelPush.color = glm::vec4(1.0f);
                 if(!textureName.empty()) {
                     if(!debugDraw) SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
                               "Missing texture: %s", textureName.c_str());
@@ -153,10 +144,7 @@ namespace vex {
             glm::mat3 warpMatrix = glm::mat3(1.0f);
             modelPush.setAffineTransform(warpMatrix);
 
-            // Vertex snap parameters
-            //modelPush.time = currentTime;
             modelPush.snapResolution = 1.f;
-            //modelPush.screenSize = {ctx_.swapchainExtent.width, ctx_.swapchainExtent.height};
             modelPush.jitterIntensity = 0.5f;
             modelPush.enablePS1Effects =
                 PS1Effects::VERTEX_SNAPPING |
@@ -174,12 +162,11 @@ namespace vex {
                 cmd,
                 pipelineLayout,
                 VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                0,  // Offset for first block
+                0,
                 sizeof(PushConstants),
                 &modelPush
             );
 
-            // Buffer binding
             VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
             VkDeviceSize offsets[] = {0};
             vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);

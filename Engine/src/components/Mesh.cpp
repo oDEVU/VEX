@@ -1,4 +1,4 @@
-#include "components/mesh.hpp"
+#include "components/Mesh.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -20,7 +20,6 @@ namespace vex {
             aiProcess_GenNormals |
             aiProcess_FlipUVs);
 
-        // Enhanced error checking
         if (!scene) {
             throw std::runtime_error("Assimp failed to load file: " + std::string(importer.GetErrorString()));
         }
@@ -30,15 +29,12 @@ namespace vex {
         if (!scene->mRootNode) {
             throw std::runtime_error("Assimp scene has no root node");
         }
-
-        // Validate mesh array before access
         if (!scene->mMeshes) {
             throw std::runtime_error("Assimp scene has invalid mesh array");
         }
         if (scene->mNumMeshes == 0) {
             throw std::runtime_error("Model contains no meshes");
         }
-
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             throw std::runtime_error("Failed to load model: " + std::string(importer.GetErrorString()));
         }
@@ -49,7 +45,6 @@ namespace vex {
         for (unsigned m = 0; m < scene->mNumMeshes; m++) {
 
             SDL_Log("Processing mesh %i...", m);
-            // Process first mesh only for simplicity
             aiMesh* aiMesh = scene->mMeshes[m];
             Submesh& submesh = submeshes[m];
 
@@ -90,7 +85,7 @@ namespace vex {
                 }
             }
 
-            // Get texture path from material
+            // Textures
             SDL_Log("Getting texture path...");
             if (aiMesh->mMaterialIndex >= 0) {
                 aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];

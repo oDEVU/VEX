@@ -21,7 +21,6 @@ namespace vex {
         VmaAllocator allocator;
         VkSurfaceKHR surface;
 
-        // Swapchain members
         VkSwapchainKHR swapchain;
         std::vector<VkImage> swapchainImages;
         VkFormat swapchainImageFormat;
@@ -38,14 +37,12 @@ namespace vex {
         VkImageView depthImageView;
         VkFormat depthFormat;
 
-        // Low-resolution rendering resources
         VkImage lowResColorImage = VK_NULL_HANDLE;
         VmaAllocation lowResColorAlloc = VK_NULL_HANDLE;
         VkImageView lowResColorView = VK_NULL_HANDLE;
         VkFramebuffer lowResFramebuffer = VK_NULL_HANDLE;
         VkRenderPass lowResRenderPass = VK_NULL_HANDLE;
 
-        // Rendering members
         VkRenderPass renderPass;
         VkPipelineLayout pipelineLayout;
         std::vector<VkFramebuffer> swapchainFramebuffers;
@@ -84,35 +81,31 @@ namespace vex {
             vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
         }
 
-        // Queue family indices
         uint32_t graphicsQueueFamily;
         uint32_t presentQueueFamily;
 
-        // Frame management
         uint32_t currentFrame = 0;
         uint32_t currentImageIndex = 0;
         const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
         const uint32_t MAX_TEXTURES = 1024;
         const uint32_t MAX_MODELS = 1024;
 
-        // Synchronization (expanded)
         std::vector<VkSemaphore> imageAvailableSemaphores;
         std::vector<VkSemaphore> renderFinishedSemaphores;
         std::vector<VkFence> inFlightFences;
 
         VkDescriptorSetLayout descriptorSetLayout;
-        VkDescriptorSetLayout uboDescriptorSetLayout; // Set 0: UBOs
-        VkDescriptorSetLayout textureDescriptorSetLayout; // Set 1: Textures
+        VkDescriptorSetLayout uboDescriptorSetLayout;
+        VkDescriptorSetLayout textureDescriptorSetLayout;
 
         std::unordered_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;
 
-        // Frame management
         struct FrameData {
             VkDescriptorSet uboSet;
             std::vector<VkDescriptorSet> textureSets;
-            // ... other frame resources ...
         };
+
         std::vector<FrameData> frames;
         glm::uvec2 currentRenderResolution;
     } VulkanContext;

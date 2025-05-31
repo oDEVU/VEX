@@ -1,4 +1,3 @@
-// resolution.hpp
 #pragma once
 
 #include <glm/glm.hpp>
@@ -30,7 +29,7 @@ public:
     glm::uvec2 getWindowResolution() const { return windowResolution; }
     float getUpscaleRatio() const { return upscaleRatio; }
 
-    void update(); // Call when window is resized
+    void update();
 
 private:
     void calculatePS1SharpResolution();

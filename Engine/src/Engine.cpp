@@ -1,10 +1,10 @@
 // engine.cpp
-#include "engine.hpp"
+#include "Engine.hpp"
 #include "SDL3/SDL_events.h"
 
-#include "components/window.hpp"
+#include "components/Window.hpp"
 
-#include "components/backends/vulkan/interface.hpp"
+#include "components/backends/vulkan/Interface.hpp"
 
 namespace vex {
 

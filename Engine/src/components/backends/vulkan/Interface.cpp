@@ -2,7 +2,7 @@
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 1
 
-#include "interface.hpp"
+#include "Interface.hpp"
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
@@ -16,42 +16,39 @@ namespace vex {
 
          context.currentRenderResolution = initialResolution;
 
-        // Initialize Volk with SDL's loader
         SDL_Log("Loading Vulkan library...");
         if (!SDL_Vulkan_LoadLibrary(nullptr)) {
             throw std::runtime_error(SDL_GetError());
         }
 
+        // Init stuff
+
         SDL_Log("Initializing Volk...");
         volkInitializeCustom(reinterpret_cast<PFN_vkGetInstanceProcAddr>(SDL_Vulkan_GetVkGetInstanceProcAddr()));
 
-        // Get required extensions
         SDL_Log("Creating Vulkan instance...");
         uint32_t sdlExtensionCount = 0;
         const char* const* sdlExtensions = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
         std::vector<const char*> extensions(sdlExtensions, sdlExtensions + sdlExtensionCount);
 
-        // Add required instance extensions
         extensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
 #ifdef __APPLE__
         extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 #endif
 
-        // Enable validation layers
+        // TODO: allow for enabling only for debug builds
         const std::vector<const char*> validationLayers = {
             "VK_LAYER_KHRONOS_validation"
         };
 
-        // Application info
         VkApplicationInfo appInfo = {};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = "VEX Engine";
+        appInfo.pApplicationName = "VEX Engine Game";
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "VEX";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.apiVersion = apiVersion;
 
-        // Instance create info
         VkInstanceCreateInfo createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         createInfo.pApplicationInfo = &appInfo;
@@ -64,21 +61,18 @@ namespace vex {
         createInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 #endif
 
-        // Create instance
         if (vkCreateInstance(&createInfo, nullptr, &context.instance) != VK_SUCCESS) {
             throw std::runtime_error("Failed to create Vulkan instance");
         }
 
-        // Load Volk instance functions
         volkLoadInstance(context.instance);
 
         SDL_Log("Binding window...");
-
         if (!SDL_Vulkan_CreateSurface(window, context.instance, nullptr, &context.surface)) {
             throw std::runtime_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
 
-        // Pick physical device
+        // Device stuff
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(context.instance, &deviceCount, nullptr);
         if (deviceCount == 0) {
@@ -88,13 +82,12 @@ namespace vex {
         std::vector<VkPhysicalDevice> devices(deviceCount);
         vkEnumeratePhysicalDevices(context.instance, &deviceCount, devices.data());
 
-        // Select the first suitable device
+        // Select the first suitable device, FIX ME!
         for (const auto& device : devices) {
             VkPhysicalDeviceProperties deviceProperties;
             vkGetPhysicalDeviceProperties(device, &deviceProperties);
             SDL_Log("Selected GPU: %s", deviceProperties.deviceName);
 
-            // Check queue families
             uint32_t queueFamilyCount = 0;
             vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
             std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
@@ -129,7 +122,6 @@ namespace vex {
             throw std::runtime_error("Failed to find a suitable GPU");
         }
 
-        // Create logical device
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
         std::set<uint32_t> uniqueQueueFamilies = {context.graphicsQueueFamily, context.presentQueueFamily};
 
@@ -143,7 +135,7 @@ namespace vex {
             queueCreateInfos.push_back(queueCreateInfo);
         }
 
-        // Device extensions
+        // Device extensions, They are fucking broken :C
         std::vector<const char*> deviceExtensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
 #ifdef __APPLE__
@@ -152,7 +144,7 @@ namespace vex {
         };
 
         VkPhysicalDeviceFeatures deviceFeatures = {};
-        deviceFeatures.samplerAnisotropy = VK_TRUE; // Add this line
+        deviceFeatures.samplerAnisotropy = VK_TRUE;
 
         VkDeviceCreateInfo deviceCreateInfo = {};
         deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -166,14 +158,12 @@ namespace vex {
             throw std::runtime_error("Failed to create logical device");
         }
 
-        // Load Volk device functions
         volkLoadDevice(context.device);
 
-        // Get queues
         vkGetDeviceQueue(context.device, context.graphicsQueueFamily, 0, &context.graphicsQueue);
         vkGetDeviceQueue(context.device, context.presentQueueFamily, 0, &context.presentQueue);
 
-        // Initialize VMA
+        // VMA STUFF
         VmaVulkanFunctions vmaFuncs = {};
         vmaFuncs.vkGetInstanceProcAddr = vkGetInstanceProcAddr;
         vmaFuncs.vkGetDeviceProcAddr = vkGetDeviceProcAddr;
@@ -206,19 +196,16 @@ namespace vex {
             throw std::runtime_error("Failed to create VMA allocator");
         }
 
-        // Initialize rendering resources
         SDL_Log("Initializing Swapchain Manager...");
 
         swapchainManager_ = std::make_unique<VulkanSwapchainManager>(context,window_);
         swapchainManager_->createSwapchain();
 
-        // Initialize rendering resources
         SDL_Log("Initializing Resources...");
         resources_ = std::make_unique<VulkanResources>(context);
         SDL_Log("Initializing Pipeline...");
         pipeline_ = std::make_unique<VulkanPipeline>(context);
 
-        // Define vertex layout
         VkVertexInputBindingDescription bindingDesc{};
         bindingDesc.binding = 0;
         bindingDesc.stride = sizeof(Vertex);
@@ -236,20 +223,14 @@ namespace vex {
             attributes
         );
 
-        //setObjectName(context.device, (uint64_t)context.depthImage,
-        //             VK_OBJECT_TYPE_IMAGE, "Depth Buffer");
-
         startTime = std::chrono::high_resolution_clock::now();
         SDL_Log("Vulkan interface initialized successfully");
     }
 
     Interface::~Interface() {
         vkDeviceWaitIdle(context.device);
-
         swapchainManager_->cleanupSwapchain();
 
-
-        // Cleanup synchronization objects
         for (size_t i = 0; i < context.MAX_FRAMES_IN_FLIGHT; i++) {
             if (context.imageAvailableSemaphores[i]) {
                 vkDestroySemaphore(context.device, context.imageAvailableSemaphores[i], nullptr);
@@ -284,7 +265,6 @@ namespace vex {
         }
         context.swapchainFramebuffers.clear();
 
-        // Destroy image views (if not already destroyed by cleanupSwapchain)
         for (auto& imageView : context.swapchainImageViews) {
             if (imageView) {
                 vkDestroyImageView(context.device, imageView, nullptr);
@@ -336,7 +316,6 @@ namespace vex {
             throw;
         }
 
-            // Assign a stable ID
             uint32_t newId;
             if (!freeModelIds_.empty()) {
                 newId = freeModelIds_.back();
@@ -348,13 +327,11 @@ namespace vex {
                 }
             }
 
-        // Create new model entry
         models_.emplace_back(std::make_unique<Model>());
         Model& model = *models_.back();
         model.id = newId;
         model.meshData = std::move(meshData);
 
-        // Collect unique texture paths from all submeshes
         std::unordered_set<std::string> uniqueTextures;
         for (const auto& submesh : model.meshData.submeshes) {
             if (!submesh.texturePath.empty()) {
@@ -362,7 +339,6 @@ namespace vex {
             }
         }
 
-        // Load all required textures
         SDL_Log("Loading %zu submesh textures", uniqueTextures.size());
         for (const auto& texPath : uniqueTextures) {
             SDL_Log("Processing texture: %s", texPath.c_str());
@@ -381,7 +357,6 @@ namespace vex {
             }
         }
 
-        // Upload mesh to GPU
         try {
             SDL_Log("Creating Vulkan mesh for %s", name.c_str());
             vulkanMeshes_.push_back(std::make_unique<VulkanMesh>(context));
@@ -393,7 +368,6 @@ namespace vex {
             throw;
         }
 
-        // Register model
         modelRegistry_[name] = &model;
         SDL_Log("Model %s registered successfully", name.c_str());
         return model;
@@ -404,22 +378,15 @@ namespace vex {
         auto it = modelRegistry_.find(name);
         if (it == modelRegistry_.end()) return;
 
-            // Reclaim the ID
             freeModelIds_.push_back(it->second->id);
 
-        // Find the model in the deque
-
-            // Erase from deque
             auto modelIter = std::find_if(
                 models_.begin(), models_.end(),
                 [&](const auto& m) { return m.get() == it->second; }
             );
             if (modelIter != models_.end()) models_.erase(modelIter);
 
-        // Remove from registry
         modelRegistry_.erase(name);
-
-        // Unload texture
         resources_->unloadTexture(name);
     }
 
@@ -471,7 +438,6 @@ namespace vex {
             context.currentRenderResolution = renderResolution;
             pipeline_->updateViewport(renderResolution);
         }
-        // Wait for previous frame
         vkWaitForFences(
             context.device,
             1,
@@ -480,7 +446,6 @@ namespace vex {
             UINT64_MAX
         );
 
-        // Acquire next image
         VkResult result = vkAcquireNextImageKHR(
             context.device,
             context.swapchain,
@@ -495,13 +460,10 @@ namespace vex {
             return;
         }
 
-        // Reset fence
         vkResetFences(context.device, 1, &context.inFlightFences[context.currentFrame]);
 
-        // Update camera UBO
         resources_->updateCameraUBO({view, proj});
 
-        // Bind default texture explicitly
         VkImageView textureView = resources_->getTextureView("default");
         resources_->updateTextureDescriptor(context.currentFrame, textureView, 0);
 
@@ -511,8 +473,6 @@ namespace vex {
             return;
         }
 
-
-        // Record command buffer
         VkCommandBuffer commandBuffer = context.commandBuffers[context.currentImageIndex];
            vkResetCommandBuffer(commandBuffer, 0);
 
@@ -520,7 +480,6 @@ namespace vex {
            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
            vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
-           // First render pass - render to low-res framebuffer
            VkRenderPassBeginInfo renderPassInfo{};
            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
            renderPassInfo.renderPass = context.lowResRenderPass;
@@ -536,7 +495,6 @@ namespace vex {
 
                vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-                  // Set viewport and scissor for low-res rendering
                   VkViewport viewport{};
                   viewport.x = 0.0f;
                   viewport.y = 0.0f;
@@ -551,14 +509,9 @@ namespace vex {
                   scissor.extent = {context.swapchainExtent.width, context.swapchainExtent.height};
                   vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-        // Bind default texture initially
         VkImageView defaultTexture = resources_->getTextureView("default");
         resources_->updateTextureDescriptor(context.currentFrame, defaultTexture, 0);
-        //SDL_Log("Bound default texture");
 
-
-
-                    // Bind pipeline
                     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_->get());
 
 
@@ -573,14 +526,13 @@ namespace vex {
             resources_->updateCameraUBO({view, proj});
             resources_->updateModelUBO(context.currentFrame, model.id, ModelUBO{model.transform.matrix()});
             //SDL_Log("Updated UBOs for model %zu", i);
-            // Draw all submeshes
             vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, model.id, currentTime, context.currentRenderResolution);
         }
 
 
         vkCmdEndRenderPass(commandBuffer);
 
-        // Transition low-res image for transfer
+        // Transition low-res image
         VkImageMemoryBarrier lowResBarrier{};
         lowResBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
         lowResBarrier.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -607,18 +559,16 @@ namespace vex {
         swapchainBarrier.srcAccessMask = 0;
         swapchainBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 
-        // Issue both barriers together
         vkCmdPipelineBarrier(
             commandBuffer,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,  // Source stage
-            VK_PIPELINE_STAGE_TRANSFER_BIT,                 // Destination stage
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
             0,
             0, nullptr,
             0, nullptr,
             2, (VkImageMemoryBarrier[]){lowResBarrier, swapchainBarrier}
         );
 
-        // Perform the blit with nearest-neighbor filtering
         VkImageBlit blit{};
         blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         blit.srcSubresource.mipLevel = 0;
@@ -636,10 +586,9 @@ namespace vex {
             context.lowResColorImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
             context.swapchainImages[context.currentImageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             1, &blit,
-            VK_FILTER_NEAREST // Critical for pixel-perfect upscaling
+            VK_FILTER_NEAREST
         );
 
-        // Transition swapchain image for presentation
         VkImageMemoryBarrier presentBarrier{};
         presentBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
         presentBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -653,7 +602,6 @@ namespace vex {
         presentBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         presentBarrier.dstAccessMask = 0;
 
-        // Transition low-res image back for rendering
         VkImageMemoryBarrier lowResRestoreBarrier{};
         lowResRestoreBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
         lowResRestoreBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
@@ -669,17 +617,16 @@ namespace vex {
 
         vkCmdPipelineBarrier(
             commandBuffer,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,                 // Source stage
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,   // Destination stage
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
             0,
             0, nullptr,
             0, nullptr,
             2, (VkImageMemoryBarrier[]){presentBarrier, lowResRestoreBarrier}
         );
 
-            vkEndCommandBuffer(commandBuffer);
+        vkEndCommandBuffer(commandBuffer);
 
-        // Submit
         VkSubmitInfo submitInfo{};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -702,7 +649,6 @@ namespace vex {
             context.inFlightFences[context.currentFrame]
         );
 
-        // Present
         VkPresentInfoKHR presentInfo{};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         presentInfo.waitSemaphoreCount = 1;

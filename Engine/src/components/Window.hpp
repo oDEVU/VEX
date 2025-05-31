@@ -7,7 +7,7 @@
 namespace vex {
     class Window{
         private:
-            SDL_Window *window;                    // Declare a pointer
+            SDL_Window *window;
             bool done = false;
         public:
             Window(std::string title, int resx = 480, int resy = 640);

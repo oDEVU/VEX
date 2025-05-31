@@ -7,7 +7,7 @@
 #include <vector>
 #include <memory>
 
-//Renderer
+//VEX components
 #include "context.hpp"
 
 namespace vex {
@@ -21,7 +21,6 @@ namespace vex {
         void recreateSwapchain();
 
     private:
-        // Helper methods (formerly private in VulkanInterface)
         void createImageViews();
         void createRenderPass();
         void createFramebuffers();
@@ -33,7 +32,6 @@ namespace vex {
 
         void cleanupLowResResources();
 
-        // Swapchain utilities
         VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
         VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);

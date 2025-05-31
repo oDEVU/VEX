@@ -1,4 +1,4 @@
-#include "pipeline.hpp"
+#include "Pipeline.hpp"
 #include <fstream>
 #include <stdexcept>
 
@@ -39,11 +39,9 @@ namespace vex {
         const VkVertexInputBindingDescription& bindingDescription,
         const std::vector<VkVertexInputAttributeDescription>& attributeDescriptions
     ) {
-        // 1. Load shader code
         auto vertShaderCode = readFile(vertShaderPath);
         auto fragShaderCode = readFile(fragShaderPath);
 
-        // 2. Create shader modules
         SDL_Log("Creating shader modules...");
         auto createShaderModule = [&](const std::vector<char>& code) {
             VkShaderModuleCreateInfo createInfo{};
@@ -61,7 +59,6 @@ namespace vex {
         VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
 
-        // 3. Define shader stages
         SDL_Log("Defining shader stages...");
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -77,7 +74,6 @@ namespace vex {
 
         VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
-        // 4. Vertex input state
         SDL_Log("Creating vertex input state...");
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -86,7 +82,6 @@ namespace vex {
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
         vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
-        // 5. Pipeline state setup
         SDL_Log("Creating pipeline state...");
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -144,17 +139,12 @@ namespace vex {
         colorBlending.attachmentCount = 1;
         colorBlending.pAttachments = &colorBlendAttachment;
 
-
-
-            // 2. Pipeline Layout
             SDL_Log("Creating Pipeline layout...");
-
             VkPushConstantRange pushConstantRange{};
             pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
             pushConstantRange.offset = 0;
             pushConstantRange.size = sizeof(PushConstants);
 
-            // Pipeline layout with both descriptor sets
             std::array<VkDescriptorSetLayout, 2> setLayouts = {
                 ctx_.uboDescriptorSetLayout,
                 ctx_.textureDescriptorSetLayout
@@ -182,8 +172,6 @@ namespace vex {
         depthStencil.maxDepthBounds = 1.0f;
         depthStencil.stencilTestEnable = VK_FALSE;
 
-
-        // Add dynamic state
         std::vector<VkDynamicState> dynamicStates = {
             VK_DYNAMIC_STATE_VIEWPORT,
             VK_DYNAMIC_STATE_SCISSOR
@@ -194,7 +182,6 @@ namespace vex {
         dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
         dynamicState.pDynamicStates = dynamicStates.data();
 
-        // 7. Create graphics pipeline
         SDL_Log("Creating Graphics pipeline...");
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -216,7 +203,6 @@ namespace vex {
             throw std::runtime_error("Failed to create graphics pipeline");
         }
 
-        // 8. Cleanup shader modules
         SDL_Log("Cleanup shader modules...");
         vkDestroyShaderModule(ctx_.device, vertShaderModule, nullptr);
         vkDestroyShaderModule(ctx_.device, fragShaderModule, nullptr);

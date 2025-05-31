@@ -1,5 +1,5 @@
 #pragma once
-#include "mesh.hpp"
+#include "Mesh.hpp"
 #include "transform.hpp"
 #include <memory>
 
@@ -9,7 +9,7 @@ namespace vex {
         MeshData meshData;
         Transform transform;
         uint32_t id = UINT32_MAX;
-        std::vector<std::string> textureNames;  // Changed from texturePath to textureName
+        std::vector<std::string> textureNames;
 
         void loadFromFile(const std::string& path) {
             meshData.loadFromFile(path);

@@ -11,7 +11,6 @@ namespace vex {
         VulkanResources(VulkanContext& context);
         ~VulkanResources();
 
-        // Buffer management
         void createUniformBuffers();
 
         void updateCameraUBO(const CameraUBO& data);
@@ -23,7 +22,6 @@ namespace vex {
             return defaultTextureName;
         }
 
-        // Texture management
         void loadTexture(const std::string& path, const std::string& name);
         void unloadTexture(const std::string& name);
         VkImageView getTextureView(const std::string& name) const;
@@ -54,7 +52,7 @@ namespace vex {
         uint32_t getTextureIndex(const std::string& name) const {
             auto it = ctx_.textureIndices.find(name);
             if (it != ctx_.textureIndices.end()) return it->second;
-            return 0; // Default texture index
+            return 0;
         }
 
     private:
@@ -62,19 +60,16 @@ namespace vex {
 
         VulkanContext& ctx_;
 
-        // Uniform buffers
         std::vector<VkBuffer> cameraBuffers_;
         std::vector<VkBuffer> modelBuffers_;
         std::vector<VmaAllocation> cameraAllocs_;
         std::vector<VmaAllocation> modelAllocs_;
 
-        // Descriptors
         VkDescriptorSetLayout descriptorSetLayout_;
         std::vector<VkDescriptorSet> descriptorSets_;
         VkDescriptorPool descriptorPool_;
         std::vector<VkDescriptorSet> textureDescriptorSets_;
 
-        // Textures
         std::unordered_map<std::string, VkImageView> textures_;
         VkSampler textureSampler_;
 

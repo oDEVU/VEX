@@ -3,8 +3,8 @@
 #include <memory>
 #include <SDL3/SDL.h>
 
-#include "components/resolution_manager.hpp"
-#include "components/model.hpp"
+#include "components/ResolutionManager.hpp"
+#include "components/Model.hpp"
 
 namespace vex {
 
@@ -16,21 +16,17 @@ public:
     Engine(const char* title, int width, int height);
     ~Engine();
 
-    // Main loop control
     void run();
 
-    // Accessors
     SDL_Window* getWindow() const;
     Interface* getInterface() const;
 
     void setResolutionMode(ResolutionMode mode) { resolutionManager->setMode(mode); }
     ResolutionMode getResolutionMode() const { return resolutionManager->getCurrentMode(); }
 
-
     Model& loadModel(const std::string& modelPath, const std::string& name);
     Model* getModel(const std::string& name);
 
-    // Event handling hooks
     virtual void processEvent(const SDL_Event& event);
     virtual void update(float deltaTime);
     virtual void render();
