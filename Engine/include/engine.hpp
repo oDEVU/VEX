@@ -3,11 +3,13 @@
 #include <memory>
 #include <SDL3/SDL.h>
 
-#include "window.hpp"
-#include "resolution_manager.hpp"
-#include "backends/vulkan/interface.hpp"
+#include "components/resolution_manager.hpp"
+#include "components/model.hpp"
 
 namespace vex {
+
+class Window;
+class Interface;
 
 class Engine {
 public:
@@ -23,6 +25,10 @@ public:
 
     void setResolutionMode(ResolutionMode mode) { resolutionManager->setMode(mode); }
     ResolutionMode getResolutionMode() const { return resolutionManager->getCurrentMode(); }
+
+
+    Model& loadModel(const std::string& modelPath, const std::string& name);
+    Model* getModel(const std::string& name);
 
     // Event handling hooks
     virtual void processEvent(const SDL_Event& event);

@@ -230,8 +230,8 @@ namespace vex {
         attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)};
 
         pipeline_->createGraphicsPipeline(
-            "shaders/basic.vert.spv",
-            "shaders/basic.frag.spv",
+            "Engine/shaders/basic.vert.spv",
+            "Engine/shaders/basic.frag.spv",
             bindingDesc,
             attributes
         );

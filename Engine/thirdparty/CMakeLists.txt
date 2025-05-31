@@ -45,30 +45,38 @@ set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(assimp)
 
 # glm
-set(GLM_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-add_subdirectory(glm)
+add_library(thirdparty_glm INTERFACE)
+target_include_directories(thirdparty_glm INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/glm)
 
-
-# Final interface library
-add_library(thirdparty INTERFACE)
-target_link_libraries(thirdparty INTERFACE
-    SDL3::SDL3
-    volk
-    VulkanMemoryAllocator
-    Vulkan::Vulkan
-    assimp
-    glm::glm
-)
-
-# Linux-specific linking
+# Linux-specific dependencies
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    target_link_libraries(thirdparty INTERFACE
-        ${WAYLAND_LIBRARIES}
-        ${X11_LIBRARIES}
-    )
-    target_include_directories(thirdparty INTERFACE
+    add_library(linux_deps INTERFACE)
+    target_include_directories(linux_deps INTERFACE
         ${WAYLAND_INCLUDE_DIRS}
         ${X11_INCLUDE_DIRS}
     )
+    target_link_libraries(linux_deps INTERFACE
+        ${WAYLAND_LIBRARIES}
+        ${X11_LIBRARIES}
+    )
 endif()
+
+# Create consolidated interface for all third-party dependencies
+add_library(thirdparty_engine INTERFACE)
+
+# Link all static dependencies to the interface
+target_link_libraries(thirdparty_engine INTERFACE
+    SDL3-static
+    volk
+    VulkanMemoryAllocator
+    assimp
+    thirdparty_glm
+)
+
+# Conditionally add Linux deps
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_libraries(thirdparty_engine INTERFACE linux_deps)
+endif()
+
+# Prevent exporting this internal target
+set_target_properties(thirdparty_engine PROPERTIES EXPORT_PROPERTIES "EXCLUDE_FROM_ALL")

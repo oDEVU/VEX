@@ -1,4 +1,4 @@
-#include "components/engine.hpp"
+#include "engine.hpp"
 #include "components/model.hpp"
 
 #include <cstdlib>
@@ -38,17 +38,17 @@ public:
         // Custom game logic
         if(!modelsLoaded){
             SDL_Log("Main loop: Trying to load models...");
-            m_interface->loadModel("assets/cube.obj", "cube");
-            cube = m_interface->getModel("cube");
-            //m_interface->loadModel("assets/human.obj", "human");
-            m_interface->loadModel("assets/PenguinBaseMesh.obj", "penguin");
-            m_interface->loadModel("assets/scene.gltf", "viper");
-            viper = m_interface->getModel("viper");
+            loadModel("assets/cube.obj", "cube");
+            cube = getModel("cube");
+            //loadModel("assets/human.obj", "human");
+            loadModel("assets/PenguinBaseMesh.obj", "penguin");
+            loadModel("assets/scene.gltf", "viper");
+            viper = getModel("viper");
             modelsLoaded = true;
         }
 
         if(frame == 100){
-            penguin = m_interface->getModel("penguin");
+            penguin = getModel("penguin");
         }
 
         if(animate){

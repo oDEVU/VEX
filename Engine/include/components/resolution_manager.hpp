@@ -8,9 +8,9 @@
 #include <bits/stdc++.h>
 #include <SDL3/SDL.h>
 
-#include "window.hpp"
-
 namespace vex {
+
+class Window;
 
 enum class ResolutionMode {
     NATIVE,     // Use window resolution

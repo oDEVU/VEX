@@ -1,5 +1,6 @@
 #include "vulkan_mesh.hpp"
-#include "../../mesh.hpp" // Add this include
+#include "components/mesh.hpp"
+#include "components/model.hpp"
 #include "glm/fwd.hpp"
 
 

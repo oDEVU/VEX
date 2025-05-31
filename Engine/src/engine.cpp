@@ -2,6 +2,10 @@
 #include "engine.hpp"
 #include "SDL3/SDL_events.h"
 
+#include "components/window.hpp"
+
+#include "components/backends/vulkan/interface.hpp"
+
 namespace vex {
 
 Engine::Engine(const char* title, int width, int height) {
@@ -78,6 +82,15 @@ Engine::~Engine() {
     m_interface.reset();
     m_window.reset();
     SDL_Quit();
+}
+
+
+Model& Engine::loadModel(const std::string& modelPath, const std::string& name){
+    return m_interface->loadModel(modelPath, name);
+}
+
+Model* Engine::getModel(const std::string& name){
+    return m_interface->getModel(name);
 }
 
 // Default implementations (can be overridden)

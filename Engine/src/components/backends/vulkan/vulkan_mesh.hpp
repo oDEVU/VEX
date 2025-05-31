@@ -1,6 +1,7 @@
 #pragma once
 #include "context.hpp"
-#include "../../mesh.hpp"
+#include "components/mesh.hpp"
+#include "components/model.hpp"
 #include "resources.hpp"
 
 namespace vex {

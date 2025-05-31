@@ -1,5 +1,7 @@
 // resolution.cpp
-#include "resolution_manager.hpp"
+#include "components/resolution_manager.hpp"
+
+#include "window.hpp"
 
 namespace vex {
 

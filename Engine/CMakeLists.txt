@@ -1,0 +1,175 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(VEX)
+set(NAMESPACE_NAME "VEX")
+
+option(BUILD_SHARED_LIBS "Build the shared library" OFF)
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+include(GenerateExportHeader)
+
+find_package(Vulkan REQUIRED COMPONENTS glslc)
+find_program(glslc_executable NAMES glslc HINTS Vulkan::glslc)
+
+set(CPP_LIBRARY_VERSION_MAJOR 0)
+set(CPP_LIBRARY_VERSION_MINOR 1)
+set(CPP_LIBRARY_VERSION_PATCH 0)
+set(CPP_LIBRARY_VERSION_STRING ${CPP_LIBRARY_VERSION_MAJOR}.${CPP_LIBRARY_VERSION_MINOR}.${CPP_LIBRARY_VERSION_PATCH})
+
+add_library(${PROJECT_NAME})
+add_library(${NAMESPACE_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
+add_subdirectory(thirdparty)
+
+# Link to consolidated third-party interface
+target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
+
+generate_export_header(${PROJECT_NAME}
+    EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME}_export.h
+)
+set(public_header_files
+    include/engine.hpp
+    include/components/mesh.hpp
+    include/components/model.hpp
+    include/components/transform.hpp
+    include/components/resolution_manager.hpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
+)
+set(source_files
+        src/engine.cpp
+        src/components/mesh.cpp
+        src/components/resolution_manager.cpp
+        src/components/window.cpp
+        src/components/window.hpp
+        src/components/backends/vulkan/context.hpp
+        src/components/backends/vulkan/interface.cpp
+        src/components/backends/vulkan/interface.hpp
+        src/components/backends/vulkan/pipeline.cpp
+        src/components/backends/vulkan/pipeline.hpp
+        src/components/backends/vulkan/resources.cpp
+        src/components/backends/vulkan/resources.hpp
+        src/components/backends/vulkan/swapchain_manager.cpp
+        src/components/backends/vulkan/swapchain_manager.hpp
+        src/components/backends/vulkan/uniforms.hpp
+        src/components/backends/vulkan/vulkan_mesh.cpp
+        src/components/backends/vulkan/vulkan_mesh.hpp
+    )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    LANGUAGES CXX
+    CXX_STANDARD 23
+    CXX_STANDARD_REQUIRED OFF
+    CXX_EXTENSIONS OFF
+    VERSION ${CPP_LIBRARY_VERSION_STRING}
+    SOVERSION ${CPP_LIBRARY_VERSION_MAJOR}
+    PUBLIC_HEADER "${public_header_files}"
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN 1
+)
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        ${public_header_files}
+        ${source_files}
+)
+
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+#==============================================================================
+# INSTALLATION (Only for standalone engine builds)
+#==============================================================================
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+
+    install(TARGETS ${PROJECT_NAME}
+        EXPORT ${PROJECT_NAME}Targets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Library
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Library
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  COMPONENT Library
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} COMPONENT Development
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+
+    install(EXPORT ${PROJECT_NAME}Targets
+        FILE ${PROJECT_NAME}Targets.cmake
+        NAMESPACE ${NAMESPACE_NAME}::
+        DESTINATION ${ConfigPackageLocation}
+        COMPONENT Development
+    )
+
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glm/glm
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+
+    configure_package_config_file(
+        ${PROJECT_NAME}Config.cmake.in
+        ${PROJECT_NAME}Config.cmake
+        INSTALL_DESTINATION "${ConfigPackageLocation}"
+        PATH_VARS CMAKE_INSTALL_PREFIX
+    )
+
+    write_basic_package_version_file(
+        ${PROJECT_NAME}ConfigVersion.cmake
+        VERSION ${CPP_LIBRARY_VERSION_STRING}
+        COMPATIBILITY AnyNewerVersion
+    )
+
+    install(
+        FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        DESTINATION
+            ${ConfigPackageLocation}
+        COMPONENT
+            Development
+    )
+endif()
+
+#==============================================================================
+# COMPILE SHADERS
+#
+set(SHADER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders)
+set(SHADER_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/shaders)
+
+file(GLOB SHADERS
+  ${SHADER_SOURCE_DIR}/*.vert
+  ${SHADER_SOURCE_DIR}/*.frag
+  ${SHADER_SOURCE_DIR}/*.comp
+  ${SHADER_SOURCE_DIR}/*.geom
+  ${SHADER_SOURCE_DIR}/*.tesc
+  ${SHADER_SOURCE_DIR}/*.tese
+  ${SHADER_SOURCE_DIR}/*.mesh
+  ${SHADER_SOURCE_DIR}/*.task
+  ${SHADER_SOURCE_DIR}/*.rgen
+  ${SHADER_SOURCE_DIR}/*.rchit
+  ${SHADER_SOURCE_DIR}/*.rmiss)
+
+add_custom_command(
+  COMMAND
+    ${CMAKE_COMMAND} -E make_directory ${SHADER_BINARY_DIR}
+  OUTPUT ${SHADER_BINARY_DIR}
+  COMMENT "Creating ${SHADER_BINARY_DIR}"
+)
+
+foreach(source IN LISTS SHADERS)
+    get_filename_component(FILENAME ${source} NAME)
+    add_custom_command(
+    COMMAND
+      ${glslc_executable}
+      -o ${SHADER_BINARY_DIR}/${FILENAME}.spv
+      ${source}
+    OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}.spv
+    DEPENDS ${source} ${SHADER_BINARY_DIR}
+    COMMENT "Compiling ${FILENAME}"
+  )
+    list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+endforeach()
+
+add_custom_target(shaders ALL DEPENDS ${SPV_SHADERS})

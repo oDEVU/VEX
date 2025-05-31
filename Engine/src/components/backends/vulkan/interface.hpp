@@ -15,8 +15,8 @@
 #include "swapchain_manager.hpp"
 #include "pipeline.hpp"
 #include "resources.hpp"
-#include "../../mesh.hpp"
-#include "../../model.hpp"
+#include "components/mesh.hpp"
+#include "components/model.hpp"
 #include "vulkan_mesh.hpp"
 
 namespace vex {
