@@ -29,7 +29,7 @@ Engine::Engine(const char* title, int width, int height) {
     auto renderRes = resolutionManager->getRenderResolution();
     SDL_Log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes);
-
+    m_camera = std::make_unique<Camera>();
 
     SDL_Log("Engine initialized successfully");
 }
@@ -38,10 +38,16 @@ void Engine::run() {
     Uint64 lastTime = SDL_GetPerformanceCounter();
 
     while (m_running) {
+
+        // Timing
+        Uint64 now = SDL_GetPerformanceCounter();
+        float deltaTime = (float)((now - lastTime) / (float)SDL_GetPerformanceFrequency());
+        lastTime = now;
+
         // Event processing
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            processEvent(event);
+            processEvent(event, deltaTime);
             switch (event.type) {
                 case SDL_EVENT_QUIT:
                     m_running = false;
@@ -61,15 +67,12 @@ void Engine::run() {
             }
         }
 
-        // Timing
-        Uint64 now = SDL_GetPerformanceCounter();
-        float deltaTime = (float)((now - lastTime) / (float)SDL_GetPerformanceFrequency());
-        lastTime = now;
-
         // Update and render
 
         if(frame > 0){
             update(deltaTime);
+        }else{
+            beginGame();
         }
 
         render();
@@ -94,17 +97,18 @@ Model* Engine::getModel(const std::string& name){
 }
 
 // Default implementations (can be overridden)
-void Engine::processEvent(const SDL_Event& event) {}
+void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
+void Engine::beginGame() {}
 void Engine::render() {
     auto renderRes = resolutionManager->getRenderResolution();
 
-    glm::mat4 view = glm::lookAt(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    glm::mat4 view = glm::lookAt(m_camera->transform.position, glm::vec3(m_camera->transform.position + m_camera->transform.getForwardVector()), m_camera->transform.getUpVector());
     glm::mat4 proj = glm::perspective(
-        glm::radians(45.0f),
+        glm::radians(m_camera->fov),
         renderRes.x / static_cast<float>(renderRes.y),
-        0.1f,
-        100.0f
+        m_camera->nearPlane,
+        m_camera->farPlane
     );
     proj[1][1] *= -1;
 

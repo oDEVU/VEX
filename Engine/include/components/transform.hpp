@@ -17,5 +17,28 @@ namespace vex {
             mat = glm::scale(mat, scale);
             return mat;
         }
+
+        glm::vec3 getForwardVector() const {
+            float pitch = glm::radians(rotation.x);
+            float yaw = glm::radians(rotation.y);
+
+            return glm::normalize(glm::vec3(
+                cos(yaw) * cos(pitch),
+                sin(pitch),
+                sin(yaw) * cos(pitch)
+            ));
+        }
+
+        glm::vec3 getRightVector() {
+            glm::vec3 forward = getForwardVector();
+            glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+            return glm::normalize(glm::cross(forward, worldUp));
+        }
+
+        glm::vec3 getUpVector() {
+            glm::vec3 forward = getForwardVector();
+            glm::vec3 right = getRightVector();
+            return glm::normalize(glm::cross(right, forward));
+        }
     };
 }

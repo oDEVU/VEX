@@ -5,6 +5,7 @@
 
 #include "components/ResolutionManager.hpp"
 #include "components/Model.hpp"
+#include "components/Camera.hpp"
 
 namespace vex {
 
@@ -18,8 +19,7 @@ public:
 
     void run();
 
-    SDL_Window* getWindow() const;
-    Interface* getInterface() const;
+    std::shared_ptr<Camera> getCamera() {return m_camera;}
 
     void setResolutionMode(ResolutionMode mode) { resolutionManager->setMode(mode); }
     ResolutionMode getResolutionMode() const { return resolutionManager->getCurrentMode(); }
@@ -27,15 +27,17 @@ public:
     Model& loadModel(const std::string& modelPath, const std::string& name);
     Model* getModel(const std::string& name);
 
-    virtual void processEvent(const SDL_Event& event);
+    virtual void processEvent(const SDL_Event& event, float deltaTime);
+    virtual void beginGame();
     virtual void update(float deltaTime);
     virtual void render();
-
 protected:
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Interface> m_interface;
     std::unique_ptr<ResolutionManager> resolutionManager;
     bool m_running = true;
     u_int64_t frame = 0;
+
+    std::shared_ptr<Camera> m_camera;
 };
 }

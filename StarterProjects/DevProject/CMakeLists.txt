@@ -13,15 +13,15 @@ target_sources(${PROJECT_NAME} PRIVATE main.cpp)
 add_subdirectory(../../Engine  ${CMAKE_BINARY_DIR}/Engine)
 target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
 
-set(ASSETS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/assets")
-set(ASSETS_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/assets")
+set(ASSETS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Assets")
+set(ASSETS_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/Assets")
 
-add_custom_target(copy_assets ALL
+add_custom_target(copy_Assets ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory "${ASSETS_DEST_DIR}"
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${ASSETS_SOURCE_DIR}"
         "${ASSETS_DEST_DIR}"
-    COMMENT "Copying assets directory"
+    COMMENT "Copying Assets directory"
 )
 
-add_dependencies(${PROJECT_NAME} copy_assets)
+add_dependencies(${PROJECT_NAME} copy_Assets)
