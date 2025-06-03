@@ -20,6 +20,17 @@ set(CPP_LIBRARY_VERSION_STRING ${CPP_LIBRARY_VERSION_MAJOR}.${CPP_LIBRARY_VERSIO
 add_library(${PROJECT_NAME})
 add_library(${NAMESPACE_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
+message(STATUS "VEX build type: ${CMAKE_BUILD_TYPE}")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(VEX PRIVATE ENABLE_CPPTRACE=1)
+else()
+    target_compile_definitions(VEX PRIVATE ENABLE_CPPTRACE=0)
+endif()
+
+get_target_property(defs VEX COMPILE_DEFINITIONS)
+message(STATUS "Compile definitions for VEX: ${defs}")
+
 add_subdirectory(thirdparty)
 
 # Link to consolidated third-party interface
@@ -34,6 +45,7 @@ set(public_header_files
     include/components/Model.hpp
     include/components/transform.hpp
     include/components/ResolutionManager.hpp
+    include/components/errorUtils.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(source_files
@@ -58,7 +70,7 @@ set(source_files
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LANGUAGES CXX
-    CXX_STANDARD 23
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED OFF
     CXX_EXTENSIONS OFF
     VERSION ${CPP_LIBRARY_VERSION_STRING}

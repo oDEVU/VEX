@@ -4,7 +4,9 @@
 
 #include "Interface.hpp"
 #include <vector>
-#include <stdexcept>
+
+#include "components/errorUtils.hpp"
+
 #include <algorithm>
 #include <set>
 #include <fstream>
@@ -18,7 +20,7 @@ namespace vex {
 
         SDL_Log("Loading Vulkan library...");
         if (!SDL_Vulkan_LoadLibrary(nullptr)) {
-            throw std::runtime_error(SDL_GetError());
+            throw_error(SDL_GetError());
         }
 
         // Init stuff
@@ -62,21 +64,21 @@ namespace vex {
 #endif
 
         if (vkCreateInstance(&createInfo, nullptr, &context.instance) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create Vulkan instance");
+            throw_error("Failed to create Vulkan instance");
         }
 
         volkLoadInstance(context.instance);
 
         SDL_Log("Binding window...");
         if (!SDL_Vulkan_CreateSurface(window, context.instance, nullptr, &context.surface)) {
-            throw std::runtime_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
+            throw_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
 
         // Device stuff
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(context.instance, &deviceCount, nullptr);
         if (deviceCount == 0) {
-            throw std::runtime_error("Failed to find GPUs with Vulkan support");
+            throw_error("Failed to find GPUs with Vulkan support");
         }
 
         std::vector<VkPhysicalDevice> devices(deviceCount);
@@ -119,7 +121,7 @@ namespace vex {
         }
 
         if (context.physicalDevice == VK_NULL_HANDLE) {
-            throw std::runtime_error("Failed to find a suitable GPU");
+            throw_error("Failed to find a suitable GPU");
         }
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
@@ -155,7 +157,7 @@ namespace vex {
         deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
         if (vkCreateDevice(context.physicalDevice, &deviceCreateInfo, nullptr, &context.device) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create logical device");
+            throw_error("Failed to create logical device");
         }
 
         volkLoadDevice(context.device);
@@ -193,7 +195,7 @@ namespace vex {
         allocatorInfo.pVulkanFunctions = &vmaFuncs;
 
         if (vmaCreateAllocator(&allocatorInfo, &context.allocator) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create VMA allocator");
+            throw_error("Failed to create VMA allocator");
         }
 
         SDL_Log("Initializing Swapchain Manager...");
@@ -299,7 +301,7 @@ namespace vex {
     Model& Interface::loadModel(const std::string& path, const std::string& name) {
         SDL_Log("Loading model: %s...", name.c_str());
         if (modelRegistry_.count(name)) {
-            throw std::runtime_error("Model '" + name + "' already exists");
+            throw_error("Model '" + name + "' already exists");
         }
 
         MeshData meshData;
@@ -307,13 +309,13 @@ namespace vex {
             SDL_Log("Loading mesh data from: %s", path.c_str());
             std::ifstream fileCheck(path);
             if (!fileCheck.is_open()) {
-                throw std::runtime_error("File not found: " + path);
+                throw_error("File not found: " + path);
             }
             fileCheck.close();
             meshData.loadFromFile(path);
         } catch (const std::exception& e) {
-            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Model load failed: %s", e.what());
-            throw;
+            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Model load failed");
+            handle_exception(e);
         }
 
             uint32_t newId;
@@ -323,7 +325,7 @@ namespace vex {
             } else {
                 newId = nextModelId_++;
                 if (newId >= context.MAX_MODELS) {
-                    throw std::runtime_error("Maximum model count exceeded");
+                    throw_error("Maximum model count exceeded");
                 }
             }
 
@@ -348,9 +350,9 @@ namespace vex {
                     SDL_Log("Loaded texture: %s", texPath.c_str());
                 } catch (const std::exception& e) {
                     SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                                "Failed to load texture %s: %s",
-                                texPath.c_str(), e.what());
-                    throw;
+                                "Failed to load texture %s",
+                                texPath.c_str());
+                    handle_exception(e);
                 }
             } else {
                 SDL_Log("Texture already exists: %s", texPath.c_str());
@@ -363,9 +365,9 @@ namespace vex {
             vulkanMeshes_.back()->upload(model.meshData);
             SDL_Log("Mesh upload successful");
         } catch (const std::exception& e) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed: %s", e.what());
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
             vulkanMeshes_.pop_back();
-            throw;
+            handle_exception(e);
         }
 
         modelRegistry_[name] = &model;
@@ -405,7 +407,7 @@ namespace vex {
         if (context.surface) return;
 
         if (!SDL_Vulkan_CreateSurface(window, context.instance, nullptr, &context.surface)) {
-            throw std::runtime_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
+            throw_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
 
         window_ = window;
@@ -664,7 +666,7 @@ namespace vex {
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
             swapchainManager_->recreateSwapchain();
         } else if (result != VK_SUCCESS) {
-            throw std::runtime_error("Failed to present swap chain image!");
+            throw_error("Failed to present swap chain image!");
         }
 
         context.currentFrame = (context.currentFrame + 1) % context.MAX_FRAMES_IN_FLIGHT;

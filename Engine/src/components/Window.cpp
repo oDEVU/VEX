@@ -13,8 +13,8 @@ namespace vex {
             SDL_SetHint("SDL_VIDEO_FORCE_PIXEL_SIZE", "1");
             SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
             SDL_SetHint("SDL_VIDEO_WAYLAND_MODE_EMULATION", "1");
-            SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "wayland,x11", SDL_HINT_OVERRIDE);
-            setenv("SDL_VIDEODRIVER", "wayland,x11", 1);
+            SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "x11,wayland", SDL_HINT_OVERRIDE);
+            setenv("SDL_VIDEODRIVER", "x11,wayland", 1);
         #endif
 
         if (!SDL_Init(SDL_INIT_VIDEO)) {

@@ -1,9 +1,11 @@
 #include "components/Mesh.hpp"
+#include "components/errorUtils.hpp"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/version.h>
-#include <stdexcept>
+#include <filesystem>
 
 namespace vex {
     void MeshData::loadFromFile(const std::string& path) {
@@ -15,28 +17,33 @@ namespace vex {
 
         SDL_Log("Creating assimp importer...");
         Assimp::Importer importer;
+
+        if (!std::filesystem::exists(path)){
+            throw_error("File: [" + path + "] doesnt exists");
+        }
+
         const aiScene* scene = importer.ReadFile(path,
             aiProcess_Triangulate |
             aiProcess_GenNormals |
             aiProcess_FlipUVs);
 
         if (!scene) {
-            throw std::runtime_error("Assimp failed to load file: " + std::string(importer.GetErrorString()));
+            throw_error("Assimp failed to load file: " + std::string(importer.GetErrorString()));
         }
         if (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {
-            throw std::runtime_error("Assimp scene incomplete: " + std::string(importer.GetErrorString()));
+            throw_error("Assimp scene incomplete: " + std::string(importer.GetErrorString()));
         }
         if (!scene->mRootNode) {
-            throw std::runtime_error("Assimp scene has no root node");
+            throw_error("Assimp scene has no root node");
         }
         if (!scene->mMeshes) {
-            throw std::runtime_error("Assimp scene has invalid mesh array");
+            throw_error("Assimp scene has invalid mesh array");
         }
         if (scene->mNumMeshes == 0) {
-            throw std::runtime_error("Model contains no meshes");
+            throw_error("Model contains no meshes");
         }
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            throw std::runtime_error("Failed to load model: " + std::string(importer.GetErrorString()));
+            throw_error("Failed to load model: " + std::string(importer.GetErrorString()));
         }
 
 

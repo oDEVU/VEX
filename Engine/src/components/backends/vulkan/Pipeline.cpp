@@ -1,8 +1,8 @@
 #include "Pipeline.hpp"
 #include <fstream>
-#include <stdexcept>
 
 #include "uniforms.hpp"
+#include "components/errorUtils.hpp"
 
 namespace vex {
     VulkanPipeline::VulkanPipeline(VulkanContext& context) : ctx_(context) {}
@@ -20,7 +20,7 @@ namespace vex {
         SDL_Log("Reading shader...");
         std::ifstream file(filename, std::ios::ate | std::ios::binary);
         if (!file.is_open()) {
-            throw std::runtime_error("Failed to open shader file: " + filename);
+            throw_error("Failed to open shader file: " + filename);
         }
         size_t fileSize = file.tellg();
         std::vector<char> buffer(fileSize);
@@ -51,7 +51,7 @@ namespace vex {
 
             VkShaderModule shaderModule;
             if (vkCreateShaderModule(ctx_.device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create shader module");
+                throw_error("Failed to create shader module");
             }
             return shaderModule;
         };
@@ -159,7 +159,7 @@ namespace vex {
 
             SDL_Log("Creating pipeline layout with %d descriptor sets", setLayouts.size());
             if (vkCreatePipelineLayout(ctx_.device, &pipelineLayoutInfo, nullptr, &layout_) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create pipeline layout!");
+                throw_error("Failed to create pipeline layout!");
             }
 
         VkPipelineDepthStencilStateCreateInfo depthStencil{};
@@ -200,7 +200,7 @@ namespace vex {
         pipelineInfo.subpass = 0;
 
         if (vkCreateGraphicsPipelines(ctx_.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline_) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create graphics pipeline");
+            throw_error("Failed to create graphics pipeline");
         }
 
         SDL_Log("Cleanup shader modules...");

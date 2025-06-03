@@ -44,6 +44,21 @@ set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(assimp)
 
+# dirty fix for assimp not compiling in realese
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_options(assimp PRIVATE -Wno-array-bounds)
+endif()
+
+# cpptrace
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(CPPTRACE_STATIC_DEFINE ON CACHE BOOL "" FORCE)
+    set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+    set(CPPTRACE_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(CPPTRACE_COLOR_OUTPUT ON CACHE BOOL "" FORCE)
+    add_subdirectory(cpptrace)
+endif()
+
 # glm
 add_library(thirdparty_glm INTERFACE)
 target_include_directories(thirdparty_glm INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/glm)
@@ -70,6 +85,12 @@ target_link_libraries(thirdparty_engine INTERFACE
     assimp
     thirdparty_glm
 )
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_link_libraries(thirdparty_engine INTERFACE
+        cpptrace::cpptrace
+    )
+endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(thirdparty_engine INTERFACE linux_deps)

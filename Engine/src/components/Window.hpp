@@ -4,6 +4,8 @@
 #include <SDL3/SDL_main.h>
 #include <iostream>
 
+#include "components/errorUtils.hpp"
+
 namespace vex {
     class Window{
         private:

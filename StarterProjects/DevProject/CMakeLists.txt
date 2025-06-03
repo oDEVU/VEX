@@ -9,6 +9,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(${PROJECT_NAME})
 
+# Enables stacktraces for Debug builds
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ENABLE_CPPTRACE=1)
+else()
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ENABLE_CPPTRACE=0)
+endif()
+
 target_sources(${PROJECT_NAME} PRIVATE main.cpp)
 add_subdirectory(../../Engine  ${CMAKE_BINARY_DIR}/Engine)
 target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)

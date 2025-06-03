@@ -1,6 +1,7 @@
 #include "SwapchainManager.hpp"
+#include "components/errorUtils.hpp"
+
 #include <vector>
-#include <stdexcept>
 #include <algorithm>
 #include <set>
 #include <limits>
@@ -17,13 +18,13 @@ namespace vex {
         SDL_Log("Creating Swapchain");
         VkSurfaceCapabilitiesKHR capabilities;
         if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(context_.physicalDevice, context_.surface, &capabilities) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to get surface capabilities");
+            throw_error("Failed to get surface capabilities");
         }
 
         uint32_t formatCount;
         vkGetPhysicalDeviceSurfaceFormatsKHR(context_.physicalDevice, context_.surface, &formatCount, nullptr);
         if (formatCount == 0) {
-            throw std::runtime_error("No surface formats supported");
+            throw_error("No surface formats supported");
         }
         std::vector<VkSurfaceFormatKHR> formats(formatCount);
         vkGetPhysicalDeviceSurfaceFormatsKHR(context_.physicalDevice, context_.surface, &formatCount, formats.data());
@@ -31,7 +32,7 @@ namespace vex {
         uint32_t presentModeCount;
         vkGetPhysicalDeviceSurfacePresentModesKHR(context_.physicalDevice, context_.surface, &presentModeCount, nullptr);
         if (presentModeCount == 0) {
-            throw std::runtime_error("No present modes supported");
+            throw_error("No present modes supported");
         }
 
         std::vector<VkPresentModeKHR> presentModes(presentModeCount);
@@ -46,7 +47,7 @@ namespace vex {
 
         if (!(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) ||
             !(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)) {
-            throw std::runtime_error("Swapchain format doesn't support blitting!");
+            throw_error("Swapchain format doesn't support blitting!");
         }
 
         uint32_t imageCount = capabilities.minImageCount + 1;
@@ -82,7 +83,7 @@ namespace vex {
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
         if (vkCreateSwapchainKHR(context_.device, &createInfo, nullptr, &context_.swapchain) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create swapchain");
+            throw_error("Failed to create swapchain");
         }
 
         vkGetSwapchainImagesKHR(context_.device, context_.swapchain, &imageCount, nullptr);
@@ -145,7 +146,7 @@ namespace vex {
 
         if (vmaCreateImage(context_.allocator, &imageInfo, &allocInfo,
                           &context_.depthImage, &context_.depthAllocation, nullptr) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create depth image");
+            throw_error("Failed to create depth image");
         }
 
         VkImageViewCreateInfo viewInfo{};
@@ -160,9 +161,8 @@ namespace vex {
         viewInfo.subresourceRange.layerCount = 1;
 
         if (vkCreateImageView(context_.device, &viewInfo, nullptr, &context_.depthImageView) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create depth image view");
+            throw_error("Failed to create depth image view");
         }
-
         createRenderPass();
     }
 
@@ -187,7 +187,7 @@ namespace vex {
             createInfo.subresourceRange.layerCount = 1;
 
             if (vkCreateImageView(context_.device, &createInfo, nullptr, &context_.swapchainImageViews[i]) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create image views");
+                throw_error("Failed to create image views");
             }
         }
         createDepthResources();
@@ -249,7 +249,7 @@ namespace vex {
         renderPassInfo.pDependencies = &dependency;
 
         if (vkCreateRenderPass(context_.device, &renderPassInfo, nullptr, &context_.renderPass) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create render pass");
+            throw_error("Failed to create render pass");
         }
             VkAttachmentDescription lowColorAttachment = {};
             lowColorAttachment.format = context_.swapchainImageFormat;
@@ -273,7 +273,7 @@ namespace vex {
             lowResRenderPassInfo.pDependencies = &dependency;
 
             if (vkCreateRenderPass(context_.device, &lowResRenderPassInfo, nullptr, &context_.lowResRenderPass) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create low-res render pass");
+                throw_error("Failed to create low-res render pass");
             }
 
         createFramebuffers();
@@ -301,7 +301,7 @@ namespace vex {
 
             if (vkCreateFramebuffer(context_.device, &framebufferInfo, nullptr,
                                   &context_.swapchainFramebuffers[i]) != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create framebuffer");
+                throw_error("Failed to create framebuffer");
             }
         }
         createCommandPool();
@@ -315,7 +315,7 @@ namespace vex {
         poolInfo.queueFamilyIndex = context_.graphicsQueueFamily;
 
         if (vkCreateCommandPool(context_.device, &poolInfo, nullptr, &context_.commandPool) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create command pool");
+            throw_error("Failed to create command pool");
         }
 
         createCommandBuffers();
@@ -332,7 +332,7 @@ namespace vex {
         allocInfo.commandBufferCount = (uint32_t)context_.commandBuffers.size();
 
         if (vkAllocateCommandBuffers(context_.device, &allocInfo, context_.commandBuffers.data()) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to allocate command buffers");
+            throw_error("Failed to allocate command buffers");
         }
 
         createSyncObjects();
@@ -357,17 +357,17 @@ namespace vex {
         for (size_t i = 0; i < context_.MAX_FRAMES_IN_FLIGHT; i++) {
             result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.imageAvailableSemaphores[i]);
             if (result != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create image available semaphore");
+                throw_error("Failed to create image available semaphore");
             }
 
             result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.renderFinishedSemaphores[i]);
             if (result != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create render finished semaphore");
+                throw_error("Failed to create render finished semaphore");
             }
 
             result = vkCreateFence(context_.device, &fenceInfo, nullptr, &context_.inFlightFences[i]);
             if (result != VK_SUCCESS) {
-                throw std::runtime_error("Failed to create fence");
+                throw_error("Failed to create fence");
             }
 
             assert(context_.inFlightFences[i] != VK_NULL_HANDLE);
@@ -390,7 +390,7 @@ namespace vex {
         }
 
         if (!context_.lowResRenderPass) {
-            throw std::runtime_error("Low-res render pass not created!");
+            throw_error("Low-res render pass not created!");
         }
 
         cleanupLowResResources();
@@ -603,6 +603,6 @@ namespace vex {
                 return format;
             }
         }
-        throw std::runtime_error("Failed to find supported depth format");
+        throw_error("Failed to find supported depth format");
     }
 }

@@ -2,6 +2,7 @@
 #include "components/GameInfo.hpp"
 #include "components/Model.hpp"
 #include "components/Camera.hpp"
+#include "components/errorUtils.hpp"
 
 #include <cstdlib>
 #include <sys/types.h>
@@ -120,7 +121,8 @@ int main(int argc, char* argv[]) {
         game.run();
         SDL_Log("Game loop exited normally");
     } catch (const std::exception& e) {
-        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Game error: %s", e.what());
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Game error:");
+        handle_exception(e);
         return 1;
     } catch (...) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Unknown error occurred");
