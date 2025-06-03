@@ -4,6 +4,10 @@
 
 // TODO:
 
+- Implement nuklear
+- Implement input system
+- Improve camera system
+
 - Vertext Colors for models (to use as ao or fog)
 - Vertext lighting
 - Toggable Z buffer issues (idk if its possible but still would be cool)

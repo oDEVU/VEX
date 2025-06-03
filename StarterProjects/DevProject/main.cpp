@@ -31,7 +31,7 @@ public:
                 m_running = false;
             }
 
-            // Basic camera stuff, just for testing, do not do it like this lmao
+            // Basic camera input, just for testing, do not do it like this lmao
 
             if (key_event.scancode == SDL_SCANCODE_W) {
                 getCamera()->transform.position = getCamera()->transform.position + (getCamera()->transform.getForwardVector()*float(deltaTime*250));
