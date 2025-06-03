@@ -1,11 +1,13 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <SDL3/SDL.h>
 
 #include "components/ResolutionManager.hpp"
 #include "components/Model.hpp"
 #include "components/Camera.hpp"
+#include "components/GameInfo.hpp"
 
 namespace vex {
 
@@ -14,7 +16,7 @@ class Interface;
 
 class Engine {
 public:
-    Engine(const char* title, int width, int height);
+    Engine(const char* title, int width, int height, GameInfo gInfo);
     ~Engine();
 
     void run();
@@ -39,5 +41,7 @@ protected:
     u_int64_t frame = 0;
 
     std::shared_ptr<Camera> m_camera;
+
+    GameInfo gameInfo;
 };
 }

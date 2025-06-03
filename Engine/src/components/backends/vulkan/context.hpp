@@ -27,11 +27,6 @@ namespace vex {
         VkExtent2D swapchainExtent;
         std::vector<VkImageView> swapchainImageViews;
 
-        VkImage renderTargetImage = VK_NULL_HANDLE;
-        VmaAllocation renderTargetAllocation = VK_NULL_HANDLE;
-        VkImageView renderTargetView = VK_NULL_HANDLE;
-        VkExtent2D renderResolution;
-
         VkImage depthImage = VK_NULL_HANDLE;
         VmaAllocation depthAllocation = VK_NULL_HANDLE;
         VkImageView depthImageView;
@@ -87,6 +82,8 @@ namespace vex {
         uint32_t currentFrame = 0;
         uint32_t currentImageIndex = 0;
         const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
+
+        //FIXME: Implement somethig to dynamically allocate resources and not relly on max txt and models
         const uint32_t MAX_TEXTURES = 1024;
         const uint32_t MAX_MODELS = 1024;
 
@@ -101,12 +98,6 @@ namespace vex {
         std::unordered_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;
 
-        struct FrameData {
-            VkDescriptorSet uboSet;
-            std::vector<VkDescriptorSet> textureSets;
-        };
-
-        std::vector<FrameData> frames;
         glm::uvec2 currentRenderResolution;
     } VulkanContext;
 }

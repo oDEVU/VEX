@@ -10,6 +10,6 @@ namespace vex {
         float fov = 45;
         float nearPlane = 0.1;
         float farPlane = 100.0;
-        uint32_t id = UINT32_MAX;
+        uint32_t id = UINT32_MAX; // In the editor i want to have multiple of them and then rebind them but not its unused.
     };
 }

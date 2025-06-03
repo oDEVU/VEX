@@ -5,10 +5,15 @@
 #include "components/Window.hpp"
 
 #include "components/backends/vulkan/Interface.hpp"
+#include <cstdint>
 
 namespace vex {
 
-Engine::Engine(const char* title, int width, int height) {
+Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
+    gameInfo = gInfo;
+    if(gameInfo.versionMajor == 0 && gameInfo.versionMinor == 0 && gameInfo.versionPatch == 0){
+        SDL_Log("Project version not set!");
+    }
 
     // Create window
     m_window = std::make_unique<Window>(title, width, height);
@@ -28,7 +33,7 @@ Engine::Engine(const char* title, int width, int height) {
     // Pass initial render resolution to interface
     auto renderRes = resolutionManager->getRenderResolution();
     SDL_Log("Initializing Vulkan interface...");
-    m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes);
+    m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, gameInfo);
     m_camera = std::make_unique<Camera>();
 
     SDL_Log("Engine initialized successfully");

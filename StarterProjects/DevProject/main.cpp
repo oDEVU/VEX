@@ -1,5 +1,5 @@
 #include "Engine.hpp"
-#include "SDL3/SDL_camera.h"
+#include "components/GameInfo.hpp"
 #include "components/Model.hpp"
 #include "components/Camera.hpp"
 
@@ -11,6 +11,7 @@ public:
     using vex::Engine::Engine; // Inherit constructor
     bool animate = true;
 
+    //FIXME: im dumb and this doesnt need delta time.
     void processEvent(const SDL_Event& event, float deltaTime) {
         if (event.type == SDL_EVENT_KEY_DOWN) {
             const SDL_KeyboardEvent& key_event = event.key;
@@ -50,13 +51,14 @@ public:
             //SDL_Log("delta: %f", deltaTime);
         }
     }
+
     vex::Model* viper;
     vex::Model* penguin;
     vex::Model* cube;
 
     void beginGame() override {
         // Load first models
-        SDL_Log("Main loop: Trying to load models...");
+        SDL_Log("BeginGame: Trying to load models...");
         loadModel("Assets/cube.obj", "cube");
         cube = getModel("cube");
         //loadModel("Assets/human.obj", "human");
@@ -65,6 +67,7 @@ public:
         viper = getModel("viper");
 
         // setup camera transforms
+        SDL_Log("BeginGame: CameraSetup ..");
         getCamera()->transform.position = glm::vec3{0,0,5};
         getCamera()->transform.rotation = glm::vec3{0,270,0};
     }
@@ -104,9 +107,15 @@ public:
 int main(int argc, char* argv[]) {
     try {
         SDL_Log("Creating game instance...");
-        DevProject game("DevProject", 1280, 720);
-        SDL_Log("Game instance created successfully");
 
+        vex::GameInfo gInfo{"DevProject",
+                            0,
+                            1,
+                            0
+        };
+        DevProject game("DevProject", 1280, 720, gInfo);
+
+        SDL_Log("Game instance created successfully");
         SDL_Log("Starting game loop...");
         game.run();
         SDL_Log("Game loop exited normally");

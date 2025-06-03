@@ -11,7 +11,7 @@
 #include <unordered_set>
 
 namespace vex {
-    Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution) : window_(window){
+    Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo) : window_(window){
         constexpr uint32_t apiVersion = VK_API_VERSION_1_3;
 
          context.currentRenderResolution = initialResolution;
@@ -43,10 +43,10 @@ namespace vex {
 
         VkApplicationInfo appInfo = {};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = "VEX Engine Game";
-        appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+        appInfo.pApplicationName = gInfo.projectName.c_str();
+        appInfo.applicationVersion = VK_MAKE_VERSION(gInfo.versionMajor, gInfo.versionMinor, gInfo.versionPatch);
         appInfo.pEngineName = "VEX";
-        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+        appInfo.engineVersion = VK_MAKE_VERSION(0, 1, 0);
         appInfo.apiVersion = apiVersion;
 
         VkInstanceCreateInfo createInfo = {};

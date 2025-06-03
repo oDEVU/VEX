@@ -17,6 +17,7 @@
 #include "Resources.hpp"
 #include "components/Mesh.hpp"
 #include "components/Model.hpp"
+#include "components/GameInfo.hpp"
 #include "VulkanMesh.hpp"
 
 namespace vex {
@@ -41,7 +42,7 @@ namespace vex {
 
         void createDefaultTexture();
     public:
-        Interface(SDL_Window* window, glm::uvec2 initialResolution);
+        Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo);
         ~Interface();
 
         Model& loadModel(const std::string& modelPath, const std::string& name);

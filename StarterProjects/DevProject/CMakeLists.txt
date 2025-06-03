@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.16)
 project(DevProject)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 
-# So zed would no longer show false errors you need to copy or link compile_commands.json file to root.
+# So zed would no longer show false errors you need to copy or link compile_commands.json file to root folder.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(${PROJECT_NAME})
