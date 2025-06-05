@@ -46,6 +46,7 @@ set(public_header_files
     include/components/transform.hpp
     include/components/ResolutionManager.hpp
     include/components/errorUtils.hpp
+    include/components/ImGUIWrapper.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(source_files
@@ -66,6 +67,8 @@ set(source_files
         src/components/backends/vulkan/uniforms.hpp
         src/components/backends/vulkan/VulkanMesh.cpp
         src/components/backends/vulkan/VulkanMesh.hpp
+        src/components/backends/vulkan/VulkanImGUIWrapper.cpp
+        src/components/backends/vulkan/VulkanImGUIWrapper.hpp
     )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

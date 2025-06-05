@@ -435,7 +435,7 @@ namespace vex {
         pipeline_->updateViewport(resolution);
     }
 
-    void Interface::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution) {
+    void Interface::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, ImGUIWrapper& m_ui, u_int64_t frame) {
         if (renderResolution != context.currentRenderResolution) {
             context.currentRenderResolution = renderResolution;
             pipeline_->updateViewport(renderResolution);
@@ -531,6 +531,11 @@ namespace vex {
             vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, model.id, currentTime, context.currentRenderResolution);
         }
 
+        if(frame != 0){
+            m_ui.beginFrame();
+            m_ui.executeUIFunctions();
+            m_ui.endFrame();
+        }
 
         vkCmdEndRenderPass(commandBuffer);
 

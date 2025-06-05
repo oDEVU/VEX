@@ -11,6 +11,7 @@
 #include <chrono>
 
 //VEX components
+#include "components/ImGUIWrapper.hpp"
 #include "context.hpp"
 #include "SwapchainManager.hpp"
 #include "Pipeline.hpp"
@@ -18,6 +19,7 @@
 #include "components/Mesh.hpp"
 #include "components/Model.hpp"
 #include "components/GameInfo.hpp"
+#include "VulkanImGUIWrapper.hpp"
 #include "VulkanMesh.hpp"
 
 namespace vex {
@@ -49,12 +51,14 @@ namespace vex {
         void unloadModel(const std::string& name);
         Model* getModel(const std::string& name);
 
+        VulkanContext* getContext() { return &context; }
+
         std::chrono::high_resolution_clock::time_point startTime;
         float currentTime = 0.0f;
 
         void bindWindow(SDL_Window* window);
         void unbindWindow();
         void setRenderResolution(glm::uvec2 resolution);
-        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution);
+        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, ImGUIWrapper& m_ui, u_int64_t frame);
     };
 }

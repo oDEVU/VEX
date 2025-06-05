@@ -71,6 +71,13 @@ public:
         SDL_Log("BeginGame: CameraSetup ..");
         getCamera()->transform.position = glm::vec3{0,0,5};
         getCamera()->transform.rotation = glm::vec3{0,270,0};
+
+        m_imgui->addUIFunction([this]() {
+            ImGui::Begin("Engine Stats");
+            ImGui::Text("Renderer: Vulkan");
+            ImGui::Text("Frame: %i", frame);
+            ImGui::End();
+        });
     }
 
     void update(float deltaTime) override {

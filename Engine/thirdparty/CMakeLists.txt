@@ -59,6 +59,24 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_subdirectory(cpptrace)
 endif()
 
+# imgui
+set(IMGUI_PATH  "imgui")
+file(GLOB IMGUI_SOURCES
+    ${IMGUI_PATH}/*.cpp
+    ${IMGUI_PATH}/backends/imgui_impl_vulkan.cpp
+    ${IMGUI_PATH}/backends/imgui_impl_sdl3.cpp
+)
+add_library("ImGui" STATIC ${IMGUI_SOURCES})
+target_include_directories("ImGui" PUBLIC
+    ${IMGUI_PATH}
+    ${CMAKE_CURRENT_SOURCE_DIR}/SDL/include
+)
+
+target_link_libraries("ImGui" PRIVATE SDL3-static volk)
+target_compile_definitions(ImGui PRIVATE
+    IMGUI_IMPL_VULKAN_USE_VOLK
+)
+
 # glm
 add_library(thirdparty_glm INTERFACE)
 target_include_directories(thirdparty_glm INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/glm)
@@ -84,6 +102,7 @@ target_link_libraries(thirdparty_engine INTERFACE
     VulkanMemoryAllocator
     assimp
     thirdparty_glm
+    ImGui
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

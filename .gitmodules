@@ -18,3 +18,6 @@
 [submodule "Engine/thirdparty/cpptrace"]
 	path = Engine/thirdparty/cpptrace
 	url = https://github.com/jeremy-rifkin/cpptrace.git
+[submodule "Engine/thirdparty/imgui"]
+	path = Engine/thirdparty/imgui
+	url = https://github.com/ocornut/imgui.git

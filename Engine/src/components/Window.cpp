@@ -20,7 +20,7 @@ namespace vex {
         if (!SDL_Init(SDL_INIT_VIDEO)) {
             const char* error = SDL_GetError();
             SDL_Log("SDL_Init failed: %s", error);
-            throw std::runtime_error(error);
+            throw_error(error);
         }
 
         std::cout << "resx: " << resx << std::endl;
@@ -34,7 +34,7 @@ namespace vex {
             SDL_WINDOW_VULKAN | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_RESIZABLE // currently vulkan hardcoded
         );
         if (!window) {
-            throw std::runtime_error(SDL_GetError());
+            throw_error(SDL_GetError());
         }
 
         if (window == NULL) {

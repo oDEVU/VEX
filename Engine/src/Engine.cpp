@@ -5,6 +5,8 @@
 #include "components/Window.hpp"
 
 #include "components/backends/vulkan/Interface.hpp"
+#include "components/backends/vulkan/VulkanImGUIWrapper.hpp"
+#include "components/backends/vulkan/context.hpp"
 #include <cstdint>
 
 namespace vex {
@@ -15,10 +17,7 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
         SDL_Log("Project version not set!");
     }
 
-    // Create window
     m_window = std::make_unique<Window>(title, width, height);
-
-    // Create resolution manager
     resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
 
     // Testing resolution modes
@@ -28,13 +27,12 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     //resolutionManager->setMode(ResolutionMode::RES_480P);     // Height same as original but not intiger scaled (wierd scaling)
     //resolutionManager->update();
 
-    // Create renderer (could be Vulkan or OpenGL)
-    //
-    // Pass initial render resolution to interface
     auto renderRes = resolutionManager->getRenderResolution();
     SDL_Log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, gameInfo);
     m_camera = std::make_unique<Camera>();
+    m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
+    m_imgui->init();
 
     SDL_Log("Engine initialized successfully");
 }
@@ -44,15 +42,14 @@ void Engine::run() {
 
     while (m_running) {
 
-        // Timing
         Uint64 now = SDL_GetPerformanceCounter();
         float deltaTime = (float)((now - lastTime) / (float)SDL_GetPerformanceFrequency());
         lastTime = now;
 
-        // Event processing
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             processEvent(event, deltaTime);
+            m_imgui->processEvent(&event);
             switch (event.type) {
                 case SDL_EVENT_QUIT:
                     m_running = false;
@@ -72,7 +69,6 @@ void Engine::run() {
             }
         }
 
-        // Update and render
 
         if(frame > 0){
             update(deltaTime);
@@ -86,7 +82,6 @@ void Engine::run() {
 }
 
 Engine::~Engine() {
-    // Cleanup resources in reverse order of initialization
     m_interface.reset();
     m_window.reset();
     SDL_Quit();
@@ -101,7 +96,6 @@ Model* Engine::getModel(const std::string& name){
     return m_interface->getModel(name);
 }
 
-// Default implementations (can be overridden)
 void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
 void Engine::beginGame() {}
@@ -117,7 +111,7 @@ void Engine::render() {
     );
     proj[1][1] *= -1;
 
-    m_interface->renderFrame(view, proj, renderRes);
+    m_interface->renderFrame(view, proj, renderRes, *m_imgui, frame);
 }
 
 }

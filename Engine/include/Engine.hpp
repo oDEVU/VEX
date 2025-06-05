@@ -8,6 +8,7 @@
 #include "components/Model.hpp"
 #include "components/Camera.hpp"
 #include "components/GameInfo.hpp"
+#include "components/ImGUIWrapper.hpp"
 
 namespace vex {
 
@@ -37,6 +38,8 @@ protected:
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Interface> m_interface;
     std::unique_ptr<ResolutionManager> resolutionManager;
+    std::unique_ptr<ImGUIWrapper> m_imgui;
+
     bool m_running = true;
     u_int64_t frame = 0;
 
