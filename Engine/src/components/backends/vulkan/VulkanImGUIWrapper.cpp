@@ -1,14 +1,19 @@
 #include "VulkanImGUIWrapper.hpp"
 #include "components/errorUtils.hpp"
 
+#if DEBUG_BUILD
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_vulkan.h>
+#endif
 
 namespace vex {
+
     VulkanImGUIWrapper::VulkanImGUIWrapper(SDL_Window* window, VulkanContext& vulkanContext)
         : m_window(window), m_vulkanContext(vulkanContext) {}
 
     VulkanImGUIWrapper::~VulkanImGUIWrapper() {
+
+#if DEBUG_BUILD
         if (m_initialized) {
             ImGui_ImplVulkan_Shutdown();
             ImGui_ImplSDL3_Shutdown();
@@ -18,7 +23,9 @@ namespace vex {
                 vkDestroyDescriptorPool(m_vulkanContext.device, m_imguiPool, nullptr);
             }
         }
+#endif
     }
+#if DEBUG_BUILD
 
     void VulkanImGUIWrapper::init() {
         SDL_Log("Initialization of DearImGUI");
@@ -193,4 +200,5 @@ namespace vex {
         colors[ImGuiCol_Text] = ImVec4(0.95f, 0.96f, 0.98f, 1.00f);
         colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.05f, 1.00f);
     }
+#endif
 }

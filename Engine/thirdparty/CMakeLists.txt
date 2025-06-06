@@ -49,33 +49,33 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(assimp PRIVATE -Wno-array-bounds)
 endif()
 
-# cpptrace
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # cpptrace
     set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     set(CPPTRACE_STATIC_DEFINE ON CACHE BOOL "" FORCE)
     set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
     set(CPPTRACE_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     set(CPPTRACE_COLOR_OUTPUT ON CACHE BOOL "" FORCE)
     add_subdirectory(cpptrace)
+
+    # imgui
+    set(IMGUI_PATH  "imgui")
+    file(GLOB IMGUI_SOURCES
+        ${IMGUI_PATH}/*.cpp
+        ${IMGUI_PATH}/backends/imgui_impl_vulkan.cpp
+        ${IMGUI_PATH}/backends/imgui_impl_sdl3.cpp
+    )
+    add_library("ImGui" STATIC ${IMGUI_SOURCES})
+    target_include_directories("ImGui" PUBLIC
+        ${IMGUI_PATH}
+        ${CMAKE_CURRENT_SOURCE_DIR}/SDL/include
+    )
+
+    target_link_libraries("ImGui" PRIVATE SDL3-static volk)
+    target_compile_definitions(ImGui PRIVATE
+        IMGUI_IMPL_VULKAN_USE_VOLK
+    )
 endif()
-
-# imgui
-set(IMGUI_PATH  "imgui")
-file(GLOB IMGUI_SOURCES
-    ${IMGUI_PATH}/*.cpp
-    ${IMGUI_PATH}/backends/imgui_impl_vulkan.cpp
-    ${IMGUI_PATH}/backends/imgui_impl_sdl3.cpp
-)
-add_library("ImGui" STATIC ${IMGUI_SOURCES})
-target_include_directories("ImGui" PUBLIC
-    ${IMGUI_PATH}
-    ${CMAKE_CURRENT_SOURCE_DIR}/SDL/include
-)
-
-target_link_libraries("ImGui" PRIVATE SDL3-static volk)
-target_compile_definitions(ImGui PRIVATE
-    IMGUI_IMPL_VULKAN_USE_VOLK
-)
 
 # glm
 add_library(thirdparty_glm INTERFACE)
@@ -102,12 +102,12 @@ target_link_libraries(thirdparty_engine INTERFACE
     VulkanMemoryAllocator
     assimp
     thirdparty_glm
-    ImGui
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(thirdparty_engine INTERFACE
         cpptrace::cpptrace
+        ImGui
     )
 endif()
 

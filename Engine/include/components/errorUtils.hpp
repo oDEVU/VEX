@@ -3,7 +3,7 @@
 #include <iostream>
 #include <SDL3/SDL_log.h>
 
-#if ENABLE_CPPTRACE
+#if DEBUG_BUILD
 #include <cpptrace/cpptrace.hpp>
 
 inline void throw_error(const std::string& msg) {

@@ -72,12 +72,14 @@ public:
         getCamera()->transform.position = glm::vec3{0,0,5};
         getCamera()->transform.rotation = glm::vec3{0,270,0};
 
+#if DEBUG_BUILD
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");
             ImGui::Text("Renderer: Vulkan");
             ImGui::Text("Frame: %i", frame);
             ImGui::End();
         });
+#endif
     }
 
     void update(float deltaTime) override {
