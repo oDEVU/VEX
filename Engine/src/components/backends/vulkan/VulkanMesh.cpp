@@ -12,11 +12,11 @@
 
 namespace vex {
     VulkanMesh::VulkanMesh(VulkanContext& context) : ctx_(context) {
-        SDL_Log("VulkanMesh created");
+        log("VulkanMesh created");
     }
 
     VulkanMesh::~VulkanMesh() {
-        SDL_Log("Destroying VulkanMesh");
+        log("Destroying VulkanMesh");
         for (auto& submesh : submeshBuffers_) {
             vmaDestroyBuffer(ctx_.allocator, submesh.vertexBuffer, submesh.vertexAlloc);
             vmaDestroyBuffer(ctx_.allocator, submesh.indexBuffer, submesh.indexAlloc);
@@ -24,7 +24,7 @@ namespace vex {
     }
 
     void VulkanMesh::upload(const MeshData& meshData) {
-        SDL_Log("Uploading mesh with %zu submeshes", meshData.submeshes.size());
+        log("Uploading mesh with %zu submeshes", meshData.submeshes.size());
 
         submeshBuffers_.reserve(meshData.submeshes.size());
         submeshTextures_.reserve(meshData.submeshes.size());
@@ -61,7 +61,7 @@ namespace vex {
             submeshBuffers_.push_back(buffers);
             submeshTextures_.push_back(srcSubmesh.texturePath);
 
-            SDL_Log("Uploaded submesh: %zu vertices, %u indices, texture: '%s'",
+            log("Uploaded submesh: %zu vertices, %u indices, texture: '%s'",
                    srcSubmesh.vertices.size(), buffers.indexCount,
                    srcSubmesh.texturePath.c_str());
         }
@@ -69,7 +69,7 @@ namespace vex {
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
                          VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const {
-        if(!debugDraw) SDL_Log("Drawing mesh with %zu submeshes", submeshBuffers_.size());
+        if(!debugDraw) log("Drawing mesh with %zu submeshes", submeshBuffers_.size());
 
         std::string currentTexture = "";
         for (size_t i = 0; i < submeshBuffers_.size(); i++) {
@@ -104,7 +104,7 @@ namespace vex {
             );
 
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
-            if(!debugDraw) SDL_Log("Submesh %zu texture: '%s' (exists: %s)",
+            if(!debugDraw) log("Submesh %zu texture: '%s' (exists: %s)",
                    i,
                    textureName.c_str(),
                    textureExists ? "true" : "false");
@@ -129,7 +129,7 @@ namespace vex {
                     if(textureView != VK_NULL_HANDLE) {
                         resources.updateTextureDescriptor(frameIndex, textureView, i);
                         currentTexture = textureName;
-                        if(!debugDraw) SDL_Log("Bound texture: %s", textureName.c_str());
+                        if(!debugDraw) log("Bound texture: %s", textureName.c_str());
                     }
                 }
                 modelPush.color = glm::vec4(1.0f);

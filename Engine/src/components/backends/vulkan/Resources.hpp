@@ -1,6 +1,8 @@
 #pragma once
 #include "uniforms.hpp"
 #include "context.hpp"
+#include "components/errorUtils.hpp"
+
 #include <unordered_map>
 #include <string>
 #include <fstream>

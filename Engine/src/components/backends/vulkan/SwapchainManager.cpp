@@ -1,5 +1,4 @@
 #include "SwapchainManager.hpp"
-#include "components/errorUtils.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -15,7 +14,7 @@ namespace vex {
     VulkanSwapchainManager::~VulkanSwapchainManager() {}
 
     void VulkanSwapchainManager::createSwapchain() {
-        SDL_Log("Creating Swapchain");
+        log("Creating Swapchain");
         VkSurfaceCapabilitiesKHR capabilities;
         if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(context_.physicalDevice, context_.surface, &capabilities) != VK_SUCCESS) {
             throw_error("Failed to get surface capabilities");
@@ -124,7 +123,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createDepthResources() {
-        SDL_Log("Creating depth resources...");
+        log("Creating depth resources...");
 
         VkFormat depthFormat = findDepthFormat();
 
@@ -167,7 +166,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createImageViews() {
-        SDL_Log("creating imageviews");
+        log("creating imageviews");
         context_.swapchainImageViews.resize(context_.swapchainImages.size());
 
         for (size_t i = 0; i < context_.swapchainImages.size(); i++) {
@@ -194,7 +193,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createRenderPass() {
-        SDL_Log("creating renderpass");
+        log("creating renderpass");
         VkAttachmentDescription colorAttachment = {};
         colorAttachment.format = context_.swapchainImageFormat;
         colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -280,7 +279,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createFramebuffers() {
-        SDL_Log("creating framebuffers with depth attachments");
+        log("creating framebuffers with depth attachments");
 
         context_.swapchainFramebuffers.resize(context_.swapchainImageViews.size());
 
@@ -308,7 +307,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createCommandPool() {
-        SDL_Log("creating command pools");
+        log("creating command pools");
         VkCommandPoolCreateInfo poolInfo = {};
         poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
         poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
@@ -322,7 +321,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createCommandBuffers() {
-        SDL_Log("creating command buffers");
+        log("creating command buffers");
         context_.commandBuffers.resize(context_.swapchainFramebuffers.size());
 
         VkCommandBufferAllocateInfo allocInfo = {};
@@ -339,7 +338,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createSyncObjects() {
-        SDL_Log("Creating synchronization objects...");
+        log("Creating synchronization objects...");
 
         context_.imageAvailableSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
         context_.renderFinishedSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
@@ -372,7 +371,7 @@ namespace vex {
 
             assert(context_.inFlightFences[i] != VK_NULL_HANDLE);
 
-            SDL_Log("Created sync objects: fence=%p", (void*)context_.inFlightFences[i]);
+            log("Created sync objects: fence=%p", (void*)context_.inFlightFences[i]);
         }
 
         if (context_.renderPass && context_.depthImageView) {
@@ -516,28 +515,28 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
-        SDL_Log("recreating swapchains");
+        log("recreating swapchains");
         vkDeviceWaitIdle(context_.device);
-        SDL_Log("cleanupLowResResources");
+        log("cleanupLowResResources");
         cleanupLowResResources();
-        SDL_Log("cleanupSwapchain");
+        log("cleanupSwapchain");
         cleanupSwapchain();
 
         createSwapchain();
-        SDL_Log("createImageViews");
+        log("createImageViews");
         createImageViews();
-        SDL_Log("createRenderPass");
+        log("createRenderPass");
         createRenderPass();
-        SDL_Log("createFramebuffers");
+        log("createFramebuffers");
         createFramebuffers();
-        SDL_Log("createCommandBuffers");
+        log("createCommandBuffers");
         createCommandBuffers();
-        SDL_Log("createLowResResources");
+        log("createLowResResources");
         createLowResResources();
     }
 
     VkSurfaceFormatKHR VulkanSwapchainManager::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
-        SDL_Log("choosing swapsurface format");
+        log("choosing swapsurface format");
         for (const auto& availableFormat : availableFormats) {
             if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
                 availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
@@ -548,12 +547,12 @@ namespace vex {
     }
 
     VkPresentModeKHR VulkanSwapchainManager::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
-        SDL_Log("choosing swap present mode");
+        log("choosing swap present mode");
 
         for (const auto& availablePresentMode : availablePresentModes) {
             if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
                 if (SDL_GetCurrentVideoDriver() && strcmp(SDL_GetCurrentVideoDriver(), "wayland") == 0) {
-                    SDL_Log("Wayland detected, FIFO selected");
+                    log("Wayland detected, FIFO selected");
                     return VK_PRESENT_MODE_FIFO_KHR;
                 }else{
                     return availablePresentMode;
@@ -564,7 +563,7 @@ namespace vex {
     }
 
     VkExtent2D VulkanSwapchainManager::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
-        SDL_Log("choosing swap extent");
+        log("choosing swap extent");
         if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
             return capabilities.currentExtent;
         } else {

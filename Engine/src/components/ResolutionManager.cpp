@@ -45,7 +45,7 @@ void ResolutionManager::update() {
             break;
     }
 
-    SDL_Log("Resolution mode updated: %dx%d (render) -> %dx%d (window), scale: %.2f",
+    log("Resolution mode updated: %dx%d (render) -> %dx%d (window), scale: %.2f",
            renderResolution.x, renderResolution.y,
            windowResolution.x, windowResolution.y,
            upscaleRatio);

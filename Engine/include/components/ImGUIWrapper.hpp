@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-#if DEBUG_BUILD
+#if DEBUG
 #include <imgui.h>
 #endif
 
@@ -18,7 +18,7 @@ namespace vex {
         virtual void beginFrame() = 0;
         virtual void endFrame() = 0;
         virtual void processEvent(const SDL_Event* event) = 0;
-#if DEBUG_BUILD
+#if DEBUG
         virtual ImGuiIO& getIO() = 0;
 #endif
 

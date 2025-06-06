@@ -7,7 +7,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_vulkan.h>
 
-#if DEBUG_BUILD
+#if DEBUG
 #include <imgui.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_vulkan.h>
@@ -18,7 +18,7 @@ namespace vex {
     public:
         VulkanImGUIWrapper(SDL_Window* window, VulkanContext& vulkanContext);
         virtual ~VulkanImGUIWrapper();
-#if DEBUG_BUILD
+#if DEBUG
         void init() override;
         void beginFrame() override;
         void endFrame() override;
@@ -32,7 +32,7 @@ namespace vex {
 #endif
 
     private:
-#if DEBUG_BUILD
+#if DEBUG
         void createDescriptorPool();
         void setupStyle();
 

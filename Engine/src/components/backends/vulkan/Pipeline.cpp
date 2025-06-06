@@ -2,7 +2,6 @@
 #include <fstream>
 
 #include "uniforms.hpp"
-#include "components/errorUtils.hpp"
 
 namespace vex {
     VulkanPipeline::VulkanPipeline(VulkanContext& context) : ctx_(context) {}
@@ -17,7 +16,7 @@ namespace vex {
     }
 
     std::vector<char> VulkanPipeline::readFile(const std::string& filename) {
-        SDL_Log("Reading shader...");
+        log("Reading shader...");
         std::ifstream file(filename, std::ios::ate | std::ios::binary);
         if (!file.is_open()) {
             throw_error("Failed to open shader file: " + filename);
@@ -42,7 +41,7 @@ namespace vex {
         auto vertShaderCode = readFile(vertShaderPath);
         auto fragShaderCode = readFile(fragShaderPath);
 
-        SDL_Log("Creating shader modules...");
+        log("Creating shader modules...");
         auto createShaderModule = [&](const std::vector<char>& code) {
             VkShaderModuleCreateInfo createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -59,7 +58,7 @@ namespace vex {
         VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
 
-        SDL_Log("Defining shader stages...");
+        log("Defining shader stages...");
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -74,7 +73,7 @@ namespace vex {
 
         VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
-        SDL_Log("Creating vertex input state...");
+        log("Creating vertex input state...");
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexBindingDescriptionCount = 1;
@@ -82,7 +81,7 @@ namespace vex {
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
         vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
-        SDL_Log("Creating pipeline state...");
+        log("Creating pipeline state...");
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -100,7 +99,7 @@ namespace vex {
         scissor.offset = {0, 0};
         scissor.extent = {currentRenderResolution.x, currentRenderResolution.y};
 
-        SDL_Log("Creating viewport state...");
+        log("Creating viewport state...");
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         viewportState.viewportCount = 1;
@@ -108,7 +107,7 @@ namespace vex {
         viewportState.scissorCount = 1;
         viewportState.pScissors = &scissor;
 
-        SDL_Log("Creating resterazer...");
+        log("Creating resterazer...");
         VkPipelineRasterizationStateCreateInfo rasterizer{};
         rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         rasterizer.depthClampEnable = VK_FALSE;
@@ -119,7 +118,7 @@ namespace vex {
         rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
 
-        SDL_Log("Creating multisampling...");
+        log("Creating multisampling...");
         VkPipelineMultisampleStateCreateInfo multisampling{};
         multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
         multisampling.sampleShadingEnable = VK_FALSE;
@@ -139,7 +138,7 @@ namespace vex {
         colorBlending.attachmentCount = 1;
         colorBlending.pAttachments = &colorBlendAttachment;
 
-            SDL_Log("Creating Pipeline layout...");
+            log("Creating Pipeline layout...");
             VkPushConstantRange pushConstantRange{};
             pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
             pushConstantRange.offset = 0;
@@ -157,7 +156,7 @@ namespace vex {
             pipelineLayoutInfo.pushConstantRangeCount = 1;
             pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 
-            SDL_Log("Creating pipeline layout with %d descriptor sets", setLayouts.size());
+            log("Creating pipeline layout with %d descriptor sets", setLayouts.size());
             if (vkCreatePipelineLayout(ctx_.device, &pipelineLayoutInfo, nullptr, &layout_) != VK_SUCCESS) {
                 throw_error("Failed to create pipeline layout!");
             }
@@ -182,7 +181,7 @@ namespace vex {
         dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
         dynamicState.pDynamicStates = dynamicStates.data();
 
-        SDL_Log("Creating Graphics pipeline...");
+        log("Creating Graphics pipeline...");
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
         pipelineInfo.stageCount = 2;
@@ -203,7 +202,7 @@ namespace vex {
             throw_error("Failed to create graphics pipeline");
         }
 
-        SDL_Log("Cleanup shader modules...");
+        log("Cleanup shader modules...");
         vkDestroyShaderModule(ctx_.device, vertShaderModule, nullptr);
         vkDestroyShaderModule(ctx_.device, fragShaderModule, nullptr);
     }

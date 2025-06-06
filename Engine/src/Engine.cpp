@@ -14,7 +14,7 @@ namespace vex {
 Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     gameInfo = gInfo;
     if(gameInfo.versionMajor == 0 && gameInfo.versionMinor == 0 && gameInfo.versionPatch == 0){
-        SDL_Log("Project version not set!");
+        log("Project version not set!");
     }
 
     m_window = std::make_unique<Window>(title, width, height);
@@ -28,13 +28,13 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     //resolutionManager->update();
 
     auto renderRes = resolutionManager->getRenderResolution();
-    SDL_Log("Initializing Vulkan interface...");
+    log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, gameInfo);
     m_camera = std::make_unique<Camera>();
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
 
-    SDL_Log("Engine initialized successfully");
+    log("Engine initialized successfully");
 }
 
 void Engine::run() {
@@ -55,7 +55,7 @@ void Engine::run() {
                     m_running = false;
                     break;
                 case SDL_EVENT_DID_ENTER_FOREGROUND:
-                    SDL_Log("Binding window to Vulkan...");
+                    log("Binding window to Vulkan...");
                     m_interface->bindWindow(m_window->GetSDLWindow());
                     break;
                 case SDL_EVENT_WILL_ENTER_BACKGROUND:

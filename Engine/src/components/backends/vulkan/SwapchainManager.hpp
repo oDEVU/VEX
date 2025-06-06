@@ -9,6 +9,7 @@
 
 //VEX components
 #include "context.hpp"
+#include "components/errorUtils.hpp"
 
 namespace vex {
     class VulkanSwapchainManager {

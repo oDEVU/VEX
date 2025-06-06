@@ -49,7 +49,7 @@ public:
                 getCamera()->transform.position = getCamera()->transform.position + (getCamera()->transform.getRightVector()*float(deltaTime*-250));
             }
 
-            //SDL_Log("delta: %f", deltaTime);
+            //log("delta: %f", deltaTime);
         }
     }
 
@@ -59,7 +59,7 @@ public:
 
     void beginGame() override {
         // Load first models
-        SDL_Log("BeginGame: Trying to load models...");
+        log("BeginGame: Trying to load models...");
         loadModel("Assets/cube.obj", "cube");
         cube = getModel("cube");
         //loadModel("Assets/human.obj", "human");
@@ -68,11 +68,11 @@ public:
         viper = getModel("viper");
 
         // setup camera transforms
-        SDL_Log("BeginGame: CameraSetup ..");
+        log("BeginGame: CameraSetup ..");
         getCamera()->transform.position = glm::vec3{0,0,5};
         getCamera()->transform.rotation = glm::vec3{0,270,0};
 
-#if DEBUG_BUILD
+#if DEBUG
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");
             ImGui::Text("Renderer: Vulkan");
@@ -92,7 +92,7 @@ public:
         if(animate){
                     //Debuging camera rotations
                     //getCamera()->transform.rotation = glm::vec3{0,float(frame)/1000,0};
-                    //SDL_Log("Camera rot: %f", float(frame)/1000);
+                    //log("Camera rot: %f", float(frame)/1000);
 
                     if (viper) {
                         viper->transform.rotation.y = (float(frame)/100);
@@ -116,7 +116,7 @@ public:
 
 int main(int argc, char* argv[]) {
     try {
-        SDL_Log("Creating game instance...");
+        log("Creating game instance...");
 
         vex::GameInfo gInfo{"DevProject",
                             0,
@@ -125,10 +125,10 @@ int main(int argc, char* argv[]) {
         };
         DevProject game("DevProject", 1280, 720, gInfo);
 
-        SDL_Log("Game instance created successfully");
-        SDL_Log("Starting game loop...");
+        log("Game instance created successfully");
+        log("Starting game loop...");
         game.run();
-        SDL_Log("Game loop exited normally");
+        log("Game loop exited normally");
     } catch (const std::exception& e) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Game error:");
         handle_exception(e);
@@ -138,6 +138,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    SDL_Log("Exiting cleanly");
+    log("Exiting cleanly");
     return 0;
 }

@@ -1,7 +1,6 @@
 #include "VulkanImGUIWrapper.hpp"
-#include "components/errorUtils.hpp"
 
-#if DEBUG_BUILD
+#if DEBUG
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_vulkan.h>
 #endif
@@ -13,7 +12,7 @@ namespace vex {
 
     VulkanImGUIWrapper::~VulkanImGUIWrapper() {
 
-#if DEBUG_BUILD
+#if DEBUG
         if (m_initialized) {
             ImGui_ImplVulkan_Shutdown();
             ImGui_ImplSDL3_Shutdown();
@@ -25,10 +24,10 @@ namespace vex {
         }
 #endif
     }
-#if DEBUG_BUILD
+#if DEBUG
 
     void VulkanImGUIWrapper::init() {
-        SDL_Log("Initialization of DearImGUI");
+        log("Initialization of DearImGUI");
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
@@ -66,12 +65,12 @@ namespace vex {
         init_info.Allocator = nullptr;
         init_info.DescriptorPool = m_imguiPool;
 
-        SDL_Log("Initing ImGui Vulkan backend");
+        log("Initing ImGui Vulkan backend");
         if (!ImGui_ImplVulkan_Init(&init_info)) {
             throw_error("Failed to initialize ImGui Vulkan backend");
         }
 
-        SDL_Log("Creating ImGUI font textures");
+        log("Creating ImGUI font textures");
         if (!ImGui_ImplVulkan_CreateFontsTexture()) {
             throw_error("Failed to create ImGui font textures");
         }
@@ -141,7 +140,7 @@ namespace vex {
     }
 
     void VulkanImGUIWrapper::createDescriptorPool() {
-        SDL_Log("Creating ImGUI DescriptorPools");
+        log("Creating ImGUI DescriptorPools");
 
         VkDescriptorPoolSize pool_sizes[] = {
             { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },

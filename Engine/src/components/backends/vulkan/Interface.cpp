@@ -18,17 +18,17 @@ namespace vex {
 
          context.currentRenderResolution = initialResolution;
 
-        SDL_Log("Loading Vulkan library...");
+        log("Loading Vulkan library...");
         if (!SDL_Vulkan_LoadLibrary(nullptr)) {
             throw_error(SDL_GetError());
         }
 
         // Init stuff
 
-        SDL_Log("Initializing Volk...");
+        log("Initializing Volk...");
         volkInitializeCustom(reinterpret_cast<PFN_vkGetInstanceProcAddr>(SDL_Vulkan_GetVkGetInstanceProcAddr()));
 
-        SDL_Log("Creating Vulkan instance...");
+        log("Creating Vulkan instance...");
         uint32_t sdlExtensionCount = 0;
         const char* const* sdlExtensions = SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount);
         std::vector<const char*> extensions(sdlExtensions, sdlExtensions + sdlExtensionCount);
@@ -69,7 +69,7 @@ namespace vex {
 
         volkLoadInstance(context.instance);
 
-        SDL_Log("Binding window...");
+        log("Binding window...");
         if (!SDL_Vulkan_CreateSurface(window, context.instance, nullptr, &context.surface)) {
             throw_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
@@ -88,7 +88,7 @@ namespace vex {
         for (const auto& device : devices) {
             VkPhysicalDeviceProperties deviceProperties;
             vkGetPhysicalDeviceProperties(device, &deviceProperties);
-            SDL_Log("Selected GPU: %s", deviceProperties.deviceName);
+            log("Selected GPU: %s", deviceProperties.deviceName);
 
             uint32_t queueFamilyCount = 0;
             vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
@@ -198,14 +198,14 @@ namespace vex {
             throw_error("Failed to create VMA allocator");
         }
 
-        SDL_Log("Initializing Swapchain Manager...");
+        log("Initializing Swapchain Manager...");
 
         swapchainManager_ = std::make_unique<VulkanSwapchainManager>(context,window_);
         swapchainManager_->createSwapchain();
 
-        SDL_Log("Initializing Resources...");
+        log("Initializing Resources...");
         resources_ = std::make_unique<VulkanResources>(context);
-        SDL_Log("Initializing Pipeline...");
+        log("Initializing Pipeline...");
         pipeline_ = std::make_unique<VulkanPipeline>(context);
 
         VkVertexInputBindingDescription bindingDesc{};
@@ -226,7 +226,7 @@ namespace vex {
         );
 
         startTime = std::chrono::high_resolution_clock::now();
-        SDL_Log("Vulkan interface initialized successfully");
+        log("Vulkan interface initialized successfully");
     }
 
     Interface::~Interface() {
@@ -299,14 +299,14 @@ namespace vex {
 
 
     Model& Interface::loadModel(const std::string& path, const std::string& name) {
-        SDL_Log("Loading model: %s...", name.c_str());
+        log("Loading model: %s...", name.c_str());
         if (modelRegistry_.count(name)) {
             throw_error("Model '" + name + "' already exists");
         }
 
         MeshData meshData;
         try {
-            SDL_Log("Loading mesh data from: %s", path.c_str());
+            log("Loading mesh data from: %s", path.c_str());
             std::ifstream fileCheck(path);
             if (!fileCheck.is_open()) {
                 throw_error("File not found: " + path);
@@ -341,13 +341,13 @@ namespace vex {
             }
         }
 
-        SDL_Log("Loading %zu submesh textures", uniqueTextures.size());
+        log("Loading %zu submesh textures", uniqueTextures.size());
         for (const auto& texPath : uniqueTextures) {
-            SDL_Log("Processing texture: %s", texPath.c_str());
+            log("Processing texture: %s", texPath.c_str());
             if (!resources_->textureExists(texPath)) {
                 try {
                     resources_->loadTexture(texPath, texPath);
-                    SDL_Log("Loaded texture: %s", texPath.c_str());
+                    log("Loaded texture: %s", texPath.c_str());
                 } catch (const std::exception& e) {
                     SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                                 "Failed to load texture %s",
@@ -355,15 +355,15 @@ namespace vex {
                     handle_exception(e);
                 }
             } else {
-                SDL_Log("Texture already exists: %s", texPath.c_str());
+                log("Texture already exists: %s", texPath.c_str());
             }
         }
 
         try {
-            SDL_Log("Creating Vulkan mesh for %s", name.c_str());
+            log("Creating Vulkan mesh for %s", name.c_str());
             vulkanMeshes_.push_back(std::make_unique<VulkanMesh>(context));
             vulkanMeshes_.back()->upload(model.meshData);
-            SDL_Log("Mesh upload successful");
+            log("Mesh upload successful");
         } catch (const std::exception& e) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
             vulkanMeshes_.pop_back();
@@ -371,7 +371,7 @@ namespace vex {
         }
 
         modelRegistry_[name] = &model;
-        SDL_Log("Model %s registered successfully", name.c_str());
+        log("Model %s registered successfully", name.c_str());
         return model;
     }
 
@@ -402,7 +402,7 @@ namespace vex {
 
     void Interface::bindWindow(SDL_Window* window) {
 
-        SDL_Log("Binding window...");
+        log("Binding window...");
 
         if (context.surface) return;
 
@@ -412,7 +412,7 @@ namespace vex {
 
         window_ = window;
 
-        SDL_Log("Initializing Swapchain...");
+        log("Initializing Swapchain...");
         swapchainManager_->createSwapchain();
     }
 
@@ -527,7 +527,7 @@ namespace vex {
             // Update UBOs
             resources_->updateCameraUBO({view, proj});
             resources_->updateModelUBO(context.currentFrame, model.id, ModelUBO{model.transform.matrix()});
-            //SDL_Log("Updated UBOs for model %zu", i);
+            //log("Updated UBOs for model %zu", i);
             vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, model.id, currentTime, context.currentRenderResolution);
         }
 

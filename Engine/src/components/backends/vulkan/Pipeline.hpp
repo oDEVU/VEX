@@ -2,6 +2,7 @@
 #include "context.hpp"
 #include <vector>
 #include <glm/glm.hpp>
+#include "components/errorUtils.hpp"
 
 namespace vex {
     class VulkanPipeline {

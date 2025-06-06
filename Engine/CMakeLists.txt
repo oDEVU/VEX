@@ -23,9 +23,9 @@ add_library(${NAMESPACE_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 message(STATUS "VEX build type: ${CMAKE_BUILD_TYPE}")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(VEX PUBLIC DEBUG_BUILD=1)
+    target_compile_definitions(VEX PUBLIC DEBUG=1)
 else()
-    target_compile_definitions(VEX PUBLIC DEBUG_BUILD=0)
+    target_compile_definitions(VEX PUBLIC DEBUG=0)
 endif()
 
 get_target_property(defs VEX COMPILE_DEFINITIONS)

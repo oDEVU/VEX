@@ -11,9 +11,9 @@ add_executable(${PROJECT_NAME})
 
 # Enables stacktraces for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG_BUILD=1)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=1)
 else()
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG_BUILD=0)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
 endif()
 
 target_sources(${PROJECT_NAME} PRIVATE main.cpp)

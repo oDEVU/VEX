@@ -1,5 +1,4 @@
 #include "Resources.hpp"
-#include "components/errorUtils.hpp"
 
 #include <volk.h>
 #include <vk_mem_alloc.h>
@@ -21,7 +20,7 @@ namespace vex {
     }
 
     void VulkanResources::createUniformBuffers() {
-        SDL_Log("Creating uniform buffers...");
+        log("Creating uniform buffers...");
         cameraBuffers_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
         cameraAllocs_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
         modelBuffers_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
@@ -48,7 +47,7 @@ namespace vex {
     }
 
     void VulkanResources::createDescriptorResources() {
-        SDL_Log("Setting up VkDescriptorSetLayoutBinding...");
+        log("Setting up VkDescriptorSetLayoutBinding...");
         std::array<VkDescriptorSetLayoutBinding, 2> uboBindings{};
         uboBindings[0].binding = 0;
         uboBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -65,7 +64,7 @@ namespace vex {
         uboLayoutInfo.bindingCount = static_cast<uint32_t>(uboBindings.size());
         uboLayoutInfo.pBindings = uboBindings.data();
 
-        SDL_Log("Creating Uniform buffer bindings...");
+        log("Creating Uniform buffer bindings...");
         if (vkCreateDescriptorSetLayout(ctx_.device, &uboLayoutInfo, nullptr, &ctx_.uboDescriptorSetLayout) != VK_SUCCESS) {
             throw_error("Failed to create descriptor set layout");
         }
@@ -81,7 +80,7 @@ namespace vex {
     texLayoutInfo.bindingCount = 1;
     texLayoutInfo.pBindings = &texBinding;
 
-        SDL_Log("Creating Texture bindings...");
+        log("Creating Texture bindings...");
         if (vkCreateDescriptorSetLayout(ctx_.device, &texLayoutInfo, nullptr, &ctx_.textureDescriptorSetLayout) != VK_SUCCESS) {
             throw_error("Failed to create descriptor set layout");
         }
@@ -108,7 +107,7 @@ namespace vex {
         poolInfo.pPoolSizes = poolSizes.data();
         poolInfo.maxSets = ctx_.MAX_FRAMES_IN_FLIGHT * (2 + ctx_.MAX_TEXTURES);
 
-        SDL_Log("Creating descriptor pool with %d max sets", poolInfo.maxSets);
+        log("Creating descriptor pool with %d max sets", poolInfo.maxSets);
         if (vkCreateDescriptorPool(ctx_.device, &poolInfo, nullptr, &descriptorPool_) != VK_SUCCESS) {
             throw_error("Failed to create descriptor pool");
         }
@@ -120,7 +119,7 @@ namespace vex {
         uboAllocInfo.descriptorSetCount = ctx_.MAX_FRAMES_IN_FLIGHT;
         uboAllocInfo.pSetLayouts = uboLayouts.data();
 
-        SDL_Log("Allocating %d UBO descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT);
+        log("Allocating %d UBO descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT);
         descriptorSets_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
         if (vkAllocateDescriptorSets(ctx_.device, &uboAllocInfo, descriptorSets_.data()) != VK_SUCCESS) {
             throw_error("Failed to allocate UBO descriptor sets");
@@ -217,7 +216,7 @@ namespace vex {
 
         VkImage image;
         VmaAllocation allocation;
-        SDL_Log("Creating default texture image...");
+        log("Creating default texture image...");
         if (vmaCreateImage(ctx_.allocator, &imageInfo, &allocInfo, &image, &allocation, nullptr) != VK_SUCCESS) {
             throw_error("Failed to create default texture image");
         }
@@ -261,7 +260,7 @@ namespace vex {
         viewInfo.subresourceRange.layerCount = 1;
 
         VkImageView imageView;
-        SDL_Log("Creating default texture image view...");
+        log("Creating default texture image view...");
         if (vkCreateImageView(ctx_.device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
             vmaDestroyImage(ctx_.allocator, image, allocation);
             throw_error("Failed to create default texture image view");
@@ -274,11 +273,11 @@ namespace vex {
 
         ctx_.textureIndices["default"] = 0;
         ctx_.nextTextureIndex = 1;
-        SDL_Log("Created default texture with index 0");
+        log("Created default texture with index 0");
     }
 
     void VulkanResources::createPerMeshTextureSets() {
-        SDL_Log("Creating %d texture descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES);
+        log("Creating %d texture descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES);
 
         textureDescriptorSets_.resize(ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES);
 
@@ -317,7 +316,7 @@ namespace vex {
             }
         }
         vkUpdateDescriptorSets(ctx_.device, writes.size(), writes.data(), 0, nullptr);
-        SDL_Log("Initialized %d texture descriptor sets with default texture", writes.size());
+        log("Initialized %d texture descriptor sets with default texture", writes.size());
     }
 
 
@@ -347,7 +346,7 @@ namespace vex {
             samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
             samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
 
-            SDL_Log("Creating texture sampler...");
+            log("Creating texture sampler...");
             vkCreateSampler(ctx_.device, &samplerInfo, nullptr, &textureSampler_);
         }
 
@@ -367,7 +366,7 @@ namespace vex {
             }
             test.close();
 
-            SDL_Log("STBI loading image...");
+            log("STBI loading image...");
             int texWidth, texHeight, texChannels;
             stbi_uc* pixels = stbi_load(fullPath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 
@@ -375,7 +374,7 @@ namespace vex {
                 SDL_LogError(SDL_LOG_CATEGORY_ERROR, "STBI failed: %s", stbi_failure_reason());
                 throw_error("Failed to load texture pixels");
             }
-            SDL_Log("Image loaded: %dx%d, %d channels", texWidth, texHeight, texChannels);
+            log("Image loaded: %dx%d, %d channels", texWidth, texHeight, texChannels);
 
             VkDeviceSize imageSize = texWidth * texHeight * 4;
 
@@ -383,7 +382,7 @@ namespace vex {
                 throw_error("Failed to load texture: " + fullPath);
             }
 
-            SDL_Log("Creating staging buffer (%zu bytes)...",
+            log("Creating staging buffer (%zu bytes)...",
                   static_cast<size_t>(texWidth * texHeight * 4));
             VkBuffer stagingBuffer;
             VmaAllocation stagingAlloc;
@@ -403,7 +402,7 @@ namespace vex {
             vmaUnmapMemory(ctx_.allocator, stagingAlloc);
             stbi_image_free(pixels);
 
-            SDL_Log("Creating Vulkan image...");
+            log("Creating Vulkan image...");
             VkImageCreateInfo imageInfo{};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
             imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -493,18 +492,18 @@ namespace vex {
             viewInfo.subresourceRange.layerCount = 1;
 
             VkImageView textureView;
-            SDL_Log("Creating vulkan texture view...");
+            log("Creating vulkan texture view...");
             if (vkCreateImageView(ctx_.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
                 throw_error("Failed to create texture image view!");
             }
 
             if (ctx_.textureIndices.contains(name)) {
-                SDL_Log("Texture '%s' already exists at index %u", name.c_str(), ctx_.textureIndices[name]);
+                log("Texture '%s' already exists at index %u", name.c_str(), ctx_.textureIndices[name]);
                 return;
             }
 
             ctx_.textureIndices[name] = ctx_.nextTextureIndex++;
-            SDL_Log("Assigned texture '%s' to index %u", name.c_str(), ctx_.textureIndices[name]);
+            log("Assigned texture '%s' to index %u", name.c_str(), ctx_.textureIndices[name]);
 
             textures_[name] = textureView;
             textureImages_[name] = textureImage;
@@ -515,7 +514,7 @@ namespace vex {
                     throw_error("Exceeded maximum texture count");
                 }
                 ctx_.textureIndices[name] = ctx_.textureIndices.size();
-                SDL_Log("Assigned texture '%s' to index %d", name.c_str(), ctx_.textureIndices[name]);
+                log("Assigned texture '%s' to index %d", name.c_str(), ctx_.textureIndices[name]);
 
                 VkDescriptorImageInfo imageDescInfo{};
                 imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -533,7 +532,7 @@ namespace vex {
 
                     vkUpdateDescriptorSets(ctx_.device, 1, &write, 0, nullptr);
                 }
-                SDL_Log("Updated texture descriptors for '%s'", name.c_str());
+                log("Updated texture descriptors for '%s'", name.c_str());
         }
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;

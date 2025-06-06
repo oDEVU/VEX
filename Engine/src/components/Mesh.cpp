@@ -10,12 +10,12 @@
 namespace vex {
     void MeshData::loadFromFile(const std::string& path) {
         // Temporary debug code
-        SDL_Log("Using Assimp version: %d.%d.%d",
+        log("Using Assimp version: %d.%d.%d",
                aiGetVersionMajor(),
                aiGetVersionMinor(),
                aiGetVersionRevision());
 
-        SDL_Log("Creating assimp importer...");
+        log("Creating assimp importer...");
         Assimp::Importer importer;
 
         if (!std::filesystem::exists(path)){
@@ -51,12 +51,12 @@ namespace vex {
         submeshes.resize(scene->mNumMeshes);
         for (unsigned m = 0; m < scene->mNumMeshes; m++) {
 
-            SDL_Log("Processing mesh %i...", m);
+            log("Processing mesh %i...", m);
             aiMesh* aiMesh = scene->mMeshes[m];
             Submesh& submesh = submeshes[m];
 
             // Vertices
-            SDL_Log("Loading verticies...");
+            log("Loading verticies...");
             submesh.vertices.resize(aiMesh->mNumVertices);
             for (unsigned i = 0; i < aiMesh->mNumVertices; i++) {
                 submesh.vertices[i].position = {
@@ -77,13 +77,13 @@ namespace vex {
                         aiMesh->mTextureCoords[0][i].y
                     };
                 }else{
-                    SDL_Log("Invalid texure UVs...");
+                    log("Invalid texure UVs...");
                     submesh.vertices[i].uv = glm::vec2(-1.0f);
                 }
             }
 
             // Indices
-            SDL_Log("Loading indices...");
+            log("Loading indices...");
             submesh.indices.resize(aiMesh->mNumFaces * 3);
             for (unsigned i = 0; i < aiMesh->mNumFaces; i++) {
                 aiFace face = aiMesh->mFaces[i];
@@ -93,7 +93,7 @@ namespace vex {
             }
 
             // Textures
-            SDL_Log("Getting texture path...");
+            log("Getting texture path...");
             if (aiMesh->mMaterialIndex >= 0) {
                 aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
                 aiString texPath;

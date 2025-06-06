@@ -2,6 +2,7 @@
 #include "context.hpp"
 #include "components/Mesh.hpp"
 #include "components/Model.hpp"
+#include "components/errorUtils.hpp"
 #include "Resources.hpp"
 
 namespace vex {

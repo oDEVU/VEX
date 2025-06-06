@@ -2,7 +2,7 @@
 
 namespace vex {
     Window::Window(std::string title, int resx, int resy){
-        SDL_Log("Initializing SDL...");
+        log("Initializing SDL...");
 
         // WHY THE FUCK WAYLAND IS SO BLURRY NO MATTER WHAT I DO?!?!?
         #ifdef __linux__
@@ -19,14 +19,14 @@ namespace vex {
 
         if (!SDL_Init(SDL_INIT_VIDEO)) {
             const char* error = SDL_GetError();
-            SDL_Log("SDL_Init failed: %s", error);
+            log("SDL_Init failed: %s", error);
             throw_error(error);
         }
 
         std::cout << "resx: " << resx << std::endl;
         std::cout << "resy: " << resy << std::endl;
 
-        SDL_Log("Creating window...");
+        log("Creating window...");
         window = SDL_CreateWindow(
             title.c_str(),
             resx,
