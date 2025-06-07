@@ -17,9 +17,17 @@ namespace vex {
 
     VulkanMesh::~VulkanMesh() {
         log("Destroying VulkanMesh");
+        vkDeviceWaitIdle(ctx_.device);
+
         for (auto& submesh : submeshBuffers_) {
-            vmaDestroyBuffer(ctx_.allocator, submesh.vertexBuffer, submesh.vertexAlloc);
-            vmaDestroyBuffer(ctx_.allocator, submesh.indexBuffer, submesh.indexAlloc);
+            if (submesh.vertexBuffer != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(ctx_.allocator, submesh.vertexBuffer, submesh.vertexAlloc);
+                submesh.vertexBuffer = VK_NULL_HANDLE;
+            }
+            if (submesh.indexBuffer != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(ctx_.allocator, submesh.indexBuffer, submesh.indexAlloc);
+                submesh.indexBuffer = VK_NULL_HANDLE;
+            }
         }
     }
 

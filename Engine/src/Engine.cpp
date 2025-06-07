@@ -82,6 +82,7 @@ void Engine::run() {
 }
 
 Engine::~Engine() {
+    m_imgui.reset();
     m_interface.reset();
     m_window.reset();
     SDL_Quit();

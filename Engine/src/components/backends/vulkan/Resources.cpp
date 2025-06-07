@@ -16,8 +16,41 @@ namespace vex {
     }
 
     VulkanResources::~VulkanResources() {
-        // TODO: clean up Resources stuff
+        vkDeviceWaitIdle(ctx_.device);
+
+        if (textureSampler_ != VK_NULL_HANDLE) {
+            vkDestroySampler(ctx_.device, textureSampler_, nullptr);
+            textureSampler_ = VK_NULL_HANDLE;
+        }
+
+        for (size_t i = 0; i < ctx_.MAX_FRAMES_IN_FLIGHT; i++) {
+            if (cameraBuffers_[i] != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(ctx_.allocator, cameraBuffers_[i], cameraAllocs_[i]);
+                cameraBuffers_[i] = VK_NULL_HANDLE;
+            }
+            if (modelBuffers_[i] != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(ctx_.allocator, modelBuffers_[i], modelAllocs_[i]);
+                modelBuffers_[i] = VK_NULL_HANDLE;
+            }
+        }
+
+        for (auto& [name, image] : textureImages_) {
+            if (textureViews_[name] != VK_NULL_HANDLE) {
+                vkDestroyImageView(ctx_.device, textureViews_[name], nullptr);
+                textureViews_[name] = VK_NULL_HANDLE;
+            }
+            if (image != VK_NULL_HANDLE && textureAllocations_[name] != VK_NULL_HANDLE) {
+                vmaDestroyImage(ctx_.allocator, image, textureAllocations_[name]);
+                image = VK_NULL_HANDLE;
+            }
+        }
+
+        if (descriptorPool_ != VK_NULL_HANDLE) {
+            vkDestroyDescriptorPool(ctx_.device, descriptorPool_, nullptr);
+            descriptorPool_ = VK_NULL_HANDLE;
+        }
     }
+
 
     void VulkanResources::createUniformBuffers() {
         log("Creating uniform buffers...");
@@ -540,8 +573,17 @@ namespace vex {
             auto it = textures_.find(name);
             if (it == textures_.end()) return;
 
-            vkDestroyImageView(ctx_.device, textureViews_[name], nullptr);
-            vmaDestroyImage(ctx_.allocator, textureImages_[name], textureAllocations_[name]);
+            vkDeviceWaitIdle(ctx_.device);
+
+            if (textureViews_[name] != VK_NULL_HANDLE) {
+                vkDestroyImageView(ctx_.device, textureViews_[name], nullptr);
+                textureViews_[name] = VK_NULL_HANDLE;
+            }
+
+            if (textureImages_[name] != VK_NULL_HANDLE && textureAllocations_[name] != VK_NULL_HANDLE) {
+                vmaDestroyImage(ctx_.allocator, textureImages_[name], textureAllocations_[name]);
+                textureImages_[name] = VK_NULL_HANDLE;
+            }
 
             textures_.erase(name);
             textureImages_.erase(name);

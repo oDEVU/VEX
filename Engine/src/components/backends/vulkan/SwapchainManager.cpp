@@ -130,7 +130,7 @@ namespace vex {
         VkImageCreateInfo imageInfo{};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
-        imageInfo.extent = {context_.currentRenderResolution.x, context_.currentRenderResolution.y, 1};
+        imageInfo.extent = {context_.swapchainExtent.width, context_.swapchainExtent.height, 1};
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
         imageInfo.format = depthFormat;

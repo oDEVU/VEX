@@ -38,10 +38,13 @@ namespace vex {
         extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 #endif
 
-        // TODO: allow for enabling only for debug builds
+#if DEBUG
         const std::vector<const char*> validationLayers = {
             "VK_LAYER_KHRONOS_validation"
         };
+#else
+        const std::vector<const char*> validationLayers;
+#endif
 
         VkApplicationInfo appInfo = {};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -231,7 +234,26 @@ namespace vex {
 
     Interface::~Interface() {
         vkDeviceWaitIdle(context.device);
+
+        modelRegistry_.clear();
+        models_.clear();
+        vulkanMeshes_.clear();
+
+        resources_.reset();
+
+        pipeline_.reset();
+
         swapchainManager_->cleanupSwapchain();
+        swapchainManager_.reset();
+
+        if (context.textureDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(context.device, context.textureDescriptorSetLayout, nullptr);
+            context.textureDescriptorSetLayout = VK_NULL_HANDLE;
+        }
+        if (context.uboDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(context.device, context.uboDescriptorSetLayout, nullptr);
+            context.uboDescriptorSetLayout = VK_NULL_HANDLE;
+        }
 
         for (size_t i = 0; i < context.MAX_FRAMES_IN_FLIGHT; i++) {
             if (context.imageAvailableSemaphores[i]) {

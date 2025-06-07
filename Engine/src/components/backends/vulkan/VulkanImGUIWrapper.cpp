@@ -13,15 +13,20 @@ namespace vex {
     VulkanImGUIWrapper::~VulkanImGUIWrapper() {
 
 #if DEBUG
-        if (m_initialized) {
-            ImGui_ImplVulkan_Shutdown();
-            ImGui_ImplSDL3_Shutdown();
-            ImGui::DestroyContext();
+    if (m_initialized) {
+        vkDeviceWaitIdle(m_vulkanContext.device);
 
-            if (m_imguiPool != VK_NULL_HANDLE) {
-                vkDestroyDescriptorPool(m_vulkanContext.device, m_imguiPool, nullptr);
-            }
+        ImGui_ImplVulkan_DestroyFontsTexture();
+        ImGui_ImplVulkan_Shutdown();
+
+        if (m_imguiPool != VK_NULL_HANDLE) {
+            vkDestroyDescriptorPool(m_vulkanContext.device, m_imguiPool, nullptr);
+            m_imguiPool = VK_NULL_HANDLE;
         }
+
+        ImGui_ImplSDL3_Shutdown();
+        ImGui::DestroyContext();
+    }
 #endif
     }
 #if DEBUG

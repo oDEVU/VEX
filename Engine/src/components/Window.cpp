@@ -23,8 +23,7 @@ namespace vex {
             throw_error(error);
         }
 
-        std::cout << "resx: " << resx << std::endl;
-        std::cout << "resy: " << resy << std::endl;
+        log("Creating window with resolution: %i X %i", resx, resy);
 
         log("Creating window...");
         window = SDL_CreateWindow(
