@@ -162,7 +162,10 @@ namespace vex {
         if (vkCreateImageView(context_.device, &viewInfo, nullptr, &context_.depthImageView) != VK_SUCCESS) {
             throw_error("Failed to create depth image view");
         }
-        createRenderPass();
+
+        context_.depthFormat = depthFormat;
+
+        createCommandPool();
     }
 
     void VulkanSwapchainManager::createImageViews() {
@@ -189,121 +192,8 @@ namespace vex {
                 throw_error("Failed to create image views");
             }
         }
+
         createDepthResources();
-    }
-
-    void VulkanSwapchainManager::createRenderPass() {
-        log("creating renderpass");
-        VkAttachmentDescription colorAttachment = {};
-        colorAttachment.format = context_.swapchainImageFormat;
-        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-        VkAttachmentReference colorAttachmentRef = {};
-        colorAttachmentRef.attachment = 0;
-        colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-        VkAttachmentDescription depthAttachment{};
-        depthAttachment.format = findDepthFormat();
-        depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-        depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
-
-        VkAttachmentReference depthAttachmentRef{};
-        depthAttachmentRef.attachment = 1;
-        depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-        VkSubpassDescription subpass = {};
-        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-        subpass.colorAttachmentCount = 1;
-        subpass.pColorAttachments = &colorAttachmentRef;
-        subpass.pDepthStencilAttachment = &depthAttachmentRef;
-
-        VkSubpassDependency dependency = {};
-        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-        dependency.dstSubpass = 0;
-        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.srcAccessMask = 0;
-        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-        std::array<VkAttachmentDescription, 2> attachments = {colorAttachment, depthAttachment};
-
-        VkRenderPassCreateInfo renderPassInfo = {};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-        renderPassInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-        renderPassInfo.pAttachments = attachments.data();
-        renderPassInfo.subpassCount = 1;
-        renderPassInfo.pSubpasses = &subpass;
-        renderPassInfo.dependencyCount = 1;
-        renderPassInfo.pDependencies = &dependency;
-
-        if (vkCreateRenderPass(context_.device, &renderPassInfo, nullptr, &context_.renderPass) != VK_SUCCESS) {
-            throw_error("Failed to create render pass");
-        }
-            VkAttachmentDescription lowColorAttachment = {};
-            lowColorAttachment.format = context_.swapchainImageFormat;
-            lowColorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-            lowColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            lowColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            lowColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            lowColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            lowColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            lowColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-            std::array<VkAttachmentDescription, 2> lowAttachments = {lowColorAttachment, depthAttachment};
-
-            VkRenderPassCreateInfo lowResRenderPassInfo = {};
-            lowResRenderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-            lowResRenderPassInfo.attachmentCount = static_cast<uint32_t>(lowAttachments.size());
-            lowResRenderPassInfo.pAttachments = lowAttachments.data();
-            lowResRenderPassInfo.subpassCount = 1;
-            lowResRenderPassInfo.pSubpasses = &subpass;
-            lowResRenderPassInfo.dependencyCount = 1;
-            lowResRenderPassInfo.pDependencies = &dependency;
-
-            if (vkCreateRenderPass(context_.device, &lowResRenderPassInfo, nullptr, &context_.lowResRenderPass) != VK_SUCCESS) {
-                throw_error("Failed to create low-res render pass");
-            }
-
-        createFramebuffers();
-    }
-
-    void VulkanSwapchainManager::createFramebuffers() {
-        log("creating framebuffers with depth attachments");
-
-        context_.swapchainFramebuffers.resize(context_.swapchainImageViews.size());
-
-        for (size_t i = 0; i < context_.swapchainImageViews.size(); i++) {
-            std::array<VkImageView, 2> attachments = {
-                context_.swapchainImageViews[i],
-                context_.depthImageView
-            };
-
-            VkFramebufferCreateInfo framebufferInfo = {};
-            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            framebufferInfo.renderPass = context_.renderPass;
-            framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-            framebufferInfo.pAttachments = attachments.data();
-            framebufferInfo.width = context_.swapchainExtent.width;
-            framebufferInfo.height = context_.swapchainExtent.height;
-            framebufferInfo.layers = 1;
-
-            if (vkCreateFramebuffer(context_.device, &framebufferInfo, nullptr,
-                                  &context_.swapchainFramebuffers[i]) != VK_SUCCESS) {
-                throw_error("Failed to create framebuffer");
-            }
-        }
-        createCommandPool();
     }
 
     void VulkanSwapchainManager::createCommandPool() {
@@ -322,7 +212,12 @@ namespace vex {
 
     void VulkanSwapchainManager::createCommandBuffers() {
         log("creating command buffers");
-        context_.commandBuffers.resize(context_.swapchainFramebuffers.size());
+        uint32_t commandBufferCount = static_cast<uint32_t>(context_.swapchainImages.size());
+        if (commandBufferCount == 0) {
+            throw_error("No swapchain images for command buffer creation");
+        }
+
+        context_.commandBuffers.resize(commandBufferCount);
 
         VkCommandBufferAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -374,11 +269,11 @@ namespace vex {
             log("Created sync objects: fence=%p", (void*)context_.inFlightFences[i]);
         }
 
-        if (context_.renderPass && context_.depthImageView) {
+        if (context_.depthImageView) {
             createLowResResources();
         } else {
             SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
-                       "Deferring low-res resource creation - renderPass or depth image not ready");
+                       "Deferring low-res resource creation - depth image not ready");
         }
     }
 
@@ -386,10 +281,6 @@ namespace vex {
         if (context_.currentRenderResolution.x == 0 || context_.currentRenderResolution.y == 0) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Invalid render resolution for low-res resources");
             return;
-        }
-
-        if (!context_.lowResRenderPass) {
-            throw_error("Low-res render pass not created!");
         }
 
         cleanupLowResResources();
@@ -432,36 +323,10 @@ namespace vex {
             return;
         }
 
-        std::array<VkImageView, 2> attachments = {
-            context_.lowResColorView,
-            context_.depthImageView
-        };
-
-        VkFramebufferCreateInfo fbInfo{};
-        fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        fbInfo.renderPass = context_.lowResRenderPass;
-        fbInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-        fbInfo.pAttachments = attachments.data();
-        fbInfo.width = context_.currentRenderResolution.x;
-        fbInfo.height = context_.currentRenderResolution.y;
-        fbInfo.layers = 1;
-        if (vkCreateFramebuffer(context_.device, &fbInfo, nullptr, &context_.lowResFramebuffer) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res framebuffer");
-            vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
-            vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
-            context_.lowResColorView = VK_NULL_HANDLE;
-            context_.lowResColorImage = VK_NULL_HANDLE;
-            context_.lowResColorAlloc = VK_NULL_HANDLE;
-            return;
-        }
+        context_.lowResColorFormat = context_.swapchainImageFormat;
     }
 
     void VulkanSwapchainManager::cleanupLowResResources() {
-        if (context_.lowResFramebuffer != VK_NULL_HANDLE) {
-            vkDestroyFramebuffer(context_.device, context_.lowResFramebuffer, nullptr);
-            context_.lowResFramebuffer = VK_NULL_HANDLE;
-        }
-
         if (context_.lowResColorView != VK_NULL_HANDLE) {
             vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
             context_.lowResColorView = VK_NULL_HANDLE;
@@ -481,12 +346,6 @@ namespace vex {
                     if (context_.lowResColorImage) {
                         vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
                     }
-                    if (context_.lowResFramebuffer) {
-                        vkDestroyFramebuffer(context_.device, context_.lowResFramebuffer, nullptr);
-                    }
-                    if (context_.lowResRenderPass) {
-                        vkDestroyRenderPass(context_.device, context_.lowResRenderPass, nullptr);
-                    }
 
         if (context_.depthImageView) {
             vkDestroyImageView(context_.device, context_.depthImageView, nullptr);
@@ -497,11 +356,6 @@ namespace vex {
             context_.depthImage = VK_NULL_HANDLE;
         }
 
-        for (auto& framebuffer : context_.swapchainFramebuffers) {
-            vkDestroyFramebuffer(context_.device, framebuffer, nullptr);
-        }
-        context_.swapchainFramebuffers.clear();
-
         for (auto& imageView : context_.swapchainImageViews) {
             vkDestroyImageView(context_.device, imageView, nullptr);
         }
@@ -509,9 +363,6 @@ namespace vex {
 
         vkDestroySwapchainKHR(context_.device, context_.swapchain, nullptr);
         context_.swapchain = VK_NULL_HANDLE;
-
-        vkDestroyRenderPass(context_.device, context_.renderPass, nullptr);
-        context_.renderPass = VK_NULL_HANDLE;
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
@@ -525,10 +376,6 @@ namespace vex {
         createSwapchain();
         log("createImageViews");
         createImageViews();
-        log("createRenderPass");
-        createRenderPass();
-        log("createFramebuffers");
-        createFramebuffers();
         log("createCommandBuffers");
         createCommandBuffers();
         log("createLowResResources");

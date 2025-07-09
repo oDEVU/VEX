@@ -181,6 +181,12 @@ namespace vex {
         dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
         dynamicState.pDynamicStates = dynamicStates.data();
 
+        VkPipelineRenderingCreateInfo renderingCreateInfo{};
+        renderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
+        renderingCreateInfo.colorAttachmentCount = 1;
+        renderingCreateInfo.pColorAttachmentFormats = &ctx_.swapchainImageFormat;
+        renderingCreateInfo.depthAttachmentFormat = ctx_.depthFormat;
+
         log("Creating Graphics pipeline...");
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -195,8 +201,7 @@ namespace vex {
         pipelineInfo.pDepthStencilState = &depthStencil;
         pipelineInfo.pDynamicState = &dynamicState;
         pipelineInfo.layout = layout_;
-        pipelineInfo.renderPass = ctx_.renderPass;
-        pipelineInfo.subpass = 0;
+        pipelineInfo.pNext = &renderingCreateInfo;
 
         if (vkCreateGraphicsPipelines(ctx_.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline_) != VK_SUCCESS) {
             throw_error("Failed to create graphics pipeline");

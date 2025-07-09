@@ -142,7 +142,8 @@ namespace vex {
 
         // Device extensions, They are fucking broken :C
         std::vector<const char*> deviceExtensions = {
-            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+            VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME
 #ifdef __APPLE__
             , VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
 #endif
@@ -151,8 +152,13 @@ namespace vex {
         VkPhysicalDeviceFeatures deviceFeatures = {};
         deviceFeatures.samplerAnisotropy = VK_TRUE;
 
+        VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeature{};
+        dynamicRenderingFeature.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
+        dynamicRenderingFeature.dynamicRendering = VK_TRUE;
+
         VkDeviceCreateInfo deviceCreateInfo = {};
         deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+        deviceCreateInfo.pNext = &dynamicRenderingFeature;
         deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
         deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
         deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
@@ -276,18 +282,6 @@ namespace vex {
             vkDestroyCommandPool(context.device, context.commandPool, nullptr);
             context.commandPool = VK_NULL_HANDLE;
         }
-
-        if (context.renderPass) {
-            vkDestroyRenderPass(context.device, context.renderPass, nullptr);
-            context.renderPass = VK_NULL_HANDLE;
-        }
-
-        for (auto& framebuffer : context.swapchainFramebuffers) {
-            if (framebuffer){
-                vkDestroyFramebuffer(context.device, framebuffer, nullptr);
-            }
-        }
-        context.swapchainFramebuffers.clear();
 
         for (auto& imageView : context.swapchainImageViews) {
             if (imageView) {
@@ -457,6 +451,36 @@ namespace vex {
         pipeline_->updateViewport(resolution);
     }
 
+    void Interface::transitionImageLayout(VkCommandBuffer cmd, VkImage image,
+                                        VkImageLayout oldLayout, VkImageLayout newLayout,
+                                        VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+                                        VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage) {
+        VkImageMemoryBarrier barrier{};
+        barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        barrier.oldLayout = oldLayout;
+        barrier.newLayout = newLayout;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.image = image;
+        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        barrier.subresourceRange.baseMipLevel = 0;
+        barrier.subresourceRange.levelCount = 1;
+        barrier.subresourceRange.baseArrayLayer = 0;
+        barrier.subresourceRange.layerCount = 1;
+        barrier.srcAccessMask = srcAccessMask;
+        barrier.dstAccessMask = dstAccessMask;
+
+        vkCmdPipelineBarrier(
+            cmd,
+            srcStage,
+            dstStage,
+            0,
+            0, nullptr,
+            0, nullptr,
+            1, &barrier
+        );
+    }
+
     void Interface::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, ImGUIWrapper& m_ui, u_int64_t frame) {
         if (renderResolution != context.currentRenderResolution) {
             context.currentRenderResolution = renderResolution;
@@ -491,33 +515,58 @@ namespace vex {
         VkImageView textureView = resources_->getTextureView("default");
         resources_->updateTextureDescriptor(context.currentFrame, textureView, 0);
 
-
-        if (!context.lowResFramebuffer || !context.lowResColorImage) {
-            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Low-res resources not ready - skipping frame");
-            return;
-        }
-
         VkCommandBuffer commandBuffer = context.commandBuffers[context.currentImageIndex];
-           vkResetCommandBuffer(commandBuffer, 0);
+        vkResetCommandBuffer(commandBuffer, 0);
 
-           VkCommandBufferBeginInfo beginInfo{};
-           beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-           vkBeginCommandBuffer(commandBuffer, &beginInfo);
+        VkCommandBufferBeginInfo beginInfo{};
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
-           VkRenderPassBeginInfo renderPassInfo{};
-           renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-           renderPassInfo.renderPass = context.lowResRenderPass;
-           renderPassInfo.framebuffer = context.lowResFramebuffer;
-           renderPassInfo.renderArea.offset = {0, 0};
-           renderPassInfo.renderArea.extent = {renderResolution.x, renderResolution.y};
+        transitionImageLayout(commandBuffer,
+                            context.swapchainImages[context.currentImageIndex],
+                            VK_IMAGE_LAYOUT_UNDEFINED,
+                            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                            0,
+                            VK_ACCESS_TRANSFER_WRITE_BIT,
+                            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                            VK_PIPELINE_STAGE_TRANSFER_BIT);
 
-               VkClearValue clearValues[2];
-               clearValues[0].color = {{0.1f, 0.1f, 0.1f, 1.0f}};
-               clearValues[1].depthStencil = {1.0f, 0};
-               renderPassInfo.clearValueCount = 2;
-               renderPassInfo.pClearValues = clearValues;
+        transitionImageLayout(commandBuffer,
+                            context.lowResColorImage,
+                            VK_IMAGE_LAYOUT_UNDEFINED,
+                            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                            0,
+                            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
-               vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+           VkRenderingInfo renderingInfo{};
+           renderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+           renderingInfo.renderArea.offset = {0, 0};
+           renderingInfo.renderArea.extent = {renderResolution.x, renderResolution.y};
+           renderingInfo.layerCount = 1;
+
+           VkRenderingAttachmentInfo colorAttachment{};
+           colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+           colorAttachment.imageView = context.lowResColorView;
+           colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+           colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+           colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+           colorAttachment.clearValue.color = {{0.1f, 0.1f, 0.1f, 1.0f}};
+
+           VkRenderingAttachmentInfo depthAttachment{};
+           depthAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+           depthAttachment.imageView = context.depthImageView;
+           depthAttachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+           depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+           depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+           depthAttachment.clearValue.depthStencil = {1.0f, 0};
+
+           renderingInfo.colorAttachmentCount = 1;
+           renderingInfo.pColorAttachments = &colorAttachment;
+           renderingInfo.pDepthAttachment = &depthAttachment;
+
+           vkCmdBeginRendering(commandBuffer, &renderingInfo);
 
                   VkViewport viewport{};
                   viewport.x = 0.0f;
@@ -559,44 +608,15 @@ namespace vex {
             m_ui.endFrame();
         }
 
-        vkCmdEndRenderPass(commandBuffer);
+        vkCmdEndRendering(commandBuffer);
 
-        // Transition low-res image
-        VkImageMemoryBarrier lowResBarrier{};
-        lowResBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-        lowResBarrier.oldLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-        lowResBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
-        lowResBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        lowResBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        lowResBarrier.image = context.lowResColorImage;
-        lowResBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        lowResBarrier.subresourceRange.levelCount = 1;
-        lowResBarrier.subresourceRange.layerCount = 1;
-        lowResBarrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-        lowResBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
-
-        VkImageMemoryBarrier swapchainBarrier{};
-        swapchainBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-        swapchainBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        swapchainBarrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
-        swapchainBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        swapchainBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        swapchainBarrier.image = context.swapchainImages[context.currentImageIndex];
-        swapchainBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        swapchainBarrier.subresourceRange.levelCount = 1;
-        swapchainBarrier.subresourceRange.layerCount = 1;
-        swapchainBarrier.srcAccessMask = 0;
-        swapchainBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-
-        vkCmdPipelineBarrier(
-            commandBuffer,
-            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            0,
-            0, nullptr,
-            0, nullptr,
-            2, (VkImageMemoryBarrier[]){lowResBarrier, swapchainBarrier}
-        );
+        transitionImageLayout(commandBuffer, context.lowResColorImage,
+                            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                            VK_ACCESS_TRANSFER_READ_BIT,
+                            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                            VK_PIPELINE_STAGE_TRANSFER_BIT);
 
         VkImageBlit blit{};
         blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;

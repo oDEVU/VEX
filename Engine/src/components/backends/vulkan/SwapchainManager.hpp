@@ -23,7 +23,6 @@ namespace vex {
 
     private:
         void createImageViews();
-        void createRenderPass();
         void createFramebuffers();
         void createCommandPool();
         void createCommandBuffers();

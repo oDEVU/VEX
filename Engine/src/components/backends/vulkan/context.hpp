@@ -35,17 +35,11 @@ namespace vex {
         VkImage lowResColorImage = VK_NULL_HANDLE;
         VmaAllocation lowResColorAlloc = VK_NULL_HANDLE;
         VkImageView lowResColorView = VK_NULL_HANDLE;
-        VkFramebuffer lowResFramebuffer = VK_NULL_HANDLE;
-        VkRenderPass lowResRenderPass = VK_NULL_HANDLE;
+        VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;
 
-        VkRenderPass renderPass;
         VkPipelineLayout pipelineLayout;
-        std::vector<VkFramebuffer> swapchainFramebuffers;
         VkCommandPool commandPool;
         std::vector<VkCommandBuffer> commandBuffers;
-
-        VkRenderPass uiRenderPass;
-        std::vector<VkFramebuffer>  uiFramebuffers;
 
         VkCommandBuffer beginSingleTimeCommands() {
             VkCommandBufferAllocateInfo allocInfo{};

@@ -41,7 +41,7 @@ namespace vex {
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-        if (!vkCreateSampler || !vkCreateDescriptorPool || !vkCreateRenderPass) {
+        if (!vkCreateSampler || !vkCreateDescriptorPool) {
             throw_error("Critical Vulkan function pointers are null!");
         }
 
@@ -57,7 +57,6 @@ namespace vex {
         init_info.QueueFamily = m_vulkanContext.graphicsQueueFamily;
         init_info.Queue = m_vulkanContext.graphicsQueue;
         init_info.PipelineCache = VK_NULL_HANDLE;
-        init_info.RenderPass = m_vulkanContext.lowResRenderPass;
         init_info.Subpass = 0;
         init_info.MinImageCount = m_vulkanContext.swapchainImages.size();
         init_info.ImageCount = m_vulkanContext.swapchainImages.size();
@@ -69,6 +68,12 @@ namespace vex {
         init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
         init_info.Allocator = nullptr;
         init_info.DescriptorPool = m_imguiPool;
+        init_info.UseDynamicRendering = true;
+
+        init_info.PipelineRenderingCreateInfo = {.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO};
+        init_info.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+        init_info.PipelineRenderingCreateInfo.pColorAttachmentFormats = &m_vulkanContext.swapchainImageFormat;
+        init_info.PipelineRenderingCreateInfo.depthAttachmentFormat = m_vulkanContext.depthFormat;
 
         log("Initing ImGui Vulkan backend");
         if (!ImGui_ImplVulkan_Init(&init_info)) {

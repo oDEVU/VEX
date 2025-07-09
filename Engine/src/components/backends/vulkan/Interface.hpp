@@ -43,6 +43,10 @@ namespace vex {
         std::vector<std::unique_ptr<VulkanMesh>> vulkanMeshes_;
 
         void createDefaultTexture();
+        void transitionImageLayout(VkCommandBuffer cmd, VkImage image,
+                                            VkImageLayout oldLayout, VkImageLayout newLayout,
+                                            VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+                                            VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage);
     public:
         Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo);
         ~Interface();
