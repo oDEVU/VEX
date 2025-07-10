@@ -12,11 +12,6 @@ namespace vex {
     };
 
     struct PushConstants {
-        // TODO: get rid of that shit, it doesnt even work
-        alignas(16) glm::vec4 affineTransformX;
-        alignas(16) glm::vec4 affineTransformY;
-        alignas(16) glm::vec4 affineTransformZ;
-
         alignas(4) float snapResolution;
         alignas(4) float jitterIntensity;
         alignas(4) int enablePS1Effects;
@@ -28,13 +23,6 @@ namespace vex {
         alignas(8) glm::vec2 windowResolution;
         alignas(16) float upscaleRatio;
         alignas(4) int renderingMode;
-
-                // Helper method
-                void setAffineTransform(const glm::mat3& m) {
-                    affineTransformX = glm::vec4(m[0], 0.0f);
-                    affineTransformY = glm::vec4(m[1], 0.0f);
-                    affineTransformZ = glm::vec4(m[2], 0.0f);
-                }
     };
 
     namespace PS1Effects {

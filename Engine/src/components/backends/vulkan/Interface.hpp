@@ -24,29 +24,6 @@
 
 namespace vex {
     class Interface {
-    private:
-        VulkanContext context;
-        bool shouldClose = false;
-
-        SDL_Window *window_;
-        std::unique_ptr<VulkanSwapchainManager> swapchainManager_;
-        std::unique_ptr<VulkanResources> resources_;
-        std::unique_ptr<VulkanPipeline> pipeline_;
-
-        std::deque<std::unique_ptr<Model>> models_;
-        std::unordered_map<std::string, Model*> modelRegistry_;
-
-        std::vector<uint32_t> freeModelIds_;
-        uint32_t nextModelId_ = 0;
-        static constexpr uint32_t INVALID_MODEL_ID = UINT32_MAX;
-
-        std::vector<std::unique_ptr<VulkanMesh>> vulkanMeshes_;
-
-        void createDefaultTexture();
-        void transitionImageLayout(VkCommandBuffer cmd, VkImage image,
-                                            VkImageLayout oldLayout, VkImageLayout newLayout,
-                                            VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
-                                            VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage);
     public:
         Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo);
         ~Interface();
@@ -55,14 +32,37 @@ namespace vex {
         void unloadModel(const std::string& name);
         Model* getModel(const std::string& name);
 
-        VulkanContext* getContext() { return &context; }
+        VulkanContext* getContext() { return &m_context; }
 
         std::chrono::high_resolution_clock::time_point startTime;
         float currentTime = 0.0f;
 
-        void bindWindow(SDL_Window* window);
+        void bindWindow(SDL_Window *p_window);
         void unbindWindow();
         void setRenderResolution(glm::uvec2 resolution);
         void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, ImGUIWrapper& m_ui, u_int64_t frame);
+    private:
+        VulkanContext m_context;
+        bool m_shouldClose = false;
+
+        SDL_Window *m_p_window;
+        std::unique_ptr<VulkanSwapchainManager> m_p_swapchainManager;
+        std::unique_ptr<VulkanResources> m_p_resources;
+        std::unique_ptr<VulkanPipeline> m_p_pipeline;
+
+        std::deque<std::unique_ptr<Model>> m_models;
+        std::unordered_map<std::string, Model*> m_modelRegistry;
+
+        std::vector<uint32_t> m_freeModelIds;
+        uint32_t m_nextModelId = 0;
+        static constexpr uint32_t INVALID_MODEL_ID = UINT32_MAX;
+
+        std::vector<std::unique_ptr<VulkanMesh>> m_vulkanMeshes;
+
+        void createDefaultTexture();
+        void transitionImageLayout(VkCommandBuffer cmd, VkImage image,
+                                            VkImageLayout oldLayout, VkImageLayout newLayout,
+                                            VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
+                                            VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage);
     };
 }

@@ -4,14 +4,14 @@
 #include "uniforms.hpp"
 
 namespace vex {
-    VulkanPipeline::VulkanPipeline(VulkanContext& context) : ctx_(context) {}
+    VulkanPipeline::VulkanPipeline(VulkanContext& r_context) : m_r_context(r_context) {}
 
     VulkanPipeline::~VulkanPipeline() {
-        if (pipeline_ != VK_NULL_HANDLE) {
-            vkDestroyPipeline(ctx_.device, pipeline_, nullptr);
+        if (m_pipeline != VK_NULL_HANDLE) {
+            vkDestroyPipeline(m_r_context.device, m_pipeline, nullptr);
         }
-        if (layout_ != VK_NULL_HANDLE) {
-            vkDestroyPipelineLayout(ctx_.device, layout_, nullptr);
+        if (m_layout != VK_NULL_HANDLE) {
+            vkDestroyPipelineLayout(m_r_context.device, m_layout, nullptr);
         }
     }
 
@@ -29,7 +29,7 @@ namespace vex {
     }
 
     void VulkanPipeline::updateViewport(glm::uvec2 resolution) {
-        currentRenderResolution = resolution;
+        m_currentRenderResolution = resolution;
     }
 
     void VulkanPipeline::createGraphicsPipeline(
@@ -49,7 +49,7 @@ namespace vex {
             createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
             VkShaderModule shaderModule;
-            if (vkCreateShaderModule(ctx_.device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+            if (vkCreateShaderModule(m_r_context.device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
                 throw_error("Failed to create shader module");
             }
             return shaderModule;
@@ -90,14 +90,14 @@ namespace vex {
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = static_cast<float>(ctx_.currentRenderResolution.x);
-        viewport.height = static_cast<float>(ctx_.currentRenderResolution.y);
+        viewport.width = static_cast<float>(m_r_context.currentRenderResolution.x);
+        viewport.height = static_cast<float>(m_r_context.currentRenderResolution.y);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
         scissor.offset = {0, 0};
-        scissor.extent = {currentRenderResolution.x, currentRenderResolution.y};
+        scissor.extent = {m_currentRenderResolution.x, m_currentRenderResolution.y};
 
         log("Creating viewport state...");
         VkPipelineViewportStateCreateInfo viewportState{};
@@ -145,8 +145,8 @@ namespace vex {
             pushConstantRange.size = sizeof(PushConstants);
 
             std::array<VkDescriptorSetLayout, 2> setLayouts = {
-                ctx_.uboDescriptorSetLayout,
-                ctx_.textureDescriptorSetLayout
+                m_r_context.uboDescriptorSetLayout,
+                m_r_context.textureDescriptorSetLayout
             };
 
             VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
@@ -157,7 +157,7 @@ namespace vex {
             pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
 
             log("Creating pipeline layout with %d descriptor sets", setLayouts.size());
-            if (vkCreatePipelineLayout(ctx_.device, &pipelineLayoutInfo, nullptr, &layout_) != VK_SUCCESS) {
+            if (vkCreatePipelineLayout(m_r_context.device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) {
                 throw_error("Failed to create pipeline layout!");
             }
 
@@ -184,8 +184,8 @@ namespace vex {
         VkPipelineRenderingCreateInfo renderingCreateInfo{};
         renderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
         renderingCreateInfo.colorAttachmentCount = 1;
-        renderingCreateInfo.pColorAttachmentFormats = &ctx_.swapchainImageFormat;
-        renderingCreateInfo.depthAttachmentFormat = ctx_.depthFormat;
+        renderingCreateInfo.pColorAttachmentFormats = &m_r_context.swapchainImageFormat;
+        renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;
 
         log("Creating Graphics pipeline...");
         VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -200,15 +200,15 @@ namespace vex {
         pipelineInfo.pColorBlendState = &colorBlending;
         pipelineInfo.pDepthStencilState = &depthStencil;
         pipelineInfo.pDynamicState = &dynamicState;
-        pipelineInfo.layout = layout_;
+        pipelineInfo.layout = m_layout;
         pipelineInfo.pNext = &renderingCreateInfo;
 
-        if (vkCreateGraphicsPipelines(ctx_.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline_) != VK_SUCCESS) {
+        if (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline) != VK_SUCCESS) {
             throw_error("Failed to create graphics pipeline");
         }
 
         log("Cleanup shader modules...");
-        vkDestroyShaderModule(ctx_.device, vertShaderModule, nullptr);
-        vkDestroyShaderModule(ctx_.device, fragShaderModule, nullptr);
+        vkDestroyShaderModule(m_r_context.device, vertShaderModule, nullptr);
+        vkDestroyShaderModule(m_r_context.device, fragShaderModule, nullptr);
     }
 }

@@ -19,10 +19,6 @@ layout(location = 1) out vec2 fragUV;
 layout(location = 2) out float fragDepth;
 
 layout(push_constant) uniform PushConsts {
-    // Model properties
-    vec4 affineTransformX;
-    vec4 affineTransformY;
-    vec4 affineTransformZ;
     float snapResolution;
     float jitterIntensity;
     int enablePS1Effects;
@@ -76,6 +72,14 @@ void main() {
 
     gl_Position = clipPos;
     fragNormal = normalize(mat3(transpose(inverse(object.model))) * inNormal);
-    fragUV = inUV;
+
+    // affine texture warping uvs
+    if (bool(push.enablePS1Effects & 0x2)) {
+        //affine warping
+        fragUV = inUV;
+    } else {
+        fragUV = inUV;
+    }
+
     fragDepth = viewPos.z;
 }

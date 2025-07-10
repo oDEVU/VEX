@@ -12,24 +12,24 @@
 namespace vex {
 
 Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
-    gameInfo = gInfo;
-    if(gameInfo.versionMajor == 0 && gameInfo.versionMinor == 0 && gameInfo.versionPatch == 0){
+    m_gameInfo = gInfo;
+    if(m_gameInfo.versionMajor == 0 && m_gameInfo.versionMinor == 0 && m_gameInfo.versionPatch == 0){
         log("Project version not set!");
     }
 
     m_window = std::make_unique<Window>(title, width, height);
-    resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
+    m_resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
 
     // Testing resolution modes
-    //resolutionManager->setMode(ResolutionMode::NATIVE);       // Native
-    //resolutionManager->setMode(ResolutionMode::PS1_SHARP);    // Close to ps1 resolution but intiger scaled
-    //resolutionManager->setMode(ResolutionMode::RES_240P);     // Height same as original but not intiger scaled (wierd scaling)
-    //resolutionManager->setMode(ResolutionMode::RES_480P);     // Height same as original but not intiger scaled (wierd scaling)
-    //resolutionManager->update();
+    //m_resolutionManager->setMode(ResolutionMode::NATIVE);       // Native
+    //m_resolutionManager->setMode(ResolutionMode::PS1_SHARP);    // Close to ps1 resolution but intiger scaled
+    //m_resolutionManager->setMode(ResolutionMode::RES_240P);     // Height same as original but not intiger scaled (wierd scaling)
+    //m_resolutionManager->setMode(ResolutionMode::RES_480P);     // Height same as original but not intiger scaled (wierd scaling)
+    //m_resolutionManager->update();
 
-    auto renderRes = resolutionManager->getRenderResolution();
+    auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
-    m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, gameInfo);
+    m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo);
     m_camera = std::make_unique<Camera>();
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
@@ -62,22 +62,22 @@ void Engine::run() {
                     m_interface->unbindWindow();
                     break;
                 case SDL_EVENT_WINDOW_RESIZED:
-                    resolutionManager->update();
-                    auto renderRes = resolutionManager->getRenderResolution();
+                    m_resolutionManager->update();
+                    auto renderRes = m_resolutionManager->getRenderResolution();
                     m_interface->setRenderResolution(renderRes);
                     break;
             }
         }
 
 
-        if(frame > 0){
+        if(m_frame > 0){
             update(deltaTime);
         }else{
             beginGame();
         }
 
         render();
-        frame++;
+        m_frame++;
     }
 }
 
@@ -88,6 +88,12 @@ Engine::~Engine() {
     SDL_Quit();
 }
 
+void Engine::setResolutionMode(ResolutionMode mode) {
+    m_resolutionManager->setMode(mode);
+    m_resolutionManager->update();
+    auto renderRes = m_resolutionManager->getRenderResolution();
+    m_interface->setRenderResolution(renderRes);
+}
 
 Model& Engine::loadModel(const std::string& modelPath, const std::string& name){
     return m_interface->loadModel(modelPath, name);
@@ -101,7 +107,7 @@ void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
 void Engine::beginGame() {}
 void Engine::render() {
-    auto renderRes = resolutionManager->getRenderResolution();
+    auto renderRes = m_resolutionManager->getRenderResolution();
 
     glm::mat4 view = glm::lookAt(m_camera->transform.position, glm::vec3(m_camera->transform.position + m_camera->transform.getForwardVector()), m_camera->transform.getUpVector());
     glm::mat4 proj = glm::perspective(
@@ -112,7 +118,7 @@ void Engine::render() {
     );
     proj[1][1] *= -1;
 
-    m_interface->renderFrame(view, proj, renderRes, *m_imgui, frame);
+    m_interface->renderFrame(view, proj, renderRes, *m_imgui, m_frame);
 }
 
 }

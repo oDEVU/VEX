@@ -13,10 +13,10 @@
 #include <unordered_set>
 
 namespace vex {
-    Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo) : window_(window){
+    Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo) : m_p_window(window){
         constexpr uint32_t apiVersion = VK_API_VERSION_1_3;
 
-         context.currentRenderResolution = initialResolution;
+        m_context.currentRenderResolution = initialResolution;
 
         log("Loading Vulkan library...");
         if (!SDL_Vulkan_LoadLibrary(nullptr)) {
@@ -66,26 +66,26 @@ namespace vex {
         createInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 #endif
 
-        if (vkCreateInstance(&createInfo, nullptr, &context.instance) != VK_SUCCESS) {
+        if (vkCreateInstance(&createInfo, nullptr, &m_context.instance) != VK_SUCCESS) {
             throw_error("Failed to create Vulkan instance");
         }
 
-        volkLoadInstance(context.instance);
+        volkLoadInstance(m_context.instance);
 
         log("Binding window...");
-        if (!SDL_Vulkan_CreateSurface(window, context.instance, nullptr, &context.surface)) {
+        if (!SDL_Vulkan_CreateSurface(window, m_context.instance, nullptr, &m_context.surface)) {
             throw_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
 
         // Device stuff
         uint32_t deviceCount = 0;
-        vkEnumeratePhysicalDevices(context.instance, &deviceCount, nullptr);
+        vkEnumeratePhysicalDevices(m_context.instance, &deviceCount, nullptr);
         if (deviceCount == 0) {
             throw_error("Failed to find GPUs with Vulkan support");
         }
 
         std::vector<VkPhysicalDevice> devices(deviceCount);
-        vkEnumeratePhysicalDevices(context.instance, &deviceCount, devices.data());
+        vkEnumeratePhysicalDevices(m_context.instance, &deviceCount, devices.data());
 
         // Select the first suitable device, FIX ME!
         for (const auto& device : devices) {
@@ -101,34 +101,34 @@ namespace vex {
             int i = 0;
             for (const auto& queueFamily : queueFamilies) {
                 if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-                    context.graphicsQueueFamily = i;
+                    m_context.graphicsQueueFamily = i;
                 }
 
                 VkBool32 presentSupport = false;
-                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, context.surface, &presentSupport);
+                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_context.surface, &presentSupport);
 
                 if (presentSupport) {
-                    context.presentQueueFamily = i;
+                    m_context.presentQueueFamily = i;
                 }
 
-                if (context.graphicsQueueFamily != UINT32_MAX && context.presentQueueFamily != UINT32_MAX) {
+                if (m_context.graphicsQueueFamily != UINT32_MAX && m_context.presentQueueFamily != UINT32_MAX) {
                     break;
                 }
                 i++;
             }
 
-            if (context.graphicsQueueFamily != UINT32_MAX && context.presentQueueFamily != UINT32_MAX) {
-                context.physicalDevice = device;
+            if (m_context.graphicsQueueFamily != UINT32_MAX && m_context.presentQueueFamily != UINT32_MAX) {
+                m_context.physicalDevice = device;
                 break;
             }
         }
 
-        if (context.physicalDevice == VK_NULL_HANDLE) {
+        if (m_context.physicalDevice == VK_NULL_HANDLE) {
             throw_error("Failed to find a suitable GPU");
         }
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-        std::set<uint32_t> uniqueQueueFamilies = {context.graphicsQueueFamily, context.presentQueueFamily};
+        std::set<uint32_t> uniqueQueueFamilies = {m_context.graphicsQueueFamily, m_context.presentQueueFamily};
 
         float queuePriority = 1.0f;
         for (uint32_t queueFamily : uniqueQueueFamilies) {
@@ -165,14 +165,14 @@ namespace vex {
         deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
         deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-        if (vkCreateDevice(context.physicalDevice, &deviceCreateInfo, nullptr, &context.device) != VK_SUCCESS) {
+        if (vkCreateDevice(m_context.physicalDevice, &deviceCreateInfo, nullptr, &m_context.device) != VK_SUCCESS) {
             throw_error("Failed to create logical device");
         }
 
-        volkLoadDevice(context.device);
+        volkLoadDevice(m_context.device);
 
-        vkGetDeviceQueue(context.device, context.graphicsQueueFamily, 0, &context.graphicsQueue);
-        vkGetDeviceQueue(context.device, context.presentQueueFamily, 0, &context.presentQueue);
+        vkGetDeviceQueue(m_context.device, m_context.graphicsQueueFamily, 0, &m_context.graphicsQueue);
+        vkGetDeviceQueue(m_context.device, m_context.presentQueueFamily, 0, &m_context.presentQueue);
 
         // VMA STUFF
         VmaVulkanFunctions vmaFuncs = {};
@@ -197,25 +197,25 @@ namespace vex {
         vmaFuncs.vkCmdCopyBuffer = vkCmdCopyBuffer;
 
         VmaAllocatorCreateInfo allocatorInfo = {};
-        allocatorInfo.physicalDevice = context.physicalDevice;
-        allocatorInfo.device = context.device;
-        allocatorInfo.instance = context.instance;
+        allocatorInfo.physicalDevice = m_context.physicalDevice;
+        allocatorInfo.device = m_context.device;
+        allocatorInfo.instance = m_context.instance;
         allocatorInfo.vulkanApiVersion = apiVersion;
         allocatorInfo.pVulkanFunctions = &vmaFuncs;
 
-        if (vmaCreateAllocator(&allocatorInfo, &context.allocator) != VK_SUCCESS) {
+        if (vmaCreateAllocator(&allocatorInfo, &m_context.allocator) != VK_SUCCESS) {
             throw_error("Failed to create VMA allocator");
         }
 
         log("Initializing Swapchain Manager...");
 
-        swapchainManager_ = std::make_unique<VulkanSwapchainManager>(context,window_);
-        swapchainManager_->createSwapchain();
+        m_p_swapchainManager = std::make_unique<VulkanSwapchainManager>(m_context,m_p_window);
+        m_p_swapchainManager->createSwapchain();
 
         log("Initializing Resources...");
-        resources_ = std::make_unique<VulkanResources>(context);
+        m_p_resources = std::make_unique<VulkanResources>(m_context);
         log("Initializing Pipeline...");
-        pipeline_ = std::make_unique<VulkanPipeline>(context);
+        m_p_pipeline = std::make_unique<VulkanPipeline>(m_context);
 
         VkVertexInputBindingDescription bindingDesc{};
         bindingDesc.binding = 0;
@@ -227,7 +227,7 @@ namespace vex {
         attributes[1] = {1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)};
         attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)};
 
-        pipeline_->createGraphicsPipeline(
+        m_p_pipeline->createGraphicsPipeline(
             "Engine/shaders/basic.vert.spv",
             "Engine/shaders/basic.frag.spv",
             bindingDesc,
@@ -239,75 +239,75 @@ namespace vex {
     }
 
     Interface::~Interface() {
-        vkDeviceWaitIdle(context.device);
+        vkDeviceWaitIdle(m_context.device);
 
-        modelRegistry_.clear();
-        models_.clear();
-        vulkanMeshes_.clear();
+        m_modelRegistry.clear();
+        m_models.clear();
+        m_vulkanMeshes.clear();
 
-        resources_.reset();
+        m_p_resources.reset();
 
-        pipeline_.reset();
+        m_p_pipeline.reset();
 
-        swapchainManager_->cleanupSwapchain();
-        swapchainManager_.reset();
+        m_p_swapchainManager->cleanupSwapchain();
+        m_p_swapchainManager.reset();
 
-        if (context.textureDescriptorSetLayout != VK_NULL_HANDLE) {
-            vkDestroyDescriptorSetLayout(context.device, context.textureDescriptorSetLayout, nullptr);
-            context.textureDescriptorSetLayout = VK_NULL_HANDLE;
+        if (m_context.textureDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_context.device, m_context.textureDescriptorSetLayout, nullptr);
+            m_context.textureDescriptorSetLayout = VK_NULL_HANDLE;
         }
-        if (context.uboDescriptorSetLayout != VK_NULL_HANDLE) {
-            vkDestroyDescriptorSetLayout(context.device, context.uboDescriptorSetLayout, nullptr);
-            context.uboDescriptorSetLayout = VK_NULL_HANDLE;
+        if (m_context.uboDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_context.device, m_context.uboDescriptorSetLayout, nullptr);
+            m_context.uboDescriptorSetLayout = VK_NULL_HANDLE;
         }
 
-        for (size_t i = 0; i < context.MAX_FRAMES_IN_FLIGHT; i++) {
-            if (context.imageAvailableSemaphores[i]) {
-                vkDestroySemaphore(context.device, context.imageAvailableSemaphores[i], nullptr);
-                context.imageAvailableSemaphores[i] = VK_NULL_HANDLE;
+        for (size_t i = 0; i < m_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            if (m_context.imageAvailableSemaphores[i]) {
+                vkDestroySemaphore(m_context.device, m_context.imageAvailableSemaphores[i], nullptr);
+                m_context.imageAvailableSemaphores[i] = VK_NULL_HANDLE;
             }
-            if (context.renderFinishedSemaphores[i]) {
-                vkDestroySemaphore(context.device, context.renderFinishedSemaphores[i], nullptr);
-                context.renderFinishedSemaphores[i] = VK_NULL_HANDLE;
+            if (m_context.renderFinishedSemaphores[i]) {
+                vkDestroySemaphore(m_context.device, m_context.renderFinishedSemaphores[i], nullptr);
+                m_context.renderFinishedSemaphores[i] = VK_NULL_HANDLE;
             }
-            if (context.inFlightFences[i]) {
-                vkDestroyFence(context.device, context.inFlightFences[i], nullptr);
-                context.inFlightFences[i] = VK_NULL_HANDLE;
+            if (m_context.inFlightFences[i]) {
+                vkDestroyFence(m_context.device, m_context.inFlightFences[i], nullptr);
+                m_context.inFlightFences[i] = VK_NULL_HANDLE;
             }
         }
 
-        context.commandBuffers.clear();
+        m_context.commandBuffers.clear();
 
-        if (context.commandPool) {
-            vkDestroyCommandPool(context.device, context.commandPool, nullptr);
-            context.commandPool = VK_NULL_HANDLE;
+        if (m_context.commandPool) {
+            vkDestroyCommandPool(m_context.device, m_context.commandPool, nullptr);
+            m_context.commandPool = VK_NULL_HANDLE;
         }
 
-        for (auto& imageView : context.swapchainImageViews) {
+        for (auto& imageView : m_context.swapchainImageViews) {
             if (imageView) {
-                vkDestroyImageView(context.device, imageView, nullptr);
+                vkDestroyImageView(m_context.device, imageView, nullptr);
             }
         }
-        context.swapchainImageViews.clear();
+        m_context.swapchainImageViews.clear();
 
-        if (context.allocator) {
-            vmaDestroyAllocator(context.allocator);
-            context.allocator = nullptr;
+        if (m_context.allocator) {
+            vmaDestroyAllocator(m_context.allocator);
+            m_context.allocator = nullptr;
         }
 
-        if (context.device) {
-            vkDestroyDevice(context.device, nullptr);
-            context.device = VK_NULL_HANDLE;
+        if (m_context.device) {
+            vkDestroyDevice(m_context.device, nullptr);
+            m_context.device = VK_NULL_HANDLE;
         }
 
-        if (context.surface) {
-            vkDestroySurfaceKHR(context.instance, context.surface, nullptr);
-            context.surface = VK_NULL_HANDLE;
+        if (m_context.surface) {
+            vkDestroySurfaceKHR(m_context.instance, m_context.surface, nullptr);
+            m_context.surface = VK_NULL_HANDLE;
         }
 
-        if (context.instance) {
-            vkDestroyInstance(context.instance, nullptr);
-            context.instance = VK_NULL_HANDLE;
+        if (m_context.instance) {
+            vkDestroyInstance(m_context.instance, nullptr);
+            m_context.instance = VK_NULL_HANDLE;
         }
 
         SDL_Vulkan_UnloadLibrary();
@@ -316,7 +316,7 @@ namespace vex {
 
     Model& Interface::loadModel(const std::string& path, const std::string& name) {
         log("Loading model: %s...", name.c_str());
-        if (modelRegistry_.count(name)) {
+        if (m_modelRegistry.count(name)) {
             throw_error("Model '" + name + "' already exists");
         }
 
@@ -335,18 +335,18 @@ namespace vex {
         }
 
             uint32_t newId;
-            if (!freeModelIds_.empty()) {
-                newId = freeModelIds_.back();
-                freeModelIds_.pop_back();
+            if (!m_freeModelIds.empty()) {
+                newId = m_freeModelIds.back();
+                m_freeModelIds.pop_back();
             } else {
-                newId = nextModelId_++;
-                if (newId >= context.MAX_MODELS) {
+                newId = m_nextModelId++;
+                if (newId >= m_context.MAX_MODELS) {
                     throw_error("Maximum model count exceeded");
                 }
             }
 
-        models_.emplace_back(std::make_unique<Model>());
-        Model& model = *models_.back();
+        m_models.emplace_back(std::make_unique<Model>());
+        Model& model = *m_models.back();
         model.id = newId;
         model.meshData = std::move(meshData);
 
@@ -360,9 +360,9 @@ namespace vex {
         log("Loading %zu submesh textures", uniqueTextures.size());
         for (const auto& texPath : uniqueTextures) {
             log("Processing texture: %s", texPath.c_str());
-            if (!resources_->textureExists(texPath)) {
+            if (!m_p_resources->textureExists(texPath)) {
                 try {
-                    resources_->loadTexture(texPath, texPath);
+                    m_p_resources->loadTexture(texPath, texPath);
                     log("Loaded texture: %s", texPath.c_str());
                 } catch (const std::exception& e) {
                     SDL_LogError(SDL_LOG_CATEGORY_ERROR,
@@ -377,78 +377,75 @@ namespace vex {
 
         try {
             log("Creating Vulkan mesh for %s", name.c_str());
-            vulkanMeshes_.push_back(std::make_unique<VulkanMesh>(context));
-            vulkanMeshes_.back()->upload(model.meshData);
+            m_vulkanMeshes.push_back(std::make_unique<VulkanMesh>(m_context));
+            m_vulkanMeshes.back()->upload(model.meshData);
             log("Mesh upload successful");
         } catch (const std::exception& e) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
-            vulkanMeshes_.pop_back();
+            m_vulkanMeshes.pop_back();
             handle_exception(e);
         }
 
-        modelRegistry_[name] = &model;
+        m_modelRegistry[name] = &model;
         log("Model %s registered successfully", name.c_str());
         return model;
     }
 
     void Interface::unloadModel(const std::string& name) {
 
-        auto it = modelRegistry_.find(name);
-        if (it == modelRegistry_.end()) return;
+        auto it = m_modelRegistry.find(name);
+        if (it == m_modelRegistry.end()) return;
 
-            freeModelIds_.push_back(it->second->id);
+            m_freeModelIds.push_back(it->second->id);
 
             auto modelIter = std::find_if(
-                models_.begin(), models_.end(),
+                m_models.begin(), m_models.end(),
                 [&](const auto& m) { return m.get() == it->second; }
             );
-            if (modelIter != models_.end()) models_.erase(modelIter);
+            if (modelIter != m_models.end()) m_models.erase(modelIter);
 
-        modelRegistry_.erase(name);
-        resources_->unloadTexture(name);
+        m_modelRegistry.erase(name);
+        m_p_resources->unloadTexture(name);
     }
 
     Model* Interface::getModel(const std::string& name) {
-        auto it = modelRegistry_.find(name);
-        return (it != modelRegistry_.end()) ? it->second : nullptr;
+        auto it = m_modelRegistry.find(name);
+        return (it != m_modelRegistry.end()) ? it->second : nullptr;
     }
     void Interface::createDefaultTexture() {
-        resources_->createDefaultTexture();
+        m_p_resources->createDefaultTexture();
     }
 
-    void Interface::bindWindow(SDL_Window* window) {
+    void Interface::bindWindow(SDL_Window *m_p_window) {
 
         log("Binding window...");
 
-        if (context.surface) return;
+        if (m_context.surface) return;
 
-        if (!SDL_Vulkan_CreateSurface(window, context.instance, nullptr, &context.surface)) {
+        if (!SDL_Vulkan_CreateSurface(m_p_window, m_context.instance, nullptr, &m_context.surface)) {
             throw_error("Failed to create Vulkan surface: " + std::string(SDL_GetError()));
         }
 
-        window_ = window;
+        this->m_p_window = m_p_window;
 
         log("Initializing Swapchain...");
-        swapchainManager_->createSwapchain();
+        m_p_swapchainManager->createSwapchain();
     }
 
     void Interface::unbindWindow() {
-        if (!context.surface) return;
+        if (!m_context.surface) return;
 
-        vkDeviceWaitIdle(context.device);
-        swapchainManager_->cleanupSwapchain();
+        vkDeviceWaitIdle(m_context.device);
+        m_p_swapchainManager->cleanupSwapchain();
 
-        vkDestroySurfaceKHR(context.instance, context.surface, nullptr);
-        context.surface = VK_NULL_HANDLE;
+        vkDestroySurfaceKHR(m_context.instance, m_context.surface, nullptr);
+        m_context.surface = VK_NULL_HANDLE;
     }
 
     void Interface::setRenderResolution(glm::uvec2 resolution) {
-        context.currentRenderResolution = resolution;
-        // Recreate swapchain with new resolution
-        swapchainManager_->recreateSwapchain();
-
-        // Update viewport and scissor in pipeline
-        pipeline_->updateViewport(resolution);
+        m_context.currentRenderResolution = resolution;
+        m_p_swapchainManager->recreateSwapchain();
+        m_p_pipeline->updateViewport(resolution);
     }
 
     void Interface::transitionImageLayout(VkCommandBuffer cmd, VkImage image,
@@ -482,40 +479,42 @@ namespace vex {
     }
 
     void Interface::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, ImGUIWrapper& m_ui, u_int64_t frame) {
-        if (renderResolution != context.currentRenderResolution) {
-            context.currentRenderResolution = renderResolution;
-            pipeline_->updateViewport(renderResolution);
+        if (renderResolution != m_context.currentRenderResolution) {
+            m_context.currentRenderResolution = renderResolution;
+            m_p_pipeline->updateViewport(renderResolution);
         }
         vkWaitForFences(
-            context.device,
+            m_context.device,
             1,
-            &context.inFlightFences[context.currentFrame],
+            &m_context.inFlightFences[m_context.currentFrame],
             VK_TRUE,
             UINT64_MAX
         );
 
         VkResult result = vkAcquireNextImageKHR(
-            context.device,
-            context.swapchain,
+            m_context.device,
+            m_context.swapchain,
             UINT64_MAX,
-            context.imageAvailableSemaphores[context.currentFrame],
+            m_context.imageAvailableSemaphores[m_context.currentFrame],
             VK_NULL_HANDLE,
-            &context.currentImageIndex
+            &m_context.currentImageIndex
         );
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-            swapchainManager_->recreateSwapchain();
+            m_p_swapchainManager->recreateSwapchain();
             return;
         }
 
-        vkResetFences(context.device, 1, &context.inFlightFences[context.currentFrame]);
+        vkResetFences(m_context.device, 1, &m_context.inFlightFences[m_context.currentFrame]);
 
-        resources_->updateCameraUBO({view, proj});
+        vkDeviceWaitIdle(m_context.device);
 
-        VkImageView textureView = resources_->getTextureView("default");
-        resources_->updateTextureDescriptor(context.currentFrame, textureView, 0);
+        m_p_resources->updateCameraUBO({view, proj});
 
-        VkCommandBuffer commandBuffer = context.commandBuffers[context.currentImageIndex];
+        VkImageView textureView = m_p_resources->getTextureView("default");
+        m_p_resources->updateTextureDescriptor(m_context.currentFrame, textureView, 0);
+
+        VkCommandBuffer commandBuffer = m_context.commandBuffers[m_context.currentImageIndex];
         vkResetCommandBuffer(commandBuffer, 0);
 
         VkCommandBufferBeginInfo beginInfo{};
@@ -523,7 +522,7 @@ namespace vex {
         vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
         transitionImageLayout(commandBuffer,
-                            context.swapchainImages[context.currentImageIndex],
+                            m_context.swapchainImages[m_context.currentImageIndex],
                             VK_IMAGE_LAYOUT_UNDEFINED,
                             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                             0,
@@ -532,7 +531,7 @@ namespace vex {
                             VK_PIPELINE_STAGE_TRANSFER_BIT);
 
         transitionImageLayout(commandBuffer,
-                            context.lowResColorImage,
+                            m_context.lowResColorImage,
                             VK_IMAGE_LAYOUT_UNDEFINED,
                             VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                             0,
@@ -548,7 +547,7 @@ namespace vex {
 
            VkRenderingAttachmentInfo colorAttachment{};
            colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-           colorAttachment.imageView = context.lowResColorView;
+           colorAttachment.imageView = m_context.lowResColorView;
            colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -556,7 +555,7 @@ namespace vex {
 
            VkRenderingAttachmentInfo depthAttachment{};
            depthAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-           depthAttachment.imageView = context.depthImageView;
+           depthAttachment.imageView = m_context.depthImageView;
            depthAttachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
            depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
            depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -571,35 +570,35 @@ namespace vex {
                   VkViewport viewport{};
                   viewport.x = 0.0f;
                   viewport.y = 0.0f;
-                  viewport.width = static_cast<float>(context.swapchainExtent.width);
-                  viewport.height = static_cast<float>(context.swapchainExtent.height);
+                  viewport.width = static_cast<float>(m_context.swapchainExtent.width);
+                  viewport.height = static_cast<float>(m_context.swapchainExtent.height);
                   viewport.minDepth = 0.0f;
                   viewport.maxDepth = 1.0f;
                   vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 
                   VkRect2D scissor{};
                   scissor.offset = {0, 0};
-                  scissor.extent = {context.swapchainExtent.width, context.swapchainExtent.height};
+                  scissor.extent = {m_context.swapchainExtent.width, m_context.swapchainExtent.height};
                   vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-        VkImageView defaultTexture = resources_->getTextureView("default");
-        resources_->updateTextureDescriptor(context.currentFrame, defaultTexture, 0);
+        VkImageView defaultTexture = m_p_resources->getTextureView("default");
+        m_p_resources->updateTextureDescriptor(m_context.currentFrame, defaultTexture, 0);
 
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline_->get());
+                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_pipeline->get());
 
 
         auto now = std::chrono::high_resolution_clock::now();
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
-        for (auto& modelPtr : models_) {
+        for (auto& modelPtr : m_models) {
             auto& model = *modelPtr;
-            auto& vulkanMesh = vulkanMeshes_[model.id];
+            auto& vulkanMesh = m_vulkanMeshes[model.id];
 
             // Update UBOs
-            resources_->updateCameraUBO({view, proj});
-            resources_->updateModelUBO(context.currentFrame, model.id, ModelUBO{model.transform.matrix()});
+            m_p_resources->updateCameraUBO({view, proj});
+            m_p_resources->updateModelUBO(m_context.currentFrame, model.id, ModelUBO{model.transform.matrix()});
             //log("Updated UBOs for model %zu", i);
-            vulkanMesh->draw(commandBuffer, pipeline_->layout(), *resources_, context.currentFrame, model.id, currentTime, context.currentRenderResolution);
+            vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_context.currentFrame, model.id, currentTime, m_context.currentRenderResolution);
         }
 
         if(frame != 0){
@@ -610,7 +609,7 @@ namespace vex {
 
         vkCmdEndRendering(commandBuffer);
 
-        transitionImageLayout(commandBuffer, context.lowResColorImage,
+        transitionImageLayout(commandBuffer, m_context.lowResColorImage,
                             VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
@@ -628,12 +627,12 @@ namespace vex {
 
         blit.dstSubresource = blit.srcSubresource;
         blit.dstOffsets[0] = {0, 0, 0};
-        blit.dstOffsets[1] = {(int)context.swapchainExtent.width, (int)context.swapchainExtent.height, 1};
+        blit.dstOffsets[1] = {(int)m_context.swapchainExtent.width, (int)m_context.swapchainExtent.height, 1};
 
         vkCmdBlitImage(
             commandBuffer,
-            context.lowResColorImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            context.swapchainImages[context.currentImageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            m_context.lowResColorImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+            m_context.swapchainImages[m_context.currentImageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             1, &blit,
             VK_FILTER_NEAREST
         );
@@ -644,7 +643,7 @@ namespace vex {
         presentBarrier.newLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
         presentBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         presentBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        presentBarrier.image = context.swapchainImages[context.currentImageIndex];
+        presentBarrier.image = m_context.swapchainImages[m_context.currentImageIndex];
         presentBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         presentBarrier.subresourceRange.levelCount = 1;
         presentBarrier.subresourceRange.layerCount = 1;
@@ -657,7 +656,7 @@ namespace vex {
         lowResRestoreBarrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
         lowResRestoreBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         lowResRestoreBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-        lowResRestoreBarrier.image = context.lowResColorImage;
+        lowResRestoreBarrier.image = m_context.lowResColorImage;
         lowResRestoreBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         lowResRestoreBarrier.subresourceRange.levelCount = 1;
         lowResRestoreBarrier.subresourceRange.layerCount = 1;
@@ -679,7 +678,7 @@ namespace vex {
         VkSubmitInfo submitInfo{};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-        VkSemaphore waitSemaphores[] = {context.imageAvailableSemaphores[context.currentFrame]};
+        VkSemaphore waitSemaphores[] = {m_context.imageAvailableSemaphores[m_context.currentFrame]};
         VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
         submitInfo.waitSemaphoreCount = 1;
         submitInfo.pWaitSemaphores = waitSemaphores;
@@ -687,15 +686,15 @@ namespace vex {
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &commandBuffer;
 
-        VkSemaphore signalSemaphores[] = {context.renderFinishedSemaphores[context.currentFrame]};
+        VkSemaphore signalSemaphores[] = {m_context.renderFinishedSemaphores[m_context.currentFrame]};
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
         vkQueueSubmit(
-            context.graphicsQueue,
+            m_context.graphicsQueue,
             1,
             &submitInfo,
-            context.inFlightFences[context.currentFrame]
+            m_context.inFlightFences[m_context.currentFrame]
         );
 
         VkPresentInfoKHR presentInfo{};
@@ -703,19 +702,19 @@ namespace vex {
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores = signalSemaphores;
 
-        VkSwapchainKHR swapchains[] = {context.swapchain};
+        VkSwapchainKHR swapchains[] = {m_context.swapchain};
         presentInfo.swapchainCount = 1;
         presentInfo.pSwapchains = swapchains;
-        presentInfo.pImageIndices = &context.currentImageIndex;
+        presentInfo.pImageIndices = &m_context.currentImageIndex;
 
-        result = vkQueuePresentKHR(context.presentQueue, &presentInfo);
+        result = vkQueuePresentKHR(m_context.presentQueue, &presentInfo);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-            swapchainManager_->recreateSwapchain();
+            m_p_swapchainManager->recreateSwapchain();
         } else if (result != VK_SUCCESS) {
             throw_error("Failed to present swap chain image!");
         }
 
-        context.currentFrame = (context.currentFrame + 1) % context.MAX_FRAMES_IN_FLIGHT;
+        m_context.currentFrame = (m_context.currentFrame + 1) % m_context.MAX_FRAMES_IN_FLIGHT;
     }
 }

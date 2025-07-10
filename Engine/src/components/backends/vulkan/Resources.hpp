@@ -29,55 +29,55 @@ namespace vex {
         VkImageView getTextureView(const std::string& name) const;
 
         VkDescriptorSet getDescriptorSet(uint32_t frameIndex) const {
-            if (frameIndex >= descriptorSets_.size()) {
+            if (frameIndex >= m_descriptorSets.size()) {
                 SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                            "Invalid frame index %u (Max %zu)",
-                           frameIndex, descriptorSets_.size());
+                           frameIndex, m_descriptorSets.size());
                 return VK_NULL_HANDLE;
             }
-            return descriptorSets_[frameIndex];
+            return m_descriptorSets[frameIndex];
         }
 
         VkDescriptorSet* getDescriptorSetPtr(uint32_t frameIndex) {
-            return &descriptorSets_[frameIndex];
+            return &m_descriptorSets[frameIndex];
         }
         VkDescriptorSet getUBODescriptorSet(uint32_t frameIndex) const {
-            return descriptorSets_[frameIndex];
+            return m_descriptorSets[frameIndex];
         }
         VkDescriptorSet getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex);
 
-        VkDescriptorSetLayout getDescriptorLayout() const { return descriptorSetLayout_; }
+        VkDescriptorSetLayout getDescriptorLayout() const { return m_descriptorSetLayout; }
 
         bool textureExists(const std::string& name) const {
-            return textures_.find(name) != textures_.end();
+            return m_textures.find(name) != m_textures.end();
         }
         uint32_t getTextureIndex(const std::string& name) const {
-            auto it = ctx_.textureIndices.find(name);
-            if (it != ctx_.textureIndices.end()) return it->second;
+            auto it = m_r_context.textureIndices.find(name);
+            if (it != m_r_context.textureIndices.end()) return it->second;
             return 0;
         }
 
     private:
         const std::string defaultTextureName = "default";
 
-        VulkanContext& ctx_;
+        VulkanContext& m_r_context;
 
-        std::vector<VkBuffer> cameraBuffers_;
-        std::vector<VkBuffer> modelBuffers_;
-        std::vector<VmaAllocation> cameraAllocs_;
-        std::vector<VmaAllocation> modelAllocs_;
+        std::vector<VkBuffer> m_cameraBuffers;
+        std::vector<VkBuffer> m_modelBuffers;
+        std::vector<VmaAllocation> m_cameraAllocs;
+        std::vector<VmaAllocation> m_modelAllocs;
 
-        VkDescriptorSetLayout descriptorSetLayout_;
-        std::vector<VkDescriptorSet> descriptorSets_;
-        VkDescriptorPool descriptorPool_;
-        std::vector<VkDescriptorSet> textureDescriptorSets_;
+        VkDescriptorSetLayout m_descriptorSetLayout;
+        std::vector<VkDescriptorSet> m_descriptorSets;
+        VkDescriptorPool m_descriptorPool;
+        std::vector<VkDescriptorSet> m_textureDescriptorSets;
 
-        std::unordered_map<std::string, VkImageView> textures_;
-        VkSampler textureSampler_;
+        std::unordered_map<std::string, VkImageView> m_textures;
+        VkSampler m_textureSampler;
 
-        std::unordered_map<std::string, VkImage> textureImages_;
-        std::unordered_map<std::string, VmaAllocation> textureAllocations_;
-        std::unordered_map<std::string, VkImageView> textureViews_;
+        std::unordered_map<std::string, VkImage> m_textureImages;
+        std::unordered_map<std::string, VmaAllocation> m_textureAllocations;
+        std::unordered_map<std::string, VkImageView> m_textureViews;
 
         void createDescriptorResources();
         void createTextureSampler();

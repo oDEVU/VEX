@@ -26,9 +26,9 @@ namespace vex {
 
         void disableDebug();
 
-        VulkanContext& ctx_;
-        std::vector<SubmeshBuffers> submeshBuffers_;
-        std::vector<std::string> submeshTextures_;
-        bool debugDraw = true; // set to true when not debuging lmao
+        VulkanContext& m_r_context;
+        std::vector<SubmeshBuffers> m_submeshBuffers;
+        std::vector<std::string> m_submeshTextures;
+        bool m_debugDraw = true; // set to true when not debuging lmao
     };
 }

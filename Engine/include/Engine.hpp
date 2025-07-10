@@ -24,8 +24,8 @@ public:
 
     std::shared_ptr<Camera> getCamera() {return m_camera;}
 
-    void setResolutionMode(ResolutionMode mode) { resolutionManager->setMode(mode); }
-    ResolutionMode getResolutionMode() const { return resolutionManager->getCurrentMode(); }
+    void setResolutionMode(ResolutionMode mode);
+    ResolutionMode getResolutionMode() const { return m_resolutionManager->getCurrentMode(); }
 
     Model& loadModel(const std::string& modelPath, const std::string& name);
     Model* getModel(const std::string& name);
@@ -37,14 +37,14 @@ public:
 protected:
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Interface> m_interface;
-    std::unique_ptr<ResolutionManager> resolutionManager;
+    std::unique_ptr<ResolutionManager> m_resolutionManager;
     std::unique_ptr<ImGUIWrapper> m_imgui;
 
     bool m_running = true;
-    u_int64_t frame = 0;
+    u_int64_t m_frame = 0;
 
     std::shared_ptr<Camera> m_camera;
 
-    GameInfo gameInfo;
+    GameInfo m_gameInfo;
 };
 }

@@ -7,7 +7,7 @@
 namespace vex {
     class VulkanPipeline {
     public:
-        VulkanPipeline(VulkanContext& context);
+        VulkanPipeline(VulkanContext& r_context);
         ~VulkanPipeline();
 
         void createGraphicsPipeline(
@@ -17,16 +17,16 @@ namespace vex {
             const std::vector<VkVertexInputAttributeDescription>& attributeDescriptions
         );
 
-        VkPipeline get() const { return pipeline_; }
-        VkPipelineLayout layout() const { return layout_; }
+        VkPipeline get() const { return m_pipeline; }
+        VkPipelineLayout layout() const { return m_layout; }
         void updateViewport(glm::uvec2 resolution);
 
     private:
-        VulkanContext& ctx_;
-        VkPipeline pipeline_ = VK_NULL_HANDLE;
-        VkPipelineLayout layout_ = VK_NULL_HANDLE;
+        VulkanContext &m_r_context;
+        VkPipeline m_pipeline = VK_NULL_HANDLE;
+        VkPipelineLayout m_layout = VK_NULL_HANDLE;
 
-        glm::uvec2 currentRenderResolution;
+        glm::uvec2 m_currentRenderResolution;
 
         std::vector<char> readFile(const std::string& filename);
     };

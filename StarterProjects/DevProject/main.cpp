@@ -3,6 +3,7 @@
 #include "components/Model.hpp"
 #include "components/Camera.hpp"
 #include "components/errorUtils.hpp"
+#include "components/ResolutionManager.hpp"
 
 #include <cstdlib>
 #include <sys/types.h>
@@ -31,6 +32,22 @@ public:
                 m_running = false;
             }
 
+            if (key_event.scancode == SDL_SCANCODE_1) {
+                setResolutionMode(vex::ResolutionMode::NATIVE);
+            }
+
+            if (key_event.scancode == SDL_SCANCODE_2) {
+                setResolutionMode(vex::ResolutionMode::PS1_SHARP);
+            }
+
+            if (key_event.scancode == SDL_SCANCODE_3) {
+                setResolutionMode(vex::ResolutionMode::RES_240P);
+            }
+
+            if (key_event.scancode == SDL_SCANCODE_4) {
+                setResolutionMode(vex::ResolutionMode::RES_480P);
+            }
+
             // Basic camera input, just for testing, do not do it like this lmao
 
             if (key_event.scancode == SDL_SCANCODE_W) {
@@ -56,12 +73,16 @@ public:
     vex::Model* viper;
     vex::Model* penguin;
     vex::Model* cube;
+    vex::Model* cube2;
 
     void beginGame() override {
         // Load first models
         log("BeginGame: Trying to load models...");
         loadModel("Assets/cube.obj", "cube");
         cube = getModel("cube");
+        loadModel("Assets/wierd_textured_cube/untitled.obj", "cube2");
+        cube2 = getModel("cube2");
+        cube2 -> transform.position = glm::vec3{3,0,0};
         //loadModel("Assets/human.obj", "human");
         loadModel("Assets/PenguinBaseMesh.obj", "penguin");
         loadModel("Assets/scene.gltf", "viper");
@@ -76,7 +97,7 @@ public:
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");
             ImGui::Text("Renderer: Vulkan");
-            ImGui::Text("Frame: %i", frame);
+            ImGui::Text("Frame: %i", m_frame);
             ImGui::End();
         });
 #endif
@@ -85,25 +106,25 @@ public:
     void update(float deltaTime) override {
 
         // load penguin at runtime
-        if(frame == 100){
+        if(m_frame == 100){
             penguin = getModel("penguin");
         }
 
         if(animate){
                     //Debuging camera rotations
-                    //getCamera()->transform.rotation = glm::vec3{0,float(frame)/1000,0};
-                    //log("Camera rot: %f", float(frame)/1000);
+                    //getCamera()->transform.rotation = glm::vec3{0,float(m_frame)/1000,0};
+                    //log("Camera rot: %f", float(m_frame)/1000);
 
                     if (viper) {
-                        viper->transform.rotation.y = (float(frame)/100);
+                        viper->transform.rotation.y = (float(m_frame)/100);
                     }
 
-                    if (penguin && frame > 100) {
-                        penguin->transform.position.y = (sin(float(frame)/100)/2)+1;
+                    if (penguin && m_frame > 100) {
+                        penguin->transform.position.y = (sin(float(m_frame)/100)/2)+1;
                     }
 
                     if (cube) {
-                        cube->transform.scale = glm::vec3{sin(float(frame)/1000), sin(float(frame)/1000), sin(float(frame)/1000)};
+                        cube->transform.scale = glm::vec3{sin(float(m_frame)/1000), sin(float(m_frame)/1000), sin(float(m_frame)/1000)};
                     }
         }
     }

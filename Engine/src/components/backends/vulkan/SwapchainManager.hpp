@@ -37,7 +37,7 @@ namespace vex {
         VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
         VkFormat findDepthFormat();
 
-        VulkanContext& context_;
-        SDL_Window *m_window;
+        VulkanContext& m_r_context;
+        SDL_Window *m_p_window;
     };
 }

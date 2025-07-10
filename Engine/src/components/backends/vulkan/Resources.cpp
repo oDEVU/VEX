@@ -8,7 +8,7 @@
 #include "../../../../thirdparty/stb/stb_image.h"
 
 namespace vex {
-    VulkanResources::VulkanResources(VulkanContext& context) : ctx_(context) {
+    VulkanResources::VulkanResources(VulkanContext& context) : m_r_context(context) {
         createDefaultTexture();
         createTextureSampler();
         createUniformBuffers();
@@ -16,48 +16,48 @@ namespace vex {
     }
 
     VulkanResources::~VulkanResources() {
-        vkDeviceWaitIdle(ctx_.device);
+        vkDeviceWaitIdle(m_r_context.device);
 
-        if (textureSampler_ != VK_NULL_HANDLE) {
-            vkDestroySampler(ctx_.device, textureSampler_, nullptr);
-            textureSampler_ = VK_NULL_HANDLE;
+        if (m_textureSampler != VK_NULL_HANDLE) {
+            vkDestroySampler(m_r_context.device, m_textureSampler, nullptr);
+            m_textureSampler = VK_NULL_HANDLE;
         }
 
-        for (size_t i = 0; i < ctx_.MAX_FRAMES_IN_FLIGHT; i++) {
-            if (cameraBuffers_[i] != VK_NULL_HANDLE) {
-                vmaDestroyBuffer(ctx_.allocator, cameraBuffers_[i], cameraAllocs_[i]);
-                cameraBuffers_[i] = VK_NULL_HANDLE;
+        for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            if (m_cameraBuffers[i] != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(m_r_context.allocator, m_cameraBuffers[i], m_cameraAllocs[i]);
+                m_cameraBuffers[i] = VK_NULL_HANDLE;
             }
-            if (modelBuffers_[i] != VK_NULL_HANDLE) {
-                vmaDestroyBuffer(ctx_.allocator, modelBuffers_[i], modelAllocs_[i]);
-                modelBuffers_[i] = VK_NULL_HANDLE;
+            if (m_modelBuffers[i] != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(m_r_context.allocator, m_modelBuffers[i], m_modelAllocs[i]);
+                m_modelBuffers[i] = VK_NULL_HANDLE;
             }
         }
 
-        for (auto& [name, image] : textureImages_) {
-            if (textureViews_[name] != VK_NULL_HANDLE) {
-                vkDestroyImageView(ctx_.device, textureViews_[name], nullptr);
-                textureViews_[name] = VK_NULL_HANDLE;
+        for (auto& [name, image] : m_textureImages) {
+            if (m_textureViews[name] != VK_NULL_HANDLE) {
+                vkDestroyImageView(m_r_context.device, m_textureViews[name], nullptr);
+                m_textureViews[name] = VK_NULL_HANDLE;
             }
-            if (image != VK_NULL_HANDLE && textureAllocations_[name] != VK_NULL_HANDLE) {
-                vmaDestroyImage(ctx_.allocator, image, textureAllocations_[name]);
+            if (image != VK_NULL_HANDLE && m_textureAllocations[name] != VK_NULL_HANDLE) {
+                vmaDestroyImage(m_r_context.allocator, image, m_textureAllocations[name]);
                 image = VK_NULL_HANDLE;
             }
         }
 
-        if (descriptorPool_ != VK_NULL_HANDLE) {
-            vkDestroyDescriptorPool(ctx_.device, descriptorPool_, nullptr);
-            descriptorPool_ = VK_NULL_HANDLE;
+        if (m_descriptorPool != VK_NULL_HANDLE) {
+            vkDestroyDescriptorPool(m_r_context.device, m_descriptorPool, nullptr);
+            m_descriptorPool = VK_NULL_HANDLE;
         }
     }
 
 
     void VulkanResources::createUniformBuffers() {
         log("Creating uniform buffers...");
-        cameraBuffers_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
-        cameraAllocs_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
-        modelBuffers_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
-        modelAllocs_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
+        m_cameraBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_cameraAllocs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_modelBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_modelAllocs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -66,16 +66,16 @@ namespace vex {
         VmaAllocationCreateInfo allocInfo{};
         allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
 
-        for (size_t i = 0; i < ctx_.MAX_FRAMES_IN_FLIGHT; i++) {
+        for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
             // Camera UBO
             bufferInfo.size = sizeof(CameraUBO);
-            vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
-                          &cameraBuffers_[i], &cameraAllocs_[i], nullptr);
+            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
+                          &m_cameraBuffers[i], &m_cameraAllocs[i], nullptr);
 
             // Model UBO (dynamic)
-            bufferInfo.size = sizeof(ModelUBO) * ctx_.MAX_MODELS;
-            vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo,
-                          &modelBuffers_[i], &modelAllocs_[i], nullptr);
+            bufferInfo.size = sizeof(ModelUBO) * m_r_context.MAX_MODELS;
+            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
+                          &m_modelBuffers[i], &m_modelAllocs[i], nullptr);
         }
     }
 
@@ -98,7 +98,7 @@ namespace vex {
         uboLayoutInfo.pBindings = uboBindings.data();
 
         log("Creating Uniform buffer bindings...");
-        if (vkCreateDescriptorSetLayout(ctx_.device, &uboLayoutInfo, nullptr, &ctx_.uboDescriptorSetLayout) != VK_SUCCESS) {
+        if (vkCreateDescriptorSetLayout(m_r_context.device, &uboLayoutInfo, nullptr, &m_r_context.uboDescriptorSetLayout) != VK_SUCCESS) {
             throw_error("Failed to create descriptor set layout");
         }
 
@@ -114,61 +114,61 @@ namespace vex {
     texLayoutInfo.pBindings = &texBinding;
 
         log("Creating Texture bindings...");
-        if (vkCreateDescriptorSetLayout(ctx_.device, &texLayoutInfo, nullptr, &ctx_.textureDescriptorSetLayout) != VK_SUCCESS) {
+        if (vkCreateDescriptorSetLayout(m_r_context.device, &texLayoutInfo, nullptr, &m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {
             throw_error("Failed to create descriptor set layout");
         }
 
-        ctx_.descriptorSetLayout = descriptorSetLayout_;
+        m_r_context.descriptorSetLayout = m_descriptorSetLayout;
 
         std::array<VkDescriptorPoolSize, 3> poolSizes{};
 
         // Camera UBO (static)
         poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSizes[0].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT;
+        poolSizes[0].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT;
 
         // Model UBO (dynamic)
         poolSizes[1].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        poolSizes[1].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_MODELS;
+        poolSizes[1].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_MODELS;
 
         // Textures
         poolSizes[2].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[2].descriptorCount = ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES;
+        poolSizes[2].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES;
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
         poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = ctx_.MAX_FRAMES_IN_FLIGHT * (2 + ctx_.MAX_TEXTURES);
+        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (2 + m_r_context.MAX_TEXTURES);
 
         log("Creating descriptor pool with %d max sets", poolInfo.maxSets);
-        if (vkCreateDescriptorPool(ctx_.device, &poolInfo, nullptr, &descriptorPool_) != VK_SUCCESS) {
+        if (vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS) {
             throw_error("Failed to create descriptor pool");
         }
 
-        std::vector<VkDescriptorSetLayout> uboLayouts(ctx_.MAX_FRAMES_IN_FLIGHT, ctx_.uboDescriptorSetLayout);
+        std::vector<VkDescriptorSetLayout> uboLayouts(m_r_context.MAX_FRAMES_IN_FLIGHT, m_r_context.uboDescriptorSetLayout);
         VkDescriptorSetAllocateInfo uboAllocInfo{};
         uboAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        uboAllocInfo.descriptorPool = descriptorPool_;
-        uboAllocInfo.descriptorSetCount = ctx_.MAX_FRAMES_IN_FLIGHT;
+        uboAllocInfo.descriptorPool = m_descriptorPool;
+        uboAllocInfo.descriptorSetCount = m_r_context.MAX_FRAMES_IN_FLIGHT;
         uboAllocInfo.pSetLayouts = uboLayouts.data();
 
-        log("Allocating %d UBO descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT);
-        descriptorSets_.resize(ctx_.MAX_FRAMES_IN_FLIGHT);
-        if (vkAllocateDescriptorSets(ctx_.device, &uboAllocInfo, descriptorSets_.data()) != VK_SUCCESS) {
+        log("Allocating %d UBO descriptor sets", m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_descriptorSets.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        if (vkAllocateDescriptorSets(m_r_context.device, &uboAllocInfo, m_descriptorSets.data()) != VK_SUCCESS) {
             throw_error("Failed to allocate UBO descriptor sets");
         }
 
         createPerMeshTextureSets();
-        for (size_t i = 0; i < ctx_.MAX_FRAMES_IN_FLIGHT; i++) {
+        for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
             std::array<VkWriteDescriptorSet, 2> uboWrites{};
 
             // Camera UBO
             VkDescriptorBufferInfo cameraBufferInfo{};
-            cameraBufferInfo.buffer = cameraBuffers_[i];
+            cameraBufferInfo.buffer = m_cameraBuffers[i];
             cameraBufferInfo.range = sizeof(CameraUBO);
 
             uboWrites[0] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-            uboWrites[0].dstSet = descriptorSets_[i];
+            uboWrites[0].dstSet = m_descriptorSets[i];
             uboWrites[0].dstBinding = 0;
             uboWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             uboWrites[0].descriptorCount = 1;
@@ -176,17 +176,17 @@ namespace vex {
 
             // Model UBO
             VkDescriptorBufferInfo modelBufferInfo{};
-            modelBufferInfo.buffer = modelBuffers_[i];
+            modelBufferInfo.buffer = m_modelBuffers[i];
             modelBufferInfo.range = sizeof(ModelUBO);
 
             uboWrites[1] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-            uboWrites[1].dstSet = descriptorSets_[i];
+            uboWrites[1].dstSet = m_descriptorSets[i];
             uboWrites[1].dstBinding = 1;
             uboWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
             uboWrites[1].descriptorCount = 1;
             uboWrites[1].pBufferInfo = &modelBufferInfo;
 
-            vkUpdateDescriptorSets(ctx_.device, uboWrites.size(), uboWrites.data(), 0, nullptr);
+            vkUpdateDescriptorSets(m_r_context.device, uboWrites.size(), uboWrites.data(), 0, nullptr);
         }
     }
 
@@ -194,7 +194,7 @@ namespace vex {
         VkDescriptorImageInfo imageInfo{};
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageInfo.imageView = textureView;
-        imageInfo.sampler = textureSampler_;
+        imageInfo.sampler = m_textureSampler;
 
         VkWriteDescriptorSet write{};
         write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -204,28 +204,28 @@ namespace vex {
         write.descriptorCount = 1;
         write.pImageInfo = &imageInfo;
 
-        vkUpdateDescriptorSets(ctx_.device, 1, &write, 0, nullptr);
+        vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
     }
 
     void VulkanResources::updateCameraUBO(const CameraUBO& data) {
         void* mapped;
-        vmaMapMemory(ctx_.allocator, cameraAllocs_[ctx_.currentFrame], &mapped);
+        vmaMapMemory(m_r_context.allocator, m_cameraAllocs[m_r_context.currentFrame], &mapped);
         memcpy(mapped, &data, sizeof(data));
-        vmaUnmapMemory(ctx_.allocator, cameraAllocs_[ctx_.currentFrame]);
+        vmaUnmapMemory(m_r_context.allocator, m_cameraAllocs[m_r_context.currentFrame]);
     }
 
     void VulkanResources::updateModelUBO(uint32_t frameIndex, uint32_t modelIndex, const ModelUBO& data) {
-        if (modelIndex >= ctx_.MAX_MODELS) {
+        if (modelIndex >= m_r_context.MAX_MODELS) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                          "Model index %u exceeds MAX_MODELS (%u)",
-                         modelIndex, ctx_.MAX_MODELS);
+                         modelIndex, m_r_context.MAX_MODELS);
             return;
         }
         void* mapped;
-        vmaMapMemory(ctx_.allocator, modelAllocs_[frameIndex], &mapped);
+        vmaMapMemory(m_r_context.allocator, m_modelAllocs[frameIndex], &mapped);
         char* modelData = static_cast<char*>(mapped) + modelIndex * sizeof(ModelUBO);
         memcpy(modelData, &data, sizeof(ModelUBO));
-        vmaUnmapMemory(ctx_.allocator, modelAllocs_[frameIndex]);
+        vmaUnmapMemory(m_r_context.allocator, m_modelAllocs[frameIndex]);
     }
 
     void VulkanResources::createDefaultTexture() {
@@ -250,11 +250,11 @@ namespace vex {
         VkImage image;
         VmaAllocation allocation;
         log("Creating default texture image...");
-        if (vmaCreateImage(ctx_.allocator, &imageInfo, &allocInfo, &image, &allocation, nullptr) != VK_SUCCESS) {
+        if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo, &image, &allocation, nullptr) != VK_SUCCESS) {
             throw_error("Failed to create default texture image");
         }
 
-        VkCommandBuffer commandBuffer = ctx_.beginSingleTimeCommands();
+        VkCommandBuffer commandBuffer = m_r_context.beginSingleTimeCommands();
 
         VkImageMemoryBarrier barrier{};
         barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -281,7 +281,7 @@ namespace vex {
             1, &barrier
         );
 
-        ctx_.endSingleTimeCommands(commandBuffer);
+        m_r_context.endSingleTimeCommands(commandBuffer);
 
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -294,50 +294,50 @@ namespace vex {
 
         VkImageView imageView;
         log("Creating default texture image view...");
-        if (vkCreateImageView(ctx_.device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
-            vmaDestroyImage(ctx_.allocator, image, allocation);
+        if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
+            vmaDestroyImage(m_r_context.allocator, image, allocation);
             throw_error("Failed to create default texture image view");
         }
 
-        textures_["default"] = imageView;
-        textureImages_["default"] = image;
-        textureAllocations_["default"] = allocation;
-        textureViews_["default"] = imageView;
+        m_textures["default"] = imageView;
+        m_textureImages["default"] = image;
+        m_textureAllocations["default"] = allocation;
+        m_textureViews["default"] = imageView;
 
-        ctx_.textureIndices["default"] = 0;
-        ctx_.nextTextureIndex = 1;
+        m_r_context.textureIndices["default"] = 0;
+        m_r_context.nextTextureIndex = 1;
         log("Created default texture with index 0");
     }
 
     void VulkanResources::createPerMeshTextureSets() {
-        log("Creating %d texture descriptor sets", ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES);
+        log("Creating %d texture descriptor sets", m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES);
 
-        textureDescriptorSets_.resize(ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES);
+        m_textureDescriptorSets.resize(m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES);
 
         std::vector<VkDescriptorSetLayout> layouts(
-            ctx_.MAX_FRAMES_IN_FLIGHT * ctx_.MAX_TEXTURES,
-            ctx_.textureDescriptorSetLayout
+            m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES,
+            m_r_context.textureDescriptorSetLayout
         );
 
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = descriptorPool_;
+        allocInfo.descriptorPool = m_descriptorPool;
         allocInfo.descriptorSetCount = static_cast<uint32_t>(layouts.size());
         allocInfo.pSetLayouts = layouts.data();
 
-        VkResult result = vkAllocateDescriptorSets(ctx_.device, &allocInfo, textureDescriptorSets_.data());
+        VkResult result = vkAllocateDescriptorSets(m_r_context.device, &allocInfo, m_textureDescriptorSets.data());
         if (result != VK_SUCCESS) {
             throw_error("Failed to allocate texture descriptor sets: " + std::to_string(result));
         }
 
         VkDescriptorImageInfo defaultImageInfo{};
         defaultImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        defaultImageInfo.sampler = textureSampler_;
+        defaultImageInfo.sampler = m_textureSampler;
         defaultImageInfo.imageView = getTextureView("default");
 
         std::vector<VkWriteDescriptorSet> writes;
-        for (uint32_t frame = 0; frame < ctx_.MAX_FRAMES_IN_FLIGHT; ++frame) {
-            for (uint32_t texIdx = 0; texIdx < ctx_.MAX_TEXTURES; ++texIdx) {
+        for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
+            for (uint32_t texIdx = 0; texIdx < m_r_context.MAX_TEXTURES; ++texIdx) {
                 VkWriteDescriptorSet write{};
                 write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                 write.dstSet = getTextureDescriptorSet(frame, texIdx);
@@ -348,20 +348,20 @@ namespace vex {
                 writes.push_back(write);
             }
         }
-        vkUpdateDescriptorSets(ctx_.device, writes.size(), writes.data(), 0, nullptr);
+        vkUpdateDescriptorSets(m_r_context.device, writes.size(), writes.data(), 0, nullptr);
         log("Initialized %d texture descriptor sets with default texture", writes.size());
     }
 
 
     VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) {
-        const uint32_t index = frameIndex * ctx_.MAX_TEXTURES + textureIndex;
-        if (index >= textureDescriptorSets_.size()) {
+        const uint32_t index = frameIndex * m_r_context.MAX_TEXTURES + textureIndex;
+        if (index >= m_textureDescriptorSets.size()) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                        "Texture index out of bounds (Frame: %u, TexIndex: %u, Max: %u)",
-                       frameIndex, textureIndex, ctx_.MAX_TEXTURES);
+                       frameIndex, textureIndex, m_r_context.MAX_TEXTURES);
             return VK_NULL_HANDLE;
         }
-        return textureDescriptorSets_[index];
+        return m_textureDescriptorSets[index];
     }
 
     void VulkanResources::createTextureSampler() {
@@ -380,16 +380,16 @@ namespace vex {
             samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
 
             log("Creating texture sampler...");
-            vkCreateSampler(ctx_.device, &samplerInfo, nullptr, &textureSampler_);
+            vkCreateSampler(m_r_context.device, &samplerInfo, nullptr, &m_textureSampler);
         }
 
         void VulkanResources::loadTexture(const std::string& path, const std::string& name) {
             std::string fullPath = "Assets/" + std::string(path.c_str());
 
-            if (ctx_.textureIndices.size() >= ctx_.MAX_TEXTURES) {
+            if (m_r_context.textureIndices.size() >= m_r_context.MAX_TEXTURES) {
                 SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                            "Maximum texture count (%u) reached!",
-                           ctx_.MAX_TEXTURES);
+                           m_r_context.MAX_TEXTURES);
                 return;
             }
             std::ifstream test(fullPath);
@@ -427,12 +427,12 @@ namespace vex {
             VmaAllocationCreateInfo allocInfo{};
             allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
 
-            vmaCreateBuffer(ctx_.allocator, &bufferInfo, &allocInfo, &stagingBuffer, &stagingAlloc, nullptr);
+            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo, &stagingBuffer, &stagingAlloc, nullptr);
 
             void* data;
-            vmaMapMemory(ctx_.allocator, stagingAlloc, &data);
+            vmaMapMemory(m_r_context.allocator, stagingAlloc, &data);
             memcpy(data, pixels, static_cast<size_t>(imageSize));
-            vmaUnmapMemory(ctx_.allocator, stagingAlloc);
+            vmaUnmapMemory(m_r_context.allocator, stagingAlloc);
             stbi_image_free(pixels);
 
             log("Creating Vulkan image...");
@@ -453,9 +453,9 @@ namespace vex {
 
             VkImage textureImage;
             VmaAllocation textureAlloc;
-            vmaCreateImage(ctx_.allocator, &imageInfo, &imageAllocInfo, &textureImage, &textureAlloc, nullptr);
+            vmaCreateImage(m_r_context.allocator, &imageInfo, &imageAllocInfo, &textureImage, &textureAlloc, nullptr);
 
-            VkCommandBuffer commandBuffer = ctx_.beginSingleTimeCommands();
+            VkCommandBuffer commandBuffer = m_r_context.beginSingleTimeCommands();
 
             VkImageMemoryBarrier barrier{};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -509,11 +509,11 @@ namespace vex {
                 0, nullptr,
                 1, &barrier);
 
-            ctx_.endSingleTimeCommands(commandBuffer);
+            m_r_context.endSingleTimeCommands(commandBuffer);
 
-            vkDeviceWaitIdle(ctx_.device);
+            vkDeviceWaitIdle(m_r_context.device);
 
-            vmaDestroyBuffer(ctx_.allocator, stagingBuffer, stagingAlloc);
+            vmaDestroyBuffer(m_r_context.allocator, stagingBuffer, stagingAlloc);
 
             VkImageViewCreateInfo viewInfo{};
             viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -526,73 +526,73 @@ namespace vex {
 
             VkImageView textureView;
             log("Creating vulkan texture view...");
-            if (vkCreateImageView(ctx_.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
+            if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
                 throw_error("Failed to create texture image view!");
             }
 
-            if (ctx_.textureIndices.contains(name)) {
-                log("Texture '%s' already exists at index %u", name.c_str(), ctx_.textureIndices[name]);
+            if (m_r_context.textureIndices.contains(name)) {
+                log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
                 return;
             }
 
-            ctx_.textureIndices[name] = ctx_.nextTextureIndex++;
-            log("Assigned texture '%s' to index %u", name.c_str(), ctx_.textureIndices[name]);
+            m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
+            log("Assigned texture '%s' to index %u", name.c_str(), m_r_context.textureIndices[name]);
 
-            textures_[name] = textureView;
-            textureImages_[name] = textureImage;
-            textureAllocations_[name] = textureAlloc;
-            textureViews_[name] = textureView;
+            m_textures[name] = textureView;
+            m_textureImages[name] = textureImage;
+            m_textureAllocations[name] = textureAlloc;
+            m_textureViews[name] = textureView;
 
-                if (ctx_.textureIndices.size() >= ctx_.MAX_TEXTURES) {
+                if (m_r_context.textureIndices.size() >= m_r_context.MAX_TEXTURES) {
                     throw_error("Exceeded maximum texture count");
                 }
-                ctx_.textureIndices[name] = ctx_.textureIndices.size();
-                log("Assigned texture '%s' to index %d", name.c_str(), ctx_.textureIndices[name]);
+                m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
+                log("Assigned texture '%s' to index %d", name.c_str(), m_r_context.textureIndices[name]);
 
                 VkDescriptorImageInfo imageDescInfo{};
                 imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                imageDescInfo.sampler = textureSampler_;
+                imageDescInfo.sampler = m_textureSampler;
                 imageDescInfo.imageView = textureView;
 
-                for (uint32_t frame = 0; frame < ctx_.MAX_FRAMES_IN_FLIGHT; ++frame) {
+                for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
                     VkWriteDescriptorSet write{};
                     write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    write.dstSet = getTextureDescriptorSet(frame, ctx_.textureIndices[name]);
+                    write.dstSet = getTextureDescriptorSet(frame, m_r_context.textureIndices[name]);
                     write.dstBinding = 0;
                     write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                     write.descriptorCount = 1;
                     write.pImageInfo = &imageDescInfo;
 
-                    vkUpdateDescriptorSets(ctx_.device, 1, &write, 0, nullptr);
+                    vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
                 }
                 log("Updated texture descriptors for '%s'", name.c_str());
         }
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;
 
-            auto it = textures_.find(name);
-            if (it == textures_.end()) return;
+            auto it = m_textures.find(name);
+            if (it == m_textures.end()) return;
 
-            vkDeviceWaitIdle(ctx_.device);
+            vkDeviceWaitIdle(m_r_context.device);
 
-            if (textureViews_[name] != VK_NULL_HANDLE) {
-                vkDestroyImageView(ctx_.device, textureViews_[name], nullptr);
-                textureViews_[name] = VK_NULL_HANDLE;
+            if (m_textureViews[name] != VK_NULL_HANDLE) {
+                vkDestroyImageView(m_r_context.device, m_textureViews[name], nullptr);
+                m_textureViews[name] = VK_NULL_HANDLE;
             }
 
-            if (textureImages_[name] != VK_NULL_HANDLE && textureAllocations_[name] != VK_NULL_HANDLE) {
-                vmaDestroyImage(ctx_.allocator, textureImages_[name], textureAllocations_[name]);
-                textureImages_[name] = VK_NULL_HANDLE;
+            if (m_textureImages[name] != VK_NULL_HANDLE && m_textureAllocations[name] != VK_NULL_HANDLE) {
+                vmaDestroyImage(m_r_context.allocator, m_textureImages[name], m_textureAllocations[name]);
+                m_textureImages[name] = VK_NULL_HANDLE;
             }
 
-            textures_.erase(name);
-            textureImages_.erase(name);
-            textureAllocations_.erase(name);
-            textureViews_.erase(name);
+            m_textures.erase(name);
+            m_textureImages.erase(name);
+            m_textureAllocations.erase(name);
+            m_textureViews.erase(name);
         }
 
         VkImageView VulkanResources::getTextureView(const std::string& name) const {
-            auto it = textures_.find(name);
-            return (it != textures_.end()) ? it->second : textures_.at(getDefaultTextureName());
+            auto it = m_textures.find(name);
+            return (it != m_textures.end()) ? it->second : m_textures.at(getDefaultTextureName());
         }
 }

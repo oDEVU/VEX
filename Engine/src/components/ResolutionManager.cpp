@@ -4,39 +4,39 @@
 
 namespace vex {
 
-ResolutionManager::ResolutionManager(SDL_Window* window) : window(window) {
+ResolutionManager::ResolutionManager(SDL_Window* window) : m_p_window(window) {
     update();
 }
 
 void ResolutionManager::setMode(ResolutionMode mode) {
-    currentMode = mode;
+    m_currentMode = mode;
     update();
 }
 
 void ResolutionManager::update() {
     int width, height;
-    SDL_GetWindowSizeInPixels(window, &width, &height);
-    windowResolution = {width, height};
+    SDL_GetWindowSizeInPixels(m_p_window, &width, &height);
+    m_windowResolution = {width, height};
 
-    switch(currentMode) {
+    switch(m_currentMode) {
         case ResolutionMode::NATIVE:
-            renderResolution = windowResolution;
-            upscaleRatio = 1.0f;
+            m_renderResolution = m_windowResolution;
+            m_upscaleRatio = 1.0f;
             break;
 
         case ResolutionMode::RES_240P: {
             float aspect = width / static_cast<float>(height);
-            renderResolution.y = 240;
-            renderResolution.x = static_cast<uint32_t>(240 * aspect);
-            upscaleRatio = height / 240.0f;
+            m_renderResolution.y = 240;
+            m_renderResolution.x = static_cast<uint32_t>(240 * aspect);
+            m_upscaleRatio = height / 240.0f;
             break;
         }
 
         case ResolutionMode::RES_480P: {
             float aspect = width / static_cast<float>(height);
-            renderResolution.y = 480;
-            renderResolution.x = static_cast<uint32_t>(480 * aspect);
-            upscaleRatio = height / 480.0f;
+            m_renderResolution.y = 480;
+            m_renderResolution.x = static_cast<uint32_t>(480 * aspect);
+            m_upscaleRatio = height / 480.0f;
             break;
         }
 
@@ -46,25 +46,25 @@ void ResolutionManager::update() {
     }
 
     log("Resolution mode updated: %dx%d (render) -> %dx%d (window), scale: %.2f",
-           renderResolution.x, renderResolution.y,
-           windowResolution.x, windowResolution.y,
-           upscaleRatio);
+           m_renderResolution.x, m_renderResolution.y,
+           m_windowResolution.x, m_windowResolution.y,
+           m_upscaleRatio);
 }
 
 void ResolutionManager::calculatePS1SharpResolution() {
-    int yscale = floor(windowResolution.y / 240);
+    int yscale = floor(m_windowResolution.y / 240);
     int maxScale = std::max(1, yscale);
 
     maxScale = std::clamp(maxScale, 1, 4);
 
-    renderResolution = windowResolution / static_cast<unsigned int>(maxScale);
-    upscaleRatio = maxScale;
+    m_renderResolution = m_windowResolution / static_cast<unsigned int>(maxScale);
+    m_upscaleRatio = maxScale;
 
-    if (renderResolution.y < 240) {
-        float aspect = windowResolution.x / static_cast<float>(windowResolution.y);
-        renderResolution.y = 240;
-        renderResolution.x = static_cast<uint32_t>(240 * aspect);
-        upscaleRatio = windowResolution.y / 240.0f;
+    if (m_renderResolution.y < 240) {
+        float aspect = m_windowResolution.x / static_cast<float>(m_windowResolution.y);
+        m_renderResolution.y = 240;
+        m_renderResolution.x = static_cast<uint32_t>(240 * aspect);
+        m_upscaleRatio = m_windowResolution.y / 240.0f;
     }
 }
 

@@ -39,7 +39,7 @@ namespace vex {
         VkDescriptorPool m_imguiPool = VK_NULL_HANDLE;
         bool m_initialized = false;
 #endif
-        SDL_Window* m_window;
-        VulkanContext& m_vulkanContext;
+        SDL_Window *m_p_window;
+        VulkanContext& m_r_context;
     };
 }

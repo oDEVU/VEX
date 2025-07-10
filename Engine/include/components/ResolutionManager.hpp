@@ -20,25 +20,25 @@ enum class ResolutionMode {
 
 class ResolutionManager {
 public:
-    ResolutionManager(SDL_Window* window);
+    ResolutionManager(SDL_Window *p_window);
 
     void setMode(ResolutionMode mode);
-    ResolutionMode getCurrentMode() const { return currentMode; }
+    ResolutionMode getCurrentMode() const { return m_currentMode; }
 
-    glm::uvec2 getRenderResolution() const { return renderResolution; }
-    glm::uvec2 getWindowResolution() const { return windowResolution; }
-    float getUpscaleRatio() const { return upscaleRatio; }
+    glm::uvec2 getRenderResolution() const { return m_renderResolution; }
+    glm::uvec2 getWindowResolution() const { return m_windowResolution; }
+    float getUpscaleRatio() const { return m_upscaleRatio; }
 
     void update();
 
 private:
     void calculatePS1SharpResolution();
 
-    SDL_Window* window;
-    ResolutionMode currentMode = ResolutionMode::PS1_SHARP;
-    glm::uvec2 windowResolution;
-    glm::uvec2 renderResolution;
-    float upscaleRatio = 1.0f;
+    SDL_Window *m_p_window;
+    ResolutionMode m_currentMode = ResolutionMode::PS1_SHARP;
+    glm::uvec2 m_windowResolution;
+    glm::uvec2 m_renderResolution;
+    float m_upscaleRatio = 1.0f;
 };
 
 } // namespace vex

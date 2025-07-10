@@ -8,41 +8,41 @@
 #include <array>
 
 namespace vex {
-    VulkanSwapchainManager::VulkanSwapchainManager(VulkanContext& context, SDL_Window* window) : context_(context) {
-        m_window = window;
+    VulkanSwapchainManager::VulkanSwapchainManager(VulkanContext& context, SDL_Window* window) : m_r_context(context) {
+        m_p_window = window;
     }
     VulkanSwapchainManager::~VulkanSwapchainManager() {}
 
     void VulkanSwapchainManager::createSwapchain() {
         log("Creating Swapchain");
         VkSurfaceCapabilitiesKHR capabilities;
-        if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(context_.physicalDevice, context_.surface, &capabilities) != VK_SUCCESS) {
+        if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_r_context.physicalDevice, m_r_context.surface, &capabilities) != VK_SUCCESS) {
             throw_error("Failed to get surface capabilities");
         }
 
         uint32_t formatCount;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(context_.physicalDevice, context_.surface, &formatCount, nullptr);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(m_r_context.physicalDevice, m_r_context.surface, &formatCount, nullptr);
         if (formatCount == 0) {
             throw_error("No surface formats supported");
         }
         std::vector<VkSurfaceFormatKHR> formats(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(context_.physicalDevice, context_.surface, &formatCount, formats.data());
+        vkGetPhysicalDeviceSurfaceFormatsKHR(m_r_context.physicalDevice, m_r_context.surface, &formatCount, formats.data());
 
         uint32_t presentModeCount;
-        vkGetPhysicalDeviceSurfacePresentModesKHR(context_.physicalDevice, context_.surface, &presentModeCount, nullptr);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(m_r_context.physicalDevice, m_r_context.surface, &presentModeCount, nullptr);
         if (presentModeCount == 0) {
             throw_error("No present modes supported");
         }
 
         std::vector<VkPresentModeKHR> presentModes(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(context_.physicalDevice, context_.surface, &presentModeCount, presentModes.data());
+        vkGetPhysicalDeviceSurfacePresentModesKHR(m_r_context.physicalDevice, m_r_context.surface, &presentModeCount, presentModes.data());
 
         VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(formats);
         VkPresentModeKHR presentMode = chooseSwapPresentMode(presentModes);
         VkExtent2D extent = chooseSwapExtent(capabilities);
 
         VkFormatProperties formatProps;
-        vkGetPhysicalDeviceFormatProperties(context_.physicalDevice, surfaceFormat.format, &formatProps);
+        vkGetPhysicalDeviceFormatProperties(m_r_context.physicalDevice, surfaceFormat.format, &formatProps);
 
         if (!(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) ||
             !(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)) {
@@ -56,7 +56,7 @@ namespace vex {
 
         VkSwapchainCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        createInfo.surface = context_.surface;
+        createInfo.surface = m_r_context.surface;
         createInfo.minImageCount = imageCount;
         createInfo.imageFormat = surfaceFormat.format;
         createInfo.imageColorSpace = surfaceFormat.colorSpace;
@@ -64,8 +64,8 @@ namespace vex {
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
-        uint32_t queueFamilyIndices[] = {context_.graphicsQueueFamily, context_.presentQueueFamily};
-        if (context_.graphicsQueueFamily != context_.presentQueueFamily) {
+        uint32_t queueFamilyIndices[] = {m_r_context.graphicsQueueFamily, m_r_context.presentQueueFamily};
+        if (m_r_context.graphicsQueueFamily != m_r_context.presentQueueFamily) {
             createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
             createInfo.queueFamilyIndexCount = 2;
             createInfo.pQueueFamilyIndices = queueFamilyIndices;
@@ -81,22 +81,22 @@ namespace vex {
         createInfo.clipped = VK_TRUE;
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-        if (vkCreateSwapchainKHR(context_.device, &createInfo, nullptr, &context_.swapchain) != VK_SUCCESS) {
+        if (vkCreateSwapchainKHR(m_r_context.device, &createInfo, nullptr, &m_r_context.swapchain) != VK_SUCCESS) {
             throw_error("Failed to create swapchain");
         }
 
-        vkGetSwapchainImagesKHR(context_.device, context_.swapchain, &imageCount, nullptr);
-        context_.swapchainImages.resize(imageCount);
-        vkGetSwapchainImagesKHR(context_.device, context_.swapchain, &imageCount, context_.swapchainImages.data());
+        vkGetSwapchainImagesKHR(m_r_context.device, m_r_context.swapchain, &imageCount, nullptr);
+        m_r_context.swapchainImages.resize(imageCount);
+        vkGetSwapchainImagesKHR(m_r_context.device, m_r_context.swapchain, &imageCount, m_r_context.swapchainImages.data());
 
-        context_.swapchainImageFormat = surfaceFormat.format;
-        context_.swapchainExtent = extent;
+        m_r_context.swapchainImageFormat = surfaceFormat.format;
+        m_r_context.swapchainExtent = extent;
 
         createImageViews();
 
-        VkCommandBuffer cmd = context_.beginSingleTimeCommands();
+        VkCommandBuffer cmd = m_r_context.beginSingleTimeCommands();
 
-        for (auto& image : context_.swapchainImages) {
+        for (auto& image : m_r_context.swapchainImages) {
             VkImageMemoryBarrier barrier{};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
             barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -119,7 +119,7 @@ namespace vex {
             );
         }
 
-        context_.endSingleTimeCommands(cmd);
+        m_r_context.endSingleTimeCommands(cmd);
     }
 
     void VulkanSwapchainManager::createDepthResources() {
@@ -130,7 +130,7 @@ namespace vex {
         VkImageCreateInfo imageInfo{};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
-        imageInfo.extent = {context_.swapchainExtent.width, context_.swapchainExtent.height, 1};
+        imageInfo.extent = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height, 1};
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
         imageInfo.format = depthFormat;
@@ -143,14 +143,14 @@ namespace vex {
         VmaAllocationCreateInfo allocInfo{};
         allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
 
-        if (vmaCreateImage(context_.allocator, &imageInfo, &allocInfo,
-                          &context_.depthImage, &context_.depthAllocation, nullptr) != VK_SUCCESS) {
+        if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo,
+                          &m_r_context.depthImage, &m_r_context.depthAllocation, nullptr) != VK_SUCCESS) {
             throw_error("Failed to create depth image");
         }
 
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        viewInfo.image = context_.depthImage;
+        viewInfo.image = m_r_context.depthImage;
         viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
         viewInfo.format = depthFormat;
         viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
@@ -159,25 +159,25 @@ namespace vex {
         viewInfo.subresourceRange.baseArrayLayer = 0;
         viewInfo.subresourceRange.layerCount = 1;
 
-        if (vkCreateImageView(context_.device, &viewInfo, nullptr, &context_.depthImageView) != VK_SUCCESS) {
+        if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &m_r_context.depthImageView) != VK_SUCCESS) {
             throw_error("Failed to create depth image view");
         }
 
-        context_.depthFormat = depthFormat;
+        m_r_context.depthFormat = depthFormat;
 
         createCommandPool();
     }
 
     void VulkanSwapchainManager::createImageViews() {
         log("creating imageviews");
-        context_.swapchainImageViews.resize(context_.swapchainImages.size());
+        m_r_context.swapchainImageViews.resize(m_r_context.swapchainImages.size());
 
-        for (size_t i = 0; i < context_.swapchainImages.size(); i++) {
+        for (size_t i = 0; i < m_r_context.swapchainImages.size(); i++) {
             VkImageViewCreateInfo createInfo = {};
             createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            createInfo.image = context_.swapchainImages[i];
+            createInfo.image = m_r_context.swapchainImages[i];
             createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format = context_.swapchainImageFormat;
+            createInfo.format = m_r_context.swapchainImageFormat;
             createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
             createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
             createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -188,7 +188,7 @@ namespace vex {
             createInfo.subresourceRange.baseArrayLayer = 0;
             createInfo.subresourceRange.layerCount = 1;
 
-            if (vkCreateImageView(context_.device, &createInfo, nullptr, &context_.swapchainImageViews[i]) != VK_SUCCESS) {
+            if (vkCreateImageView(m_r_context.device, &createInfo, nullptr, &m_r_context.swapchainImageViews[i]) != VK_SUCCESS) {
                 throw_error("Failed to create image views");
             }
         }
@@ -201,9 +201,9 @@ namespace vex {
         VkCommandPoolCreateInfo poolInfo = {};
         poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
         poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-        poolInfo.queueFamilyIndex = context_.graphicsQueueFamily;
+        poolInfo.queueFamilyIndex = m_r_context.graphicsQueueFamily;
 
-        if (vkCreateCommandPool(context_.device, &poolInfo, nullptr, &context_.commandPool) != VK_SUCCESS) {
+        if (vkCreateCommandPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.commandPool) != VK_SUCCESS) {
             throw_error("Failed to create command pool");
         }
 
@@ -212,20 +212,20 @@ namespace vex {
 
     void VulkanSwapchainManager::createCommandBuffers() {
         log("creating command buffers");
-        uint32_t commandBufferCount = static_cast<uint32_t>(context_.swapchainImages.size());
+        uint32_t commandBufferCount = static_cast<uint32_t>(m_r_context.swapchainImages.size());
         if (commandBufferCount == 0) {
             throw_error("No swapchain images for command buffer creation");
         }
 
-        context_.commandBuffers.resize(commandBufferCount);
+        m_r_context.commandBuffers.resize(commandBufferCount);
 
         VkCommandBufferAllocateInfo allocInfo = {};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.commandPool = context_.commandPool;
+        allocInfo.commandPool = m_r_context.commandPool;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount = (uint32_t)context_.commandBuffers.size();
+        allocInfo.commandBufferCount = (uint32_t)m_r_context.commandBuffers.size();
 
-        if (vkAllocateCommandBuffers(context_.device, &allocInfo, context_.commandBuffers.data()) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(m_r_context.device, &allocInfo, m_r_context.commandBuffers.data()) != VK_SUCCESS) {
             throw_error("Failed to allocate command buffers");
         }
 
@@ -235,9 +235,9 @@ namespace vex {
     void VulkanSwapchainManager::createSyncObjects() {
         log("Creating synchronization objects...");
 
-        context_.imageAvailableSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
-        context_.renderFinishedSemaphores.resize(context_.MAX_FRAMES_IN_FLIGHT);
-        context_.inFlightFences.resize(context_.MAX_FRAMES_IN_FLIGHT);
+        m_r_context.imageAvailableSemaphores.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_r_context.renderFinishedSemaphores.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_r_context.inFlightFences.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
         VkSemaphoreCreateInfo semaphoreInfo = {};
         semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -248,28 +248,28 @@ namespace vex {
 
         VkResult result;
 
-        for (size_t i = 0; i < context_.MAX_FRAMES_IN_FLIGHT; i++) {
-            result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.imageAvailableSemaphores[i]);
+        for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            result = vkCreateSemaphore(m_r_context.device, &semaphoreInfo, nullptr, &m_r_context.imageAvailableSemaphores[i]);
             if (result != VK_SUCCESS) {
                 throw_error("Failed to create image available semaphore");
             }
 
-            result = vkCreateSemaphore(context_.device, &semaphoreInfo, nullptr, &context_.renderFinishedSemaphores[i]);
+            result = vkCreateSemaphore(m_r_context.device, &semaphoreInfo, nullptr, &m_r_context.renderFinishedSemaphores[i]);
             if (result != VK_SUCCESS) {
                 throw_error("Failed to create render finished semaphore");
             }
 
-            result = vkCreateFence(context_.device, &fenceInfo, nullptr, &context_.inFlightFences[i]);
+            result = vkCreateFence(m_r_context.device, &fenceInfo, nullptr, &m_r_context.inFlightFences[i]);
             if (result != VK_SUCCESS) {
                 throw_error("Failed to create fence");
             }
 
-            assert(context_.inFlightFences[i] != VK_NULL_HANDLE);
+            assert(m_r_context.inFlightFences[i] != VK_NULL_HANDLE);
 
-            log("Created sync objects: fence=%p", (void*)context_.inFlightFences[i]);
+            log("Created sync objects: fence=%p", (void*)m_r_context.inFlightFences[i]);
         }
 
-        if (context_.depthImageView) {
+        if (m_r_context.depthImageView) {
             createLowResResources();
         } else {
             SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
@@ -278,7 +278,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createLowResResources() {
-        if (context_.currentRenderResolution.x == 0 || context_.currentRenderResolution.y == 0) {
+        if (m_r_context.currentRenderResolution.x == 0 || m_r_context.currentRenderResolution.y == 0) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Invalid render resolution for low-res resources");
             return;
         }
@@ -288,10 +288,10 @@ namespace vex {
         VkImageCreateInfo imageInfo{};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
-        imageInfo.extent = {context_.currentRenderResolution.x, context_.currentRenderResolution.y, 1};
+        imageInfo.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, 1};
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
-        imageInfo.format = context_.swapchainImageFormat;
+        imageInfo.format = m_r_context.swapchainImageFormat;
         imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
         imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         imageInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
@@ -300,74 +300,74 @@ namespace vex {
         VmaAllocationCreateInfo allocInfo{};
         allocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
 
-        if (vmaCreateImage(context_.allocator, &imageInfo, &allocInfo,
-                          &context_.lowResColorImage, &context_.lowResColorAlloc, nullptr) != VK_SUCCESS) {
+        if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo,
+                          &m_r_context.lowResColorImage, &m_r_context.lowResColorAlloc, nullptr) != VK_SUCCESS) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image");
             return;
         }
 
         VkImageViewCreateInfo viewInfo{};
         viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        viewInfo.image = context_.lowResColorImage;
+        viewInfo.image = m_r_context.lowResColorImage;
         viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        viewInfo.format = context_.swapchainImageFormat;
+        viewInfo.format = m_r_context.swapchainImageFormat;
         viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         viewInfo.subresourceRange.levelCount = 1;
         viewInfo.subresourceRange.layerCount = 1;
 
-        if (vkCreateImageView(context_.device, &viewInfo, nullptr, &context_.lowResColorView) != VK_SUCCESS) {
+        if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &m_r_context.lowResColorView) != VK_SUCCESS) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image view");
-            vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
-            context_.lowResColorImage = VK_NULL_HANDLE;
-            context_.lowResColorAlloc = VK_NULL_HANDLE;
+            vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
+            m_r_context.lowResColorImage = VK_NULL_HANDLE;
+            m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
             return;
         }
 
-        context_.lowResColorFormat = context_.swapchainImageFormat;
+        m_r_context.lowResColorFormat = m_r_context.swapchainImageFormat;
     }
 
     void VulkanSwapchainManager::cleanupLowResResources() {
-        if (context_.lowResColorView != VK_NULL_HANDLE) {
-            vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
-            context_.lowResColorView = VK_NULL_HANDLE;
+        if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
+            m_r_context.lowResColorView = VK_NULL_HANDLE;
         }
 
-        if (context_.lowResColorImage != VK_NULL_HANDLE && context_.lowResColorAlloc != VK_NULL_HANDLE) {
-            vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
-            context_.lowResColorImage = VK_NULL_HANDLE;
-            context_.lowResColorAlloc = VK_NULL_HANDLE;
+        if (m_r_context.lowResColorImage != VK_NULL_HANDLE && m_r_context.lowResColorAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
+            m_r_context.lowResColorImage = VK_NULL_HANDLE;
+            m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
         }
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {
-                    if (context_.lowResColorView) {
-                        vkDestroyImageView(context_.device, context_.lowResColorView, nullptr);
+                    if (m_r_context.lowResColorView) {
+                        vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
                     }
-                    if (context_.lowResColorImage) {
-                        vmaDestroyImage(context_.allocator, context_.lowResColorImage, context_.lowResColorAlloc);
+                    if (m_r_context.lowResColorImage) {
+                        vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
                     }
 
-        if (context_.depthImageView) {
-            vkDestroyImageView(context_.device, context_.depthImageView, nullptr);
-            context_.depthImageView = VK_NULL_HANDLE;
+        if (m_r_context.depthImageView) {
+            vkDestroyImageView(m_r_context.device, m_r_context.depthImageView, nullptr);
+            m_r_context.depthImageView = VK_NULL_HANDLE;
         }
-        if (context_.depthImage) {
-            vmaDestroyImage(context_.allocator, context_.depthImage, context_.depthAllocation);
-            context_.depthImage = VK_NULL_HANDLE;
+        if (m_r_context.depthImage) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.depthImage, m_r_context.depthAllocation);
+            m_r_context.depthImage = VK_NULL_HANDLE;
         }
 
-        for (auto& imageView : context_.swapchainImageViews) {
-            vkDestroyImageView(context_.device, imageView, nullptr);
+        for (auto& imageView : m_r_context.swapchainImageViews) {
+            vkDestroyImageView(m_r_context.device, imageView, nullptr);
         }
-        context_.swapchainImageViews.clear();
+        m_r_context.swapchainImageViews.clear();
 
-        vkDestroySwapchainKHR(context_.device, context_.swapchain, nullptr);
-        context_.swapchain = VK_NULL_HANDLE;
+        vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
+        m_r_context.swapchain = VK_NULL_HANDLE;
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
         log("recreating swapchains");
-        vkDeviceWaitIdle(context_.device);
+        vkDeviceWaitIdle(m_r_context.device);
         log("cleanupLowResResources");
         cleanupLowResResources();
         log("cleanupSwapchain");
@@ -415,11 +415,11 @@ namespace vex {
             return capabilities.currentExtent;
         } else {
             int width, height;
-            SDL_GetWindowSizeInPixels(m_window, &width, &height);
+            SDL_GetWindowSizeInPixels(m_p_window, &width, &height);
 
             VkExtent2D actualExtent = {
-                static_cast<uint32_t>(context_.currentRenderResolution.x),
-                static_cast<uint32_t>(context_.currentRenderResolution.y)
+                static_cast<uint32_t>(m_r_context.currentRenderResolution.x),
+                static_cast<uint32_t>(m_r_context.currentRenderResolution.y)
             };
 
             actualExtent.width = std::clamp(
@@ -444,7 +444,7 @@ namespace vex {
 
         for (VkFormat format : candidates) {
             VkFormatProperties props;
-            vkGetPhysicalDeviceFormatProperties(context_.physicalDevice, format, &props);
+            vkGetPhysicalDeviceFormatProperties(m_r_context.physicalDevice, format, &props);
             if (props.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT) {
                 return format;
             }
