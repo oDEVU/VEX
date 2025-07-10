@@ -26,10 +26,11 @@ namespace vex {
     };
 
     namespace PS1Effects {
-        constexpr int VERTEX_SNAPPING  = 0x1;
-        constexpr int AFFINE_WARPING   = 0x2;
+        constexpr int VERTEX_SNAPPING    = 0x1;
+        constexpr int AFFINE_WARPING     = 0x2;
         constexpr int COLOR_QUANTIZATION = 0x4;
-        constexpr int VERTEX_JITTER    = 0x8;
-        constexpr int NTSC_ARTIFACTS    = 0x10;
+        constexpr int VERTEX_JITTER      = 0x8;
+        constexpr int NTSC_ARTIFACTS     = 0x10;
+        constexpr int GOURAUD_SHADING    = 0x20;
     }
 }

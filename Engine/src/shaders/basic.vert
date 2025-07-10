@@ -17,6 +17,7 @@ layout(set = 0, binding = 1) uniform ModelUBO {
 layout(location = 0) out vec3 fragNormal;
 layout(location = 1) out vec2 fragUV;
 layout(location = 2) out float fragDepth;
+layout(location = 3) out float fragDiff;
 
 layout(push_constant) uniform PushConsts {
     float snapResolution;
@@ -48,6 +49,7 @@ void main() {
     // 2. Transform to clip space
     vec4 viewPos = camera.view * worldPos;
     vec4 clipPos = camera.proj * viewPos;
+    vec4 tstPos = camera.proj * worldPos;
 
     // 3. PS1 JITTER
     if (bool(push.enablePS1Effects & 0x8)) {
@@ -72,6 +74,12 @@ void main() {
 
     gl_Position = clipPos;
     fragNormal = normalize(mat3(transpose(inverse(object.model))) * inNormal);
+
+    //gourard shading
+    vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
+    float diff = max(dot(normalize(fragNormal), lightDir), 0.1);
+
+    fragDiff = diff;
 
     // affine texture warping uvs
     if (bool(push.enablePS1Effects & 0x2)) {

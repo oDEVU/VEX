@@ -156,7 +156,8 @@ namespace vex {
                 PS1Effects::AFFINE_WARPING |
                 PS1Effects::COLOR_QUANTIZATION |
                 PS1Effects::VERTEX_JITTER |
-                PS1Effects::NTSC_ARTIFACTS;
+                PS1Effects::NTSC_ARTIFACTS |
+                PS1Effects::GOURAUD_SHADING;
 
             modelPush.renderResolution = currentRenderResolution;
             modelPush.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};

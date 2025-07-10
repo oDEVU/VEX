@@ -2,6 +2,7 @@
 layout(location = 0) in vec3 fragNormal;
 layout(location = 1) in vec2 fragUV;
 layout(location = 2) in float fragDepth;
+layout(location = 3) in float fragDiff;
 layout(location = 0) out vec4 outColor;
 
 layout(set = 1, binding = 0) uniform sampler2D texSampler;
@@ -61,9 +62,6 @@ void main() {
         uv = fragUV;
     }
 
-    vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
-    float diff = max(dot(normalize(fragNormal), lightDir), 0.2);
-
     vec2 pixelCoord = gl_FragCoord.xy;
     vec4 pushColor = push.color;
     vec4 texColor = texture(texSampler, uv);
@@ -91,6 +89,15 @@ void main() {
 
         float noise = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
         texColor.rgb += (noise - 0.5) * 0.01;
+    }
+
+    float diff = 0;
+
+    if (bool(push.enablePS1Effects & 0x20)) {
+        diff = fragDiff;
+    } else {
+        vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
+        diff = max(dot(normalize(fragNormal), lightDir), 0.1);
     }
 
     // check if models are untextured

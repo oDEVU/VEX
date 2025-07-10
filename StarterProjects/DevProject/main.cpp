@@ -74,6 +74,9 @@ public:
     vex::Model* penguin;
     vex::Model* cube;
     vex::Model* cube2;
+    vex::Model* sphere;
+    vex::Model* smoothsphere;
+
 
     void beginGame() override {
         // Load first models
@@ -83,6 +86,13 @@ public:
         loadModel("Assets/wierd_textured_cube/untitled.obj", "cube2");
         cube2 = getModel("cube2");
         cube2 -> transform.position = glm::vec3{3,0,0};
+        loadModel("Assets/SimpleSphere.fbx", "sphere");
+        sphere = getModel("sphere");
+        sphere -> transform.position = glm::vec3{-3,0,0};
+        loadModel("Assets/SimpleSmoothSphere.obj", "smoothsphere");
+        smoothsphere = getModel("smoothsphere");
+        smoothsphere -> transform.position = glm::vec3{-5,0,0};
+        smoothsphere -> transform.rotation = glm::vec3{0,90,0};
         //loadModel("Assets/human.obj", "human");
         loadModel("Assets/PenguinBaseMesh.obj", "penguin");
         loadModel("Assets/scene.gltf", "viper");
