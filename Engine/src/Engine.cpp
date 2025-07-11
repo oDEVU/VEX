@@ -96,11 +96,11 @@ void Engine::setResolutionMode(ResolutionMode mode) {
 }
 
 Model& Engine::loadModel(const std::string& modelPath, const std::string& name){
-    return m_interface->loadModel(modelPath, name);
+    return m_interface->getMeshManager().loadModel(modelPath, name);
 }
 
 Model* Engine::getModel(const std::string& name){
-    return m_interface->getModel(name);
+    return m_interface->getMeshManager().getModel(name);
 }
 
 void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
@@ -118,7 +118,7 @@ void Engine::render() {
     );
     proj[1][1] *= -1;
 
-    m_interface->renderFrame(view, proj, renderRes, *m_imgui, m_frame);
+    m_interface->getRenderer().renderFrame(view, proj, renderRes, *m_imgui, m_frame);
 }
 
 }

@@ -10,6 +10,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include <components/Model.hpp>
 
 namespace vex {
     typedef struct {

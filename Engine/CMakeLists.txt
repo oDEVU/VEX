@@ -69,6 +69,10 @@ set(source_files
         src/components/backends/vulkan/VulkanMesh.hpp
         src/components/backends/vulkan/VulkanImGUIWrapper.cpp
         src/components/backends/vulkan/VulkanImGUIWrapper.hpp
+        src/components/backends/vulkan/Renderer.cpp
+        src/components/backends/vulkan/Renderer.hpp
+        src/components/backends/vulkan/MeshManager.cpp
+        src/components/backends/vulkan/MeshManager.hpp
     )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
