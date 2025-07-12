@@ -43,7 +43,7 @@ set(public_header_files
     include/Engine.hpp
     include/components/Mesh.hpp
     include/components/Model.hpp
-    include/components/transform.hpp
+    include/components/BasicComponents.hpp
     include/components/ResolutionManager.hpp
     include/components/errorUtils.hpp
     include/components/ImGUIWrapper.hpp

@@ -7,6 +7,7 @@
 #include "components/backends/vulkan/Interface.hpp"
 #include "components/backends/vulkan/VulkanImGUIWrapper.hpp"
 #include "components/backends/vulkan/context.hpp"
+#include "entt/entity/fwd.hpp"
 #include <cstdint>
 
 namespace vex {
@@ -30,7 +31,6 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo);
-    m_camera = std::make_unique<Camera>();
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
 
@@ -95,13 +95,13 @@ void Engine::setResolutionMode(ResolutionMode mode) {
     m_interface->setRenderResolution(renderRes);
 }
 
-Model& Engine::loadModel(const std::string& modelPath, const std::string& name){
-    return m_interface->getMeshManager().loadModel(modelPath, name);
+entt::entity Engine::loadModel(const std::string& modelPath, const std::string& name, entt::entity parent){
+    return m_interface->getMeshManager().loadModel(modelPath, name, m_registry, parent);
 }
 
-Model* Engine::getModel(const std::string& name){
-    return m_interface->getMeshManager().getModel(name);
-}
+//Model* Engine::getModel(const std::string& name){
+//    return m_interface->getMeshManager().getModel(name);
+//}
 
 void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
@@ -109,6 +109,27 @@ void Engine::beginGame() {}
 void Engine::render() {
     auto renderRes = m_resolutionManager->getRenderResolution();
 
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 proj = glm::mat4(1.0f);
+    auto cameraEntity = getCamera();//m_registry.view<TransformComponent, CameraComponent>();
+    //for (auto entity : cameraView) {
+        auto& transform = m_registry.get<TransformComponent>(cameraEntity);
+        auto& camera = m_registry.get<CameraComponent>(cameraEntity);
+        view = glm::lookAt(
+            transform.position,
+            transform.position + transform.getForwardVector(),
+            transform.getUpVector()
+        );
+        proj = glm::perspective(
+            glm::radians(camera.fov),
+            renderRes.x / static_cast<float>(renderRes.y),
+            camera.nearPlane,
+            camera.farPlane
+        );
+        proj[1][1] *= -1;
+       // break;
+       //}
+    /*
     glm::mat4 view = glm::lookAt(m_camera->transform.position, glm::vec3(m_camera->transform.position + m_camera->transform.getForwardVector()), m_camera->transform.getUpVector());
     glm::mat4 proj = glm::perspective(
         glm::radians(m_camera->fov),
@@ -116,9 +137,9 @@ void Engine::render() {
         m_camera->nearPlane,
         m_camera->farPlane
     );
-    proj[1][1] *= -1;
+    proj[1][1] *= -1;*/
 
-    m_interface->getRenderer().renderFrame(view, proj, renderRes, *m_imgui, m_frame);
+    m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, m_frame);
 }
 
 }

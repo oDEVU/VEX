@@ -1,6 +1,5 @@
 #include "VulkanMesh.hpp"
 #include "components/Mesh.hpp"
-#include "components/Model.hpp"
 #include "glm/fwd.hpp"
 
 #include <SDL3/SDL.h>

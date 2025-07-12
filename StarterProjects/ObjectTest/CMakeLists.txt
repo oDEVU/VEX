@@ -1,0 +1,34 @@
+cmake_minimum_required(VERSION 3.16)
+project(ObjectTest)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_CXX_STANDARD 20)
+
+# So zed would no longer show false errors you need to copy or link compile_commands.json file to root folder.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+add_executable(${PROJECT_NAME})
+
+# Enables stacktraces for Debug builds
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=1)
+else()
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
+endif()
+
+target_sources(${PROJECT_NAME} PRIVATE main.cpp)
+add_subdirectory(../../Engine  ${CMAKE_BINARY_DIR}/Engine)
+target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
+
+set(ASSETS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Assets")
+set(ASSETS_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/Assets")
+
+add_custom_target(copy_Assets ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${ASSETS_DEST_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${ASSETS_SOURCE_DIR}"
+        "${ASSETS_DEST_DIR}"
+    COMMENT "Copying Assets directory"
+)
+
+add_dependencies(${PROJECT_NAME} copy_Assets)

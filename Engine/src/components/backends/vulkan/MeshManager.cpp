@@ -1,5 +1,8 @@
 #include "MeshManager.hpp"
+#include "components/BasicComponents.hpp"
 #include "components/errorUtils.hpp"
+#include "entt/entity/entity.hpp"
+#include "entt/entity/fwd.hpp"
 #include <fstream>
 #include <unordered_set>
 #include <SDL3/SDL.h>
@@ -11,20 +14,29 @@ namespace vex {
     }
 
     MeshManager::~MeshManager() {
-        m_modelRegistry.clear();
-        m_models.clear();
         m_vulkanMeshes.clear();
         log("MeshManager destroyed");
     }
 
-    Model& MeshManager::loadModel(const std::string& path, const std::string& name) {
+    entt::entity MeshManager::loadModel(const std::string& path, const std::string& name, entt::registry& registry, entt::entity parent = entt::null) {
+        entt::entity meshEntity = registry.create();
         log("Loading model: %s...", name.c_str());
-        if (m_modelRegistry.count(name)) {
-            throw_error("Model '" + name + "' already exists");
+
+        auto view = registry.view<MeshComponent>();
+        for (auto entity : view) {
+            auto meshComponent = view.get<MeshComponent>(entity);
+            if(meshComponent.modelName == name){
+                throw_error("Model '" + name + "' already exists");
+            }
         }
+        //if (m_modelRegistry.count(name)) {
+        //    throw_error("Model '" + name + "' already exists");
+        //}
 
         MeshData meshData;
+        MeshComponent Mesh;
         try {
+
             log("Loading mesh data from: %s", path.c_str());
             std::ifstream fileCheck(path);
             if (!fileCheck.is_open()) {
@@ -33,6 +45,7 @@ namespace vex {
             fileCheck.close();
             meshData.loadFromFile(path);
         } catch (const std::exception& e) {
+            registry.destroy(meshEntity);
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Model load failed");
             handle_exception(e);
         }
@@ -44,17 +57,16 @@ namespace vex {
         } else {
             newId = m_nextModelId++;
             if (newId >= m_r_context.MAX_MODELS) {
+                registry.destroy(meshEntity);
                 throw_error("Maximum model count exceeded");
             }
         }
 
-        m_models.emplace_back(std::make_unique<Model>());
-        Model& model = *m_models.back();
-        model.id = newId;
-        model.meshData = std::move(meshData);
+        Mesh.id = newId;
+        Mesh.meshData = std::move(meshData);
 
         std::unordered_set<std::string> uniqueTextures;
-        for (const auto& submesh : model.meshData.submeshes) {
+        for (const auto& submesh : Mesh.meshData.submeshes) {
             if (!submesh.texturePath.empty()) {
                 uniqueTextures.insert(submesh.texturePath);
             }
@@ -68,6 +80,7 @@ namespace vex {
                     m_p_resources->loadTexture(texPath, texPath);
                     log("Loaded texture: %s", texPath.c_str());
                 } catch (const std::exception& e) {
+                    registry.destroy(meshEntity);
                     SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                                  "Failed to load texture %s",
                                  texPath.c_str());
@@ -81,21 +94,26 @@ namespace vex {
         try {
             log("Creating Vulkan mesh for %s", name.c_str());
             m_vulkanMeshes.push_back(std::make_unique<VulkanMesh>(m_r_context));
-            m_vulkanMeshes.back()->upload(model.meshData);
+            m_vulkanMeshes.back()->upload(Mesh.meshData);
             log("Mesh upload successful");
         } catch (const std::exception& e) {
+            registry.destroy(meshEntity);
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
             m_vulkanMeshes.pop_back();
             handle_exception(e);
         }
 
-        m_modelRegistry[name] = &model;
+        registry.emplace<TransformComponent>(meshEntity, glm::vec3{0,0,0}, glm::vec3{0,0,0}, glm::vec3{1,1,1}, parent);
+        registry.emplace<MeshComponent>(meshEntity, Mesh);
+
         log("Model %s registered successfully", name.c_str());
-        return model;
+        return meshEntity;
     }
 
-    void MeshManager::unloadModel(const std::string& name) {
-        auto it = m_modelRegistry.find(name);
+    void MeshManager::unloadModel(const std::string& name, entt::registry& registry) {
+        // TODO
+
+        /*auto it = m_modelRegistry.find(name);
         if (it == m_modelRegistry.end()) return;
 
         m_freeModelIds.push_back(it->second->id);
@@ -110,11 +128,6 @@ namespace vex {
         }
 
         m_modelRegistry.erase(name);
-        m_p_resources->unloadTexture(name);
-    }
-
-    Model* MeshManager::getModel(const std::string& name) {
-        auto it = m_modelRegistry.find(name);
-        return (it != m_modelRegistry.end()) ? it->second : nullptr;
+        m_p_resources->unloadTexture(name);*/
     }
 }
