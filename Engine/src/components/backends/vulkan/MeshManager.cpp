@@ -1,5 +1,5 @@
 #include "MeshManager.hpp"
-#include "components/BasicComponents.hpp"
+#include "components/GameComponents/BasicComponents.hpp"
 #include "components/errorUtils.hpp"
 #include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"
@@ -18,11 +18,77 @@ namespace vex {
         log("MeshManager destroyed");
     }
 
-    entt::entity MeshManager::loadModel(const std::string& path, const std::string& name, entt::registry& registry, entt::entity parent = entt::null) {
-        entt::entity meshEntity = registry.create();
+    ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent = entt::null){
+        log("Constructing model: %s...", name.c_str());
+
+        auto view = engine.getRegistry().view<NameComponent>();
+        for (auto entity : view) {
+            auto meshComponent = view.get<NameComponent>(entity);
+            if(meshComponent.name == name){
+                throw_error("Object with name: '" + name + "' already exists");
+            }
+        }
+
+        uint32_t newId;
+        if (!m_freeModelIds.empty()) {
+            newId = m_freeModelIds.back();
+            m_freeModelIds.pop_back();
+        } else {
+            newId = m_nextModelId++;
+            if (newId >= m_r_context.MAX_MODELS) {
+                throw_error("Maximum model count exceeded");
+            }
+        }
+
+        meshComponent.id = newId;
+
+                std::unordered_set<std::string> uniqueTextures;
+                for (const auto& submesh : meshComponent.meshData.submeshes) {
+                    if (!submesh.texturePath.empty()) {
+                        uniqueTextures.insert(submesh.texturePath);
+                    }
+                }
+
+                log("Loading %zu submesh textures", uniqueTextures.size());
+                for (const auto& texPath : uniqueTextures) {
+                    log("Processing texture: %s", texPath.c_str());
+                    if (!m_p_resources->textureExists(texPath)) {
+                        try {
+                            m_p_resources->loadTexture(texPath, texPath);
+                            log("Loaded texture: %s", texPath.c_str());
+                        } catch (const std::exception& e) {
+                            SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                                         "Failed to load texture %s",
+                                         texPath.c_str());
+                            handle_exception(e);
+                        }
+                    } else {
+                        log("Texture already exists: %s", texPath.c_str());
+                    }
+                }
+
+        try {
+            log("Creating Vulkan mesh for %s", name.c_str());
+            m_vulkanMeshes.push_back(std::make_unique<VulkanMesh>(m_r_context));
+            m_vulkanMeshes.back()->upload(meshComponent.meshData);
+            log("Mesh upload successful");
+        } catch (const std::exception& e) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
+            m_vulkanMeshes.pop_back();
+            handle_exception(e);
+        }
+
+        entt::entity modelEntity = engine.getRegistry().create();
+        ModelObject* modelObject = new ModelObject(engine, name, meshComponent, transformComponent);
+
+        return modelObject;
+    }
+
+    MeshComponent MeshManager::loadMesh(const std::string& path) {
+        /*
         log("Loading model: %s...", name.c_str());
 
-        auto view = registry.view<MeshComponent>();
+        auto view = engine.getRegistry().view<MeshComponent>();
         for (auto entity : view) {
             auto meshComponent = view.get<MeshComponent>(entity);
             if(meshComponent.modelName == name){
@@ -32,9 +98,9 @@ namespace vex {
         //if (m_modelRegistry.count(name)) {
         //    throw_error("Model '" + name + "' already exists");
         //}
-
+        */
         MeshData meshData;
-        MeshComponent Mesh;
+        MeshComponent meshComponent;
         try {
 
             log("Loading mesh data from: %s", path.c_str());
@@ -45,11 +111,11 @@ namespace vex {
             fileCheck.close();
             meshData.loadFromFile(path);
         } catch (const std::exception& e) {
-            registry.destroy(meshEntity);
-            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Model load failed");
+            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Mesh load failed");
             handle_exception(e);
         }
 
+        /*
         uint32_t newId;
         if (!m_freeModelIds.empty()) {
             newId = m_freeModelIds.back();
@@ -57,60 +123,36 @@ namespace vex {
         } else {
             newId = m_nextModelId++;
             if (newId >= m_r_context.MAX_MODELS) {
-                registry.destroy(meshEntity);
                 throw_error("Maximum model count exceeded");
             }
         }
+*/
+        //meshComponent.id = newId;
+        meshComponent.meshData = std::move(meshData);
 
-        Mesh.id = newId;
-        Mesh.meshData = std::move(meshData);
-
-        std::unordered_set<std::string> uniqueTextures;
-        for (const auto& submesh : Mesh.meshData.submeshes) {
-            if (!submesh.texturePath.empty()) {
-                uniqueTextures.insert(submesh.texturePath);
-            }
-        }
-
-        log("Loading %zu submesh textures", uniqueTextures.size());
-        for (const auto& texPath : uniqueTextures) {
-            log("Processing texture: %s", texPath.c_str());
-            if (!m_p_resources->textureExists(texPath)) {
-                try {
-                    m_p_resources->loadTexture(texPath, texPath);
-                    log("Loaded texture: %s", texPath.c_str());
-                } catch (const std::exception& e) {
-                    registry.destroy(meshEntity);
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                                 "Failed to load texture %s",
-                                 texPath.c_str());
-                    handle_exception(e);
-                }
-            } else {
-                log("Texture already exists: %s", texPath.c_str());
-            }
-        }
-
+        /*
         try {
-            log("Creating Vulkan mesh for %s", name.c_str());
+            log("Creating Vulkan mesh for %s", path.c_str());
             m_vulkanMeshes.push_back(std::make_unique<VulkanMesh>(m_r_context));
-            m_vulkanMeshes.back()->upload(Mesh.meshData);
+            m_vulkanMeshes.back()->upload(meshComponent.meshData);
             log("Mesh upload successful");
         } catch (const std::exception& e) {
-            registry.destroy(meshEntity);
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
             m_vulkanMeshes.pop_back();
             handle_exception(e);
         }
+        */
 
-        registry.emplace<TransformComponent>(meshEntity, glm::vec3{0,0,0}, glm::vec3{0,0,0}, glm::vec3{1,1,1}, parent);
-        registry.emplace<MeshComponent>(meshEntity, Mesh);
+        //TransformComponent transformComponent;
+        //entt::entity modelEntity = engine.getRegistry().create();
 
-        log("Model %s registered successfully", name.c_str());
-        return meshEntity;
+        //ModelObject* modelObject = new ModelObject(engine, Mesh, transformComponent);
+
+        //log("Model %s registered successfully", name.c_str());
+        return meshComponent;//engine.getRegistry().get<GameObjectComponent>(modelObject->GetEntity()).object.get();
     }
 
-    void MeshManager::unloadModel(const std::string& name, entt::registry& registry) {
+    void MeshManager::destroyModel(ModelObject& modelObject) {
         // TODO
 
         /*auto it = m_modelRegistry.find(name);
@@ -129,5 +171,6 @@ namespace vex {
 
         m_modelRegistry.erase(name);
         m_p_resources->unloadTexture(name);*/
+        //modelObject.destroy();
     }
 }

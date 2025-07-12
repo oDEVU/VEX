@@ -1,7 +1,16 @@
+// CoreEngine
 #include "Engine.hpp"
 #include "components/GameInfo.hpp"
 #include "components/errorUtils.hpp"
 #include "components/ResolutionManager.hpp"
+
+// Object System
+#include "components/GameComponents/BasicComponents.hpp"
+#include "components/GameObjects/Creators/ModelCreator.hpp"
+#include "components/GameObjects/ModelObject.hpp"
+#include "components/GameObjects/CameraObject.hpp"
+
+#include "glm/fwd.hpp"
 
 #include <cstdlib>
 #include <sys/types.h>
@@ -46,39 +55,42 @@ public:
                 setResolutionMode(vex::ResolutionMode::RES_480P);
             }
 
-            // Basic camera input, just for testing, do not do it like this lmao
-
+            // Basic camera input, just for testing,
             if (key_event.scancode == SDL_SCANCODE_W) {
-                //getCamera()->transform.position = getCamera()->transform.position + (getCamera()->transform.getForwardVector()*float(deltaTime*250));
+                Camera->GetComponent<vex::TransformComponent>().position +=  Camera->GetComponent<vex::TransformComponent>().getForwardVector()/(float)10;
             }
 
             if (key_event.scancode == SDL_SCANCODE_S) {
-                //getCamera()->transform.position = getCamera()->transform.position + (getCamera()->transform.getForwardVector()*float(deltaTime*-250));
+                Camera->GetComponent<vex::TransformComponent>().position -=  Camera->GetComponent<vex::TransformComponent>().getForwardVector()/(float)10;
             }
 
             if (key_event.scancode == SDL_SCANCODE_D) {
-                //getCamera()->transform.position = getCamera()->transform.position + (getCamera()->transform.getRightVector()*float(deltaTime*250));
+                Camera->GetComponent<vex::TransformComponent>().position +=  Camera->GetComponent<vex::TransformComponent>().getRightVector()/(float)10;
             }
 
             if (key_event.scancode == SDL_SCANCODE_A) {
-                //getCamera()->transform.position = getCamera()->transform.position + (getCamera()->transform.getRightVector()*float(deltaTime*-250));
+                Camera->GetComponent<vex::TransformComponent>().position -=  Camera->GetComponent<vex::TransformComponent>().getRightVector()/(float)10;
             }
         }
     }
 
+    vex::ModelObject* playerEntity;
+    vex::ModelObject* viperEntity;
+    vex::CameraObject* Camera = new vex::CameraObject(
+        *this,
+        "mainCamera",
+        vex::TransformComponent{glm::vec3{0,0,5}, glm::vec3{0,270,0}, glm::vec3{1,1,1}},
+        vex::CameraComponent{45.0f, 0.1f, 100.0f});
+
     void beginGame() override {
-        entt::entity playerEntity = loadModel("Assets/human.obj", "player");
+        vex::MeshComponent playerMesh = vex::createMeshFromPath("Assets/human.obj", *this);
+        vex::TransformComponent playerTransform = vex::TransformComponent{
+            glm::vec3{0.0f, 0.3f, 0.0f},
+            glm::vec3{0.0f, 0.0f, 0.0f},
+            glm::vec3{0.1f, 0.1f, 0.1f}};
+        playerEntity = vex::createModelFromComponents("player", playerMesh, playerTransform, *this);
 
-        entt::entity viperEntity = loadModel("Assets/scene.gltf", "viper");
-
-        entt::entity camera = m_registry.create();
-        m_registry.emplace<vex::TransformComponent>(camera, glm::vec3{0,0,5}, glm::vec3{0,270,0}, glm::vec3{1,1,1}, entt::null);
-        m_registry.emplace<vex::CameraComponent>(camera, 45.0f, 0.1f, 100.0f);
-
-        // setup camera transforms
-        log("BeginGame: CameraSetup ..");
-        //getCamera()->transform.position = glm::vec3{0,0,5};
-        //getCamera()->transform.rotation = glm::vec3{0,270,0};
+        viperEntity = vex::createModelFromPath("Assets/scene.gltf", "viper", *this);
 #if DEBUG
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");
@@ -91,7 +103,12 @@ public:
 
     void update(float deltaTime) override {
         //pass
+        playerEntity->GetComponent<vex::TransformComponent>().rotation.y = m_frame;
     }
+
+    // fast todo
+    //
+    // fix parenting
 
     void render() override {
         // Custom rendering if needed

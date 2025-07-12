@@ -95,9 +95,9 @@ void Engine::setResolutionMode(ResolutionMode mode) {
     m_interface->setRenderResolution(renderRes);
 }
 
-entt::entity Engine::loadModel(const std::string& modelPath, const std::string& name, entt::entity parent){
-    return m_interface->getMeshManager().loadModel(modelPath, name, m_registry, parent);
-}
+//entt::entity Engine::loadModel(const std::string& modelPath, const std::string& name, entt::entity parent){
+//    return m_interface->getMeshManager().loadModel(modelPath, name, m_registry, parent);
+//}
 
 //Model* Engine::getModel(const std::string& name){
 //    return m_interface->getMeshManager().getModel(name);

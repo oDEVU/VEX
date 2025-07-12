@@ -2,7 +2,7 @@
 #include "entt/entity/fwd.hpp"
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
-#include <components/BasicComponents.hpp>
+#include <components/GameComponents/BasicComponents.hpp>
 
 namespace vex {
     Renderer::Renderer(VulkanContext& context,

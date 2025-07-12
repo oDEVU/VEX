@@ -1,7 +1,9 @@
 #pragma once
 
 #include "VulkanMesh.hpp"
+#include "components/GameObjects/ModelObject.hpp"
 #include "entt/entity/fwd.hpp"
+#include "Engine.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -15,8 +17,9 @@ namespace vex {
         MeshManager(VulkanContext& context, std::unique_ptr<VulkanResources>& resources);
         ~MeshManager();
 
-        entt::entity loadModel(const std::string& path, const std::string& name, entt::registry& registry, entt::entity parent);
-        void unloadModel(const std::string& name, entt::registry& registry);
+        MeshComponent loadMesh(const std::string& path);
+        ModelObject* createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent);
+        void destroyModel(ModelObject& modelObject);
         std::vector<std::unique_ptr<VulkanMesh>>& getMeshes() { return m_vulkanMeshes; }
         //std::vector<std::unique_ptr<Model>>& getModels() { return m_models; }
 

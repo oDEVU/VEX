@@ -8,7 +8,7 @@
 #include "components/ResolutionManager.hpp"
 #include "components/GameInfo.hpp"
 #include "components/ImGUIWrapper.hpp"
-#include "components/BasicComponents.hpp"
+#include "components/GameComponents/BasicComponents.hpp"
 
 namespace vex {
 
@@ -30,9 +30,10 @@ public:
     void setResolutionMode(ResolutionMode mode);
     ResolutionMode getResolutionMode() const { return m_resolutionManager->getCurrentMode(); }
 
-    entt::entity loadModel(const std::string& modelPath, const std::string& name, entt::entity parent = entt::null);
+    //entt::entity loadModel(const std::string& modelPath, const std::string& name, entt::entity parent = entt::null);
     //Model* getModel(const std::string& name);
 
+    std::shared_ptr<Interface> getInterface() { return m_interface; }
     entt::registry& getRegistry() { return m_registry; }
 
     virtual void processEvent(const SDL_Event& event, float deltaTime);
@@ -40,10 +41,10 @@ public:
     virtual void update(float deltaTime);
     virtual void render();
 protected:
-    std::unique_ptr<Window> m_window;
-    std::unique_ptr<Interface> m_interface;
-    std::unique_ptr<ResolutionManager> m_resolutionManager;
-    std::unique_ptr<ImGUIWrapper> m_imgui;
+    std::shared_ptr<Window> m_window;
+    std::shared_ptr<Interface> m_interface;
+    std::shared_ptr<ResolutionManager> m_resolutionManager;
+    std::shared_ptr<ImGUIWrapper> m_imgui;
 
     entt::registry m_registry;
 
