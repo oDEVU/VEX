@@ -13,6 +13,7 @@
 #include "glm/fwd.hpp"
 
 #include <cstdlib>
+#include <memory>
 #include <sys/types.h>
 
 class ObjectTest : public vex::Engine {
@@ -20,7 +21,6 @@ public:
     using vex::Engine::Engine; // Inherit constructor
     bool animate = true;
 
-    //FIXME: im dumb and this doesnt need delta time.
     void processEvent(const SDL_Event& event, float deltaTime) {
         if (event.type == SDL_EVENT_KEY_DOWN) {
             const SDL_KeyboardEvent& key_event = event.key;
@@ -74,7 +74,7 @@ public:
         }
     }
 
-    vex::ModelObject* playerEntity;
+    vex::ModelObject* humanEntity;
     vex::ModelObject* viperEntity;
     vex::CameraObject* Camera = new vex::CameraObject(
         *this,
@@ -83,12 +83,12 @@ public:
         vex::CameraComponent{45.0f, 0.1f, 100.0f});
 
     void beginGame() override {
-        vex::MeshComponent playerMesh = vex::createMeshFromPath("Assets/human.obj", *this);
-        vex::TransformComponent playerTransform = vex::TransformComponent{
+        vex::MeshComponent humanMesh = vex::createMeshFromPath("Assets/human.obj", *this);
+        vex::TransformComponent humanTransform = vex::TransformComponent{
             glm::vec3{0.0f, 0.3f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{0.1f, 0.1f, 0.1f}};
-        playerEntity = vex::createModelFromComponents("player", playerMesh, playerTransform, *this);
+        humanEntity = vex::createModelFromComponents("human", humanMesh, humanTransform, *this);
 
         viperEntity = vex::createModelFromPath("Assets/scene.gltf", "viper", *this);
 #if DEBUG
@@ -103,7 +103,19 @@ public:
 
     void update(float deltaTime) override {
         //pass
-        playerEntity->GetComponent<vex::TransformComponent>().rotation.y = m_frame;
+        if (humanEntity && humanEntity->isValid()) {
+            humanEntity->GetComponent<vex::TransformComponent>().rotation.y = m_frame;
+        }
+
+        // testing if i can remove entities at runtime
+        if (m_frame == 12000 && humanEntity && humanEntity->isValid()) {
+            delete humanEntity;
+            humanEntity = nullptr;
+        }
+        if (m_frame == 16000 && viperEntity && viperEntity->isValid()) {
+            delete viperEntity;
+            viperEntity = nullptr;
+        }
     }
 
     // fast todo

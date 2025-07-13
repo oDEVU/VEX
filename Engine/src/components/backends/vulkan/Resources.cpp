@@ -571,7 +571,10 @@ namespace vex {
             if (name == "default") return;
 
             auto it = m_textures.find(name);
-            if (it == m_textures.end()) return;
+            if (it == m_textures.end()){
+                log("Texture %s not loaded", name.c_str());
+                return;
+            }
 
             vkDeviceWaitIdle(m_r_context.device);
 
@@ -589,6 +592,7 @@ namespace vex {
             m_textureImages.erase(name);
             m_textureAllocations.erase(name);
             m_textureViews.erase(name);
+            log("Texture %s unloaded", name.c_str());
         }
 
         VkImageView VulkanResources::getTextureView(const std::string& name) const {

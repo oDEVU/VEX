@@ -46,7 +46,6 @@ set(public_header_files
     include/components/errorUtils.hpp
     include/components/ImGUIWrapper.hpp
     include/components/GameComponents/BasicComponents.hpp
-    include/components/GameComponents/GameObjectComponent.hpp
     include/components/GameObjects/GameObject.hpp
     include/components/GameObjects/ModelObject.hpp
     include/components/GameObjects/CameraObject.hpp
