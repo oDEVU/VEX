@@ -74,8 +74,12 @@ public:
         }
     }
 
-    vex::ModelObject* humanEntity;
-    vex::ModelObject* viperEntity;
+    vex::ModelObject* humanEntity1;
+    vex::ModelObject* humanEntity2;
+    vex::ModelObject* humanEntity3;
+    vex::ModelObject* humanEntity4;
+    vex::ModelObject* viperEntity1;
+    vex::ModelObject* viperEntity2;
     vex::CameraObject* Camera = new vex::CameraObject(
         *this,
         "mainCamera",
@@ -88,9 +92,17 @@ public:
             glm::vec3{0.0f, 0.3f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{0.1f, 0.1f, 0.1f}};
-        humanEntity = vex::createModelFromComponents("human", humanMesh, humanTransform, *this);
+        humanEntity1 = vex::createModelFromComponents("human1", humanMesh, humanTransform, *this);
+        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanEntity2 = vex::createModelFromComponents("human2", humanMesh, humanTransform, *this);
+        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanEntity3 = vex::createModelFromComponents("human3", humanMesh, humanTransform, *this);
+        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanEntity4 = vex::createModelFromComponents("human4", humanMesh, humanTransform, *this);
 
-        viperEntity = vex::createModelFromPath("Assets/scene.gltf", "viper", *this);
+        viperEntity1 = vex::createModelFromPath("Assets/scene.gltf", "viper1", *this);
+        viperEntity2 = vex::createModelFromPath("Assets/scene.gltf", "viper2", *this);
+        viperEntity2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, 0.0f, 0.0f};
 #if DEBUG
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");
@@ -103,18 +115,34 @@ public:
 
     void update(float deltaTime) override {
         //pass
-        if (humanEntity && humanEntity->isValid()) {
-            humanEntity->GetComponent<vex::TransformComponent>().rotation.y = m_frame;
+        if (humanEntity1 && humanEntity1->isValid()) {
+            humanEntity1->GetComponent<vex::TransformComponent>().rotation.y = m_frame;
         }
 
         // testing if i can remove entities at runtime
-        if (m_frame == 12000 && humanEntity && humanEntity->isValid()) {
-            delete humanEntity;
-            humanEntity = nullptr;
+        if (m_frame == 12000 && humanEntity1 && humanEntity1->isValid()) {
+            delete humanEntity1;
+            humanEntity1 = nullptr;
         }
-        if (m_frame == 16000 && viperEntity && viperEntity->isValid()) {
-            delete viperEntity;
-            viperEntity = nullptr;
+        if (m_frame == 24000 && humanEntity2 && humanEntity2->isValid()) {
+            delete humanEntity2;
+            humanEntity2 = nullptr;
+        }
+        if (m_frame == 36000 && humanEntity3 && humanEntity3->isValid()) {
+            delete humanEntity3;
+            humanEntity3 = nullptr;
+        }
+        if (m_frame == 48000 && humanEntity4 && humanEntity4->isValid()) {
+            delete humanEntity4;
+            humanEntity4 = nullptr;
+        }
+        if (m_frame == 16000 && viperEntity1 && viperEntity1->isValid()) {
+            delete viperEntity1;
+            viperEntity1 = nullptr;
+        }
+        if (m_frame == 32000 && viperEntity2 && viperEntity2->isValid()) {
+            delete viperEntity2;
+            viperEntity2 = nullptr;
         }
     }
 

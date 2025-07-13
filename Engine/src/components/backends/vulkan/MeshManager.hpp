@@ -3,6 +3,7 @@
 #include "VulkanMesh.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameObjects/ModelObject.hpp"
+#include "components/Mesh.hpp"
 #include "entt/entity/fwd.hpp"
 #include "Engine.hpp"
 
@@ -21,13 +22,10 @@ namespace vex {
         MeshComponent loadMesh(const std::string& path);
         ModelObject* createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent);
         void destroyModel(std::string& name, MeshComponent meshComponent);
-        std::unique_ptr<VulkanMesh>& getMeshByKey(std::string& key) { return m_vulkanMeshes.at(key); }
-        //std::vector<std::unique_ptr<Model>>& getModels() { return m_models; }
-
-        //Model* getModel(const std::string& name) {
-        //    auto it = m_modelRegistry.find(name);
-        //    return (it != m_modelRegistry.end()) ? it->second : nullptr;
-        //}
+        std::unique_ptr<VulkanMesh>& getMeshByKey(std::string& key) {
+            //log("Curently %i vulkan meshes loaded.", m_vulkanMeshes.size());
+            return m_vulkanMeshes.at(key);
+        }
 
     private:
         VulkanContext& m_r_context;

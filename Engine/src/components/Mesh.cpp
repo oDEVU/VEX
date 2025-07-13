@@ -77,7 +77,7 @@ namespace vex {
                         aiMesh->mTextureCoords[0][i].y
                     };
                 }else{
-                    log("Invalid texure UVs...");
+                    //log("Invalid texure UVs...");
                     submesh.vertices[i].uv = glm::vec2(-1.0f);
                 }
             }

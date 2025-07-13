@@ -69,15 +69,20 @@ namespace vex {
 
         try {
             log("Creating Vulkan mesh for %s", name.c_str());
-            std::string tmpName = name;
-            m_vulkanMeshes.emplace(tmpName, std::make_unique<VulkanMesh>(m_r_context));
+            if(m_vulkanMeshes.find(meshComponent.meshData.meshPath) == m_vulkanMeshes.end()){
+                m_vulkanMeshes.emplace(meshComponent.meshData.meshPath, std::make_unique<VulkanMesh>(m_r_context));
+                m_vulkanMeshes.at(meshComponent.meshData.meshPath)->upload(meshComponent.meshData);
+                m_vulkanMeshes.at(meshComponent.meshData.meshPath)->addInstance();
+            }else{
+                m_vulkanMeshes.at(meshComponent.meshData.meshPath)->addInstance();
+                log("Reusing same mesh model");
+            }
             //m_vulkanMeshes.push_back(std::make_unique<VulkanMesh>(m_r_context));
-            m_vulkanMeshes.at(name)->upload(meshComponent.meshData);
             //log("vulkanMesh id: %i", m_vulkanMeshes.size());
             log("Mesh upload successful");
         } catch (const std::exception& e) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
-            m_vulkanMeshes.erase(name);
+            m_vulkanMeshes.erase(meshComponent.meshData.meshPath);
             handle_exception(e);
         }
 
@@ -99,6 +104,7 @@ namespace vex {
             }
             fileCheck.close();
             meshData.loadFromFile(path);
+            meshData.meshPath = path;
         } catch (const std::exception& e) {
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Mesh load failed");
             handle_exception(e);
@@ -111,11 +117,15 @@ namespace vex {
         log("Freed model id");
         m_freeModelIds.push_back(meshComponent.id);
 
-        log("Erased VulkanMesh data");
-        m_vulkanMeshes.erase(name);
-        for(size_t i = 0; i < meshComponent.textureNames.size(); i++){
-            m_p_resources->unloadTexture(meshComponent.textureNames[i]);
+        if(getMeshByKey(meshComponent.meshData.meshPath)->getNumOfInstances() <= 1){
+            log("Erased VulkanMesh data");
+            m_vulkanMeshes.erase(meshComponent.meshData.meshPath);
+            for(size_t i = 0; i < meshComponent.textureNames.size(); i++){
+                m_p_resources->unloadTexture(meshComponent.textureNames[i]);
+            }
+            log("Unloaded textures");
+        }else{
+            getMeshByKey(meshComponent.meshData.meshPath)->removeInstance();
         }
-        log("Unloaded textures");
     }
 }

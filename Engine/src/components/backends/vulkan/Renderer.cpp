@@ -134,7 +134,7 @@ namespace vex {
         auto now = std::chrono::high_resolution_clock::now();
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
-        auto modelView = registry.view<TransformComponent, MeshComponent, NameComponent>();
+        auto modelView = registry.view<TransformComponent, MeshComponent>();
         uint32_t modelIndex = 0;
 
         for (auto entity : modelView) {
@@ -145,7 +145,7 @@ namespace vex {
 
             m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
             //auto& vulkanMesh = m_p_meshManager->getMeshes().at(modelView.get<NameComponent>(entity));
-            auto& vulkanMesh =  m_p_meshManager->getMeshByKey(modelView.get<NameComponent>(entity).name);
+            auto& vulkanMesh =  m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
             vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
             modelIndex++;
         }
