@@ -1,5 +1,3 @@
-#pragma once
-
 #include <string>
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 
