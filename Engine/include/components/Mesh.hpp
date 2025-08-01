@@ -1,4 +1,7 @@
 #pragma once
+#include "components/pathUtils.hpp"
+
+#include <filesystem>
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>

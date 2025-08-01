@@ -384,7 +384,7 @@ namespace vex {
         }
 
         void VulkanResources::loadTexture(const std::string& path, const std::string& name) {
-            std::string fullPath = "Assets/" + std::string(path.c_str());
+            std::string fullPath = path;//"Assets/" + std::string(path.c_str());
 
             if (m_r_context.textureIndices.size() >= m_r_context.MAX_TEXTURES) {
                 SDL_LogError(SDL_LOG_CATEGORY_ERROR,

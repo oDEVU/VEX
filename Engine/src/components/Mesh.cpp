@@ -5,7 +5,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/version.h>
-#include <filesystem>
 
 namespace vex {
     void MeshData::loadFromFile(const std::string& path) {
@@ -18,11 +17,13 @@ namespace vex {
         log("Creating assimp importer...");
         Assimp::Importer importer;
 
-        if (!std::filesystem::exists(path)){
-            throw_error("File: [" + path + "] doesnt exists");
+        std::string realPath = path;//GetAssetPath(path);
+
+        if (!std::filesystem::exists(realPath)){
+            throw_error("File: [" + realPath + "] doesnt exists");
         }
 
-        const aiScene* scene = importer.ReadFile(path,
+        const aiScene* scene = importer.ReadFile(realPath,
             aiProcess_Triangulate |
             aiProcess_GenNormals |
             aiProcess_FlipUVs);
@@ -94,11 +95,15 @@ namespace vex {
 
             // Textures
             log("Getting texture path...");
+
+            std::filesystem::path meshPath(realPath);
+            meshPath.remove_filename();
+
             if (aiMesh->mMaterialIndex >= 0) {
                 aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
                 aiString texPath;
                 if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS) {
-                    submesh.texturePath = texPath.C_Str();
+                    submesh.texturePath = meshPath.string() + texPath.C_Str();
                 }
             }
         }

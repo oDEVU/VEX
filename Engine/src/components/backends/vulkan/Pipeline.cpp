@@ -17,9 +17,12 @@ namespace vex {
 
     std::vector<char> VulkanPipeline::readFile(const std::string& filename) {
         log("Reading shader...");
-        std::ifstream file(filename, std::ios::ate | std::ios::binary);
+
+        std::string realPath = GetAssetPath(filename);
+
+        std::ifstream file(realPath, std::ios::ate | std::ios::binary);
         if (!file.is_open()) {
-            throw_error("Failed to open shader file: " + filename);
+            throw_error("Failed to open shader file: " + realPath);
         }
         size_t fileSize = file.tellg();
         std::vector<char> buffer(fileSize);

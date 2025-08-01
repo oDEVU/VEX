@@ -39,8 +39,13 @@ namespace vex {
                 throw_error("Maximum model count exceeded");
             }
         }
+        //std::string realPath = GetAssetPath(path);
         meshComponent.id = newId;
         meshComponent.textureNames.clear();
+
+        //std::filesystem::path meshPath(meshComponent.meshData.meshPath);
+        //meshPath.remove_filename();
+
                 std::unordered_set<std::string> uniqueTextures;
                 for (const auto& submesh : meshComponent.meshData.submeshes) {
                     if (!submesh.texturePath.empty()) {
@@ -96,15 +101,15 @@ namespace vex {
         MeshData meshData;
         MeshComponent meshComponent;
         try {
-
-            log("Loading mesh data from: %s", path.c_str());
-            std::ifstream fileCheck(path);
+            std::string realPath = GetAssetPath(path);
+            log("Loading mesh data from: %s", realPath.c_str());
+            std::ifstream fileCheck(realPath);
             if (!fileCheck.is_open()) {
-                throw_error("File not found: " + path);
+                throw_error("File not found: " + realPath);
             }
             fileCheck.close();
-            meshData.loadFromFile(path);
-            meshData.meshPath = path;
+            meshData.loadFromFile(realPath);
+            meshData.meshPath = realPath;
         } catch (const std::exception& e) {
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Mesh load failed");
             handle_exception(e);

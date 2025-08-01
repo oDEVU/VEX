@@ -83,7 +83,7 @@ namespace vex {
             const auto& buffers = m_submeshBuffers[i];
             const auto& textureName = m_submeshTextures[i];
             uint32_t textureIndex = resources.getTextureIndex(textureName);
-
+            //log("Invalid texture index %u for '%s'", textureIndex, textureName.c_str());
 
             if (textureIndex >= m_r_context.MAX_TEXTURES) {
                 SDL_LogError(SDL_LOG_CATEGORY_RENDER,

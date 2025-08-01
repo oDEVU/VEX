@@ -44,6 +44,7 @@ set(public_header_files
     include/components/Mesh.hpp
     include/components/ResolutionManager.hpp
     include/components/errorUtils.hpp
+    include/components/pathUtils.hpp
     include/components/ImGUIWrapper.hpp
     include/components/GameComponents/BasicComponents.hpp
     include/components/GameObjects/GameObject.hpp

@@ -3,16 +3,20 @@
 #include "SDL3/SDL_events.h"
 
 #include "components/Window.hpp"
+#include "components/pathUtils.hpp"
 
 #include "components/backends/vulkan/Interface.hpp"
 #include "components/backends/vulkan/VulkanImGUIWrapper.hpp"
 #include "components/backends/vulkan/context.hpp"
 #include "entt/entity/fwd.hpp"
+
 #include <cstdint>
+#include <filesystem>
 
 namespace vex {
 
 Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
+    std::filesystem::current_path(GetExecutableDir());
     m_gameInfo = gInfo;
     if(m_gameInfo.versionMajor == 0 && m_gameInfo.versionMinor == 0 && m_gameInfo.versionPatch == 0){
         log("Project version not set!");

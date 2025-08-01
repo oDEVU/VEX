@@ -4,6 +4,9 @@
 #include <glm/glm.hpp>
 #include "components/errorUtils.hpp"
 
+#include "components/pathUtils.hpp"
+#include <filesystem>
+
 namespace vex {
     class VulkanPipeline {
     public:
