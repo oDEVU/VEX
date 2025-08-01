@@ -1,5 +1,8 @@
 #include "Renderer.hpp"
+#include "entt/entity/fwd.hpp"
 #include <SDL3/SDL.h>
+#include <entt/entt.hpp>
+#include <components/GameComponents/BasicComponents.hpp>
 
 namespace vex {
     Renderer::Renderer(VulkanContext& context,
@@ -20,7 +23,7 @@ namespace vex {
         log("Renderer destroyed");
     }
 
-    void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, ImGUIWrapper& m_ui, uint64_t frame) {
+    void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, uint64_t frame) {
         if (renderResolution != m_r_context.currentRenderResolution) {
             m_r_context.currentRenderResolution = renderResolution;
             m_p_pipeline->updateViewport(renderResolution);
@@ -131,12 +134,27 @@ namespace vex {
         auto now = std::chrono::high_resolution_clock::now();
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
-        auto& models = m_p_meshManager->getModels();
+        auto modelView = registry.view<TransformComponent, MeshComponent>();
+        uint32_t modelIndex = 0;
+
+        for (auto entity : modelView) {
+            auto& transform = modelView.get<TransformComponent>(entity);
+            auto& mesh = modelView.get<MeshComponent>(entity);
+            //auto* model = m_p_meshManager->getModel(mesh.modelName);
+            //if (!model) continue;
+
+            m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
+            //auto& vulkanMesh = m_p_meshManager->getMeshes().at(modelView.get<NameComponent>(entity));
+            auto& vulkanMesh =  m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
+            vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
+            modelIndex++;
+        }
+        /*auto& models = m_p_meshManager->getModels();
         for (size_t i = 0; i < m_p_meshManager->getMeshes().size(); ++i) {
             auto& vulkanMesh = m_p_meshManager->getMeshes()[i];
             m_p_resources->updateModelUBO(m_r_context.currentFrame, i, ModelUBO{models[i]->transform.matrix()});
             vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, i, currentTime, m_r_context.currentRenderResolution);
-        }
+        }*/
 
         if (frame != 0) {
             m_ui.beginFrame();

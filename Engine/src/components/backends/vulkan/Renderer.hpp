@@ -20,7 +20,7 @@ namespace vex {
                  std::unique_ptr<MeshManager>& meshManager);
         ~Renderer();
 
-        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, ImGUIWrapper& ui, uint64_t frame);
+        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& ui, uint64_t frame);
 
     private:
         void transitionImageLayout(VkCommandBuffer cmd, VkImage image,

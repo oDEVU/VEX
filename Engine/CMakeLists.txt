@@ -42,11 +42,15 @@ generate_export_header(${PROJECT_NAME}
 set(public_header_files
     include/Engine.hpp
     include/components/Mesh.hpp
-    include/components/Model.hpp
-    include/components/transform.hpp
     include/components/ResolutionManager.hpp
     include/components/errorUtils.hpp
+    include/components/pathUtils.hpp
     include/components/ImGUIWrapper.hpp
+    include/components/GameComponents/BasicComponents.hpp
+    include/components/GameObjects/GameObject.hpp
+    include/components/GameObjects/ModelObject.hpp
+    include/components/GameObjects/CameraObject.hpp
+    include/components/GameObjects/Creators/ModelCreator.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(source_files
@@ -73,6 +77,7 @@ set(source_files
         src/components/backends/vulkan/Renderer.hpp
         src/components/backends/vulkan/MeshManager.cpp
         src/components/backends/vulkan/MeshManager.hpp
+        src/components/GameObjects/Creators/ModelCreator.cpp
     )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

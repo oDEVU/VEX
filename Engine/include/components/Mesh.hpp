@@ -1,4 +1,7 @@
 #pragma once
+#include "components/pathUtils.hpp"
+
+#include <filesystem>
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
@@ -19,7 +22,7 @@ namespace vex {
 
     struct MeshData {
         std::vector<Submesh> submeshes;
-
+        std::string meshPath;
         void loadFromFile(const std::string& path);
         void clear() {
             submeshes.clear();

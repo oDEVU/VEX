@@ -21,3 +21,7 @@
 [submodule "Engine/thirdparty/imgui"]
 	path = Engine/thirdparty/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Engine/thirdparty/entt"]
+	path = Engine/thirdparty/entt
+	url = https://github.com/skypjack/entt.git
+	branch = v3.13.x

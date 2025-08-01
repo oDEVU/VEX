@@ -44,6 +44,9 @@ set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(assimp)
 
+#entt
+add_subdirectory(entt)
+
 # dirty fix for assimp not compiling in realese
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(assimp PRIVATE -Wno-array-bounds)
@@ -102,6 +105,7 @@ target_link_libraries(thirdparty_engine INTERFACE
     VulkanMemoryAllocator
     assimp
     thirdparty_glm
+    EnTT::EnTT
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
