@@ -88,6 +88,7 @@ public:
         inputComp.addBinding(SDL_SCANCODE_A, vex::InputActionState::Held, [this](float deltaTime) {
             Camera->GetComponent<vex::TransformComponent>().position -= Camera->GetComponent<vex::TransformComponent>().getRightVector() * deltaTime;
         });
+
         inputComp.addBinding(SDL_SCANCODE_E, vex::InputActionState::Pressed, [this](float) {
             if(getInputMode() == vex::InputMode::Game){
                 setInputMode(vex::InputMode::UI);
@@ -109,14 +110,18 @@ public:
         vex::TransformComponent humanTransform = vex::TransformComponent{
             glm::vec3{0.0f, 0.3f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
-            glm::vec3{0.1f, 0.1f, 0.1f}};
+            glm::vec3{1.0f, 1.0f, 1.0f}};
         humanEntity1 = vex::createModelFromComponents("human1", humanMesh, humanTransform, *this);
-        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanTransform.position += glm::vec3(5,0,0);
         humanEntity2 = vex::createModelFromComponents("human2", humanMesh, humanTransform, *this);
-        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanTransform.position += glm::vec3(5,0,0);
         humanEntity3 = vex::createModelFromComponents("human3", humanMesh, humanTransform, *this);
-        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanTransform.position += glm::vec3(5,0,0);
         humanEntity4 = vex::createModelFromComponents("human4", humanMesh, humanTransform, *this);
+
+        humanEntity2->ParentTo(humanEntity1->GetEntity());
+        humanEntity3->ParentTo(humanEntity2->GetEntity());
+        humanEntity4->ParentTo(humanEntity3->GetEntity());
 
         viperEntity1 = vex::createModelFromPath("Assets/scene.gltf", "viper1", *this);
         viperEntity2 = vex::createModelFromPath("Assets/scene.gltf", "viper2", *this);
@@ -138,35 +143,31 @@ public:
         }
 
         // testing if i can remove entities at runtime
-        if (m_frame == 12000 && humanEntity1 && humanEntity1->isValid()) {
+        if (m_frame == 120000 && humanEntity1 && humanEntity1->isValid()) {
             delete humanEntity1;
             humanEntity1 = nullptr;
         }
-        if (m_frame == 24000 && humanEntity2 && humanEntity2->isValid()) {
+        if (m_frame == 240000 && humanEntity2 && humanEntity2->isValid()) {
             delete humanEntity2;
             humanEntity2 = nullptr;
         }
-        if (m_frame == 36000 && humanEntity3 && humanEntity3->isValid()) {
+        if (m_frame == 360000 && humanEntity3 && humanEntity3->isValid()) {
             delete humanEntity3;
             humanEntity3 = nullptr;
         }
-        if (m_frame == 48000 && humanEntity4 && humanEntity4->isValid()) {
+        if (m_frame == 480000 && humanEntity4 && humanEntity4->isValid()) {
             delete humanEntity4;
             humanEntity4 = nullptr;
         }
-        if (m_frame == 16000 && viperEntity1 && viperEntity1->isValid()) {
+        if (m_frame == 160000 && viperEntity1 && viperEntity1->isValid()) {
             delete viperEntity1;
             viperEntity1 = nullptr;
         }
-        if (m_frame == 32000 && viperEntity2 && viperEntity2->isValid()) {
+        if (m_frame == 320000 && viperEntity2 && viperEntity2->isValid()) {
             delete viperEntity2;
             viperEntity2 = nullptr;
         }
     }
-
-    // fast todo
-    //
-    // fix parenting
 
     void render() override {
         // Custom rendering if needed

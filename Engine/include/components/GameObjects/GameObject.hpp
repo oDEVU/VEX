@@ -49,6 +49,9 @@
       template<typename T> void AddComponent(const T& comp) { m_engine.getRegistry().emplace_or_replace<T>(m_entity, comp); }
       template<typename T> bool HasComponent() const { return m_engine.getRegistry().any_of<T>(m_entity); }
       bool isValid() const { return m_isValid; }
+      void ParentTo(entt::entity entity){
+          GetComponent<TransformComponent>().parent = entity;
+      }
       protected:
       Engine& m_engine;
       entt::entity m_entity;
