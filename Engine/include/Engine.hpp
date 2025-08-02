@@ -9,6 +9,7 @@
 #include "components/GameInfo.hpp"
 #include "components/ImGUIWrapper.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
+#include "components/InputSystem.hpp"
 
 namespace vex {
 
@@ -29,6 +30,8 @@ public:
 
     void setResolutionMode(ResolutionMode mode);
     ResolutionMode getResolutionMode() const { return m_resolutionManager->getCurrentMode(); }
+    void setInputMode(InputMode mode) { m_inputSystem->setInputMode(mode); }
+    InputMode getInputMode() const { return m_inputSystem->getInputMode(); }
 
     //entt::entity loadModel(const std::string& modelPath, const std::string& name, entt::entity parent = entt::null);
     //Model* getModel(const std::string& name);
@@ -45,6 +48,7 @@ protected:
     std::shared_ptr<Interface> m_interface;
     std::shared_ptr<ResolutionManager> m_resolutionManager;
     std::shared_ptr<ImGUIWrapper> m_imgui;
+    std::unique_ptr<InputSystem> m_inputSystem;
 
     entt::registry m_registry;
 

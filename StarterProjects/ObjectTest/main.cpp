@@ -3,9 +3,11 @@
 #include "components/GameInfo.hpp"
 #include "components/errorUtils.hpp"
 #include "components/ResolutionManager.hpp"
+#include "components/InputSystem.hpp"
 
 // Object System
 #include "components/GameComponents/BasicComponents.hpp"
+#include "components/GameComponents/InputComponent.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/GameObjects/ModelObject.hpp"
 #include "components/GameObjects/CameraObject.hpp"
@@ -54,23 +56,6 @@ public:
             if (key_event.scancode == SDL_SCANCODE_4) {
                 setResolutionMode(vex::ResolutionMode::RES_480P);
             }
-
-            // Basic camera input, just for testing,
-            if (key_event.scancode == SDL_SCANCODE_W) {
-                Camera->GetComponent<vex::TransformComponent>().position +=  Camera->GetComponent<vex::TransformComponent>().getForwardVector()/(float)10;
-            }
-
-            if (key_event.scancode == SDL_SCANCODE_S) {
-                Camera->GetComponent<vex::TransformComponent>().position -=  Camera->GetComponent<vex::TransformComponent>().getForwardVector()/(float)10;
-            }
-
-            if (key_event.scancode == SDL_SCANCODE_D) {
-                Camera->GetComponent<vex::TransformComponent>().position +=  Camera->GetComponent<vex::TransformComponent>().getRightVector()/(float)10;
-            }
-
-            if (key_event.scancode == SDL_SCANCODE_A) {
-                Camera->GetComponent<vex::TransformComponent>().position -=  Camera->GetComponent<vex::TransformComponent>().getRightVector()/(float)10;
-            }
         }
     }
 
@@ -80,13 +65,46 @@ public:
     vex::ModelObject* humanEntity4;
     vex::ModelObject* viperEntity1;
     vex::ModelObject* viperEntity2;
-    vex::CameraObject* Camera = new vex::CameraObject(
-        *this,
-        "mainCamera",
-        vex::TransformComponent{glm::vec3{0,0,5}, glm::vec3{0,270,0}, glm::vec3{1,1,1}},
-        vex::CameraComponent{45.0f, 0.1f, 100.0f});
+    vex::CameraObject* Camera;
 
     void beginGame() override {
+        Camera = new vex::CameraObject(
+            *this,
+            "mainCamera",
+            vex::TransformComponent{glm::vec3{0,0,5}, glm::vec3{0,270,0}, glm::vec3{1,1,1}},
+            vex::CameraComponent{45.0f, 0.1f, 100.0f}
+        );
+
+        vex::InputComponent inputComp;
+        inputComp.addBinding(SDL_SCANCODE_W, vex::InputActionState::Held, [this](float deltaTime) {
+            Camera->GetComponent<vex::TransformComponent>().position += Camera->GetComponent<vex::TransformComponent>().getForwardVector() * deltaTime;
+        });
+        inputComp.addBinding(SDL_SCANCODE_S, vex::InputActionState::Held, [this](float deltaTime) {
+            Camera->GetComponent<vex::TransformComponent>().position -= Camera->GetComponent<vex::TransformComponent>().getForwardVector() * deltaTime;
+        });
+        inputComp.addBinding(SDL_SCANCODE_D, vex::InputActionState::Held, [this](float deltaTime) {
+            Camera->GetComponent<vex::TransformComponent>().position += Camera->GetComponent<vex::TransformComponent>().getRightVector() * deltaTime;
+        });
+        inputComp.addBinding(SDL_SCANCODE_A, vex::InputActionState::Held, [this](float deltaTime) {
+            Camera->GetComponent<vex::TransformComponent>().position -= Camera->GetComponent<vex::TransformComponent>().getRightVector() * deltaTime;
+        });
+        inputComp.addBinding(SDL_SCANCODE_E, vex::InputActionState::Pressed, [this](float) {
+            if(getInputMode() == vex::InputMode::Game){
+                setInputMode(vex::InputMode::UI);
+            }else{
+                setInputMode(vex::InputMode::Game);
+            }
+        });
+
+        inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis, float deltaTime) {
+            Camera->GetComponent<vex::TransformComponent>().rotation.y += axis * deltaTime * 25;
+        });
+        inputComp.addMouseAxisBinding(vex::MouseAxis::Y, [this](float axis, float deltaTime) {
+            Camera->GetComponent<vex::TransformComponent>().rotation.x -= axis * deltaTime * 25;
+        });
+
+        Camera->AddComponent(inputComp);
+
         vex::MeshComponent humanMesh = vex::createMeshFromPath("Assets/human.obj", *this);
         vex::TransformComponent humanTransform = vex::TransformComponent{
             glm::vec3{0.0f, 0.3f, 0.0f},

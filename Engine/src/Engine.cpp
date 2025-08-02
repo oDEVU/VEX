@@ -24,6 +24,7 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
 
     m_window = std::make_unique<Window>(title, width, height);
     m_resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
+    m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
 
     // Testing resolution modes
     //m_resolutionManager->setMode(ResolutionMode::NATIVE);       // Native
@@ -52,6 +53,7 @@ void Engine::run() {
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
+            m_inputSystem->processEvent(event, deltaTime);
             processEvent(event, deltaTime);
             m_imgui->processEvent(&event);
             switch (event.type) {
@@ -73,6 +75,7 @@ void Engine::run() {
             }
         }
 
+        m_inputSystem->update(deltaTime);
 
         if(m_frame > 0){
             update(deltaTime);
@@ -88,6 +91,7 @@ void Engine::run() {
 Engine::~Engine() {
     m_imgui.reset();
     m_interface.reset();
+    m_inputSystem.reset();
     m_window.reset();
     SDL_Quit();
 }

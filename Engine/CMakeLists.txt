@@ -46,7 +46,9 @@ set(public_header_files
     include/components/errorUtils.hpp
     include/components/pathUtils.hpp
     include/components/ImGUIWrapper.hpp
+    include/components/InputSystem.hpp
     include/components/GameComponents/BasicComponents.hpp
+    include/components/GameComponents/InputComponent.hpp
     include/components/GameObjects/GameObject.hpp
     include/components/GameObjects/ModelObject.hpp
     include/components/GameObjects/CameraObject.hpp
@@ -59,6 +61,7 @@ set(source_files
         src/components/ResolutionManager.cpp
         src/components/Window.cpp
         src/components/Window.hpp
+        src/components/InputSystem.cpp
         src/components/backends/vulkan/context.hpp
         src/components/backends/vulkan/Interface.cpp
         src/components/backends/vulkan/Interface.hpp
