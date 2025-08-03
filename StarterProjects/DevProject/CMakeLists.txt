@@ -1,5 +1,18 @@
 cmake_minimum_required(VERSION 3.16)
-project(DevProject)
+project(VexProject)
+
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VexProject.json")
+    message(FATAL_ERROR "Project file not found!")
+endif()
+
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VexProject.json" PROJECT_JSON)
+string(JSON PROJECT_NAME ERROR_VARIABLE JSON_ERROR GET "${PROJECT_JSON}" "project_name")
+
+if(JSON_ERROR)
+    message(FATAL_ERROR "Failed to parse project file: ${JSON_ERROR}")
+endif()
+
+project(${PROJECT_NAME})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_STANDARD 20)
