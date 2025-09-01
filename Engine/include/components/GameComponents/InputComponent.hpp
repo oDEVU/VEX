@@ -26,7 +26,7 @@ struct InputBinding {
 
 struct MouseAxisBinding {
     MouseAxis axis;
-    std::function<void(float, float)> action;
+    std::function<void(float)> action;
 };
 
 struct InputComponent {
@@ -37,7 +37,7 @@ struct InputComponent {
         bindings.push_back({scancode, state, action});
     }
 
-    void addMouseAxisBinding(MouseAxis axis, std::function<void(float, float)> action) {
+    void addMouseAxisBinding(MouseAxis axis, std::function<void(float)> action) {
         mouseAxisBindings.push_back({axis, action});
     }
 };

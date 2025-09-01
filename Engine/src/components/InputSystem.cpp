@@ -58,7 +58,7 @@ namespace vex {
                 auto& inputComp = view.get<InputComponent>(entity);
                 for (const auto& binding : inputComp.mouseAxisBindings) {
                     float delta = (binding.axis == MouseAxis::X) ? event.motion.xrel : event.motion.yrel;
-                    binding.action(delta, deltaTime);
+                    binding.action(delta);
                 }
             }
         }

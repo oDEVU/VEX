@@ -77,6 +77,7 @@ public:
             vex::CameraComponent{45.0f, 0.1f, 100.0f}
         );
 
+        // Action Inputs need deltaTime
         vex::InputComponent inputComp;
         inputComp.addBinding(SDL_SCANCODE_W, vex::InputActionState::Held, [this](float deltaTime) {
             Camera->GetComponent<vex::TransformComponent>().position += Camera->GetComponent<vex::TransformComponent>().getForwardVector() * deltaTime;
@@ -99,11 +100,12 @@ public:
             }
         });
 
-        inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis, float deltaTime) {
-            Camera->GetComponent<vex::TransformComponent>().rotation.y += axis * deltaTime * 25;
+        // Axis inputs dont need delta time since movement beetween frames will be proportionaly smaller
+        inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis) {
+            Camera->GetComponent<vex::TransformComponent>().rotation.y += axis * 0.05;
         });
-        inputComp.addMouseAxisBinding(vex::MouseAxis::Y, [this](float axis, float deltaTime) {
-            Camera->GetComponent<vex::TransformComponent>().rotation.x -= axis * deltaTime * 25;
+        inputComp.addMouseAxisBinding(vex::MouseAxis::Y, [this](float axis) {
+            Camera->GetComponent<vex::TransformComponent>().rotation.x -= axis * 0.05;
         });
 
         Camera->AddComponent(inputComp);
