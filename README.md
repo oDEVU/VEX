@@ -1,6 +1,8 @@
 # VEX (Vulkan Early eXperiences)
- Game engine made in vulkan that aim to replicate feel of ps1 era games. Main goal of the project is to learn graphics programming without complicationg my life with PBR, etc. But still build somethink 'cool'.
 
+![Vex logo rendered in engine](/RepoStuff/RenderedLogo.png)
+
+ Game engine made in vulkan that aim to replicate feel of ps1 era games. Main goal of the project is to learn graphics programming without complicationg my life with PBR, etc. But still build somethink 'cool'.
 
 // TODO:
 
