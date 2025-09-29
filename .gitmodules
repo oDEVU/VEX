@@ -1,27 +1,27 @@
-[submodule "thirdparty/SDL"]
+[submodule "Engine/Core/thirdparty/SDL"]
 	path = Engine/Core/thirdparty/SDL
 	url = https://github.com/libsdl-org/SDL.git
 	branch = release-3.2.x
-[submodule "thirdparty/volk"]
+[submodule "Engine/Core/thirdparty/volk"]
 	path = Engine/Core/thirdparty/volk
 	url = https://github.com/zeux/volk
 	branch = vulkan-sdk-1.4.313
-[submodule "thirdparty/VulkanMemoryAllocator"]
-	path = Engine/Core/thirdparty/VulkanMemoryAllocator
-	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
-[submodule "thirdparty/assimp"]
-	path = Engine/Core/thirdparty/assimp
-	url = https://github.com/assimp/assimp.git
-[submodule "thirdparty/glm"]
+[submodule "Engine/Core/thirdparty/glm"]
 	path = Engine/Core/thirdparty/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "Engine/thirdparty/cpptrace"]
+[submodule "Engine/Core/thirdparty/cpptrace"]
 	path = Engine/Core/thirdparty/cpptrace
 	url = https://github.com/jeremy-rifkin/cpptrace.git
-[submodule "Engine/thirdparty/imgui"]
+[submodule "Engine/Core/thirdparty/imgui"]
 	path = Engine/Core/thirdparty/imgui
 	url = https://github.com/ocornut/imgui.git
-[submodule "Engine/thirdparty/entt"]
+[submodule "Engine/Core/thirdparty/entt"]
 	path = Engine/Core/thirdparty/entt
 	url = https://github.com/skypjack/entt.git
 	branch = v3.13.x
+[submodule "Engine/Core/thirdparty/VulkanMemoryAllocator"]
+	path = Engine/Core/thirdparty/VulkanMemoryAllocator
+	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git
+[submodule "Engine/Core/thirdparty/assimp"]
+	path = Engine/Core/thirdparty/assimp
+	url = https://github.com/assimp/assimp.git
