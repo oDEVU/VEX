@@ -1,5 +1,6 @@
 {
   "project_name": "ObjectTest",
   "main_scene": "Assets/scenes/main.json",
-  "version": "1"
+  "version": "1",
+  "engine_path": "../../Engine"
 }

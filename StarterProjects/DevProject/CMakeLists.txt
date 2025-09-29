@@ -12,6 +12,16 @@ if(JSON_ERROR)
     message(FATAL_ERROR "Failed to parse project file: ${JSON_ERROR}")
 endif()
 
+string(JSON ENGINE_PATH ERROR_VARIABLE JSON_ERROR GET "${PROJECT_JSON}" "engine_path")
+
+if(NOT EXISTS "${ENGINE_PATH}")
+    message(FATAL_ERROR "Project file has invalid engine path. Please check the path in the project file.")
+endif()
+
+if(NOT EXISTS "${ENGINE_PATH}/BuildTools/build/vpak_packer")
+    message(FATAL_ERROR "BuildTools are not present. Make sure they are built.")
+endif()
+
 project(${PROJECT_NAME})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
@@ -30,18 +40,28 @@ else()
 endif()
 
 target_sources(${PROJECT_NAME} PRIVATE main.cpp)
-add_subdirectory(../../Engine  ${CMAKE_BINARY_DIR}/Engine)
+add_subdirectory(${ENGINE_PATH}/Core  ${CMAKE_BINARY_DIR}/Engine)
 target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
 
 set(ASSETS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Assets")
 set(ASSETS_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/Assets")
 
-add_custom_target(copy_Assets ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${ASSETS_DEST_DIR}"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${ASSETS_SOURCE_DIR}"
-        "${ASSETS_DEST_DIR}"
-    COMMENT "Copying Assets directory"
-)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_custom_target(copy_Assets ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${ASSETS_DEST_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${ASSETS_SOURCE_DIR}"
+            "${ASSETS_DEST_DIR}"
+        COMMENT "Copying Assets directory"
+    )
+else()
+    make_directory(${ASSETS_DEST_DIR})
+    add_custom_target(copy_Assets ALL
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/${ENGINE_PATH}/BuildTools/build/vpak_packer
+        ${ASSETS_SOURCE_DIR}
+        ${ASSETS_DEST_DIR}/assets.vpk
+        COMMENT "Packing assets for release build"
+    )
+endif()
 
 add_dependencies(${PROJECT_NAME} copy_Assets)
