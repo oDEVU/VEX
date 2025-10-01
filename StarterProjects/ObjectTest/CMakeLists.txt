@@ -34,7 +34,9 @@ set(CMAKE_CXX_STANDARD 20)
 # So zed would no longer show false errors you need to copy or link compile_commands.json file to root folder.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(${PROJECT_NAME})
+file(GLOB GAME_SRC CONFIGURE_DEPENDS "Source/*.h" "Source/*.cpp")
+
+add_executable(${PROJECT_NAME} ${GAME_SRC})
 
 # Enables stacktraces for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

@@ -6,6 +6,7 @@
 #include "components/errorUtils.hpp"
 #include "components/ResolutionManager.hpp"
 #include "components/InputSystem.hpp"
+#include "components/SceneManager.hpp"
 
 // Object System
 #include "components/GameComponents/BasicComponents.hpp"
@@ -24,6 +25,7 @@ class ObjectTest : public vex::Engine {
 public:
     using vex::Engine::Engine; // Inherit constructor
     bool animate = true;
+    vex::SceneManager sceneManager;
 
     void processEvent(const SDL_Event& event, float deltaTime) {
         if (event.type == SDL_EVENT_KEY_DOWN) {
@@ -67,50 +69,12 @@ public:
     vex::ModelObject* humanEntity4;
     vex::ModelObject* viperEntity1;
     vex::ModelObject* viperEntity2;
-    vex::CameraObject* Camera;
 
     double fps = 0;
 
     void beginGame() override {
-        Camera = new vex::CameraObject(
-            *this,
-            "mainCamera",
-            vex::TransformComponent{glm::vec3{0,0,5}, glm::vec3{0,270,0}, glm::vec3{1,1,1}},
-            vex::CameraComponent{45.0f, 0.1f, 100.0f}
-        );
-
-        // Action Inputs need deltaTime
-        vex::InputComponent inputComp;
-        inputComp.addBinding(SDL_SCANCODE_W, vex::InputActionState::Held, [this](float deltaTime) {
-            Camera->GetComponent<vex::TransformComponent>().position += Camera->GetComponent<vex::TransformComponent>().getForwardVector() * deltaTime;
-        });
-        inputComp.addBinding(SDL_SCANCODE_S, vex::InputActionState::Held, [this](float deltaTime) {
-            Camera->GetComponent<vex::TransformComponent>().position -= Camera->GetComponent<vex::TransformComponent>().getForwardVector() * deltaTime;
-        });
-        inputComp.addBinding(SDL_SCANCODE_D, vex::InputActionState::Held, [this](float deltaTime) {
-            Camera->GetComponent<vex::TransformComponent>().position += Camera->GetComponent<vex::TransformComponent>().getRightVector() * deltaTime;
-        });
-        inputComp.addBinding(SDL_SCANCODE_A, vex::InputActionState::Held, [this](float deltaTime) {
-            Camera->GetComponent<vex::TransformComponent>().position -= Camera->GetComponent<vex::TransformComponent>().getRightVector() * deltaTime;
-        });
-
-        inputComp.addBinding(SDL_SCANCODE_E, vex::InputActionState::Pressed, [this](float) {
-            if(getInputMode() == vex::InputMode::Game){
-                setInputMode(vex::InputMode::UI);
-            }else{
-                setInputMode(vex::InputMode::Game);
-            }
-        });
-
-        // Axis inputs dont need delta time since movement beetween frames will be proportionaly smaller
-        inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis) {
-            Camera->GetComponent<vex::TransformComponent>().rotation.y += axis * 0.05;
-        });
-        inputComp.addMouseAxisBinding(vex::MouseAxis::Y, [this](float axis) {
-            Camera->GetComponent<vex::TransformComponent>().rotation.x -= axis * 0.05;
-        });
-
-        Camera->AddComponent(inputComp);
+        sceneManager.loadScene("Assets/scenes/main.json", *this);
+        sceneManager.sceneBegin();
 
         vex::MeshComponent humanMesh = vex::createMeshFromPath("Assets/human.obj", *this);
         vex::TransformComponent humanTransform = vex::TransformComponent{
@@ -148,6 +112,8 @@ public:
     void update(float deltaTime) override {
 
         fps = 1/deltaTime;
+
+        sceneManager.sceneUpdate(deltaTime);
 
         //pass
         if (humanEntity1 && humanEntity1->isValid()) {

@@ -25,3 +25,7 @@
 [submodule "Engine/Core/thirdparty/assimp"]
 	path = Engine/Core/thirdparty/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "Engine/Core/thirdparty/json"]
+	path = Engine/Core/thirdparty/json
+	url = https://github.com/nlohmann/json.git
+	branch = master

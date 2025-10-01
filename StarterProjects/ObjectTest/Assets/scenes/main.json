@@ -1,0 +1,8 @@
+{
+  "objects": [
+    {
+      "type": "Player",
+      "name": "DebugCamera"
+    }
+  ]
+}

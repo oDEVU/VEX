@@ -34,9 +34,6 @@ public:
     void setInputMode(InputMode mode) { m_inputSystem->setInputMode(mode); }
     InputMode getInputMode() const { return m_inputSystem->getInputMode(); }
 
-    //entt::entity loadModel(const std::string& modelPath, const std::string& name, entt::entity parent = entt::null);
-    //Model* getModel(const std::string& name);
-
     std::shared_ptr<Interface> getInterface() { return m_interface; }
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
     entt::registry& getRegistry() { return m_registry; }

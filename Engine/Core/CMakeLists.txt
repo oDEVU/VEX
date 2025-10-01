@@ -43,6 +43,7 @@ set(public_header_files
     include/Engine.hpp
     include/components/Mesh.hpp
     include/components/ResolutionManager.hpp
+    include/components/SceneManager.hpp
     include/components/errorUtils.hpp
     include/components/pathUtils.hpp
     include/components/ImGUIWrapper.hpp
@@ -53,12 +54,14 @@ set(public_header_files
     include/components/GameObjects/ModelObject.hpp
     include/components/GameObjects/CameraObject.hpp
     include/components/GameObjects/Creators/ModelCreator.hpp
+    include/components/GameObjects/GameObjectFactory.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(source_files
         src/Engine.cpp
         src/components/Mesh.cpp
         src/components/ResolutionManager.cpp
+        src/components/SceneManager.cpp
         src/components/Window.cpp
         src/components/Window.hpp
         src/components/VirtualFileSystem.cpp

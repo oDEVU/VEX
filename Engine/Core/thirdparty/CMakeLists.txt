@@ -47,6 +47,11 @@ add_subdirectory(assimp)
 #entt
 add_subdirectory(entt)
 
+#nlohmann::json
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+set(JSON_Install OFF CACHE INTERNAL "")
+add_subdirectory(json)
+
 # dirty fix for assimp not compiling in realese
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(assimp PRIVATE -Wno-array-bounds)
@@ -127,6 +132,7 @@ target_link_libraries(thirdparty_engine INTERFACE
     assimp
     thirdparty_glm
     EnTT::EnTT
+    nlohmann_json
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
