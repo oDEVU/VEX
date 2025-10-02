@@ -1,4 +1,5 @@
 #include "components/SceneManager.hpp"
+#include "VirtualFileSystem.hpp"
 #include <nlohmann/json.hpp>
 #include <cstdint>
 #include <fstream>
@@ -12,15 +13,21 @@ void SceneManager::loadScene(const std::string& path, Engine& engine) {
 }
 
 void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& engine) {
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        log("Error: Could not open scene file: %s", path.c_str());
+    //std::ifstream file(path);
+    std::string realPath = GetAssetPath(path);
+    if (!engine.getFileSystem()->file_exists(realPath)) {
+        log("Error: Could not open scene file: %s", realPath.c_str());
         return;
     }
 
+    auto fileData = engine.getFileSystem()->load_file(realPath);
+
+    SDL_Log("%s",fileData->data.data());
+
     nlohmann::json json;
-    json = nlohmann::json::parse(file);
-    file.close();
+    json = nlohmann::json::parse(fileData->data.data(), nullptr, true);
+    //json = nlohmann::json::
+    //file.close();
 
     auto objects = json["objects"];
     if (!objects.is_array()) {

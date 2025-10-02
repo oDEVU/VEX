@@ -246,7 +246,7 @@ std::string VirtualFileSystem::clean_path(const std::string& path) {
         result = result.substr(1);
     }
 
-    if (result.find("Assets/") == 0) {
+    if (result.find("Assets/") == 0 && m_use_packed_assets) {
         result = result.substr(7);
     }
 
