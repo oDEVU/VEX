@@ -27,9 +27,39 @@ struct TransformComponent {
         return local;
     }
 
-    glm::vec3 getForwardVector() const {
-        float pitch = glm::radians(rotation.x);
-        float yaw = glm::radians(rotation.y);
+    glm::vec3 getWorldPosition(const entt::registry& registry) const {
+        glm::vec3 worldPos = position;
+        entt::entity current = parent;
+        while (current != entt::null && registry.valid(current) && registry.all_of<TransformComponent>(current)) {
+            worldPos += registry.get<TransformComponent>(current).position;
+            current = registry.get<TransformComponent>(current).parent;
+        }
+        return worldPos;
+    }
+
+    glm::vec3 getWorldRotation(const entt::registry& registry) const {
+        glm::vec3 worldRot = rotation;
+        entt::entity current = parent;
+        while (current != entt::null && registry.valid(current) && registry.all_of<TransformComponent>(current)) {
+            worldRot += registry.get<TransformComponent>(current).rotation;
+            current = registry.get<TransformComponent>(current).parent;
+        }
+        return worldRot;
+    }
+
+    glm::vec3 getWorldScale(const entt::registry& registry) const {
+        glm::vec3 worldScale = scale;
+        entt::entity current = parent;
+        while (current != entt::null && registry.valid(current) && registry.all_of<TransformComponent>(current)) {
+            worldScale *= registry.get<TransformComponent>(current).scale;
+            current = registry.get<TransformComponent>(current).parent;
+        }
+        return worldScale;
+    }
+
+    glm::vec3 getForwardVector(const entt::registry& registry) const {
+        float pitch = glm::radians(getWorldRotation(registry).x);
+        float yaw = glm::radians(getWorldRotation(registry).y);
 
         return glm::normalize(glm::vec3(
             cos(yaw) * cos(pitch),
@@ -38,15 +68,15 @@ struct TransformComponent {
         ));
     }
 
-    glm::vec3 getRightVector() {
-        glm::vec3 forward = getForwardVector();
+    glm::vec3 getRightVector(const entt::registry& registry) {
+        glm::vec3 forward = getForwardVector(registry);
         glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
         return glm::normalize(glm::cross(forward, worldUp));
     }
 
-    glm::vec3 getUpVector() {
-        glm::vec3 forward = getForwardVector();
-        glm::vec3 right = getRightVector();
+    glm::vec3 getUpVector(const entt::registry& registry) {
+        glm::vec3 forward = getForwardVector(registry);
+        glm::vec3 right = getRightVector(registry);
         return glm::normalize(glm::cross(right, forward));
     }
 };

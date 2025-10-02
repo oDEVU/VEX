@@ -180,3 +180,7 @@ int main(int argc, char* argv[]) {
     log("Exiting cleanly");
     return 0;
 }
+
+// Quick todo
+//
+// make scenes work with parenting and custom components (or any atleast now) and custom constructors

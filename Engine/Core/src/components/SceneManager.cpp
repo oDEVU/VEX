@@ -22,7 +22,7 @@ void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& eng
 
     auto fileData = engine.getFileSystem()->load_file(realPath);
 
-    SDL_Log("%s",fileData->data.data());
+    //SDL_Log("%s",fileData->data.data()); // It work on my PC lol
 
     nlohmann::json json;
     json = nlohmann::json::parse(fileData->data.data(), nullptr, true);
