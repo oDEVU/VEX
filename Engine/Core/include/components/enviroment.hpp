@@ -15,5 +15,6 @@ namespace vex {
       float ambientLightStrength = 0.1f;
       glm::vec3 sunLight = glm::vec3(1.0f, 1.0f, 1.0f);
       glm::vec3 sunDirection = glm::vec3(1.0f, 1.0f, 1.0f);
+      glm::vec3 clearColor = glm::vec3(0.1f);
     };
 }

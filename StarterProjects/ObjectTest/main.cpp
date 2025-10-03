@@ -69,6 +69,7 @@ public:
     vex::ModelObject* humanEntity4;
     vex::ModelObject* viperEntity1;
     vex::ModelObject* viperEntity2;
+    vex::ModelObject* cube;
 
     double fps = 0;
 
@@ -96,6 +97,14 @@ public:
         viperEntity1 = vex::createModelFromPath("Assets/scene.gltf", "viper1", *this);
         viperEntity2 = vex::createModelFromPath("Assets/scene.gltf", "viper2", *this);
         viperEntity2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, 0.0f, 0.0f};
+
+
+        vex::MeshComponent cubeMesh = vex::createMeshFromPath("Assets/cube.obj", *this);
+        vex::TransformComponent cubeTransform = vex::TransformComponent{
+            glm::vec3{-4.0f, -1.57f, -5.0f},
+            glm::vec3{0.0f, 0.0f, 0.0f},
+            glm::vec3{10.0f, 1.0f, 10.0f}};
+        cube = vex::createModelFromComponents("cube", cubeMesh, cubeTransform, *this);
 #if DEBUG
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");

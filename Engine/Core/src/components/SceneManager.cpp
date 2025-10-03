@@ -70,6 +70,14 @@ void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& eng
                 lighting["sunDirection"][2].get<float>()
             );
         }
+
+        if (lighting.contains("clearColor") && lighting["clearColor"].is_array() && lighting["clearColor"].size() >= 3) {
+            env.clearColor = glm::vec3(
+                lighting["clearColor"][0].get<float>(),
+                lighting["clearColor"][1].get<float>(),
+                lighting["clearColor"][2].get<float>()
+            );
+        }
     }
 
     engine.setEnvironmentSettings(env);
