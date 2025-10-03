@@ -5,7 +5,7 @@
 namespace vex {
     struct enviroment{
       bool gourardShading = true;
-      bool passiveVertexJitter = false;
+      bool passiveVertexJitter = true;
       bool vertexSnapping = true;
       bool affineWarping = true;
       bool colorQuantization = true;
