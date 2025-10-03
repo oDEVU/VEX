@@ -10,6 +10,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include "components/enviroment.hpp"
 
 namespace vex {
     typedef struct {
@@ -96,5 +97,7 @@ namespace vex {
         uint32_t nextTextureIndex = 0;
 
         glm::uvec2 currentRenderResolution;
+
+        enviroment m_enviroment;
     } VulkanContext;
 }

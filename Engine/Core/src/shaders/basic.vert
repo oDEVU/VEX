@@ -31,6 +31,12 @@ layout(push_constant) uniform PushConsts {
     vec2 windowResolution;
     float upscaleRatio;
     int renderingMode;
+
+    // Lighting
+    vec4 ambientLight;
+    float ambientLightStrength;
+    vec4 sunLight;
+    vec4 sunDirection;
 } push;
 
 // PS1-style noise function
@@ -51,10 +57,10 @@ void main() {
     vec4 clipPos = camera.proj * viewPos;
     vec4 tstPos = camera.proj * worldPos;
 
+    vec2 screenPos = (clipPos.xy / clipPos.w * 0.5 + 0.5) * push.renderResolution;
+
     // 3. PS1 JITTER
     if (bool(push.enablePS1Effects & 0x8)) {
-        vec2 screenPos = (clipPos.xy / clipPos.w * 0.5 + 0.5) * push.renderResolution;
-
         // Time parameters
         float jitterSpeed = 8.0; // Jitter cycles per second
         float phase = push.time * jitterSpeed;
@@ -69,15 +75,16 @@ void main() {
             ) * 2.0;
 
         screenPos += jitter * push.jitterIntensity;
-        clipPos.xy = ((screenPos / push.windowResolution) * 2.0 - 1.0) * clipPos.w;
     }
+
+    clipPos.xy = ((screenPos / push.windowResolution) * 2.0 - 1.0) * clipPos.w;
 
     gl_Position = clipPos;
     fragNormal = normalize(mat3(transpose(inverse(object.model))) * inNormal);
 
     //gourard shading
-    vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
-    float diff = max(dot(normalize(fragNormal), lightDir), 0.1);
+    vec3 lightDir = normalize(push.sunDirection.xyz);
+    float diff = max(dot(normalize(fragNormal), lightDir), 0.0);
 
     fragDiff = diff;
 

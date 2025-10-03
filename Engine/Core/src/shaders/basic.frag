@@ -20,6 +20,12 @@ layout(push_constant) uniform PushConsts {
     vec2 windowResolution;
     float upscaleRatio;
     int renderingMode;
+
+    // Lighting
+    vec4 ambientLight;
+    float ambientLightStrength;
+    vec4 sunLight;
+    vec4 sunDirection;
 } push;
 
 mat4 psx_dither_table = mat4(
@@ -96,15 +102,18 @@ void main() {
     if (bool(push.enablePS1Effects & 0x20)) {
         diff = fragDiff;
     } else {
-        vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
-        diff = max(dot(normalize(fragNormal), lightDir), 0.1);
+        vec3 lightDir = normalize(push.sunDirection.xyz);
+        diff = max(dot(normalize(fragNormal), lightDir), 0.0);
     }
+
+    vec3 ambient = push.ambientLight.xyz * push.ambientLightStrength;
+    vec3 lighting = ambient + (diff * push.sunLight.xyz);
 
     // check if models are untextured
     if (fragUV.x < 0.0 || fragUV.y < 0.0) {
         // untextured models use push.color
-        outColor = pushColor * diff;
+        outColor = pushColor * vec4(lighting, 1.0);
     } else {
-        outColor = texColor * diff;
+        outColor = texColor * vec4(lighting, 1.0);
     }
 }

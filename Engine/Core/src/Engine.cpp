@@ -99,6 +99,14 @@ void Engine::setResolutionMode(ResolutionMode mode) {
     m_interface->setRenderResolution(renderRes);
 }
 
+void Engine::setEnvironmentSettings(enviroment settings) {
+    m_interface->setEnvironment(settings);
+}
+
+enviroment Engine::getEnvironmentSettings() {
+    return m_interface->getEnvironment();
+}
+
 void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
 void Engine::beginGame() {}

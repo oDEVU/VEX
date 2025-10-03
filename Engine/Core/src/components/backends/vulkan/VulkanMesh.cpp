@@ -150,18 +150,40 @@ namespace vex {
 
             modelPush.snapResolution = 1.f;
             modelPush.jitterIntensity = 0.5f;
-            modelPush.enablePS1Effects =
-                PS1Effects::VERTEX_SNAPPING |
-                PS1Effects::AFFINE_WARPING |
-                PS1Effects::COLOR_QUANTIZATION |
-                PS1Effects::VERTEX_JITTER |
-                PS1Effects::NTSC_ARTIFACTS |
-                PS1Effects::GOURAUD_SHADING;
+
+            if(m_r_context.m_enviroment.vertexSnapping){
+                modelPush.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
+            }
+
+            if(m_r_context.m_enviroment.passiveVertexJitter){
+                modelPush.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
+            }
+
+            if(m_r_context.m_enviroment.affineWarping){
+                modelPush.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
+            }
+
+            if(m_r_context.m_enviroment.colorQuantization){
+                modelPush.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
+            }
+
+            if(m_r_context.m_enviroment.ntfsArtifacts){
+                modelPush.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
+            }
+
+            if(m_r_context.m_enviroment.gourardShading){
+                modelPush.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
+            }
 
             modelPush.renderResolution = currentRenderResolution;
             modelPush.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
             modelPush.time = currentTime;
             modelPush.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(currentRenderResolution.y);
+
+            modelPush.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
+            modelPush.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
+            modelPush.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
+            modelPush.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
 
             vkCmdPushConstants(
                 cmd,

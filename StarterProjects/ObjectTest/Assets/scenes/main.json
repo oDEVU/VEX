@@ -1,4 +1,20 @@
 {
+  "environment": {
+    "lighting": {
+      "ambientLight": [0.8, 0.9, 1.0, 1.0],
+      "ambientLightStrength": 0.1,
+      "sunLight": [1.0, 1.0, 1.0, 1.0],
+      "sunDirection": [1.0, 1.0, 1.0, 1.0]
+    },
+    "shading": {
+      "gouraud": true,
+      "passiveVertexJitter": false,
+      "vertexSnapping": true,
+      "affineTextureWarping": true,
+      "colorQuantization": true,
+      "ntfsArtifacts": true
+    }
+  },
   "objects": [
     {
       "type": "Player",

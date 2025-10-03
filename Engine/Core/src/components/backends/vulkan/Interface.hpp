@@ -13,6 +13,7 @@
 #include <memory>
 #include <components/GameInfo.hpp>
 #include "../../VirtualFileSystem.hpp"
+#include "components/enviroment.hpp"
 
 namespace vex {
     class Interface {
@@ -28,6 +29,9 @@ namespace vex {
         VulkanContext* getContext() { return &m_context; }
         MeshManager& getMeshManager() { return *m_p_meshManager; }
         Renderer& getRenderer() { return *m_p_renderer; }
+
+        void setEnvironment(enviroment env) {m_context.m_enviroment = env;}
+        enviroment getEnvironment() { return m_context.m_enviroment;}
 
     private:
         VulkanContext m_context;

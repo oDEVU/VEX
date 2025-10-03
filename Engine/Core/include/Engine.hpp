@@ -10,6 +10,7 @@
 #include "components/ImGUIWrapper.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/InputSystem.hpp"
+#include "components/enviroment.hpp"
 
 namespace vex {
 
@@ -33,6 +34,8 @@ public:
     ResolutionMode getResolutionMode() const { return m_resolutionManager->getCurrentMode(); }
     void setInputMode(InputMode mode) { m_inputSystem->setInputMode(mode); }
     InputMode getInputMode() const { return m_inputSystem->getInputMode(); }
+    void setEnvironmentSettings(enviroment settings);
+    enviroment getEnvironmentSettings();
 
     std::shared_ptr<Interface> getInterface() { return m_interface; }
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }

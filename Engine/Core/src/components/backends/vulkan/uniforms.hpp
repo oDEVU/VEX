@@ -18,11 +18,16 @@ namespace vex {
 
         alignas(16) glm::vec4 color;
 
-        alignas(16) float time;
+        alignas(4) float time;
         alignas(8) glm::vec2 renderResolution;
         alignas(8) glm::vec2 windowResolution;
-        alignas(16) float upscaleRatio;
+        alignas(4) float upscaleRatio;
         alignas(4) int renderingMode;
+
+        alignas(16) glm::vec4 ambientLight;
+        alignas(4) float ambientLightStrength;
+        alignas(16) glm::vec4 sunLight;
+        alignas(16) glm::vec4 sunDirection;
     };
 
     namespace PS1Effects {
