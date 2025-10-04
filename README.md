@@ -27,12 +27,9 @@
 ## TODO:
 
 - UI rendering
-- Virtual file system for asset packing
-- Scene system (so object wont need ti me manually added to main.cpp, esentialy abstrasting that part with graphics editor late on)
 
 - Vertext Colors for models (to use as ao or fog)
 - Vertext lighting
-- Toggable Z buffer issues (idk if its possible but still would be cool)
-- Add option to reduce passive jitter (as it wasnt common in ps1 games with static objects, it was artifact of GTE)
 - Add billboard rendering
 - Add particle system
+- Add support for animated 3D models
