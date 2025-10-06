@@ -15,9 +15,11 @@ layout(set = 0, binding = 1) uniform ModelUBO {
 
 // Outputs
 layout(location = 0) out vec3 fragNormal;
-layout(location = 1) out vec2 fragUV;
+layout(location = 1) noperspective out vec2 fragUV;
 layout(location = 2) out float fragDepth;
 layout(location = 3) out float fragDiff;
+layout(location = 4) noperspective out vec2 fragUVNum;
+layout(location = 5) noperspective out float fragInvW;
 
 layout(push_constant) uniform PushConsts {
     float snapResolution;
@@ -88,13 +90,10 @@ void main() {
 
     fragDiff = diff;
 
-    // affine texture warping uvs
-    if (bool(push.enablePS1Effects & 0x2)) {
-        //affine warping
-        fragUV = inUV;
-    } else {
-        fragUV = inUV;
-    }
+    float inv_w = 1.0 / clipPos.w;
+    fragUVNum = inUV * inv_w;
+    fragInvW = inv_w;
+    fragUV = inUV;
 
     fragDepth = viewPos.z;
 }

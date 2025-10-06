@@ -19,7 +19,13 @@
   "objects": [
     {
       "type": "Player",
-      "name": "DebugCamera"
+      "name": "DebugCamera",
+      "components": [
+        {
+          "type": "MeshComponent",
+          "path": "/Assets/human.obj"
+        }
+      ]
     }
   ]
 }

@@ -1,8 +1,10 @@
 #version 450
 layout(location = 0) in vec3 fragNormal;
-layout(location = 1) in vec2 fragUV;
+layout(location = 1) noperspective in vec2 fragUV;
 layout(location = 2) in float fragDepth;
 layout(location = 3) in float fragDiff;
+layout(location = 4) noperspective in vec2 fragUVNum;
+layout(location = 5) noperspective in float fragInvW;
 layout(location = 0) out vec4 outColor;
 
 layout(set = 1, binding = 0) uniform sampler2D texSampler;
@@ -65,7 +67,7 @@ void main() {
     if (bool(push.enablePS1Effects & 0x2)) {
         uv = fragUV;
     } else {
-        uv = fragUV;
+        uv = fragUVNum / fragInvW;
     }
 
     vec2 pixelCoord = gl_FragCoord.xy;
@@ -110,7 +112,7 @@ void main() {
     vec3 lighting = ambient + (diff * push.sunLight.xyz);
 
     // check if models are untextured
-    if (fragUV.x < 0.0 || fragUV.y < 0.0) {
+    if (uv.x < 0.0 || uv.y < 0.0) {
         // untextured models use push.color
         outColor = pushColor * vec4(lighting, 1.0);
     } else {
