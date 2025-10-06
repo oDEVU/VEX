@@ -69,6 +69,8 @@ public:
     vex::ModelObject* humanEntity4;
     vex::ModelObject* viperEntity1;
     vex::ModelObject* viperEntity2;
+    vex::ModelObject* viperShadow1;
+    vex::ModelObject* viperShadow2;
     vex::ModelObject* cube;
 
     double fps = 0;
@@ -99,9 +101,19 @@ public:
         viperEntity2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, 0.0f, 0.0f};
 
 
+        viperShadow1 = vex::createModelFromPath("Assets/ViperShadow.obj", "shadow1", *this);
+        viperShadow1->GetComponent<vex::TransformComponent>().rotation += glm::vec3{0.0f, 90.0f, 0.0f};
+        viperShadow1->GetComponent<vex::TransformComponent>().scale = glm::vec3{0.9f, 0.9f, 0.9f};
+        viperShadow1->GetComponent<vex::TransformComponent>().position += glm::vec3{0.0f, -0.02f, 0.0f};
+        viperShadow2 = vex::createModelFromPath("Assets/ViperShadow.obj", "shadow2", *this);
+        viperShadow2->GetComponent<vex::TransformComponent>().rotation += glm::vec3{0.0f, 90.0f, 0.0f};
+        viperShadow2->GetComponent<vex::TransformComponent>().scale = glm::vec3{0.9f, 0.9f, 0.9f};
+        viperShadow2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, -0.02f, 0.0f};
+
+
         vex::MeshComponent cubeMesh = vex::createMeshFromPath("Assets/cube.obj", *this);
         vex::TransformComponent cubeTransform = vex::TransformComponent{
-            glm::vec3{-4.0f, -1.57f, -5.0f},
+            glm::vec3{-4.0f, -1.61f, -5.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{10.0f, 1.0f, 10.0f}};
         cube = vex::createModelFromComponents("cube", cubeMesh, cubeTransform, *this);

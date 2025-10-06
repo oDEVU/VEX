@@ -1,7 +1,7 @@
 #  VEX (Vulkan Early eXperiences)
 ![Vex logo rendered in engine](/RepoStuff/RenderedLogo.png)
-
 A game engine built with Vulkan that aims to replicate the feel of PS1-era games. The main goal of this project is to learn graphics programming without the complexity of PBR and other modern techniques, while still building something visually appealing.
+![Vex logo rendered in engine](/RepoStuff/VEX_SS_LOWRES.png)
 
 ## Current Project State:
 ### PS1-style graphics with the ability to enable and disable specific features
