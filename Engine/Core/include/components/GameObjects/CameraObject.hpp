@@ -5,10 +5,10 @@
   namespace vex {
   class CameraObject : public GameObject {
   public:
-      CameraObject(Engine& engine, const std::string& name, TransformComponent transformComponent, CameraComponent cameraComponent)
+      CameraObject(Engine& engine, const std::string& name)
           : GameObject(engine, name) {
-          AddComponent(TransformComponent{transformComponent});
-          AddComponent(CameraComponent{cameraComponent});
+          AddComponent(TransformComponent{});
+          AddComponent(CameraComponent{});
       }
   };
   }

@@ -49,6 +49,7 @@ set(public_header_files
     include/components/ImGUIWrapper.hpp
     include/components/InputSystem.hpp
     include/components/GameComponents/BasicComponents.hpp
+    include/components/GameComponents/ComponentFactory.hpp
     include/components/GameComponents/InputComponent.hpp
     include/components/GameObjects/GameObject.hpp
     include/components/GameObjects/ModelObject.hpp

@@ -6,6 +6,7 @@
 #include <entt/entt.hpp>
 
 #include "components/Mesh.hpp"
+#include "components/errorUtils.hpp"
 
 namespace vex{
 struct TransformComponent {

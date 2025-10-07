@@ -22,8 +22,29 @@
       "name": "DebugCamera",
       "components": [
         {
-          "type": "MeshComponent",
-          "path": "/Assets/human.obj"
+          "type": "TransformComponent",
+          "position": [0.0, 0.0, 5.0],
+          "rotation": [0.0, 270.0, 0.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      ]
+    },
+    {
+      "type": "CameraObject",
+      "name": "newCamera",
+      "parent": "DebugCamera",
+      "components": [
+        {
+          "type": "TransformComponent",
+          "position": [0.0, 0.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0],
+          "scale": [1.0, 1.0, 1.0]
+        },
+        {
+          "type": "CameraComponent",
+          "fov": 60.0,
+          "nearPlane": 0.1,
+          "farPlane": 100.0
         }
       ]
     }

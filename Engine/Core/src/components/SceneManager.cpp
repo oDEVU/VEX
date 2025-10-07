@@ -1,4 +1,8 @@
 #include "components/SceneManager.hpp"
+#include "components/GameComponents/BasicComponents.hpp"
+#include "components/GameComponents/ComponentFactory.hpp"
+#include "components/GameObjects/GameObjectFactory.hpp"
+#include "components/GameObjects/CameraObject.hpp"
 #include "components/enviroment.hpp"
 #include "VirtualFileSystem.hpp"
 #include <nlohmann/json.hpp>
@@ -7,6 +11,52 @@
 #include <filesystem>
 
 namespace vex {
+    void LoadTransformComponent(GameObject& obj, const nlohmann::json& json) {
+        TransformComponent comp;
+        if (json.contains("position") && json["position"].is_array() && json["position"].size() >= 3) {
+            comp.position = glm::vec3(
+                json["position"][0].get<float>(),
+                json["position"][1].get<float>(),
+                json["position"][2].get<float>()
+            );
+        }
+        if (json.contains("rotation") && json["rotation"].is_array() && json["rotation"].size() >= 3) {
+            comp.rotation = glm::vec3(
+                json["rotation"][0].get<float>(),
+                json["rotation"][1].get<float>(),
+                json["rotation"][2].get<float>()
+            );
+        }
+        if (json.contains("scale") && json["scale"].is_array() && json["scale"].size() >= 3) {
+            comp.scale = glm::vec3(
+                json["scale"][0].get<float>(),
+                json["scale"][1].get<float>(),
+                json["scale"][2].get<float>()
+            );
+        }
+        obj.AddComponent(comp);
+    }
+
+    void LoadCameraComponent(GameObject& obj, const nlohmann::json& json) {
+        CameraComponent comp;
+        if (json.contains("fov") && !json["fov"].is_array()) {
+            comp.fov = json["fov"].get<float>();
+        }
+        if (json.contains("nearPlane") && !json["nearPlane"].is_array()) {
+            comp.nearPlane = json["nearPlane"].get<float>();
+        }
+        if (json.contains("farPlane") && !json["farPlane"].is_array()) {
+            comp.farPlane = json["farPlane"].get<float>();
+        }
+        obj.AddComponent(comp);
+    }
+
+    // Loadable Components
+    REGISTER_COMPONENT(TransformComponent, LoadTransformComponent);
+    REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
+
+    // Loadable Objects
+    REGISTER_GAME_OBJECT(CameraObject);
 
 void SceneManager::loadScene(const std::string& path, Engine& engine) {
     clearScene();
@@ -26,7 +76,7 @@ void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& eng
     log("Scene data: \n%s",fileData->data.data()); // It work on my PC lol
 
     nlohmann::json json;
-    json = nlohmann::json::parse(fileData->data.data(), nullptr, true);
+    json = nlohmann::json::parse(fileData->data.begin(), fileData->data.end(), nullptr, true);
     //json = nlohmann::json::
     //file.close();
 
@@ -97,6 +147,37 @@ void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& eng
         }
 
         GameObject* gameObj = GameObjectFactory::getInstance().create(type, engine, name);
+        if (!gameObj) {
+            log("Error: Failed to create GameObject of type '%s'", type.c_str());
+            continue;
+        }
+
+        auto components = obj["components"];
+        if (!components.is_array()) {
+            log("Object '%s' has no components to load", name.c_str());
+        } else {
+            for (const auto& comp : components) {
+                std::string compType = comp.value("type", "");
+                if (compType.empty()) {
+                    log("Error: Component missing type for object '%s'", name.c_str());
+                    continue;
+                }
+                ComponentRegistry::getInstance().loadComponent(*gameObj, compType, comp);
+            }
+        }
+
+                std::string parent = obj.value("parent", "");
+                if (!parent.empty()) {
+                    for(const auto& m_obj : m_objects) {
+                        if (m_obj->GetComponent<NameComponent>().name == parent) {
+                            gameObj->ParentTo(m_obj->GetEntity());
+                            //gameObj->GetComponent<TransformComponent>().parent = m_obj->GetEntity();
+                            log("Parented object '%s' to '%s'", gameObj->GetComponent<NameComponent>().name.c_str(), m_obj->GetComponent<NameComponent>().name.c_str());
+                            break;
+                        }
+                    }
+                }
+
         if (gameObj) {
             m_objects.emplace_back(gameObj);
         }

@@ -8,19 +8,17 @@ namespace vex {
 class Player : public GameObject {
 public:
     Player(Engine& engine, const std::string& name) : GameObject(engine, name) {
-        AddComponent(TransformComponent{glm::vec3{0,0,5}, glm::vec3{0,270,0}, glm::vec3{1,1,1}});
+        AddComponent(TransformComponent{});
     }
 
     void BeginPlay() override {
         log("Player \"%s\" started", GetComponent<NameComponent>().name.c_str());
 
-
-        Camera = new vex::CameraObject(
-            m_engine,
-            "mainCamera",
-            vex::TransformComponent{glm::vec3{0,0,0}, glm::vec3{0,0,0}, glm::vec3{1,1,1}},
-            vex::CameraComponent{45.0f, 0.1f, 100.0f}
-        );
+        //Camera = new vex::CameraObject(
+        //    m_engine,
+        //    "mainCamera"
+            //);
+        //Camera -> ParentTo(this->GetEntity());
 
         // Action Inputs need deltaTime
         vex::InputComponent inputComp;
@@ -54,8 +52,6 @@ public:
         });
 
         AddComponent(inputComp);
-
-        Camera -> ParentTo(this->GetEntity());
     }
 
     void Update(float deltaTime) override {
@@ -66,6 +62,6 @@ public:
         //log("Player camera transform : %f,%f,%f ", Camera->GetComponent<TransformComponent>().position.x, Camera->GetComponent<TransformComponent>().position.y, Camera->GetComponent<TransformComponent>().position.z);
     }
 private:
-vex::CameraObject* Camera;
+//vex::CameraObject* Camera;
 };
 }
