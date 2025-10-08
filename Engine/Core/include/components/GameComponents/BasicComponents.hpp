@@ -80,6 +80,7 @@ struct MeshComponent {
     MeshData meshData;
     uint32_t id = UINT32_MAX;
     std::vector<std::string> textureNames;
+    bool isTransparent = false;
 };
 
 struct NameComponent {

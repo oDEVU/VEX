@@ -102,13 +102,15 @@ public:
 
 
         viperShadow1 = vex::createModelFromPath("Assets/ViperShadow.obj", "shadow1", *this);
+        viperShadow1->GetComponent<vex::MeshComponent>().isTransparent = true;
         viperShadow1->GetComponent<vex::TransformComponent>().rotation += glm::vec3{0.0f, 90.0f, 0.0f};
         viperShadow1->GetComponent<vex::TransformComponent>().scale = glm::vec3{0.9f, 0.9f, 0.9f};
-        viperShadow1->GetComponent<vex::TransformComponent>().position += glm::vec3{0.0f, -0.02f, 0.0f};
+        viperShadow1->GetComponent<vex::TransformComponent>().position += glm::vec3{0.0f, -0.03f, 0.0f};
         viperShadow2 = vex::createModelFromPath("Assets/ViperShadow.obj", "shadow2", *this);
+        viperShadow2->GetComponent<vex::MeshComponent>().isTransparent = true;
         viperShadow2->GetComponent<vex::TransformComponent>().rotation += glm::vec3{0.0f, 90.0f, 0.0f};
         viperShadow2->GetComponent<vex::TransformComponent>().scale = glm::vec3{0.9f, 0.9f, 0.9f};
-        viperShadow2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, -0.02f, 0.0f};
+        viperShadow2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, -0.03f, 0.0f};
 
 
         vex::MeshComponent cubeMesh = vex::createMeshFromPath("Assets/cube.obj", *this);

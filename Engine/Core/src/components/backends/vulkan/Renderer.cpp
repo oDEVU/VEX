@@ -5,6 +5,11 @@
 #include <components/GameComponents/BasicComponents.hpp>
 
 namespace vex {
+    glm::vec3 extractCameraPosition(const glm::mat4& view) {
+        glm::mat4 invView = glm::inverse(view);
+        return glm::vec3(invView[3]); // Translation component of the inverse view matrix
+    }
+
     Renderer::Renderer(VulkanContext& context,
                        std::unique_ptr<VulkanResources>& resources,
                        std::unique_ptr<VulkanPipeline>& pipeline,
@@ -134,27 +139,37 @@ namespace vex {
         auto now = std::chrono::high_resolution_clock::now();
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
-        auto modelView = registry.view<TransformComponent, MeshComponent>();
-        uint32_t modelIndex = 0;
+                auto modelView = registry.view<TransformComponent, MeshComponent>();
+                uint32_t modelIndex = 0;
+                std::vector<std::pair<entt::entity, float>> transparentEntities;
 
-        for (auto entity : modelView) {
-            auto& transform = modelView.get<TransformComponent>(entity);
-            auto& mesh = modelView.get<MeshComponent>(entity);
-            //auto* model = m_p_meshManager->getModel(mesh.modelName);
-            //if (!model) continue;
+                glm::vec3 cameraPos = extractCameraPosition(view);
 
-            m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
-            //auto& vulkanMesh = m_p_meshManager->getMeshes().at(modelView.get<NameComponent>(entity));
-            auto& vulkanMesh =  m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
-            vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
-            modelIndex++;
-        }
-        /*auto& models = m_p_meshManager->getModels();
-        for (size_t i = 0; i < m_p_meshManager->getMeshes().size(); ++i) {
-            auto& vulkanMesh = m_p_meshManager->getMeshes()[i];
-            m_p_resources->updateModelUBO(m_r_context.currentFrame, i, ModelUBO{models[i]->transform.matrix()});
-            vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, i, currentTime, m_r_context.currentRenderResolution);
-        }*/
+                for (auto entity : modelView) {
+                    auto& transform = modelView.get<TransformComponent>(entity);
+                    auto& mesh = modelView.get<MeshComponent>(entity);
+                    if (!mesh.isTransparent) {
+                        m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
+                        auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
+                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
+                        modelIndex++;
+                    } else {
+                        float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);
+                        transparentEntities.emplace_back(entity, distance);
+                    }
+                }
+
+                std::sort(transparentEntities.begin(), transparentEntities.end(),
+                          [](const auto& a, const auto& b) { return a.second > b.second; });
+
+                for (const auto& [entity, distance] : transparentEntities) {
+                    auto& transform = modelView.get<TransformComponent>(entity);
+                    auto& mesh = modelView.get<MeshComponent>(entity);
+                    m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
+                    auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
+                    vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
+                    modelIndex++;
+                }
 
         if (frame != 0) {
             m_ui.beginFrame();
