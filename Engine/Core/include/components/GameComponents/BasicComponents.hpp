@@ -29,13 +29,7 @@ struct TransformComponent {
     }
 
     glm::vec3 getWorldPosition(const entt::registry& registry) const {
-        glm::vec3 worldPos = position;
-        entt::entity current = parent;
-        while (current != entt::null && registry.valid(current) && registry.all_of<TransformComponent>(current)) {
-            worldPos += registry.get<TransformComponent>(current).position;
-            current = registry.get<TransformComponent>(current).parent;
-        }
-        return worldPos;
+        return glm::vec3(matrix(registry)[3]);
     }
 
     glm::vec3 getWorldRotation(const entt::registry& registry) const {
