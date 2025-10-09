@@ -4,6 +4,22 @@ project(VEX_BuildTools)
 set(CMAKE_CXX_STANDARD 20)
 
 # VPAK Packer executable
-add_executable(vpak_packer
-    vpak_packer.cpp
+add_executable(VPAK_Packer
+    vpakPacker.cpp
+)
+
+# Project Builder executable
+add_executable(ProjectBuilder
+    projectBuilder.cpp
+)
+
+set(BUILD_FILES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/BuildFiles")
+set(BUILD_FILES_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/BuildFiles")
+
+add_custom_target(copy_files ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_FILES_DEST_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${BUILD_FILES_SOURCE_DIR}"
+        "${BUILD_FILES_DEST_DIR}"
+    COMMENT "Copying BuildFiles directory"
 )

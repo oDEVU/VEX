@@ -1,4 +1,6 @@
 build
+Build
+Intermediate
 .zed
 .cache
 compile_commands.json

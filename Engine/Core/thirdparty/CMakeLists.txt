@@ -136,6 +136,7 @@ target_link_libraries(thirdparty_engine INTERFACE
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
     target_link_libraries(thirdparty_engine INTERFACE
         cpptrace::cpptrace
         ImGui

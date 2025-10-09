@@ -205,4 +205,4 @@ foreach(source IN LISTS SHADERS)
     list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
 endforeach()
 
-add_custom_target(shaders ALL DEPENDS ${SPV_SHADERS})
+add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})

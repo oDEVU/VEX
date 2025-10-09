@@ -16,8 +16,10 @@ void clearScene();
 void sceneBegin();
 void sceneUpdate(float deltaTime);
 
+std::shared_ptr<GameObject> GetGameObject(const std::string& name);
+
 private:
-std::vector<std::unique_ptr<GameObject>> m_objects;
+std::vector<std::shared_ptr<GameObject>> m_objects;
 };
 
 } // namespace vex

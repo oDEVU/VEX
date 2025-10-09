@@ -200,4 +200,12 @@ void SceneManager::sceneUpdate(float deltaTime){
     }
 }
 
+std::shared_ptr<GameObject> SceneManager::GetGameObject(const std::string& name){
+    for(const auto& obj : m_objects){
+        if(obj->GetComponent<NameComponent>().name == name){
+            return obj;
+        }
+    }
+    return nullptr;
+}
 }
