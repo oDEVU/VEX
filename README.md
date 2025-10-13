@@ -25,9 +25,15 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 - An editor is planned, but requires a working engine core to do so
 
 ## TODO:
+### Must have to create games:
 - UI rendering system
-- Vertex colors for models (for AO or fog effects)
-- Vertex lighting implementation
 - Billboard rendering
 - Particle system
 - Support for animated 3D models
+### Should be implemented but can make games without:
+- Vertex colors for models (for AO or fog effects)
+- Vertex lighting implementation
+### Things that will make me happy but wont help me do games:
+- Frustum culling
+- offscreen rendering (to a texture for example, with support for multiple render targets)
+- Better shader pipeline
