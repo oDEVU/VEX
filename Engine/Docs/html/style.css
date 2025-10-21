@@ -1,0 +1,26 @@
+body {
+    background-color: #111;
+    color: #ddd;
+    margin: 0;
+}
+
+div.contents {
+    background-color: 111;
+    border-radius: 15px;
+}
+
+#titlearea {
+    background-color: #111;
+}
+
+#side-nav {
+    background-color: #111;
+}
+
+#nav-tree {
+    background-color: #111;
+}
+
+.footer {
+    background-color: #111;
+}

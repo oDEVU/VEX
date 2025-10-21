@@ -1,3 +1,9 @@
+/**
+ *  @file   ComponentFactory.hpp
+ *  @brief  Contains ComponentRegistry class used to have register of posible to create components..
+ *  @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/errorUtils.hpp"
@@ -10,6 +16,7 @@ namespace vex {
 
 class GameObject;
 
+/// @brief Class registering GameComponents mainly used to load them in SceneManager.
 class ComponentRegistry {
 public:
     using ComponentLoader = std::function<void(GameObject&, const nlohmann::json&)>;
@@ -38,6 +45,25 @@ private:
     std::unordered_map<std::string, ComponentLoader> loaders;
 };
 
+/// @brief Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.
+/// @details Example usage:
+/// @code
+/// void LoadCameraComponent(GameObject& obj, const nlohmann::json& json) {
+///     CameraComponent comp;
+///     if (json.contains("fov") && !json["fov"].is_array()) {
+///         comp.fov = json["fov"].get<float>();
+///     }
+///     if (json.contains("nearPlane") && !json["nearPlane"].is_array()) {
+///         comp.nearPlane = json["nearPlane"].get<float>();
+///     }
+///     if (json.contains("farPlane") && !json["farPlane"].is_array()) {
+///         comp.farPlane = json["farPlane"].get<float>();
+///     }
+///     obj.AddComponent(comp);
+/// }
+///
+/// REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
+/// @endcode
 #define REGISTER_COMPONENT(ComponentType, LoadFunction) \
     namespace { \
         struct ComponentType##Registrar { \

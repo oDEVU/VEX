@@ -37,3 +37,7 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 - Frustum culling
 - offscreen rendering (to a texture for example, with support for multiple render targets)
 - Better shader pipeline
+
+-UI
+-Fizyka/Kolizje
+-Kompilacja na windowsie

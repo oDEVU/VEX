@@ -1,3 +1,10 @@
+/**
+ *  @file   GameObjectFactory.hpp
+ *  @brief  This file defines GameObjectFactory class used to auto register GameObjects.
+ *  @author Eryk Roszkowski
+ ***********************************************/
+
+
 #pragma once
 #include "Engine.hpp"
 #include "components/errorUtils.hpp"
@@ -9,7 +16,7 @@
 #include <string>
 
 namespace vex {
-
+///@brief Class responsible for registering and then creating GameObjects eg. Player, CameraObject. It is needed to load GameObjects from scene files but not all GameObjects can be registered. It requires your GameObject to not change constructor parameters.
 class GameObjectFactory {
 public:
     using Creator = std::function<GameObject*(Engine&, const std::string&)>;
@@ -39,7 +46,16 @@ private:
     std::unordered_map<std::string, Creator> creators;
 };
 
-// Macro for automatic registration
+/// @brief Macro for automatic GameObject registration, you should call it at the bottom of your class implementation.
+/// @details Example usage:
+/// @code
+/// class MyGameObject : public GameObject {
+/// public:
+///     MyGameObject(Engine& engine, const std::string& name) : GameObject(engine, name) {}
+/// };
+///
+/// REGISTER_GAME_OBJECT(MyGameObject);
+/// @endcode
 #define REGISTER_GAME_OBJECT(ClassName) \
     namespace { \
         struct ClassName##Registrar { \

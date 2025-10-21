@@ -1,3 +1,9 @@
+/**
+ *  @file   ResolutionManager.hpp
+ *  @brief  This file defines ResolutionManager class and ResolutionMode struct.
+ *  @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 
 #include <glm/glm.hpp>
@@ -11,27 +17,48 @@ namespace vex {
 
 class Window;
 
+/// @brief Enumeration representing different resolution modes.
 enum class ResolutionMode {
-    NATIVE,     // Use window resolution
-    RES_240P,   // 240p (426x240 for 16:9)
-    RES_480P,   // 480p (854x480 for 16:9)
-    PS1_SHARP   // Integer-scaled resolution closest to PS1
+    /// @brief Use window resolution.
+    NATIVE,
+    /// @brief 240p (426x240 for 16:9).
+    RES_240P,
+    /// @brief 480p (854x480 for 16:9).
+    RES_480P,
+    /// @brief Integer-scaled resolution closest to PS1.
+    PS1_SHARP
 };
 
+/// @brief Class responsible for managing resolution settings, calculating render resolution based on selected mode.
 class ResolutionManager {
 public:
+    /// @brief Constructor.
+    /// @param SDL_Window* p_window - Pointer to the SDL window.
     ResolutionManager(SDL_Window *p_window);
 
+    /// @brief Function to set the resolution mode. It is called by engine method.
+    /// @param ResolutionMode mode - The resolution mode to set.
     void setMode(ResolutionMode mode);
+
+    /// @brief Function to get the current resolution mode.
     ResolutionMode getCurrentMode() const { return m_currentMode; }
 
+    /// @brief Function to get the current render resolution.
+    /// @return glm::uvec2 - The current render resolution.
     glm::uvec2 getRenderResolution() const { return m_renderResolution; }
+
+    /// @brief Function to get the current window resolution.
+    /// @return glm::uvec2 - The current window resolution.
     glm::uvec2 getWindowResolution() const { return m_windowResolution; }
+
+    /// @brief Function to get the current upscale ratio. Read window resolution divided by render resolution.
+    /// @return float - The current upscale ratio.
     float getUpscaleRatio() const { return m_upscaleRatio; }
 
     void update();
 
 private:
+/// @brief Function to calculate the PS1 sharp resolution.
     void calculatePS1SharpResolution();
 
     SDL_Window *m_p_window;
