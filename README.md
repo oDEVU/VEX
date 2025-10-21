@@ -24,6 +24,10 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 - Currently only tested on Linux with AMD GPUs (both discrete and integrated)
 - An editor is planned, but requires a working engine core to do so
 
+## Engine documentation
+Engine documentation can be found under: https://odevu.github.io/VEX/
+It can also be regenerated locally by using doxygen.
+
 ## TODO:
 ### Must have to create games:
 - UI rendering system
