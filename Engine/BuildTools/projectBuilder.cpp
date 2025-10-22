@@ -4,8 +4,66 @@
 #include <vector>
 #include <string>
 #include <cstring>
+#include <filesystem>
+#include <thread>
+
+#ifdef _WIN32
+#include <windows.h>
+#elif defined(__APPLE__)
+#include <mach-o/dyld.h>
+#include <sys/param.h> // For MAXPATHLEN
+#else // Linux
+#include <unistd.h>
+#endif
+
+// Copied from pathUtils
+inline std::filesystem::path GetExecutableDir() {
+    std::filesystem::path exePath;
+
+#ifdef _WIN32
+    // Windows: Use GetModuleFileNameW
+    wchar_t wPath[MAX_PATH];
+    DWORD len = GetModuleFileNameW(NULL, wPath, MAX_PATH);
+    if (len == 0 || len == MAX_PATH) {
+        std::cerr << "Failed to get executable path on Windows";
+    }
+    // Convert UTF-16 to UTF-8
+    int utf8Size = WideCharToMultiByte(CP_UTF8, 0, wPath, -1, nullptr, 0, nullptr, nullptr);
+    if (utf8Size == 0) {
+        std::cerr << "Failed to convert executable path to UTF-8";
+    }
+    std::string utf8Path(utf8Size, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, wPath, -1, utf8Path.data(), utf8Size, nullptr, nullptr);
+    exePath = std::filesystem::path(utf8Path);
+#elif defined(__APPLE__)
+    // macOS: Use _NSGetExecutablePath
+    char pathBuf[MAXPATHLEN];
+    uint32_t size = sizeof(pathBuf);
+    if (_NSGetExecutablePath(pathBuf, &size) != 0) {
+        std::cerr << "Failed to get executable path on macOS";
+    }
+    exePath = std::filesystem::canonical(pathBuf); // Resolve symlinks/aliases
+#else
+    // Linux: Use readlink
+    char pathBuf[1024];
+    ssize_t len = ::readlink("/proc/self/exe", pathBuf, sizeof(pathBuf) - 1);
+    if (len == -1) {
+        std::cerr << "Failed to read /proc/self/exe on Linux";
+    }
+    pathBuf[len] = '\0';
+    exePath = std::filesystem::path(pathBuf);
+#endif
+
+    return exePath.parent_path();
+}
 
 int main(int argc, char* argv[]) {
+
+    std::filesystem::current_path(GetExecutableDir().string() + "/../");
+
+    unsigned int cores = std::thread::hardware_concurrency();
+    std::string parallel = "--parallel " + std::to_string(cores > 0 ? cores : 1);
+
     if (argc < 2) {
         std::cout << "Usage: " << argv[0] << " <project directory containing VexProject.json file> <build type -debug/-release (optional, defaults to debug)>" << std::endl;
         return 1;
@@ -78,7 +136,8 @@ int main(int argc, char* argv[]) {
             std::cerr << "CMake configure failed with exit code: " << result << std::endl;
             return 1;
         }
-        result = std::system("cmake --build build/debug --config Debug --parallel $(nproc --all)");
+        std::string build_cmd = "cmake --build build/debug --config Debug " + parallel;
+        result = std::system(build_cmd.c_str());
         if (result != 0) {
             std::cerr << "CMake build failed with exit code: " << result << std::endl;
             return 1;
@@ -91,7 +150,8 @@ int main(int argc, char* argv[]) {
             std::cerr << "CMake configure failed with exit code: " << result << std::endl;
             return 1;
         }
-        result = std::system("cmake --build build/release --config Release --parallel $(nproc --all)");
+        std::string build_cmd = "cmake --build build/release --config Release " + parallel;
+        result = std::system(build_cmd.c_str());
         if (result != 0) {
             std::cerr << "CMake build failed with exit code: " << result << std::endl;
             return 1;
@@ -109,7 +169,20 @@ int main(int argc, char* argv[]) {
         for (const auto& entry : std::filesystem::directory_iterator(build_dir)) {
             std::string path_str = entry.path().string();
             std::string filename = entry.path().filename().string();
-            if (path_str != build_dir + "/_deps" && path_str != build_dir + "/CMakeFiles" && path_str != build_dir + "/CMakeCache.txt" && path_str != build_dir + "/cmake_install.cmake" && path_str != build_dir + "/compile_commands.json" && path_str != build_dir + "/.ninja_deps" && path_str != build_dir + "/.ninja_log" && path_str != build_dir + "/build.ninja") {
+
+            // Build files to ignore while comping
+            if (path_str != build_dir + "/CPackSourceConfig.cmake"
+                && path_str != build_dir + "/CPackConfig.cmake"
+                && path_str != build_dir + "/_deps"
+                && path_str != build_dir + "/CMakeFiles"
+                && path_str != build_dir + "/CMakeCache.txt"
+                && path_str != build_dir + "/cmake_install.cmake"
+                && path_str != build_dir + "/compile_commands.json"
+                && path_str != build_dir + "/.ninja_deps"
+                && path_str != build_dir + "/.ninja_log"
+                && path_str != build_dir + "/build.ninja"
+                && path_str.find("cmake")) {
+
                 std::string dest_path = output_dir + "/" + filename;
                 if (std::filesystem::exists(dest_path)) {
                     std::filesystem::remove_all(dest_path);
