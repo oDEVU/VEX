@@ -1,0 +1,38 @@
+{
+  "root": {
+    "layout": "column",
+    "justify": "space-between",
+    "align": "flex-start",
+    "padding": 14,
+    "children": [
+      {
+        "type": "label",
+        "id": "score",
+        "text": "Score: 0",
+        "style": {
+          "font": "Assets/ui/fonts/vcr.ttf",
+          "size": 12,
+          "color": [1.0, 1.0, 1.0, 1.0]
+        }
+      },
+      {
+        "type": "image",
+        "id": "logo",
+        "image": "Assets/LogoTexture.png",
+        "size": [64, 64]
+      },
+      {
+        "type": "button",
+        "id": "pause",
+        "text": "Pause",
+        "style": {
+          "font": "Assets/ui/fonts/vcr.ttf",
+          "size": 20,
+          "color": [1.0, 1.0, 1.0, 1.0],
+          "bgColor": [0.2, 0.2, 0.2, 0.8]
+        },
+        "size": [80, 32]
+      }
+    ]
+  }
+}

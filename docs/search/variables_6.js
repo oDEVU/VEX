@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uv_0',['uv',['../structvex_1_1Vertex.html#a1db72ea81494f63be7b4195717a38c5d',1,'vex::Vertex']]]
+  ['texindex_0',['texIndex',['../structvex_1_1UIVertex.html#ac09c638d80b1e96dfe3876e57eee08ca',1,'vex::UIVertex']]]
 ];

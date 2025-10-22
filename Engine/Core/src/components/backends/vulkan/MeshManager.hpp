@@ -20,7 +20,7 @@
 namespace vex {
     class MeshManager {
     public:
-        MeshManager(VulkanContext& context, std::unique_ptr<VulkanResources>& resources, VirtualFileSystem* vfs);
+        MeshManager(VulkanContext& context, std::shared_ptr<VulkanResources>& resources, VirtualFileSystem* vfs);
         ~MeshManager();
 
         MeshComponent loadMesh(const std::string& path);
@@ -34,7 +34,7 @@ namespace vex {
     private:
         VulkanContext& m_r_context;
         VirtualFileSystem* m_vfs;
-        std::unique_ptr<VulkanResources>& m_p_resources;
+        std::shared_ptr<VulkanResources>& m_p_resources;
         std::map<std::string, std::unique_ptr<VulkanMesh>> m_vulkanMeshes;
         std::vector<uint32_t> m_freeModelIds;
         uint32_t m_nextModelId = 0;

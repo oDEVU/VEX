@@ -79,6 +79,13 @@ public:
         sceneManager.loadScene("Assets/scenes/main.json", *this);
         sceneManager.sceneBegin();
 
+        m_vexUI->load("Assets/ui/example.json");
+
+        m_vexUI->setText("score", "FPS: " + std::to_string(fps));
+        m_vexUI->setOnClick("pause", []() {
+            log("Pause button clicked");
+        });
+
         vex::MeshComponent humanMesh = vex::createMeshFromPath("Assets/human.obj", *this);
         vex::TransformComponent humanTransform = vex::TransformComponent{
             glm::vec3{0.0f, 0.3f, 0.0f},
@@ -135,6 +142,8 @@ public:
     void update(float deltaTime) override {
 
         fps = 1/deltaTime;
+
+        m_vexUI->setText("score", "FPS: " + std::to_string(fps));
 
         sceneManager.sceneUpdate(deltaTime);
 

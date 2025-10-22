@@ -10,7 +10,7 @@
 #include <SDL3/SDL.h>
 
 namespace vex {
-    MeshManager::MeshManager(VulkanContext& context, std::unique_ptr<VulkanResources>& resources, VirtualFileSystem* vfs)
+    MeshManager::MeshManager(VulkanContext& context, std::shared_ptr<VulkanResources>& resources, VirtualFileSystem* vfs)
         : m_r_context(context), m_p_resources(resources), m_vfs(vfs) {
         log("MeshManager initialized");
     }

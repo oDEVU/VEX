@@ -116,10 +116,10 @@ $(function(){initNavTree('classvex_1_1Renderer.html',''); initResizable(true); }
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7a6b153e7af407fe44c7896fdd7c5b5a" id="r_a7a6b153e7af407fe44c7896fdd7c5b5a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a6b153e7af407fe44c7896fdd7c5b5a">Renderer</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;resources, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;pipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanSwapchainManager.html">VulkanSwapchainManager</a> &gt; &amp;swapchainManager, std::unique_ptr&lt; <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a> &gt; &amp;meshManager)</td></tr>
-<tr class="separator:a7a6b153e7af407fe44c7896fdd7c5b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abed362c3e24647d248f6bbe4cdd5f15c" id="r_abed362c3e24647d248f6bbe4cdd5f15c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abed362c3e24647d248f6bbe4cdd5f15c">renderFrame</a> (const glm::mat4 &amp;view, const glm::mat4 &amp;proj, glm::uvec2 renderResolution, entt::registry &amp;registry, <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;ui, uint64_t frame)</td></tr>
-<tr class="separator:abed362c3e24647d248f6bbe4cdd5f15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c3f75ee7ceca2464c08f9dc206fa23d" id="r_a2c3f75ee7ceca2464c08f9dc206fa23d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c3f75ee7ceca2464c08f9dc206fa23d">Renderer</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, std::shared_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;resources, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;pipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;uiPipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanSwapchainManager.html">VulkanSwapchainManager</a> &gt; &amp;swapchainManager, std::unique_ptr&lt; <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a> &gt; &amp;meshManager)</td></tr>
+<tr class="separator:a2c3f75ee7ceca2464c08f9dc206fa23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3972277923b93df3b2d0c2a5088c41e" id="r_af3972277923b93df3b2d0c2a5088c41e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3972277923b93df3b2d0c2a5088c41e">renderFrame</a> (const glm::mat4 &amp;view, const glm::mat4 &amp;proj, glm::uvec2 renderResolution, entt::registry &amp;registry, <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;ui, <a class="el" href="classvex_1_1VexUI.html">VexUI</a> &amp;vui, uint64_t frame)</td></tr>
+<tr class="separator:af3972277923b93df3b2d0c2a5088c41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -130,10 +130,12 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:afdb057361200cdbe4f6205edf7dc05a7" id="r_afdb057361200cdbe4f6205edf7dc05a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdb057361200cdbe4f6205edf7dc05a7">m_r_context</a></td></tr>
 <tr class="separator:afdb057361200cdbe4f6205edf7dc05a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82e6f704ab480651ccbe579775594503" id="r_a82e6f704ab480651ccbe579775594503"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82e6f704ab480651ccbe579775594503">m_p_resources</a></td></tr>
-<tr class="separator:a82e6f704ab480651ccbe579775594503"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaab7d9a15ef995a70ecaacf6fb5e5fbe" id="r_aaab7d9a15ef995a70ecaacf6fb5e5fbe"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaab7d9a15ef995a70ecaacf6fb5e5fbe">m_p_resources</a></td></tr>
+<tr class="separator:aaab7d9a15ef995a70ecaacf6fb5e5fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6336045d534c0ca08b04f6b7444d8659" id="r_a6336045d534c0ca08b04f6b7444d8659"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6336045d534c0ca08b04f6b7444d8659">m_p_pipeline</a></td></tr>
 <tr class="separator:a6336045d534c0ca08b04f6b7444d8659"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00b1937d114919d5ec3d74aeb8a3a96c" id="r_a00b1937d114919d5ec3d74aeb8a3a96c"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00b1937d114919d5ec3d74aeb8a3a96c">m_p_uiPipeline</a></td></tr>
+<tr class="separator:a00b1937d114919d5ec3d74aeb8a3a96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40e4efe79e2de0f618a67fc9adee908b" id="r_a40e4efe79e2de0f618a67fc9adee908b"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanSwapchainManager.html">VulkanSwapchainManager</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40e4efe79e2de0f618a67fc9adee908b">m_p_swapchainManager</a></td></tr>
 <tr class="separator:a40e4efe79e2de0f618a67fc9adee908b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a896f0e60c8a66d83e22f5289f3e5e67e" id="r_a896f0e60c8a66d83e22f5289f3e5e67e"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a896f0e60c8a66d83e22f5289f3e5e67e">m_p_meshManager</a></td></tr>
@@ -145,10 +147,10 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00014">14</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00015">15</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7a6b153e7af407fe44c7896fdd7c5b5a" name="a7a6b153e7af407fe44c7896fdd7c5b5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a6b153e7af407fe44c7896fdd7c5b5a">&#9670;&#160;</a></span>Renderer()</h2>
+<a id="a2c3f75ee7ceca2464c08f9dc206fa23d" name="a2c3f75ee7ceca2464c08f9dc206fa23d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c3f75ee7ceca2464c08f9dc206fa23d">&#9670;&#160;</a></span>Renderer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,12 +163,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>resources</em></span>, </td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>resources</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>pipeline</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>uiPipeline</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -181,7 +188,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00013">13</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00014">14</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -200,13 +207,13 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00027">27</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00030">30</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="abed362c3e24647d248f6bbe4cdd5f15c" name="abed362c3e24647d248f6bbe4cdd5f15c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abed362c3e24647d248f6bbe4cdd5f15c">&#9670;&#160;</a></span>renderFrame()</h2>
+<a id="af3972277923b93df3b2d0c2a5088c41e" name="af3972277923b93df3b2d0c2a5088c41e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3972277923b93df3b2d0c2a5088c41e">&#9670;&#160;</a></span>renderFrame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,12 +246,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classvex_1_1VexUI.html">VexUI</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>vui</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>frame</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00031">31</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00034">34</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -305,7 +317,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00291">291</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00295">295</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -330,7 +342,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00037">37</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00040">40</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -354,7 +366,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00035">35</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00038">38</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -378,12 +390,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00033">33</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00035">35</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a82e6f704ab480651ccbe579775594503" name="a82e6f704ab480651ccbe579775594503"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82e6f704ab480651ccbe579775594503">&#9670;&#160;</a></span>m_p_resources</h2>
+<a id="aaab7d9a15ef995a70ecaacf6fb5e5fbe" name="aaab7d9a15ef995a70ecaacf6fb5e5fbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaab7d9a15ef995a70ecaacf6fb5e5fbe">&#9670;&#160;</a></span>m_p_resources</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -392,7 +404,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a>&gt;&amp; vex::Renderer::m_p_resources</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a>&gt;&amp; vex::Renderer::m_p_resources</td>
         </tr>
       </table>
   </td>
@@ -402,7 +414,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00032">32</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00034">34</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -426,7 +438,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00034">34</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00037">37</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a00b1937d114919d5ec3d74aeb8a3a96c" name="a00b1937d114919d5ec3d74aeb8a3a96c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00b1937d114919d5ec3d74aeb8a3a96c">&#9670;&#160;</a></span>m_p_uiPipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a>&gt;&amp; vex::Renderer::m_p_uiPipeline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00036">36</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -450,7 +486,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00031">31</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00033">33</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -474,7 +510,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00036">36</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00039">39</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>

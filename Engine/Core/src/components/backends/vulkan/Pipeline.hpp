@@ -5,9 +5,11 @@
 #include "components/errorUtils.hpp"
 
 #include "components/pathUtils.hpp"
+#include "components/UI/UIVertex.hpp"
 #include <filesystem>
 
 namespace vex {
+
     class VulkanPipeline {
     public:
         VulkanPipeline(VulkanContext& r_context);
@@ -19,6 +21,11 @@ namespace vex {
             const VkVertexInputBindingDescription& bindingDescription,
             const std::vector<VkVertexInputAttributeDescription>& attributeDescriptions
         );
+        void createUIPipeline(
+            const std::string& vertShaderPath,
+            const std::string& fragShaderPath,
+            const VkVertexInputBindingDescription& bindingDesc,
+            const std::vector<VkVertexInputAttributeDescription>& attrDesc);
 
         VkPipeline get() const { return m_pipeline; }
         VkPipelineLayout layout() const { return m_layout; }

@@ -12,6 +12,7 @@
 #include <SDL3/SDL.h>
 #include <memory>
 #include <components/GameInfo.hpp>
+#include <components/UI/UIVertex.hpp>
 #include "../../VirtualFileSystem.hpp"
 #include "components/enviroment.hpp"
 
@@ -27,6 +28,7 @@ namespace vex {
         void createDefaultTexture();
 
         VulkanContext* getContext() { return &m_context; }
+        VulkanResources* getResources() { return m_p_resources.get(); }
         MeshManager& getMeshManager() { return *m_p_meshManager; }
         Renderer& getRenderer() { return *m_p_renderer; }
 
@@ -38,8 +40,9 @@ namespace vex {
         SDL_Window* m_p_window;
         VirtualFileSystem* m_vfs;
         std::unique_ptr<VulkanSwapchainManager> m_p_swapchainManager;
-        std::unique_ptr<VulkanResources> m_p_resources;
+        std::shared_ptr<VulkanResources> m_p_resources;
         std::unique_ptr<VulkanPipeline> m_p_pipeline;
+        std::unique_ptr<VulkanPipeline> m_p_uiPipeline;
         std::unique_ptr<MeshManager> m_p_meshManager;
         std::unique_ptr<Renderer> m_p_renderer;
     };

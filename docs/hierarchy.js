@@ -6,6 +6,7 @@ var hierarchy =
     [ "vex::Engine", "classvex_1_1Engine.html", null ],
     [ "vex::enviroment", "structvex_1_1enviroment.html", null ],
     [ "vex::VirtualFileSystem::FileData", "structvex_1_1VirtualFileSystem_1_1FileData.html", null ],
+    [ "vex::FontAtlas", "structvex_1_1FontAtlas.html", null ],
     [ "vex::GameInfo", "structvex_1_1GameInfo.html", null ],
     [ "vex::GameObject", "classvex_1_1GameObject.html", [
       [ "vex::CameraObject", "classvex_1_1CameraObject.html", null ],
@@ -46,7 +47,12 @@ var hierarchy =
     [ "vex::Submesh", "structvex_1_1Submesh.html", null ],
     [ "vex::VulkanMesh::SubmeshBuffers", "structvex_1_1VulkanMesh_1_1SubmeshBuffers.html", null ],
     [ "vex::TransformComponent", "structvex_1_1TransformComponent.html", null ],
+    [ "vex::UIPushConstants", "structvex_1_1UIPushConstants.html", null ],
+    [ "vex::UIQuad", "structvex_1_1UIQuad.html", null ],
+    [ "vex::UIStyle", "structvex_1_1UIStyle.html", null ],
+    [ "vex::UIVertex", "structvex_1_1UIVertex.html", null ],
     [ "vex::Vertex", "structvex_1_1Vertex.html", null ],
+    [ "vex::VexUI", "classvex_1_1VexUI.html", null ],
     [ "vex::VirtualFileSystem", "classvex_1_1VirtualFileSystem.html", null ],
     [ "vex::VirtualFileSystem::VPKFileEntry", "structvex_1_1VirtualFileSystem_1_1VPKFileEntry.html", null ],
     [ "vex::VirtualFileSystem::VPKHeader", "structvex_1_1VirtualFileSystem_1_1VPKHeader.html", null ],
@@ -55,5 +61,6 @@ var hierarchy =
     [ "vex::VulkanPipeline", "classvex_1_1VulkanPipeline.html", null ],
     [ "vex::VulkanResources", "classvex_1_1VulkanResources.html", null ],
     [ "vex::VulkanSwapchainManager", "classvex_1_1VulkanSwapchainManager.html", null ],
+    [ "vex::Widget", "structvex_1_1Widget.html", null ],
     [ "vex::Window", "classvex_1_1Window.html", null ]
 ];

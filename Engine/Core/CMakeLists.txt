@@ -48,6 +48,7 @@ set(public_header_files
     include/components/pathUtils.hpp
     include/components/ImGUIWrapper.hpp
     include/components/InputSystem.hpp
+    include/components/UI/VexUI.hpp
     include/components/GameComponents/BasicComponents.hpp
     include/components/GameComponents/ComponentFactory.hpp
     include/components/GameComponents/InputComponent.hpp
@@ -68,6 +69,7 @@ set(source_files
         src/components/VirtualFileSystem.cpp
         src/components/VirtualFileSystem.hpp
         src/components/InputSystem.cpp
+        src/components/UI/VexUI.cpp
         src/components/backends/vulkan/context.hpp
         src/components/backends/vulkan/Interface.cpp
         src/components/backends/vulkan/Interface.hpp

@@ -34,6 +34,8 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
+    m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
+    m_vexUI->init();
 
     log("Engine initialized successfully");
 }
@@ -52,6 +54,7 @@ void Engine::run() {
             m_inputSystem->processEvent(event, deltaTime);
             processEvent(event, deltaTime);
             m_imgui->processEvent(&event);
+            m_vexUI->processEvent(event);
             switch (event.type) {
                 case SDL_EVENT_QUIT:
                     m_running = false;
@@ -133,7 +136,7 @@ void Engine::render() {
     );
     proj[1][1] *= -1;
 
-    m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, m_frame);
+    m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, *m_vexUI, m_frame);
 }
 
 }

@@ -136,6 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a777c49742fa6e898a46d8a6c97d75b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc98d19439dc53425270d0a302e30466" id="r_afc98d19439dc53425270d0a302e30466"><td class="memItemLeft" align="right" valign="top">VkImageView&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc98d19439dc53425270d0a302e30466">getTextureView</a> (const std::string &amp;name) const</td></tr>
 <tr class="separator:afc98d19439dc53425270d0a302e30466"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac55a799b0723985d996d95cb51a462a4" id="r_ac55a799b0723985d996d95cb51a462a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac55a799b0723985d996d95cb51a462a4">createTextureFromRaw</a> (const std::vector&lt; unsigned char &gt; &amp;rgba, int w, int h, const std::string &amp;name)</td></tr>
+<tr class="separator:ac55a799b0723985d996d95cb51a462a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac14d5b2f5f8102b54bcaa5328470dd22" id="r_ac14d5b2f5f8102b54bcaa5328470dd22"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac14d5b2f5f8102b54bcaa5328470dd22">getDescriptorSet</a> (uint32_t frameIndex) const</td></tr>
 <tr class="separator:ac14d5b2f5f8102b54bcaa5328470dd22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad90195b6917ca02195cb0307d99ffa70" id="r_ad90195b6917ca02195cb0307d99ffa70"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad90195b6917ca02195cb0307d99ffa70">getDescriptorSetPtr</a> (uint32_t frameIndex)</td></tr>
@@ -251,7 +253,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00231">231</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00372">372</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -278,7 +280,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00082">82</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00223">223</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -305,7 +307,40 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00312">312</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00453">453</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac55a799b0723985d996d95cb51a462a4" name="ac55a799b0723985d996d95cb51a462a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac55a799b0723985d996d95cb51a462a4">&#9670;&#160;</a></span>createTextureFromRaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VulkanResources::createTextureFromRaw </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; unsigned char &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>rgba</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>w</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>h</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00054">54</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +367,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00367">367</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00508">508</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -351,7 +386,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00055">55</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00196">196</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -405,7 +440,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00050">50</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00051">51</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -432,7 +467,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00032">32</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00033">33</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -459,7 +494,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00042">42</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00043">43</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -482,7 +517,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00356">356</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00497">497</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -509,7 +544,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00055">55</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00056">56</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -528,7 +563,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00612">612</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00753">753</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -555,7 +590,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00045">45</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00046">46</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -583,7 +618,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00386">386</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00527">527</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -610,7 +645,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00052">52</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00053">53</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -629,7 +664,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00584">584</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00725">725</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -648,7 +683,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00210">210</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00351">351</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -676,7 +711,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00217">217</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00358">358</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -704,7 +739,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00193">193</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00334">334</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -729,7 +764,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00062">62</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00063">63</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -753,7 +788,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00068">68</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00069">69</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -777,7 +812,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00066">66</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00067">67</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -801,7 +836,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00073">73</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00074">74</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -825,7 +860,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00071">71</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00072">72</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -849,7 +884,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00072">72</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00073">73</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -873,7 +908,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00069">69</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00070">70</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -897,7 +932,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00067">67</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00068">68</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -921,7 +956,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00064">64</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00065">65</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -945,7 +980,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00080">80</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00081">81</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -969,7 +1004,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00074">74</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00075">75</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -993,7 +1028,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00079">79</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00080">80</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1017,7 +1052,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00076">76</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00077">77</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1041,7 +1076,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00077">77</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00078">78</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1065,7 +1100,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00081">81</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00082">82</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>

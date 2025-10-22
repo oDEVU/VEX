@@ -29,3 +29,6 @@
 	path = Engine/Core/thirdparty/json
 	url = https://github.com/nlohmann/json.git
 	branch = master
+[submodule "Engine/Core/thirdparty/yoga"]
+	path = Engine/Core/thirdparty/yoga
+	url = https://github.com/facebook/yoga.git

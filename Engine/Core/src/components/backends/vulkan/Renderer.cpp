@@ -1,4 +1,5 @@
 #include "Renderer.hpp"
+#include "components/backends/vulkan/Pipeline.hpp"
 #include "entt/entity/fwd.hpp"
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
@@ -7,17 +8,19 @@
 namespace vex {
     glm::vec3 extractCameraPosition(const glm::mat4& view) {
         glm::mat4 invView = glm::inverse(view);
-        return glm::vec3(invView[3]); // Translation component of the inverse view matrix
+        return glm::vec3(invView[3]);
     }
 
     Renderer::Renderer(VulkanContext& context,
-                       std::unique_ptr<VulkanResources>& resources,
+                       std::shared_ptr<VulkanResources>& resources,
                        std::unique_ptr<VulkanPipeline>& pipeline,
+                       std::unique_ptr<VulkanPipeline>& uiPipeline,
                        std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
                        std::unique_ptr<MeshManager>& meshManager)
         : m_r_context(context),
           m_p_resources(resources),
           m_p_pipeline(pipeline),
+          m_p_uiPipeline(uiPipeline),
           m_p_swapchainManager(swapchainManager),
           m_p_meshManager(meshManager) {
         startTime = std::chrono::high_resolution_clock::now();
@@ -28,7 +31,7 @@ namespace vex {
         log("Renderer destroyed");
     }
 
-    void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, uint64_t frame) {
+    void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, VexUI& vui, uint64_t frame) {
         if (renderResolution != m_r_context.currentRenderResolution) {
             m_r_context.currentRenderResolution = renderResolution;
             m_p_pipeline->updateViewport(renderResolution);
@@ -172,6 +175,7 @@ namespace vex {
                 }
 
         if (frame != 0) {
+            vui.render(commandBuffer, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), m_r_context.currentFrame);
             m_ui.beginFrame();
             m_ui.executeUIFunctions();
             m_ui.endFrame();

@@ -28,6 +28,7 @@ namespace vex {
         void loadTexture(const std::string& path, const std::string& name, VirtualFileSystem *vfs);
         void unloadTexture(const std::string& name);
         VkImageView getTextureView(const std::string& name) const;
+        void createTextureFromRaw(const std::vector<unsigned char>& rgba, int w, int h, const std::string& name);
 
         VkDescriptorSet getDescriptorSet(uint32_t frameIndex) const {
             if (frameIndex >= m_descriptorSets.size()) {

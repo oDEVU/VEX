@@ -2,7 +2,7 @@ var searchData=
 [
   ['imguiwrapper_0',['ImGUIWrapper',['../classvex_1_1ImGUIWrapper.html',1,'vex']]],
   ['imguiwrapper_2ehpp_1',['ImGUIWrapper.hpp',['../ImGUIWrapper_8hpp.html',1,'']]],
-  ['init_2',['init',['../classvex_1_1ImGUIWrapper.html#a3e9e9d074bbd2f8f741dad416e395f84',1,'vex::ImGUIWrapper::init()'],['../classvex_1_1VulkanImGUIWrapper.html#a2c9291f4691960f3076f10f928aed2ab',1,'vex::VulkanImGUIWrapper::init()']]],
+  ['init_2',['init',['../classvex_1_1ImGUIWrapper.html#a3e9e9d074bbd2f8f741dad416e395f84',1,'vex::ImGUIWrapper::init()'],['../classvex_1_1VexUI.html#a574755bc5cf4a1aaafef0b5b95611a72',1,'vex::VexUI::init()'],['../classvex_1_1VulkanImGUIWrapper.html#a2c9291f4691960f3076f10f928aed2ab',1,'vex::VulkanImGUIWrapper::init()']]],
   ['inputactionstate_3',['InputActionState',['../InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee',1,'vex']]],
   ['inputbinding_4',['InputBinding',['../structvex_1_1InputBinding.html',1,'vex']]],
   ['inputcomponent_5',['InputComponent',['../structvex_1_1InputComponent.html',1,'vex']]],

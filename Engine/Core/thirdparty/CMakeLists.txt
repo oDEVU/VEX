@@ -31,6 +31,30 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 add_subdirectory(volk)
 
+#yoga
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-Wno-array-bounds)
+endif()
+set(YOGA_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+set(YOGA_ENABLE_BENCHMARKS OFF CACHE BOOL "" FORCE)
+set(YOGA_SKIP_TESTS TRUE CACHE INTERNAL "" FORCE)
+set(YOGA_SKIP_BENCHMARKS TRUE CACHE INTERNAL "" FORCE)
+add_subdirectory(yoga)
+
+# Check what Yoga target is available
+if(TARGET yoga)
+    message(STATUS "Yoga target found: yoga")
+    set(YOGA_TARGET yoga)
+elseif(TARGET Yoga)
+    message(STATUS "Yoga target found: Yoga")
+    set(YOGA_TARGET Yoga)
+elseif(TARGET yogacore)
+    message(STATUS "Yoga target found: yogacore")
+    set(YOGA_TARGET yogacore)
+else()
+    message(FATAL_ERROR "Could not find Yoga target")
+endif()
+
 # VMA
 set(VMA_STATIC_VULKAN_FUNCTIONS OFF)
 set(VMA_DYNAMIC_VULKAN_FUNCTIONS ON)
@@ -133,7 +157,10 @@ target_link_libraries(thirdparty_engine INTERFACE
     thirdparty_glm
     EnTT::EnTT
     nlohmann_json
+    ${YOGA_TARGET}
 )
+
+target_include_directories(thirdparty_engine INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/yoga)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_SCAN_FOR_MODULES OFF)

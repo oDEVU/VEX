@@ -7,6 +7,7 @@ var annotated_dup =
       [ "ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
       [ "Engine", "classvex_1_1Engine.html", "classvex_1_1Engine" ],
       [ "enviroment", "structvex_1_1enviroment.html", "structvex_1_1enviroment" ],
+      [ "FontAtlas", "structvex_1_1FontAtlas.html", null ],
       [ "GameInfo", "structvex_1_1GameInfo.html", null ],
       [ "GameObject", "classvex_1_1GameObject.html", "classvex_1_1GameObject" ],
       [ "GameObjectFactory", "classvex_1_1GameObjectFactory.html", null ],
@@ -28,7 +29,12 @@ var annotated_dup =
       [ "SceneManager", "classvex_1_1SceneManager.html", "classvex_1_1SceneManager" ],
       [ "Submesh", "structvex_1_1Submesh.html", null ],
       [ "TransformComponent", "structvex_1_1TransformComponent.html", "structvex_1_1TransformComponent" ],
+      [ "UIPushConstants", "structvex_1_1UIPushConstants.html", null ],
+      [ "UIQuad", "structvex_1_1UIQuad.html", null ],
+      [ "UIStyle", "structvex_1_1UIStyle.html", null ],
+      [ "UIVertex", "structvex_1_1UIVertex.html", "structvex_1_1UIVertex" ],
       [ "Vertex", "structvex_1_1Vertex.html", "structvex_1_1Vertex" ],
+      [ "VexUI", "classvex_1_1VexUI.html", "classvex_1_1VexUI" ],
       [ "VirtualFileSystem", "classvex_1_1VirtualFileSystem.html", "classvex_1_1VirtualFileSystem" ],
       [ "VPKAssimpIOSystem", "classvex_1_1VPKAssimpIOSystem.html", null ],
       [ "VPKAssimpStream", "classvex_1_1VPKAssimpStream.html", null ],
@@ -38,6 +44,7 @@ var annotated_dup =
       [ "VulkanPipeline", "classvex_1_1VulkanPipeline.html", null ],
       [ "VulkanResources", "classvex_1_1VulkanResources.html", null ],
       [ "VulkanSwapchainManager", "classvex_1_1VulkanSwapchainManager.html", null ],
+      [ "Widget", "structvex_1_1Widget.html", null ],
       [ "Window", "classvex_1_1Window.html", null ]
     ] ]
 ];

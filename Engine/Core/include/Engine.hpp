@@ -17,6 +17,7 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/InputSystem.hpp"
 #include "components/enviroment.hpp"
+#include "components/UI/VexUI.hpp"
 
 namespace vex {
 
@@ -71,6 +72,7 @@ public:
     std::shared_ptr<Interface> getInterface() { return m_interface; }
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
     entt::registry& getRegistry() { return m_registry; }
+    std::shared_ptr<VexUI> getVexUI() { return m_vexUI; }
 
     /// @brief Internal virtual function for handling window/keyboard events.
     /// @param SDL_Event - Event to process.
@@ -95,6 +97,7 @@ protected:
     std::shared_ptr<ImGUIWrapper> m_imgui;
     std::unique_ptr<InputSystem> m_inputSystem;
     std::shared_ptr<VirtualFileSystem> m_vfs;
+    std::shared_ptr<VexUI> m_vexUI;
 
     entt::registry m_registry;
 

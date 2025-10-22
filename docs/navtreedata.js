@@ -49,7 +49,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"BasicComponents_8hpp.html"
+"BasicComponents_8hpp.html",
+"structvex_1_1enviroment.html#a7b0286a765e6fba844288bbf7bcd8380"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

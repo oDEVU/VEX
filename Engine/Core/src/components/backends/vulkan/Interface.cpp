@@ -228,8 +228,29 @@ namespace vex {
             attributes
         );
 
+        log("Initializing UI Pipeline...");
+        m_p_uiPipeline = std::make_unique<VulkanPipeline>(m_context);
+
+        VkVertexInputBindingDescription uiBinding{};
+        uiBinding.binding   = 0;
+        uiBinding.stride    = sizeof(UIVertex);
+        uiBinding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+        std::vector<VkVertexInputAttributeDescription> uiAttrs(4);
+        uiAttrs[0] = {0, 0, VK_FORMAT_R32G32_SFLOAT,       offsetof(UIVertex, position)};
+        uiAttrs[1] = {1, 0, VK_FORMAT_R32G32_SFLOAT,       offsetof(UIVertex, uv)};
+        uiAttrs[2] = {2, 0, VK_FORMAT_R32G32B32A32_SFLOAT,offsetof(UIVertex, color)};
+        uiAttrs[3] = {3, 0, VK_FORMAT_R32_SFLOAT,         offsetof(UIVertex, texIndex)};
+
+        m_p_uiPipeline->createUIPipeline(
+            "Engine/shaders/ui.vert.spv",
+            "Engine/shaders/ui.frag.spv",
+            uiBinding,
+            uiAttrs
+        );
+
         log("Initializing Renderer...");
-        m_p_renderer = std::make_unique<Renderer>(m_context, m_p_resources, m_p_pipeline, m_p_swapchainManager, m_p_meshManager);
+        m_p_renderer = std::make_unique<Renderer>(m_context, m_p_resources, m_p_pipeline, m_p_uiPipeline, m_p_swapchainManager, m_p_meshManager);
 
         log("Vulkan interface initialized successfully");
     }
@@ -241,6 +262,7 @@ namespace vex {
         m_p_meshManager.reset();
         m_p_resources.reset();
         m_p_pipeline.reset();
+        m_p_uiPipeline.reset();
         m_p_swapchainManager->cleanupSwapchain();
         m_p_swapchainManager.reset();
 
