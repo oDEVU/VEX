@@ -135,6 +135,7 @@ void VexUI::loadImages(Widget* w) {
     for (auto* c : w->children) loadImages(c);
 }
 
+// @todo Implement more of yogas features like margin, flexes?, aligments.
 Widget* VexUI::parseNode(const nlohmann::json& j) {
     Widget* w = new Widget();
 
@@ -179,6 +180,9 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
     if (j.contains("children") && j["children"].is_array()) {
         for (const auto& c : j["children"]) {
             Widget* child = parseNode(c);
+            auto childYoga = child->yoga;
+            YGNodeStyleSetWidth(childYoga, child->size.x);
+            YGNodeStyleSetHeight(childYoga, child->size.y);
             w->children.push_back(child);
             YGNodeInsertChild(w->yoga, child->yoga, static_cast<uint32_t>(w->children.size() - 1));
         }
@@ -244,6 +248,7 @@ void VexUI::processEvent(const SDL_Event& ev) {
     float sy = static_cast<float>(m_ctx.swapchainExtent.height) / m_ctx.currentRenderResolution.y;
 
     if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+        log("Mouse button down. pos: (%f, %f)", ev.button.x / sx, ev.button.y / sy);
         glm::vec2 mouse(ev.button.x / sx, ev.button.y / sy);
         if (Widget* w = findWidgetAt(m_root, mouse); w && w->type == WidgetType::Button && w->onClick)
             w->onClick();

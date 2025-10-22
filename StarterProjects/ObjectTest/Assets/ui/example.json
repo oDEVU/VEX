@@ -3,7 +3,7 @@
     "layout": "column",
     "justify": "space-between",
     "align": "flex-start",
-    "padding": 14,
+    "padding": 8,
     "children": [
       {
         "type": "label",
