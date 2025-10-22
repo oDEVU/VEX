@@ -9,9 +9,10 @@ var searchData=
   ['setmode_6',['setMode',['../classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a',1,'vex::ResolutionManager']]],
   ['setonclick_7',['setOnClick',['../classvex_1_1VexUI.html#ab74640bfd9c9e8d55e7d5ce23450f5d4',1,'vex::VexUI']]],
   ['setresolutionmode_8',['setResolutionMode',['../classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a',1,'vex::Engine']]],
-  ['settext_9',['setText',['../classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618',1,'vex::VexUI']]],
-  ['submesh_10',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
-  ['submeshbuffers_11',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]],
-  ['sundirection_12',['sunDirection',['../structvex_1_1enviroment.html#ab3ab7907a38eab33de0f95f36ff787ab',1,'vex::enviroment']]],
-  ['sunlight_13',['sunLight',['../structvex_1_1enviroment.html#a6e4d74a0a8925df0ed423ccac2c0a92a',1,'vex::enviroment']]]
+  ['setstyle_9',['setStyle',['../classvex_1_1VexUI.html#a003fd3aa45ad3730338a8649fe06bfc8',1,'vex::VexUI']]],
+  ['settext_10',['setText',['../classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618',1,'vex::VexUI']]],
+  ['submesh_11',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
+  ['submeshbuffers_12',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]],
+  ['sundirection_13',['sunDirection',['../structvex_1_1enviroment.html#ab3ab7907a38eab33de0f95f36ff787ab',1,'vex::enviroment']]],
+  ['sunlight_14',['sunLight',['../structvex_1_1enviroment.html#a6e4d74a0a8925df0ed423ccac2c0a92a',1,'vex::enviroment']]]
 ];

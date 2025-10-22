@@ -14,10 +14,12 @@ var searchData=
   ['getrenderresolution_11',['getRenderResolution',['../classvex_1_1ResolutionManager.html#ad9547b6b5479891fe76d271e4f3e8f36',1,'vex::ResolutionManager']]],
   ['getresolutionmode_12',['getResolutionMode',['../classvex_1_1Engine.html#a990ca389e3e97678e7a090d8903acb47',1,'vex::Engine']]],
   ['getrightvector_13',['getRightVector',['../structvex_1_1TransformComponent.html#aa6f209d4f9356a208d902aa6c088352e',1,'vex::TransformComponent']]],
-  ['getupscaleratio_14',['getUpscaleRatio',['../classvex_1_1ResolutionManager.html#a48fa637b9efb4377a957af044f174c9a',1,'vex::ResolutionManager']]],
-  ['getupvector_15',['getUpVector',['../structvex_1_1TransformComponent.html#a993984dd9ebce2a0614e11c4de6205fd',1,'vex::TransformComponent']]],
-  ['getwindowresolution_16',['getWindowResolution',['../classvex_1_1ResolutionManager.html#a54e611ed2a60ed43409ef33c492483e4',1,'vex::ResolutionManager']]],
-  ['getworldposition_17',['getWorldPosition',['../structvex_1_1TransformComponent.html#afbae5e1a17a9b004cef187b38f7cebed',1,'vex::TransformComponent']]],
-  ['getworldrotation_18',['getWorldRotation',['../structvex_1_1TransformComponent.html#a8f99915f77da88acd8d15d287183f694',1,'vex::TransformComponent']]],
-  ['getworldscale_19',['getWorldScale',['../structvex_1_1TransformComponent.html#a66cad5dd776d3f5706153bfd8745b4be',1,'vex::TransformComponent']]]
+  ['getstyle_14',['getStyle',['../classvex_1_1VexUI.html#a601ee02c87191445c9a3f7078784b202',1,'vex::VexUI']]],
+  ['getupscaleratio_15',['getUpscaleRatio',['../classvex_1_1ResolutionManager.html#a48fa637b9efb4377a957af044f174c9a',1,'vex::ResolutionManager']]],
+  ['getupvector_16',['getUpVector',['../structvex_1_1TransformComponent.html#a993984dd9ebce2a0614e11c4de6205fd',1,'vex::TransformComponent']]],
+  ['getwidget_17',['getWidget',['../classvex_1_1VexUI.html#a1eca1eba19ae99f2da6eeb7beceed431',1,'vex::VexUI']]],
+  ['getwindowresolution_18',['getWindowResolution',['../classvex_1_1ResolutionManager.html#a54e611ed2a60ed43409ef33c492483e4',1,'vex::ResolutionManager']]],
+  ['getworldposition_19',['getWorldPosition',['../structvex_1_1TransformComponent.html#afbae5e1a17a9b004cef187b38f7cebed',1,'vex::TransformComponent']]],
+  ['getworldrotation_20',['getWorldRotation',['../structvex_1_1TransformComponent.html#a8f99915f77da88acd8d15d287183f694',1,'vex::TransformComponent']]],
+  ['getworldscale_21',['getWorldScale',['../structvex_1_1TransformComponent.html#a66cad5dd776d3f5706153bfd8745b4be',1,'vex::TransformComponent']]]
 ];

@@ -30,7 +30,7 @@ namespace vex {
 /// @brief Basic UI styling component
 struct UIStyle {
     glm::vec4 color{1,1,1,1};
-    glm::vec4 bgColor{0,0,0,0};
+    glm::vec4 bgColor{-1,-1,-1,-1};
     std::string font;
     float fontSize = 16.f;
 };
@@ -107,6 +107,44 @@ public:
     /// });
     /// @endcode
     void setOnClick(const std::string& id, std::function<void()> cb);
+
+    /// @brief Get a UI element.
+    /// @param const std::string& id - ID of the UI element.
+    /// @return Widget& - Reference to the UI element.
+    /// @details Example usage:
+    /// @code
+    /// Widget& scoreWidget = m_vexUI->getWidget("score");
+    /// @endcode
+    Widget& getWidget(const std::string& id) {
+        if (Widget* w = findById(m_root, id)) return *w;
+        log("Widget not found");
+    }
+
+    /// @brief Get a UI element's style.
+    /// @param const std::string& id - ID of the UI element.
+    /// @return UIStyle& - Reference to the UI element's style.
+    /// @details Example usage:
+    /// @code
+    /// UIStyle& scoreStyle = m_vexUI->getStyle("score");
+    /// @endcode
+    UIStyle getStyle(const std::string& id) {
+        if (Widget* w = findById(m_root, id)) return w->style;
+        log("Widget not found");
+    }
+
+    /// @brief Set a UI element's style.
+    /// @param const std::string& id - ID of the UI element.
+    /// @param const UIStyle& style - New style for the UI element.
+    /// @details Example usage:
+    /// @code
+    /// UIStyle& scoreStyle = m_vexUI->getStyle("score");
+    /// scoreStyle.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    /// m_vexUI->setStyle("score", scoreStyle);
+    /// @endcode
+    void setStyle(const std::string& id, const UIStyle& style) {
+        if (Widget* w = findById(m_root, id)) w->style = style;
+        log("Widget not found");
+    }
 
 private:
     VulkanContext& m_ctx;
