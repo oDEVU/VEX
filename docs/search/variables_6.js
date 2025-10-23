@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['texindex_0',['texIndex',['../structvex_1_1UIVertex.html#ac09c638d80b1e96dfe3876e57eee08ca',1,'vex::UIVertex']]]
+  ['ntfsartifacts_0',['ntfsArtifacts',['../structvex_1_1enviroment.html#a30d511632c871477abae3cdf7f028324',1,'vex::enviroment']]]
 ];

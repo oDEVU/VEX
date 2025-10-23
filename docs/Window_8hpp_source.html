@@ -108,35 +108,39 @@ $(function(){initNavTree('Window_8hpp_source.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Window.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;SDL3/SDL.h&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;SDL3/SDL_main.h&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<a href="Window_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>vex {</div>
-<div class="foldopen" id="foldopen00010" data-start="{" data-end="};">
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="classvex_1_1Window.html">   10</a></span>    <span class="keyword">class </span>Window{</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>        <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>            SDL_Window *window;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>            <span class="keywordtype">bool</span> done = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>            Window(std::string title, <span class="keywordtype">int</span> resx = 480, <span class="keywordtype">int</span> resy = 640);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>            ~Window();</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>            SDL_Window* GetSDLWindow();</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    };</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;SDL3/SDL.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;SDL3/SDL_main.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>vex {</div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classvex_1_1Window.html">   17</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91">Window</a>{</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            SDL_Window *window;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="keywordtype">bool</span> done = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            <a class="code hl_function" href="classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91">Window</a>(std::string title, <span class="keywordtype">int</span> resx = 480, <span class="keywordtype">int</span> resy = 640);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            <a class="code hl_function" href="classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91">~Window</a>();</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            SDL_Window* <a class="code hl_function" href="classvex_1_1Window.html#a9f55e03567720265b43277eb4df8e5b5">GetSDLWindow</a>();</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    };</div>
 </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>}</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>}</div>
+<div class="ttc" id="aclassvex_1_1Window_html_a9f55e03567720265b43277eb4df8e5b5"><div class="ttname"><a href="classvex_1_1Window.html#a9f55e03567720265b43277eb4df8e5b5">vex::Window::GetSDLWindow</a></div><div class="ttdeci">SDL_Window * GetSDLWindow()</div><div class="ttdoc">Getter for SDL_Window pointer.</div><div class="ttdef"><b>Definition</b> <a href="Window_8cpp_source.html#l00054">Window.cpp:54</a></div></div>
+<div class="ttc" id="aclassvex_1_1Window_html_ae57e58f01774bd314764a060ce164c91"><div class="ttname"><a href="classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91">vex::Window::Window</a></div><div class="ttdeci">Window(std::string title, int resx=480, int resy=640)</div><div class="ttdoc">Constructor for Window class. Creates a new SDL_Window with the given title and resolution.</div><div class="ttdef"><b>Definition</b> <a href="Window_8cpp_source.html#l00004">Window.cpp:4</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a class="el" href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a class="el" href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><b>Window.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a class="el" href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a class="el" href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><a class="el" href="Window_8hpp.html">Window.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

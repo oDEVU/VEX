@@ -1,20 +1,9 @@
 var searchData=
 [
-  ['vertex_0',['Vertex',['../structvex_1_1Vertex.html',1,'vex']]],
-  ['vertexsnapping_1',['vertexSnapping',['../structvex_1_1enviroment.html#a7b0286a765e6fba844288bbf7bcd8380',1,'vex::enviroment']]],
-  ['vexui_2',['VexUI',['../classvex_1_1VexUI.html',1,'vex::VexUI'],['../classvex_1_1VexUI.html#a5c081cf41b22e86604dd8016fbce0684',1,'vex::VexUI::VexUI()']]],
-  ['vexui_2ehpp_3',['VexUI.hpp',['../VexUI_8hpp.html',1,'']]],
-  ['virtualfilesystem_4',['VirtualFileSystem',['../classvex_1_1VirtualFileSystem.html',1,'vex']]],
-  ['vpkassimpiosystem_5',['VPKAssimpIOSystem',['../classvex_1_1VPKAssimpIOSystem.html',1,'vex']]],
-  ['vpkassimpstream_6',['VPKAssimpStream',['../classvex_1_1VPKAssimpStream.html',1,'vex']]],
-  ['vpkfileentry_7',['VPKFileEntry',['../structvex_1_1VirtualFileSystem_1_1VPKFileEntry.html',1,'vex::VirtualFileSystem']]],
-  ['vpkheader_8',['VPKHeader',['../structvex_1_1VirtualFileSystem_1_1VPKHeader.html',1,'vex::VirtualFileSystem']]],
-  ['vpkstream_9',['VPKStream',['../classvex_1_1VirtualFileSystem_1_1VPKStream.html',1,'vex::VirtualFileSystem']]],
-  ['vpkstreambuf_10',['VPKStreamBuf',['../classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html',1,'vex::VirtualFileSystem::VPKStream']]],
-  ['vulkancontext_11',['VulkanContext',['../structvex_1_1VulkanContext.html',1,'vex']]],
-  ['vulkanimguiwrapper_12',['VulkanImGUIWrapper',['../classvex_1_1VulkanImGUIWrapper.html',1,'vex']]],
-  ['vulkanmesh_13',['VulkanMesh',['../classvex_1_1VulkanMesh.html',1,'vex']]],
-  ['vulkanpipeline_14',['VulkanPipeline',['../classvex_1_1VulkanPipeline.html',1,'vex']]],
-  ['vulkanresources_15',['VulkanResources',['../classvex_1_1VulkanResources.html',1,'vex']]],
-  ['vulkanswapchainmanager_16',['VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html',1,'vex']]]
+  ['texindex_0',['texIndex',['../structvex_1_1UIVertex.html#ac09c638d80b1e96dfe3876e57eee08ca',1,'vex::UIVertex']]],
+  ['textureexists_1',['textureExists',['../classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef',1,'vex::VulkanResources']]],
+  ['throw_5ferror_2',['throw_error',['../errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102',1,'errorUtils.hpp']]],
+  ['todo_20list_3',['Todo List',['../todo.html',1,'']]],
+  ['transformcomponent_4',['TransformComponent',['../structvex_1_1TransformComponent.html',1,'vex']]],
+  ['transitionimagelayout_5',['transitionImageLayout',['../classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11',1,'vex::Renderer']]]
 ];

@@ -26,6 +26,9 @@ var NAVTREE =
 [
   [ "VEX Engine", "index.html", [
     [ "Todo List", "todo.html", null ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -50,7 +53,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BasicComponents_8hpp.html",
-"structvex_1_1enviroment.html#a44507fe643a64b249ac8d0971abe198f"
+"classvex_1_1ResolutionManager.html#a7c992a0cdfd97eb54d4653be647dcb0f",
+"structvex_1_1FontAtlas.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

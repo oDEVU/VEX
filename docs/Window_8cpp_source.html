@@ -108,10 +108,11 @@ $(function(){initNavTree('Window_8cpp_source.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Window.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;Window.hpp&quot;</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="Window_8hpp.html">Window.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span>    Window::Window(std::string title, <span class="keywordtype">int</span> resx, <span class="keywordtype">int</span> resy){</div>
+<div class="foldopen" id="foldopen00004" data-start="{" data-end="}">
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno"><a class="line" href="classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91">    4</a></span>    <a class="code hl_function" href="classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91">Window::Window</a>(std::string title, <span class="keywordtype">int</span> resx, <span class="keywordtype">int</span> resy){</div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Initializing SDL...&quot;</span>);</div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>        <span class="comment">// WHY THE FUCK WAYLAND IS SO BLURRY NO MATTER WHAT I DO?!?!?</span></div>
@@ -151,6 +152,7 @@ $(function(){initNavTree('Window_8cpp_source.html',''); initResizable(true); });
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        }</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    }</div>
+</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    Window::~Window(){</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="comment">// CleanUp</span></div>
@@ -161,10 +163,15 @@ $(function(){initNavTree('Window_8cpp_source.html',''); initResizable(true); });
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;Window closed&quot;</span> &lt;&lt; std::endl;</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    }</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    SDL_Window* Window::GetSDLWindow(){</div>
+<div class="foldopen" id="foldopen00054" data-start="{" data-end="}">
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classvex_1_1Window.html#a9f55e03567720265b43277eb4df8e5b5">   54</a></span>    SDL_Window* <a class="code hl_function" href="classvex_1_1Window.html#a9f55e03567720265b43277eb4df8e5b5">Window::GetSDLWindow</a>(){</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">return</span> window;</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    }</div>
+</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>}</div>
+<div class="ttc" id="aWindow_8hpp_html"><div class="ttname"><a href="Window_8hpp.html">Window.hpp</a></div><div class="ttdoc">This file defines Window class.</div></div>
+<div class="ttc" id="aclassvex_1_1Window_html_a9f55e03567720265b43277eb4df8e5b5"><div class="ttname"><a href="classvex_1_1Window.html#a9f55e03567720265b43277eb4df8e5b5">vex::Window::GetSDLWindow</a></div><div class="ttdeci">SDL_Window * GetSDLWindow()</div><div class="ttdoc">Getter for SDL_Window pointer.</div><div class="ttdef"><b>Definition</b> <a href="#l00054">Window.cpp:54</a></div></div>
+<div class="ttc" id="aclassvex_1_1Window_html_ae57e58f01774bd314764a060ce164c91"><div class="ttname"><a href="classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91">vex::Window::Window</a></div><div class="ttdeci">Window(std::string title, int resx=480, int resy=640)</div><div class="ttdoc">Constructor for Window class. Creates a new SDL_Window with the given title and resolution.</div><div class="ttdef"><b>Definition</b> <a href="#l00004">Window.cpp:4</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a1e76fad2fc6915f89fbc9975e63e8f01"><div class="ttname"><a href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a></div><div class="ttdeci">void log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00052">errorUtils.hpp:52</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a8716696aa383ccb523980d921fbc4102"><div class="ttname"><a href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a></div><div class="ttdeci">void throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00043">errorUtils.hpp:43</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

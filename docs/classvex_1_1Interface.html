@@ -112,30 +112,49 @@ $(function(){initNavTree('classvex_1_1Interface.html',''); initResizable(true); 
   <div class="headertitle"><div class="title">vex::Interface Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classvex_1_1Interface.html" title="Interface Class for vulkan backend.">Interface</a> Class for vulkan backend.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6302482df52114edf7302c31f8303165" id="r_a6302482df52114edf7302c31f8303165"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6302482df52114edf7302c31f8303165">Interface</a> (SDL_Window *window, glm::uvec2 initialResolution, <a class="el" href="structvex_1_1GameInfo.html">GameInfo</a> gInfo, <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *vfs)</td></tr>
+<tr class="memdesc:a6302482df52114edf7302c31f8303165"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1Interface.html" title="Interface Class for vulkan backend.">Interface</a> class.  <br /></td></tr>
 <tr class="separator:a6302482df52114edf7302c31f8303165"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b5f3faa74e9d23b5bd53c110e5e866c" id="r_a5b5f3faa74e9d23b5bd53c110e5e866c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b5f3faa74e9d23b5bd53c110e5e866c">~Interface</a> ()</td></tr>
+<tr class="memdesc:a5b5f3faa74e9d23b5bd53c110e5e866c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple destructor cleaning up resources.  <br /></td></tr>
+<tr class="separator:a5b5f3faa74e9d23b5bd53c110e5e866c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ade6ea1d65bd7460e47623d6a8376d0" id="r_a2ade6ea1d65bd7460e47623d6a8376d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ade6ea1d65bd7460e47623d6a8376d0">bindWindow</a> (SDL_Window *window)</td></tr>
+<tr class="memdesc:a2ade6ea1d65bd7460e47623d6a8376d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds window.  <br /></td></tr>
 <tr class="separator:a2ade6ea1d65bd7460e47623d6a8376d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f3a488cea4154de1827da61958073f1" id="r_a4f3a488cea4154de1827da61958073f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f3a488cea4154de1827da61958073f1">unbindWindow</a> ()</td></tr>
+<tr class="memdesc:a4f3a488cea4154de1827da61958073f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simply unbinds window.  <br /></td></tr>
 <tr class="separator:a4f3a488cea4154de1827da61958073f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a050b018b8de1100f3cf2aaaab614750c" id="r_a050b018b8de1100f3cf2aaaab614750c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a050b018b8de1100f3cf2aaaab614750c">setRenderResolution</a> (glm::uvec2 resolution)</td></tr>
+<tr class="memdesc:a050b018b8de1100f3cf2aaaab614750c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates render resolution and manages window size change.  <br /></td></tr>
 <tr class="separator:a050b018b8de1100f3cf2aaaab614750c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f4845f3fe170ffbc882a432c2630986" id="r_a8f4845f3fe170ffbc882a432c2630986"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f4845f3fe170ffbc882a432c2630986">createDefaultTexture</a> ()</td></tr>
+<tr class="memdesc:a8f4845f3fe170ffbc882a432c2630986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates default texture for untextured meshes. (to be exact, it calls <a class="el" href="classvex_1_1VulkanResources.html" title="This class manages resources like textures, descriptor sets, and uniform buffers.">VulkanResources</a> method for it)  <br /></td></tr>
 <tr class="separator:a8f4845f3fe170ffbc882a432c2630986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6353a3f1584398f1ede21ea33cd54531" id="r_a6353a3f1584398f1ede21ea33cd54531"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6353a3f1584398f1ede21ea33cd54531">getContext</a> ()</td></tr>
+<tr class="memdesc:a6353a3f1584398f1ede21ea33cd54531"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for <a class="el" href="structvex_1_1VulkanContext.html" title="Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.">VulkanContext</a>.  <br /></td></tr>
 <tr class="separator:a6353a3f1584398f1ede21ea33cd54531"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af112614a8a57c58059728a365a1603d4" id="r_af112614a8a57c58059728a365a1603d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af112614a8a57c58059728a365a1603d4">getResources</a> ()</td></tr>
+<tr class="memdesc:af112614a8a57c58059728a365a1603d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for <a class="el" href="classvex_1_1VulkanResources.html" title="This class manages resources like textures, descriptor sets, and uniform buffers.">VulkanResources</a>.  <br /></td></tr>
 <tr class="separator:af112614a8a57c58059728a365a1603d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90d412beabb7ce16bef3ffe3443cb9b8" id="r_a90d412beabb7ce16bef3ffe3443cb9b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1MeshManager.html">MeshManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90d412beabb7ce16bef3ffe3443cb9b8">getMeshManager</a> ()</td></tr>
+<tr class="memdesc:a90d412beabb7ce16bef3ffe3443cb9b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a>.  <br /></td></tr>
 <tr class="separator:a90d412beabb7ce16bef3ffe3443cb9b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5717d102b53e3e0c15cf709e4844548b" id="r_a5717d102b53e3e0c15cf709e4844548b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Renderer.html">Renderer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5717d102b53e3e0c15cf709e4844548b">getRenderer</a> ()</td></tr>
+<tr class="memdesc:a5717d102b53e3e0c15cf709e4844548b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a>.  <br /></td></tr>
 <tr class="separator:a5717d102b53e3e0c15cf709e4844548b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3674fb03e32008769344df029cf7a736" id="r_a3674fb03e32008769344df029cf7a736"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3674fb03e32008769344df029cf7a736">setEnvironment</a> (<a class="el" href="structvex_1_1enviroment.html">enviroment</a> env)</td></tr>
+<tr class="memdesc:a3674fb03e32008769344df029cf7a736"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows to update Enviroment settings at runtime. Since they are in push constant we need interface to extract and pass the data.  <br /></td></tr>
 <tr class="separator:a3674fb03e32008769344df029cf7a736"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b29f95b7b51f4fe9b025f603127e297" id="r_a9b29f95b7b51f4fe9b025f603127e297"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1enviroment.html">enviroment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b29f95b7b51f4fe9b025f603127e297">getEnvironment</a> ()</td></tr>
+<tr class="memdesc:a9b29f95b7b51f4fe9b025f603127e297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for Enviroment settings. Returns a copy of the current environment settings.  <br /></td></tr>
 <tr class="separator:a9b29f95b7b51f4fe9b025f603127e297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -160,8 +179,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a429cb84a98f6ead3f884880eb965693c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00020">20</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<div class="textblock"><p><a class="el" href="classvex_1_1Interface.html" title="Interface Class for vulkan backend.">Interface</a> Class for vulkan backend. </p>
+<p>This class manages whole vulkan backend, from initalization, to holding resources, binding window, to calling renderer. Its managing class for backend abstraction. Its architecture allows me to replace it with for example OpenGL <a class="el" href="classvex_1_1Interface.html" title="Interface Class for vulkan backend.">Interface</a> with same methods and interface should manage backend by itself. </p>
+
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00028">28</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6302482df52114edf7302c31f8303165" name="a6302482df52114edf7302c31f8303165"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6302482df52114edf7302c31f8303165">&#9670;&#160;</a></span>Interface()</h2>
@@ -192,6 +213,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructor for <a class="el" href="classvex_1_1Interface.html" title="Interface Class for vulkan backend.">Interface</a> class. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">SDL_Window*</td><td>window - Pointer to SDL_Window. </td></tr>
+    <tr><td class="paramname">glm::uvec2</td><td>initialResolution - Initial resolution of the window. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structvex_1_1GameInfo.html" title="this struct contains information about the game. like project name and version.">GameInfo</a></td><td>gInfo - <a class="el" href="structvex_1_1GameInfo.html" title="this struct contains information about the game. like project name and version.">GameInfo</a> object. </td></tr>
+    <tr><td class="paramname">VirtualFileSystem*</td><td>vfs - Pointer to <a class="el" href="classvex_1_1VirtualFileSystem.html" title="This class provides abstraction of file system needed for loading packed and unpacked assets.">VirtualFileSystem</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>It initializes vulkan backend, binds window, creates resources, and initializes renderer. </p>
+
 <p class="definition">Definition at line <a class="el" href="Interface_8cpp_source.html#l00013">13</a> of file <a class="el" href="Interface_8cpp_source.html">Interface.cpp</a>.</p>
 
 </div>
@@ -210,6 +243,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Simple destructor cleaning up resources. </p>
 
 <p class="definition">Definition at line <a class="el" href="Interface_8cpp_source.html#l00258">258</a> of file <a class="el" href="Interface_8cpp_source.html">Interface.cpp</a>.</p>
 
@@ -231,6 +266,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Binds window. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">SDL_Window*</td><td>window - Pointer to SDL_Window.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>It is used internally to bind backend to the window. Its called when initializing backend. And everytime the window is resized. </p>
+
 <p class="definition">Definition at line <a class="el" href="Interface_8cpp_source.html#l00334">334</a> of file <a class="el" href="Interface_8cpp_source.html">Interface.cpp</a>.</p>
 
 </div>
@@ -249,6 +293,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Creates default texture for untextured meshes. (to be exact, it calls <a class="el" href="classvex_1_1VulkanResources.html" title="This class manages resources like textures, descriptor sets, and uniform buffers.">VulkanResources</a> method for it) </p>
 
 <p class="definition">Definition at line <a class="el" href="Interface_8cpp_source.html#l00330">330</a> of file <a class="el" href="Interface_8cpp_source.html">Interface.cpp</a>.</p>
 
@@ -277,7 +323,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00030">30</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p>Getter for <a class="el" href="structvex_1_1VulkanContext.html" title="Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.">VulkanContext</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>VulkanContext* </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00057">57</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -304,7 +353,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00036">36</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p>Getter for Enviroment settings. Returns a copy of the current environment settings. </p>
+<dl class="section return"><dt>Returns</dt><dd>enviroment </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00077">77</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -331,7 +383,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00032">32</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p>Getter for <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classvex_1_1MeshManager.html">MeshManager</a>&amp; </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00065">65</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -358,7 +413,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00033">33</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p>Getter for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a>&amp; </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00069">69</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -385,7 +443,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00031">31</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p>Getter for <a class="el" href="classvex_1_1VulkanResources.html" title="This class manages resources like textures, descriptor sets, and uniform buffers.">VulkanResources</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>VulkanResources* </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00061">61</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -412,7 +473,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00035">35</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p>Allows to update Enviroment settings at runtime. Since they are in push constant we need interface to extract and pass the data. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enviroment</td><td>env </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00073">73</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -430,6 +499,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Updates render resolution and manages window size change. </p>
 
 <p class="definition">Definition at line <a class="el" href="Interface_8cpp_source.html#l00358">358</a> of file <a class="el" href="Interface_8cpp_source.html">Interface.cpp</a>.</p>
 
@@ -449,6 +520,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Simply unbinds window. </p>
 
 <p class="definition">Definition at line <a class="el" href="Interface_8cpp_source.html#l00348">348</a> of file <a class="el" href="Interface_8cpp_source.html">Interface.cpp</a>.</p>
 
@@ -475,7 +548,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00039">39</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00080">80</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -499,7 +572,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00046">46</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00087">87</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -523,7 +596,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00044">44</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00085">85</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -547,7 +620,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00047">47</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00088">88</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -571,7 +644,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00043">43</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00084">84</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -595,7 +668,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00042">42</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00083">83</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -619,7 +692,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00045">45</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00086">86</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -643,7 +716,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00040">40</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00081">81</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>
@@ -667,7 +740,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00041">41</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Interface_8hpp_source.html#l00082">82</a> of file <a class="el" href="Interface_8hpp_source.html">Interface.hpp</a>.</p>
 
 </div>
 </div>

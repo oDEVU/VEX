@@ -1,3 +1,9 @@
+/**
+ *  @file   VulkanImGUIWrapper.hpp
+ *  @brief  This file defines class with Imgui for vulkan backend definition.
+ *  @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 
 #include "components/ImGUIWrapper.hpp"
@@ -14,15 +20,25 @@
 #endif
 
 namespace vex {
+    /// @brief Class with Imgui for vulkan backend definition, inheriting from ImGUIWrapper.
     class VulkanImGUIWrapper : public ImGUIWrapper {
     public:
+        /// @brief Constructor for VulkanImGUIWrapper.
+        /// @param SDL_Window* window - The SDL window to use for ImGUI.
+        /// @param VulkanContext& vulkanContext - The Vulkan context containing vulkan resources..
         VulkanImGUIWrapper(SDL_Window* window, VulkanContext& vulkanContext);
         virtual ~VulkanImGUIWrapper();
 #if DEBUG
+        /// @brief Initializes ImGUI for Vulkan backend, called by the engine while initializing.
         void init() override;
+        /// @brief Begins a new frame for ImGUI, needs to be called after render method.
         void beginFrame() override;
+        /// @brief Ends the current frame for ImGUI, needs to be called after render method.
         void endFrame() override;
+        /// @brief Processes an mouse events.
         void processEvent(const SDL_Event* event) override;
+        /// @brief Gets the ImGuiIO instance.
+        /// @return ImGuiIO& - The ImGuiIO instance.
         ImGuiIO& getIO() override;
 #else
     void init() override { return; }
@@ -33,7 +49,9 @@ namespace vex {
 
     private:
 #if DEBUG
+        /// @brief Creates the descriptor pool for ImGUI.
         void createDescriptorPool();
+        /// @brief Sets up the style for ImGUI.
         void setupStyle();
 
         VkDescriptorPool m_imguiPool = VK_NULL_HANDLE;

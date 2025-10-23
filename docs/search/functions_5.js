@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['handle_5fexception_0',['handle_exception',['../errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77',1,'errorUtils.hpp']]],
-  ['hascomponent_1',['HasComponent',['../classvex_1_1GameObject.html#a07e4c6377471e361db406c340337d9c4',1,'vex::GameObject']]]
+  ['file_5fexists_0',['file_exists',['../classvex_1_1VirtualFileSystem.html#af7e5ffbb87270ae0927501e9284ba0b5',1,'vex::VirtualFileSystem']]],
+  ['find_5ffile_5fentry_1',['find_file_entry',['../classvex_1_1VirtualFileSystem.html#a6d692d38adea7d64785bdeb064db29d5',1,'vex::VirtualFileSystem']]],
+  ['finddepthformat_2',['findDepthFormat',['../classvex_1_1VulkanSwapchainManager.html#aecfa5eecf53f371760dff05f46697043',1,'vex::VulkanSwapchainManager']]]
 ];

@@ -108,7 +108,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html',''); initResizabl
   <div class="headertitle"><div class="title">VulkanImGUIWrapper.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;VulkanImGUIWrapper.hpp&quot;</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanImGUIWrapper_8hpp.html">VulkanImGUIWrapper.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#if DEBUG</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;backends/imgui_impl_sdl3.h&gt;</span></div>
@@ -117,8 +117,10 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html',''); initResizabl
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>vex {</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    VulkanImGUIWrapper::VulkanImGUIWrapper(SDL_Window* window, <a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; vulkanContext)</div>
+<div class="foldopen" id="foldopen00010" data-start="{" data-end="}">
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c">   10</a></span>    <a class="code hl_function" href="classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c">VulkanImGUIWrapper::VulkanImGUIWrapper</a>(SDL_Window* window, <a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; vulkanContext)</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>        : m_p_window(window), m_r_context(vulkanContext) {}</div>
+</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    VulkanImGUIWrapper::~VulkanImGUIWrapper() {</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#if DEBUG</span></div>
@@ -139,7 +141,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html',''); initResizabl
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    }</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#if DEBUG</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> VulkanImGUIWrapper::init() {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanImGUIWrapper.html#a2c9291f4691960f3076f10f928aed2ab">VulkanImGUIWrapper::init</a>() {</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Initialization of DearImGUI&quot;</span>);</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        IMGUI_CHECKVERSION();</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        ImGui::CreateContext();</div>
@@ -197,7 +199,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html',''); initResizabl
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        m_initialized = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    }</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">void</span> VulkanImGUIWrapper::beginFrame() {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646">VulkanImGUIWrapper::beginFrame</a>() {</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        ImGui_ImplVulkan_NewFrame();</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        ImGui_ImplSDL3_NewFrame();</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        ImGui::NewFrame();</div>
@@ -210,12 +212,12 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html',''); initResizabl
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    }</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keywordtype">void</span> VulkanImGUIWrapper::endFrame() {</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanImGUIWrapper.html#a914707e58572f5540062faedcf186351">VulkanImGUIWrapper::endFrame</a>() {</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        ImGui::Render();</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_r_context.commandBuffers[m_r_context.currentImageIndex]);</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    }</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">void</span> VulkanImGUIWrapper::processEvent(<span class="keyword">const</span> SDL_Event* event) {</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanImGUIWrapper.html#a3b3aaa57eadba08ccd0b6ee6d57d97cb">VulkanImGUIWrapper::processEvent</a>(<span class="keyword">const</span> SDL_Event* event) {</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        ImGuiIO&amp; io = ImGui::GetIO();</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        <span class="comment">// Calculate scale factors (window-to-render)</span></div>
@@ -308,9 +310,15 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html',''); initResizabl
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    }</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>}</div>
+<div class="ttc" id="aVulkanImGUIWrapper_8hpp_html"><div class="ttname"><a href="VulkanImGUIWrapper_8hpp.html">VulkanImGUIWrapper.hpp</a></div><div class="ttdoc">This file defines class with Imgui for vulkan backend definition.</div></div>
+<div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a2c9291f4691960f3076f10f928aed2ab"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a2c9291f4691960f3076f10f928aed2ab">vex::VulkanImGUIWrapper::init</a></div><div class="ttdeci">void init() override</div><div class="ttdoc">Initialization called inside Engine class.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00044">VulkanImGUIWrapper.hpp:44</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a3632c617d696b089815ff793cd5ea75c"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c">vex::VulkanImGUIWrapper::VulkanImGUIWrapper</a></div><div class="ttdeci">VulkanImGUIWrapper(SDL_Window *window, VulkanContext &amp;vulkanContext)</div><div class="ttdoc">Constructor for VulkanImGUIWrapper.</div><div class="ttdef"><b>Definition</b> <a href="#l00010">VulkanImGUIWrapper.cpp:10</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a3b3aaa57eadba08ccd0b6ee6d57d97cb"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a3b3aaa57eadba08ccd0b6ee6d57d97cb">vex::VulkanImGUIWrapper::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event *event) override</div><div class="ttdoc">Its used to process input needed by interaction with ImGui.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00047">VulkanImGUIWrapper.hpp:47</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a5547c7ab8e934f8f936a717e9a277646"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646">vex::VulkanImGUIWrapper::beginFrame</a></div><div class="ttdeci">void beginFrame() override</div><div class="ttdoc">Begining of UI rendering called in vex::Renderer::renderFrame.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00045">VulkanImGUIWrapper.hpp:45</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a914707e58572f5540062faedcf186351"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a914707e58572f5540062faedcf186351">vex::VulkanImGUIWrapper::endFrame</a></div><div class="ttdeci">void endFrame() override</div><div class="ttdoc">Ends UI rendering for frame.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00046">VulkanImGUIWrapper.hpp:46</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a1e76fad2fc6915f89fbc9975e63e8f01"><div class="ttname"><a href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a></div><div class="ttdeci">void log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00052">errorUtils.hpp:52</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a8716696aa383ccb523980d921fbc4102"><div class="ttname"><a href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a></div><div class="ttdeci">void throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00043">errorUtils.hpp:43</a></div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00015">context.hpp:15</a></div></div>
+<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00023">context.hpp:23</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,7 +1,19 @@
 var searchData=
 [
-  ['texindex_0',['texIndex',['../structvex_1_1UIVertex.html#ac09c638d80b1e96dfe3876e57eee08ca',1,'vex::UIVertex']]],
-  ['throw_5ferror_1',['throw_error',['../errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102',1,'errorUtils.hpp']]],
-  ['todo_20list_2',['Todo List',['../todo.html',1,'']]],
-  ['transformcomponent_3',['TransformComponent',['../structvex_1_1TransformComponent.html',1,'vex']]]
+  ['recreateswapchain_0',['recreateSwapchain',['../classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245',1,'vex::VulkanSwapchainManager']]],
+  ['register_5fcomponent_1',['REGISTER_COMPONENT',['../ComponentFactory_8hpp.html#a3c2eb139ecc6bb3b7733d2d2ecc67685',1,'ComponentFactory.hpp']]],
+  ['register_5fgame_5fobject_2',['REGISTER_GAME_OBJECT',['../GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88',1,'GameObjectFactory.hpp']]],
+  ['removeinstance_3',['removeInstance',['../classvex_1_1VulkanMesh.html#a85c4ec5bb63eb855353ac38eb6e0df1a',1,'vex::VulkanMesh']]],
+  ['render_4',['render',['../classvex_1_1VexUI.html#ae2ed2215b0e78bec7e54f83a493ca5ca',1,'vex::VexUI::render()'],['../classvex_1_1Engine.html#a651671153ff5f6edc58e2d76700c6c77',1,'vex::Engine::render()']]],
+  ['renderer_5',['Renderer',['../classvex_1_1Renderer.html',1,'vex::Renderer'],['../classvex_1_1Renderer.html#a2c3f75ee7ceca2464c08f9dc206fa23d',1,'vex::Renderer::Renderer()']]],
+  ['renderer_2ehpp_6',['Renderer.hpp',['../Renderer_8hpp.html',1,'']]],
+  ['renderframe_7',['renderFrame',['../classvex_1_1Renderer.html#af3972277923b93df3b2d0c2a5088c41e',1,'vex::Renderer']]],
+  ['res_5f240p_8',['RES_240P',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaeabc3f998c9b1f13a5bb3c52a41e6fc3',1,'vex']]],
+  ['res_5f480p_9',['RES_480P',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6',1,'vex']]],
+  ['resolutionmanager_10',['ResolutionManager',['../classvex_1_1ResolutionManager.html',1,'vex::ResolutionManager'],['../classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382',1,'vex::ResolutionManager::ResolutionManager()']]],
+  ['resolutionmanager_2ehpp_11',['ResolutionManager.hpp',['../ResolutionManager_8hpp.html',1,'']]],
+  ['resolutionmode_12',['ResolutionMode',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7e',1,'vex']]],
+  ['resolve_5frelative_5fpath_13',['resolve_relative_path',['../classvex_1_1VirtualFileSystem.html#a6cabffa3f598dde4e3d26340a5b3d0f9',1,'vex::VirtualFileSystem']]],
+  ['resources_2ehpp_14',['Resources.hpp',['../Resources_8hpp.html',1,'']]],
+  ['run_15',['run',['../classvex_1_1Engine.html#a31e8a27cef3dc33821c15f7cbb49f107',1,'vex::Engine']]]
 ];

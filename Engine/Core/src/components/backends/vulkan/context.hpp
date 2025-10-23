@@ -1,3 +1,9 @@
+/**
+ *  @file   context.hpp
+ *  @brief  This file defines struct holding all vulkan data, like device, surface, swapchain, images, views, and more.
+ *  @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 
 #include <sys/types.h>
@@ -12,6 +18,8 @@
 #include "components/enviroment.hpp"
 
 namespace vex {
+    /// @brief Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.
+    /// @todo cleanup
     typedef struct {
         VkInstance instance;
         VkPhysicalDevice physicalDevice;
@@ -41,6 +49,8 @@ namespace vex {
         VkCommandPool commandPool;
         std::vector<VkCommandBuffer> commandBuffers;
 
+        /// @brief Function to begin single time command, used for stuff like creating vulkan image when loading textures.
+        /// @return VkCommandBuffer
         VkCommandBuffer beginSingleTimeCommands() {
             VkCommandBufferAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -59,6 +69,8 @@ namespace vex {
             return commandBuffer;
         }
 
+        /// @brief Function to end single time command.
+        /// @param VkCommandBuffer commandBuffer - The command buffer to end.
         void endSingleTimeCommands(VkCommandBuffer commandBuffer) {
             vkEndCommandBuffer(commandBuffer);
 
@@ -80,7 +92,7 @@ namespace vex {
         uint32_t currentImageIndex = 0;
         const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
 
-        //FIXME: Implement somethig to dynamically allocate resources and not relly on max txt and models
+        /// @todo Implement something to dynamically allocate resources and not rely on max textures and models
         const uint32_t MAX_TEXTURES = 1024;
         const uint32_t MAX_MODELS = 1024;
 

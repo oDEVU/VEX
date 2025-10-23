@@ -112,6 +112,11 @@ $(function(){initNavTree('classvex_1_1VulkanImGUIWrapper.html',''); initResizabl
   <div class="headertitle"><div class="title">vex::VulkanImGUIWrapper Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class with Imgui for vulkan backend definition, inheriting from <a class="el" href="classvex_1_1ImGUIWrapper.html" title="This class provides an interface template for ImGui Implementation. Every backend should implement th...">ImGUIWrapper</a>.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for vex::VulkanImGUIWrapper:</div>
 <div class="dyncontent">
@@ -125,12 +130,13 @@ Inheritance diagram for vex::VulkanImGUIWrapper:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3632c617d696b089815ff793cd5ea75c" id="r_a3632c617d696b089815ff793cd5ea75c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3632c617d696b089815ff793cd5ea75c">VulkanImGUIWrapper</a> (SDL_Window *window, <a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;vulkanContext)</td></tr>
+<tr class="memdesc:a3632c617d696b089815ff793cd5ea75c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1VulkanImGUIWrapper.html" title="Class with Imgui for vulkan backend definition, inheriting from ImGUIWrapper.">VulkanImGUIWrapper</a>.  <br /></td></tr>
 <tr class="separator:a3632c617d696b089815ff793cd5ea75c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c9291f4691960f3076f10f928aed2ab" id="r_a2c9291f4691960f3076f10f928aed2ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c9291f4691960f3076f10f928aed2ab">init</a> () override</td></tr>
 <tr class="memdesc:a2c9291f4691960f3076f10f928aed2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization called inside <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a> class.  <br /></td></tr>
 <tr class="separator:a2c9291f4691960f3076f10f928aed2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5547c7ab8e934f8f936a717e9a277646" id="r_a5547c7ab8e934f8f936a717e9a277646"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5547c7ab8e934f8f936a717e9a277646">beginFrame</a> () override</td></tr>
-<tr class="memdesc:a5547c7ab8e934f8f936a717e9a277646"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begining of UI rendering called in vex::Renderer::renderFrame.  <br /></td></tr>
+<tr class="memdesc:a5547c7ab8e934f8f936a717e9a277646"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begining of UI rendering called in <a class="el" href="classvex_1_1Renderer.html#af3972277923b93df3b2d0c2a5088c41e" title="Renders a frame using the provided parameters.">vex::Renderer::renderFrame</a>.  <br /></td></tr>
 <tr class="separator:a5547c7ab8e934f8f936a717e9a277646"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a914707e58572f5540062faedcf186351" id="r_a914707e58572f5540062faedcf186351"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a914707e58572f5540062faedcf186351">endFrame</a> () override</td></tr>
 <tr class="memdesc:a914707e58572f5540062faedcf186351"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends UI rendering for frame.  <br /></td></tr>
@@ -160,8 +166,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ad7d97ce83e799a06137f094001ab26f6 inherit pro_attribs_classvex_1_1ImGUIWrapper"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00017">17</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<div class="textblock"><p>Class with Imgui for vulkan backend definition, inheriting from <a class="el" href="classvex_1_1ImGUIWrapper.html" title="This class provides an interface template for ImGui Implementation. Every backend should implement th...">ImGUIWrapper</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00024">24</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3632c617d696b089815ff793cd5ea75c" name="a3632c617d696b089815ff793cd5ea75c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3632c617d696b089815ff793cd5ea75c">&#9670;&#160;</a></span>VulkanImGUIWrapper()</h2>
@@ -181,6 +188,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor for <a class="el" href="classvex_1_1VulkanImGUIWrapper.html" title="Class with Imgui for vulkan backend definition, inheriting from ImGUIWrapper.">VulkanImGUIWrapper</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">SDL_Window*</td><td>window - The SDL window to use for ImGUI. </td></tr>
+    <tr><td class="paramname">VulkanContext&amp;</td><td>vulkanContext - The Vulkan context containing vulkan resources.. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8cpp_source.html#l00010">10</a> of file <a class="el" href="VulkanImGUIWrapper_8cpp_source.html">VulkanImGUIWrapper.cpp</a>.</p>
 
@@ -237,11 +253,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Begining of UI rendering called in vex::Renderer::renderFrame. </p>
+<p>Begining of UI rendering called in <a class="el" href="classvex_1_1Renderer.html#af3972277923b93df3b2d0c2a5088c41e" title="Renders a frame using the provided parameters.">vex::Renderer::renderFrame</a>. </p>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#adb59498d778f116eb17eec998d8c79c3">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00029">29</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00045">45</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -272,7 +288,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#a48a6bb72a45804ed72704c8f7d2f6c81">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00030">30</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00046">46</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -303,7 +319,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#a3e9e9d074bbd2f8f741dad416e395f84">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00028">28</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00044">44</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -334,7 +350,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#a992ee0c337a2007cf37d358fa626f663">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00031">31</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00047">47</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -359,7 +375,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00042">42</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00060">60</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -383,7 +399,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00043">43</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00061">61</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>

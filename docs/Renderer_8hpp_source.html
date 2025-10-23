@@ -108,60 +108,73 @@ $(function(){initNavTree('Renderer_8hpp_source.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">Renderer.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;context.hpp&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;Resources.hpp&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;Pipeline.hpp&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;SwapchainManager.hpp&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;VulkanImGUIWrapper.hpp&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;VulkanMesh.hpp&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="VexUI_8hpp.html">components/UI/VexUI.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;MeshManager.hpp&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;chrono&gt;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>vex {</div>
-<div class="foldopen" id="foldopen00015" data-start="{" data-end="};">
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html">   15</a></span>    <span class="keyword">class </span>Renderer {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        Renderer(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context,</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>                 std::shared_ptr&lt;VulkanResources&gt;&amp; resources,</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>                 std::unique_ptr&lt;VulkanPipeline&gt;&amp; pipeline,</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>                 std::unique_ptr&lt;VulkanPipeline&gt;&amp; uiPipeline,</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                 std::unique_ptr&lt;VulkanSwapchainManager&gt;&amp; swapchainManager,</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>                 std::unique_ptr&lt;MeshManager&gt;&amp; meshManager);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        ~Renderer();</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keywordtype">void</span> renderFrame(<span class="keyword">const</span> glm::mat4&amp; view, <span class="keyword">const</span> glm::mat4&amp; proj, glm::uvec2 renderResolution, entt::registry&amp; registry, <a class="code hl_class" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a>&amp; ui, <a class="code hl_class" href="classvex_1_1VexUI.html">VexUI</a>&amp; vui, uint64_t frame);</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordtype">void</span> transitionImageLayout(VkCommandBuffer cmd, VkImage image,</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                                   VkImageLayout oldLayout, VkImageLayout newLayout,</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                                   VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                                   VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; m_r_context;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        std::shared_ptr&lt;VulkanResources&gt;&amp; m_p_resources;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        std::unique_ptr&lt;VulkanPipeline&gt;&amp; m_p_pipeline;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        std::unique_ptr&lt;VulkanPipeline&gt;&amp; m_p_uiPipeline;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        std::unique_ptr&lt;VulkanSwapchainManager&gt;&amp; m_p_swapchainManager;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        std::unique_ptr&lt;MeshManager&gt;&amp; m_p_meshManager;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        std::chrono::high_resolution_clock::time_point startTime;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordtype">float</span> currentTime = 0.0f;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    };</div>
+<a href="Renderer_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="context_8hpp.html">context.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="Resources_8hpp.html">Resources.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="Pipeline_8hpp.html">Pipeline.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="SwapchainManager_8hpp.html">SwapchainManager.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanImGUIWrapper_8hpp.html">VulkanImGUIWrapper.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanMesh_8hpp.html">VulkanMesh.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="VexUI_8hpp.html">components/UI/VexUI.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;MeshManager.hpp&quot;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;chrono&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span>vex {</div>
+<div class="foldopen" id="foldopen00022" data-start="{" data-end="};">
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html">   22</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classvex_1_1Renderer.html#a2c3f75ee7ceca2464c08f9dc206fa23d">Renderer</a> {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <a class="code hl_function" href="classvex_1_1Renderer.html#a2c3f75ee7ceca2464c08f9dc206fa23d">Renderer</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                 std::shared_ptr&lt;VulkanResources&gt;&amp; resources,</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>                 std::unique_ptr&lt;VulkanPipeline&gt;&amp; pipeline,</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                 std::unique_ptr&lt;VulkanPipeline&gt;&amp; uiPipeline,</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                 std::unique_ptr&lt;VulkanSwapchainManager&gt;&amp; swapchainManager,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                 std::unique_ptr&lt;MeshManager&gt;&amp; meshManager);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <a class="code hl_function" href="classvex_1_1Renderer.html#ab647f7466e1195b57864a5ead4c51cad">~Renderer</a>();</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#af3972277923b93df3b2d0c2a5088c41e">renderFrame</a>(<span class="keyword">const</span> glm::mat4&amp; view, <span class="keyword">const</span> glm::mat4&amp; proj, glm::uvec2 renderResolution, entt::registry&amp; registry, <a class="code hl_class" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a>&amp; ui, <a class="code hl_class" href="classvex_1_1VexUI.html">VexUI</a>&amp; vui, uint64_t frame);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11">transitionImageLayout</a>(VkCommandBuffer cmd, VkImage image,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                                   VkImageLayout oldLayout, VkImageLayout newLayout,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                                   VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                                   VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; m_r_context;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        std::shared_ptr&lt;VulkanResources&gt;&amp; m_p_resources;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        std::unique_ptr&lt;VulkanPipeline&gt;&amp; m_p_pipeline;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        std::unique_ptr&lt;VulkanPipeline&gt;&amp; m_p_uiPipeline;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        std::unique_ptr&lt;VulkanSwapchainManager&gt;&amp; m_p_swapchainManager;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        std::unique_ptr&lt;MeshManager&gt;&amp; m_p_meshManager;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        std::chrono::high_resolution_clock::time_point startTime;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordtype">float</span> currentTime = 0.0f;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    };</div>
 </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>}</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>}</div>
+<div class="ttc" id="aPipeline_8hpp_html"><div class="ttname"><a href="Pipeline_8hpp.html">Pipeline.hpp</a></div><div class="ttdoc">This file defines VulkanPipeline Class.</div></div>
+<div class="ttc" id="aResources_8hpp_html"><div class="ttname"><a href="Resources_8hpp.html">Resources.hpp</a></div><div class="ttdoc">This file defines VulkanResources Class.</div></div>
+<div class="ttc" id="aSwapchainManager_8hpp_html"><div class="ttname"><a href="SwapchainManager_8hpp.html">SwapchainManager.hpp</a></div><div class="ttdoc">This file defines VulkanSwapchainManager Class.</div></div>
 <div class="ttc" id="aVexUI_8hpp_html"><div class="ttname"><a href="VexUI_8hpp.html">VexUI.hpp</a></div><div class="ttdoc">This file defines vex ui class, very basic ui system.</div></div>
+<div class="ttc" id="aVulkanImGUIWrapper_8hpp_html"><div class="ttname"><a href="VulkanImGUIWrapper_8hpp.html">VulkanImGUIWrapper.hpp</a></div><div class="ttdoc">This file defines class with Imgui for vulkan backend definition.</div></div>
+<div class="ttc" id="aVulkanMesh_8hpp_html"><div class="ttname"><a href="VulkanMesh_8hpp.html">VulkanMesh.hpp</a></div><div class="ttdoc">This file defines VulkanMesh class.</div></div>
 <div class="ttc" id="aclassvex_1_1ImGUIWrapper_html"><div class="ttname"><a href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a></div><div class="ttdoc">This class provides an interface template for ImGui Implementation. Every backend should implement th...</div><div class="ttdef"><b>Definition</b> <a href="ImGUIWrapper_8hpp_source.html#l00020">ImGUIWrapper.hpp:20</a></div></div>
+<div class="ttc" id="aclassvex_1_1Renderer_html_a2c3f75ee7ceca2464c08f9dc206fa23d"><div class="ttname"><a href="classvex_1_1Renderer.html#a2c3f75ee7ceca2464c08f9dc206fa23d">vex::Renderer::Renderer</a></div><div class="ttdeci">Renderer(VulkanContext &amp;context, std::shared_ptr&lt; VulkanResources &gt; &amp;resources, std::unique_ptr&lt; VulkanPipeline &gt; &amp;pipeline, std::unique_ptr&lt; VulkanPipeline &gt; &amp;uiPipeline, std::unique_ptr&lt; VulkanSwapchainManager &gt; &amp;swapchainManager, std::unique_ptr&lt; MeshManager &gt; &amp;meshManager)</div><div class="ttdoc">Constructor for Renderer class.</div><div class="ttdef"><b>Definition</b> <a href="Renderer_8cpp_source.html#l00014">Renderer.cpp:14</a></div></div>
+<div class="ttc" id="aclassvex_1_1Renderer_html_a2f3486083d37afa6ab1d599ffae1ad11"><div class="ttname"><a href="classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11">vex::Renderer::transitionImageLayout</a></div><div class="ttdeci">void transitionImageLayout(VkCommandBuffer cmd, VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage)</div><div class="ttdoc">Helper function for image transition.</div><div class="ttdef"><b>Definition</b> <a href="Renderer_8cpp_source.html#l00295">Renderer.cpp:295</a></div></div>
+<div class="ttc" id="aclassvex_1_1Renderer_html_ab647f7466e1195b57864a5ead4c51cad"><div class="ttname"><a href="classvex_1_1Renderer.html#ab647f7466e1195b57864a5ead4c51cad">vex::Renderer::~Renderer</a></div><div class="ttdeci">~Renderer()</div><div class="ttdoc">Destructor for Renderer class.</div><div class="ttdef"><b>Definition</b> <a href="Renderer_8cpp_source.html#l00030">Renderer.cpp:30</a></div></div>
+<div class="ttc" id="aclassvex_1_1Renderer_html_af3972277923b93df3b2d0c2a5088c41e"><div class="ttname"><a href="classvex_1_1Renderer.html#af3972277923b93df3b2d0c2a5088c41e">vex::Renderer::renderFrame</a></div><div class="ttdeci">void renderFrame(const glm::mat4 &amp;view, const glm::mat4 &amp;proj, glm::uvec2 renderResolution, entt::registry &amp;registry, ImGUIWrapper &amp;ui, VexUI &amp;vui, uint64_t frame)</div><div class="ttdoc">Renders a frame using the provided parameters.</div><div class="ttdef"><b>Definition</b> <a href="Renderer_8cpp_source.html#l00034">Renderer.cpp:34</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html"><div class="ttname"><a href="classvex_1_1VexUI.html">vex::VexUI</a></div><div class="ttdoc">Class defining VexUI, it initializes the UI system, loads, renders, converts ui data,...</div><div class="ttdef"><b>Definition</b> <a href="VexUI_8hpp_source.html#l00064">VexUI.hpp:64</a></div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00015">context.hpp:15</a></div></div>
+<div class="ttc" id="acontext_8hpp_html"><div class="ttname"><a href="context_8hpp.html">context.hpp</a></div><div class="ttdoc">This file defines struct holding all vulkan data, like device, surface, swapchain,...</div></div>
+<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00023">context.hpp:23</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a class="el" href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a class="el" href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><a class="el" href="dir_9e1921360d46161c020d536b432a8792.html">backends</a></li><li class="navelem"><a class="el" href="dir_08299eacb9396cb3f34cee2e653f299e.html">vulkan</a></li><li class="navelem"><b>Renderer.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a class="el" href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a class="el" href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><a class="el" href="dir_9e1921360d46161c020d536b432a8792.html">backends</a></li><li class="navelem"><a class="el" href="dir_08299eacb9396cb3f34cee2e653f299e.html">vulkan</a></li><li class="navelem"><a class="el" href="Renderer_8hpp.html">Renderer.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

@@ -8,7 +8,7 @@ var dir_3da5c18f2e32f0267c3ca22901fd8466 =
     [ "ResolutionManager.cpp", "ResolutionManager_8cpp_source.html", null ],
     [ "SceneManager.cpp", "SceneManager_8cpp_source.html", null ],
     [ "VirtualFileSystem.cpp", "VirtualFileSystem_8cpp_source.html", null ],
-    [ "VirtualFileSystem.hpp", "VirtualFileSystem_8hpp_source.html", null ],
+    [ "VirtualFileSystem.hpp", "VirtualFileSystem_8hpp.html", "VirtualFileSystem_8hpp" ],
     [ "Window.cpp", "Window_8cpp_source.html", null ],
-    [ "Window.hpp", "Window_8hpp_source.html", null ]
+    [ "Window.hpp", "Window_8hpp.html", "Window_8hpp" ]
 ];

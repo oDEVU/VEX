@@ -76,7 +76,6 @@ namespace vex {
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
                          VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const {
-        if(!m_debugDraw) log("Drawing mesh with %zu submeshes", m_submeshBuffers.size());
 
         std::string currentTexture = "";
         for (size_t i = 0; i < m_submeshBuffers.size(); i++) {
@@ -111,10 +110,6 @@ namespace vex {
             );
 
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
-            if(!m_debugDraw) log("Submesh %zu texture: '%s' (exists: %s)",
-                   i,
-                   textureName.c_str(),
-                   textureExists ? "true" : "false");
 
             if (textureExists) {
                 if (currentTexture != textureName) {
@@ -136,15 +131,13 @@ namespace vex {
                     if(textureView != VK_NULL_HANDLE) {
                         resources.updateTextureDescriptor(frameIndex, textureView, i);
                         currentTexture = textureName;
-                        if(!m_debugDraw) log("Bound texture: %s", textureName.c_str());
                     }
                 }
                 modelPush.color = glm::vec4(1.0f);
             } else {
                 modelPush.color = glm::vec4(1.0f);
                 if(!textureName.empty()) {
-                    if(!m_debugDraw) SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
-                              "Missing texture: %s", textureName.c_str());
+                    log("Missing texture: %s", textureName.c_str());
                 }
             }
 

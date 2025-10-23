@@ -108,62 +108,71 @@ $(function(){initNavTree('uniforms_8hpp_source.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">uniforms.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="keyword">namespace </span>vex {</div>
-<div class="foldopen" id="foldopen00005" data-start="{" data-end="};">
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno"><a class="line" href="structvex_1_1CameraUBO.html">    5</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CameraUBO.html">CameraUBO</a> {</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>        <span class="keyword">alignas</span>(16) glm::mat4 view;</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>        <span class="keyword">alignas</span>(16) glm::mat4 proj;</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    };</div>
-</div>
+<a href="uniforms_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="foldopen" id="foldopen00010" data-start="{" data-end="};">
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="structvex_1_1ModelUBO.html">   10</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1ModelUBO.html">ModelUBO</a> {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>        <span class="keyword">alignas</span>(16) glm::mat4 model;</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    };</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>vex {</div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="structvex_1_1CameraUBO.html">   12</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CameraUBO.html">CameraUBO</a> {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89">   14</a></span>        <span class="keyword">alignas</span>(16) glm::mat4 <a class="code hl_variable" href="structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89">view</a>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82">   16</a></span>        <span class="keyword">alignas</span>(16) glm::mat4 <a class="code hl_variable" href="structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82">proj</a>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    };</div>
 </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="foldopen" id="foldopen00014" data-start="{" data-end="};">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structvex_1_1PushConstants.html">   14</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a> {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> snapResolution;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> jitterIntensity;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">int</span> enablePS1Effects;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keyword">alignas</span>(16) glm::vec4 color;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> time;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">alignas</span>(8) glm::vec2 renderResolution;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keyword">alignas</span>(8) glm::vec2 windowResolution;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> upscaleRatio;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">int</span> renderingMode;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">alignas</span>(16) glm::vec4 ambientLight;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> ambientLightStrength;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">alignas</span>(16) glm::vec4 sunLight;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keyword">alignas</span>(16) glm::vec4 sunDirection;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    };</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span></div>
+<div class="foldopen" id="foldopen00020" data-start="{" data-end="};">
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structvex_1_1ModelUBO.html">   20</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1ModelUBO.html">ModelUBO</a> {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="structvex_1_1ModelUBO.html#a893fc29e79861249bd2cad9e7f88c604">   22</a></span>        <span class="keyword">alignas</span>(16) glm::mat4 <a class="code hl_variable" href="structvex_1_1ModelUBO.html#a893fc29e79861249bd2cad9e7f88c604">model</a>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    };</div>
 </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">namespace </span>PS1Effects {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> VERTEX_SNAPPING    = 0x1;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> AFFINE_WARPING     = 0x2;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> COLOR_QUANTIZATION = 0x4;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> VERTEX_JITTER      = 0x8;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> NTSC_ARTIFACTS     = 0x10;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> GOURAUD_SHADING    = 0x20;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    }</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>}</div>
-<div class="ttc" id="astructvex_1_1CameraUBO_html"><div class="ttname"><a href="structvex_1_1CameraUBO.html">vex::CameraUBO</a></div><div class="ttdef"><b>Definition</b> <a href="#l00005">uniforms.hpp:5</a></div></div>
-<div class="ttc" id="astructvex_1_1ModelUBO_html"><div class="ttname"><a href="structvex_1_1ModelUBO.html">vex::ModelUBO</a></div><div class="ttdef"><b>Definition</b> <a href="#l00010">uniforms.hpp:10</a></div></div>
-<div class="ttc" id="astructvex_1_1PushConstants_html"><div class="ttname"><a href="structvex_1_1PushConstants.html">vex::PushConstants</a></div><div class="ttdef"><b>Definition</b> <a href="#l00014">uniforms.hpp:14</a></div></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span></div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structvex_1_1PushConstants.html">   26</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a> {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> snapResolution;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> jitterIntensity;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structvex_1_1PushConstants.html#ad8a9caab3d87fb4de3e83d7017f7d1c7">   30</a></span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">int</span> <a class="code hl_variable" href="structvex_1_1PushConstants.html#ad8a9caab3d87fb4de3e83d7017f7d1c7">enablePS1Effects</a>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <span class="keyword">alignas</span>(16) glm::vec4 color;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> time;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keyword">alignas</span>(8) glm::vec2 renderResolution;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keyword">alignas</span>(8) glm::vec2 windowResolution;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> upscaleRatio;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">int</span> renderingMode;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keyword">alignas</span>(16) glm::vec4 ambientLight;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keyword">alignas</span>(4) <span class="keywordtype">float</span> ambientLightStrength;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keyword">alignas</span>(16) glm::vec4 sunLight;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keyword">alignas</span>(16) glm::vec4 sunDirection;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    };</div>
+</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span></div>
+<div class="foldopen" id="foldopen00048" data-start="{" data-end="}">
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="namespacevex_1_1PS1Effects.html">   48</a></span>    <span class="keyword">namespace </span><a class="code hl_namespace" href="namespacevex_1_1PS1Effects.html">PS1Effects</a> {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> VERTEX_SNAPPING    = 0x1;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> AFFINE_WARPING     = 0x2;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> COLOR_QUANTIZATION = 0x4;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> VERTEX_JITTER      = 0x8;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> NTSC_ARTIFACTS     = 0x10;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">constexpr</span> <span class="keywordtype">int</span> GOURAUD_SHADING    = 0x20;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    }</div>
+</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}</div>
+<div class="ttc" id="anamespacevex_1_1PS1Effects_html"><div class="ttname"><a href="namespacevex_1_1PS1Effects.html">vex::PS1Effects</a></div><div class="ttdoc">PS1Effects namespace for easier setting of them in push constant.</div><div class="ttdef"><b>Definition</b> <a href="#l00048">uniforms.hpp:48</a></div></div>
+<div class="ttc" id="astructvex_1_1CameraUBO_html"><div class="ttname"><a href="structvex_1_1CameraUBO.html">vex::CameraUBO</a></div><div class="ttdoc">Camera uniform buffer object.</div><div class="ttdef"><b>Definition</b> <a href="#l00012">uniforms.hpp:12</a></div></div>
+<div class="ttc" id="astructvex_1_1CameraUBO_html_a0e68f563a160add421760319ca18eb89"><div class="ttname"><a href="structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89">vex::CameraUBO::view</a></div><div class="ttdeci">glm::mat4 view</div><div class="ttdoc">View matrix.</div><div class="ttdef"><b>Definition</b> <a href="#l00014">uniforms.hpp:14</a></div></div>
+<div class="ttc" id="astructvex_1_1CameraUBO_html_a863ab7518cd70c907345550da35fdc82"><div class="ttname"><a href="structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82">vex::CameraUBO::proj</a></div><div class="ttdeci">glm::mat4 proj</div><div class="ttdoc">Projection matrix.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">uniforms.hpp:16</a></div></div>
+<div class="ttc" id="astructvex_1_1ModelUBO_html"><div class="ttname"><a href="structvex_1_1ModelUBO.html">vex::ModelUBO</a></div><div class="ttdoc">Model uniform buffer object.</div><div class="ttdef"><b>Definition</b> <a href="#l00020">uniforms.hpp:20</a></div></div>
+<div class="ttc" id="astructvex_1_1ModelUBO_html_a893fc29e79861249bd2cad9e7f88c604"><div class="ttname"><a href="structvex_1_1ModelUBO.html#a893fc29e79861249bd2cad9e7f88c604">vex::ModelUBO::model</a></div><div class="ttdeci">glm::mat4 model</div><div class="ttdoc">Model matrix.</div><div class="ttdef"><b>Definition</b> <a href="#l00022">uniforms.hpp:22</a></div></div>
+<div class="ttc" id="astructvex_1_1PushConstants_html"><div class="ttname"><a href="structvex_1_1PushConstants.html">vex::PushConstants</a></div><div class="ttdoc">Push constants, holds both environment and model information.</div><div class="ttdef"><b>Definition</b> <a href="#l00026">uniforms.hpp:26</a></div></div>
+<div class="ttc" id="astructvex_1_1PushConstants_html_ad8a9caab3d87fb4de3e83d7017f7d1c7"><div class="ttname"><a href="structvex_1_1PushConstants.html#ad8a9caab3d87fb4de3e83d7017f7d1c7">vex::PushConstants::enablePS1Effects</a></div><div class="ttdeci">int enablePS1Effects</div><div class="ttdoc">contains multiple PS1Effects thanks to bitwise operations.</div><div class="ttdef"><b>Definition</b> <a href="#l00030">uniforms.hpp:30</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a class="el" href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a class="el" href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><a class="el" href="dir_9e1921360d46161c020d536b432a8792.html">backends</a></li><li class="navelem"><a class="el" href="dir_08299eacb9396cb3f34cee2e653f299e.html">vulkan</a></li><li class="navelem"><b>uniforms.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a class="el" href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a class="el" href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><a class="el" href="dir_9e1921360d46161c020d536b432a8792.html">backends</a></li><li class="navelem"><a class="el" href="dir_08299eacb9396cb3f34cee2e653f299e.html">vulkan</a></li><li class="navelem"><a class="el" href="uniforms_8hpp.html">uniforms.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

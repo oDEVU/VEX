@@ -113,44 +113,64 @@ $(function(){initNavTree('classvex_1_1VulkanSwapchainManager.html',''); initResi
   <div class="headertitle"><div class="title">vex::VulkanSwapchainManager Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Manages Vulkan swapchain resources.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3f8b56ae0e97a0f784a88416c3892cd9" id="r_a3f8b56ae0e97a0f784a88416c3892cd9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f8b56ae0e97a0f784a88416c3892cd9">VulkanSwapchainManager</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, SDL_Window *window)</td></tr>
+<tr class="memdesc:a3f8b56ae0e97a0f784a88416c3892cd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1VulkanSwapchainManager.html" title="Manages Vulkan swapchain resources.">VulkanSwapchainManager</a>.  <br /></td></tr>
 <tr class="separator:a3f8b56ae0e97a0f784a88416c3892cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24542bc6c7d15c346c2d554daabb92b9" id="r_a24542bc6c7d15c346c2d554daabb92b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24542bc6c7d15c346c2d554daabb92b9">~VulkanSwapchainManager</a> ()</td></tr>
+<tr class="memdesc:a24542bc6c7d15c346c2d554daabb92b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple destructor for <a class="el" href="classvex_1_1VulkanSwapchainManager.html" title="Manages Vulkan swapchain resources.">VulkanSwapchainManager</a>.  <br /></td></tr>
+<tr class="separator:a24542bc6c7d15c346c2d554daabb92b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af81e5812c886c1a3f29daaf4d26b6519" id="r_af81e5812c886c1a3f29daaf4d26b6519"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af81e5812c886c1a3f29daaf4d26b6519">createSwapchain</a> ()</td></tr>
+<tr class="memdesc:af81e5812c886c1a3f29daaf4d26b6519"><td class="mdescLeft">&#160;</td><td class="mdescRight">creates or recreates swapchain.  <br /></td></tr>
 <tr class="separator:af81e5812c886c1a3f29daaf4d26b6519"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07ecf116ade867fff92cab29a22aec85" id="r_a07ecf116ade867fff92cab29a22aec85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07ecf116ade867fff92cab29a22aec85">cleanupSwapchain</a> ()</td></tr>
+<tr class="memdesc:a07ecf116ade867fff92cab29a22aec85"><td class="mdescLeft">&#160;</td><td class="mdescRight">cleans up swapchain resources.  <br /></td></tr>
 <tr class="separator:a07ecf116ade867fff92cab29a22aec85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf0fd1348a8dedd914065a6511097245" id="r_abf0fd1348a8dedd914065a6511097245"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf0fd1348a8dedd914065a6511097245">recreateSwapchain</a> ()</td></tr>
+<tr class="memdesc:abf0fd1348a8dedd914065a6511097245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function to cleanup old swapchain and create new one, used when resizing the window.  <br /></td></tr>
 <tr class="separator:abf0fd1348a8dedd914065a6511097245"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:abbc631a3ed838cf0918b843e9845a358" id="r_abbc631a3ed838cf0918b843e9845a358"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbc631a3ed838cf0918b843e9845a358">createImageViews</a> ()</td></tr>
+<tr class="memdesc:abbc631a3ed838cf0918b843e9845a358"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create image views for swapchain images.  <br /></td></tr>
 <tr class="separator:abbc631a3ed838cf0918b843e9845a358"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b3a579fa5b5ba981934f35cd54c6097" id="r_a6b3a579fa5b5ba981934f35cd54c6097"><td class="memItemLeft" align="right" valign="top"><a id="a6b3a579fa5b5ba981934f35cd54c6097" name="a6b3a579fa5b5ba981934f35cd54c6097"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createFramebuffers</b> ()</td></tr>
-<tr class="separator:a6b3a579fa5b5ba981934f35cd54c6097"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1ce9d5da142f33cf0c55785d6ab768a" id="r_ad1ce9d5da142f33cf0c55785d6ab768a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1ce9d5da142f33cf0c55785d6ab768a">createCommandPool</a> ()</td></tr>
+<tr class="memdesc:ad1ce9d5da142f33cf0c55785d6ab768a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create command pool for swapchain creation.  <br /></td></tr>
 <tr class="separator:ad1ce9d5da142f33cf0c55785d6ab768a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af20b71a100d5995bedd273687eb7ecd6" id="r_af20b71a100d5995bedd273687eb7ecd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af20b71a100d5995bedd273687eb7ecd6">createCommandBuffers</a> ()</td></tr>
+<tr class="memdesc:af20b71a100d5995bedd273687eb7ecd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create command buffers for swapchain creation.  <br /></td></tr>
 <tr class="separator:af20b71a100d5995bedd273687eb7ecd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2921277552a732f3123cbf613f36a38" id="r_ac2921277552a732f3123cbf613f36a38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2921277552a732f3123cbf613f36a38">createSyncObjects</a> ()</td></tr>
+<tr class="memdesc:ac2921277552a732f3123cbf613f36a38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create synchronization objects for swapchain creation.  <br /></td></tr>
 <tr class="separator:ac2921277552a732f3123cbf613f36a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13783f2bfc01362258cf9deccfa2ac98" id="r_a13783f2bfc01362258cf9deccfa2ac98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13783f2bfc01362258cf9deccfa2ac98">createDepthResources</a> ()</td></tr>
+<tr class="memdesc:a13783f2bfc01362258cf9deccfa2ac98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create depth resources for swapchain creation.  <br /></td></tr>
 <tr class="separator:a13783f2bfc01362258cf9deccfa2ac98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbf8635af80fb246172b886d73c260a5" id="r_adbf8635af80fb246172b886d73c260a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbf8635af80fb246172b886d73c260a5">createLowResResources</a> ()</td></tr>
+<tr class="memdesc:adbf8635af80fb246172b886d73c260a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to create low resolution resources for low res rendering.  <br /></td></tr>
 <tr class="separator:adbf8635af80fb246172b886d73c260a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7143fe67a28c118f034e8587f795c5db" id="r_a7143fe67a28c118f034e8587f795c5db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7143fe67a28c118f034e8587f795c5db">cleanupLowResResources</a> ()</td></tr>
+<tr class="memdesc:a7143fe67a28c118f034e8587f795c5db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to cleanup low resolution resources, since low res resources can be changed without changing window resiolution.  <br /></td></tr>
 <tr class="separator:a7143fe67a28c118f034e8587f795c5db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49111448e1cedb7e600a21548d5ef1e0" id="r_a49111448e1cedb7e600a21548d5ef1e0"><td class="memItemLeft" align="right" valign="top">VkSurfaceFormatKHR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49111448e1cedb7e600a21548d5ef1e0">chooseSwapSurfaceFormat</a> (const std::vector&lt; VkSurfaceFormatKHR &gt; &amp;availableFormats)</td></tr>
+<tr class="memdesc:a49111448e1cedb7e600a21548d5ef1e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function choosing SwapSurfaceFormat based on hardware capabilities.  <br /></td></tr>
 <tr class="separator:a49111448e1cedb7e600a21548d5ef1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5577ee1206d2262091c1a4a341fb1218" id="r_a5577ee1206d2262091c1a4a341fb1218"><td class="memItemLeft" align="right" valign="top">VkPresentModeKHR&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5577ee1206d2262091c1a4a341fb1218">chooseSwapPresentMode</a> (const std::vector&lt; VkPresentModeKHR &gt; &amp;availablePresentModes)</td></tr>
+<tr class="memdesc:a5577ee1206d2262091c1a4a341fb1218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function choosing SwapPresentMode based on hardware capabilities.  <br /></td></tr>
 <tr class="separator:a5577ee1206d2262091c1a4a341fb1218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fd20f56b7964bdfe17b0736fd94bcb3" id="r_a8fd20f56b7964bdfe17b0736fd94bcb3"><td class="memItemLeft" align="right" valign="top">VkExtent2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fd20f56b7964bdfe17b0736fd94bcb3">chooseSwapExtent</a> (const VkSurfaceCapabilitiesKHR &amp;capabilities)</td></tr>
+<tr class="memdesc:a8fd20f56b7964bdfe17b0736fd94bcb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function choosing SwapExtent based on hardware capabilities.  <br /></td></tr>
 <tr class="separator:a8fd20f56b7964bdfe17b0736fd94bcb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecfa5eecf53f371760dff05f46697043" id="r_aecfa5eecf53f371760dff05f46697043"><td class="memItemLeft" align="right" valign="top">VkFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecfa5eecf53f371760dff05f46697043">findDepthFormat</a> ()</td></tr>
+<tr class="memdesc:aecfa5eecf53f371760dff05f46697043"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to find depth format based on hardware capabilities.  <br /></td></tr>
 <tr class="separator:aecfa5eecf53f371760dff05f46697043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -161,17 +181,15 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7462d5d0b3a139d9b371581516a238da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00015">15</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<div class="textblock"><p>Manages Vulkan swapchain resources. </p>
+
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00022">22</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3f8b56ae0e97a0f784a88416c3892cd9" name="a3f8b56ae0e97a0f784a88416c3892cd9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f8b56ae0e97a0f784a88416c3892cd9">&#9670;&#160;</a></span>VulkanSwapchainManager()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">vex::VulkanSwapchainManager::VulkanSwapchainManager </td>
@@ -184,12 +202,16 @@ Private Attributes</h2></td></tr>
           <td class="paramtype">SDL_Window *</td>          <td class="paramname"><span class="paramname"><em>window</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel explicit">explicit</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Constructor for <a class="el" href="classvex_1_1VulkanSwapchainManager.html" title="Manages Vulkan swapchain resources.">VulkanSwapchainManager</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VulkanContext&amp;</td><td>context - Used to save swapchain resources to context. </td></tr>
+    <tr><td class="paramname">SDL_Window*</td><td>window </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00011">11</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -209,6 +231,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Simple destructor for <a class="el" href="classvex_1_1VulkanSwapchainManager.html" title="Manages Vulkan swapchain resources.">VulkanSwapchainManager</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00014">14</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -238,6 +262,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function choosing SwapExtent based on hardware capabilities. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>VkSurfaceCapabilitiesKHR&amp; capabilities </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VkExtent2D. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00412">412</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -264,6 +297,15 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Helper function choosing SwapPresentMode based on hardware capabilities. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::vector&lt;VkPresentModeKHR&gt;&amp; availablePresentModes </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VkPresentModeKHR. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00396">396</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -292,6 +334,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function choosing SwapSurfaceFormat based on hardware capabilities. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::vector&lt;VkSurfaceFormatKHR&gt;&amp; availableFormats </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VkSurfaceFormatKHR. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00385">385</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -319,6 +370,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function to cleanup low resolution resources, since low res resources can be changed without changing window resiolution. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classvex_1_1ResolutionManager.html" title="Class responsible for managing resolution settings, calculating render resolution based on selected m...">ResolutionManager</a> </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00329">329</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -337,6 +391,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>cleans up swapchain resources. </p>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00342">342</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -365,6 +421,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function to create command buffers for swapchain creation. </p>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00213">213</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -391,6 +449,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Helper function to create command pool for swapchain creation. </p>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00199">199</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -419,6 +479,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function to create depth resources for swapchain creation. </p>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00125">125</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -445,6 +507,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Helper function to create image views for swapchain images. </p>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00171">171</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -473,6 +537,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function to create low resolution resources for low res rendering. </p>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00280">280</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -491,6 +557,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>creates or recreates swapchain. </p>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00016">16</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -519,6 +587,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function to create synchronization objects for swapchain creation. </p>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00235">235</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -546,6 +616,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Helper function to find depth format based on hardware capabilities. </p>
+<dl class="section return"><dt>Returns</dt><dd>VkFormat. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00438">438</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
@@ -564,6 +637,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Simple function to cleanup old swapchain and create new one, used when resizing the window. </p>
 
 <p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00368">368</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
@@ -590,7 +665,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00041">41</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00084">84</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -614,7 +689,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00040">40</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00083">83</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 
 </div>
 </div>

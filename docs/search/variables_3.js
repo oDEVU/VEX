@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ntfsartifacts_0',['ntfsArtifacts',['../structvex_1_1enviroment.html#a30d511632c871477abae3cdf7f028324',1,'vex::enviroment']]]
+  ['enableps1effects_0',['enablePS1Effects',['../structvex_1_1PushConstants.html#ad8a9caab3d87fb4de3e83d7017f7d1c7',1,'vex::PushConstants']]]
 ];

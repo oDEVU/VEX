@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['load_0',['load',['../classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795',1,'vex::VexUI']]],
-  ['loadscene_1',['loadScene',['../classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953',1,'vex::SceneManager']]],
-  ['loadscenewithoutclearing_2',['loadSceneWithoutClearing',['../classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846',1,'vex::SceneManager']]],
-  ['log_3',['log',['../errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01',1,'errorUtils.hpp']]]
+  ['handle_5fexception_0',['handle_exception',['../errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77',1,'errorUtils.hpp']]],
+  ['hascomponent_1',['HasComponent',['../classvex_1_1GameObject.html#a07e4c6377471e361db406c340337d9c4',1,'vex::GameObject']]]
 ];

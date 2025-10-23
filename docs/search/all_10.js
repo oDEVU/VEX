@@ -1,11 +1,22 @@
 var searchData=
 [
-  ['uipushconstants_0',['UIPushConstants',['../structvex_1_1UIPushConstants.html',1,'vex']]],
-  ['uiquad_1',['UIQuad',['../structvex_1_1UIQuad.html',1,'vex']]],
-  ['uistyle_2',['UIStyle',['../structvex_1_1UIStyle.html',1,'vex']]],
-  ['uivertex_3',['UIVertex',['../structvex_1_1UIVertex.html',1,'vex']]],
-  ['uivertex_2ehpp_4',['UIVertex.hpp',['../UIVertex_8hpp.html',1,'']]],
-  ['update_5',['Update',['../classvex_1_1GameObject.html#aff7761eb14e47fee0d495f2f86597b8a',1,'vex::GameObject']]],
-  ['update_6',['update',['../classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f',1,'vex::InputSystem::update()'],['../classvex_1_1Engine.html#a9d7355662abceb4069d112e4ab3b67ea',1,'vex::Engine::update()']]],
-  ['uv_7',['uv',['../structvex_1_1Vertex.html#a1db72ea81494f63be7b4195717a38c5d',1,'vex::Vertex::uv'],['../structvex_1_1UIVertex.html#ad6f8051d7f89df9aec7e81da71b3ffab',1,'vex::UIVertex::uv']]]
+  ['scenebegin_0',['sceneBegin',['../classvex_1_1SceneManager.html#ac7c7eec1534debfb848dacbaabb66810',1,'vex::SceneManager']]],
+  ['scenemanager_1',['SceneManager',['../classvex_1_1SceneManager.html',1,'vex']]],
+  ['scenemanager_2ehpp_2',['SceneManager.hpp',['../SceneManager_8hpp.html',1,'']]],
+  ['sceneupdate_3',['sceneUpdate',['../classvex_1_1SceneManager.html#ac06d216624c1816c46c929c6832e2ac4',1,'vex::SceneManager']]],
+  ['setenvironment_4',['setEnvironment',['../classvex_1_1Interface.html#a3674fb03e32008769344df029cf7a736',1,'vex::Interface']]],
+  ['setenvironmentsettings_5',['setEnvironmentSettings',['../classvex_1_1Engine.html#a28373df4e7c7486b85ae6bf4277d73b5',1,'vex::Engine']]],
+  ['setinputmode_6',['setInputMode',['../classvex_1_1InputSystem.html#a1c8042ce42b253872a991153fdc88a15',1,'vex::InputSystem::setInputMode()'],['../classvex_1_1Engine.html#a22b26b2a4c127db42bba2eb1da77ad50',1,'vex::Engine::setInputMode()']]],
+  ['setmode_7',['setMode',['../classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a',1,'vex::ResolutionManager']]],
+  ['setonclick_8',['setOnClick',['../classvex_1_1VexUI.html#ab74640bfd9c9e8d55e7d5ce23450f5d4',1,'vex::VexUI']]],
+  ['setrenderresolution_9',['setRenderResolution',['../classvex_1_1Interface.html#a050b018b8de1100f3cf2aaaab614750c',1,'vex::Interface']]],
+  ['setresolutionmode_10',['setResolutionMode',['../classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a',1,'vex::Engine']]],
+  ['setstyle_11',['setStyle',['../classvex_1_1VexUI.html#a003fd3aa45ad3730338a8649fe06bfc8',1,'vex::VexUI']]],
+  ['settext_12',['setText',['../classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618',1,'vex::VexUI']]],
+  ['size_13',['size',['../structvex_1_1VirtualFileSystem_1_1FileData.html#a2ecb6cc392713f7718f4610c4489904e',1,'vex::VirtualFileSystem::FileData']]],
+  ['submesh_14',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
+  ['submeshbuffers_15',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]],
+  ['sundirection_16',['sunDirection',['../structvex_1_1enviroment.html#ab3ab7907a38eab33de0f95f36ff787ab',1,'vex::enviroment']]],
+  ['sunlight_17',['sunLight',['../structvex_1_1enviroment.html#a6e4d74a0a8925df0ed423ccac2c0a92a',1,'vex::enviroment']]],
+  ['swapchainmanager_2ehpp_18',['SwapchainManager.hpp',['../SwapchainManager_8hpp.html',1,'']]]
 ];

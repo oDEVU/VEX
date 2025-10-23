@@ -108,7 +108,7 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
   <div class="headertitle"><div class="title">SwapchainManager.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;SwapchainManager.hpp&quot;</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="SwapchainManager_8hpp.html">SwapchainManager.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
@@ -118,12 +118,15 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;array&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    VulkanSwapchainManager::VulkanSwapchainManager(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context, SDL_Window* window) : m_r_context(context) {</div>
+<div class="foldopen" id="foldopen00011" data-start="{" data-end="}">
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a3f8b56ae0e97a0f784a88416c3892cd9">   11</a></span>    <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a3f8b56ae0e97a0f784a88416c3892cd9">VulkanSwapchainManager::VulkanSwapchainManager</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context, SDL_Window* window) : m_r_context(context) {</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>        m_p_window = window;</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    }</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    VulkanSwapchainManager::~VulkanSwapchainManager() {}</div>
+</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a24542bc6c7d15c346c2d554daabb92b9">   14</a></span>    <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a24542bc6c7d15c346c2d554daabb92b9">VulkanSwapchainManager::~VulkanSwapchainManager</a>() {}</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::createSwapchain() {</div>
+<div class="foldopen" id="foldopen00016" data-start="{" data-end="}">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#af81e5812c886c1a3f29daaf4d26b6519">   16</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#af81e5812c886c1a3f29daaf4d26b6519">VulkanSwapchainManager::createSwapchain</a>() {</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating Swapchain&quot;</span>);</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        VkSurfaceCapabilitiesKHR capabilities;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordflow">if</span> (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_r_context.physicalDevice, m_r_context.surface, &amp;capabilities) != VK_SUCCESS) {</div>
@@ -147,9 +150,9 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        std::vector&lt;VkPresentModeKHR&gt; presentModes(presentModeCount);</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        vkGetPhysicalDeviceSurfacePresentModesKHR(m_r_context.physicalDevice, m_r_context.surface, &amp;presentModeCount, presentModes.data());</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(formats);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        VkPresentModeKHR presentMode = chooseSwapPresentMode(presentModes);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        VkExtent2D extent = chooseSwapExtent(capabilities);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        VkSurfaceFormatKHR surfaceFormat = <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a49111448e1cedb7e600a21548d5ef1e0">chooseSwapSurfaceFormat</a>(formats);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        VkPresentModeKHR presentMode = <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a5577ee1206d2262091c1a4a341fb1218">chooseSwapPresentMode</a>(presentModes);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        VkExtent2D extent = <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a8fd20f56b7964bdfe17b0736fd94bcb3">chooseSwapExtent</a>(capabilities);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        VkFormatProperties formatProps;</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        vkGetPhysicalDeviceFormatProperties(m_r_context.physicalDevice, surfaceFormat.format, &amp;formatProps);</div>
@@ -202,7 +205,7 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        m_r_context.swapchainImageFormat = surfaceFormat.format;</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        m_r_context.swapchainExtent = extent;</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        createImageViews();</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#abbc631a3ed838cf0918b843e9845a358">createImageViews</a>();</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        VkCommandBuffer cmd = m_r_context.beginSingleTimeCommands();</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
@@ -231,11 +234,13 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        m_r_context.endSingleTimeCommands(cmd);</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    }</div>
+</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::createDepthResources() {</div>
+<div class="foldopen" id="foldopen00125" data-start="{" data-end="}">
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a13783f2bfc01362258cf9deccfa2ac98">  125</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a13783f2bfc01362258cf9deccfa2ac98">VulkanSwapchainManager::createDepthResources</a>() {</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating depth resources...&quot;</span>);</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        VkFormat depthFormat = findDepthFormat();</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        VkFormat depthFormat = <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#aecfa5eecf53f371760dff05f46697043">findDepthFormat</a>();</div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        VkImageCreateInfo imageInfo{};</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;</div>
@@ -275,10 +280,12 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        m_r_context.depthFormat = depthFormat;</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        createCommandPool();</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#ad1ce9d5da142f33cf0c55785d6ab768a">createCommandPool</a>();</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    }</div>
+</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::createImageViews() {</div>
+<div class="foldopen" id="foldopen00171" data-start="{" data-end="}">
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#abbc631a3ed838cf0918b843e9845a358">  171</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#abbc631a3ed838cf0918b843e9845a358">VulkanSwapchainManager::createImageViews</a>() {</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;creating imageviews&quot;</span>);</div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        m_r_context.swapchainImageViews.resize(m_r_context.swapchainImages.size());</div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
@@ -303,10 +310,12 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            }</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        }</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        createDepthResources();</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a13783f2bfc01362258cf9deccfa2ac98">createDepthResources</a>();</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    }</div>
+</div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::createCommandPool() {</div>
+<div class="foldopen" id="foldopen00199" data-start="{" data-end="}">
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#ad1ce9d5da142f33cf0c55785d6ab768a">  199</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#ad1ce9d5da142f33cf0c55785d6ab768a">VulkanSwapchainManager::createCommandPool</a>() {</div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;creating command pools&quot;</span>);</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        VkCommandPoolCreateInfo poolInfo = {};</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;</div>
@@ -317,10 +326,12 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create command pool&quot;</span>);</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        }</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        createCommandBuffers();</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#af20b71a100d5995bedd273687eb7ecd6">createCommandBuffers</a>();</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    }</div>
+</div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::createCommandBuffers() {</div>
+<div class="foldopen" id="foldopen00213" data-start="{" data-end="}">
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#af20b71a100d5995bedd273687eb7ecd6">  213</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#af20b71a100d5995bedd273687eb7ecd6">VulkanSwapchainManager::createCommandBuffers</a>() {</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;creating command buffers&quot;</span>);</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        uint32_t commandBufferCount = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(m_r_context.swapchainImages.size());</div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        <span class="keywordflow">if</span> (commandBufferCount == 0) {</div>
@@ -339,10 +350,12 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to allocate command buffers&quot;</span>);</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        }</div>
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        createSyncObjects();</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#ac2921277552a732f3123cbf613f36a38">createSyncObjects</a>();</div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    }</div>
+</div>
 <div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::createSyncObjects() {</div>
+<div class="foldopen" id="foldopen00235" data-start="{" data-end="}">
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#ac2921277552a732f3123cbf613f36a38">  235</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#ac2921277552a732f3123cbf613f36a38">VulkanSwapchainManager::createSyncObjects</a>() {</div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating synchronization objects...&quot;</span>);</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        m_r_context.imageAvailableSemaphores.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);</div>
@@ -380,20 +393,22 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        }</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        <span class="keywordflow">if</span> (m_r_context.depthImageView) {</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>            createLowResResources();</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>            <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#adbf8635af80fb246172b886d73c260a5">createLowResResources</a>();</div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,</div>
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                       <span class="stringliteral">&quot;Deferring low-res resource creation - depth image not ready&quot;</span>);</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>        }</div>
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    }</div>
+</div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::createLowResResources() {</div>
+<div class="foldopen" id="foldopen00280" data-start="{" data-end="}">
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#adbf8635af80fb246172b886d73c260a5">  280</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#adbf8635af80fb246172b886d73c260a5">VulkanSwapchainManager::createLowResResources</a>() {</div>
 <div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        <span class="keywordflow">if</span> (m_r_context.currentRenderResolution.x == 0 || m_r_context.currentRenderResolution.y == 0) {</div>
 <div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>            SDL_LogError(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;Invalid render resolution for low-res resources&quot;</span>);</div>
 <div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        }</div>
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        cleanupLowResResources();</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a7143fe67a28c118f034e8587f795c5db">cleanupLowResResources</a>();</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        VkImageCreateInfo imageInfo{};</div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;</div>
@@ -435,8 +450,10 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>        m_r_context.lowResColorFormat = m_r_context.swapchainImageFormat;</div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    }</div>
+</div>
 <div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span> </div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::cleanupLowResResources() {</div>
+<div class="foldopen" id="foldopen00329" data-start="{" data-end="}">
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a7143fe67a28c118f034e8587f795c5db">  329</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a7143fe67a28c118f034e8587f795c5db">VulkanSwapchainManager::cleanupLowResResources</a>() {</div>
 <div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>        <span class="keywordflow">if</span> (m_r_context.lowResColorView != VK_NULL_HANDLE) {</div>
 <div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>            vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>            m_r_context.lowResColorView = VK_NULL_HANDLE;</div>
@@ -448,8 +465,10 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>            m_r_context.lowResColorAlloc = VK_NULL_HANDLE;</div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>        }</div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    }</div>
+</div>
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::cleanupSwapchain() {</div>
+<div class="foldopen" id="foldopen00342" data-start="{" data-end="}">
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a07ecf116ade867fff92cab29a22aec85">  342</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a07ecf116ade867fff92cab29a22aec85">VulkanSwapchainManager::cleanupSwapchain</a>() {</div>
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>                    <span class="keywordflow">if</span> (m_r_context.lowResColorView) {</div>
 <div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>                        vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>                    }</div>
@@ -474,25 +493,29 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>        vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        m_r_context.swapchain = VK_NULL_HANDLE;</div>
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    }</div>
+</div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    <span class="keywordtype">void</span> VulkanSwapchainManager::recreateSwapchain() {</div>
+<div class="foldopen" id="foldopen00368" data-start="{" data-end="}">
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245">  368</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245">VulkanSwapchainManager::recreateSwapchain</a>() {</div>
 <div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;recreating swapchains&quot;</span>);</div>
 <div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        vkDeviceWaitIdle(m_r_context.device);</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;cleanupLowResResources&quot;</span>);</div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>        cleanupLowResResources();</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a7143fe67a28c118f034e8587f795c5db">cleanupLowResResources</a>();</div>
 <div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;cleanupSwapchain&quot;</span>);</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        cleanupSwapchain();</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a07ecf116ade867fff92cab29a22aec85">cleanupSwapchain</a>();</div>
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span> </div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>        createSwapchain();</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#af81e5812c886c1a3f29daaf4d26b6519">createSwapchain</a>();</div>
 <div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;createImageViews&quot;</span>);</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>        createImageViews();</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#abbc631a3ed838cf0918b843e9845a358">createImageViews</a>();</div>
 <div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;createCommandBuffers&quot;</span>);</div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>        createCommandBuffers();</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#af20b71a100d5995bedd273687eb7ecd6">createCommandBuffers</a>();</div>
 <div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;createLowResResources&quot;</span>);</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>        createLowResResources();</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>        <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#adbf8635af80fb246172b886d73c260a5">createLowResResources</a>();</div>
 <div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    }</div>
+</div>
 <div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    VkSurfaceFormatKHR VulkanSwapchainManager::chooseSwapSurfaceFormat(<span class="keyword">const</span> std::vector&lt;VkSurfaceFormatKHR&gt;&amp; availableFormats) {</div>
+<div class="foldopen" id="foldopen00385" data-start="{" data-end="}">
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a49111448e1cedb7e600a21548d5ef1e0">  385</a></span>    VkSurfaceFormatKHR <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a49111448e1cedb7e600a21548d5ef1e0">VulkanSwapchainManager::chooseSwapSurfaceFormat</a>(<span class="keyword">const</span> std::vector&lt;VkSurfaceFormatKHR&gt;&amp; availableFormats) {</div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;choosing swapsurface format&quot;</span>);</div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; availableFormat : availableFormats) {</div>
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>            <span class="keywordflow">if</span> (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &amp;&amp;</div>
@@ -502,8 +525,10 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        }</div>
 <div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        <span class="keywordflow">return</span> availableFormats[0];</div>
 <div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>    }</div>
+</div>
 <div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span> </div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    VkPresentModeKHR VulkanSwapchainManager::chooseSwapPresentMode(<span class="keyword">const</span> std::vector&lt;VkPresentModeKHR&gt;&amp; availablePresentModes) {</div>
+<div class="foldopen" id="foldopen00396" data-start="{" data-end="}">
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a5577ee1206d2262091c1a4a341fb1218">  396</a></span>    VkPresentModeKHR <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a5577ee1206d2262091c1a4a341fb1218">VulkanSwapchainManager::chooseSwapPresentMode</a>(<span class="keyword">const</span> std::vector&lt;VkPresentModeKHR&gt;&amp; availablePresentModes) {</div>
 <div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;choosing swap present mode&quot;</span>);</div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
 <div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; availablePresentMode : availablePresentModes) {</div>
@@ -518,8 +543,10 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        }</div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>        <span class="keywordflow">return</span> VK_PRESENT_MODE_FIFO_KHR;</div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>    }</div>
+</div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>    VkExtent2D VulkanSwapchainManager::chooseSwapExtent(<span class="keyword">const</span> VkSurfaceCapabilitiesKHR&amp; capabilities) {</div>
+<div class="foldopen" id="foldopen00412" data-start="{" data-end="}">
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#a8fd20f56b7964bdfe17b0736fd94bcb3">  412</a></span>    VkExtent2D <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#a8fd20f56b7964bdfe17b0736fd94bcb3">VulkanSwapchainManager::chooseSwapExtent</a>(<span class="keyword">const</span> VkSurfaceCapabilitiesKHR&amp; capabilities) {</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;choosing swap extent&quot;</span>);</div>
 <div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        <span class="keywordflow">if</span> (capabilities.currentExtent.width != std::numeric_limits&lt;uint32_t&gt;::max()) {</div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>            <span class="keywordflow">return</span> capabilities.currentExtent;</div>
@@ -544,8 +571,10 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>            <span class="keywordflow">return</span> actualExtent;</div>
 <div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        }</div>
 <div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    }</div>
+</div>
 <div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span> </div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    VkFormat VulkanSwapchainManager::findDepthFormat() {</div>
+<div class="foldopen" id="foldopen00438" data-start="{" data-end="}">
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanSwapchainManager.html#aecfa5eecf53f371760dff05f46697043">  438</a></span>    VkFormat <a class="code hl_function" href="classvex_1_1VulkanSwapchainManager.html#aecfa5eecf53f371760dff05f46697043">VulkanSwapchainManager::findDepthFormat</a>() {</div>
 <div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>        std::vector&lt;VkFormat&gt; candidates = {</div>
 <div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>            VK_FORMAT_D32_SFLOAT,</div>
 <div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>            VK_FORMAT_D32_SFLOAT_S8_UINT,</div>
@@ -561,10 +590,28 @@ $(function(){initNavTree('SwapchainManager_8cpp_source.html',''); initResizable(
 <div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>        }</div>
 <div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to find supported depth format&quot;</span>);</div>
 <div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>    }</div>
+</div>
 <div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>}</div>
+<div class="ttc" id="aSwapchainManager_8hpp_html"><div class="ttname"><a href="SwapchainManager_8hpp.html">SwapchainManager.hpp</a></div><div class="ttdoc">This file defines VulkanSwapchainManager Class.</div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a07ecf116ade867fff92cab29a22aec85"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a07ecf116ade867fff92cab29a22aec85">vex::VulkanSwapchainManager::cleanupSwapchain</a></div><div class="ttdeci">void cleanupSwapchain()</div><div class="ttdoc">cleans up swapchain resources.</div><div class="ttdef"><b>Definition</b> <a href="#l00342">SwapchainManager.cpp:342</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a13783f2bfc01362258cf9deccfa2ac98"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a13783f2bfc01362258cf9deccfa2ac98">vex::VulkanSwapchainManager::createDepthResources</a></div><div class="ttdeci">void createDepthResources()</div><div class="ttdoc">Helper function to create depth resources for swapchain creation.</div><div class="ttdef"><b>Definition</b> <a href="#l00125">SwapchainManager.cpp:125</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a24542bc6c7d15c346c2d554daabb92b9"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a24542bc6c7d15c346c2d554daabb92b9">vex::VulkanSwapchainManager::~VulkanSwapchainManager</a></div><div class="ttdeci">~VulkanSwapchainManager()</div><div class="ttdoc">Simple destructor for VulkanSwapchainManager.</div><div class="ttdef"><b>Definition</b> <a href="#l00014">SwapchainManager.cpp:14</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a3f8b56ae0e97a0f784a88416c3892cd9"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a3f8b56ae0e97a0f784a88416c3892cd9">vex::VulkanSwapchainManager::VulkanSwapchainManager</a></div><div class="ttdeci">VulkanSwapchainManager(VulkanContext &amp;context, SDL_Window *window)</div><div class="ttdoc">Constructor for VulkanSwapchainManager.</div><div class="ttdef"><b>Definition</b> <a href="#l00011">SwapchainManager.cpp:11</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a49111448e1cedb7e600a21548d5ef1e0"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a49111448e1cedb7e600a21548d5ef1e0">vex::VulkanSwapchainManager::chooseSwapSurfaceFormat</a></div><div class="ttdeci">VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector&lt; VkSurfaceFormatKHR &gt; &amp;availableFormats)</div><div class="ttdoc">Helper function choosing SwapSurfaceFormat based on hardware capabilities.</div><div class="ttdef"><b>Definition</b> <a href="#l00385">SwapchainManager.cpp:385</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a5577ee1206d2262091c1a4a341fb1218"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a5577ee1206d2262091c1a4a341fb1218">vex::VulkanSwapchainManager::chooseSwapPresentMode</a></div><div class="ttdeci">VkPresentModeKHR chooseSwapPresentMode(const std::vector&lt; VkPresentModeKHR &gt; &amp;availablePresentModes)</div><div class="ttdoc">Helper function choosing SwapPresentMode based on hardware capabilities.</div><div class="ttdef"><b>Definition</b> <a href="#l00396">SwapchainManager.cpp:396</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a7143fe67a28c118f034e8587f795c5db"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a7143fe67a28c118f034e8587f795c5db">vex::VulkanSwapchainManager::cleanupLowResResources</a></div><div class="ttdeci">void cleanupLowResResources()</div><div class="ttdoc">Helper function to cleanup low resolution resources, since low res resources can be changed without c...</div><div class="ttdef"><b>Definition</b> <a href="#l00329">SwapchainManager.cpp:329</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_a8fd20f56b7964bdfe17b0736fd94bcb3"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#a8fd20f56b7964bdfe17b0736fd94bcb3">vex::VulkanSwapchainManager::chooseSwapExtent</a></div><div class="ttdeci">VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &amp;capabilities)</div><div class="ttdoc">Helper function choosing SwapExtent based on hardware capabilities.</div><div class="ttdef"><b>Definition</b> <a href="#l00412">SwapchainManager.cpp:412</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_abbc631a3ed838cf0918b843e9845a358"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#abbc631a3ed838cf0918b843e9845a358">vex::VulkanSwapchainManager::createImageViews</a></div><div class="ttdeci">void createImageViews()</div><div class="ttdoc">Helper function to create image views for swapchain images.</div><div class="ttdef"><b>Definition</b> <a href="#l00171">SwapchainManager.cpp:171</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_abf0fd1348a8dedd914065a6511097245"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245">vex::VulkanSwapchainManager::recreateSwapchain</a></div><div class="ttdeci">void recreateSwapchain()</div><div class="ttdoc">Simple function to cleanup old swapchain and create new one, used when resizing the window.</div><div class="ttdef"><b>Definition</b> <a href="#l00368">SwapchainManager.cpp:368</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_ac2921277552a732f3123cbf613f36a38"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#ac2921277552a732f3123cbf613f36a38">vex::VulkanSwapchainManager::createSyncObjects</a></div><div class="ttdeci">void createSyncObjects()</div><div class="ttdoc">Helper function to create synchronization objects for swapchain creation.</div><div class="ttdef"><b>Definition</b> <a href="#l00235">SwapchainManager.cpp:235</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_ad1ce9d5da142f33cf0c55785d6ab768a"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#ad1ce9d5da142f33cf0c55785d6ab768a">vex::VulkanSwapchainManager::createCommandPool</a></div><div class="ttdeci">void createCommandPool()</div><div class="ttdoc">Helper function to create command pool for swapchain creation.</div><div class="ttdef"><b>Definition</b> <a href="#l00199">SwapchainManager.cpp:199</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_adbf8635af80fb246172b886d73c260a5"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#adbf8635af80fb246172b886d73c260a5">vex::VulkanSwapchainManager::createLowResResources</a></div><div class="ttdeci">void createLowResResources()</div><div class="ttdoc">Helper function to create low resolution resources for low res rendering.</div><div class="ttdef"><b>Definition</b> <a href="#l00280">SwapchainManager.cpp:280</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_aecfa5eecf53f371760dff05f46697043"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#aecfa5eecf53f371760dff05f46697043">vex::VulkanSwapchainManager::findDepthFormat</a></div><div class="ttdeci">VkFormat findDepthFormat()</div><div class="ttdoc">Helper function to find depth format based on hardware capabilities.</div><div class="ttdef"><b>Definition</b> <a href="#l00438">SwapchainManager.cpp:438</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_af20b71a100d5995bedd273687eb7ecd6"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#af20b71a100d5995bedd273687eb7ecd6">vex::VulkanSwapchainManager::createCommandBuffers</a></div><div class="ttdeci">void createCommandBuffers()</div><div class="ttdoc">Helper function to create command buffers for swapchain creation.</div><div class="ttdef"><b>Definition</b> <a href="#l00213">SwapchainManager.cpp:213</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanSwapchainManager_html_af81e5812c886c1a3f29daaf4d26b6519"><div class="ttname"><a href="classvex_1_1VulkanSwapchainManager.html#af81e5812c886c1a3f29daaf4d26b6519">vex::VulkanSwapchainManager::createSwapchain</a></div><div class="ttdeci">void createSwapchain()</div><div class="ttdoc">creates or recreates swapchain.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">SwapchainManager.cpp:16</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a1e76fad2fc6915f89fbc9975e63e8f01"><div class="ttname"><a href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a></div><div class="ttdeci">void log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00052">errorUtils.hpp:52</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a8716696aa383ccb523980d921fbc4102"><div class="ttname"><a href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a></div><div class="ttdeci">void throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00043">errorUtils.hpp:43</a></div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00015">context.hpp:15</a></div></div>
+<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00023">context.hpp:23</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

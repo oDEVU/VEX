@@ -1,5 +1,6 @@
 var classvex_1_1VulkanImGUIWrapper =
 [
+    [ "VulkanImGUIWrapper", "classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c", null ],
     [ "beginFrame", "classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646", null ],
     [ "endFrame", "classvex_1_1VulkanImGUIWrapper.html#a914707e58572f5540062faedcf186351", null ],
     [ "init", "classvex_1_1VulkanImGUIWrapper.html#a2c9291f4691960f3076f10f928aed2ab", null ],

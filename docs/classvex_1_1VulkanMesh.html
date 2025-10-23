@@ -108,38 +108,43 @@ $(function(){initNavTree('classvex_1_1VulkanMesh.html',''); initResizable(true);
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classvex_1_1VulkanMesh-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">vex::VulkanMesh Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class defining mesh object with vulkan specific data and methods.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1VulkanMesh_1_1SubmeshBuffers.html">SubmeshBuffers</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">struct used to hold buffers and allocations for each submesh in single object.  <a href="structvex_1_1VulkanMesh_1_1SubmeshBuffers.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8f93f0aa79903bad35a77ae1dfd1ba89" id="r_a8f93f0aa79903bad35a77ae1dfd1ba89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f93f0aa79903bad35a77ae1dfd1ba89">VulkanMesh</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context)</td></tr>
+<tr class="memdesc:a8f93f0aa79903bad35a77ae1dfd1ba89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> class.  <br /></td></tr>
 <tr class="separator:a8f93f0aa79903bad35a77ae1dfd1ba89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8f9fc0c2c186c80b5085afd662ebd3f" id="r_ac8f9fc0c2c186c80b5085afd662ebd3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8f9fc0c2c186c80b5085afd662ebd3f">upload</a> (const <a class="el" href="structvex_1_1MeshData.html">MeshData</a> &amp;meshData)</td></tr>
+<tr class="memdesc:ac8f9fc0c2c186c80b5085afd662ebd3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uploads mesh data to the GPU.  <br /></td></tr>
 <tr class="separator:ac8f9fc0c2c186c80b5085afd662ebd3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef190153e927cdaa0eca92a9d523811b" id="r_aef190153e927cdaa0eca92a9d523811b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef190153e927cdaa0eca92a9d523811b">draw</a> (VkCommandBuffer cmd, VkPipelineLayout pipelineLayout, <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &amp;resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const</td></tr>
+<tr class="memdesc:aef190153e927cdaa0eca92a9d523811b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the mesh to the screen.  <br /></td></tr>
 <tr class="separator:aef190153e927cdaa0eca92a9d523811b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a376fa45ea544041ffd44c718c7b6a4a9" id="r_a376fa45ea544041ffd44c718c7b6a4a9"><td class="memItemLeft" align="right" valign="top">u_int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a376fa45ea544041ffd44c718c7b6a4a9">getNumOfInstances</a> () const</td></tr>
+<tr class="memdesc:a376fa45ea544041ffd44c718c7b6a4a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance, needed for mesh manager to know when to unload <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a>.  <br /></td></tr>
 <tr class="separator:a376fa45ea544041ffd44c718c7b6a4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe01f872274b8a6cdc42f2d1af82d134" id="r_afe01f872274b8a6cdc42f2d1af82d134"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe01f872274b8a6cdc42f2d1af82d134">addInstance</a> ()</td></tr>
+<tr class="memdesc:afe01f872274b8a6cdc42f2d1af82d134"><td class="mdescLeft">&#160;</td><td class="mdescRight">increments number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance.  <br /></td></tr>
 <tr class="separator:afe01f872274b8a6cdc42f2d1af82d134"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85c4ec5bb63eb855353ac38eb6e0df1a" id="r_a85c4ec5bb63eb855353ac38eb6e0df1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85c4ec5bb63eb855353ac38eb6e0df1a">removeInstance</a> ()</td></tr>
+<tr class="memdesc:a85c4ec5bb63eb855353ac38eb6e0df1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">decrements number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance.  <br /></td></tr>
 <tr class="separator:a85c4ec5bb63eb855353ac38eb6e0df1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a7e05760650adb35317bb75c0ad222cf4" id="r_a7e05760650adb35317bb75c0ad222cf4"><td class="memItemLeft" align="right" valign="top"><a id="a7e05760650adb35317bb75c0ad222cf4" name="a7e05760650adb35317bb75c0ad222cf4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>disableDebug</b> ()</td></tr>
-<tr class="separator:a7e05760650adb35317bb75c0ad222cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -151,12 +156,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a823c90a6d6120bee57ff0130c033296f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa517d4d10744489352c3ad2aa8cb2ede" id="r_aa517d4d10744489352c3ad2aa8cb2ede"><td class="memItemLeft" align="right" valign="top">u_int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa517d4d10744489352c3ad2aa8cb2ede">numOfInstances</a> = 0</td></tr>
 <tr class="separator:aa517d4d10744489352c3ad2aa8cb2ede"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a670e2cabbe5532ed56b520654127dd69" id="r_a670e2cabbe5532ed56b520654127dd69"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a670e2cabbe5532ed56b520654127dd69">m_debugDraw</a> = true</td></tr>
-<tr class="separator:a670e2cabbe5532ed56b520654127dd69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00009">9</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<div class="textblock"><p>Class defining mesh object with vulkan specific data and methods. </p>
+
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00016">16</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8f93f0aa79903bad35a77ae1dfd1ba89" name="a8f93f0aa79903bad35a77ae1dfd1ba89"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8f93f0aa79903bad35a77ae1dfd1ba89">&#9670;&#160;</a></span>VulkanMesh()</h2>
@@ -172,6 +176,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor for <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> class. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VulkanContext&amp;</td><td>context - Reference to the <a class="el" href="structvex_1_1VulkanContext.html" title="Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.">VulkanContext</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00013">13</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
@@ -220,7 +232,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00019">19</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p>increments number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance. </p>
+
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00044">44</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -268,6 +282,21 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Draws the mesh to the screen. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VkCommandBuffer</td><td>cmd - Command buffer to draw the mesh. </td></tr>
+    <tr><td class="paramname">VkPipelineLayout</td><td>pipelineLayout - Pipeline layout for the mesh. </td></tr>
+    <tr><td class="paramname">VulkanResources&amp;</td><td>resources - Vulkan resources for the mesh. </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>frameIndex - Index of the current frame. </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>modelIndex - Index of the current model. </td></tr>
+    <tr><td class="paramname">float</td><td>currentTime - Current time. </td></tr>
+    <tr><td class="paramname">glm::uvec2</td><td>currentRenderResolution - Current render resolution.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>It is called automatically in <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> for every mesh component having a <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a>. </p>
+
 <p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00077">77</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
@@ -295,7 +324,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00018">18</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p>Helper function to get number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance, needed for mesh manager to know when to unload <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>u_int32_t </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00041">41</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -322,7 +354,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00020">20</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p>decrements number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance. </p>
+
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00047">47</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -341,35 +375,19 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Uploads mesh data to the GPU. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1MeshData.html" title="Mesh data structure for loading and managing mesh data.">MeshData</a>&amp; meshData - Mesh data to be uploaded. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00033">33</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a670e2cabbe5532ed56b520654127dd69" name="a670e2cabbe5532ed56b520654127dd69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a670e2cabbe5532ed56b520654127dd69">&#9670;&#160;</a></span>m_debugDraw</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool vex::VulkanMesh::m_debugDraw = true</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00037">37</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
-
-</div>
-</div>
 <a id="a3297d89cf14d2a568bf28824904b8c7f" name="a3297d89cf14d2a568bf28824904b8c7f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3297d89cf14d2a568bf28824904b8c7f">&#9670;&#160;</a></span>m_r_context</h2>
 
@@ -390,7 +408,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00033">33</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00059">59</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -414,7 +432,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00034">34</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00060">60</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -438,7 +456,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00035">35</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00061">61</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -462,7 +480,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00036">36</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00062">62</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
