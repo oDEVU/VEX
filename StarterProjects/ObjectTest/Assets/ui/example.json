@@ -1,7 +1,7 @@
 {
   "root": {
     "layout": "column",
-    "justify": "space-between",
+    "justify": "space-evenly",
     "align": "flex-start",
     "padding": 8,
     "children": [
@@ -36,6 +36,41 @@
           "bgColor": [0.2, 0.2, 0.2, 0.8]
         },
         "size": [80, 32]
+      },
+      {
+        "type": "container",
+        "id": "quests_container",
+        "layout": "column",
+        "justify": "center",
+        "alignSelf": "baseline",
+        "size": [200, 60],
+        "style": {
+          "bgColor": [0, 0, 0, 0.8],
+          "padding": 5
+        },
+        "children": [
+          {
+            "type": "label",
+            "id": "quest1",
+            "text": "Quest 1: Slay 5 goblins",
+            "textAlign": "right",
+            "style": {
+              "font": "Assets/ui/fonts/vcr.ttf",
+              "fontSize": 14,
+              "color": [1, 1, 1, 1]
+            }
+          },
+          {
+            "type": "label",
+            "id": "quest2",
+            "text": "Quest 2: Find the key",
+            "style": {
+              "font": "Assets/ui/fonts/vcr.ttf",
+              "fontSize": 14,
+              "color": [1, 1, 1, 1]
+            }
+          }
+        ]
       }
     ]
   }

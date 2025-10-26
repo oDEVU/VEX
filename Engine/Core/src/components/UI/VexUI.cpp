@@ -149,6 +149,7 @@ void VexUI::loadImages(Widget* w) {
 // @todo Implement more of yogas features like margin, flexes?, aligments.
 Widget* VexUI::parseNode(const nlohmann::json& j) {
     Widget* w = new Widget();
+    w->type = WidgetType::Container;
 
     if (j.contains("type")) {
         std::string t = j["type"].get<std::string>();
@@ -189,6 +190,7 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
         else if (al == "space-between") YGNodeStyleSetAlignItems(w->yoga, YGAlignSpaceBetween);
         else if (al == "space-evenly") YGNodeStyleSetAlignItems(w->yoga, YGAlignSpaceEvenly);
     }
+
     if (j.contains("padding")) YGNodeStyleSetPadding(w->yoga, YGEdgeAll, j["padding"].get<float>());
 
     if (j.contains("size")) {
@@ -206,7 +208,14 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
 
     if (j.contains("position")) {
         std::string pos = j["position"].get<std::string>();
-        if (pos == "absolute") YGNodeStyleSetPositionType(w->yoga, YGPositionTypeAbsolute);
+        if (pos == "absolute"){
+            YGNodeStyleSetPositionType(w->yoga, YGPositionTypeAbsolute);
+
+            if (j.contains("left")) YGNodeStyleSetMargin(w->yoga, YGEdgeLeft, j["left"].get<float>());
+            if (j.contains("right")) YGNodeStyleSetMargin(w->yoga, YGEdgeRight, j["right"].get<float>());
+            if (j.contains("top")) YGNodeStyleSetMargin(w->yoga, YGEdgeTop, j["top"].get<float>());
+            if (j.contains("bottom")) YGNodeStyleSetMargin(w->yoga, YGEdgeBottom, j["bottom"].get<float>());
+        }
         else if (pos == "relative") YGNodeStyleSetPositionType(w->yoga, YGPositionTypeRelative);
     }
 
@@ -266,6 +275,18 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
             else if ((child->type == WidgetType::Label || child->type == WidgetType::Button) && !child->text.empty()) {
                 YGNodeSetMeasureFunc(childYoga, VexUI::measureTextNode);
             }
+
+            if (!child->children.empty()) {
+                float flexGrow = YGNodeStyleGetFlexGrow(childYoga);
+                if (flexGrow == 0.f) {
+                    YGNodeStyleSetFlexGrow(childYoga, 1.f);
+                }
+                YGAlign alignSelf = YGNodeStyleGetAlignSelf(childYoga);
+                if (alignSelf == YGAlignAuto) {
+                    YGNodeStyleSetAlignSelf(childYoga, YGAlignStretch);
+                }
+            }
+
             w->children.push_back(child);
             YGNodeInsertChild(w->yoga, child->yoga, static_cast<uint32_t>(w->children.size() - 1));
         }
@@ -283,11 +304,22 @@ void VexUI::load(const std::string& path) {
     catch (const nlohmann::json::parse_error& e) { log("UI JSON error: %s", e.what()); return; }
 
     freeTree(m_root);
-    if (json.contains("root")) {
-        m_root = parseNode(json["root"]);
-        loadFonts(m_root);
-        loadImages(m_root);
-    }
+        m_root = nullptr;
+        if (json.contains("root")) {
+            m_root = parseNode(json["root"]);
+        }
+        if (m_root && json.contains("overlays") && json["overlays"].is_array()) {
+            for (const auto& ov : json["overlays"]) {
+                Widget* overlay = parseNode(ov);
+                YGNodeStyleSetPositionType(overlay->yoga, YGPositionTypeAbsolute);
+                m_root->children.push_back(overlay);
+                YGNodeInsertChild(m_root->yoga, overlay->yoga, static_cast<uint32_t>(m_root->children.size() - 1));
+            }
+        }
+        if (m_root) {
+            loadFonts(m_root);
+            loadImages(m_root);
+        }
 }
 
 void VexUI::layout(glm::uvec2 res) {
@@ -389,10 +421,14 @@ YGSize VexUI::measureTextNode(const YGNode* node, float width, YGMeasureMode wid
     return w->ui->calculateTextSize(w, maxW);
 }
 
-void VexUI::batch(Widget* w, std::vector<float>& verts) {
+void VexUI::batch(Widget* w, std::vector<float>& verts, Widget* parent) {
     if (!w) return;
     float x = YGNodeLayoutGetLeft(w->yoga);
     float y = YGNodeLayoutGetTop(w->yoga);
+    if (parent) {
+        x += YGNodeLayoutGetLeft(parent->yoga);// - YGNodeLayoutGetPadding(parent->yoga, YGEdgeLeft);
+        y += YGNodeLayoutGetTop(parent->yoga);// - YGNodeLayoutGetPadding(parent->yoga, YGEdgeTop);
+    }
     float width  = YGNodeLayoutGetWidth(w->yoga);
     float height = YGNodeLayoutGetHeight(w->yoga);
 
@@ -504,7 +540,7 @@ void VexUI::batch(Widget* w, std::vector<float>& verts) {
         }
     }
 
-    for (auto* c : w->children) batch(c, verts);
+    for (auto* c : w->children) batch(c, verts, w);
 }
 
 void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pipelineLayout, int currentFrame) {

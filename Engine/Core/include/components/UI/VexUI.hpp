@@ -172,7 +172,7 @@ private:
     void loadFonts(Widget* w);
     void loadImages(Widget* w);
     void layout(glm::uvec2 res);
-    void batch(Widget* w, std::vector<float>& verts);
+    void batch(Widget* w, std::vector<float>& verts, Widget* parent = nullptr);
     void uploadVerts(const std::vector<float>& verts);
     Widget* parseNode(const nlohmann::json& j);
     void freeTree(Widget* w);
