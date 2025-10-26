@@ -33,9 +33,14 @@ class VexUI;
 struct UIStyle {
     glm::vec4 color{1,1,1,1};
     glm::vec4 bgColor{-1,-1,-1,-1};
+    glm::vec4 borderColor = {0,0,0,0};
     std::string font;
     float fontSize = 16.f;
+    float borderWidth = 0.f;
 };
+
+/// @brief Allows for text aligment.
+enum class TextAlign { Left, Center, Right };
 
 /// @brief Quad component needed for rendering.
 struct UIQuad {
@@ -58,6 +63,7 @@ struct Widget {
     std::vector<Widget*> children;
     std::function<void()> onClick = nullptr;
     VexUI* ui = nullptr;
+    TextAlign textAlign = TextAlign::Left;
 
     ~Widget();
     void applyJson(const nlohmann::json& j);
@@ -172,7 +178,7 @@ private:
     void freeTree(Widget* w);
     Widget* findWidgetAt(Widget* w, glm::vec2 pos);
     Widget* findById(Widget* w, const std::string& id);
-    YGSize calculateTextSize(Widget* w);
+    YGSize calculateTextSize(Widget* w, float maxWidth = FLT_MAX);
     static YGSize measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 };
 }

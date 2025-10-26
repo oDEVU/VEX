@@ -200,6 +200,61 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
             YGNodeStyleSetMargin(w->yoga, YGEdgeAll, j["margin"].get<float>());
         }
 
+    if (j.contains("flexGrow")) YGNodeStyleSetFlexGrow(w->yoga, j["flexGrow"].get<float>());
+    if (j.contains("flexShrink")) YGNodeStyleSetFlexShrink(w->yoga, j["flexShrink"].get<float>());
+    if (j.contains("flexBasis")) YGNodeStyleSetFlexBasis(w->yoga, j["flexBasis"].get<float>());
+
+    if (j.contains("position")) {
+        std::string pos = j["position"].get<std::string>();
+        if (pos == "absolute") YGNodeStyleSetPositionType(w->yoga, YGPositionTypeAbsolute);
+        else if (pos == "relative") YGNodeStyleSetPositionType(w->yoga, YGPositionTypeRelative);
+    }
+
+    if (j.contains("wrap")) {
+        std::string wr = j["wrap"].get<std::string>();
+        if (wr == "wrap") YGNodeStyleSetFlexWrap(w->yoga, YGWrapWrap);
+        else if (wr == "no-wrap") YGNodeStyleSetFlexWrap(w->yoga, YGWrapNoWrap);
+        else if (wr == "wrap-reverse") YGNodeStyleSetFlexWrap(w->yoga, YGWrapWrapReverse);
+    }
+
+    if (j.contains("alignSelf")) {
+        std::string as = j["alignSelf"].get<std::string>();
+        if (as == "center") YGNodeStyleSetAlignSelf(w->yoga, YGAlignCenter);
+        else if (as == "auto") YGNodeStyleSetAlignSelf(w->yoga, YGAlignAuto);
+        else if (as == "flex-start") YGNodeStyleSetAlignSelf(w->yoga, YGAlignFlexStart);
+        else if (as == "flex-end") YGNodeStyleSetAlignSelf(w->yoga, YGAlignFlexEnd);
+        else if (as == "stretch") YGNodeStyleSetAlignSelf(w->yoga, YGAlignStretch);
+        else if (as == "baseline") YGNodeStyleSetAlignSelf(w->yoga, YGAlignBaseline);
+        else if (as == "space-around") YGNodeStyleSetAlignSelf(w->yoga, YGAlignSpaceAround);
+        else if (as == "space-between") YGNodeStyleSetAlignSelf(w->yoga, YGAlignSpaceBetween);
+        else if (as == "space-evenly") YGNodeStyleSetAlignSelf(w->yoga, YGAlignSpaceEvenly);
+    }
+
+    if (j.contains("paddingLeft")) YGNodeStyleSetPadding(w->yoga, YGEdgeLeft, j["paddingLeft"].get<float>());
+    if (j.contains("paddingRight")) YGNodeStyleSetPadding(w->yoga, YGEdgeRight, j["paddingRight"].get<float>());
+    if (j.contains("paddingTop")) YGNodeStyleSetPadding(w->yoga, YGEdgeTop, j["paddingTop"].get<float>());
+    if (j.contains("paddingBottom")) YGNodeStyleSetPadding(w->yoga, YGEdgeBottom, j["paddingBottom"].get<float>());
+
+    if (j.contains("marginLeft")) YGNodeStyleSetMargin(w->yoga, YGEdgeLeft, j["marginLeft"].get<float>());
+    if (j.contains("marginRight")) YGNodeStyleSetMargin(w->yoga, YGEdgeRight, j["marginRight"].get<float>());
+    if (j.contains("marginTop")) YGNodeStyleSetMargin(w->yoga, YGEdgeTop, j["marginTop"].get<float>());
+    if (j.contains("marginBottom")) YGNodeStyleSetMargin(w->yoga, YGEdgeBottom, j["marginBottom"].get<float>());
+
+    if (j.contains("borderWidth")) {
+        w->style.borderWidth = j["borderWidth"].get<float>();
+        YGNodeStyleSetBorder(w->yoga, YGEdgeAll, w->style.borderWidth);  // Affects layout space
+    }
+    if (j.contains("borderColor") && j["borderColor"].is_array() && j["borderColor"].size() == 4) {
+        w->style.borderColor = glm::vec4(j["borderColor"][0].get<float>(), j["borderColor"][1].get<float>(),
+                                         j["borderColor"][2].get<float>(), j["borderColor"][3].get<float>());
+    }
+
+    if (j.contains("textAlign")) {
+        std::string ta = j["textAlign"].get<std::string>();
+        if (ta == "center") w->textAlign = TextAlign::Center;
+        else if (ta == "right") w->textAlign = TextAlign::Right;
+    }
+
     if (j.contains("children") && j["children"].is_array()) {
         for (const auto& c : j["children"]) {
             Widget* child = parseNode(c);
@@ -283,34 +338,55 @@ void VexUI::processEvent(const SDL_Event& ev) {
     }
 }
 
-YGSize VexUI::calculateTextSize(Widget* w) {
+YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
     std::string key = w->style.font + "_" + std::to_string(static_cast<int>(w->style.fontSize));
     auto it = m_fontAtlases.find(key);
     if (it == m_fontAtlases.end() || w->text.empty()) {
         return {0, 0};
     }
-
     const FontAtlas& a = it->second;
-    float totalWidth = 0.f;
 
+    std::vector<std::string> lines;
+    std::string currentLine;
+    float currentWidth = 0.f;
     for (char ch : w->text) {
+        if (ch == '\n') {
+            lines.push_back(currentLine);
+            currentLine.clear();
+            currentWidth = 0.f;
+            continue;
+        }
         if (ch < 32 || ch > 127) continue;
         const stbtt_bakedchar& cd = a.cdata[ch - 32];
-        totalWidth += cd.xadvance;
+        if (currentWidth + cd.xadvance > maxWidth && !currentLine.empty()) {
+            lines.push_back(currentLine);
+            currentLine.clear();
+            currentWidth = 0.f;
+        }
+        currentLine += ch;
+        currentWidth += cd.xadvance;
     }
+    if (!currentLine.empty()) lines.push_back(currentLine);float lineHeight = a.ascent - a.descent;
+        float totalHeight = lines.size() * lineHeight;
+        float totalWidth = 0.f;
+        for (const auto& line : lines) {
+            float lineWidth = 0.f;
+            for (char ch : line) {
+                if (ch < 32 || ch > 127) continue;
+                const stbtt_bakedchar& cd = a.cdata[ch - 32];
+                lineWidth += cd.xadvance;
+            }
+            totalWidth = std::max(totalWidth, lineWidth);
+        }
 
-    float totalHeight = a.ascent - a.descent;
-
-    return {totalWidth, totalHeight};
+        return {std::min(maxWidth, totalWidth), totalHeight};
 }
 
 YGSize VexUI::measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode) {
     Widget* w = static_cast<Widget*>(YGNodeGetContext(node));
-    if (!w || !w->ui) {
-        return {0, 0};
-    }
-    // Call our member function to do the real work
-    return w->ui->calculateTextSize(w);
+    if (!w || !w->ui) return {0, 0};
+    float maxW = (widthMode == YGMeasureModeAtMost || widthMode == YGMeasureModeExactly) ? width : FLT_MAX;
+    return w->ui->calculateTextSize(w, maxW);
 }
 
 void VexUI::batch(Widget* w, std::vector<float>& verts) {
@@ -339,31 +415,82 @@ void VexUI::batch(Widget* w, std::vector<float>& verts) {
         pushQuad(x, y, 0, 0, x + width, y + height, 1, 1, w->style.bgColor, -1.f);
     }
 
+    if (w->style.borderWidth > 0.f && w->style.borderColor.a > 0.f) {
+        // Top
+        pushQuad(x, y, 0, 0, x + width, y + w->style.borderWidth, 1, 1, w->style.borderColor, -1.f);
+        // Bottom
+        pushQuad(x, y + height - w->style.borderWidth, 0, 0, x + width, y + height, 1, 1, w->style.borderColor, -1.f);
+        // Left
+        pushQuad(x, y, 0, 0, x + w->style.borderWidth, y + height, 1, 1, w->style.borderColor, -1.f);
+        // Right
+        pushQuad(x + width - w->style.borderWidth, y, 0, 0, x + width, y + height, 1, 1, w->style.borderColor, -1.f);
+    }
+
     if ((w->type == WidgetType::Label || w->type == WidgetType::Button) && !w->text.empty() && !w->style.font.empty()) {
         std::string key = w->style.font + "_" + std::to_string(static_cast<int>(w->style.fontSize));
         auto it = m_fontAtlases.find(key);
         if (it != m_fontAtlases.end()) {
             const FontAtlas& a = it->second;
 
-            float cx = x;
-            float cy = y + a.ascent;
+            std::vector<std::string> lines;
+                    std::string currentLine;
+                    float currentWidth = 0.f;
+                    for (char ch : w->text) {
+                        if (ch == '\n') {
+                            lines.push_back(currentLine);
+                            currentLine.clear();
+                            currentWidth = 0.f;
+                            continue;
+                        }
+                        if (ch < 32 || ch > 127) continue;
+                        const stbtt_bakedchar& cd = a.cdata[ch - 32];
+                        if (currentWidth + cd.xadvance > width && !currentLine.empty()) {
+                            lines.push_back(currentLine);
+                            currentLine.clear();
+                            currentWidth = 0.f;
+                        }
+                        currentLine += ch;
+                        currentWidth += cd.xadvance;
+                    }
+                    if (!currentLine.empty()) lines.push_back(currentLine);
 
-            for (char ch : w->text) {
-                if (ch < 32 || ch > 127) continue;
-                const stbtt_bakedchar& cd = a.cdata[ch - 32];
+                    float lineHeight = a.ascent - a.descent;
+                    float cy = y + a.ascent;
 
-                float px = cx + cd.xoff;
-                float py = cy + cd.yoff;
+                    for (const auto& line : lines) {
+                        float lineWidth = 0.f;
+                        for (char ch : line) {
+                            if (ch < 32 || ch > 127) continue;
+                            const stbtt_bakedchar& cd = a.cdata[ch - 32];
+                            lineWidth += cd.xadvance;
+                        }
 
-                float u0 = cd.x0 / float(a.width);
-                float v0 = cd.y0 / float(a.height);
-                float u1 = cd.x1 / float(a.width);
-                float v1 = cd.y1 / float(a.height);
+                        float startX = x;
+                        if (w->textAlign == TextAlign::Center) {
+                            startX = x + (width - lineWidth) / 2.f;
+                        } else if (w->textAlign == TextAlign::Right) {
+                            startX = x + (width - lineWidth);
+                        }
 
-                pushQuad(px, py, u0, v0,
-                         px + (cd.x1 - cd.x0), py + (cd.y1 - cd.y0), u1, v1,
-                         w->style.color, static_cast<float>(a.texIdx));
-                cx += cd.xadvance;
+                        float cx = startX;
+                        for (char ch : line) {
+                            if (ch < 32 || ch > 127) continue;
+                            const stbtt_bakedchar& cd = a.cdata[ch - 32];
+
+                            float px = cx + cd.xoff;
+                            float py = cy + cd.yoff;
+
+                            float u0 = cd.x0 / float(a.width);
+                            float v0 = cd.y0 / float(a.height);
+                            float u1 = cd.x1 / float(a.width);
+                            float v1 = cd.y1 / float(a.height);
+
+                            pushQuad(px, py, u0, v0,
+                                     px + (cd.x1 - cd.x0), py + (cd.y1 - cd.y0), u1, v1,
+                                     w->style.color, static_cast<float>(a.texIdx));
+                            cx += cd.xadvance;
+                        }
+                        cy += lineHeight;
             }
         }
     }

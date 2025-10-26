@@ -26,6 +26,9 @@
         "id": "pause",
         "text": "Pause",
         "margin": 8,
+        "borderWidth": 3,
+        "borderColor": [0.0, 0.0, 0.0, 1.0],
+        "textAlign": "center",
         "style": {
           "font": "Assets/ui/fonts/vcr.ttf",
           "size": 20,
