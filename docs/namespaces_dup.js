@@ -67,6 +67,11 @@ var namespaces_dup =
         [ "RES_480P", "ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6", null ],
         [ "PS1_SHARP", "ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485", null ]
       ] ],
+      [ "TextAlign", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886", [
+        [ "Left", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886a945d5e233cf7d6240f6b783b36a374ff", null ],
+        [ "Center", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
+        [ "Right", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886a92b09c7c48c520c3c55e497875da437c", null ]
+      ] ],
       [ "WidgetType", "VexUI_8hpp.html#a7f58754048eee9edc68ba1d810291eba", [
         [ "Container", "VexUI_8hpp.html#a7f58754048eee9edc68ba1d810291ebaa0e7278cda02a9c0446dcc75a4df34eb2", null ],
         [ "Label", "VexUI_8hpp.html#a7f58754048eee9edc68ba1d810291ebaab021df6aac4654c454f46c77646e745f", null ],

@@ -13,7 +13,6 @@ namespace vex {
 
 Widget::~Widget() {
     if (yoga) YGNodeFree(yoga);
-    for (auto* c : children) delete c;
 }
 
 void Widget::applyJson(const nlohmann::json& j) {
@@ -211,10 +210,10 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
         if (pos == "absolute"){
             YGNodeStyleSetPositionType(w->yoga, YGPositionTypeAbsolute);
 
-            if (j.contains("left")) YGNodeStyleSetMargin(w->yoga, YGEdgeLeft, j["left"].get<float>());
-            if (j.contains("right")) YGNodeStyleSetMargin(w->yoga, YGEdgeRight, j["right"].get<float>());
-            if (j.contains("top")) YGNodeStyleSetMargin(w->yoga, YGEdgeTop, j["top"].get<float>());
-            if (j.contains("bottom")) YGNodeStyleSetMargin(w->yoga, YGEdgeBottom, j["bottom"].get<float>());
+            if (j.contains("left")) YGNodeStyleSetPosition(w->yoga, YGEdgeLeft, j["left"].get<float>());
+            if (j.contains("right")) YGNodeStyleSetPosition(w->yoga, YGEdgeRight, j["right"].get<float>());
+            if (j.contains("top")) YGNodeStyleSetPosition(w->yoga, YGEdgeTop, j["top"].get<float>());
+            if (j.contains("bottom")) YGNodeStyleSetPosition(w->yoga, YGEdgeBottom, j["bottom"].get<float>());
         }
         else if (pos == "relative") YGNodeStyleSetPositionType(w->yoga, YGPositionTypeRelative);
     }
@@ -277,10 +276,6 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
             }
 
             if (!child->children.empty()) {
-                float flexGrow = YGNodeStyleGetFlexGrow(childYoga);
-                if (flexGrow == 0.f) {
-                    YGNodeStyleSetFlexGrow(childYoga, 1.f);
-                }
                 YGAlign alignSelf = YGNodeStyleGetAlignSelf(childYoga);
                 if (alignSelf == YGAlignAuto) {
                     YGNodeStyleSetAlignSelf(childYoga, YGAlignStretch);
@@ -410,22 +405,45 @@ YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
             }
             totalWidth = std::max(totalWidth, lineWidth);
         }
-
-        return {std::min(maxWidth, totalWidth), totalHeight};
+return {totalWidth, totalHeight};
 }
 
 YGSize VexUI::measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode) {
     Widget* w = static_cast<Widget*>(YGNodeGetContext(node));
     if (!w || !w->ui) return {0, 0};
-    float maxW = (widthMode == YGMeasureModeAtMost || widthMode == YGMeasureModeExactly) ? width : FLT_MAX;
-    return w->ui->calculateTextSize(w, maxW);
+
+    float maxW = FLT_MAX;
+    if (widthMode == YGMeasureModeExactly || widthMode == YGMeasureModeAtMost) {
+        maxW = width;
+    }
+
+    YGSize naturalSize = w->ui->calculateTextSize(w, maxW);
+    YGSize measuredSize;
+
+    if (widthMode == YGMeasureModeExactly) {
+        measuredSize.width = width;
+    } else if (widthMode == YGMeasureModeAtMost) {
+        measuredSize.width = std::min(width, naturalSize.width);
+    } else {
+        measuredSize.width = naturalSize.width;
+    }
+
+    if (heightMode == YGMeasureModeExactly) {
+        measuredSize.height = height;
+    } else if (heightMode == YGMeasureModeAtMost) {
+        measuredSize.height = std::min(height, naturalSize.height);
+    } else {
+        measuredSize.height = naturalSize.height;
+    }
+
+    return measuredSize;
 }
 
 void VexUI::batch(Widget* w, std::vector<float>& verts, Widget* parent) {
     if (!w) return;
     float x = YGNodeLayoutGetLeft(w->yoga);
     float y = YGNodeLayoutGetTop(w->yoga);
-    if (parent) {
+    if (parent && YGNodeStyleGetPositionType(w->yoga) != YGPositionTypeAbsolute) {
         x += YGNodeLayoutGetLeft(parent->yoga);// - YGNodeLayoutGetPadding(parent->yoga, YGEdgeLeft);
         y += YGNodeLayoutGetTop(parent->yoga);// - YGNodeLayoutGetPadding(parent->yoga, YGEdgeTop);
     }

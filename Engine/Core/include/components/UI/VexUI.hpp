@@ -70,6 +70,7 @@ struct Widget {
 };
 
 /// @brief Class defining VexUI, it initializes the UI system, loads, renders, converts ui data, essentially managing ui from file to reneering.
+/// @todo make it into a UI_Component, so it renders like meshes and there can be multiple instances of ui. Also add z-index for sorting. Thank you later me.
 class VexUI {
 public:
     /// @brief Constructor for VexUI.

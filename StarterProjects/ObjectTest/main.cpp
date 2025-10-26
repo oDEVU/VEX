@@ -80,8 +80,6 @@ public:
         sceneManager.sceneBegin();
 
         m_vexUI->load("Assets/ui/example.json");
-
-        m_vexUI->setText("score", "FPS: " + std::to_string(fps));
         m_vexUI->setOnClick("pause", []() {
             log("Pause button clicked");
         });
@@ -143,7 +141,7 @@ public:
 
         fps = 1/deltaTime;
 
-        m_vexUI->setText("score", "FPS: " + std::to_string(fps));
+        m_vexUI->setText("fps", "FPS: " + std::to_string((int)fps));
 
         sceneManager.sceneUpdate(deltaTime);
 

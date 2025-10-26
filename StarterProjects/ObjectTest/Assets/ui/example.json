@@ -1,14 +1,15 @@
 {
   "root": {
     "layout": "column",
-    "justify": "space-evenly",
+    "justify": "space-between",
     "align": "flex-start",
     "padding": 8,
     "children": [
       {
         "type": "label",
-        "id": "score",
-        "text": "Score: 0",
+        "id": "fps",
+        "text": "FPS: 0",
+        "size": [400, 20],
         "style": {
           "font": "Assets/ui/fonts/vcr.ttf",
           "size": 12,
@@ -18,24 +19,11 @@
       {
         "type": "image",
         "id": "logo",
+        "position": "absolute",
+        "bottom": 5,
+        "right": 5,
         "image": "Assets/LogoTexture.png",
         "size": [64, 64]
-      },
-      {
-        "type": "button",
-        "id": "pause",
-        "text": "Pause",
-        "margin": 8,
-        "borderWidth": 3,
-        "borderColor": [0.0, 0.0, 0.0, 1.0],
-        "textAlign": "center",
-        "style": {
-          "font": "Assets/ui/fonts/vcr.ttf",
-          "size": 20,
-          "color": [1.0, 1.0, 1.0, 1.0],
-          "bgColor": [0.2, 0.2, 0.2, 0.8]
-        },
-        "size": [80, 32]
       },
       {
         "type": "container",
@@ -43,10 +31,10 @@
         "layout": "column",
         "justify": "center",
         "alignSelf": "baseline",
-        "size": [200, 60],
+        "padding": 8,
+        "size": [400, 60],
         "style": {
-          "bgColor": [0, 0, 0, 0.8],
-          "padding": 5
+          "bgColor": [0, 0, 0, 0.8]
         },
         "children": [
           {
@@ -71,6 +59,22 @@
             }
           }
         ]
+      },
+      {
+        "type": "button",
+        "id": "pause",
+        "text": "Pause",
+        "margin": 8,
+        "borderWidth": 3,
+        "borderColor": [0.0, 0.0, 0.0, 1.0],
+        "textAlign": "center",
+        "style": {
+          "font": "Assets/ui/fonts/vcr.ttf",
+          "size": 20,
+          "color": [1.0, 1.0, 1.0, 1.0],
+          "bgColor": [0.2, 0.2, 0.2, 0.8]
+        },
+        "size": [80, 32]
       }
     ]
   }

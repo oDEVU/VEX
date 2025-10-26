@@ -53,8 +53,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BasicComponents_8hpp.html",
-"classvex_1_1ResolutionManager.html#a7c992a0cdfd97eb54d4653be647dcb0f",
-"structvex_1_1FontAtlas.html"
+"classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382",
+"structvex_1_1CameraUBO.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

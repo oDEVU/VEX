@@ -1,5 +1,12 @@
 var NAVTREEINDEX2 =
 {
+"structvex_1_1CameraUBO.html":[1,0,0,3],
+"structvex_1_1CameraUBO.html":[2,0,0,2],
+"structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89":[1,0,0,3,1],
+"structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89":[2,0,0,2,1],
+"structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82":[1,0,0,3,0],
+"structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82":[2,0,0,2,0],
+"structvex_1_1FontAtlas.html":[1,0,0,7],
 "structvex_1_1FontAtlas.html":[2,0,0,6],
 "structvex_1_1GameInfo.html":[1,0,0,8],
 "structvex_1_1GameInfo.html":[2,0,0,7],

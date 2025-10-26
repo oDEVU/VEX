@@ -1,5 +1,12 @@
 var NAVTREEINDEX1 =
 {
+"classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382":[2,0,0,24,0],
+"classvex_1_1ResolutionManager.html#a48fa637b9efb4377a957af044f174c9a":[1,0,0,25,4],
+"classvex_1_1ResolutionManager.html#a48fa637b9efb4377a957af044f174c9a":[2,0,0,24,4],
+"classvex_1_1ResolutionManager.html#a4bd8ebdaf15b7e91218b836610c53484":[1,0,0,25,1],
+"classvex_1_1ResolutionManager.html#a4bd8ebdaf15b7e91218b836610c53484":[2,0,0,24,1],
+"classvex_1_1ResolutionManager.html#a54e611ed2a60ed43409ef33c492483e4":[1,0,0,25,5],
+"classvex_1_1ResolutionManager.html#a54e611ed2a60ed43409ef33c492483e4":[2,0,0,24,5],
 "classvex_1_1ResolutionManager.html#a7c992a0cdfd97eb54d4653be647dcb0f":[1,0,0,25,2],
 "classvex_1_1ResolutionManager.html#a7c992a0cdfd97eb54d4653be647dcb0f":[2,0,0,24,2],
 "classvex_1_1ResolutionManager.html#ad9547b6b5479891fe76d271e4f3e8f36":[1,0,0,25,3],
@@ -242,12 +249,5 @@ var NAVTREEINDEX1 =
 "pathUtils_8hpp.html#af5639fbb3bb2fe5ff20d1971df72206b":[3,0,0,0,0,9,1],
 "pathUtils_8hpp_source.html":[3,0,0,0,0,9],
 "structvex_1_1CameraComponent.html":[1,0,0,1],
-"structvex_1_1CameraComponent.html":[2,0,0,0],
-"structvex_1_1CameraUBO.html":[1,0,0,3],
-"structvex_1_1CameraUBO.html":[2,0,0,2],
-"structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89":[1,0,0,3,1],
-"structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89":[2,0,0,2,1],
-"structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82":[1,0,0,3,0],
-"structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82":[2,0,0,2,0],
-"structvex_1_1FontAtlas.html":[1,0,0,7]
+"structvex_1_1CameraComponent.html":[2,0,0,0]
 };
