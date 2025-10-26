@@ -8,5 +8,9 @@ layout(location = 0) out vec4 outColor;
 layout(set = 1, binding = 0) uniform sampler2D texSampler;
 
 void main() {
-    outColor = texture(texSampler, fragUV) * fragColor;
+    if (fragTexIndex < 0.0) {
+        outColor = fragColor;
+    } else {
+        outColor = texture(texSampler, fragUV) * fragColor;
+    }
 }

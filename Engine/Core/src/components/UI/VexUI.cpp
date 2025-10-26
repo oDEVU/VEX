@@ -47,6 +47,9 @@ struct FontAtlas {
     VkImageView view = VK_NULL_HANDLE;
     uint32_t texIdx = 0;
     int width = 0, height = 0;
+    float ascent = 0.f;
+    float descent = 0.f;
+    float scale = 0.f;
     float bakedSize = 0.f;
 };
 
@@ -99,6 +102,14 @@ void VexUI::loadFonts(Widget* w) {
             goto recurse;
         }
 
+        int ascent, descent, lineGap;
+        stbtt_GetFontVMetrics(&atlas.info, &ascent, &descent, &lineGap); // Get metrics
+
+        float scale = stbtt_ScaleForPixelHeight(&atlas.info, w->style.fontSize); // Get scale
+        atlas.ascent = static_cast<float>(ascent) * scale;
+        atlas.descent = static_cast<float>(descent) * scale;
+        atlas.scale = scale;
+
         const int W = 512, H = 512;
         std::vector<unsigned char> bitmap(W * H, 0);
         atlas.cdata.resize(96);
@@ -148,7 +159,10 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
 
     w->applyJson(j);
 
+    w->ui = this;
     w->yoga = YGNodeNew();
+    YGNodeSetContext(w->yoga, w);
+
     if (j.contains("layout")) {
         std::string l = j["layout"].get<std::string>();
         if (l == "row") YGNodeStyleSetFlexDirection(w->yoga, YGFlexDirectionRow);
@@ -177,12 +191,26 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
     }
     if (j.contains("padding")) YGNodeStyleSetPadding(w->yoga, YGEdgeAll, j["padding"].get<float>());
 
+    if (j.contains("size")) {
+            YGNodeStyleSetWidth(w->yoga, w->size.x);
+            YGNodeStyleSetHeight(w->yoga, w->size.y);
+        }
+
+    if (j.contains("margin")) {
+            YGNodeStyleSetMargin(w->yoga, YGEdgeAll, j["margin"].get<float>());
+        }
+
     if (j.contains("children") && j["children"].is_array()) {
         for (const auto& c : j["children"]) {
             Widget* child = parseNode(c);
             auto childYoga = child->yoga;
-            YGNodeStyleSetWidth(childYoga, child->size.x);
-            YGNodeStyleSetHeight(childYoga, child->size.y);
+            if (c.contains("size") && c["size"].is_array() && c["size"].size() == 2) {
+                YGNodeStyleSetWidth(childYoga, child->size.x);
+                YGNodeStyleSetHeight(childYoga, child->size.y);
+            }
+            else if ((child->type == WidgetType::Label || child->type == WidgetType::Button) && !child->text.empty()) {
+                YGNodeSetMeasureFunc(childYoga, VexUI::measureTextNode);
+            }
             w->children.push_back(child);
             YGNodeInsertChild(w->yoga, child->yoga, static_cast<uint32_t>(w->children.size() - 1));
         }
@@ -255,6 +283,36 @@ void VexUI::processEvent(const SDL_Event& ev) {
     }
 }
 
+YGSize VexUI::calculateTextSize(Widget* w) {
+    std::string key = w->style.font + "_" + std::to_string(static_cast<int>(w->style.fontSize));
+    auto it = m_fontAtlases.find(key);
+    if (it == m_fontAtlases.end() || w->text.empty()) {
+        return {0, 0};
+    }
+
+    const FontAtlas& a = it->second;
+    float totalWidth = 0.f;
+
+    for (char ch : w->text) {
+        if (ch < 32 || ch > 127) continue;
+        const stbtt_bakedchar& cd = a.cdata[ch - 32];
+        totalWidth += cd.xadvance;
+    }
+
+    float totalHeight = a.ascent - a.descent;
+
+    return {totalWidth, totalHeight};
+}
+
+YGSize VexUI::measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode) {
+    Widget* w = static_cast<Widget*>(YGNodeGetContext(node));
+    if (!w || !w->ui) {
+        return {0, 0};
+    }
+    // Call our member function to do the real work
+    return w->ui->calculateTextSize(w);
+}
+
 void VexUI::batch(Widget* w, std::vector<float>& verts) {
     if (!w) return;
     float x = YGNodeLayoutGetLeft(w->yoga);
@@ -288,7 +346,7 @@ void VexUI::batch(Widget* w, std::vector<float>& verts) {
             const FontAtlas& a = it->second;
 
             float cx = x;
-            float cy = y;
+            float cy = y + a.ascent;
 
             for (char ch : w->text) {
                 if (ch < 32 || ch > 127) continue;

@@ -27,6 +27,8 @@
 
 namespace vex {
 
+class VexUI;
+
 /// @brief Basic UI styling component
 struct UIStyle {
     glm::vec4 color{1,1,1,1};
@@ -55,6 +57,7 @@ struct Widget {
     YGNodeRef yoga = nullptr;
     std::vector<Widget*> children;
     std::function<void()> onClick = nullptr;
+    VexUI* ui = nullptr;
 
     ~Widget();
     void applyJson(const nlohmann::json& j);
@@ -169,5 +172,7 @@ private:
     void freeTree(Widget* w);
     Widget* findWidgetAt(Widget* w, glm::vec2 pos);
     Widget* findById(Widget* w, const std::string& id);
+    YGSize calculateTextSize(Widget* w);
+    static YGSize measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
 };
 }

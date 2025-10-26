@@ -6,7 +6,7 @@ layout(location = 3) in float inTexIndex;
 
 layout(location = 0) out vec2 fragUV;
 layout(location = 1) out vec4 fragColor;
-layout(location = 2) out float fragTexIndex;
+layout(location = 2) out flat float fragTexIndex;
 
 layout(push_constant) uniform PushConstants {
     mat4 ortho;
