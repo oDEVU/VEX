@@ -84,11 +84,13 @@ set(BUILD_GMOCK OFF CACHE BOOL "Disable GoogleMock build" FORCE)
 set(INSTALL_GTEST OFF CACHE BOOL "Disable GoogleTest install" FORCE)
 add_subdirectory(assimp)
 
-if(TARGET gtest)
-    target_compile_options(gtest PRIVATE -Wno-character-conversion)
-endif()
-if(TARGET gtest_main)
-    target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
+if(WIN32)
+    if(TARGET gtest)
+        target_compile_options(gtest PRIVATE -Wno-character-conversion)
+    endif()
+    if(TARGET gtest_main)
+        target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
+    endif()
 endif()
 
 #entt
@@ -101,9 +103,17 @@ add_subdirectory(json)
 
 # dirty fix for assimp not compiling in realese
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_options(assimp PRIVATE -Wno-array-bounds -Wno-character-conversion)
+    if(WIN32)
+        target_compile_options(assimp PRIVATE -Wno-array-bounds -Wno-character-conversion)
+    else()
+        target_compile_options(assimp PRIVATE -Wno-array-bounds)
+    endif()
 else()
-    target_compile_options(assimp PRIVATE -Wno-character-conversion -Wno-error)
+    if(WIN32)
+        target_compile_options(assimp PRIVATE -Wno-character-conversion -Wno-error)
+    else()
+        target_compile_options(assimp PRIVATE -Wno-error)
+    endif()
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -116,27 +126,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CPPTRACE_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     set(CPPTRACE_COLOR_OUTPUT ON CACHE BOOL "" FORCE)
     add_subdirectory(cpptrace) # Add module flags for cpptrace-lib
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        target_compile_options(cpptrace-lib PRIVATE -fmodules-ts)
-    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT WIN32)
-        target_compile_options(cpptrace-lib PRIVATE -fmodules --precompile)
-    elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-        target_compile_options(cpptrace-lib PRIVATE /experimental:module /std:c++20)
-    endif()
-
-    # Handle Clang precompilation for .cppm files
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-            add_custom_command(
-                  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm
-                  COMMAND ${CMAKE_CXX_COMPILER} -std=c++20 -fmodules --precompile -o ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm ${CMAKE_CURRENT_SOURCE_DIR}/cpptrace/src/cpptrace.cppm
-                  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cpptrace/src/cpptrace.cppm
-                  COMMENT "Precompiling cpptrace.cppm"
-                )
-            target_sources(cpptrace-lib PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm)
-            set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm PROPERTIES GENERATED TRUE)
-        endif()
-    endif()
 
     # imgui
     set(IMGUI_PATH  "imgui")

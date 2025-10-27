@@ -31,20 +31,21 @@ It can also be regenerated locally by using doxygen.
 ## Building
 
 ### Dependencies
-Windows:
-Git
-Cmake (Recomended: Official windows_x64 installer, rememeber to make sure its added to $PATH)
-ninja-build (Recomended: 'winget install Ninja-build.Ninja')
-clang (Recomended: 'winget install -e --id LLVM.LLVM' (you need 7-zip for installation to succed) remember to add 'C:\Program Files\LLVM\bin' to the $PATH)
-Windows SDK (Recomended: Installing Visual Studio 2022)
-Vulkan SDK (with validation layers, download from lunarg.org website, here also you can choose to install glm,SDL and volk headers, there is no need for them since all that is added as submodule, but you can use them at your own risk)
 
-Linux:
-cmake
-ninja-build
-clang
-Vulkan SDK (with validation layers)
-(thousands other libs mostly for wayland/x11 stuff, i will write them down later)
+#### Windows:
+- Git
+- Cmake (Recomended: Official windows_x64 installer, rememeber to make sure its added to $PATH)
+- ninja-build (Recomended: 'winget install Ninja-build.Ninja')
+- clang (Recomended: 'winget install -e --id LLVM.LLVM' (you need 7-zip for installation to succed) remember to add 'C:\Program Files\LLVM\bin' to the $PATH)
+- Windows SDK (Recomended: Installing Visual Studio 2022)
+- Vulkan SDK (with validation layers, download from lunarg.org website, here also you can choose to install glm,SDL and volk headers, there is no need for them since all that is added as submodule, but you can use them at your own risk)
+
+#### Linux:
+- cmake
+- ninja-build
+- clang
+- Vulkan SDK (with validation layers)
+- (thousands other libs mostly for wayland/x11 stuff, i will write them down later)
 
 ### Building build tools
 
@@ -52,7 +53,7 @@ Simply run build script for your platform (build-linux.sh/build-windows.bat) tha
 
 ### Building project
 
-If you built BuildTools succesfully inside Engine/BuildTools/build there should be now ProjectBuilder executable, simply pass it project path and build type. (ProjectBuilder <path-to-project> <-d/-r>)
+If you built BuildTools succesfully inside Engine/BuildTools/build there should be now ProjectBuilder executable, simply pass it project path and build type. (ProjectBuilder < path > <-d/-r>)
 
 ## TODO:
 ### Must have to create games:
