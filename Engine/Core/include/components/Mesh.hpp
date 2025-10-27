@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
+#define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <iostream>
 

@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
+set(CMAKE_DISABLE_TESTING TRUE CACHE BOOL "Force disable all tests" FORCE)
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VexProject.json")
     message(FATAL_ERROR "Project file not found!")
@@ -25,8 +27,8 @@ if(NOT EXISTS "${ENGINE_PATH}")
     message(FATAL_ERROR "Project file has invalid engine path. Please check the path in the project file. Loaded path: ${ENGINE_PATH}")
 endif()
 
-if(NOT EXISTS "${ENGINE_PATH}/BuildTools/build/VPAK_Packer")
-    message(FATAL_ERROR "BuildTools are not present. Make sure they are built.")
+if(NOT EXISTS "${ENGINE_PATH}/BuildTools/build/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}")
+    message(FATAL_ERROR "BuildTools are not present. Make sure VPAK_Packer is built.")
 endif()
 
 project(${PROJECT_NAME})
@@ -66,7 +68,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     make_directory(${ASSETS_DEST_DIR})
     add_custom_target(copy_Assets ALL
-        COMMAND ${ENGINE_PATH}/BuildTools/build/VPAK_Packer
+        COMMAND ${ENGINE_PATH}/BuildTools/build/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}
         ${ASSETS_SOURCE_DIR}
         ${ASSETS_DEST_DIR}/assets.vpk
         COMMENT "Packing assets for release build"

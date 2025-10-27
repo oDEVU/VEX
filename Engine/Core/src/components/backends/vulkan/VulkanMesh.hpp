@@ -37,8 +37,8 @@ namespace vex {
                 VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const;
 
         /// @brief Helper function to get number of mesh components using this VulkanMesh instance, needed for mesh manager to know when to unload VulkanMesh.
-        /// @return u_int32_t
-        u_int32_t getNumOfInstances() const { return numOfInstances; }
+        /// @return int
+        int getNumOfInstances() const { return numOfInstances; }
 
         /// @brief increments number of mesh components using this VulkanMesh instance.
         void addInstance() { numOfInstances++; }
@@ -59,6 +59,6 @@ namespace vex {
         VulkanContext& m_r_context;
         std::vector<SubmeshBuffers> m_submeshBuffers;
         std::vector<std::string> m_submeshTextures;
-        u_int32_t numOfInstances = 0;
+        int numOfInstances = 0;
     };
 }

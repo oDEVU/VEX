@@ -126,7 +126,13 @@ std::unique_ptr<VirtualFileSystem::FileData> VirtualFileSystem::load_file(const 
 
         return file_data;
     } else {
-        std::string full_path = "/" +clean_virtual_path;
+        std::string full_path;
+
+    #ifdef _WIN32
+        full_path = clean_virtual_path;
+    #else
+        full_path = "/" + clean_virtual_path;
+    #endif
 
         if (!fs::exists(full_path)) {
             return nullptr;
@@ -173,7 +179,13 @@ std::unique_ptr<std::istream> VirtualFileSystem::open_file_stream(const std::str
 
         return std::make_unique<VPKStream>(buffer.data(), buffer.size());
     } else {
-        std::string full_path = "/" +clean_virtual_path;
+        std::string full_path;
+
+    #ifdef _WIN32
+        full_path = clean_virtual_path;
+    #else
+        full_path = "/" + clean_virtual_path;
+    #endif
         if (!fs::exists(full_path)) {
             return nullptr;
         }
@@ -187,7 +199,13 @@ bool VirtualFileSystem::file_exists(const std::string& virtual_path) {
     if (m_use_packed_assets && m_loaded_vpk) {
         return find_file_entry(clean_virtual_path) != nullptr;
     } else {
-        std::string full_path = "/" +clean_virtual_path;
+        std::string full_path;
+
+    #ifdef _WIN32
+        full_path = clean_virtual_path;
+    #else
+        full_path = "/" + clean_virtual_path;
+    #endif
         log(full_path.c_str());
         return fs::exists(full_path);
     }
@@ -200,7 +218,13 @@ size_t VirtualFileSystem::get_file_size(const std::string& virtual_path) {
         const auto* entry = find_file_entry(clean_virtual_path);
         return entry ? entry->data_size : 0;
     } else {
-        std::string full_path = "/" +clean_virtual_path;
+        std::string full_path;
+
+    #ifdef _WIN32
+        full_path = clean_virtual_path;
+    #else
+        full_path = "/" + clean_virtual_path;
+    #endif
         if (fs::exists(full_path)) {
             return fs::file_size(full_path);
         }

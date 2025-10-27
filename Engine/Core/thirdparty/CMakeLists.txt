@@ -1,3 +1,9 @@
+set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
+if(WIN32)
+    string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS" CACHE STRING "Modified CXX flags for thirdparty on Windows" FORCE)
+endif()
+
 # SDL3 with Wayland support
 set(SDL_TEST OFF CACHE BOOL "Disable SDL tests")
 set(SDL_STATIC ON CACHE BOOL "Build shared library")
@@ -5,6 +11,9 @@ set(SDL_VIDEO ON CACHE BOOL "Enable video subsystem")
 set(SDL_VIDEO_WAYLAND ON CACHE BOOL "Enable Wayland")
 set(SDL_VIDEO_X11 ON CACHE BOOL "Enable X11")
 set(SDL_VULKAN ON CACHE BOOL "Enable Vulkan")
+if(WIN32)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
 add_subdirectory(SDL)
 
 # volk with multi-platform support
@@ -35,10 +44,12 @@ add_subdirectory(volk)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_compile_options(-Wno-array-bounds)
 endif()
-set(YOGA_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
-set(YOGA_ENABLE_BENCHMARKS OFF CACHE BOOL "" FORCE)
-set(YOGA_SKIP_TESTS TRUE CACHE INTERNAL "" FORCE)
-set(YOGA_SKIP_BENCHMARKS TRUE CACHE INTERNAL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
+set(YOGA_ENABLE_TESTS OFF CACHE BOOL "Disable Yoga tests" FORCE)
+set(YOGA_ENABLE_BENCHMARKS OFF CACHE BOOL "Disable Yoga benchmarks" FORCE)
+set(YOGA_SKIP_TESTS TRUE CACHE INTERNAL "Skip Yoga tests" FORCE)
+set(YOGA_SKIP_BENCHMARKS TRUE CACHE INTERNAL "Skip Yoga benchmarks" FORCE)
+set(YOGA_BUILD_TESTS OFF CACHE BOOL "Disable Yoga test builds" FORCE)
 add_subdirectory(yoga)
 
 # Check what Yoga target is available
@@ -66,7 +77,19 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
+set(ASSIMP_NO_TEST_IMPORT OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+set(BUILD_GTEST OFF CACHE BOOL "Disable GoogleTest build" FORCE)
+set(BUILD_GMOCK OFF CACHE BOOL "Disable GoogleMock build" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "Disable GoogleTest install" FORCE)
 add_subdirectory(assimp)
+
+if(TARGET gtest)
+    target_compile_options(gtest PRIVATE -Wno-character-conversion)
+endif()
+if(TARGET gtest_main)
+    target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
+endif()
 
 #entt
 add_subdirectory(entt)
@@ -78,13 +101,15 @@ add_subdirectory(json)
 
 # dirty fix for assimp not compiling in realese
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_options(assimp PRIVATE -Wno-array-bounds)
+    target_compile_options(assimp PRIVATE -Wno-array-bounds -Wno-character-conversion)
+else()
+    target_compile_options(assimp PRIVATE -Wno-character-conversion -Wno-error)
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_SCAN_FOR_MODULES OFF CACHE BOOL "Disable C++ module scanning" FORCE)
 
-    # cpptrace
+    add_definitions(-DCPPTRACE_STATIC_DEFINE)
     set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     set(CPPTRACE_STATIC_DEFINE ON CACHE BOOL "" FORCE)
     set(CPPTRACE_BUILD_TESTING OFF CACHE BOOL "" FORCE)
@@ -93,7 +118,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_subdirectory(cpptrace) # Add module flags for cpptrace-lib
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         target_compile_options(cpptrace-lib PRIVATE -fmodules-ts)
-    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT WIN32)
         target_compile_options(cpptrace-lib PRIVATE -fmodules --precompile)
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         target_compile_options(cpptrace-lib PRIVATE /experimental:module /std:c++20)
@@ -101,14 +126,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
     # Handle Clang precompilation for .cppm files
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        add_custom_command(
-                OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm
-                COMMAND ${CMAKE_CXX_COMPILER} -std=c++20 -fmodules --precompile -o ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm ${CMAKE_CURRENT_SOURCE_DIR}/cpptrace/src/cpptrace.cppm
-                DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cpptrace/src/cpptrace.cppm
-                COMMENT "Precompiling cpptrace.cppm"
-            )
-        target_sources(cpptrace-lib PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm)
-        set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm PROPERTIES GENERATED TRUE)
+        if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+            add_custom_command(
+                  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm
+                  COMMAND ${CMAKE_CXX_COMPILER} -std=c++20 -fmodules --precompile -o ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm ${CMAKE_CURRENT_SOURCE_DIR}/cpptrace/src/cpptrace.cppm
+                  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cpptrace/src/cpptrace.cppm
+                  COMMENT "Precompiling cpptrace.cppm"
+                )
+            target_sources(cpptrace-lib PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm)
+            set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/cpptrace.pcm PROPERTIES GENERATED TRUE)
+        endif()
     endif()
 
     # imgui

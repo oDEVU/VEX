@@ -27,7 +27,7 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
     m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
     m_vfs = std::make_unique<VirtualFileSystem>();
-    m_vfs->initialize(GetExecutableDir());
+    m_vfs->initialize(GetExecutableDir().string());
 
     auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
@@ -114,6 +114,7 @@ void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
 void Engine::beginGame() {}
 void Engine::render() {
+    log("Render function called");
     auto renderRes = m_resolutionManager->getRenderResolution();
 
     glm::mat4 view = glm::mat4(1.0f);
@@ -136,7 +137,14 @@ void Engine::render() {
     );
     proj[1][1] *= -1;
 
-    m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, *m_vexUI, m_frame);
+    log("Calling Renderer::renderFrame()");
+    try{
+        m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, *m_vexUI, m_frame);
+    } catch (const std::exception& e) {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Frame not in fact rendered :C");
+        handle_exception(e);
+    }
+    log("Frame Rendered");
 }
 
 }

@@ -8,6 +8,7 @@
 #include "context.hpp"
 #include <vector>
 #include <glm/glm.hpp>
+#include <array>
 #include "components/errorUtils.hpp"
 
 #include "components/pathUtils.hpp"
