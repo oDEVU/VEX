@@ -96,9 +96,9 @@ You need to provide the tool with the path to your project's root folder and spe
 
 | Argument | Description |
 | :--- | :--- |
-| **<path>** | The absolute path to your project's root directory. |
+| **< path >** | The absolute path to your project's root directory. |
 | **-d** | Compiles the project in Debug mode (for development and debugging). |
-| **-rCompiles** | the project in Release mode (optimized for final deployment). |
+| **-r** | Compiles the project in Release mode (optimized for final deployment). |
 
 ## TODO:
 ### Must have to create games:
