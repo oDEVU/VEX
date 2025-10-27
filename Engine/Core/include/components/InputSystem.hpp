@@ -5,6 +5,7 @@
  ***********************************************/
 
 #pragma once
+#define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
 #include <unordered_map>

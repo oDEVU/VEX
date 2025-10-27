@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <memory>
+#define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
 
@@ -102,7 +103,7 @@ protected:
     entt::registry m_registry;
 
     bool m_running = true;
-    u_int64_t m_frame = 0;
+    int m_frame = 0;
 
     GameInfo m_gameInfo;
 };

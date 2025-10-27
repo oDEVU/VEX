@@ -3,8 +3,6 @@
 #include <filesystem>
 #include <vector>
 #include <string>
-#include <cstring>
-#include <filesystem>
 #include <thread>
 
 #ifdef _WIN32
@@ -16,7 +14,7 @@
 #include <unistd.h>
 #endif
 
-// Copied from pathUtils
+// Get directory containing the executable
 inline std::filesystem::path GetExecutableDir() {
     std::filesystem::path exePath;
 
@@ -25,12 +23,14 @@ inline std::filesystem::path GetExecutableDir() {
     wchar_t wPath[MAX_PATH];
     DWORD len = GetModuleFileNameW(NULL, wPath, MAX_PATH);
     if (len == 0 || len == MAX_PATH) {
-        std::cerr << "Failed to get executable path on Windows";
+        std::cerr << "Failed to get executable path on Windows\n";
+        return {};
     }
     // Convert UTF-16 to UTF-8
     int utf8Size = WideCharToMultiByte(CP_UTF8, 0, wPath, -1, nullptr, 0, nullptr, nullptr);
     if (utf8Size == 0) {
-        std::cerr << "Failed to convert executable path to UTF-8";
+        std::cerr << "Failed to convert executable path to UTF-8\n";
+        return {};
     }
     std::string utf8Path(utf8Size, '\0');
     WideCharToMultiByte(CP_UTF8, 0, wPath, -1, utf8Path.data(), utf8Size, nullptr, nullptr);
@@ -40,15 +40,17 @@ inline std::filesystem::path GetExecutableDir() {
     char pathBuf[MAXPATHLEN];
     uint32_t size = sizeof(pathBuf);
     if (_NSGetExecutablePath(pathBuf, &size) != 0) {
-        std::cerr << "Failed to get executable path on macOS";
+        std::cerr << "Failed to get executable path on macOS\n";
+        return {};
     }
-    exePath = std::filesystem::canonical(pathBuf); // Resolve symlinks/aliases
+    exePath = std::filesystem::canonical(pathBuf);
 #else
     // Linux: Use readlink
     char pathBuf[1024];
     ssize_t len = ::readlink("/proc/self/exe", pathBuf, sizeof(pathBuf) - 1);
     if (len == -1) {
-        std::cerr << "Failed to read /proc/self/exe on Linux";
+        std::cerr << "Failed to read /proc/self/exe on Linux\n";
+        return {};
     }
     pathBuf[len] = '\0';
     exePath = std::filesystem::path(pathBuf);
@@ -58,169 +60,195 @@ inline std::filesystem::path GetExecutableDir() {
 }
 
 int main(int argc, char* argv[]) {
+    namespace fs = std::filesystem;
 
-    std::filesystem::current_path(GetExecutableDir().string() + "/../");
+    // Set working directory to parent of executable
+    try {
+        fs::current_path(GetExecutableDir() / "..");
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Failed to set working directory: " << e.what() << '\n';
+        return 1;
+    }
 
     unsigned int cores = std::thread::hardware_concurrency();
     std::string parallel = "--parallel " + std::to_string(cores > 0 ? cores : 1);
 
     if (argc < 2) {
-        std::cout << "Usage: " << argv[0] << " <project directory containing VexProject.json file> <build type -debug/-release (optional, defaults to debug)>" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <project directory containing VexProject.json file> <build type -debug/-release (optional, defaults to debug)>\n";
         return 1;
     }
 
-    std::string project_dir = argv[1];
+    fs::path project_dir = argv[1];
     std::string build_type = "-debug";
 
     if (argc >= 3) {
-            std::string arg2 = argv[2];
-            if (arg2 == "-debug" || arg2 == "-release" || arg2 == "-d" || arg2 == "-r") {
-                build_type = arg2;
-            } else {
-                std::cout << "Invalid build type '" << arg2 << "'. Defaulting to debug." << std::endl;
-            }
+        std::string arg2 = argv[2];
+        if (arg2 == "-debug" || arg2 == "-release" || arg2 == "-d" || arg2 == "-r") {
+            build_type = arg2;
+        } else {
+            std::cout << "Invalid build type '" << arg2 << "'. Defaulting to debug.\n";
         }
+    }
 
-    if (!std::filesystem::exists(project_dir) || !std::filesystem::is_directory(project_dir) || !std::filesystem::exists(project_dir + "/VexProject.json")) {
-        std::cerr << "Project directory does not exist: \"" << project_dir << "\" or does not contain VexProject.json file" << std::endl;
+    fs::path vex_project_file = project_dir / "VexProject.json";
+    if (!fs::exists(project_dir) || !fs::is_directory(project_dir) || !fs::exists(vex_project_file)) {
+        std::cerr << "Project directory does not exist: \"" << project_dir.string() << "\" or does not contain VexProject.json\n";
         return 1;
     }
 
-    std::string intermediate_dir = project_dir + "/Intermediate";
-    if (!std::filesystem::exists(intermediate_dir) || !std::filesystem::is_directory(intermediate_dir)) {
-        std::filesystem::create_directory(intermediate_dir);
+    fs::path intermediate_dir = project_dir / "Intermediate";
+    if (!fs::exists(intermediate_dir) || !fs::is_directory(intermediate_dir)) {
+        fs::create_directory(intermediate_dir);
     }
 
     try {
-        for (const auto& entry : std::filesystem::directory_iterator(project_dir)) {
-            std::string path_str = entry.path().string();
-            std::string filename = entry.path().filename().string();
-            if (path_str != project_dir + "/build" && path_str != project_dir + "/Build" && path_str != intermediate_dir) {
-                std::string dest_path = intermediate_dir + "/" + filename;
-                if (std::filesystem::exists(dest_path)) {
-                    std::filesystem::remove_all(dest_path);
+        fs::path build_path = project_dir / "build";
+        fs::path Build_path = project_dir / "Build"; // Handle case sensitivity
+        for (const auto& entry : fs::directory_iterator(project_dir)) {
+            auto path = fs::weakly_canonical(entry.path());
+            auto filename = path.filename().string();
+            std::cout << intermediate_dir.string() << '\n';
+            if (path != fs::weakly_canonical(build_path) &&
+                path != fs::weakly_canonical(Build_path) &&
+                path != fs::weakly_canonical(intermediate_dir)) {
+                fs::path dest_path = intermediate_dir / filename;
+                if (fs::exists(dest_path)) {
+                    fs::remove_all(dest_path);
                 }
-                std::filesystem::copy(entry.path(), dest_path, std::filesystem::copy_options::recursive);
+                fs::copy(entry.path(), dest_path, fs::copy_options::recursive);
             }
         }
-    } catch (const std::filesystem::filesystem_error& e) {
+    } catch (const fs::filesystem_error& e) {
         std::cerr << e.what() << '\n';
         return 1;
     }
 
-    if (std::filesystem::exists(intermediate_dir + "/CMakeLists.txt")) {
-        std::filesystem::remove_all(intermediate_dir + "/CMakeLists.txt");
+    fs::path cmakelists_src = "BuildFiles/CMakeLists.txt";
+    fs::path cmakelists_dest = intermediate_dir / "CMakeLists.txt";
+    if (fs::exists(cmakelists_dest)) {
+        fs::remove_all(cmakelists_dest);
     }
-    std::filesystem::copy("BuildFiles/CMakeLists.txt", intermediate_dir + "/CMakeLists.txt");
+    fs::copy(cmakelists_src, cmakelists_dest);
 
-    // Change current working directory to Intermediate
+    // Change working directory to Intermediate
     try {
-        std::filesystem::current_path(intermediate_dir);
-    } catch (const std::filesystem::filesystem_error& e) {
+        fs::current_path(intermediate_dir);
+    } catch (const fs::filesystem_error& e) {
         std::cerr << "Failed to change directory: " << e.what() << '\n';
         return 1;
     }
 
-    // Execute cmake configure
-    std::string build_dir = intermediate_dir + "/build/debug";
-    std::string output_dir = project_dir + "/Build";
+    // Execute CMake configure
+    fs::path build_dir = intermediate_dir / "build/debug";
+    fs::path output_dir = project_dir / "Build";
 
-    if (!std::filesystem::exists(output_dir)) {
-         std::filesystem::create_directory(output_dir);
+    if (!fs::exists(output_dir)) {
+        fs::create_directory(output_dir);
     }
 
-    if(build_type == "-d" || build_type == "-debug"){
-        output_dir = project_dir + "/Build/Debug";
-        int result = std::system("cmake -G Ninja -B build/debug -DCMAKE_BUILD_TYPE=Debug");
+    if (build_type == "-d" || build_type == "-debug") {
+        output_dir = project_dir / "Build" / "Debug";
+        int result = std::system("cmake -G Ninja -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++");
         if (result != 0) {
-            std::cerr << "CMake configure failed with exit code: " << result << std::endl;
+            std::cerr << "CMake configure failed with exit code: " << result << '\n';
             return 1;
         }
         std::string build_cmd = "cmake --build build/debug --config Debug " + parallel;
         result = std::system(build_cmd.c_str());
         if (result != 0) {
-            std::cerr << "CMake build failed with exit code: " << result << std::endl;
+            std::cerr << "CMake build failed with exit code: " << result << '\n';
             return 1;
         }
-    }else if(build_type == "-r" || build_type == "-release"){
-        output_dir = project_dir + "/Build/Release";
-        build_dir = intermediate_dir + "/build/release";
-        int result = std::system("cmake -G Ninja -B build/release -DCMAKE_BUILD_TYPE=Release");
+    } else if (build_type == "-r" || build_type == "-release") {
+        output_dir = project_dir / "Build" / "Release";
+        build_dir = intermediate_dir / "build/release";
+        int result = std::system("cmake -G Ninja -B build/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++");
         if (result != 0) {
-            std::cerr << "CMake configure failed with exit code: " << result << std::endl;
+            std::cerr << "CMake configure failed with exit code: " << result << '\n';
             return 1;
         }
         std::string build_cmd = "cmake --build build/release --config Release " + parallel;
         result = std::system(build_cmd.c_str());
         if (result != 0) {
-            std::cerr << "CMake build failed with exit code: " << result << std::endl;
+            std::cerr << "CMake build failed with exit code: " << result << '\n';
             return 1;
         }
     }
 
-    if (!std::filesystem::exists(output_dir)) {
-         std::filesystem::create_directory(output_dir);
-    }else{
-        std::filesystem::remove_all(output_dir);
-        std::filesystem::create_directory(output_dir);
+    if (!fs::exists(output_dir)) {
+        fs::create_directory(output_dir);
+    } else {
+        fs::remove_all(output_dir);
+        fs::create_directory(output_dir);
     }
 
     try {
-        for (const auto& entry : std::filesystem::directory_iterator(build_dir)) {
-            std::string path_str = entry.path().string();
-            std::string filename = entry.path().filename().string();
+        fs::path cpack_source = build_dir / "CPackSourceConfig.cmake";
+        fs::path cpack_config = build_dir / "CPackConfig.cmake";
+        fs::path deps = build_dir / "_deps";
+        fs::path cmake_files = build_dir / "CMakeFiles";
+        fs::path cmake_cache = build_dir / "CMakeCache.txt";
+        fs::path cmake_install = build_dir / "cmake_install.cmake";
+        fs::path compile_commands = build_dir / "compile_commands.json";
+        fs::path ninja_deps = build_dir / ".ninja_deps";
+        fs::path ninja_log = build_dir / ".ninja_log";
+        fs::path build_ninja = build_dir / "build.ninja";
 
-            // Build files to ignore while comping
-            if (path_str != build_dir + "/CPackSourceConfig.cmake"
-                && path_str != build_dir + "/CPackConfig.cmake"
-                && path_str != build_dir + "/_deps"
-                && path_str != build_dir + "/CMakeFiles"
-                && path_str != build_dir + "/CMakeCache.txt"
-                && path_str != build_dir + "/cmake_install.cmake"
-                && path_str != build_dir + "/compile_commands.json"
-                && path_str != build_dir + "/.ninja_deps"
-                && path_str != build_dir + "/.ninja_log"
-                && path_str != build_dir + "/build.ninja"
-                && path_str.find("cmake")) {
-
-                std::string dest_path = output_dir + "/" + filename;
-                if (std::filesystem::exists(dest_path)) {
-                    std::filesystem::remove_all(dest_path);
+        for (const auto& entry : fs::directory_iterator(build_dir)) {
+            auto path = fs::weakly_canonical(entry.path());
+            auto filename = path.filename().string();
+            if (path != fs::weakly_canonical(cpack_source) &&
+                path != fs::weakly_canonical(cpack_config) &&
+                path != fs::weakly_canonical(deps) &&
+                path != fs::weakly_canonical(cmake_files) &&
+                path != fs::weakly_canonical(cmake_cache) &&
+                path != fs::weakly_canonical(cmake_install) &&
+                path != fs::weakly_canonical(compile_commands) &&
+                path != fs::weakly_canonical(ninja_deps) &&
+                path != fs::weakly_canonical(ninja_log) &&
+                path != fs::weakly_canonical(build_ninja) &&
+                filename.find("cmake") == std::string::npos) {
+                fs::path dest_path = output_dir / filename;
+                if (fs::exists(dest_path)) {
+                    fs::remove_all(dest_path);
                 }
-                std::filesystem::copy(entry.path(), dest_path, std::filesystem::copy_options::recursive);
+                fs::copy(entry.path(), dest_path, fs::copy_options::recursive);
             }
         }
-    } catch (const std::filesystem::filesystem_error& e) {
+    } catch (const fs::filesystem_error& e) {
         std::cerr << e.what() << '\n';
         return 1;
     }
 
-    output_dir = output_dir + "/Engine";
+    output_dir = output_dir / "Engine";
 
-        try {
-            for (const auto& entry : std::filesystem::directory_iterator(output_dir)) {
-                std::string path_str = entry.path().string();
-                std::string filename = entry.path().filename().string();
-                if (path_str != output_dir + "/libVEX.a" && path_str != output_dir + "/shaders") {
-                    std::filesystem::remove_all(entry.path());
-                }
+    try {
+        fs::path libvex_path = output_dir / "libVEX.a";
+        fs::path shaders_path = output_dir / "shaders";
+        for (const auto& entry : fs::directory_iterator(output_dir)) {
+            auto path = fs::weakly_canonical(entry.path());
+            if (path != fs::weakly_canonical(libvex_path) &&
+                path != fs::weakly_canonical(shaders_path)) {
+                fs::remove_all(entry.path());
             }
-        } catch (const std::filesystem::filesystem_error& e) {
-            std::cerr << e.what() << '\n';
-            return 1;
         }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << e.what() << '\n';
+        return 1;
+    }
 
-                try {
-                    for (const auto& entry : std::filesystem::directory_iterator(intermediate_dir)) {
-                        std::string path_str = entry.path().string();
-                        std::string filename = entry.path().filename().string();
-                        if (path_str != intermediate_dir + "/build") {
-                            std::filesystem::remove_all(entry.path());
-                        }
-                    }
-                } catch (const std::filesystem::filesystem_error& e) {
-                    std::cerr << e.what() << '\n';
-                    return 1;
-                }
+    try {
+        fs::path build_path = intermediate_dir / "build";
+        for (const auto& entry : fs::directory_iterator(intermediate_dir)) {
+            auto path = fs::weakly_canonical(entry.path());
+            if (path != fs::weakly_canonical(build_path)) {
+                fs::remove_all(entry.path());
+            }
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << e.what() << '\n';
+        return 1;
+    }
+
     return 0;
 }

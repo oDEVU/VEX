@@ -15,6 +15,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include <string>
 #include "components/enviroment.hpp"
 
 namespace vex {

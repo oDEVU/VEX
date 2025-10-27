@@ -12,6 +12,8 @@
 
 #include <unordered_map>
 #include <string>
+#include <array>
+#include <vector>
 #include <fstream>
 
 namespace vex {

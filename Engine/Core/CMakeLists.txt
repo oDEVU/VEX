@@ -4,6 +4,7 @@ project(VEX)
 set(NAMESPACE_NAME "VEX")
 
 option(BUILD_SHARED_LIBS "Build the shared library" OFF)
+set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)

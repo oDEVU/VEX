@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 #include "components/backends/vulkan/Pipeline.hpp"
 #include "entt/entity/fwd.hpp"
+#define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
 #include <components/GameComponents/BasicComponents.hpp>
@@ -32,6 +33,7 @@ namespace vex {
     }
 
     void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, VexUI& vui, uint64_t frame) {
+        //log("Begining rendering...");
         if (renderResolution != m_r_context.currentRenderResolution) {
             m_r_context.currentRenderResolution = renderResolution;
             m_p_pipeline->updateViewport(renderResolution);
@@ -56,17 +58,22 @@ namespace vex {
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
             m_p_swapchainManager->recreateSwapchain();
             return;
+        }else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+            throw_error("Failed to acquire swap chain image!");
         }
 
         vkResetFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame]);
 
         vkDeviceWaitIdle(m_r_context.device);
 
+        //log("Updating camera UBO...");
         m_p_resources->updateCameraUBO({view, proj});
 
+        //log("Updating texture Descriptor.");
         VkImageView textureView = m_p_resources->getTextureView("default");
         m_p_resources->updateTextureDescriptor(m_r_context.currentFrame, textureView, 0);
 
+        //log("Begining comand buffer...");
         VkCommandBuffer commandBuffer = m_r_context.commandBuffers[m_r_context.currentImageIndex];
         vkResetCommandBuffer(commandBuffer, 0);
 
@@ -74,6 +81,7 @@ namespace vex {
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
+        //log("Translating high res image...");
         transitionImageLayout(commandBuffer,
                              m_r_context.swapchainImages[m_r_context.currentImageIndex],
                              VK_IMAGE_LAYOUT_UNDEFINED,
@@ -83,6 +91,7 @@ namespace vex {
                              VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                              VK_PIPELINE_STAGE_TRANSFER_BIT);
 
+        //log("Translating low res image...");
         transitionImageLayout(commandBuffer,
                              m_r_context.lowResColorImage,
                              VK_IMAGE_LAYOUT_UNDEFINED,
@@ -118,7 +127,13 @@ namespace vex {
         renderingInfo.pColorAttachments = &colorAttachment;
         renderingInfo.pDepthAttachment = &depthAttachment;
 
-        vkCmdBeginRendering(commandBuffer, &renderingInfo);
+        //log("Beggining rendering...");
+        try{
+            vkCmdBeginRendering(commandBuffer, &renderingInfo);
+        } catch (const std::exception& e) {
+            handle_exception(e);
+        }
+        //log("vkCmdBeginRendering ran");
 
         VkViewport viewport{};
         viewport.x = 0.0f;
@@ -127,27 +142,39 @@ namespace vex {
         viewport.height = static_cast<float>(m_r_context.swapchainExtent.height);
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
+        //log("setting viewport");
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        //log("vkCmdSetViewport ran");
 
         VkRect2D scissor{};
         scissor.offset = {0, 0};
         scissor.extent = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
+        //log("setting scissor");
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
+        //log("vkCmdSetScissor ran");
 
         VkImageView defaultTexture = m_p_resources->getTextureView("default");
         m_p_resources->updateTextureDescriptor(m_r_context.currentFrame, defaultTexture, 0);
 
+
+        //log("Binding pipeline...");
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_pipeline->get());
 
         auto now = std::chrono::high_resolution_clock::now();
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
+
+                //log("Getting renderable entities...");
                 auto modelView = registry.view<TransformComponent, MeshComponent>();
                 uint32_t modelIndex = 0;
                 std::vector<std::pair<entt::entity, float>> transparentEntities;
 
+
+                //log("Extracting camera pos...");
                 glm::vec3 cameraPos = extractCameraPosition(view);
 
+
+                //log("Rendering non transparent meshes");
                 for (auto entity : modelView) {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
@@ -165,6 +192,8 @@ namespace vex {
                 std::sort(transparentEntities.begin(), transparentEntities.end(),
                           [](const auto& a, const auto& b) { return a.second > b.second; });
 
+
+                //log("Drawind transparent meshes");
                 for (const auto& [entity, distance] : transparentEntities) {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
@@ -175,14 +204,19 @@ namespace vex {
                 }
 
         if (frame != 0) {
+            //log("Rendering VEXUI and ImGUI...");
             vui.render(commandBuffer, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), m_r_context.currentFrame);
             m_ui.beginFrame();
             m_ui.executeUIFunctions();
             m_ui.endFrame();
         }
 
+
+        //log("Ending rendering...");
         vkCmdEndRendering(commandBuffer);
 
+
+        //log("Translating low res color image...");
         transitionImageLayout(commandBuffer, m_r_context.lowResColorImage,
                              VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                              VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
@@ -191,6 +225,8 @@ namespace vex {
                              VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                              VK_PIPELINE_STAGE_TRANSFER_BIT);
 
+
+        //log("Bliting low res image to highres target...");
         VkImageBlit blit{};
         blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         blit.srcSubresource.mipLevel = 0;
@@ -237,6 +273,7 @@ namespace vex {
         lowResRestoreBarrier.srcAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
         lowResRestoreBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
+        //log("vkCmdPipelineBarrier.");
         vkCmdPipelineBarrier(
             commandBuffer,
             VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -247,6 +284,8 @@ namespace vex {
             2, (VkImageMemoryBarrier[]){presentBarrier, lowResRestoreBarrier}
         );
 
+
+        //log("Ending command buffer.");
         vkEndCommandBuffer(commandBuffer);
 
         VkSubmitInfo submitInfo{};
@@ -264,6 +303,8 @@ namespace vex {
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
+
+        //log("Queue submit.");
         vkQueueSubmit(
             m_r_context.graphicsQueue,
             1,
@@ -281,6 +322,8 @@ namespace vex {
         presentInfo.pSwapchains = swapchains;
         presentInfo.pImageIndices = &m_r_context.currentImageIndex;
 
+
+        //log("queue present.");
         result = vkQueuePresentKHR(m_r_context.presentQueue, &presentInfo);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
@@ -303,7 +346,18 @@ namespace vex {
         barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.image = image;
-        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ||
+                newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL) {
+                barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+                // Dodaj aspekt Stencil, jeśli używasz formatu z S8_UINT.
+                // W SwapchainManager.cpp masz formaty z S8_UINT, więc jest to bezpieczne.
+                if (m_r_context.depthFormat == VK_FORMAT_D32_SFLOAT_S8_UINT ||
+                    m_r_context.depthFormat == VK_FORMAT_D24_UNORM_S8_UINT) {
+                    barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+                }
+            } else {
+                barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            }
         barrier.subresourceRange.baseMipLevel = 0;
         barrier.subresourceRange.levelCount = 1;
         barrier.subresourceRange.baseArrayLayer = 0;
