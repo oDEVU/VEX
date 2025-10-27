@@ -43,9 +43,30 @@ file(GLOB GAME_SRC CONFIGURE_DEPENDS "Source/*.h" "Source/*.cpp")
 
 add_executable(${PROJECT_NAME} ${GAME_SRC})
 
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        "-Wl,/subsystem:windows,/ENTRY:mainCRTStartup"
+    )
+endif()
+
 # Enables stacktraces for Debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=1)
+    if(WIN32)
+        set(VULKAN_VALIDATION_DLL "${Vulkan_LIBRARY_DIR}/../Bin/VkLayer_khronos_validation.dll")
+        if(EXISTS "${VULKAN_VALIDATION_DLL}")
+            add_custom_command(
+            TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    "${VULKAN_VALIDATION_DLL}"
+                    "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+            COMMENT "Copying Vulkan validation layer DLL to Debug build directory"
+            CONFIGURATIONS Debug
+        )
+        else()
+            message(WARNING "Vulkan validation layer DLL not found at ${VULKAN_VALIDATION_DLL}")
+        endif()
+    endif()
 else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
 endif()
