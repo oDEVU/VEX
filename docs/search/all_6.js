@@ -26,7 +26,7 @@ var searchData=
   ['getgameobject_23',['GetGameObject',['../classvex_1_1SceneManager.html#a81ba17e0bcd30b9196330d55ade5e0fd',1,'vex::SceneManager']]],
   ['getinputmode_24',['getInputMode',['../classvex_1_1InputSystem.html#abeab3f484cd87ed5fd1dcbf21fe645a3',1,'vex::InputSystem::getInputMode()'],['../classvex_1_1Engine.html#a7b503ecc63cd29aeae1dd22d0a3573ef',1,'vex::Engine::getInputMode()']]],
   ['getmeshmanager_25',['getMeshManager',['../classvex_1_1Interface.html#a90d412beabb7ce16bef3ffe3443cb9b8',1,'vex::Interface']]],
-  ['getnumofinstances_26',['getNumOfInstances',['../classvex_1_1VulkanMesh.html#a376fa45ea544041ffd44c718c7b6a4a9',1,'vex::VulkanMesh']]],
+  ['getnumofinstances_26',['getNumOfInstances',['../classvex_1_1VulkanMesh.html#a018283187e61b83681b9bea1d3d6577f',1,'vex::VulkanMesh']]],
   ['getrenderer_27',['getRenderer',['../classvex_1_1Interface.html#a5717d102b53e3e0c15cf709e4844548b',1,'vex::Interface']]],
   ['getrenderresolution_28',['getRenderResolution',['../classvex_1_1ResolutionManager.html#ad9547b6b5479891fe76d271e4f3e8f36',1,'vex::ResolutionManager']]],
   ['getresolutionmode_29',['getResolutionMode',['../classvex_1_1Engine.html#a990ca389e3e97678e7a090d8903acb47',1,'vex::Engine']]],
@@ -44,5 +44,6 @@ var searchData=
   ['getworldposition_41',['getWorldPosition',['../structvex_1_1TransformComponent.html#afbae5e1a17a9b004cef187b38f7cebed',1,'vex::TransformComponent']]],
   ['getworldrotation_42',['getWorldRotation',['../structvex_1_1TransformComponent.html#a8f99915f77da88acd8d15d287183f694',1,'vex::TransformComponent']]],
   ['getworldscale_43',['getWorldScale',['../structvex_1_1TransformComponent.html#a66cad5dd776d3f5706153bfd8745b4be',1,'vex::TransformComponent']]],
-  ['gourardshading_44',['gourardShading',['../structvex_1_1enviroment.html#a099696b2a0f948fad8ac1b2624a53383',1,'vex::enviroment']]]
+  ['getzindex_44',['getZIndex',['../classvex_1_1VexUI.html#a4a05532a109fb7863680159559fe31f6',1,'vex::VexUI']]],
+  ['gourardshading_45',['gourardShading',['../structvex_1_1enviroment.html#a099696b2a0f948fad8ac1b2624a53383',1,'vex::enviroment']]]
 ];

@@ -12,5 +12,6 @@ var searchData=
   ['inputsystem_9',['InputSystem',['../classvex_1_1InputSystem.html',1,'vex::InputSystem'],['../classvex_1_1InputSystem.html#a5fe185afab2a985ea5c51e71471e57af',1,'vex::InputSystem::InputSystem()']]],
   ['inputsystem_2ehpp_10',['InputSystem.hpp',['../InputSystem_8hpp.html',1,'']]],
   ['interface_11',['Interface',['../classvex_1_1Interface.html',1,'vex::Interface'],['../classvex_1_1Interface.html#a6302482df52114edf7302c31f8303165',1,'vex::Interface::Interface()']]],
-  ['interface_2ehpp_12',['Interface.hpp',['../Interface_8hpp.html',1,'']]]
+  ['interface_2ehpp_12',['Interface.hpp',['../Interface_8hpp.html',1,'']]],
+  ['isinitialized_13',['isInitialized',['../classvex_1_1VexUI.html#a9bbc53e1d2b45083b807ab9ce23c75dc',1,'vex::VexUI']]]
 ];

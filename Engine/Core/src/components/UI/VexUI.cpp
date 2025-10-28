@@ -79,6 +79,7 @@ bool VexUI::init() {
     si.magFilter = si.minFilter = VK_FILTER_NEAREST;
     si.addressModeU = si.addressModeV = si.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
     vkCreateSampler(m_ctx.device, &si, nullptr, &m_uiSampler);
+    initialized = true;
     return true;
 }
 
@@ -290,15 +291,16 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
 }
 
 void VexUI::load(const std::string& path) {
-    std::string realPath = GetAssetPath(path);
-    auto data = m_vfs->load_file(realPath);
-    if (!data) { log("UI: cannot open %s", realPath.c_str()); return; }
+    if(initialized){
+        std::string realPath = GetAssetPath(path);
+        auto data = m_vfs->load_file(realPath);
+        if (!data) { log("UI: cannot open %s", realPath.c_str()); return; }
 
-    nlohmann::json json;
-    try { json = nlohmann::json::parse(data->data.begin(), data->data.end()); }
-    catch (const nlohmann::json::parse_error& e) { log("UI JSON error: %s", e.what()); return; }
+        nlohmann::json json;
+        try { json = nlohmann::json::parse(data->data.begin(), data->data.end()); }
+        catch (const nlohmann::json::parse_error& e) { log("UI JSON error: %s", e.what()); return; }
 
-    freeTree(m_root);
+        freeTree(m_root);
         m_root = nullptr;
         if (json.contains("root")) {
             m_root = parseNode(json["root"]);
@@ -315,6 +317,10 @@ void VexUI::load(const std::string& path) {
             loadFonts(m_root);
             loadImages(m_root);
         }
+    }else{
+        loadPending = true;
+        loadPath = path;
+    }
 }
 
 void VexUI::layout(glm::uvec2 res) {
@@ -344,12 +350,25 @@ Widget* VexUI::findById(Widget* w, const std::string& id) {
 }
 
 void VexUI::setText(const std::string& id, const std::string& txt) {
-    if (Widget* w = findById(m_root, id)) w->text = txt;
+    if (initialized){
+        if (Widget* w = findById(m_root, id)) w->text = txt;
+    }else{
+        pendingSetters.push_back([this, id, txt]() {
+            if (Widget* w = findById(m_root, id)) w->text = txt;
+        });
+    }
 }
 
 void VexUI::setOnClick(const std::string& id, std::function<void()> cb) {
-    if (Widget* w = findById(m_root, id); w && w->type == WidgetType::Button)
-        w->onClick = std::move(cb);
+    if (initialized){
+        if (Widget* w = findById(m_root, id); w && w->type == WidgetType::Button)
+            w->onClick = std::move(cb);
+    }else{
+        pendingSetters.push_back([this, id, cb]() {
+            if (Widget* w = findById(m_root, id); w && w->type == WidgetType::Button)
+                w->onClick = std::move(cb);
+        });
+    }
 }
 
 void VexUI::processEvent(const SDL_Event& ev) {

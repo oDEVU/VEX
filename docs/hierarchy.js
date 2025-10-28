@@ -47,6 +47,7 @@ var hierarchy =
     [ "vex::Submesh", "structvex_1_1Submesh.html", null ],
     [ "vex::VulkanMesh::SubmeshBuffers", "structvex_1_1VulkanMesh_1_1SubmeshBuffers.html", null ],
     [ "vex::TransformComponent", "structvex_1_1TransformComponent.html", null ],
+    [ "vex::UiComponent", "structvex_1_1UiComponent.html", null ],
     [ "vex::UIPushConstants", "structvex_1_1UIPushConstants.html", null ],
     [ "vex::UIQuad", "structvex_1_1UIQuad.html", null ],
     [ "vex::UIStyle", "structvex_1_1UIStyle.html", null ],

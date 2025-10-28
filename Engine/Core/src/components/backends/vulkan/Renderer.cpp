@@ -5,6 +5,7 @@
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
 #include <components/GameComponents/BasicComponents.hpp>
+#include <components/GameComponents/UiComponent.hpp>
 
 namespace vex {
     glm::vec3 extractCameraPosition(const glm::mat4& view) {
@@ -32,7 +33,7 @@ namespace vex {
         log("Renderer destroyed");
     }
 
-    void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, VexUI& vui, uint64_t frame) {
+    void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, uint64_t frame) {
         //log("Begining rendering...");
         if (renderResolution != m_r_context.currentRenderResolution) {
             m_r_context.currentRenderResolution = renderResolution;
@@ -205,7 +206,26 @@ namespace vex {
 
         if (frame != 0) {
             //log("Rendering VEXUI and ImGUI...");
-            vui.render(commandBuffer, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), m_r_context.currentFrame);
+            //vui.render(commandBuffer, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), m_r_context.currentFrame);
+            //
+            auto uiView = registry.view<UiComponent>();
+            std::vector<UiComponent> uiObjects;
+            for (auto entity : uiView) {
+                if(uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
+                    uiObjects.emplace_back(uiView.get<UiComponent>(entity));
+                }else{
+                    log("UiComponent not initialized");
+                }
+            }
+
+            std::sort(uiObjects.begin(), uiObjects.end(), [](const UiComponent &f, const UiComponent &s) { return f.m_vexUI->getZIndex() < s.m_vexUI->getZIndex(); });
+
+            for(const auto& uiObject : uiObjects) {
+                if(uiObject.visible){
+                    uiObject.m_vexUI->render(commandBuffer, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), m_r_context.currentFrame);
+                }
+            }
+
             m_ui.beginFrame();
             m_ui.executeUIFunctions();
             m_ui.endFrame();

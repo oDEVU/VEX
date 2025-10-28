@@ -136,9 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aef190153e927cdaa0eca92a9d523811b" id="r_aef190153e927cdaa0eca92a9d523811b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef190153e927cdaa0eca92a9d523811b">draw</a> (VkCommandBuffer cmd, VkPipelineLayout pipelineLayout, <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &amp;resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const</td></tr>
 <tr class="memdesc:aef190153e927cdaa0eca92a9d523811b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the mesh to the screen.  <br /></td></tr>
 <tr class="separator:aef190153e927cdaa0eca92a9d523811b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a376fa45ea544041ffd44c718c7b6a4a9" id="r_a376fa45ea544041ffd44c718c7b6a4a9"><td class="memItemLeft" align="right" valign="top">u_int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a376fa45ea544041ffd44c718c7b6a4a9">getNumOfInstances</a> () const</td></tr>
-<tr class="memdesc:a376fa45ea544041ffd44c718c7b6a4a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance, needed for mesh manager to know when to unload <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a>.  <br /></td></tr>
-<tr class="separator:a376fa45ea544041ffd44c718c7b6a4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a018283187e61b83681b9bea1d3d6577f" id="r_a018283187e61b83681b9bea1d3d6577f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a018283187e61b83681b9bea1d3d6577f">getNumOfInstances</a> () const</td></tr>
+<tr class="memdesc:a018283187e61b83681b9bea1d3d6577f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance, needed for mesh manager to know when to unload <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a>.  <br /></td></tr>
+<tr class="separator:a018283187e61b83681b9bea1d3d6577f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe01f872274b8a6cdc42f2d1af82d134" id="r_afe01f872274b8a6cdc42f2d1af82d134"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe01f872274b8a6cdc42f2d1af82d134">addInstance</a> ()</td></tr>
 <tr class="memdesc:afe01f872274b8a6cdc42f2d1af82d134"><td class="mdescLeft">&#160;</td><td class="mdescRight">increments number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance.  <br /></td></tr>
 <tr class="separator:afe01f872274b8a6cdc42f2d1af82d134"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,8 +154,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a54494a4b745b5374219d166db4e0bb2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a823c90a6d6120bee57ff0130c033296f" id="r_a823c90a6d6120bee57ff0130c033296f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a823c90a6d6120bee57ff0130c033296f">m_submeshTextures</a></td></tr>
 <tr class="separator:a823c90a6d6120bee57ff0130c033296f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa517d4d10744489352c3ad2aa8cb2ede" id="r_aa517d4d10744489352c3ad2aa8cb2ede"><td class="memItemLeft" align="right" valign="top">u_int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa517d4d10744489352c3ad2aa8cb2ede">numOfInstances</a> = 0</td></tr>
-<tr class="separator:aa517d4d10744489352c3ad2aa8cb2ede"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a505a8cd76207fe4be15772f6657e5d25" id="r_a505a8cd76207fe4be15772f6657e5d25"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a505a8cd76207fe4be15772f6657e5d25">numOfInstances</a> = 0</td></tr>
+<tr class="separator:a505a8cd76207fe4be15772f6657e5d25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class defining mesh object with vulkan specific data and methods. </p>
@@ -301,8 +301,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a376fa45ea544041ffd44c718c7b6a4a9" name="a376fa45ea544041ffd44c718c7b6a4a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a376fa45ea544041ffd44c718c7b6a4a9">&#9670;&#160;</a></span>getNumOfInstances()</h2>
+<a id="a018283187e61b83681b9bea1d3d6577f" name="a018283187e61b83681b9bea1d3d6577f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a018283187e61b83681b9bea1d3d6577f">&#9670;&#160;</a></span>getNumOfInstances()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -311,7 +311,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">u_int32_t vex::VulkanMesh::getNumOfInstances </td>
+          <td class="memname">int vex::VulkanMesh::getNumOfInstances </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -325,7 +325,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Helper function to get number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance, needed for mesh manager to know when to unload <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>u_int32_t </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00041">41</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
@@ -460,8 +460,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa517d4d10744489352c3ad2aa8cb2ede" name="aa517d4d10744489352c3ad2aa8cb2ede"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa517d4d10744489352c3ad2aa8cb2ede">&#9670;&#160;</a></span>numOfInstances</h2>
+<a id="a505a8cd76207fe4be15772f6657e5d25" name="a505a8cd76207fe4be15772f6657e5d25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a505a8cd76207fe4be15772f6657e5d25">&#9670;&#160;</a></span>numOfInstances</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -470,7 +470,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">u_int32_t vex::VulkanMesh::numOfInstances = 0</td>
+          <td class="memname">int vex::VulkanMesh::numOfInstances = 0</td>
         </tr>
       </table>
   </td>

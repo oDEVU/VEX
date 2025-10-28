@@ -29,6 +29,7 @@ var annotated_dup =
       [ "SceneManager", "classvex_1_1SceneManager.html", "classvex_1_1SceneManager" ],
       [ "Submesh", "structvex_1_1Submesh.html", null ],
       [ "TransformComponent", "structvex_1_1TransformComponent.html", "structvex_1_1TransformComponent" ],
+      [ "UiComponent", "structvex_1_1UiComponent.html", "structvex_1_1UiComponent" ],
       [ "UIPushConstants", "structvex_1_1UIPushConstants.html", null ],
       [ "UIQuad", "structvex_1_1UIQuad.html", null ],
       [ "UIStyle", "structvex_1_1UIStyle.html", null ],

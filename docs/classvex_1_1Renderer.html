@@ -127,9 +127,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab647f7466e1195b57864a5ead4c51cad" id="r_ab647f7466e1195b57864a5ead4c51cad"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab647f7466e1195b57864a5ead4c51cad">~Renderer</a> ()</td></tr>
 <tr class="memdesc:ab647f7466e1195b57864a5ead4c51cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> class.  <br /></td></tr>
 <tr class="separator:ab647f7466e1195b57864a5ead4c51cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3972277923b93df3b2d0c2a5088c41e" id="r_af3972277923b93df3b2d0c2a5088c41e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3972277923b93df3b2d0c2a5088c41e">renderFrame</a> (const glm::mat4 &amp;view, const glm::mat4 &amp;proj, glm::uvec2 renderResolution, entt::registry &amp;registry, <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;ui, <a class="el" href="classvex_1_1VexUI.html">VexUI</a> &amp;vui, uint64_t frame)</td></tr>
-<tr class="memdesc:af3972277923b93df3b2d0c2a5088c41e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders a frame using the provided parameters.  <br /></td></tr>
-<tr class="separator:af3972277923b93df3b2d0c2a5088c41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abed362c3e24647d248f6bbe4cdd5f15c" id="r_abed362c3e24647d248f6bbe4cdd5f15c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abed362c3e24647d248f6bbe4cdd5f15c">renderFrame</a> (const glm::mat4 &amp;view, const glm::mat4 &amp;proj, glm::uvec2 renderResolution, entt::registry &amp;registry, <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;ui, uint64_t frame)</td></tr>
+<tr class="memdesc:abed362c3e24647d248f6bbe4cdd5f15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders a frame using the provided parameters.  <br /></td></tr>
+<tr class="separator:abed362c3e24647d248f6bbe4cdd5f15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -213,7 +213,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Its created and handled by VulkanInteface constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00014">14</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00016">16</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -234,13 +234,13 @@ Private Attributes</h2></td></tr>
 
 <p>Destructor for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> class. </p>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00030">30</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00032">32</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af3972277923b93df3b2d0c2a5088c41e" name="af3972277923b93df3b2d0c2a5088c41e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3972277923b93df3b2d0c2a5088c41e">&#9670;&#160;</a></span>renderFrame()</h2>
+<a id="abed362c3e24647d248f6bbe4cdd5f15c" name="abed362c3e24647d248f6bbe4cdd5f15c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abed362c3e24647d248f6bbe4cdd5f15c">&#9670;&#160;</a></span>renderFrame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,11 +273,6 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classvex_1_1VexUI.html">VexUI</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>vui</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>frame</em></span>&#160;)</td>
         </tr>
       </table>
@@ -291,13 +286,12 @@ Private Attributes</h2></td></tr>
     <tr><td class="paramname">glm::uvec2</td><td>renderResolution - Render resolution. </td></tr>
     <tr><td class="paramname">entt::registry&amp;</td><td>registry - Entity registry. </td></tr>
     <tr><td class="paramname">ImGUIWrapper&amp;</td><td>ui - ImGUI wrapper. </td></tr>
-    <tr><td class="paramname">VexUI&amp;</td><td>vui - <a class="el" href="classvex_1_1VexUI.html" title="Class defining VexUI, it initializes the UI system, loads, renders, converts ui data,...">VexUI</a>. </td></tr>
     <tr><td class="paramname">uint64_t</td><td>frame - Frame number. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00034">34</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00036">36</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -374,7 +368,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>It is used internally to transition low resolution image to window resolution. </p>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00295">295</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00356">356</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -399,7 +393,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00074">74</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00073">73</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -423,7 +417,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00072">72</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00071">71</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -447,7 +441,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00069">69</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00068">68</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -471,7 +465,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00068">68</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00067">67</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -495,7 +489,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00071">71</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00070">70</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -519,7 +513,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00070">70</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00069">69</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -543,7 +537,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00067">67</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00066">66</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -567,7 +561,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00073">73</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00072">72</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>

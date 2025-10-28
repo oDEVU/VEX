@@ -79,10 +79,10 @@ public:
         sceneManager.loadScene("Assets/scenes/main.json", *this);
         sceneManager.sceneBegin();
 
-        m_vexUI->load("Assets/ui/example.json");
-        m_vexUI->setOnClick("pause", []() {
-            log("Pause button clicked");
-        });
+        //m_vexUI->load("Assets/ui/example.json");
+        //m_vexUI->setOnClick("pause", []() {
+        //    log("Pause button clicked");
+        //});
 
         vex::MeshComponent humanMesh = vex::createMeshFromPath("Assets/human.obj", *this);
         vex::TransformComponent humanTransform = vex::TransformComponent{
@@ -141,7 +141,7 @@ public:
 
         fps = 1/deltaTime;
 
-        m_vexUI->setText("fps", "FPS: " + std::to_string((int)fps));
+        //m_vexUI->setText("fps", "FPS: " + std::to_string((int)fps));
 
         sceneManager.sceneUpdate(deltaTime);
 

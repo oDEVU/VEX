@@ -7,7 +7,7 @@ var searchData=
   ['render_4',['render',['../classvex_1_1VexUI.html#ae2ed2215b0e78bec7e54f83a493ca5ca',1,'vex::VexUI::render()'],['../classvex_1_1Engine.html#a651671153ff5f6edc58e2d76700c6c77',1,'vex::Engine::render()']]],
   ['renderer_5',['Renderer',['../classvex_1_1Renderer.html',1,'vex::Renderer'],['../classvex_1_1Renderer.html#a2c3f75ee7ceca2464c08f9dc206fa23d',1,'vex::Renderer::Renderer()']]],
   ['renderer_2ehpp_6',['Renderer.hpp',['../Renderer_8hpp.html',1,'']]],
-  ['renderframe_7',['renderFrame',['../classvex_1_1Renderer.html#af3972277923b93df3b2d0c2a5088c41e',1,'vex::Renderer']]],
+  ['renderframe_7',['renderFrame',['../classvex_1_1Renderer.html#abed362c3e24647d248f6bbe4cdd5f15c',1,'vex::Renderer']]],
   ['res_5f240p_8',['RES_240P',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaeabc3f998c9b1f13a5bb3c52a41e6fc3',1,'vex']]],
   ['res_5f480p_9',['RES_480P',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6',1,'vex']]],
   ['resolutionmanager_10',['ResolutionManager',['../classvex_1_1ResolutionManager.html',1,'vex::ResolutionManager'],['../classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382',1,'vex::ResolutionManager::ResolutionManager()']]],

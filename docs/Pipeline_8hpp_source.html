@@ -114,61 +114,62 @@ $(function(){initNavTree('Pipeline_8hpp_source.html',''); initResizable(true); }
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="context_8hpp.html">context.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="pathUtils_8hpp.html">components/pathUtils.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="UIVertex_8hpp.html">components/UI/UIVertex.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span></div>
-<div class="foldopen" id="foldopen00020" data-start="{" data-end="};">
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html">   20</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">VulkanPipeline</a> {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">VulkanPipeline</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; r_context);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">~VulkanPipeline</a>();</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#aac43b2e87b883999cc2abfd635834a80">createGraphicsPipeline</a>(</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>            <span class="keyword">const</span> std::string&amp; vertShaderPath,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            <span class="keyword">const</span> std::string&amp; fragShaderPath,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keyword">const</span> VkVertexInputBindingDescription&amp; bindingDescription,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="keyword">const</span> std::vector&lt;VkVertexInputAttributeDescription&gt;&amp; attributeDescriptions</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        );</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d">createUIPipeline</a>(</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <span class="keyword">const</span> std::string&amp; vertShaderPath,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <span class="keyword">const</span> std::string&amp; fragShaderPath,</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <span class="keyword">const</span> VkVertexInputBindingDescription&amp; bindingDesc,</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            <span class="keyword">const</span> std::vector&lt;VkVertexInputAttributeDescription&gt;&amp; attrDesc);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html#aa2b529bcec43595666b92dca25adbd1a">   55</a></span>        VkPipeline <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#aa2b529bcec43595666b92dca25adbd1a">get</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_pipeline; }</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html#a3c4ff44fe6570165185103439aaada29">   60</a></span>        VkPipelineLayout <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a3c4ff44fe6570165185103439aaada29">layout</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_layout; }</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49">updateViewport</a>(glm::uvec2 resolution);</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;m_r_context;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        VkPipeline m_pipeline = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        VkPipelineLayout m_layout = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        glm::uvec2 m_currentRenderResolution;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        std::vector&lt;char&gt; readFile(<span class="keyword">const</span> std::string&amp; filename);</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    };</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="pathUtils_8hpp.html">components/pathUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="UIVertex_8hpp.html">components/UI/UIVertex.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span>vex {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span></div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="};">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html">   21</a></span>    <span class="keyword">class </span><a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">VulkanPipeline</a> {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">VulkanPipeline</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; r_context);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">~VulkanPipeline</a>();</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#aac43b2e87b883999cc2abfd635834a80">createGraphicsPipeline</a>(</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            <span class="keyword">const</span> std::string&amp; vertShaderPath,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keyword">const</span> std::string&amp; fragShaderPath,</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="keyword">const</span> VkVertexInputBindingDescription&amp; bindingDescription,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="keyword">const</span> std::vector&lt;VkVertexInputAttributeDescription&gt;&amp; attributeDescriptions</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        );</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d">createUIPipeline</a>(</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <span class="keyword">const</span> std::string&amp; vertShaderPath,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <span class="keyword">const</span> std::string&amp; fragShaderPath,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            <span class="keyword">const</span> VkVertexInputBindingDescription&amp; bindingDesc,</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            <span class="keyword">const</span> std::vector&lt;VkVertexInputAttributeDescription&gt;&amp; attrDesc);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html#aa2b529bcec43595666b92dca25adbd1a">   56</a></span>        VkPipeline <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#aa2b529bcec43595666b92dca25adbd1a">get</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_pipeline; }</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html#a3c4ff44fe6570165185103439aaada29">   61</a></span>        VkPipelineLayout <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a3c4ff44fe6570165185103439aaada29">layout</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_layout; }</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49">updateViewport</a>(glm::uvec2 resolution);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;m_r_context;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        VkPipeline m_pipeline = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        VkPipelineLayout m_layout = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        glm::uvec2 m_currentRenderResolution;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        std::vector&lt;char&gt; readFile(<span class="keyword">const</span> std::string&amp; filename);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    };</div>
 </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>}</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>}</div>
 <div class="ttc" id="aUIVertex_8hpp_html"><div class="ttname"><a href="UIVertex_8hpp.html">UIVertex.hpp</a></div><div class="ttdoc">This file defines structs needed for UI rendering.</div></div>
-<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a3c4ff44fe6570165185103439aaada29"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a3c4ff44fe6570165185103439aaada29">vex::VulkanPipeline::layout</a></div><div class="ttdeci">VkPipelineLayout layout() const</div><div class="ttdoc">Returns the VkPipelineLayout.</div><div class="ttdef"><b>Definition</b> <a href="#l00060">Pipeline.hpp:60</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a3c4ff44fe6570165185103439aaada29"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a3c4ff44fe6570165185103439aaada29">vex::VulkanPipeline::layout</a></div><div class="ttdeci">VkPipelineLayout layout() const</div><div class="ttdoc">Returns the VkPipelineLayout.</div><div class="ttdef"><b>Definition</b> <a href="#l00061">Pipeline.hpp:61</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a4e6b47a0e253b2f2e6a2f7118adea69d"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d">vex::VulkanPipeline::createUIPipeline</a></div><div class="ttdeci">void createUIPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDesc, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attrDesc)</div><div class="ttdoc">Creates a UI VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="Pipeline_8cpp_source.html#l00225">Pipeline.cpp:225</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a98622acc241688b8fa46d13af4cd376b"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">vex::VulkanPipeline::VulkanPipeline</a></div><div class="ttdeci">VulkanPipeline(VulkanContext &amp;r_context)</div><div class="ttdoc">Constructor for VulkanPipeline.</div><div class="ttdef"><b>Definition</b> <a href="Pipeline_8cpp_source.html#l00008">Pipeline.cpp:8</a></div></div>
-<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aa2b529bcec43595666b92dca25adbd1a"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aa2b529bcec43595666b92dca25adbd1a">vex::VulkanPipeline::get</a></div><div class="ttdeci">VkPipeline get() const</div><div class="ttdoc">Returns the VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00055">Pipeline.hpp:55</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aa2b529bcec43595666b92dca25adbd1a"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aa2b529bcec43595666b92dca25adbd1a">vex::VulkanPipeline::get</a></div><div class="ttdeci">VkPipeline get() const</div><div class="ttdoc">Returns the VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00056">Pipeline.hpp:56</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aa4a1d52319fe905983561f4d04473d49"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49">vex::VulkanPipeline::updateViewport</a></div><div class="ttdeci">void updateViewport(glm::uvec2 resolution)</div><div class="ttdoc">Updates viewport to new resolution.</div><div class="ttdef"><b>Definition</b> <a href="Pipeline_8cpp_source.html#l00035">Pipeline.cpp:35</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aac43b2e87b883999cc2abfd635834a80"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aac43b2e87b883999cc2abfd635834a80">vex::VulkanPipeline::createGraphicsPipeline</a></div><div class="ttdeci">void createGraphicsPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a graphics VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="Pipeline_8cpp_source.html#l00039">Pipeline.cpp:39</a></div></div>
 <div class="ttc" id="acontext_8hpp_html"><div class="ttname"><a href="context_8hpp.html">context.hpp</a></div><div class="ttdoc">This file defines struct holding all vulkan data, like device, surface, swapchain,...</div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
 <div class="ttc" id="apathUtils_8hpp_html"><div class="ttname"><a href="pathUtils_8hpp.html">pathUtils.hpp</a></div><div class="ttdoc">This file implements path-related utilities.</div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00023">context.hpp:23</a></div></div>
+<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00024">context.hpp:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

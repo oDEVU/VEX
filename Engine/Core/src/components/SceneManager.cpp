@@ -190,13 +190,21 @@ void SceneManager::clearScene() {
 
 void SceneManager::sceneBegin(){
     for (auto& obj : m_objects) {
-        obj->BeginPlay();
+        try{
+            obj->BeginPlay();
+        }catch(const std::exception& e){
+            log("Error: %s", e.what());
+        }
     }
 }
 
 void SceneManager::sceneUpdate(float deltaTime){
     for (auto& obj : m_objects) {
-        obj->Update(deltaTime);
+        try{
+            obj->Update(deltaTime);
+        }catch(const std::exception& e){
+            log("Error: %s", e.what());
+        }
     }
 }
 

@@ -13,10 +13,11 @@ var searchData=
   ['setresolutionmode_10',['setResolutionMode',['../classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a',1,'vex::Engine']]],
   ['setstyle_11',['setStyle',['../classvex_1_1VexUI.html#a003fd3aa45ad3730338a8649fe06bfc8',1,'vex::VexUI']]],
   ['settext_12',['setText',['../classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618',1,'vex::VexUI']]],
-  ['size_13',['size',['../structvex_1_1VirtualFileSystem_1_1FileData.html#a2ecb6cc392713f7718f4610c4489904e',1,'vex::VirtualFileSystem::FileData']]],
-  ['submesh_14',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
-  ['submeshbuffers_15',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]],
-  ['sundirection_16',['sunDirection',['../structvex_1_1enviroment.html#ab3ab7907a38eab33de0f95f36ff787ab',1,'vex::enviroment']]],
-  ['sunlight_17',['sunLight',['../structvex_1_1enviroment.html#a6e4d74a0a8925df0ed423ccac2c0a92a',1,'vex::enviroment']]],
-  ['swapchainmanager_2ehpp_18',['SwapchainManager.hpp',['../SwapchainManager_8hpp.html',1,'']]]
+  ['setzindex_13',['setZIndex',['../classvex_1_1VexUI.html#a3330bb72abd6ecbe257c4813cc4842c3',1,'vex::VexUI']]],
+  ['size_14',['size',['../structvex_1_1VirtualFileSystem_1_1FileData.html#a2ecb6cc392713f7718f4610c4489904e',1,'vex::VirtualFileSystem::FileData']]],
+  ['submesh_15',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
+  ['submeshbuffers_16',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]],
+  ['sundirection_17',['sunDirection',['../structvex_1_1enviroment.html#ab3ab7907a38eab33de0f95f36ff787ab',1,'vex::enviroment']]],
+  ['sunlight_18',['sunLight',['../structvex_1_1enviroment.html#a6e4d74a0a8925df0ed423ccac2c0a92a',1,'vex::enviroment']]],
+  ['swapchainmanager_2ehpp_19',['SwapchainManager.hpp',['../SwapchainManager_8hpp.html',1,'']]]
 ];

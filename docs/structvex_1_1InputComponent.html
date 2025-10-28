@@ -137,7 +137,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Component you add to your <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> to handle input, eg. add input bindings and mouse axis bindings. </p>
 
-<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00043">43</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00044">44</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab6b18d5459430bc38abfd71a5ee74650" name="ab6b18d5459430bc38abfd71a5ee74650"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab6b18d5459430bc38abfd71a5ee74650">&#9670;&#160;</a></span>addBinding()</h2>
@@ -186,10 +186,10 @@ Public Attributes</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>* input = entity-&gt;addComponent&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
 <div class="line">input-&gt;<a class="code hl_function" href="#ab6b18d5459430bc38abfd71a5ee74650">addBinding</a>(SDL_SCANCODE_SPACE, InputActionState::Pressed, onJump);</div>
-<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00043">InputComponent.hpp:43</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ab6b18d5459430bc38abfd71a5ee74650"><div class="ttname"><a href="#ab6b18d5459430bc38abfd71a5ee74650">vex::InputComponent::addBinding</a></div><div class="ttdeci">void addBinding(SDL_Scancode scancode, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds input binding.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00061">InputComponent.hpp:61</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00044">InputComponent.hpp:44</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_ab6b18d5459430bc38abfd71a5ee74650"><div class="ttname"><a href="#ab6b18d5459430bc38abfd71a5ee74650">vex::InputComponent::addBinding</a></div><div class="ttdeci">void addBinding(SDL_Scancode scancode, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds input binding.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00062">InputComponent.hpp:62</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00061">61</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00062">62</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
 
 </div>
 </div>
@@ -234,10 +234,10 @@ Public Attributes</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>* input = player-&gt;addComponent&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
 <div class="line">input-&gt;<a class="code hl_function" href="#ade73e4eef54216ef51d4b4c4c2e7787f">addMouseAxisBinding</a>(MouseAxis::X, onMouseMove);</div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ade73e4eef54216ef51d4b4c4c2e7787f"><div class="ttname"><a href="#ade73e4eef54216ef51d4b4c4c2e7787f">vex::InputComponent::addMouseAxisBinding</a></div><div class="ttdeci">void addMouseAxisBinding(MouseAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds axis binding.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00078">InputComponent.hpp:78</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_ade73e4eef54216ef51d4b4c4c2e7787f"><div class="ttname"><a href="#ade73e4eef54216ef51d4b4c4c2e7787f">vex::InputComponent::addMouseAxisBinding</a></div><div class="ttdeci">void addMouseAxisBinding(MouseAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds axis binding.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00079">InputComponent.hpp:79</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00021">BasicComponents.hpp:21</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00078">78</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00079">79</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
 
 </div>
 </div>
@@ -254,7 +254,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00044">44</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00045">45</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
 
 </div>
 </div>
@@ -270,7 +270,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00045">45</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00046">46</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
 
 </div>
 </div>

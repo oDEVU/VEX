@@ -10,5 +10,6 @@ var searchData=
   ['setrenderresolution_7',['setRenderResolution',['../classvex_1_1Interface.html#a050b018b8de1100f3cf2aaaab614750c',1,'vex::Interface']]],
   ['setresolutionmode_8',['setResolutionMode',['../classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a',1,'vex::Engine']]],
   ['setstyle_9',['setStyle',['../classvex_1_1VexUI.html#a003fd3aa45ad3730338a8649fe06bfc8',1,'vex::VexUI']]],
-  ['settext_10',['setText',['../classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618',1,'vex::VexUI']]]
+  ['settext_10',['setText',['../classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618',1,'vex::VexUI']]],
+  ['setzindex_11',['setZIndex',['../classvex_1_1VexUI.html#a3330bb72abd6ecbe257c4813cc4842c3',1,'vex::VexUI']]]
 ];

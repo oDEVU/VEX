@@ -152,8 +152,74 @@ public:
     /// m_vexUI->setStyle("score", scoreStyle);
     /// @endcode
     void setStyle(const std::string& id, const UIStyle& style) {
-        if (Widget* w = findById(m_root, id)) w->style = style;
-        log("Widget not found");
+        if (initialized) {
+            if (Widget* w = findById(m_root, id)) w->style = style;
+            log("Widget not found");
+        }else{
+            pendingSetters.push_back([this, id, style]() {
+                if (Widget* w = findById(m_root, id)) {
+                    w->style = style;
+                } else {
+                    printf("Widget not found: %s", id.c_str());
+                }
+            });
+        }
+    }
+
+    /// @brief Check if the UI system is initialized.
+    /// @return bool - True if initialized, false otherwise.
+    /// @details Example usage:
+    /// @code
+    /// if (m_vexUI->isInitialized()) {
+    ///     // UI system is ready for use
+    /// }
+    /// @endcode
+    bool isInitialized() {
+        return initialized;
+    }
+
+    /// @brief Get the current z-index of the UI system.
+    /// @return int - Current z-index.
+    /// @details Example usage:
+    /// @code
+    /// int zIndex = m_vexUI->getZIndex();
+    /// @endcode
+    int getZIndex() {
+        return zIndex;
+    }
+
+    /// @brief Set the z-index of the UI system.
+    /// @param zIndex - New z-index value.
+    /// @details Example usage:
+    /// @code
+    /// m_vexUI->setZIndex(10);
+    /// @endcode
+    void setZIndex(int zIndex) {
+        if(initialized){
+            this->zIndex = zIndex;
+        }else{
+            pendingSetters.push_back([this, zIndex]() {
+                this->zIndex = zIndex;
+            });
+        }
+    }
+    /// @brief Update the UI system.
+    /// @details This function should not be called directly. Its called every frame by the engine right before rendering to update pending operations.
+    /// @code
+    /// m_vexUI->update();
+    /// @endcode
+    void update() {
+        if (initialized) {
+            if (loadPending) {
+                loadPending = false;
+                load(loadPath);
+            }
+            for (auto& setter : pendingSetters) {
+                setter();
+            }
+            pendingSetters.clear();
+        }
+
     }
 
 private:
@@ -162,6 +228,13 @@ private:
     VulkanResources* m_res;
 
     Widget* m_root = nullptr;
+    bool initialized = false;
+    int zIndex = 0;
+
+    std::vector<std::function<void()>> pendingSetters;
+
+    bool loadPending = false;
+    std::string loadPath = "";
 
     std::unordered_map<std::string, struct FontAtlas> m_fontAtlases;
 

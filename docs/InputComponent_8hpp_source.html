@@ -111,71 +111,72 @@ $(function(){initNavTree('InputComponent_8hpp_source.html',''); initResizable(tr
 <a href="InputComponent_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;SDL3/SDL.h&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span></div>
-<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">   17</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    Pressed,</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    Released,</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    Held</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>};</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define SDL_MAIN_HANDLED</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;SDL3/SDL.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>vex {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span></div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="};">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">   18</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    Pressed,</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    Released,</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    Held</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>};</div>
 </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span></div>
-<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">   24</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> {</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    X,</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    Y</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>};</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
+<div class="foldopen" id="foldopen00025" data-start="{" data-end="};">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">   25</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    X,</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    Y</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>};</div>
 </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span></div>
-<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structvex_1_1InputBinding.html">   30</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputBinding.html">InputBinding</a> {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    SDL_Scancode scancode;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    std::function&lt;void(<span class="keywordtype">float</span>)&gt; action;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>};</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span></div>
+<div class="foldopen" id="foldopen00031" data-start="{" data-end="};">
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structvex_1_1InputBinding.html">   31</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputBinding.html">InputBinding</a> {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    SDL_Scancode scancode;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    std::function&lt;void(<span class="keywordtype">float</span>)&gt; action;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>};</div>
 </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
-<div class="foldopen" id="foldopen00037" data-start="{" data-end="};">
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structvex_1_1MouseAxisBinding.html">   37</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1MouseAxisBinding.html">MouseAxisBinding</a> {</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> axis;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    std::function&lt;void(<span class="keywordtype">float</span>)&gt; action;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span></div>
+<div class="foldopen" id="foldopen00038" data-start="{" data-end="};">
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="structvex_1_1MouseAxisBinding.html">   38</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1MouseAxisBinding.html">MouseAxisBinding</a> {</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> axis;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    std::function&lt;void(<span class="keywordtype">float</span>)&gt; action;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>};</div>
 </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span></div>
-<div class="foldopen" id="foldopen00043" data-start="{" data-end="};">
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html">   43</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a> {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    std::vector&lt;InputBinding&gt; bindings;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    std::vector&lt;MouseAxisBinding&gt; mouseAxisBindings;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span></div>
-<div class="foldopen" id="foldopen00061" data-start="{" data-end="}">
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">   61</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">addBinding</a>(SDL_Scancode scancode, <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        bindings.push_back({scancode, state, action});</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span></div>
+<div class="foldopen" id="foldopen00044" data-start="{" data-end="};">
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html">   44</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a> {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    std::vector&lt;InputBinding&gt; bindings;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    std::vector&lt;MouseAxisBinding&gt; mouseAxisBindings;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
+<div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">   62</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">addBinding</a>(SDL_Scancode scancode, <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        bindings.push_back({scancode, state, action});</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    }</div>
 </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span></div>
-<div class="foldopen" id="foldopen00078" data-start="{" data-end="}">
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">   78</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">addMouseAxisBinding</a>(<a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> axis, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        mouseAxisBindings.push_back({axis, action});</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span></div>
+<div class="foldopen" id="foldopen00079" data-start="{" data-end="}">
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">   79</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">addMouseAxisBinding</a>(<a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> axis, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        mouseAxisBindings.push_back({axis, action});</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
 </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>};</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>};</div>
 </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>}</div>
-<div class="ttc" id="aInputComponent_8hpp_html_ac124416b4019bbc3469060d23628f236"><div class="ttname"><a href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">vex::MouseAxis</a></div><div class="ttdeci">MouseAxis</div><div class="ttdoc">Enum representing the axis of a mouse.</div><div class="ttdef"><b>Definition</b> <a href="#l00024">InputComponent.hpp:24</a></div></div>
-<div class="ttc" id="aInputComponent_8hpp_html_afa59d168ebb1f4a027aa18468ce8baee"><div class="ttname"><a href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">vex::InputActionState</a></div><div class="ttdeci">InputActionState</div><div class="ttdoc">Enum representing the state of an input action.</div><div class="ttdef"><b>Definition</b> <a href="#l00017">InputComponent.hpp:17</a></div></div>
-<div class="ttc" id="astructvex_1_1InputBinding_html"><div class="ttname"><a href="structvex_1_1InputBinding.html">vex::InputBinding</a></div><div class="ttdoc">Struct representing an input binding. SDL_Scancode, state and std::function containing the action to ...</div><div class="ttdef"><b>Definition</b> <a href="#l00030">InputComponent.hpp:30</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="#l00043">InputComponent.hpp:43</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ab6b18d5459430bc38abfd71a5ee74650"><div class="ttname"><a href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">vex::InputComponent::addBinding</a></div><div class="ttdeci">void addBinding(SDL_Scancode scancode, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds input binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00061">InputComponent.hpp:61</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ade73e4eef54216ef51d4b4c4c2e7787f"><div class="ttname"><a href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">vex::InputComponent::addMouseAxisBinding</a></div><div class="ttdeci">void addMouseAxisBinding(MouseAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds axis binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00078">InputComponent.hpp:78</a></div></div>
-<div class="ttc" id="astructvex_1_1MouseAxisBinding_html"><div class="ttname"><a href="structvex_1_1MouseAxisBinding.html">vex::MouseAxisBinding</a></div><div class="ttdoc">Struct representing an axis binding. Axis and std::function containing the action to be performed.</div><div class="ttdef"><b>Definition</b> <a href="#l00037">InputComponent.hpp:37</a></div></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>}</div>
+<div class="ttc" id="aInputComponent_8hpp_html_ac124416b4019bbc3469060d23628f236"><div class="ttname"><a href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">vex::MouseAxis</a></div><div class="ttdeci">MouseAxis</div><div class="ttdoc">Enum representing the axis of a mouse.</div><div class="ttdef"><b>Definition</b> <a href="#l00025">InputComponent.hpp:25</a></div></div>
+<div class="ttc" id="aInputComponent_8hpp_html_afa59d168ebb1f4a027aa18468ce8baee"><div class="ttname"><a href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">vex::InputActionState</a></div><div class="ttdeci">InputActionState</div><div class="ttdoc">Enum representing the state of an input action.</div><div class="ttdef"><b>Definition</b> <a href="#l00018">InputComponent.hpp:18</a></div></div>
+<div class="ttc" id="astructvex_1_1InputBinding_html"><div class="ttname"><a href="structvex_1_1InputBinding.html">vex::InputBinding</a></div><div class="ttdoc">Struct representing an input binding. SDL_Scancode, state and std::function containing the action to ...</div><div class="ttdef"><b>Definition</b> <a href="#l00031">InputComponent.hpp:31</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="#l00044">InputComponent.hpp:44</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_ab6b18d5459430bc38abfd71a5ee74650"><div class="ttname"><a href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">vex::InputComponent::addBinding</a></div><div class="ttdeci">void addBinding(SDL_Scancode scancode, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds input binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00062">InputComponent.hpp:62</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_ade73e4eef54216ef51d4b4c4c2e7787f"><div class="ttname"><a href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">vex::InputComponent::addMouseAxisBinding</a></div><div class="ttdeci">void addMouseAxisBinding(MouseAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds axis binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00079">InputComponent.hpp:79</a></div></div>
+<div class="ttc" id="astructvex_1_1MouseAxisBinding_html"><div class="ttname"><a href="structvex_1_1MouseAxisBinding.html">vex::MouseAxisBinding</a></div><div class="ttdoc">Struct representing an axis binding. Axis and std::function containing the action to be performed.</div><div class="ttdef"><b>Definition</b> <a href="#l00038">InputComponent.hpp:38</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

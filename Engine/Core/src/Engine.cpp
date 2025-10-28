@@ -5,6 +5,7 @@
 #include "components/VirtualFileSystem.hpp"
 #include "components/Window.hpp"
 #include "components/pathUtils.hpp"
+#include <components/GameComponents/UiComponent.hpp>
 
 #include "components/backends/vulkan/Interface.hpp"
 #include "components/backends/vulkan/VulkanImGUIWrapper.hpp"
@@ -34,10 +35,18 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
-    m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
-    m_vexUI->init();
+    //m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
+    //m_vexUI->init();
 
     log("Engine initialized successfully");
+}
+
+std::shared_ptr<Interface> Engine::getInterface() {
+    return m_interface;
+}
+
+std::shared_ptr<VexUI> Engine::createVexUI(){
+    return std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
 }
 
 void Engine::run() {
@@ -54,7 +63,15 @@ void Engine::run() {
             m_inputSystem->processEvent(event, deltaTime);
             processEvent(event, deltaTime);
             m_imgui->processEvent(&event);
-            m_vexUI->processEvent(event);
+            //m_vexUI->processEvent(event);
+            //
+            auto uiView = m_registry.view<UiComponent>();
+            std::vector<UiComponent> uiObjects;
+            for (auto entity : uiView) {
+                if(uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
+                    uiView.get<UiComponent>(entity).m_vexUI->processEvent(event);
+                }
+            }
             switch (event.type) {
                 case SDL_EVENT_QUIT:
                     m_running = false;
@@ -77,8 +94,30 @@ void Engine::run() {
         m_inputSystem->update(deltaTime);
 
         if(m_frame > 0){
+
+            auto uiView = m_registry.view<UiComponent>();
+            std::vector<UiComponent> uiObjects;
+            for (auto entity : uiView) {
+                if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
+                    //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
+                    uiView.get<UiComponent>(entity).m_vexUI->init();
+                    uiView.get<UiComponent>(entity).m_vexUI->update();
+                }
+            }
+
             update(deltaTime);
         }else{
+
+            auto uiView = m_registry.view<UiComponent>();
+            std::vector<UiComponent> uiObjects;
+            for (auto entity : uiView) {
+                if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
+                    //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
+                    uiView.get<UiComponent>(entity).m_vexUI->init();
+                    uiView.get<UiComponent>(entity).m_vexUI->update();
+                }
+            }
+
             beginGame();
         }
 
@@ -114,7 +153,7 @@ void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
 void Engine::beginGame() {}
 void Engine::render() {
-    log("Render function called");
+    //log("Render function called");
     auto renderRes = m_resolutionManager->getRenderResolution();
 
     glm::mat4 view = glm::mat4(1.0f);
@@ -137,14 +176,14 @@ void Engine::render() {
     );
     proj[1][1] *= -1;
 
-    log("Calling Renderer::renderFrame()");
+    //log("Calling Renderer::renderFrame()");
     try{
-        m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, *m_vexUI, m_frame);
+        m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, m_frame);
     } catch (const std::exception& e) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Frame not in fact rendered :C");
         handle_exception(e);
     }
-    log("Frame Rendered");
+    //log("Frame Rendered");
 }
 
 }

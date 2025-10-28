@@ -70,10 +70,10 @@ public:
     /// @return enviroment - Current environment settings.
     enviroment getEnvironmentSettings();
 
-    std::shared_ptr<Interface> getInterface() { return m_interface; }
+    std::shared_ptr<Interface> getInterface();// { return m_interface; }
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
     entt::registry& getRegistry() { return m_registry; }
-    std::shared_ptr<VexUI> getVexUI() { return m_vexUI; }
+    std::shared_ptr<VexUI> createVexUI();// { return std::make_unique<VexUI>(m_interface->getContext(), m_vfs.get(), m_interface->getResources()); }
 
     /// @brief Internal virtual function for handling window/keyboard events.
     /// @param SDL_Event - Event to process.
@@ -98,7 +98,7 @@ protected:
     std::shared_ptr<ImGUIWrapper> m_imgui;
     std::unique_ptr<InputSystem> m_inputSystem;
     std::shared_ptr<VirtualFileSystem> m_vfs;
-    std::shared_ptr<VexUI> m_vexUI;
+    //std::shared_ptr<VexUI> m_vexUI;
 
     entt::registry m_registry;
 

@@ -44,9 +44,8 @@ namespace vex {
         /// @param glm::uvec2 renderResolution - Render resolution.
         /// @param entt::registry& registry - Entity registry.
         /// @param ImGUIWrapper& ui - ImGUI wrapper.
-        /// @param VexUI& vui - VexUI.
         /// @param uint64_t frame - Frame number.
-        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& ui, VexUI& vui, uint64_t frame);
+        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& ui, uint64_t frame);
 
     private:
         /// @brief Helper function for image transition

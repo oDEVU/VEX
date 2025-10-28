@@ -152,6 +152,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a003fd3aa45ad3730338a8649fe06bfc8" id="r_a003fd3aa45ad3730338a8649fe06bfc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a003fd3aa45ad3730338a8649fe06bfc8">setStyle</a> (const std::string &amp;id, const <a class="el" href="structvex_1_1UIStyle.html">UIStyle</a> &amp;style)</td></tr>
 <tr class="memdesc:a003fd3aa45ad3730338a8649fe06bfc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a UI element's style.  <br /></td></tr>
 <tr class="separator:a003fd3aa45ad3730338a8649fe06bfc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bbc53e1d2b45083b807ab9ce23c75dc" id="r_a9bbc53e1d2b45083b807ab9ce23c75dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bbc53e1d2b45083b807ab9ce23c75dc">isInitialized</a> ()</td></tr>
+<tr class="memdesc:a9bbc53e1d2b45083b807ab9ce23c75dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the UI system is initialized.  <br /></td></tr>
+<tr class="separator:a9bbc53e1d2b45083b807ab9ce23c75dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a05532a109fb7863680159559fe31f6" id="r_a4a05532a109fb7863680159559fe31f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a05532a109fb7863680159559fe31f6">getZIndex</a> ()</td></tr>
+<tr class="memdesc:a4a05532a109fb7863680159559fe31f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current z-index of the UI system.  <br /></td></tr>
+<tr class="separator:a4a05532a109fb7863680159559fe31f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3330bb72abd6ecbe257c4813cc4842c3" id="r_a3330bb72abd6ecbe257c4813cc4842c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3330bb72abd6ecbe257c4813cc4842c3">setZIndex</a> (int zIndex)</td></tr>
+<tr class="memdesc:a3330bb72abd6ecbe257c4813cc4842c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the z-index of the UI system.  <br /></td></tr>
+<tr class="separator:a3330bb72abd6ecbe257c4813cc4842c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43c4d01e222e4c629b2883b3037da61d" id="r_a43c4d01e222e4c629b2883b3037da61d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43c4d01e222e4c629b2883b3037da61d">update</a> ()</td></tr>
+<tr class="memdesc:a43c4d01e222e4c629b2883b3037da61d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the UI system.  <br /></td></tr>
+<tr class="separator:a43c4d01e222e4c629b2883b3037da61d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -191,6 +203,16 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a24a0b42531c8cf300413919f373b879b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e6fe6d77ff3ac4d48e98bbd919ccd63" id="r_a1e6fe6d77ff3ac4d48e98bbd919ccd63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1Widget.html">Widget</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e6fe6d77ff3ac4d48e98bbd919ccd63">m_root</a> = nullptr</td></tr>
 <tr class="separator:a1e6fe6d77ff3ac4d48e98bbd919ccd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42dbe5492c40423e848f2e8971321656" id="r_a42dbe5492c40423e848f2e8971321656"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42dbe5492c40423e848f2e8971321656">initialized</a> = false</td></tr>
+<tr class="separator:a42dbe5492c40423e848f2e8971321656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a497f33368bdc38523705d63f5d9a583c" id="r_a497f33368bdc38523705d63f5d9a583c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a497f33368bdc38523705d63f5d9a583c">zIndex</a> = 0</td></tr>
+<tr class="separator:a497f33368bdc38523705d63f5d9a583c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af39aac19f3028742bc845d6678874b57" id="r_af39aac19f3028742bc845d6678874b57"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::function&lt; void()&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af39aac19f3028742bc845d6678874b57">pendingSetters</a></td></tr>
+<tr class="separator:af39aac19f3028742bc845d6678874b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7df376985255e518bcc46b8bc7d3d94" id="r_aa7df376985255e518bcc46b8bc7d3d94"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7df376985255e518bcc46b8bc7d3d94">loadPending</a> = false</td></tr>
+<tr class="separator:aa7df376985255e518bcc46b8bc7d3d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7f3d023fedf2414c07c54f88cc54ce3" id="r_ae7f3d023fedf2414c07c54f88cc54ce3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7f3d023fedf2414c07c54f88cc54ce3">loadPath</a> = &quot;&quot;</td></tr>
+<tr class="separator:ae7f3d023fedf2414c07c54f88cc54ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8a17408cd888f7a5e31774ce3d6443e" id="r_ac8a17408cd888f7a5e31774ce3d6443e"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, struct <a class="el" href="structvex_1_1FontAtlas.html">FontAtlas</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8a17408cd888f7a5e31774ce3d6443e">m_fontAtlases</a></td></tr>
 <tr class="separator:ac8a17408cd888f7a5e31774ce3d6443e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f19f14a8aa12fb4fe7655c8203ee68f" id="r_a1f19f14a8aa12fb4fe7655c8203ee68f"><td class="memItemLeft" align="right" valign="top">VkBuffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f19f14a8aa12fb4fe7655c8203ee68f">m_vb</a> = VK_NULL_HANDLE</td></tr>
@@ -298,7 +320,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00442">442</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00461">461</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -329,7 +351,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00368">368</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00387">387</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -360,7 +382,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00339">339</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00345">345</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -391,7 +413,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00324">324</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00330">330</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -418,7 +440,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00646">646</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00665">665</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -498,6 +520,37 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4a05532a109fb7863680159559fe31f6" name="a4a05532a109fb7863680159559fe31f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a05532a109fb7863680159559fe31f6">&#9670;&#160;</a></span>getZIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int vex::VexUI::getZIndex </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the current z-index of the UI system. </p>
+<dl class="section return"><dt>Returns</dt><dd>int - Current z-index.</dd></dl>
+<p>Example usage: </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> zIndex = m_vexUI-&gt;getZIndex();</div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00187">187</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a574755bc5cf4a1aaafef0b5b95611a72" name="a574755bc5cf4a1aaafef0b5b95611a72"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a574755bc5cf4a1aaafef0b5b95611a72">&#9670;&#160;</a></span>init()</h2>
 
@@ -516,6 +569,39 @@ Private Attributes</h2></td></tr>
 <p>Initialize the UI system, components needed later on. </p>
 
 <p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00068">68</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9bbc53e1d2b45083b807ab9ce23c75dc" name="a9bbc53e1d2b45083b807ab9ce23c75dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bbc53e1d2b45083b807ab9ce23c75dc">&#9670;&#160;</a></span>isInitialized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VexUI::isInitialized </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if the UI system is initialized. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool - True if initialized, false otherwise.</dd></dl>
+<p>Example usage: </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (m_vexUI-&gt;isInitialized()) {</div>
+<div class="line">    <span class="comment">// UI system is ready for use</span></div>
+<div class="line">}</div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00177">177</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -542,7 +628,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00320">320</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00326">326</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -570,7 +656,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Example usage: </p><div class="fragment"><div class="line">m_vexUI-&gt;load(<span class="stringliteral">&quot;Assets/ui/example.json&quot;</span>);</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00292">292</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00293">293</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -597,7 +683,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00085">85</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00086">86</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -624,7 +710,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00140">140</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00141">141</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -670,7 +756,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00411">411</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00430">430</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -697,7 +783,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00149">149</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00150">150</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -724,7 +810,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00355">355</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00374">374</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -768,7 +854,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00564">564</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00583">583</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -804,7 +890,7 @@ Private Attributes</h2></td></tr>
 <div class="line">});</div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a1e76fad2fc6915f89fbc9975e63e8f01"><div class="ttname"><a href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a></div><div class="ttdeci">void log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00052">errorUtils.hpp:52</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00350">350</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00362">362</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
@@ -880,7 +966,73 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Example usage: </p><div class="fragment"><div class="line">m_vexUI-&gt;setText(<span class="stringliteral">&quot;score&quot;</span>, <span class="stringliteral">&quot;FPS: &quot;</span> + std::to_string(fps));</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00346">346</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00352">352</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3330bb72abd6ecbe257c4813cc4842c3" name="a3330bb72abd6ecbe257c4813cc4842c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3330bb72abd6ecbe257c4813cc4842c3">&#9670;&#160;</a></span>setZIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VexUI::setZIndex </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>zIndex</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the z-index of the UI system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zIndex</td><td>- New z-index value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example usage: </p><div class="fragment"><div class="line">m_vexUI-&gt;setZIndex(10);</div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00197">197</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a43c4d01e222e4c629b2883b3037da61d" name="a43c4d01e222e4c629b2883b3037da61d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43c4d01e222e4c629b2883b3037da61d">&#9670;&#160;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VexUI::update </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Update the UI system. </p>
+<p>This function should not be called directly. Its called every frame by the engine right before rendering to update pending operations. </p><div class="fragment"><div class="line">m_vexUI-&gt;update();</div>
+</div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00211">211</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -907,11 +1059,83 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00636">636</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8cpp_source.html#l00655">655</a> of file <a class="el" href="VexUI_8cpp_source.html">VexUI.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a42dbe5492c40423e848f2e8971321656" name="a42dbe5492c40423e848f2e8971321656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42dbe5492c40423e848f2e8971321656">&#9670;&#160;</a></span>initialized</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VexUI::initialized = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00231">231</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae7f3d023fedf2414c07c54f88cc54ce3" name="ae7f3d023fedf2414c07c54f88cc54ce3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7f3d023fedf2414c07c54f88cc54ce3">&#9670;&#160;</a></span>loadPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string vex::VexUI::loadPath = &quot;&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00237">237</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa7df376985255e518bcc46b8bc7d3d94" name="aa7df376985255e518bcc46b8bc7d3d94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7df376985255e518bcc46b8bc7d3d94">&#9670;&#160;</a></span>loadPending</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VexUI::loadPending = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00236">236</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a6cc103bc950e4eaafa11451b8e04a724" name="a6cc103bc950e4eaafa11451b8e04a724"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6cc103bc950e4eaafa11451b8e04a724">&#9670;&#160;</a></span>m_ctx</h2>
 
@@ -932,7 +1156,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00160">160</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00226">226</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -956,7 +1180,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00166">166</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00239">239</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -980,7 +1204,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00162">162</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00228">228</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -1004,7 +1228,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00164">164</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00230">230</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -1028,7 +1252,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00171">171</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00244">244</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -1052,7 +1276,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00168">168</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00241">241</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -1076,7 +1300,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00169">169</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00242">242</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -1100,7 +1324,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00170">170</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00243">243</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
@@ -1124,7 +1348,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00161">161</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00227">227</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af39aac19f3028742bc845d6678874b57" name="af39aac19f3028742bc845d6678874b57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af39aac19f3028742bc845d6678874b57">&#9670;&#160;</a></span>pendingSetters</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::function&lt;void()&gt; &gt; vex::VexUI::pendingSetters</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00234">234</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a497f33368bdc38523705d63f5d9a583c" name="a497f33368bdc38523705d63f5d9a583c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a497f33368bdc38523705d63f5d9a583c">&#9670;&#160;</a></span>zIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int vex::VexUI::zIndex = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="VexUI_8hpp_source.html#l00232">232</a> of file <a class="el" href="VexUI_8hpp_source.html">VexUI.hpp</a>.</p>
 
 </div>
 </div>
