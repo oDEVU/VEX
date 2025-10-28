@@ -105,7 +105,9 @@ void Engine::run() {
                 }
             }
 
-            update(deltaTime);
+            if(!m_paused){
+                update(deltaTime);
+            }
         }else{
 
             auto uiView = m_registry.view<UiComponent>();

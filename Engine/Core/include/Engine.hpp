@@ -50,6 +50,10 @@ public:
     /// @param ResolutionMode mode - Enum storing resolution modes.
     void setResolutionMode(ResolutionMode mode);
 
+    /// @brief Internal function for handling pausing and resuming the game.
+    /// @param bool paused - Whether the game should be paused or resumed.
+    void setPaused(bool paused) { m_paused = paused; }
+
     /// @brief Returns the current resolution mode.
     /// @return ResolutionMode - Current resolution mode.
     ResolutionMode getResolutionMode() const { return m_resolutionManager->getCurrentMode(); }
@@ -91,6 +95,7 @@ public:
     /// @see vex::Renderer::renderFrame()
     /// @param float deltaTime - Time since last frame.
     virtual void render();
+
 protected:
     std::shared_ptr<Window> m_window;
     std::shared_ptr<Interface> m_interface;
@@ -103,6 +108,7 @@ protected:
     entt::registry m_registry;
 
     bool m_running = true;
+    bool m_paused = false;
     int m_frame = 0;
 
     GameInfo m_gameInfo;

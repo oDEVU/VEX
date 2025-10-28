@@ -18,10 +18,7 @@ public:
         log("Player \"%s\" started", GetComponent<NameComponent>().name.c_str());
 
         //GetComponent<UiComponent>().m_vexUI->init();
-        GetComponent<UiComponent>().m_vexUI->load("Assets/ui/example.json");
-        GetComponent<UiComponent>().m_vexUI->setOnClick("pause", []() {
-            log("Pause button clicked");
-        });
+        resumeGame();
 
         //Camera = new vex::CameraObject(
         //    m_engine,
@@ -56,6 +53,10 @@ public:
             GetComponent<UiComponent>().visible = !GetComponent<UiComponent>().visible;
         });
 
+        inputComp.addBinding(SDL_SCANCODE_P, vex::InputActionState::Pressed, [this](float) {
+            pauseGame();
+        });
+
         // Axis inputs dont need delta time since movement beetween frames will be proportionaly smaller
         inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis) {
             GetComponent<vex::TransformComponent>().rotation.y += axis * 0.05;
@@ -65,6 +66,26 @@ public:
         });
 
         AddComponent(inputComp);
+    }
+
+    void pauseGame() {
+        std::shared_ptr<VexUI> ui = GetComponent<UiComponent>().m_vexUI;
+        ui->load("Assets/ui/pause.json");
+        ui->setOnClick("resume", [this]() {
+            this->resumeGame();
+        });
+        m_engine.setInputMode(vex::InputMode::UI);
+        m_engine.setPaused(true);
+    }
+
+    void resumeGame() {
+        std::shared_ptr<VexUI> ui = GetComponent<UiComponent>().m_vexUI;
+        ui->load("Assets/ui/example.json");
+        ui->setOnClick("pause", [this]() {
+            this->pauseGame();
+        });
+        m_engine.setInputMode(vex::InputMode::Game);
+        m_engine.setPaused(false);
     }
 
     void Update(float deltaTime) override {

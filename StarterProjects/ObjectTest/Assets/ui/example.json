@@ -3,6 +3,7 @@
     "layout": "column",
     "justify": "space-between",
     "align": "flex-start",
+    "zindex": 1,
     "padding": 8,
     "children": [
       {
@@ -22,8 +23,8 @@
         "position": "absolute",
         "bottom": 5,
         "right": 5,
-        "image": "Assets/LogoTexture.png",
-        "size": [64, 64]
+        "image": "Assets/ui/RenderedLogo.png",
+        "size": [96, 64]
       },
       {
         "type": "container",
@@ -40,7 +41,7 @@
           {
             "type": "label",
             "id": "quest1",
-            "text": "Quest 1: Slay 5 goblins",
+            "text": "Text aligned to the right",
             "textAlign": "right",
             "style": {
               "font": "Assets/ui/fonts/vcr.ttf",
@@ -51,7 +52,7 @@
           {
             "type": "label",
             "id": "quest2",
-            "text": "Quest 2: Find the key",
+            "text": "Text aligned to the left",
             "style": {
               "font": "Assets/ui/fonts/vcr.ttf",
               "fontSize": 14,

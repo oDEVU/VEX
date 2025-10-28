@@ -1,0 +1,41 @@
+{
+  "root": {
+    "layout": "column",
+    "justify": "center",
+    "align": "center",
+    "zindex": 1,
+    "padding": 24,
+    "style": {
+      "bgColor": [0, 0, 0, 0.8]
+    },
+    "children": [
+      {
+        "type": "label",
+        "id": "label",
+        "text": "Game paused",
+        "size": [400, 60],
+        "style": {
+          "font": "Assets/ui/fonts/vcr.ttf",
+          "size": 50,
+          "color": [1.0, 1.0, 1.0, 1.0]
+        }
+      },
+      {
+        "type": "button",
+        "id": "resume",
+        "text": "Resume",
+        "margin": 8,
+        "borderWidth": 3,
+        "borderColor": [0.0, 0.0, 0.0, 1.0],
+        "textAlign": "center",
+        "style": {
+          "font": "Assets/ui/fonts/vcr.ttf",
+          "size": 20,
+          "color": [1.0, 1.0, 1.0, 1.0],
+          "bgColor": [0.2, 0.2, 0.2, 0.8]
+        },
+        "size": [120, 32]
+      }
+    ]
+  }
+}
