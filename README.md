@@ -28,6 +28,8 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 Engine documentation can be found under: https://odevu.github.io/VEX/
 It can also be regenerated locally by using doxygen.
 
+There are also code sample avaiable for creating in engine: https://odevu.github.io/VEX/samples/
+
 ## Building the Project (Curently you build engine with project)
 
 This guide provides the necessary steps for setting up your environment, compiling the custom build tools, and finally compiling the project itself.
