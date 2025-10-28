@@ -1,0 +1,1 @@
+import{_ as t,c as e,o as s,b as o}from"./app.d3030ee2.js";const f=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"samples/UI/button.md"}'),a={name:"samples/UI/button.md"},n=o("p",null,"TODO",-1),r=[n];function c(_,p,d,l,i,m){return s(),e("div",null,r)}const h=t(a,[["render",c]]);export{f as __pageData,h as default};
