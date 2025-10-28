@@ -31,7 +31,7 @@ It can also be regenerated locally by using doxygen.
 
 There are also code sample avaiable for creating in engine projects: https://odevu.github.io/VEX/samples/
 
-## Building the Project (Curently you build engine with project)
+## Building the Project (Curently you build engine with a project)
 This guide provides the necessary steps for setting up your environment, compiling the custom build tools, and finally compiling the project itself.
 
 ---
@@ -64,7 +64,7 @@ You must install all the following dependencies for your specific operating syst
 
 ### Build Steps
 
-#### 1. Build the Build Tools
+#### 1. Build the Building Tools
 The engine uses a custom compilation utility called **`ProjectBuilder`**. You must build this tool first.
 
 1.  Navigate to the **`Engine/BuildTools`** directory in your terminal.
@@ -111,15 +111,15 @@ You need to provide the tool with the path to your project's root folder and spe
 - Better shader pipeline
 
 ## Liblaries use by engine:
-Alk liblaries are included as git submpdules. Their respective licenses may differ from engine license but all of them are on some sort of opensource license.
+All liblaries are included as git submodules. Their respective licenses may differ from engine license but all of them are on some sort of opensource license.
 
-[SDL3](https://github.com/libsdl-org/SDL/)
-[Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/)
-[Volk](https://github.com/zeux/volk/)
-[glm](https://github.com/g-truc/glm/)
-[assimp](https://github.com/assimp/assimp)
-[cpptrace](https://github.com/jeremy-rifkin/cpptrace)
-[entt](https://github.com/skypjack/entt)
-[Dear ImGui](https://github.com/ocornut/imgui)
-[nlohmann/json](https://github.com/nlohmann/json/)
-[yoga](https://github.com/facebook/yoga)
+- [SDL3](https://github.com/libsdl-org/SDL/)
+- [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/)
+- [Volk](https://github.com/zeux/volk/)
+- [glm](https://github.com/g-truc/glm/)
+- [assimp](https://github.com/assimp/assimp)
+- [cpptrace](https://github.com/jeremy-rifkin/cpptrace)
+- [entt](https://github.com/skypjack/entt)
+- [Dear ImGui](https://github.com/ocornut/imgui)
+- [nlohmann/json](https://github.com/nlohmann/json/)
+- [yoga](https://github.com/facebook/yoga)
