@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a,b as s}from"./app.cca696e2.js";const u=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"samples/UI/label.md"}'),o={name:"samples/UI/label.md"},n=s("p",null,"TODO",-1),r=[n];function c(l,_,p,d,i,m){return a(),t("div",null,r)}const h=e(o,[["render",c]]);export{u as __pageData,h as default};
