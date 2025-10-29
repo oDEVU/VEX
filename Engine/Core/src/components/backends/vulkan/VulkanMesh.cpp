@@ -35,6 +35,7 @@ namespace vex {
 
         m_submeshBuffers.reserve(meshData.submeshes.size());
         m_submeshTextures.reserve(meshData.submeshes.size());
+        m_cpuSubmeshData = meshData.submeshes;
 
         for (const auto& srcSubmesh : meshData.submeshes) {
             SubmeshBuffers buffers{};
@@ -74,8 +75,261 @@ namespace vex {
         }
     }
 
+    void VulkanMesh::extractTransparentTriangles(
+        const glm::mat4& modelMatrix,
+        const glm::vec3& cameraPos,
+        uint32_t modelIndex,
+        uint32_t frameIndex,
+        std::vector<TransparentTriangle>& outTriangles
+    ) {
+        for (uint32_t submeshIndex = 0; submeshIndex < m_cpuSubmeshData.size(); ++submeshIndex) {
+            const auto& submesh = m_cpuSubmeshData[submeshIndex];
+            const auto& indices = submesh.indices;
+            const auto& vertices = submesh.vertices;
+
+            for (uint32_t i = 0; i < indices.size(); i += 3) {
+                uint32_t i0 = indices[i + 0];
+                uint32_t i1 = indices[i + 1];
+                uint32_t i2 = indices[i + 2];
+
+                const glm::vec3& p0 = vertices[i0].position;
+                const glm::vec3& p1 = vertices[i1].position;
+                const glm::vec3& p2 = vertices[i2].position;
+
+                glm::vec3 center_model = (p0 + p1 + p2) / 3.0f;
+
+                glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
+                glm::vec3 translation_vector = glm::vec3(modelMatrix[3]);
+
+                glm::vec3 center_world = rotation_scale_matrix * center_model + translation_vector;
+
+                float distance = glm::length(center_world - cameraPos);
+
+                outTriangles.push_back({
+                    distance,
+                    modelIndex,
+                    frameIndex,
+                    i,
+                    submeshIndex,
+                    this
+                });
+            }
+        }
+    }
+
+    void VulkanMesh::drawTriangle(
+        VkCommandBuffer cmd,
+        VkPipelineLayout pipelineLayout,
+        VulkanResources& resources,
+        uint32_t frameIndex,
+        uint32_t modelIndex,
+        uint32_t submeshIndex,
+        uint32_t firstIndex,
+        float currentTime,
+        glm::uvec2 currentRenderResolution
+    ) const {
+        const auto& buffers = m_submeshBuffers[submeshIndex];
+        const auto& textureName = m_submeshTextures[submeshIndex];
+
+        uint32_t textureIndex = resources.getTextureIndex(textureName);
+
+        if (textureIndex >= m_r_context.MAX_TEXTURES) {
+            SDL_LogError(SDL_LOG_CATEGORY_RENDER,
+                       "Invalid texture index %u for '%s' (Max: %u)",
+                       textureIndex, textureName.c_str(), m_r_context.MAX_TEXTURES);
+            textureIndex = 0;
+        }
+
+        uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+
+        std::array<VkDescriptorSet, 2> descriptorSets = {
+            resources.getDescriptorSet(frameIndex),
+            resources.getTextureDescriptorSet(frameIndex, textureIndex)
+        };
+
+        vkCmdBindDescriptorSets(
+            cmd,
+            VK_PIPELINE_BIND_POINT_GRAPHICS,
+            pipelineLayout,
+            0,
+            descriptorSets.size(),
+            descriptorSets.data(),
+            1,
+            &dynamicOffset
+        );
+
+        PushConstants modelPush{};
+        const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
+
+        if (textureExists) {
+            modelPush.color = glm::vec4(1.0f);
+        } else {
+            modelPush.color = glm::vec4(1.0f);
+            if(!textureName.empty()) {
+                log("Missing texture: %s", textureName.c_str());
+            }
+        }
+
+        modelPush.snapResolution = 1.f;
+        modelPush.jitterIntensity = 0.5f;
+
+        if(m_r_context.m_enviroment.vertexSnapping){
+            modelPush.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
+        }
+
+        if(m_r_context.m_enviroment.passiveVertexJitter){
+            modelPush.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
+        }
+
+        if(m_r_context.m_enviroment.affineWarping){
+            modelPush.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
+        }
+
+        if(m_r_context.m_enviroment.colorQuantization){
+            modelPush.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
+        }
+
+        if(m_r_context.m_enviroment.ntfsArtifacts){
+            modelPush.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
+        }
+
+        if(m_r_context.m_enviroment.gourardShading){
+            modelPush.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
+        }
+
+        modelPush.renderResolution = currentRenderResolution;
+        modelPush.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
+        modelPush.time = currentTime;
+        modelPush.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(currentRenderResolution.y);
+
+        modelPush.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
+        modelPush.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
+        modelPush.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
+        modelPush.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
+
+        vkCmdPushConstants(
+            cmd,
+            pipelineLayout,
+            VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+            0,
+            sizeof(PushConstants),
+            &modelPush
+        );
+
+        VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
+        vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+
+        vkCmdDrawIndexed(cmd, 3, 1, firstIndex, 0, 0);
+    }
+
+    void VulkanMesh::bindAndDrawBatched(
+        VkCommandBuffer cmd,
+        VkPipelineLayout pipelineLayout,
+        VulkanResources& resources,
+        uint32_t frameIndex,
+        uint32_t modelIndex,
+        uint32_t submeshIndex,
+        float currentTime,
+        glm::uvec2 currentRenderResolution
+    ) const {
+        const auto& buffers = m_submeshBuffers[submeshIndex];
+        const auto& textureName = m_submeshTextures[submeshIndex];
+
+        uint32_t textureIndex = resources.getTextureIndex(textureName);
+
+        if (textureIndex >= m_r_context.MAX_TEXTURES) {
+            SDL_LogError(SDL_LOG_CATEGORY_RENDER,
+                       "Invalid texture index %u for '%s' (Max: %u)",
+                       textureIndex, textureName.c_str(), m_r_context.MAX_TEXTURES);
+            textureIndex = 0;
+        }
+
+        uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+
+        std::array<VkDescriptorSet, 2> descriptorSets = {
+            resources.getDescriptorSet(frameIndex),
+            resources.getTextureDescriptorSet(frameIndex, textureIndex)
+        };
+
+        vkCmdBindDescriptorSets(
+            cmd,
+            VK_PIPELINE_BIND_POINT_GRAPHICS,
+            pipelineLayout,
+            0,
+            descriptorSets.size(),
+            descriptorSets.data(),
+            1,
+            &dynamicOffset
+        );
+
+        PushConstants modelPush{};
+        const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
+
+        if (textureExists) {
+            modelPush.color = glm::vec4(1.0f);
+        } else {
+            modelPush.color = glm::vec4(1.0f);
+            if(!textureName.empty()) {
+                log("Missing texture: %s", textureName.c_str());
+            }
+        }
+
+        modelPush.snapResolution = 1.f;
+        modelPush.jitterIntensity = 0.5f;
+
+        if(m_r_context.m_enviroment.vertexSnapping){
+            modelPush.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
+        }
+
+        if(m_r_context.m_enviroment.passiveVertexJitter){
+            modelPush.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
+        }
+
+        if(m_r_context.m_enviroment.affineWarping){
+            modelPush.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
+        }
+
+        if(m_r_context.m_enviroment.colorQuantization){
+            modelPush.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
+        }
+
+        if(m_r_context.m_enviroment.ntfsArtifacts){
+            modelPush.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
+        }
+
+        if(m_r_context.m_enviroment.gourardShading){
+            modelPush.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
+        }
+
+        modelPush.renderResolution = currentRenderResolution;
+        modelPush.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
+        modelPush.time = currentTime;
+        modelPush.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(currentRenderResolution.y);
+
+        modelPush.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
+        modelPush.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
+        modelPush.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
+        modelPush.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
+
+        vkCmdPushConstants(
+            cmd,
+            pipelineLayout,
+            VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+            0,
+            sizeof(PushConstants),
+            &modelPush
+        );
+
+        VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
+        vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+    }
+
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-                         VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const {
+            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const {
 
         std::string currentTexture = "";
         for (size_t i = 0; i < m_submeshBuffers.size(); i++) {

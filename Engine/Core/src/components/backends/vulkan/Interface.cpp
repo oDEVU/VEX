@@ -1,3 +1,4 @@
+//#include <vulkan/vulkan_core.h>
 #define VMA_IMPLEMENTATION
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 1
@@ -135,7 +136,9 @@ namespace vex {
 
         std::vector<const char*> deviceExtensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-            VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME
+            VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
+            VK_EXT_MULTI_DRAW_EXTENSION_NAME,
+            VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME
 #ifdef __APPLE__
             , VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
 #endif
@@ -144,11 +147,24 @@ namespace vex {
         VkPhysicalDeviceFeatures deviceFeatures = {};
         deviceFeatures.samplerAnisotropy = VK_TRUE;
 
+        VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features{};
+        extendedDynamicState2Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
+        extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
+        extendedDynamicState2Features.extendedDynamicState2LogicOp = VK_TRUE;
+        extendedDynamicState2Features.extendedDynamicState2PatchControlPoints = VK_TRUE;
+
         VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeature{};
         dynamicRenderingFeature.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
         dynamicRenderingFeature.dynamicRendering = VK_TRUE;
 
-        VkDeviceCreateInfo deviceCreateInfo = {};
+        VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures{};
+        multiDrawFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT;
+        multiDrawFeatures.multiDraw = VK_TRUE;
+
+        multiDrawFeatures.pNext = &extendedDynamicState2Features;
+        dynamicRenderingFeature.pNext = &multiDrawFeatures;
+
+        VkDeviceCreateInfo deviceCreateInfo{};
         deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
         deviceCreateInfo.pNext = &dynamicRenderingFeature;
         deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());

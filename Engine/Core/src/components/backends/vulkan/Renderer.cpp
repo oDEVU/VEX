@@ -164,11 +164,13 @@ namespace vex {
         auto now = std::chrono::high_resolution_clock::now();
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
+                //std::vector<TransparentTriangle> m_transparentTriangles;
+                m_transparentTriangles.clear();
 
                 //log("Getting renderable entities...");
                 auto modelView = registry.view<TransformComponent, MeshComponent>();
                 uint32_t modelIndex = 0;
-                std::vector<std::pair<entt::entity, float>> transparentEntities;
+                //std::vector<std::pair<entt::entity, float>> transparentEntities;
 
 
                 //log("Extracting camera pos...");
@@ -179,30 +181,96 @@ namespace vex {
                 for (auto entity : modelView) {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
+                    glm::mat4 modelMatrix = transform.matrix(registry);
+                    m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
                     if (!mesh.isTransparent) {
-                        m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
                         auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
                         vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
-                        modelIndex++;
+                        //modelIndex++;
                     } else {
-                        float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);
-                        transparentEntities.emplace_back(entity, distance);
+                        //float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);
+                        //transparentEntities.emplace_back(entity, distance);
+                        //
+                        auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
+                        vulkanMesh->extractTransparentTriangles(
+                            modelMatrix,
+                            cameraPos,
+                            modelIndex,
+                            m_r_context.currentFrame,
+                            m_transparentTriangles
+                        );
                     }
+                    modelIndex++;
                 }
 
-                std::sort(transparentEntities.begin(), transparentEntities.end(),
-                          [](const auto& a, const auto& b) { return a.second > b.second; });
+                std::sort(m_transparentTriangles.begin(), m_transparentTriangles.end(),
+                          [](const auto& a, const auto& b) {
+                              if (a.distanceToCamera != b.distanceToCamera) {
+                                  return a.distanceToCamera > b.distanceToCamera;
+                              }
 
+                              if (a.mesh != b.mesh) {
+                                  return a.mesh < b.mesh;
+                              }
+
+                              return a.submeshIndex < b.submeshIndex;
+                          });
 
                 //log("Drawind transparent meshes");
-                for (const auto& [entity, distance] : transparentEntities) {
+                /*for (const auto& [entity, distance] : transparentEntities) {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
                     m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
                     auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
                     vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
                     modelIndex++;
-                }
+                    }*/
+
+                    /*for (const auto& tri : m_transparentTriangles) {
+                        tri.mesh->drawTriangle(
+                            commandBuffer,
+                            m_p_pipeline->layout(),
+                            *m_p_resources,
+                            tri.frameIndex,
+                            tri.modelIndex,
+                            tri.submeshIndex,
+                            tri.firstIndex,
+                            currentTime,
+                            m_r_context.currentRenderResolution
+                        );
+                        }*/
+
+                        VulkanMesh* currentMesh = nullptr;
+                        uint32_t currentSubmeshIndex = UINT32_MAX;
+                        uint32_t currentModelIndex = UINT32_MAX;
+                        float lastTime = 0.0f;
+
+                        for (const auto& tri : m_transparentTriangles) {
+                            if (tri.mesh != currentMesh ||
+                                tri.submeshIndex != currentSubmeshIndex ||
+                                tri.modelIndex != currentModelIndex ||
+                                currentTime != lastTime)
+                            {
+
+                                tri.mesh->bindAndDrawBatched(
+                                    commandBuffer,
+                                    m_p_pipeline->layout(),
+                                    *m_p_resources,
+                                    tri.frameIndex,
+                                    tri.modelIndex,
+                                    tri.submeshIndex,
+                                    currentTime,
+                                    m_r_context.currentRenderResolution
+                                );
+
+                                currentMesh = tri.mesh;
+                                currentSubmeshIndex = tri.submeshIndex;
+                                currentModelIndex = tri.modelIndex;
+                                lastTime = currentTime;
+                            }
+
+                            vkCmdDrawIndexed(commandBuffer, 3, 1, tri.firstIndex, 0, 0);
+                        }
 
         if (frame != 0) {
             //log("Rendering VEXUI and ImGUI...");
@@ -366,6 +434,7 @@ namespace vex {
         barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.image = image;
+        //barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ||
                 newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL) {
                 barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
@@ -393,6 +462,21 @@ namespace vex {
             0, nullptr,
             0, nullptr,
             1, &barrier
+        );
+    }
+
+    void Renderer::issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands) {
+        const int32_t instanceCount = 1;
+        const int32_t vertexOffset = 0;
+
+        vkCmdDrawMultiIndexedEXT(
+            cmd,
+            static_cast<uint32_t>(commands.size()),
+            commands.data(), // No cast needed, pointer type is correct
+            sizeof(VkMultiDrawIndexedInfoEXT), // Stride is guaranteed to be correct
+            0,
+            1,
+            reinterpret_cast<const int32_t*>(&instanceCount)
         );
     }
 }

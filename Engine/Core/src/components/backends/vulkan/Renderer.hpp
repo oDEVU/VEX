@@ -63,6 +63,8 @@ namespace vex {
                                    VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
                                    VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage);
 
+        void issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands);
+
         VulkanContext& m_r_context;
         std::shared_ptr<VulkanResources>& m_p_resources;
         std::unique_ptr<VulkanPipeline>& m_p_pipeline;
@@ -71,5 +73,7 @@ namespace vex {
         std::unique_ptr<MeshManager>& m_p_meshManager;
         std::chrono::high_resolution_clock::time_point startTime;
         float currentTime = 0.0f;
+        std::vector<TransparentTriangle> m_transparentTriangles;
+        std::vector<VkMultiDrawIndexedInfoEXT> m_multiDrawInfos;
     };
 }
