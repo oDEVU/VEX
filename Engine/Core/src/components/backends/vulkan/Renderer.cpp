@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 #include "components/backends/vulkan/Pipeline.hpp"
 #include "entt/entity/fwd.hpp"
+#include <cstdint>
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
@@ -65,7 +66,7 @@ namespace vex {
 
         vkResetFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame]);
 
-        vkDeviceWaitIdle(m_r_context.device);
+        //vkDeviceWaitIdle(m_r_context.device);
 
         //log("Updating camera UBO...");
         m_p_resources->updateCameraUBO({view, proj});
@@ -240,12 +241,12 @@ namespace vex {
                         );
                         }*/
 
-                        VulkanMesh* currentMesh = nullptr;
-                        uint32_t currentSubmeshIndex = UINT32_MAX;
-                        uint32_t currentModelIndex = UINT32_MAX;
-                        float lastTime = 0.0f;
+                        //VulkanMesh* currentMesh = nullptr;
+                        //uint32_t currentSubmeshIndex = UINT32_MAX;
+                        //uint32_t currentModelIndex = UINT32_MAX;
+                        //float lastTime = 0.0f;
 
-                        for (const auto& tri : m_transparentTriangles) {
+                        /*for (const auto& tri : m_transparentTriangles) {
                             if (tri.mesh != currentMesh ||
                                 tri.submeshIndex != currentSubmeshIndex ||
                                 tri.modelIndex != currentModelIndex ||
@@ -270,7 +271,72 @@ namespace vex {
                             }
 
                             vkCmdDrawIndexed(commandBuffer, 3, 1, tri.firstIndex, 0, 0);
-                        }
+                            }*/
+                            VulkanMesh* batchMesh = nullptr;
+                            uint32_t batchSubmeshIndex = UINT32_MAX;
+                            uint32_t batchModelIndex = UINT32_MAX;
+
+                            for (const auto& tri : m_transparentTriangles) {
+                                bool stateChange = (tri.mesh != batchMesh ||
+                                                    tri.submeshIndex != batchSubmeshIndex ||
+                                                    tri.modelIndex != batchModelIndex);
+
+                                if(frame == 50){
+                                log("tri.mesh != batchMesh: %d", (tri.mesh != batchMesh));
+                                log("tri.submeshIndex != batchSubmeshIndex: %d", (tri.submeshIndex != batchSubmeshIndex));
+                                log("tri.modelIndex != batchModelIndex: %d", (tri.modelIndex != batchModelIndex));
+                                }
+
+                                if (stateChange && !m_multiDrawInfos.empty()) {
+                                    batchMesh->bindAndDrawBatched(
+                                        commandBuffer,
+                                        m_p_pipeline->layout(),
+                                        *m_p_resources,
+                                        m_r_context.currentFrame,
+                                        batchModelIndex,
+                                        batchSubmeshIndex,
+                                        currentTime,
+                                        m_r_context.currentRenderResolution
+                                    );
+
+                                    if(frame == 50){
+                                        log("Renderer::issueMultiDrawIndexed");
+                                    }
+                                    issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
+                                    m_multiDrawInfos.clear();
+                                }
+
+                                if (stateChange) {
+                                    batchMesh = tri.mesh;
+                                    batchSubmeshIndex = tri.submeshIndex;
+                                    batchModelIndex = tri.modelIndex;
+                                }
+
+                                VkMultiDrawIndexedInfoEXT drawInfo{};
+                                drawInfo.firstIndex = tri.firstIndex;
+                                drawInfo.indexCount = 3;
+                                drawInfo.vertexOffset = 0;
+                                m_multiDrawInfos.push_back(drawInfo);
+                            }
+
+                            if (!m_multiDrawInfos.empty() && batchMesh != nullptr) {
+                                batchMesh->bindAndDrawBatched(
+                                    commandBuffer,
+                                    m_p_pipeline->layout(),
+                                    *m_p_resources,
+                                    m_r_context.currentFrame,
+                                    batchModelIndex,
+                                    batchSubmeshIndex,
+                                    currentTime,
+                                    m_r_context.currentRenderResolution
+                                );
+                                if(frame == 50){
+                                    log("Renderer::issueMultiDrawIndexed");
+                                }
+                                issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
+                            }
+
+                            m_multiDrawInfos.clear();
 
         if (frame != 0) {
             //log("Rendering VEXUI and ImGUI...");
@@ -473,10 +539,10 @@ namespace vex {
             cmd,
             static_cast<uint32_t>(commands.size()),
             commands.data(), // No cast needed, pointer type is correct
-            sizeof(VkMultiDrawIndexedInfoEXT), // Stride is guaranteed to be correct
+            1, // Stride is guaranteed to be correct
             0,
-            1,
-            reinterpret_cast<const int32_t*>(&instanceCount)
+            static_cast<uint32_t>(sizeof(VkMultiDrawIndexedInfoEXT)),
+            nullptr//reinterpret_cast<const int32_t*>(&instanceCount)
         );
     }
 }
