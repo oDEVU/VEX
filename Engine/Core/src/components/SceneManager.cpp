@@ -3,6 +3,7 @@
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
+#include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/enviroment.hpp"
 #include "VirtualFileSystem.hpp"
 #include <nlohmann/json.hpp>
@@ -51,12 +52,22 @@ namespace vex {
         obj.AddComponent(comp);
     }
 
+    void LoadMeshComponent(GameObject& obj, const nlohmann::json& json) {
+        MeshComponent comp;
+        if (json.contains("path") && !json["path"].is_array()) {
+            comp = createMeshFromPath(json["path"], obj.GetEngine());
+        }
+        obj.AddComponent(comp);
+    }
+
     // Loadable Components
     REGISTER_COMPONENT(TransformComponent, LoadTransformComponent);
     REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
+    REGISTER_COMPONENT(MeshComponent, LoadMeshComponent);
 
     // Loadable Objects
     REGISTER_GAME_OBJECT(CameraObject);
+    REGISTER_GAME_OBJECT(GameObject);
 
 void SceneManager::loadScene(const std::string& path, Engine& engine) {
     clearScene();

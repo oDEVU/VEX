@@ -103,10 +103,13 @@ namespace vex {
 
                 glm::vec3 center_world = rotation_scale_matrix * center_model + translation_vector;
 
-                float distance = glm::length(center_world - cameraPos);
+                glm::vec3 d = center_world - cameraPos;
+                float distanceSq = glm::dot(d, d);
+
+                //uint32_t bucket = (uint32_t)glm::clamp(distanceSq / 10000 * (BUCKETS-1), 0.0f, (float)(BUCKETS-1));
 
                 outTriangles.push_back({
-                    distance,
+                    distanceSq,
                     modelIndex,
                     frameIndex,
                     i,

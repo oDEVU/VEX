@@ -98,13 +98,19 @@ struct TransformComponent {
     }
 };
 
+enum class RenderType  {
+    OPAQUE,
+    TRANSPARENT,
+    CUSTOM
+};
+
 /// @brief Struct containing raw meshData, mesh id, texture paths and material properties. It just template and data for rendering backend to load/convert this data to its acceptible format. This is made weirdly cause its made in mind for multiple backends. IDK i hate this system but i have no better idea.
 /// @todo Make creating this component enough to create mesh, not requiring mesh manager to load mesh data.
 struct MeshComponent {
     MeshData meshData;
     uint32_t id = UINT32_MAX;
     std::vector<std::string> textureNames;
-    bool isTransparent = false;
+    RenderType renderType = RenderType::OPAQUE;
 };
 
 /// @brief Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.

@@ -36,6 +36,8 @@ void sceneBegin();
 void sceneUpdate(float deltaTime);
 
 /// @brief Function to get game object by its unique name.
+/// @param const std::string& name - Name of the game object to get.
+/// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
 std::shared_ptr<GameObject> GetGameObject(const std::string& name);
 
 private:

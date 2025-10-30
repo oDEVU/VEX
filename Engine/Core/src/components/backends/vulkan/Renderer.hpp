@@ -75,5 +75,6 @@ namespace vex {
         float currentTime = 0.0f;
         std::vector<TransparentTriangle> m_transparentTriangles;
         std::vector<VkMultiDrawIndexedInfoEXT> m_multiDrawInfos;
+        size_t approxTriangles = 0;
     };
 }

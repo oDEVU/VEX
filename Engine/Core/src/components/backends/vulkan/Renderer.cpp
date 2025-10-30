@@ -66,7 +66,7 @@ namespace vex {
 
         vkResetFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame]);
 
-        //vkDeviceWaitIdle(m_r_context.device);
+        vkDeviceWaitIdle(m_r_context.device);
 
         //log("Updating camera UBO...");
         m_p_resources->updateCameraUBO({view, proj});
@@ -166,7 +166,11 @@ namespace vex {
         currentTime = std::chrono::duration<float>(now - startTime).count();
 
                 //std::vector<TransparentTriangle> m_transparentTriangles;
+
                 m_transparentTriangles.clear();
+                //if(approxTriangles!=0){
+                //    m_transparentTriangles.reserve(approxTriangles);
+                //}
 
                 //log("Getting renderable entities...");
                 auto modelView = registry.view<TransformComponent, MeshComponent>();
@@ -184,11 +188,11 @@ namespace vex {
                     auto& mesh = modelView.get<MeshComponent>(entity);
                     glm::mat4 modelMatrix = transform.matrix(registry);
                     m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
-                    if (!mesh.isTransparent) {
+                    if (mesh.renderType == RenderType::OPAQUE) {
                         auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
                         vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
                         //modelIndex++;
-                    } else {
+                    } else if (mesh.renderType == RenderType::TRANSPARENT) {
                         //float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);
                         //transparentEntities.emplace_back(entity, distance);
                         //
@@ -216,6 +220,8 @@ namespace vex {
 
                               return a.submeshIndex < b.submeshIndex;
                           });
+
+                //approxTriangles = m_transparentTriangles.size() + 1024;
 
                 //log("Drawind transparent meshes");
                 /*for (const auto& [entity, distance] : transparentEntities) {
