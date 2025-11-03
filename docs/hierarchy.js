@@ -1,5 +1,8 @@
 var hierarchy =
 [
+    [ "JPH::BroadPhaseLayerInterface", null, [
+      [ "vex::MyBroadPhaseLayerInterface", "classvex_1_1MyBroadPhaseLayerInterface.html", null ]
+    ] ],
     [ "vex::CameraComponent", "structvex_1_1CameraComponent.html", null ],
     [ "vex::CameraUBO", "structvex_1_1CameraUBO.html", null ],
     [ "vex::ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
@@ -37,6 +40,14 @@ var hierarchy =
     [ "vex::ModelUBO", "structvex_1_1ModelUBO.html", null ],
     [ "vex::MouseAxisBinding", "structvex_1_1MouseAxisBinding.html", null ],
     [ "vex::NameComponent", "structvex_1_1NameComponent.html", null ],
+    [ "JPH::ObjectLayerPairFilter", null, [
+      [ "vex::MyObjectLayerPairFilter", "classvex_1_1MyObjectLayerPairFilter.html", null ]
+    ] ],
+    [ "JPH::ObjectVsBroadPhaseLayerFilter", null, [
+      [ "vex::MyObjectVsBroadPhaseLayerFilter", "classvex_1_1MyObjectVsBroadPhaseLayerFilter.html", null ]
+    ] ],
+    [ "vex::PhysicsComponent", "structvex_1_1PhysicsComponent.html", null ],
+    [ "vex::PhysicsSystem", "classvex_1_1PhysicsSystem.html", null ],
     [ "vex::PushConstants", "structvex_1_1PushConstants.html", null ],
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],
     [ "vex::ResolutionManager", "classvex_1_1ResolutionManager.html", null ],
@@ -47,6 +58,7 @@ var hierarchy =
     [ "vex::Submesh", "structvex_1_1Submesh.html", null ],
     [ "vex::VulkanMesh::SubmeshBuffers", "structvex_1_1VulkanMesh_1_1SubmeshBuffers.html", null ],
     [ "vex::TransformComponent", "structvex_1_1TransformComponent.html", null ],
+    [ "vex::TransparentTriangle", "structvex_1_1TransparentTriangle.html", null ],
     [ "vex::UiComponent", "structvex_1_1UiComponent.html", null ],
     [ "vex::UIPushConstants", "structvex_1_1UIPushConstants.html", null ],
     [ "vex::UIQuad", "structvex_1_1UIQuad.html", null ],

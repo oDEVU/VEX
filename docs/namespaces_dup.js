@@ -23,13 +23,19 @@ var namespaces_dup =
       [ "ModelObject", "classvex_1_1ModelObject.html", "classvex_1_1ModelObject" ],
       [ "ModelUBO", "structvex_1_1ModelUBO.html", "structvex_1_1ModelUBO" ],
       [ "MouseAxisBinding", "structvex_1_1MouseAxisBinding.html", null ],
+      [ "MyBroadPhaseLayerInterface", "classvex_1_1MyBroadPhaseLayerInterface.html", null ],
+      [ "MyObjectLayerPairFilter", "classvex_1_1MyObjectLayerPairFilter.html", null ],
+      [ "MyObjectVsBroadPhaseLayerFilter", "classvex_1_1MyObjectVsBroadPhaseLayerFilter.html", null ],
       [ "NameComponent", "structvex_1_1NameComponent.html", null ],
+      [ "PhysicsComponent", "structvex_1_1PhysicsComponent.html", null ],
+      [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html", "classvex_1_1PhysicsSystem" ],
       [ "PushConstants", "structvex_1_1PushConstants.html", "structvex_1_1PushConstants" ],
       [ "Renderer", "classvex_1_1Renderer.html", "classvex_1_1Renderer" ],
       [ "ResolutionManager", "classvex_1_1ResolutionManager.html", "classvex_1_1ResolutionManager" ],
       [ "SceneManager", "classvex_1_1SceneManager.html", "classvex_1_1SceneManager" ],
       [ "Submesh", "structvex_1_1Submesh.html", null ],
       [ "TransformComponent", "structvex_1_1TransformComponent.html", "structvex_1_1TransformComponent" ],
+      [ "TransparentTriangle", "structvex_1_1TransparentTriangle.html", null ],
       [ "UiComponent", "structvex_1_1UiComponent.html", "structvex_1_1UiComponent" ],
       [ "UIPushConstants", "structvex_1_1UIPushConstants.html", null ],
       [ "UIQuad", "structvex_1_1UIQuad.html", null ],
@@ -67,6 +73,10 @@ var namespaces_dup =
         [ "RES_240P", "ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaeabc3f998c9b1f13a5bb3c52a41e6fc3", null ],
         [ "RES_480P", "ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6", null ],
         [ "PS1_SHARP", "ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485", null ]
+      ] ],
+      [ "ShapeType", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249e", [
+        [ "BOX", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249eae657cce1913c857166b0475f18668ef5", null ],
+        [ "SPHERE", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249ea6f7cea7381e843e2ee0338b4a92b0d43", null ]
       ] ],
       [ "TextAlign", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886", [
         [ "Left", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886a945d5e233cf7d6240f6b783b36a374ff", null ],

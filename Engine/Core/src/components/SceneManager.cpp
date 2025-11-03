@@ -65,6 +65,8 @@ namespace vex {
     REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
     REGISTER_COMPONENT(MeshComponent, LoadMeshComponent);
 
+    /// @todo Add physics component loading function
+
     // Loadable Objects
     REGISTER_GAME_OBJECT(CameraObject);
     REGISTER_GAME_OBJECT(GameObject);

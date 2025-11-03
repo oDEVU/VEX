@@ -7,6 +7,7 @@
 #include "components/ResolutionManager.hpp"
 #include "components/InputSystem.hpp"
 #include "components/SceneManager.hpp"
+#include "components/PhysicsSystem.hpp"
 
 // Object System
 #include "components/GameComponents/BasicComponents.hpp"
@@ -72,6 +73,9 @@ public:
     vex::ModelObject* viperShadow1;
     vex::ModelObject* viperShadow2;
     vex::ModelObject* cube;
+    vex::ModelObject* cube2;
+    vex::ModelObject* cube3;
+    vex::ModelObject* cube4;
 
     double fps = 0;
 
@@ -124,6 +128,37 @@ public:
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{10.0f, 1.0f, 10.0f}};
         cube = vex::createModelFromComponents("cube", cubeMesh, cubeTransform, *this);
+        vex::PhysicsComponent cubePhysics = vex::PhysicsComponent{
+            vex::ShapeType::BOX,
+            glm::vec3{10.0f, 0.5f, 10.0f},
+            0.f,
+            true
+        };
+        cube->AddComponent(cubePhysics);
+
+        vex::TransformComponent cube2Transform = vex::TransformComponent{
+            glm::vec3{1.0f, 10.0f, 1.0f},
+            glm::vec3{0.0f, 0.0f, 0.0f},
+            glm::vec3{1.0f, 1.0f, 1.0f}};
+        cube2 = vex::createModelFromComponents("cube2", cubeMesh, cube2Transform, *this);
+        vex::PhysicsComponent cube2Physics = vex::PhysicsComponent{
+            vex::ShapeType::BOX,
+            glm::vec3{0.5f, 0.5f, 0.5f},
+            0.f,
+            false
+        };
+        cube2->AddComponent(cube2Physics);
+
+        cube2Transform.position += glm::vec3{0.25f, 1.0f, 0.0f};
+        //cube2Transform.rotation = glm::vec3{0.0f, 45.0f, 0.0f};
+        cube3 = vex::createModelFromComponents("cube3", cubeMesh, cube2Transform, *this);
+        cube3->AddComponent(cube2Physics);
+
+        cube2Transform.position += glm::vec3{-0.5f, 1.0f, 0.2f};
+        //cube2Transform.rotation = glm::vec3{0.0f, 15.0f, 30.0f};
+        cube4 = vex::createModelFromComponents("cube4", cubeMesh, cube2Transform, *this);
+        cube4->AddComponent(cube2Physics);
+
 #if DEBUG
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");
@@ -180,6 +215,10 @@ public:
     void render() override {
         // Custom rendering if needed
         Engine::render(); // Call base render
+    }
+
+    vex::SceneManager& GetSceneManager() {
+        return sceneManager;
     }
 };
 

@@ -30,6 +30,9 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_vfs = std::make_unique<VirtualFileSystem>();
     m_vfs->initialize(GetExecutableDir().string());
 
+    m_physicsSystem = std::make_unique<PhysicsSystem>();
+    m_physicsSystem->init();
+
     auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
@@ -123,6 +126,7 @@ void Engine::run() {
             beginGame();
         }
 
+        m_physicsSystem->update(deltaTime, m_registry);
         render();
         m_frame++;
     }

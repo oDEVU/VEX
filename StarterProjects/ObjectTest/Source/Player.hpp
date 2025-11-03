@@ -2,6 +2,8 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameComponents/UiComponent.hpp"
 #include "components/GameObjects/GameObject.hpp"
+#include "components/GameObjects/ModelObject.hpp"
+#include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include <memory>
@@ -90,13 +92,7 @@ public:
 
     void Update(float deltaTime) override {
         GetComponent<UiComponent>().m_vexUI->setText("fps", "FPS: " + std::to_string((int)(1.f/deltaTime)));
-        // Example behavior
-        // auto& transform = GetComponent<TransformComponent>();
-        // transform.position.x += deltaTime; // Move right
-        //log("Player transform : %f,%f,%f ", GetComponent<TransformComponent>().position.x, GetComponent<TransformComponent>().position.y, GetComponent<TransformComponent>().position.z);
-        //log("Player camera transform : %f,%f,%f ", Camera->GetComponent<TransformComponent>().position.x, Camera->GetComponent<TransformComponent>().position.y, Camera->GetComponent<TransformComponent>().position.z);
     }
 private:
-//vex::CameraObject* Camera;
 };
 }

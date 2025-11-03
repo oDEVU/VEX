@@ -49,6 +49,8 @@ set(public_header_files
     include/components/pathUtils.hpp
     include/components/ImGUIWrapper.hpp
     include/components/InputSystem.hpp
+    include/components/PhysicsSystem.hpp
+    include/components/JoltSafe.hpp
     include/components/UI/VexUI.hpp
     include/components/GameComponents/BasicComponents.hpp
     include/components/GameComponents/UiComponent.hpp
@@ -71,6 +73,7 @@ set(source_files
         src/components/VirtualFileSystem.cpp
         src/components/VirtualFileSystem.hpp
         src/components/InputSystem.cpp
+        src/components/PhysicsSystem.cpp
         src/components/UI/VexUI.cpp
         src/components/backends/vulkan/context.hpp
         src/components/backends/vulkan/Interface.cpp

@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['open_5ffile_5fstream_0',['open_file_stream',['../classvex_1_1VirtualFileSystem.html#a70d36126cd90d85f79640408688d93d9',1,'vex::VirtualFileSystem']]]
+  ['namecomponent_0',['NameComponent',['../structvex_1_1NameComponent.html',1,'vex']]],
+  ['native_1',['NATIVE',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaf78504d96ba7177dc0c6784905ac8743',1,'vex']]],
+  ['ntfsartifacts_2',['ntfsArtifacts',['../structvex_1_1enviroment.html#a30d511632c871477abae3cdf7f028324',1,'vex::enviroment']]]
 ];

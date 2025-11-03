@@ -96,6 +96,20 @@ endif()
 #entt
 add_subdirectory(entt)
 
+#jolt
+# set(JPH_SHARED_LIBRARY ON "")
+set(DOUBLE_PRECISION OFF)
+set(INTERPROCEDURAL_OPTIMIZATION OFF)
+set(JPH_NO_X11_MACROS ON)
+add_compile_definitions(JPH_NO_X11_MACROS)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(GENERATE_DEBUG_SYMBOLS ON)
+    set(JPH_ENABLE_ASSERTS ON)
+endif()
+
+add_subdirectory(JoltPhysics/Build)
+
 #nlohmann::json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 set(JSON_Install OFF CACHE INTERNAL "")
@@ -173,6 +187,7 @@ target_link_libraries(thirdparty_engine INTERFACE
     thirdparty_glm
     EnTT::EnTT
     nlohmann_json
+    Jolt
     ${YOGA_TARGET}
 )
 

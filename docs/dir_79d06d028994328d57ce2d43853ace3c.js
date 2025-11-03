@@ -8,8 +8,10 @@ var dir_79d06d028994328d57ce2d43853ace3c =
     [ "GameInfo.hpp", "GameInfo_8hpp.html", "GameInfo_8hpp" ],
     [ "ImGUIWrapper.hpp", "ImGUIWrapper_8hpp.html", "ImGUIWrapper_8hpp" ],
     [ "InputSystem.hpp", "InputSystem_8hpp.html", "InputSystem_8hpp" ],
+    [ "JoltSafe.hpp", "JoltSafe_8hpp.html", null ],
     [ "Mesh.hpp", "Mesh_8hpp.html", "Mesh_8hpp" ],
     [ "pathUtils.hpp", "pathUtils_8hpp.html", "pathUtils_8hpp" ],
+    [ "PhysicsSystem.hpp", "PhysicsSystem_8hpp.html", "PhysicsSystem_8hpp" ],
     [ "ResolutionManager.hpp", "ResolutionManager_8hpp.html", "ResolutionManager_8hpp" ],
     [ "SceneManager.hpp", "SceneManager_8hpp.html", "SceneManager_8hpp" ]
 ];

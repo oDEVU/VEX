@@ -587,6 +587,8 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
     if (!m_root) return;
     layout(m_ctx.currentRenderResolution);
 
+    vkDeviceWaitIdle(m_ctx.device);
+
     std::vector<float> verts;
     verts.reserve(1024 * 9);
     batch(m_root, verts);

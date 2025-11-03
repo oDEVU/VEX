@@ -30,6 +30,22 @@
       ]
     },
     {
+      "type": "GameObject",
+      "name": "MyModel",
+      "components": [
+        {
+          "type": "TransformComponent",
+          "position": [0.0, 5.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0],
+          "scale": [1.0, 1.0, 1.0]
+        },
+        {
+          "type": "MeshComponent",
+          "path": "Assets/human.obj"
+        }
+      ]
+    },
+    {
       "type": "CameraObject",
       "name": "newCamera",
       "parent": "DebugCamera",

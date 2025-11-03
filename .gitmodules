@@ -32,3 +32,6 @@
 [submodule "Engine/Core/thirdparty/yoga"]
 	path = Engine/Core/thirdparty/yoga
 	url = https://github.com/facebook/yoga.git
+[submodule "Engine/Core/thirdparty/JoltPhysics"]
+	path = Engine/Core/thirdparty/JoltPhysics
+	url = https://github.com/jrouwe/JoltPhysics.git

@@ -10,6 +10,7 @@ var classvex_1_1Engine =
     [ "run", "classvex_1_1Engine.html#a31e8a27cef3dc33821c15f7cbb49f107", null ],
     [ "setEnvironmentSettings", "classvex_1_1Engine.html#a28373df4e7c7486b85ae6bf4277d73b5", null ],
     [ "setInputMode", "classvex_1_1Engine.html#a22b26b2a4c127db42bba2eb1da77ad50", null ],
+    [ "setPaused", "classvex_1_1Engine.html#a8046dada3563da409176fedfd79e6d2f", null ],
     [ "setResolutionMode", "classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a", null ],
     [ "update", "classvex_1_1Engine.html#a9d7355662abceb4069d112e4ab3b67ea", null ]
 ];
