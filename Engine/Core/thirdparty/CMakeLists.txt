@@ -106,6 +106,7 @@ add_compile_definitions(JPH_NO_X11_MACROS)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(GENERATE_DEBUG_SYMBOLS ON)
     set(JPH_ENABLE_ASSERTS ON)
+    set(JPH_DEBUG_RENDERER ON)
 endif()
 
 add_subdirectory(JoltPhysics/Build)

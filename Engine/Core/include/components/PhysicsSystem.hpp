@@ -43,21 +43,71 @@
 
      /// @brief Enumeration of available shape types for physics components.
      enum class ShapeType {
-         BOX, SPHERE
+         BOX, SPHERE, CAPSULE, CYLINDER
      };
 
      /// @brief Structure representing a physics component.
      struct PhysicsComponent {
          ShapeType shape = ShapeType::BOX;
+         bool isStatic = false;
+         float mass = 1.0f;
+         float friction = 0.5f;
+         uint8_t objectLayer = 0;
+         JPH::BodyID bodyId = JPH::BodyID(JPH::BodyID::cInvalidBodyID);
 
          glm::vec3 boxHalfExtents = {0.5f, 0.5f, 0.5f};
          float sphereRadius = 0.5f;
+         float capsuleRadius = 0.5f;
+         float capsuleHeight = 1.0f;
+         float cylinderRadius = 0.5f;
+         float cylinderHeight = 1.0f;
 
-         bool isStatic = false;
-         float mass = 1.0f;
+         /// --- Constructors ---
+         PhysicsComponent() = default;
 
-         uint8_t objectLayer = 0;
-         JPH::BodyID bodyId = JPH::BodyID(JPH::BodyID::cInvalidBodyID);
+         explicit PhysicsComponent(ShapeType s) : shape(s) {}
+
+         static PhysicsComponent Box(glm::vec3 halfExtents = {0.5f, 0.5f, 0.5f}, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+             PhysicsComponent pc;
+             pc.shape = ShapeType::BOX;
+             pc.boxHalfExtents = halfExtents;
+             pc.mass = mass;
+             pc.isStatic = isStatic;
+             pc.friction = friction;
+             return pc;
+         }
+
+         static PhysicsComponent Sphere(float radius = 0.5f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+             PhysicsComponent pc;
+             pc.shape = ShapeType::SPHERE;
+             pc.sphereRadius = radius;
+             pc.mass = mass;
+             pc.isStatic = isStatic;
+             pc.friction = friction;
+             return pc;
+         }
+
+         static PhysicsComponent Capsule(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+             PhysicsComponent pc;
+             pc.shape = ShapeType::CAPSULE;
+             pc.capsuleRadius = radius;
+             pc.capsuleHeight = height;
+             pc.mass = mass;
+             pc.isStatic = isStatic;
+             pc.friction = friction;
+             return pc;
+         }
+
+         static PhysicsComponent Cylinder(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+             PhysicsComponent pc;
+             pc.shape = ShapeType::CYLINDER;
+             pc.cylinderRadius = radius;
+             pc.cylinderHeight = height;
+             pc.mass = mass;
+             pc.isStatic = isStatic;
+             pc.friction = friction;
+             return pc;
+         }
      };
 
      /// @brief Class representing a physics system.

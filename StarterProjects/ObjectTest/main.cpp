@@ -124,38 +124,28 @@ public:
 
         vex::MeshComponent cubeMesh = vex::createMeshFromPath("Assets/cube.obj", *this);
         vex::TransformComponent cubeTransform = vex::TransformComponent{
-            glm::vec3{-4.0f, -1.61f, -5.0f},
+            glm::vec3{0.5f, -1.1f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
-            glm::vec3{10.0f, 1.0f, 10.0f}};
+            glm::vec3{5.0f, 0.5f, 5.0f}};
         cube = vex::createModelFromComponents("cube", cubeMesh, cubeTransform, *this);
-        vex::PhysicsComponent cubePhysics = vex::PhysicsComponent{
-            vex::ShapeType::BOX,
-            glm::vec3{10.0f, 0.5f, 10.0f},
-            0.f,
-            true
-        };
+        vex::PhysicsComponent cubePhysics = vex::PhysicsComponent::Box({10.0f, 0.5f, 10.0f}, true);
         cube->AddComponent(cubePhysics);
 
         vex::TransformComponent cube2Transform = vex::TransformComponent{
             glm::vec3{1.0f, 10.0f, 1.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
-            glm::vec3{1.0f, 1.0f, 1.0f}};
+            glm::vec3{0.5f, 0.5f, 0.5f}};
         cube2 = vex::createModelFromComponents("cube2", cubeMesh, cube2Transform, *this);
-        vex::PhysicsComponent cube2Physics = vex::PhysicsComponent{
-            vex::ShapeType::BOX,
-            glm::vec3{0.5f, 0.5f, 0.5f},
-            0.f,
-            false
-        };
+        vex::PhysicsComponent cube2Physics = vex::PhysicsComponent::Box({0.5f, 0.5f, 0.5f}, false);
         cube2->AddComponent(cube2Physics);
 
-        cube2Transform.position += glm::vec3{0.25f, 1.0f, 0.0f};
-        //cube2Transform.rotation = glm::vec3{0.0f, 45.0f, 0.0f};
+        cube2Transform.position += glm::vec3{0.25f, 3.0f, 0.0f};
+        cube2Transform.rotation = glm::vec3{-30.0f, 45.0f, 5.0f};
         cube3 = vex::createModelFromComponents("cube3", cubeMesh, cube2Transform, *this);
         cube3->AddComponent(cube2Physics);
 
-        cube2Transform.position += glm::vec3{-0.5f, 1.0f, 0.2f};
-        //cube2Transform.rotation = glm::vec3{0.0f, 15.0f, 30.0f};
+        cube2Transform.position += glm::vec3{-0.5f, 3.0f, 0.2f};
+        cube2Transform.rotation = glm::vec3{15.0f, 15.0f, 30.0f};
         cube4 = vex::createModelFromComponents("cube4", cubeMesh, cube2Transform, *this);
         cube4->AddComponent(cube2Physics);
 

@@ -110,6 +110,7 @@ void Engine::run() {
 
             if(!m_paused){
                 update(deltaTime);
+                m_physicsSystem->update(deltaTime, m_registry);
             }
         }else{
 
@@ -126,7 +127,6 @@ void Engine::run() {
             beginGame();
         }
 
-        m_physicsSystem->update(deltaTime, m_registry);
         render();
         m_frame++;
     }

@@ -3,6 +3,7 @@
 #include <components/PhysicsSystem.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
+#include "components/errorUtils.hpp"
 
 #include <components/JoltSafe.hpp>
 
@@ -21,9 +22,9 @@ namespace vex {
             m_tempAllocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
 
             m_jobSystem = new JPH::JobSystemThreadPool(
-                /*maxJobs=*/ 1024,
-                /*maxBarriers=*/ 256,
-                /*numThreads=*/ std::max(1u, std::thread::hardware_concurrency() - 1)
+                1024,
+                256,
+                std::max(1u, std::thread::hardware_concurrency() - 1)
             );
 
             m_physicsSystem = new JPH::PhysicsSystem();
@@ -41,7 +42,7 @@ namespace vex {
                 objectVsBroadPhaseLayerFilter,
                 objectLayerPairFilter
             );
-            m_physicsSystem->SetGravity(JPH::Vec3(0.0f, -9.81f, 0.0f));
+            m_physicsSystem->SetGravity(JPH::Vec3(0.0f, -1.81f, 0.0f));
             return true;
         }
 
@@ -80,8 +81,9 @@ namespace vex {
             auto& pc = view.get<PhysicsComponent>(e);
             if (pc.bodyId.IsInvalid()){
                 CreateBodyForEntity(e, registry, pc);
+            }else{
+                SyncBodyToTransform(e, registry, pc.bodyId);
             }
-            SyncBodyToTransform(e, registry, pc.bodyId);
         }
     }
 
@@ -96,8 +98,12 @@ namespace vex {
         JPH::Ref<JPH::Shape> shape;
         if (pc.shape == ShapeType::BOX)
             shape = new JPH::BoxShape(JPH::Vec3(pc.boxHalfExtents.x, pc.boxHalfExtents.y, pc.boxHalfExtents.z));
-        else
+        else if (pc.shape == ShapeType::SPHERE)
             shape = new JPH::SphereShape(pc.sphereRadius);
+        else if (pc.shape == ShapeType::CAPSULE)
+            shape = new JPH::CapsuleShape(pc.capsuleRadius, pc.capsuleHeight);
+        else if (pc.shape == ShapeType::CYLINDER)
+            shape = new JPH::CylinderShape(pc.cylinderRadius, pc.cylinderHeight);
 
         JPH::EMotionType motion = pc.isStatic ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic;
         JPH::BodyCreationSettings settings(shape, JPH::RVec3(pos), rot, motion, pc.objectLayer);
@@ -105,10 +111,13 @@ namespace vex {
         settings.mMassPropertiesOverride.mMass = pc.mass;
 
         auto& bodyInterface = m_physicsSystem->GetBodyInterface();
-        JPH::BodyID bodyId = bodyInterface.CreateAndAddBody(settings, JPH::EActivation::Activate);
+        JPH::BodyID bodyId = bodyInterface.CreateAndAddBody(settings, JPH::EActivation::DontActivate);
         if (bodyId.IsInvalid()) return std::nullopt;
 
+        bodyInterface.SetFriction(bodyId, pc.friction);
+
         pc.bodyId = bodyId;
+        bodyInterface.ActivateBody(bodyId);
         return bodyId;
     }
 
@@ -121,15 +130,24 @@ namespace vex {
     }
 
     JPH::Quat PhysicsSystem::EulerToQuat(const glm::vec3& eulerDeg) {
-        glm::vec3 rad = glm::radians(eulerDeg);
-        glm::quat q = glm::quat(rad); // glm builds from Euler (XYZ)
+        glm::mat4 mat(1.0f);
+        mat = glm::rotate(mat, glm::radians(eulerDeg.y), glm::vec3(0.0f, 1.0f, 0.0f)); // Y first
+        mat = glm::rotate(mat, glm::radians(eulerDeg.x), glm::vec3(1.0f, 0.0f, 0.0f)); // X
+        mat = glm::rotate(mat, glm::radians(eulerDeg.z), glm::vec3(0.0f, 0.0f, 1.0f)); // Z last
+        glm::quat q = glm::quat_cast(mat);
         return JPH::Quat(q.x, q.y, q.z, q.w);
     }
 
     glm::vec3 PhysicsSystem::QuatToEuler(const JPH::Quat& q) {
         glm::quat gq(q.GetW(), q.GetX(), q.GetY(), q.GetZ());
-        glm::vec3 eulerRad = glm::eulerAngles(gq);
-        return glm::degrees(eulerRad);
+        glm::mat4 mat = glm::mat4_cast(gq);
+        float ex, ey, ez;
+        glm::extractEulerAngleXYZ(mat, ex, ey, ez);
+
+        //log("Quaterion: {%f,%f,%f,%f}", q.GetW(), q.GetX(), q.GetY(), q.GetZ());
+        //log("Euler: {%f,%f,%f}", glm::degrees(ex), glm::degrees(ey), glm::degrees(ez));
+
+        return glm::degrees(glm::vec3(ex, ey, ez));
     }
 
     void PhysicsSystem::SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id) {

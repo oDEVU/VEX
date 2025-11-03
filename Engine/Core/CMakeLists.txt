@@ -63,6 +63,11 @@ set(public_header_files
     include/components/GameObjects/GameObjectFactory.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
+
+#if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+#    list(APPEND public_header_files include/components/JoltDebugRenderer.hpp)
+#endif()
+
 set(source_files
         src/Engine.cpp
         src/components/Mesh.cpp
@@ -95,6 +100,10 @@ set(source_files
         src/components/backends/vulkan/MeshManager.hpp
         src/components/GameObjects/Creators/ModelCreator.cpp
     )
+
+#if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+#    list(APPEND source_files src/components/JoltDebugRenderer.cpp)
+#endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LANGUAGES CXX
