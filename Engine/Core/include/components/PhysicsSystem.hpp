@@ -131,6 +131,108 @@
              m_physicsSystem->SetGravity(JPH::Vec3(gravity.x, gravity.y, gravity.z));
          }
 
+         /// @brief Allows for updating friction.
+         void SetFriction(JPH::BodyID bodyId, float friction){
+             auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+             bodyInterface.SetFriction(bodyId, friction);
+         }
+
+        /// @brief Allows for getting friction.
+        float GetFriction(JPH::BodyID bodyId){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            return bodyInterface.GetFriction(bodyId);
+        }
+
+        /// @brief Allows for updating bounciness.
+        void SetBounciness(JPH::BodyID bodyId, float bounciness){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.SetRestitution(bodyId, bounciness);
+        }
+
+        /// @brief Allows for getting bounciness.
+        float GetBounciness(JPH::BodyID bodyId){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            return bodyInterface.GetRestitution(bodyId);
+        }
+
+        /// @brief Allows for updating linear velocity.
+        void SetLinearVelocity(JPH::BodyID bodyId, const glm::vec3& velocity){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.SetLinearVelocity(bodyId, JPH::Vec3(velocity.x, velocity.y, velocity.z));
+        }
+
+        /// @brief Allows for getting linear velocity.
+        glm::vec3 GetLinearVelocity(JPH::BodyID bodyId){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            JPH::Vec3 velocity = bodyInterface.GetLinearVelocity(bodyId);
+            return glm::vec3(velocity.GetX(), velocity.GetY(), velocity.GetZ());
+        }
+
+        /// @brief Allows for adding to linear velocity.
+        void AddLinearVelocity(JPH::BodyID bodyId, const glm::vec3& velocity){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.AddLinearVelocity(bodyId, JPH::Vec3(velocity.x, velocity.y, velocity.z));
+        }
+
+        /// @brief Allows for setting angular velocity.
+        void SetAngularVelocity(JPH::BodyID bodyId, const glm::vec3& velocity){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.SetAngularVelocity(bodyId, JPH::Vec3(velocity.x, velocity.y, velocity.z));
+        }
+
+        /// @brief Allows for getting angular velocity.
+        glm::vec3 GetAngularVelocity(JPH::BodyID bodyId){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            JPH::Vec3 velocity = bodyInterface.GetAngularVelocity(bodyId);
+            return glm::vec3(velocity.GetX(), velocity.GetY(), velocity.GetZ());
+        }
+
+        /// @brief Allows for setting body active state.
+        void SetBodyActive(JPH::BodyID bodyId, bool active){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            if(active){
+                bodyInterface.ActivateBody(bodyId);
+            }else{
+                bodyInterface.DeactivateBody(bodyId);
+            }
+        }
+
+        /// @brief Allows for getting body active state.
+        bool GetBodyActive(JPH::BodyID bodyId){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            return bodyInterface.IsActive(bodyId);
+        }
+
+        /// @brief Applies force at the mass center of the body, it is reset next physics tick.
+        void AddForce(JPH::BodyID bodyId, const glm::vec3& force){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.AddForce(bodyId, JPH::Vec3(force.x, force.y, force.z));
+        }
+
+        /// @brief Applies force at the given position of the body, it is reset next physics tick.
+        void AddForceAtPosition(JPH::BodyID bodyId, const glm::vec3& force, const glm::vec3& position){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.AddForce(bodyId, JPH::Vec3(force.x, force.y, force.z), JPH::Vec3(position.x, position.y, position.z));
+        }
+
+        /// @brief Applies impulse at the mass center of the body, it is reset next physics tick.
+        void AddImpulse(JPH::BodyID bodyId, const glm::vec3& impulse){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.AddImpulse(bodyId, JPH::Vec3(impulse.x, impulse.y, impulse.z));
+        }
+
+        /// @brief Applies impulse at the given position of the body, it is reset next physics tick.
+        void AddImpulseAtPosition(JPH::BodyID bodyId, const glm::vec3& impulse, const glm::vec3& position){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.AddImpulse(bodyId, JPH::Vec3(impulse.x, impulse.y, impulse.z), JPH::Vec3(position.x, position.y, position.z));
+        }
+
+        /// @brief Applies angular impulse at the mass center of the body, it is reset next physics tick.
+        void AddAngularImpulse(JPH::BodyID bodyId, const glm::vec3& impulse){
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            bodyInterface.AddAngularImpulse(bodyId, JPH::Vec3(impulse.x, impulse.y, impulse.z));
+        }
+
          std::optional<JPH::BodyID> CreateBodyForEntity(entt::entity e, entt::registry& r, PhysicsComponent& pc);
          void DestroyBodyForEntity(PhysicsComponent& pc);
 

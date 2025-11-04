@@ -149,6 +149,13 @@ public:
         cube4 = vex::createModelFromComponents("cube4", cubeMesh, cube2Transform, *this);
         cube4->AddComponent(cube2Physics);
 
+        vex::InputComponent inputComp;
+        inputComp.addBinding(SDL_SCANCODE_SPACE, vex::InputActionState::Held, [this](float deltaTime) {
+            //GetComponent<vex::TransformComponent>().position += GetComponent<vex::TransformComponent>().getForwardVector(m_engine.getRegistry()) * (deltaTime * 2);
+            getPhysicsSystem()->AddImpulse(cube4->GetComponent<vex::PhysicsComponent>().bodyId, glm::vec3(0.0f, 0.1f, 0.0f));
+        });
+        cube4->AddComponent(inputComp);
+
 #if DEBUG
         m_imgui->addUIFunction([this]() {
             ImGui::Begin("Engine Stats");
