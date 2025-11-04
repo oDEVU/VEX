@@ -1,0 +1,1 @@
+import{_ as s,c as e,o as t,a}from"./app.c5b6b9d4.js";const m=JSON.parse('{"title":"Physics System","description":"","frontmatter":{},"headers":[],"relativePath":"samples/Physics/physicssystem.md"}'),c={name:"samples/Physics/physicssystem.md"},o=a("",5),p=[o];function n(i,l,r,h,d,_){return t(),e("div",null,p)}const u=s(c,[["render",n]]);export{m as __pageData,u as default};

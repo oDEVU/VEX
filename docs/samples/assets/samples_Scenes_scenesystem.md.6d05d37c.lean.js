@@ -1,0 +1,1 @@
+import{_ as e,c as a,o as s,a as n}from"./app.c5b6b9d4.js";const g=JSON.parse('{"title":"Scene Manager","description":"","frontmatter":{},"headers":[],"relativePath":"samples/Scenes/scenesystem.md"}'),t={name:"samples/Scenes/scenesystem.md"},c=n("",4),o=[c];function r(p,l,_,i,d,m){return s(),a("div",null,o)}const u=e(t,[["render",r]]);export{g as __pageData,u as default};
