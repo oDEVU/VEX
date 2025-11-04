@@ -34,7 +34,7 @@ var NAVTREE =
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
         [ "Variables", "functions_vars.html", null ]
       ] ]
@@ -53,8 +53,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BasicComponents_8hpp.html",
-"classvex_1_1MyBroadPhaseLayerInterface.html",
-"context_8hpp_source.html"
+"classvex_1_1ModelObject.html#aa3dc237babc57e7044871127bc35e00e",
+"classvex_1_1VulkanSwapchainManager.html#a13783f2bfc01362258cf9deccfa2ac98"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

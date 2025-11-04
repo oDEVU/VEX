@@ -26,7 +26,7 @@ var annotated_dup =
       [ "MyObjectLayerPairFilter", "classvex_1_1MyObjectLayerPairFilter.html", null ],
       [ "MyObjectVsBroadPhaseLayerFilter", "classvex_1_1MyObjectVsBroadPhaseLayerFilter.html", null ],
       [ "NameComponent", "structvex_1_1NameComponent.html", null ],
-      [ "PhysicsComponent", "structvex_1_1PhysicsComponent.html", null ],
+      [ "PhysicsComponent", "structvex_1_1PhysicsComponent.html", "structvex_1_1PhysicsComponent" ],
       [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html", "classvex_1_1PhysicsSystem" ],
       [ "PushConstants", "structvex_1_1PushConstants.html", "structvex_1_1PushConstants" ],
       [ "Renderer", "classvex_1_1Renderer.html", "classvex_1_1Renderer" ],
