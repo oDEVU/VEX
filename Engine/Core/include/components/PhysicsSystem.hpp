@@ -24,7 +24,7 @@
 
      class MyBroadPhaseLayerInterface : public JPH::BroadPhaseLayerInterface {
      public:
-         uint GetNumBroadPhaseLayers() const override { return 1; }
+         unsigned int GetNumBroadPhaseLayers() const override { return 1; }
          JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override { return JPH::BroadPhaseLayer(0); }
      #if defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
          const char* GetBroadPhaseLayerName(JPH::BroadPhaseLayer inLayer) const override { return "Default"; }

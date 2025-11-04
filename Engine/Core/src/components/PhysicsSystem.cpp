@@ -4,8 +4,14 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 #include "components/errorUtils.hpp"
+#include <thread>
 
 #include <components/JoltSafe.hpp>
+
+#ifdef _WIN32
+#pragma push_macro("max")  // Save if needed
+#undef max
+#endif
 
 namespace vex {
 

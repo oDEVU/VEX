@@ -98,6 +98,13 @@ struct TransformComponent {
     }
 };
 
+#if defined(OPAQUE)
+    #undef OPAQUE
+#endif
+#if defined(TRANSPARENT)
+    #undef TRANSPARENT
+#endif
+
 enum class RenderType  {
     OPAQUE,
     TRANSPARENT,

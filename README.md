@@ -98,7 +98,6 @@ You need to provide the tool with the path to your project's root folder and spe
 
 ## TODO:
 ### Must haves to create games:
-- Physics Engine
 - Billboard rendering
 - Particle system
 - Support for animated 3D models
