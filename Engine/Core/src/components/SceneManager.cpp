@@ -13,27 +13,30 @@
 
 namespace vex {
     void LoadTransformComponent(GameObject& obj, const nlohmann::json& json) {
-        TransformComponent comp;
+        TransformComponent comp(obj.GetEngine().getRegistry());
         if (json.contains("position") && json["position"].is_array() && json["position"].size() >= 3) {
-            comp.position = glm::vec3(
+            glm::vec3 position(
                 json["position"][0].get<float>(),
                 json["position"][1].get<float>(),
                 json["position"][2].get<float>()
             );
+            comp.setLocalPosition(position);
         }
         if (json.contains("rotation") && json["rotation"].is_array() && json["rotation"].size() >= 3) {
-            comp.rotation = glm::vec3(
+            glm::vec3 rotation(
                 json["rotation"][0].get<float>(),
                 json["rotation"][1].get<float>(),
                 json["rotation"][2].get<float>()
             );
+            comp.setLocalRotation(rotation);
         }
         if (json.contains("scale") && json["scale"].is_array() && json["scale"].size() >= 3) {
-            comp.scale = glm::vec3(
+            glm::vec3 scale(
                 json["scale"][0].get<float>(),
                 json["scale"][1].get<float>(),
                 json["scale"][2].get<float>()
             );
+            comp.setLocalScale(scale);
         }
         obj.AddComponent(comp);
     }

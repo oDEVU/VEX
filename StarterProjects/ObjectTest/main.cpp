@@ -83,15 +83,16 @@ public:
 
         vex::MeshComponent humanMesh = vex::createMeshFromPath("Assets/human.obj", *this);
         vex::TransformComponent humanTransform = vex::TransformComponent{
+            getRegistry(),
             glm::vec3{0.0f, 0.3f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{1.0f, 1.0f, 1.0f}};
         humanEntity1 = vex::createModelFromComponents("human1", humanMesh, humanTransform, *this);
-        humanTransform.position += glm::vec3(0.5f,-0.3f,0);
+        humanTransform.addLocalPosition(glm::vec3(0.5f,-0.3f,0));
         humanEntity2 = vex::createModelFromComponents("human2", humanMesh, humanTransform, *this);
-        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanTransform.addLocalPosition(glm::vec3(0.5f,0,0));
         humanEntity3 = vex::createModelFromComponents("human3", humanMesh, humanTransform, *this);
-        humanTransform.position += glm::vec3(0.5f,0,0);
+        humanTransform.addLocalPosition(glm::vec3(0.5f,0,0));
         humanEntity4 = vex::createModelFromComponents("human4", humanMesh, humanTransform, *this);
 
         humanEntity2->ParentTo(humanEntity1->GetEntity());
@@ -100,23 +101,24 @@ public:
 
         viperEntity1 = vex::createModelFromPath("Assets/scene.gltf", "viper1", *this);
         viperEntity2 = vex::createModelFromPath("Assets/scene.gltf", "viper2", *this);
-        viperEntity2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, 0.0f, 0.0f};
+        viperEntity2->GetComponent<vex::TransformComponent>().addLocalPosition(glm::vec3{2.0f, 0.0f, 0.0f});
 
 
         viperShadow1 = vex::createModelFromPath("Assets/ViperShadow.obj", "shadow1", *this);
         viperShadow1->GetComponent<vex::MeshComponent>().renderType = vex::RenderType::TRANSPARENT;
-        viperShadow1->GetComponent<vex::TransformComponent>().rotation += glm::vec3{0.0f, 90.0f, 0.0f};
-        viperShadow1->GetComponent<vex::TransformComponent>().scale = glm::vec3{0.9f, 0.9f, 0.9f};
-        viperShadow1->GetComponent<vex::TransformComponent>().position += glm::vec3{0.0f, -0.03f, 0.0f};
+        viperShadow1->GetComponent<vex::TransformComponent>().addLocalRotation(glm::vec3{0.0f, 90.0f, 0.0f});
+        viperShadow1->GetComponent<vex::TransformComponent>().setLocalScale(glm::vec3{0.9f, 0.9f, 0.9f});
+        viperShadow1->GetComponent<vex::TransformComponent>().addLocalPosition(glm::vec3{0.0f, -0.03f, 0.0f});
         viperShadow2 = vex::createModelFromPath("Assets/ViperShadow.obj", "shadow2", *this);
         viperShadow2->GetComponent<vex::MeshComponent>().renderType = vex::RenderType::TRANSPARENT;
-        viperShadow2->GetComponent<vex::TransformComponent>().rotation += glm::vec3{0.0f, 90.0f, 0.0f};
-        viperShadow2->GetComponent<vex::TransformComponent>().scale = glm::vec3{0.9f, 0.9f, 0.9f};
-        viperShadow2->GetComponent<vex::TransformComponent>().position += glm::vec3{2.0f, -0.03f, 0.0f};
+        viperShadow2->GetComponent<vex::TransformComponent>().addLocalRotation(glm::vec3{0.0f, 90.0f, 0.0f});
+        viperShadow2->GetComponent<vex::TransformComponent>().setLocalScale(glm::vec3{0.9f, 0.9f, 0.9f});
+        viperShadow2->GetComponent<vex::TransformComponent>().addLocalPosition(glm::vec3{2.0f, -0.03f, 0.0f});
 
 
         vex::MeshComponent cubeMesh = vex::createMeshFromPath("Assets/cube.obj", *this);
         vex::TransformComponent cubeTransform = vex::TransformComponent{
+            getRegistry(),
             glm::vec3{0.5f, -1.1f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{5.0f, 0.5f, 5.0f}};
@@ -125,6 +127,7 @@ public:
         cube->AddComponent(cubePhysics);
 
         vex::TransformComponent cube2Transform = vex::TransformComponent{
+            getRegistry(),
             glm::vec3{1.0f, 10.0f, 1.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{0.5f, 0.5f, 0.5f}};
@@ -132,13 +135,13 @@ public:
         vex::PhysicsComponent cube2Physics = vex::PhysicsComponent::Box({0.5f, 0.5f, 0.5f}, false);
         cube2->AddComponent(cube2Physics);
 
-        cube2Transform.position += glm::vec3{0.25f, 3.0f, 0.0f};
-        cube2Transform.rotation = glm::vec3{-30.0f, 45.0f, 5.0f};
+        cube2Transform.addLocalPosition(glm::vec3{0.25f, 3.0f, 0.0f});
+        cube2Transform.setLocalRotation(glm::vec3{-30.0f, 45.0f, 5.0f});
         cube3 = vex::createModelFromComponents("cube3", cubeMesh, cube2Transform, *this);
         cube3->AddComponent(cube2Physics);
 
-        cube2Transform.position += glm::vec3{-0.5f, 3.0f, 0.2f};
-        cube2Transform.rotation = glm::vec3{15.0f, 15.0f, 30.0f};
+        cube2Transform.addLocalPosition(glm::vec3{-0.5f, 3.0f, 0.2f});
+        cube2Transform.setLocalRotation(glm::vec3{15.0f, 15.0f, 30.0f});
         cube4 = vex::createModelFromComponents("cube4", cubeMesh, cube2Transform, *this);
         cube4->AddComponent(cube2Physics);
 
@@ -168,7 +171,7 @@ public:
 
         //pass
         if (humanEntity1 && humanEntity1->isValid()) {
-            humanEntity1->GetComponent<vex::TransformComponent>().rotation.y = m_frame;
+            humanEntity1->GetComponent<vex::TransformComponent>().addYaw(10*deltaTime);
         }
 
         // testing if i can remove entities at runtime

@@ -179,9 +179,9 @@ void Engine::render() {
     auto& camera = m_registry.get<CameraComponent>(cameraEntity);
 
     view = glm::lookAt(
-        transform.getWorldPosition(m_registry),
-        transform.getWorldPosition(m_registry) + transform.getForwardVector(m_registry),
-        transform.getUpVector(m_registry)
+        transform.getWorldPosition(),
+        transform.getWorldPosition() + transform.getForwardVector(),
+        transform.getUpVector()
     );
     proj = glm::perspective(
         glm::radians(camera.fov),

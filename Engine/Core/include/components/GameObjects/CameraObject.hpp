@@ -14,7 +14,7 @@
   public:
       CameraObject(Engine& engine, const std::string& name)
           : GameObject(engine, name) {
-          AddComponent(TransformComponent{});
+          AddComponent(TransformComponent{engine.getRegistry()});
           AddComponent(CameraComponent{});
       }
   };

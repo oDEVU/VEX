@@ -48,8 +48,8 @@
               auto view = m_engine.getRegistry().view<TransformComponent>();
               for (auto entity : view) {
                   auto& transform = view.get<TransformComponent>(entity);
-                  if (transform.parent == m_entity) {
-                      transform.parent = entt::null;
+                  if (transform.getParent() == m_entity) {
+                      transform.setParent(entt::null);
                   }
               }
               if (m_engine.getRegistry().valid(m_entity)) {
@@ -91,7 +91,7 @@
       /// child->ParentTo(parent->GetEntity());
       /// @endcode
       void ParentTo(entt::entity entity){
-          GetComponent<TransformComponent>().parent = entity;
+          GetComponent<TransformComponent>().setParent(entity);
       }
       protected:
       Engine& m_engine;

@@ -186,7 +186,7 @@ namespace vex {
                 for (auto entity : modelView) {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
-                    glm::mat4 modelMatrix = transform.matrix(registry);
+                    glm::mat4 modelMatrix = transform.matrix();
                     m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
                     if (mesh.renderType == RenderType::OPAQUE) {
                         auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);

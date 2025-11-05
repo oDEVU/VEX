@@ -97,8 +97,8 @@ namespace vex {
         if (!r.all_of<TransformComponent>(e)) return std::nullopt;
 
         auto& t = r.get<TransformComponent>(e);
-        JPH::Vec3 pos(t.position.x, t.position.y, t.position.z);
-        JPH::Quat rot = EulerToQuat(t.rotation);
+        JPH::Vec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
+        JPH::Quat rot = EulerToQuat(t.getWorldRotation());
 
         JPH::Ref<JPH::Shape> shape;
         if (pc.shape == ShapeType::BOX)
@@ -167,8 +167,8 @@ namespace vex {
         JPH::Quat rot = bi.GetRotation(id);
 
         auto& t = r.get<TransformComponent>(e);
-        t.position = {pos.GetX(), pos.GetY(), pos.GetZ()};
-        t.rotation = QuatToEuler(rot);
+        t.setWorldPosition(glm::vec3{pos.GetX(), pos.GetY(), pos.GetZ()});
+        t.setWorldRotation(QuatToEuler(rot));
     }
 
     PhysicsComponent& PhysicsSystem::getPhysicsComponentByBodyId(JPH::BodyID id){

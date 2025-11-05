@@ -13,7 +13,7 @@ namespace vex {
 class Player : public GameObject {
 public:
     Player(Engine& engine, const std::string& name) : GameObject(engine, name) {
-        AddComponent(TransformComponent{});
+        AddComponent(TransformComponent{engine.getRegistry()});
         AddComponent(UiComponent{engine.createVexUI()});
     }
 
@@ -32,16 +32,16 @@ public:
         // Action Inputs need deltaTime
         vex::InputComponent inputComp;
         inputComp.addBinding(SDL_SCANCODE_W, vex::InputActionState::Held, [this](float deltaTime) {
-            GetComponent<vex::TransformComponent>().position += GetComponent<vex::TransformComponent>().getForwardVector(m_engine.getRegistry()) * (deltaTime * 2);
+            GetComponent<vex::TransformComponent>().addLocalPosition(GetComponent<vex::TransformComponent>().getForwardVector() * (deltaTime * 2));
         });
         inputComp.addBinding(SDL_SCANCODE_S, vex::InputActionState::Held, [this](float deltaTime) {
-            GetComponent<vex::TransformComponent>().position -= GetComponent<vex::TransformComponent>().getForwardVector(m_engine.getRegistry()) * (deltaTime * 2);
+            GetComponent<vex::TransformComponent>().addLocalPosition(GetComponent<vex::TransformComponent>().getForwardVector() * -(deltaTime * 2));
         });
         inputComp.addBinding(SDL_SCANCODE_D, vex::InputActionState::Held, [this](float deltaTime) {
-            GetComponent<vex::TransformComponent>().position += GetComponent<vex::TransformComponent>().getRightVector(m_engine.getRegistry()) * (deltaTime * 2);
+            GetComponent<vex::TransformComponent>().addLocalPosition(GetComponent<vex::TransformComponent>().getRightVector() * (deltaTime * 2));
         });
         inputComp.addBinding(SDL_SCANCODE_A, vex::InputActionState::Held, [this](float deltaTime) {
-            GetComponent<vex::TransformComponent>().position -= GetComponent<vex::TransformComponent>().getRightVector(m_engine.getRegistry()) * (deltaTime * 2);
+            GetComponent<vex::TransformComponent>().addLocalPosition(GetComponent<vex::TransformComponent>().getRightVector() * -(deltaTime * 2));
         });
 
         inputComp.addBinding(SDL_SCANCODE_E, vex::InputActionState::Pressed, [this](float) {
@@ -62,10 +62,10 @@ public:
 
         // Axis inputs dont need delta time since movement beetween frames will be proportionaly smaller
         inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis) {
-            GetComponent<vex::TransformComponent>().rotation.y += axis * 0.05;
+            GetComponent<vex::TransformComponent>().addYaw(axis * 0.05);
         });
         inputComp.addMouseAxisBinding(vex::MouseAxis::Y, [this](float axis) {
-            GetComponent<vex::TransformComponent>().rotation.x -= axis * 0.05;
+            GetComponent<vex::TransformComponent>().addPitch(-axis * 0.05);
         });
 
         AddComponent(inputComp);
@@ -97,7 +97,7 @@ public:
         // temponary just to test stuff, dont do that, dont retrive object everyframe.
         std::shared_ptr<GameObject> object = m_engine.getSceneManager()->GetGameObjectByName("Assets/scenes/main.json", "MyModel");
         if (object) {
-            object->GetComponent<TransformComponent>().rotation.x += 0.1f;
+            object->GetComponent<TransformComponent>().addPitch(0.1f);
         }
     }
 private:

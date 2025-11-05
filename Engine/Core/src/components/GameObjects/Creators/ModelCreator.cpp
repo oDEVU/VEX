@@ -15,7 +15,7 @@ namespace vex {
     }
     ModelObject* createModelFromPath(const std::string& path, const std::string& name, Engine& engine, entt::entity parent){
         MeshComponent meshComponent = createMeshFromPath(path, engine);
-        TransformComponent transformComponent;
+        TransformComponent transformComponent(engine.getRegistry());
         return createModelFromComponents(name, meshComponent, transformComponent, engine, parent);
     }
 }
