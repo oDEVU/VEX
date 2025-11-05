@@ -127,6 +127,11 @@ namespace vex {
         return bodyId;
     }
 
+    std::optional<JPH::BodyID> PhysicsSystem::RecreateBodyForEntity(entt::entity e, PhysicsComponent& pc){
+        DestroyBodyForEntity(pc);
+        return CreateBodyForEntity(e, m_registry, pc);
+    }
+
     void PhysicsSystem::DestroyBodyForEntity(PhysicsComponent& pc) {
         if (!m_physicsSystem || pc.bodyId.IsInvalid()) return;
         auto& bi = m_physicsSystem->GetBodyInterface();

@@ -31,6 +31,10 @@ void sceneBegin();
 /// @param float deltaTime - Delta time since last frame.
 void sceneUpdate(float deltaTime);
 
+/// @brief Function to add a game object to the scene.
+/// @param std::shared_ptr<GameObject> gameObject - Shared pointer to the game object to add.
+void AddGameObject(std::shared_ptr<GameObject> gameObject);
+
 /// @brief Function to get game object by its unique name.
 /// @param const std::string& name - Name of the game object to get.
 /// @return std::shared_ptr<GameObject> - Shared pointer to the game object.

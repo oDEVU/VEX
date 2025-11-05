@@ -158,6 +158,12 @@ void Scene::sceneUpdate(float deltaTime){
     }
 }
 
+void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject){
+    if (gameObject) {
+        m_objects.emplace_back(gameObject);
+    }
+}
+
 std::shared_ptr<GameObject> Scene::GetGameObjectByName(const std::string& name){
     for(const auto& obj : m_objects){
         if(obj->GetComponent<NameComponent>().name == name){

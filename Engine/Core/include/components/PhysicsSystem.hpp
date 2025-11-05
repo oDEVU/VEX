@@ -245,7 +245,9 @@
             bodyInterface.AddAngularImpulse(bodyId, JPH::Vec3(impulse.x, impulse.y, impulse.z));
         }
 
+        /// @brief Allows to recreate physics body at runtime.
          std::optional<JPH::BodyID> CreateBodyForEntity(entt::entity e, entt::registry& r, PhysicsComponent& pc);
+         std::optional<JPH::BodyID> RecreateBodyForEntity(entt::entity e, PhysicsComponent& pc);
          void DestroyBodyForEntity(PhysicsComponent& pc);
 
          private:

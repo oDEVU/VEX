@@ -95,6 +95,10 @@ void SceneManager::scenesUpdate(float deltaTime){
     }
 }
 
+void SceneManager::AddGameObjectToScene(const std::string& scene, std::shared_ptr<GameObject> gameObject){
+    m_scenes[scene]->AddGameObject(gameObject);
+}
+
 std::shared_ptr<GameObject> SceneManager::GetGameObjectByName(const std::string& scene, const std::string& name){
     return m_scenes[scene]->GetGameObjectByName(name);
 }
