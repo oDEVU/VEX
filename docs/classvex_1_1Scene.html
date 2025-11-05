@@ -132,6 +132,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af179bb0d7faab3a4bf2e25b0aa84a51a" id="r_af179bb0d7faab3a4bf2e25b0aa84a51a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af179bb0d7faab3a4bf2e25b0aa84a51a">sceneUpdate</a> (float deltaTime)</td></tr>
 <tr class="memdesc:af179bb0d7faab3a4bf2e25b0aa84a51a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calls update in all objects it holds. This function needs to be called in your projects update method.  <br /></td></tr>
 <tr class="separator:af179bb0d7faab3a4bf2e25b0aa84a51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89e1806a6bfceb6cda24da72780145ac" id="r_a89e1806a6bfceb6cda24da72780145ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e1806a6bfceb6cda24da72780145ac">AddGameObject</a> (std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; gameObject)</td></tr>
+<tr class="memdesc:a89e1806a6bfceb6cda24da72780145ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to add a game object to the scene.  <br /></td></tr>
+<tr class="separator:a89e1806a6bfceb6cda24da72780145ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24a98fd5c40feca2186c2b1c94b2967a" id="r_a24a98fd5c40feca2186c2b1c94b2967a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24a98fd5c40feca2186c2b1c94b2967a">GetGameObjectByName</a> (const std::string &amp;name)</td></tr>
 <tr class="memdesc:a24a98fd5c40feca2186c2b1c94b2967a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get game object by its unique name.  <br /></td></tr>
 <tr class="separator:a24a98fd5c40feca2186c2b1c94b2967a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +206,33 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a89e1806a6bfceb6cda24da72780145ac" name="a89e1806a6bfceb6cda24da72780145ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89e1806a6bfceb6cda24da72780145ac">&#9670;&#160;</a></span>AddGameObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Scene::AddGameObject </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>gameObject</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to add a game object to the scene. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::shared_ptr&lt;GameObject&gt;</td><td>gameObject - Shared pointer to the game object to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00161">161</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a26c5308e48b6534ce11c6a07fdb6ff21" name="a26c5308e48b6534ce11c6a07fdb6ff21"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a26c5308e48b6534ce11c6a07fdb6ff21">&#9670;&#160;</a></span>GetGameObjectByEntity()</h2>
 
@@ -227,7 +257,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;GameObject&gt; - Shared pointer to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00170">170</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00176">176</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -255,7 +285,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;GameObject&gt; - Shared pointer to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00161">161</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00167">167</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -328,7 +358,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00045">45</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00049">49</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 
 </div>
 </div>

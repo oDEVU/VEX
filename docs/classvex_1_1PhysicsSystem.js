@@ -1,5 +1,6 @@
 var classvex_1_1PhysicsSystem =
 [
+    [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html#a9328d456cb41c2082006ba2d660b2dd5", null ],
     [ "~PhysicsSystem", "classvex_1_1PhysicsSystem.html#af0162eccb2cfdc2c320a435797de3e92", null ],
     [ "AddAngularImpulse", "classvex_1_1PhysicsSystem.html#a67b9f41f4fdc25640083de847a1b8e5d", null ],
     [ "AddForce", "classvex_1_1PhysicsSystem.html#a6695dd8cd3016a58fd780972714d2d12", null ],
@@ -7,6 +8,7 @@ var classvex_1_1PhysicsSystem =
     [ "AddImpulse", "classvex_1_1PhysicsSystem.html#a9155f76e0751bb4be461fe65f08b9c30", null ],
     [ "AddImpulseAtPosition", "classvex_1_1PhysicsSystem.html#abf95555e3924c98e90dc6c4c08bb7bae", null ],
     [ "AddLinearVelocity", "classvex_1_1PhysicsSystem.html#a48af0298212c041d3578f70069839bfe", null ],
+    [ "CreateBodyForEntity", "classvex_1_1PhysicsSystem.html#a98485e6ee768d3c2b885d458baa59ee6", null ],
     [ "GetAngularVelocity", "classvex_1_1PhysicsSystem.html#adb4338ca5ac52b1b0cb9e658552aa8b3", null ],
     [ "GetBodyActive", "classvex_1_1PhysicsSystem.html#aeb2001966a3f24cdf57fdaf47dcf1ca1", null ],
     [ "GetBounciness", "classvex_1_1PhysicsSystem.html#aff81e6537bd36ee8097bc5567c5816ef", null ],
@@ -20,5 +22,5 @@ var classvex_1_1PhysicsSystem =
     [ "SetGravityVector", "classvex_1_1PhysicsSystem.html#a6632176736787dad393d5400ca24d4f2", null ],
     [ "SetLinearVelocity", "classvex_1_1PhysicsSystem.html#a157a736a4f4b1cde151ee0ff000d65d3", null ],
     [ "shutdown", "classvex_1_1PhysicsSystem.html#a9344768ca2718429a24ca7a3ee94ff87", null ],
-    [ "update", "classvex_1_1PhysicsSystem.html#af107438e9ba8f38fbcf9122ee44b29f0", null ]
+    [ "update", "classvex_1_1PhysicsSystem.html#a5c0ea3867f54b0011652f99e1c51c93b", null ]
 ];

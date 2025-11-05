@@ -135,6 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acb010cf8ca366670931c2d4fa7e881fb" id="r_acb010cf8ca366670931c2d4fa7e881fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb010cf8ca366670931c2d4fa7e881fb">scenesUpdate</a> (float deltaTime)</td></tr>
 <tr class="memdesc:acb010cf8ca366670931c2d4fa7e881fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calls update in all objects it holds. This function needs to be called in your projects update method.  <br /></td></tr>
 <tr class="separator:acb010cf8ca366670931c2d4fa7e881fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0db28458a00b93e0fa8ab676a8357449" id="r_a0db28458a00b93e0fa8ab676a8357449"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0db28458a00b93e0fa8ab676a8357449">AddGameObjectToScene</a> (const std::string &amp;scene, std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; gameObject)</td></tr>
+<tr class="memdesc:a0db28458a00b93e0fa8ab676a8357449"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to add a game object to a scene.  <br /></td></tr>
+<tr class="separator:a0db28458a00b93e0fa8ab676a8357449"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96677f0765a558d6c2df25eb84028c6c" id="r_a96677f0765a558d6c2df25eb84028c6c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96677f0765a558d6c2df25eb84028c6c">GetGameObjectByName</a> (const std::string &amp;scene, const std::string &amp;name)</td></tr>
 <tr class="memdesc:a96677f0765a558d6c2df25eb84028c6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get game object by its unique name.  <br /></td></tr>
 <tr class="separator:a96677f0765a558d6c2df25eb84028c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,6 +155,38 @@ Private Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00014">14</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0db28458a00b93e0fa8ab676a8357449" name="a0db28458a00b93e0fa8ab676a8357449"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0db28458a00b93e0fa8ab676a8357449">&#9670;&#160;</a></span>AddGameObjectToScene()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::SceneManager::AddGameObjectToScene </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>scene</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>gameObject</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to add a game object to a scene. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; scene - Name of the scene to add the game object to. </td></tr>
+    <tr><td class="paramname">std::shared_ptr&lt;GameObject&gt;</td><td>gameObject - Shared pointer to the game object to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00101">101</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a9b9af95362d39787631b323c6f351526" name="a9b9af95362d39787631b323c6f351526"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9b9af95362d39787631b323c6f351526">&#9670;&#160;</a></span>clearScenes()</h2>
 
@@ -169,7 +204,7 @@ Private Attributes</h2></td></tr>
 
 <p>Function to clear the current scene. </p>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00088">88</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00091">91</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -202,7 +237,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;GameObject&gt; - Shared pointer to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00102">102</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00109">109</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -235,7 +270,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;GameObject&gt; - Shared pointer to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00098">98</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00105">105</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -267,7 +302,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00074">74</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00077">77</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -299,7 +334,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00083">83</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00086">86</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -326,7 +361,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00092">92</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00095">95</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -353,7 +388,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00079">79</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00082">82</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -378,7 +413,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00050">50</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00055">55</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 
 </div>
 </div>

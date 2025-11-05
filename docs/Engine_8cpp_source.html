@@ -142,7 +142,7 @@ $(function(){initNavTree('Engine_8cpp_source.html',''); initResizable(true); });
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    m_vfs = std::make_unique&lt;VirtualFileSystem&gt;();</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    m_vfs-&gt;initialize(<a class="code hl_function" href="pathUtils_8hpp.html#af5639fbb3bb2fe5ff20d1971df72206b">GetExecutableDir</a>().<span class="keywordtype">string</span>());</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    m_physicsSystem = std::make_unique&lt;PhysicsSystem&gt;();</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    m_physicsSystem = std::make_unique&lt;PhysicsSystem&gt;(m_registry);</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    m_physicsSystem-&gt;init();</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    m_sceneManager = std::make_unique&lt;SceneManager&gt;();</div>
@@ -232,7 +232,7 @@ $(function(){initNavTree('Engine_8cpp_source.html',''); initResizable(true); });
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            <span class="keywordflow">if</span>(!m_paused){</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>                <a class="code hl_function" href="classvex_1_1Engine.html#a9d7355662abceb4069d112e4ab3b67ea">update</a>(deltaTime);</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>                m_sceneManager-&gt;scenesUpdate(deltaTime);</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                m_physicsSystem-&gt;update(deltaTime, m_registry);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                m_physicsSystem-&gt;update(deltaTime);</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            }</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        }<span class="keywordflow">else</span>{</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
@@ -300,9 +300,9 @@ $(function(){initNavTree('Engine_8cpp_source.html',''); initResizable(true); });
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="keyword">auto</span>&amp; camera = m_registry.get&lt;<a class="code hl_struct" href="structvex_1_1CameraComponent.html">CameraComponent</a>&gt;(cameraEntity);</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    view = glm::lookAt(</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        transform.getWorldPosition(m_registry),</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        transform.getWorldPosition(m_registry) + transform.getForwardVector(m_registry),</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        transform.getUpVector(m_registry)</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        transform.getWorldPosition(),</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        transform.getWorldPosition() + transform.getForwardVector(),</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        transform.getUpVector()</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    );</div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    proj = glm::perspective(</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        glm::radians(camera.fov),</div>
@@ -346,9 +346,9 @@ $(function(){initNavTree('Engine_8cpp_source.html',''); initResizable(true); });
 <div class="ttc" id="aerrorUtils_8hpp_html_a9f39a20c9eb51d59239c0cad36ba6e77"><div class="ttname"><a href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a></div><div class="ttdeci">void handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrowing it.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00065">errorUtils.hpp:65</a></div></div>
 <div class="ttc" id="apathUtils_8hpp_html"><div class="ttname"><a href="pathUtils_8hpp.html">pathUtils.hpp</a></div><div class="ttdoc">This file implements path-related utilities.</div></div>
 <div class="ttc" id="apathUtils_8hpp_html_af5639fbb3bb2fe5ff20d1971df72206b"><div class="ttname"><a href="pathUtils_8hpp.html#af5639fbb3bb2fe5ff20d1971df72206b">GetExecutableDir</a></div><div class="ttdeci">std::filesystem::path GetExecutableDir()</div><div class="ttdoc">Get the directory of the executable.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8hpp_source.html#l00025">pathUtils.hpp:25</a></div></div>
-<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00129">BasicComponents.hpp:129</a></div></div>
+<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00277">BasicComponents.hpp:277</a></div></div>
 <div class="ttc" id="astructvex_1_1GameInfo_html"><div class="ttname"><a href="structvex_1_1GameInfo.html">vex::GameInfo</a></div><div class="ttdoc">this struct contains information about the game. like project name and version.</div><div class="ttdef"><b>Definition</b> <a href="GameInfo_8hpp_source.html#l00015">GameInfo.hpp:15</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00021">BasicComponents.hpp:21</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00022">BasicComponents.hpp:22</a></div></div>
 <div class="ttc" id="astructvex_1_1UiComponent_html"><div class="ttname"><a href="structvex_1_1UiComponent.html">vex::UiComponent</a></div><div class="ttdoc">Struct containing VexUI class.</div><div class="ttdef"><b>Definition</b> <a href="UiComponent_8hpp_source.html#l00012">UiComponent.hpp:12</a></div></div>
 <div class="ttc" id="astructvex_1_1enviroment_html"><div class="ttname"><a href="structvex_1_1enviroment.html">vex::enviroment</a></div><div class="ttdoc">This struct is used to hold all enviroment settings. eg. shading details or lighting setup.</div><div class="ttdef"><b>Definition</b> <a href="enviroment_8hpp_source.html#l00013">enviroment.hpp:13</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
