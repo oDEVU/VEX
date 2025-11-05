@@ -44,6 +44,7 @@ set(public_header_files
     include/Engine.hpp
     include/components/Mesh.hpp
     include/components/ResolutionManager.hpp
+    include/components/Scene.hpp
     include/components/SceneManager.hpp
     include/components/errorUtils.hpp
     include/components/pathUtils.hpp
@@ -72,6 +73,7 @@ set(source_files
         src/Engine.cpp
         src/components/Mesh.cpp
         src/components/ResolutionManager.cpp
+        src/components/Scene.cpp
         src/components/SceneManager.cpp
         src/components/Window.cpp
         src/components/Window.hpp

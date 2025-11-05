@@ -81,7 +81,7 @@ public:
 
     void beginGame() override {
         sceneManager.loadScene("Assets/scenes/main.json", *this);
-        sceneManager.sceneBegin();
+        //sceneManager.sceneBegin();
 
         //m_vexUI->load("Assets/ui/example.json");
         //m_vexUI->setOnClick("pause", []() {
@@ -175,7 +175,7 @@ public:
 
         //m_vexUI->setText("fps", "FPS: " + std::to_string((int)fps));
 
-        sceneManager.sceneUpdate(deltaTime);
+        sceneManager.scenesUpdate(deltaTime);
 
         //pass
         if (humanEntity1 && humanEntity1->isValid()) {
