@@ -6,6 +6,7 @@
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
+#include "components/SceneManager.hpp"
 #include <memory>
 
 namespace vex {
@@ -92,6 +93,12 @@ public:
 
     void Update(float deltaTime) override {
         GetComponent<UiComponent>().m_vexUI->setText("fps", "FPS: " + std::to_string((int)(1.f/deltaTime)));
+
+        // temponary just to test stuff, dont do that, dont retrive object everyframe.
+        std::shared_ptr<GameObject> object = m_engine.getSceneManager()->GetGameObjectByName("Assets/scenes/main.json", "MyModel");
+        if (object) {
+            object->GetComponent<TransformComponent>().rotation.x += 0.1f;
+        }
     }
 private:
 };

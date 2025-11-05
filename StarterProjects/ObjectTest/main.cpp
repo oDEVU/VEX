@@ -26,7 +26,6 @@ class ObjectTest : public vex::Engine {
 public:
     using vex::Engine::Engine; // Inherit constructor
     bool animate = true;
-    vex::SceneManager sceneManager;
 
     void processEvent(const SDL_Event& event, float deltaTime) {
         if (event.type == SDL_EVENT_KEY_DOWN) {
@@ -80,13 +79,7 @@ public:
     double fps = 0;
 
     void beginGame() override {
-        sceneManager.loadScene("Assets/scenes/main.json", *this);
-        //sceneManager.sceneBegin();
-
-        //m_vexUI->load("Assets/ui/example.json");
-        //m_vexUI->setOnClick("pause", []() {
-        //    log("Pause button clicked");
-        //});
+        getSceneManager()->loadScene("Assets/scenes/main.json", *this);
 
         vex::MeshComponent humanMesh = vex::createMeshFromPath("Assets/human.obj", *this);
         vex::TransformComponent humanTransform = vex::TransformComponent{
@@ -173,10 +166,6 @@ public:
 
         fps = 1/deltaTime;
 
-        //m_vexUI->setText("fps", "FPS: " + std::to_string((int)fps));
-
-        sceneManager.scenesUpdate(deltaTime);
-
         //pass
         if (humanEntity1 && humanEntity1->isValid()) {
             humanEntity1->GetComponent<vex::TransformComponent>().rotation.y = m_frame;
@@ -212,10 +201,6 @@ public:
     void render() override {
         // Custom rendering if needed
         Engine::render(); // Call base render
-    }
-
-    vex::SceneManager& GetSceneManager() {
-        return sceneManager;
     }
 };
 

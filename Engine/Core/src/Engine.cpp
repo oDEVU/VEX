@@ -9,6 +9,7 @@
 
 #include "components/backends/vulkan/Interface.hpp"
 #include "components/backends/vulkan/VulkanImGUIWrapper.hpp"
+#include "components/SceneManager.hpp"
 #include "components/backends/vulkan/context.hpp"
 #include "entt/entity/fwd.hpp"
 
@@ -33,6 +34,8 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_physicsSystem = std::make_unique<PhysicsSystem>();
     m_physicsSystem->init();
 
+    m_sceneManager = std::make_unique<SceneManager>();
+
     auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
@@ -42,6 +45,11 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     //m_vexUI->init();
 
     log("Engine initialized successfully");
+}
+
+
+std::shared_ptr<SceneManager> Engine::getSceneManager() {
+    return m_sceneManager;
 }
 
 std::shared_ptr<Interface> Engine::getInterface() {
@@ -110,6 +118,7 @@ void Engine::run() {
 
             if(!m_paused){
                 update(deltaTime);
+                m_sceneManager->scenesUpdate(deltaTime);
                 m_physicsSystem->update(deltaTime, m_registry);
             }
         }else{

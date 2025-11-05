@@ -26,6 +26,7 @@ namespace vex {
 class Window;
 class Interface;
 class VirtualFileSystem;
+class SceneManager;
 
 /// @brief Class for interaction with engine systems, your game main class will Inherit from it.
 class Engine {
@@ -79,6 +80,7 @@ public:
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
     entt::registry& getRegistry() { return m_registry; }
     std::shared_ptr<PhysicsSystem> getPhysicsSystem() { return m_physicsSystem; }
+    std::shared_ptr<SceneManager> getSceneManager();
     std::shared_ptr<VexUI> createVexUI();// { return std::make_unique<VexUI>(m_interface->getContext(), m_vfs.get(), m_interface->getResources()); }
 
     /// @brief Internal virtual function for handling window/keyboard events.
@@ -106,6 +108,7 @@ protected:
     std::unique_ptr<InputSystem> m_inputSystem;
     std::shared_ptr<VirtualFileSystem> m_vfs;
     std::shared_ptr<PhysicsSystem> m_physicsSystem;
+    std::shared_ptr<SceneManager> m_sceneManager;
     //std::shared_ptr<VexUI> m_vexUI;
 
     entt::registry m_registry;
