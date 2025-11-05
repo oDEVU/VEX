@@ -73,7 +73,7 @@ namespace vex {
         delete m_tempAllocator;
     }
 
-    void PhysicsSystem::update(float deltaTime, entt::registry& registry) {
+    void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;
 
         m_accumulator += deltaTime;
@@ -81,14 +81,13 @@ namespace vex {
             m_physicsSystem->Update(m_fixedDt, 1, m_tempAllocator, m_jobSystem);
             m_accumulator -= m_fixedDt;
         }
-
-        auto view = registry.view<PhysicsComponent, TransformComponent>();
+        auto view = m_registry.view<PhysicsComponent, TransformComponent>();
         for (auto e : view) {
             auto& pc = view.get<PhysicsComponent>(e);
             if (pc.bodyId.IsInvalid()){
-                CreateBodyForEntity(e, registry, pc);
+                CreateBodyForEntity(e, m_registry, pc);
             }else{
-                SyncBodyToTransform(e, registry, pc.bodyId);
+                SyncBodyToTransform(e, m_registry, pc.bodyId);
             }
         }
     }
@@ -121,6 +120,7 @@ namespace vex {
         if (bodyId.IsInvalid()) return std::nullopt;
 
         bodyInterface.SetFriction(bodyId, pc.friction);
+        bodyInterface.SetRestitution(bodyId, pc.bounce);
 
         pc.bodyId = bodyId;
         bodyInterface.ActivateBody(bodyId);
@@ -164,5 +164,16 @@ namespace vex {
         auto& t = r.get<TransformComponent>(e);
         t.position = {pos.GetX(), pos.GetY(), pos.GetZ()};
         t.rotation = QuatToEuler(rot);
+    }
+
+    PhysicsComponent& PhysicsSystem::getPhysicsComponentByBodyId(JPH::BodyID id){
+        auto view = m_registry.view<PhysicsComponent>();
+        for (auto e : view) {
+            auto& pc = view.get<PhysicsComponent>(e);
+            if (pc.bodyId == id){
+                return pc;
+            }
+        }
+        //return nullptr
     }
 }

@@ -31,7 +31,7 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_vfs = std::make_unique<VirtualFileSystem>();
     m_vfs->initialize(GetExecutableDir().string());
 
-    m_physicsSystem = std::make_unique<PhysicsSystem>();
+    m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
     m_physicsSystem->init();
 
     m_sceneManager = std::make_unique<SceneManager>();
@@ -119,7 +119,7 @@ void Engine::run() {
             if(!m_paused){
                 update(deltaTime);
                 m_sceneManager->scenesUpdate(deltaTime);
-                m_physicsSystem->update(deltaTime, m_registry);
+                m_physicsSystem->update(deltaTime);
             }
         }else{
 

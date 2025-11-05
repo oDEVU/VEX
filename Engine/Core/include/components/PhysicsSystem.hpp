@@ -52,6 +52,7 @@
          bool isStatic = false;
          float mass = 1.0f;
          float friction = 0.5f;
+         float bounce = 0.1f;
          uint8_t objectLayer = 0;
          JPH::BodyID bodyId = JPH::BodyID(JPH::BodyID::cInvalidBodyID);
 
@@ -67,27 +68,29 @@
 
          explicit PhysicsComponent(ShapeType s) : shape(s) {}
 
-         static PhysicsComponent Box(glm::vec3 halfExtents = {0.5f, 0.5f, 0.5f}, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+         static PhysicsComponent Box(glm::vec3 halfExtents = {0.5f, 0.5f, 0.5f}, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::BOX;
              pc.boxHalfExtents = halfExtents;
              pc.mass = mass;
              pc.isStatic = isStatic;
              pc.friction = friction;
+             pc.bounce = bounce;
              return pc;
          }
 
-         static PhysicsComponent Sphere(float radius = 0.5f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+         static PhysicsComponent Sphere(float radius = 0.5f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::SPHERE;
              pc.sphereRadius = radius;
              pc.mass = mass;
              pc.isStatic = isStatic;
              pc.friction = friction;
+             pc.bounce = bounce;
              return pc;
          }
 
-         static PhysicsComponent Capsule(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+         static PhysicsComponent Capsule(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::CAPSULE;
              pc.capsuleRadius = radius;
@@ -95,10 +98,11 @@
              pc.mass = mass;
              pc.isStatic = isStatic;
              pc.friction = friction;
+             pc.bounce = bounce;
              return pc;
          }
 
-         static PhysicsComponent Cylinder(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f) {
+         static PhysicsComponent Cylinder(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::CYLINDER;
              pc.cylinderRadius = radius;
@@ -106,6 +110,7 @@
              pc.mass = mass;
              pc.isStatic = isStatic;
              pc.friction = friction;
+             pc.bounce = bounce;
              return pc;
          }
      };
@@ -113,6 +118,9 @@
      /// @brief Class representing a physics system.
      class PhysicsSystem{
          public:
+
+         /// @brief Constructor, initializes physics system.
+         PhysicsSystem(entt::registry& registry) : m_registry(registry) {}
 
          /// @brief Destructor, simply calls shutdown()
          ~PhysicsSystem();
@@ -124,7 +132,7 @@
          void shutdown();
 
          /// @brief Updates physics, it is technically fixed time but needs delta to track if required time already passed
-         void update(float deltaTime, entt::registry& registry);
+         void update(float deltaTime);
 
          /// @brief Allows for updating gravity.
          void SetGravityVector(const glm::vec3& gravity){
@@ -135,6 +143,8 @@
          void SetFriction(JPH::BodyID bodyId, float friction){
              auto& bodyInterface = m_physicsSystem->GetBodyInterface();
              bodyInterface.SetFriction(bodyId, friction);
+
+             getPhysicsComponentByBodyId(bodyId).friction = friction;
          }
 
         /// @brief Allows for getting friction.
@@ -147,6 +157,8 @@
         void SetBounciness(JPH::BodyID bodyId, float bounciness){
             auto& bodyInterface = m_physicsSystem->GetBodyInterface();
             bodyInterface.SetRestitution(bodyId, bounciness);
+
+            getPhysicsComponentByBodyId(bodyId).bounce = bounciness;
         }
 
         /// @brief Allows for getting bounciness.
@@ -241,6 +253,8 @@
              JPH::JobSystem* m_jobSystem = nullptr;
              JPH::PhysicsSystem* m_physicsSystem = nullptr;
 
+             entt::registry& m_registry;
+
              std::unique_ptr<JPH::BroadPhaseLayerInterface> m_bpInterface;
              std::unique_ptr<JPH::ObjectVsBroadPhaseLayerFilter> m_objVsBpFilter;
              std::unique_ptr<JPH::ObjectLayerPairFilter> m_objLayerPairFilter;
@@ -251,6 +265,8 @@
              static JPH::Quat EulerToQuat(const glm::vec3& eulerDeg);
              static glm::vec3 QuatToEuler(const JPH::Quat& q);
              void SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id);
+
+             PhysicsComponent& getPhysicsComponentByBodyId(JPH::BodyID id);
 
      };
  }
