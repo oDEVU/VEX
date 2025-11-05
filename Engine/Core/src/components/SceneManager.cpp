@@ -60,6 +60,12 @@ namespace vex {
         if (json.contains("path") && !json["path"].is_array()) {
             comp = createMeshFromPath(json["path"], obj.GetEngine());
         }
+        if (json.contains("transparent") && !json["transparent"].is_array()) {
+            bool transparent = json["transparent"].get<bool>();
+            if(transparent){
+                comp.renderType = RenderType::TRANSPARENT;
+            }
+        }
         obj.AddComponent(comp);
     }
 

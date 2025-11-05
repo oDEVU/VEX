@@ -220,7 +220,7 @@ struct TransformComponent {
     /// @return glm::vec3
     glm::vec3 getForwardVector() const {
         float pitch = glm::radians(getWorldRotation().x);
-        float yaw = glm::radians(getWorldRotation().y);
+        float yaw = glm::radians(-getWorldRotation().y);
 
         return glm::normalize(glm::vec3(
             cos(yaw) * cos(pitch),

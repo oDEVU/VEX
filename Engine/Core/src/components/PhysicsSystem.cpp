@@ -75,13 +75,23 @@ namespace vex {
 
     void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;
-
+        auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+        auto view = m_registry.view<PhysicsComponent, TransformComponent>();
+        for (auto e : view) {
+            auto& tc = view.get<TransformComponent>(e);
+            auto& pc = view.get<PhysicsComponent>(e);
+            if(tc.getWorldRotation() != QuatToEuler(EulerToQuat(tc.getWorldRotation()))){
+                log("World rotation:       %f, %f, %f", tc.getWorldRotation().x, tc.getWorldRotation().y, tc.getWorldRotation().z);
+                log("Quat rotation:        %f, %f, %f, %f", EulerToQuat(tc.getWorldRotation()).GetX(), EulerToQuat(tc.getWorldRotation()).GetY(), EulerToQuat(tc.getWorldRotation()).GetZ(), EulerToQuat(tc.getWorldRotation()).GetW());
+                log("Euler rotation:       %f, %f, %f", QuatToEuler(EulerToQuat(tc.getWorldRotation())).x, QuatToEuler(EulerToQuat(tc.getWorldRotation())).y, QuatToEuler(EulerToQuat(tc.getWorldRotation())).z);
+            }
+            bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), EulerToQuat(tc.getWorldRotation()), JPH::EActivation::Activate);
+        }
         m_accumulator += deltaTime;
         while (m_accumulator >= m_fixedDt) {
             m_physicsSystem->Update(m_fixedDt, 1, m_tempAllocator, m_jobSystem);
             m_accumulator -= m_fixedDt;
         }
-        auto view = m_registry.view<PhysicsComponent, TransformComponent>();
         for (auto e : view) {
             auto& pc = view.get<PhysicsComponent>(e);
             if (pc.bodyId.IsInvalid()){
@@ -141,12 +151,21 @@ namespace vex {
     }
 
     JPH::Quat PhysicsSystem::EulerToQuat(const glm::vec3& eulerDeg) {
-        glm::mat4 mat(1.0f);
+        /*glm::mat4 mat(1.0f);
         mat = glm::rotate(mat, glm::radians(eulerDeg.y), glm::vec3(0.0f, 1.0f, 0.0f)); // Y first
         mat = glm::rotate(mat, glm::radians(eulerDeg.x), glm::vec3(1.0f, 0.0f, 0.0f)); // X
         mat = glm::rotate(mat, glm::radians(eulerDeg.z), glm::vec3(0.0f, 0.0f, 1.0f)); // Z last
         glm::quat q = glm::quat_cast(mat);
-        return JPH::Quat(q.x, q.y, q.z, q.w);
+        return JPH::Quat(q.x, q.y, q.z, q.w);*/
+
+        // Convert to Radians
+            glm::vec3 eulerRad = glm::radians(eulerDeg);
+
+            // Explicitly construct the quaternion using the Y-X-Z order (Yaw-Pitch-Roll)
+            // to match your original matrix implementation.
+            glm::quat q = glm::yawPitchRoll(eulerRad.y, eulerRad.x, eulerRad.z);
+
+            return JPH::Quat(q.x, q.y, q.z, q.w);
     }
 
     glm::vec3 PhysicsSystem::QuatToEuler(const JPH::Quat& q) {
