@@ -7,6 +7,7 @@ var dir_3da5c18f2e32f0267c3ca22901fd8466 =
     [ "Mesh.cpp", "Mesh_8cpp_source.html", null ],
     [ "PhysicsSystem.cpp", "PhysicsSystem_8cpp_source.html", null ],
     [ "ResolutionManager.cpp", "ResolutionManager_8cpp_source.html", null ],
+    [ "Scene.cpp", "Scene_8cpp_source.html", null ],
     [ "SceneManager.cpp", "SceneManager_8cpp_source.html", null ],
     [ "VirtualFileSystem.cpp", "VirtualFileSystem_8cpp_source.html", null ],
     [ "VirtualFileSystem.hpp", "VirtualFileSystem_8hpp.html", "VirtualFileSystem_8hpp" ],

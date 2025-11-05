@@ -7,7 +7,7 @@ var searchData=
   ['clean_5fpath_4',['clean_path',['../classvex_1_1VirtualFileSystem.html#a40eda351d98ffbeb3bda216100309b67',1,'vex::VirtualFileSystem']]],
   ['cleanuplowresresources_5',['cleanupLowResResources',['../classvex_1_1VulkanSwapchainManager.html#a7143fe67a28c118f034e8587f795c5db',1,'vex::VulkanSwapchainManager']]],
   ['cleanupswapchain_6',['cleanupSwapchain',['../classvex_1_1VulkanSwapchainManager.html#a07ecf116ade867fff92cab29a22aec85',1,'vex::VulkanSwapchainManager']]],
-  ['clearscene_7',['clearScene',['../classvex_1_1SceneManager.html#a99dbdf7c6240f7b56017976247889ffc',1,'vex::SceneManager']]],
+  ['clearscenes_7',['clearScenes',['../classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526',1,'vex::SceneManager']]],
   ['createcommandbuffers_8',['createCommandBuffers',['../classvex_1_1VulkanSwapchainManager.html#af20b71a100d5995bedd273687eb7ecd6',1,'vex::VulkanSwapchainManager']]],
   ['createcommandpool_9',['createCommandPool',['../classvex_1_1VulkanSwapchainManager.html#ad1ce9d5da142f33cf0c55785d6ab768a',1,'vex::VulkanSwapchainManager']]],
   ['createdefaulttexture_10',['createDefaultTexture',['../classvex_1_1Interface.html#a8f4845f3fe170ffbc882a432c2630986',1,'vex::Interface::createDefaultTexture()'],['../classvex_1_1VulkanResources.html#abefc56e46967586e0dd33c50c1f815d1',1,'vex::VulkanResources::createDefaultTexture()']]],

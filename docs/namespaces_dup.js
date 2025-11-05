@@ -32,6 +32,7 @@ var namespaces_dup =
       [ "PushConstants", "structvex_1_1PushConstants.html", "structvex_1_1PushConstants" ],
       [ "Renderer", "classvex_1_1Renderer.html", "classvex_1_1Renderer" ],
       [ "ResolutionManager", "classvex_1_1ResolutionManager.html", "classvex_1_1ResolutionManager" ],
+      [ "Scene", "classvex_1_1Scene.html", "classvex_1_1Scene" ],
       [ "SceneManager", "classvex_1_1SceneManager.html", "classvex_1_1SceneManager" ],
       [ "Submesh", "structvex_1_1Submesh.html", null ],
       [ "TransformComponent", "structvex_1_1TransformComponent.html", "structvex_1_1TransformComponent" ],

@@ -5,6 +5,7 @@ var searchData=
   ['_7emodelobject_2',['~ModelObject',['../classvex_1_1ModelObject.html#aa3dc237babc57e7044871127bc35e00e',1,'vex::ModelObject']]],
   ['_7ephysicssystem_3',['~PhysicsSystem',['../classvex_1_1PhysicsSystem.html#af0162eccb2cfdc2c320a435797de3e92',1,'vex::PhysicsSystem']]],
   ['_7erenderer_4',['~Renderer',['../classvex_1_1Renderer.html#ab647f7466e1195b57864a5ead4c51cad',1,'vex::Renderer']]],
-  ['_7evulkanresources_5',['~VulkanResources',['../classvex_1_1VulkanResources.html#a929f9c55cb9204c67b5b8fd7f013a346',1,'vex::VulkanResources']]],
-  ['_7evulkanswapchainmanager_6',['~VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html#a24542bc6c7d15c346c2d554daabb92b9',1,'vex::VulkanSwapchainManager']]]
+  ['_7escene_5',['~Scene',['../classvex_1_1Scene.html#a259def38aebfd1eb64994c78768bff2f',1,'vex::Scene']]],
+  ['_7evulkanresources_6',['~VulkanResources',['../classvex_1_1VulkanResources.html#a929f9c55cb9204c67b5b8fd7f013a346',1,'vex::VulkanResources']]],
+  ['_7evulkanswapchainmanager_7',['~VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html#a24542bc6c7d15c346c2d554daabb92b9',1,'vex::VulkanSwapchainManager']]]
 ];

@@ -1,9 +1,10 @@
 var classvex_1_1SceneManager =
 [
-    [ "clearScene", "classvex_1_1SceneManager.html#a99dbdf7c6240f7b56017976247889ffc", null ],
-    [ "GetGameObject", "classvex_1_1SceneManager.html#a81ba17e0bcd30b9196330d55ade5e0fd", null ],
+    [ "clearScenes", "classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526", null ],
+    [ "GetGameObjectByEntity", "classvex_1_1SceneManager.html#a5db8b683373bba12f569be03f3534b70", null ],
+    [ "GetGameObjectByName", "classvex_1_1SceneManager.html#a96677f0765a558d6c2df25eb84028c6c", null ],
     [ "loadScene", "classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953", null ],
     [ "loadSceneWithoutClearing", "classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846", null ],
-    [ "sceneBegin", "classvex_1_1SceneManager.html#ac7c7eec1534debfb848dacbaabb66810", null ],
-    [ "sceneUpdate", "classvex_1_1SceneManager.html#ac06d216624c1816c46c929c6832e2ac4", null ]
+    [ "scenesUpdate", "classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb", null ],
+    [ "unloadScene", "classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3", null ]
 ];

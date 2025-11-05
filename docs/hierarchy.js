@@ -51,6 +51,7 @@ var hierarchy =
     [ "vex::PushConstants", "structvex_1_1PushConstants.html", null ],
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],
     [ "vex::ResolutionManager", "classvex_1_1ResolutionManager.html", null ],
+    [ "vex::Scene", "classvex_1_1Scene.html", null ],
     [ "vex::SceneManager", "classvex_1_1SceneManager.html", null ],
     [ "std::streambuf", null, [
       [ "vex::VirtualFileSystem::VPKStream::VPKStreamBuf", "classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html", null ]
