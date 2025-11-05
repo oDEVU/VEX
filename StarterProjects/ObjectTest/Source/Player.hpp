@@ -65,7 +65,18 @@ public:
             GetComponent<vex::TransformComponent>().addYaw(axis * 0.05);
         });
         inputComp.addMouseAxisBinding(vex::MouseAxis::Y, [this](float axis) {
-            GetComponent<vex::TransformComponent>().addPitch(-axis * 0.05);
+            // dirty fix to fix camera fliping
+            if(GetComponent<vex::TransformComponent>().getWorldRotation().x < 90 && GetComponent<vex::TransformComponent>().getWorldRotation().x > -90){
+                GetComponent<vex::TransformComponent>().addPitch(-axis * 0.05);
+            }
+
+            if(GetComponent<vex::TransformComponent>().getWorldRotation().x >= 90){
+                GetComponent<vex::TransformComponent>().setWorldRotation({89.9, GetComponent<vex::TransformComponent>().getWorldRotation().y, GetComponent<vex::TransformComponent>().getWorldRotation().z});
+            }else if(GetComponent<vex::TransformComponent>().getWorldRotation().x <= -90){
+                GetComponent<vex::TransformComponent>().setWorldRotation({-89.9, GetComponent<vex::TransformComponent>().getWorldRotation().y, GetComponent<vex::TransformComponent>().getWorldRotation().z});
+            }
+
+            //log("Camera rotation: %f, %f, %f", GetComponent<vex::TransformComponent>().getWorldRotation().x, GetComponent<vex::TransformComponent>().getWorldRotation().y, GetComponent<vex::TransformComponent>().getWorldRotation().z);
         });
 
         AddComponent(inputComp);
