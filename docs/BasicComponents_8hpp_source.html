@@ -111,337 +111,375 @@ $(function(){initNavTree('BasicComponents_8hpp_source.html',''); initResizable(t
 <a href="BasicComponents_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;glm/gtc/matrix_transform.hpp&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;entt/entt.hpp&gt;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="Mesh_8hpp.html">components/Mesh.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;entt/entity/fwd.hpp&quot;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span>vex{</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span></div>
-<div class="foldopen" id="foldopen00022" data-start="{" data-end="};">
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html">   22</a></span><span class="keyword">struct </span><a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a> {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    glm::vec3 position = {0.0f, 0.0f, 0.0f};</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    glm::vec3 rotation = {0.0f, 0.0f, 0.0f};</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    glm::vec3 scale = {1.0f, 1.0f, 1.0f};</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    entt::entity parent = entt::null;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    entt::registry&amp; m_registry;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keyword">public</span>:</div>
-<div class="foldopen" id="foldopen00031" data-start="{" data-end="}">
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">   31</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>(<span class="keyword">const</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&amp; other)</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        : m_registry(other.m_registry), <span class="comment">// Initialize the reference from the other&#39;s reference</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>          position(other.position),</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>          rotation(other.rotation),</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>          scale(other.scale),</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>          parent(other.parent)</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    {}</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define GLM_ENABLE_EXPERIMENTAL</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;glm/gtc/matrix_transform.hpp&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;glm/gtc/quaternion.hpp&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;glm/gtx/quaternion.hpp&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;glm/gtx/euler_angles.hpp&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;glm/gtx/matrix_decompose.hpp&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;entt/entt.hpp&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;<a class="code" href="Mesh_8hpp.html">components/Mesh.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &quot;entt/entity/fwd.hpp&quot;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">namespace </span>vex{</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span></div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html">   26</a></span><span class="keyword">struct </span><a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a> {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    glm::vec3 position = {0.0f, 0.0f, 0.0f};</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    glm::vec3 scale = {1.0f, 1.0f, 1.0f};</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    entt::entity parent = entt::null;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">bool</span> lastTransformed = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    entt::registry&amp; m_registry;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00036" data-start="{" data-end="}">
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">   36</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>(<span class="keyword">const</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&amp; other)</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        : m_registry(other.m_registry), <span class="comment">// Initialize the reference from the other&#39;s reference</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>          position(other.position),</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>          m_rotationQuat(other.m_rotationQuat), <span class="comment">// Copy the quaternion</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>          scale(other.scale),</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>          parent(other.parent)</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    {}</div>
 </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span></div>
-<div class="foldopen" id="foldopen00040" data-start="{" data-end="}">
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf">   40</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&amp; <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf">operator=</a>(<span class="keyword">const</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&amp; other) {</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;other) {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="comment">// registry_ref cannot be reassigned. Assuming destination component belongs to the same registry.</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="comment">// registry_ref = other.registry_ref; // FORBIDDEN: Cannot rebind a reference</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            position = other.position;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            rotation = other.rotation;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            scale = other.scale;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            parent = other.parent;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        }</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    }</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
+<div class="foldopen" id="foldopen00045" data-start="{" data-end="}">
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf">   45</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&amp; <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf">operator=</a>(<span class="keyword">const</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&amp; other) {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;other) {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            position = other.position;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            m_rotationQuat = other.m_rotationQuat; <span class="comment">// Assign the quaternion</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            scale = other.scale;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            parent = other.parent;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        }</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    }</div>
 </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span></div>
-<div class="foldopen" id="foldopen00053" data-start="{" data-end="}">
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a9436c3a66ec2b6ad04bd2eacd6de341a">   53</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#a9436c3a66ec2b6ad04bd2eacd6de341a">TransformComponent</a>(entt::registry&amp; registry)</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        : m_registry(registry) {}</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span></div>
+<div class="foldopen" id="foldopen00056" data-start="{" data-end="}">
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a9436c3a66ec2b6ad04bd2eacd6de341a">   56</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#a9436c3a66ec2b6ad04bd2eacd6de341a">TransformComponent</a>(entt::registry&amp; registry)</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        : m_registry(registry) {}</div>
 </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span></div>
-<div class="foldopen" id="foldopen00057" data-start="{" data-end="}">
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a93e879969afa509ed59ea3a2526430b0">   57</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#a93e879969afa509ed59ea3a2526430b0">TransformComponent</a>(entt::registry&amp; registry, glm::vec3 pos, entt::entity p = entt::null)</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        : m_registry(registry), position(pos), parent(p) {}</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
+<div class="foldopen" id="foldopen00060" data-start="{" data-end="}">
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a93e879969afa509ed59ea3a2526430b0">   60</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#a93e879969afa509ed59ea3a2526430b0">TransformComponent</a>(entt::registry&amp; registry, glm::vec3 pos, entt::entity p = entt::null)</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        : m_registry(registry), position(pos), parent(p) {}</div>
 </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span></div>
-<div class="foldopen" id="foldopen00061" data-start="{" data-end="}">
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c">   61</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c">TransformComponent</a>(entt::registry&amp; registry, glm::vec3 pos, glm::vec3 rot, entt::entity p = entt::null)</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        : m_registry(registry), position(pos), rotation(rot), parent(p) {}</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span></div>
+<div class="foldopen" id="foldopen00064" data-start="{" data-end="}">
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c">   64</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c">TransformComponent</a>(entt::registry&amp; registry, glm::vec3 pos, glm::vec3 rot, entt::entity p = entt::null)</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        : m_registry(registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), parent(p) {}</div>
 </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span></div>
-<div class="foldopen" id="foldopen00065" data-start="{" data-end="}">
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444">   65</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444">TransformComponent</a>(entt::registry&amp; registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p = entt::null)</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        : m_registry(registry), position(pos), rotation(rot), scale(s), parent(p) {}</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span></div>
+<div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444">   68</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444">TransformComponent</a>(entt::registry&amp; registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p = entt::null)</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        : m_registry(registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), scale(s), parent(p) {}</div>
 </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span></div>
-<div class="foldopen" id="foldopen00069" data-start="{" data-end="}">
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8">   69</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8">TransformComponent</a>(entt::registry&amp; registry, entt::entity p)</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        : m_registry(registry), parent(p) {}</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span></div>
+<div class="foldopen" id="foldopen00072" data-start="{" data-end="}">
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8">   72</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8">TransformComponent</a>(entt::registry&amp; registry, entt::entity p)</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        : m_registry(registry), parent(p) {}</div>
 </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#ad47fe6cd20b433b4a71bc6fcbd6b9b3b">   73</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#ad47fe6cd20b433b4a71bc6fcbd6b9b3b">TransformComponent</a>() = <span class="keyword">delete</span>;</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span></div>
-<div class="foldopen" id="foldopen00076" data-start="{" data-end="}">
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a79214f23e2537a7806063822d6a39859">   76</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a79214f23e2537a7806063822d6a39859">setParent</a>(entt::entity newParent) {</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        parent = newParent;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#ad47fe6cd20b433b4a71bc6fcbd6b9b3b">   76</a></span>    <a class="code hl_function" href="structvex_1_1TransformComponent.html#ad47fe6cd20b433b4a71bc6fcbd6b9b3b">TransformComponent</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">bool</span> transformedLately(){</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <span class="keywordflow">return</span> lastTransformed;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordtype">void</span> updatedPhysicsTransform(){</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        lastTransformed = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    }</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span></div>
+<div class="foldopen" id="foldopen00087" data-start="{" data-end="}">
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a79214f23e2537a7806063822d6a39859">   87</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a79214f23e2537a7806063822d6a39859">setParent</a>(entt::entity newParent) {</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        parent = newParent;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    }</div>
 </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span></div>
-<div class="foldopen" id="foldopen00081" data-start="{" data-end="}">
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a8cb6295bdf09984a476b8dc7073f7478">   81</a></span>    entt::entity <a class="code hl_function" href="structvex_1_1TransformComponent.html#a8cb6295bdf09984a476b8dc7073f7478">getParent</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">return</span> parent;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    }</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span></div>
+<div class="foldopen" id="foldopen00092" data-start="{" data-end="}">
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a8cb6295bdf09984a476b8dc7073f7478">   92</a></span>    entt::entity <a class="code hl_function" href="structvex_1_1TransformComponent.html#a8cb6295bdf09984a476b8dc7073f7478">getParent</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keywordflow">return</span> parent;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    }</div>
 </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span></div>
-<div class="foldopen" id="foldopen00086" data-start="{" data-end="}">
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a6a59286f9d82e211afcc8022d2f5fa43">   86</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6a59286f9d82e211afcc8022d2f5fa43">getLocalPosition</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">return</span> position;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    }</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span></div>
+<div class="foldopen" id="foldopen00097" data-start="{" data-end="}">
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a6a59286f9d82e211afcc8022d2f5fa43">   97</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6a59286f9d82e211afcc8022d2f5fa43">getLocalPosition</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <span class="keywordflow">return</span> position;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    }</div>
 </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span></div>
-<div class="foldopen" id="foldopen00091" data-start="{" data-end="}">
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#aee6d0544270a1ac673b1c53b46c36a54">   91</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#aee6d0544270a1ac673b1c53b46c36a54">getLocalRotation</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        <span class="keywordflow">return</span> rotation;</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    }</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span></div>
+<div class="foldopen" id="foldopen00102" data-start="{" data-end="}">
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#aee6d0544270a1ac673b1c53b46c36a54">  102</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#aee6d0544270a1ac673b1c53b46c36a54">getLocalRotation</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keywordflow">return</span> glm::degrees(glm::eulerAngles(m_rotationQuat));</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    }</div>
 </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span></div>
-<div class="foldopen" id="foldopen00096" data-start="{" data-end="}">
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a479a07f769ca676199405d681fccc787">   96</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a479a07f769ca676199405d681fccc787">getLocalScale</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">return</span> scale;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    }</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span></div>
+<div class="foldopen" id="foldopen00107" data-start="{" data-end="}">
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a479a07f769ca676199405d681fccc787">  107</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a479a07f769ca676199405d681fccc787">getLocalScale</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordflow">return</span> scale;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    }</div>
 </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span></div>
-<div class="foldopen" id="foldopen00101" data-start="{" data-end="}">
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2">  101</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2">setLocalPosition</a>(glm::vec3 newPosition) {</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        position = newPosition;</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    }</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span></div>
+<div class="foldopen" id="foldopen00112" data-start="{" data-end="}">
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2">  112</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2">setLocalPosition</a>(glm::vec3 newPosition) {</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        position = newPosition;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
 </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span></div>
-<div class="foldopen" id="foldopen00106" data-start="{" data-end="}">
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a7cf317a269169a2930cc61da68c3da88">  106</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a7cf317a269169a2930cc61da68c3da88">setLocalRotation</a>(glm::vec3 newRotation) {</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        rotation = newRotation;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    }</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span></div>
+<div class="foldopen" id="foldopen00117" data-start="{" data-end="}">
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a7cf317a269169a2930cc61da68c3da88">  117</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a7cf317a269169a2930cc61da68c3da88">setLocalRotation</a>(glm::vec3 newRotation) {</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        lastTransformed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        m_rotationQuat = glm::normalize(glm::quat(glm::radians(newRotation)));</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    }</div>
 </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span></div>
-<div class="foldopen" id="foldopen00111" data-start="{" data-end="}">
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a7db17dc36cac01aedb4ce6f829f5ae4a">  111</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a7db17dc36cac01aedb4ce6f829f5ae4a">setLocalScale</a>(glm::vec3 newScale) {</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        scale = newScale;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    }</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span></div>
+<div class="foldopen" id="foldopen00123" data-start="{" data-end="}">
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a7db17dc36cac01aedb4ce6f829f5ae4a">  123</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a7db17dc36cac01aedb4ce6f829f5ae4a">setLocalScale</a>(glm::vec3 newScale) {</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        scale = newScale;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    }</div>
 </div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span></div>
-<div class="foldopen" id="foldopen00116" data-start="{" data-end="}">
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">  116</a></span>    glm::mat4 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        glm::mat4 local(1.0f);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        local = glm::translate(local, position);</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        local = glm::rotate(local, glm::radians(rotation.x), {1, 0, 0});</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        local = glm::rotate(local, glm::radians(rotation.y), {0, 1, 0});</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        local = glm::rotate(local, glm::radians(rotation.z), {0, 0, 1});</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        local = glm::scale(local, scale);</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">if</span> (parent != entt::null &amp;&amp; m_registry.valid(parent) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent)) {</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            <span class="keywordflow">return</span> m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent).<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>() * local;</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        }</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">return</span> local;</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    }</div>
-</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        <span class="comment">// --- WORLD QUATERNION METHODS FOR PHYSICS SYSTEMS ---</span></div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span></div>
-<div class="foldopen" id="foldopen00131" data-start="{" data-end="}">
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a2cf9d77e82d9bcace981ab78293000a5">  131</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a2cf9d77e82d9bcace981ab78293000a5">getWorldPosition</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        <span class="keywordflow">return</span> glm::vec3(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()[3]);</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    }</div>
+<div class="foldopen" id="foldopen00130" data-start="{" data-end="}">
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a8db494d1118de04f51b7ae2c788ad88a">  130</a></span>        glm::quat <a class="code hl_function" href="structvex_1_1TransformComponent.html#a8db494d1118de04f51b7ae2c788ad88a">getWorldQuaternion</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            <span class="keywordflow">return</span> glm::normalize(glm::quat_cast(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()));</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        }</div>
 </div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span></div>
-<div class="foldopen" id="foldopen00137" data-start="{" data-end="}">
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">  137</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">getWorldRotation</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        glm::vec3 worldRot = rotation;</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        entt::entity current = parent;</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        <span class="keywordflow">while</span> (current != entt::null &amp;&amp; m_registry.valid(current) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current)) {</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            worldRot += m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current).rotation;</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>            current = m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current).parent;</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        }</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        <span class="keywordflow">return</span> worldRot;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    }</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span></div>
+<div class="foldopen" id="foldopen00136" data-start="{" data-end="}">
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#aa3b792628e571cd834999392dfdaa598">  136</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#aa3b792628e571cd834999392dfdaa598">setWorldQuaternion</a>(glm::quat targetWorldQuat) {</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>            <span class="keywordflow">if</span> (parent != entt::null &amp;&amp; m_registry.valid(parent) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent)) {</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>                glm::quat parentWorldQuat = glm::quat_cast(m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent).matrix());</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>                glm::quat parentInverse = glm::inverse(parentWorldQuat);</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>                m_rotationQuat = parentInverse * targetWorldQuat;</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>                m_rotationQuat = targetWorldQuat;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            }</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            m_rotationQuat = glm::normalize(m_rotationQuat);</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        }</div>
 </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span></div>
-<div class="foldopen" id="foldopen00149" data-start="{" data-end="}">
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">  149</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">getWorldScale</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        glm::vec3 worldScale = scale;</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        entt::entity current = parent;</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        <span class="keywordflow">while</span> (current != entt::null &amp;&amp; m_registry.valid(current) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current)) {</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>            worldScale *= m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current).scale;</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            current = m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current).parent;</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        }</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">return</span> worldScale;</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    }</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="comment">// --------------------------------------------------</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span></div>
+<div class="foldopen" id="foldopen00150" data-start="{" data-end="}">
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">  150</a></span>    glm::mat4 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        glm::mat4 local = glm::mat4(1.0f);</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        local = glm::translate(local, position); <span class="comment">// Najpierw translacja</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        local *= glm::mat4_cast(m_rotationQuat); <span class="comment">// Następnie rotacja (mnożenie macierzy)</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        local = glm::scale(local, scale);        <span class="comment">// Na koniec skala (mnożenie macierzy)</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">if</span> (parent != entt::null &amp;&amp; m_registry.valid(parent) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent)) {</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            <span class="keywordflow">return</span> m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent).<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>() * local;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        }</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        <span class="keywordflow">return</span> local;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    }</div>
 </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span></div>
-<div class="foldopen" id="foldopen00161" data-start="{" data-end="}">
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">  161</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">setWorldPosition</a>(glm::vec3 newPosition) {</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        glm::vec3 worldOffset = <a class="code hl_function" href="structvex_1_1TransformComponent.html#a2cf9d77e82d9bcace981ab78293000a5">getWorldPosition</a>() - <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6a59286f9d82e211afcc8022d2f5fa43">getLocalPosition</a>();</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        position = newPosition + worldOffset;</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span></div>
+<div class="foldopen" id="foldopen00164" data-start="{" data-end="}">
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a2cf9d77e82d9bcace981ab78293000a5">  164</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a2cf9d77e82d9bcace981ab78293000a5">getWorldPosition</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        <span class="keywordflow">return</span> glm::vec3(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()[3]);</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    }</div>
 </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span></div>
-<div class="foldopen" id="foldopen00168" data-start="{" data-end="}">
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab">  168</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab">setWorldRotation</a>(glm::vec3 newRotation) {</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        glm::vec3 worldOffset = <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">getWorldRotation</a>() - <a class="code hl_function" href="structvex_1_1TransformComponent.html#aee6d0544270a1ac673b1c53b46c36a54">getLocalRotation</a>();</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        rotation = newRotation + worldOffset;</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    }</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span></div>
+<div class="foldopen" id="foldopen00170" data-start="{" data-end="}">
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">  170</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">getWorldRotation</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        <span class="keywordflow">return</span> glm::degrees(glm::eulerAngles(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a8db494d1118de04f51b7ae2c788ad88a">getWorldQuaternion</a>()));</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    }</div>
 </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span></div>
-<div class="foldopen" id="foldopen00175" data-start="{" data-end="}">
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20">  175</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20">setWorldScale</a>(glm::vec3 newScale) {</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        glm::vec3 worldOffset = <a class="code hl_function" href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">getWorldScale</a>() - <a class="code hl_function" href="structvex_1_1TransformComponent.html#a479a07f769ca676199405d681fccc787">getLocalScale</a>();</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        scale = newScale + worldOffset;</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    }</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span></div>
+<div class="foldopen" id="foldopen00176" data-start="{" data-end="}">
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">  176</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">getWorldScale</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        glm::vec3 worldScale = scale;</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        entt::entity current = parent;</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <span class="keywordflow">while</span> (current != entt::null &amp;&amp; m_registry.valid(current) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current)) {</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            worldScale *= m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current).scale;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>            current = m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(current).parent;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        }</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        <span class="keywordflow">return</span> worldScale;</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    }</div>
 </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span></div>
-<div class="foldopen" id="foldopen00182" data-start="{" data-end="}">
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c">  182</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c">addLocalPosition</a>(glm::vec3 newPosition) {</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        <span class="comment">//glm::vec3 worldOffset = getWorldPosition(registry) - getLocalPosition(registry);</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        position += newPosition;</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    }</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span></div>
+<div class="foldopen" id="foldopen00188" data-start="{" data-end="}">
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">  188</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">setWorldPosition</a>(glm::vec3 newPosition) {</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <span class="keywordflow">if</span> (parent != entt::null &amp;&amp; m_registry.valid(parent) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent)) {</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>            glm::mat4 parentWorldMatrix = m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent).<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>();</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>            glm::vec4 newLocalPos4 = inverseParentMatrix * glm::vec4(newPosition, 1.0f);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            position = glm::vec3(newLocalPos4);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>            position = newPosition;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        }</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    }</div>
 </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span></div>
-<div class="foldopen" id="foldopen00189" data-start="{" data-end="}">
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0">  189</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0">addLocalRotation</a>(glm::vec3 newRotation) {</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        <span class="comment">//glm::vec3 worldOffset = getWorldRotation(registry) - getLocalRotation(registry);</span></div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        rotation += newRotation;</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    }</div>
-</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span></div>
-<div class="foldopen" id="foldopen00196" data-start="{" data-end="}">
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a68b4b4644e123ad5d6987fc4a7f409f5">  196</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a68b4b4644e123ad5d6987fc4a7f409f5">addLocalScale</a>(glm::vec3 newScale) {</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        <span class="comment">//glm::vec3 worldOffset = getWorldScale(registry) - getLocalScale(registry);</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        scale += newScale;</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    }</div>
-</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span></div>
-<div class="foldopen" id="foldopen00203" data-start="{" data-end="}">
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a54d10024f0005d57ac442e9ec4b6f95f">  203</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a54d10024f0005d57ac442e9ec4b6f95f">addPitch</a>(<span class="keywordtype">float</span> deltaPitch) {</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        rotation.x += deltaPitch;</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span></div>
+<div class="foldopen" id="foldopen00201" data-start="{" data-end="}">
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab">  201</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab">setWorldRotation</a>(glm::vec3 newRotation) {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        lastTransformed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        glm::quat targetWorldQuat = glm::quat(glm::radians(newRotation));</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <a class="code hl_function" href="structvex_1_1TransformComponent.html#aa3b792628e571cd834999392dfdaa598">setWorldQuaternion</a>(targetWorldQuat);</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    }</div>
 </div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span></div>
 <div class="foldopen" id="foldopen00209" data-start="{" data-end="}">
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975">  209</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975">addYaw</a>(<span class="keywordtype">float</span> deltaYaw) {</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        rotation.y += deltaYaw;</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    }</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20">  209</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20">setWorldScale</a>(glm::vec3 newScale) {</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        <span class="keywordflow">if</span> (parent != entt::null &amp;&amp; m_registry.valid(parent) &amp;&amp; m_registry.all_of&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent)) {</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>            glm::vec3 parentWorldScale = m_registry.get&lt;<a class="code hl_function" href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">TransformComponent</a>&gt;(parent).<a class="code hl_function" href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">getWorldScale</a>();</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            scale = newScale / parentWorldScale;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>            scale = newScale;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        }</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    }</div>
 </div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span></div>
-<div class="foldopen" id="foldopen00215" data-start="{" data-end="}">
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a32a174429892ac4cc8ba2f6a32ea8ca9">  215</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a32a174429892ac4cc8ba2f6a32ea8ca9">addRoll</a>(<span class="keywordtype">float</span> deltaRoll) {</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        rotation.z += deltaRoll;</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    }</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span></div>
+<div class="foldopen" id="foldopen00220" data-start="{" data-end="}">
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c">  220</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c">addLocalPosition</a>(glm::vec3 newPosition) {</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        position += newPosition;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    }</div>
 </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span></div>
-<div class="foldopen" id="foldopen00221" data-start="{" data-end="}">
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#ab48e5ab669ee8a7894d2f7e1d69ca3ad">  221</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#ab48e5ab669ee8a7894d2f7e1d69ca3ad">getForwardVector</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        <span class="keywordtype">float</span> pitch = glm::radians(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">getWorldRotation</a>().x);</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        <span class="keywordtype">float</span> yaw = glm::radians(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">getWorldRotation</a>().y);</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        <span class="keywordflow">return</span> glm::normalize(glm::vec3(</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            cos(yaw) * cos(pitch),</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            sin(pitch),</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            sin(yaw) * cos(pitch)</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        ));</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    }</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span></div>
+<div class="foldopen" id="foldopen00226" data-start="{" data-end="}">
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0">  226</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0">addLocalRotation</a>(glm::vec3 newRotation) {</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        lastTransformed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        glm::quat deltaQuat = glm::quat(glm::radians(newRotation));</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        m_rotationQuat = m_rotationQuat * deltaQuat;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        m_rotationQuat = glm::normalize(m_rotationQuat);</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    }</div>
 </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span></div>
-<div class="foldopen" id="foldopen00234" data-start="{" data-end="}">
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#af049921935e81975e20e84d3e65f005e">  234</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#af049921935e81975e20e84d3e65f005e">getRightVector</a>() {</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>        glm::vec3 forward = <a class="code hl_function" href="structvex_1_1TransformComponent.html#ab48e5ab669ee8a7894d2f7e1d69ca3ad">getForwardVector</a>();</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        <span class="keywordflow">return</span> glm::normalize(glm::cross(forward, worldUp));</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    }</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span></div>
+<div class="foldopen" id="foldopen00235" data-start="{" data-end="}">
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a68b4b4644e123ad5d6987fc4a7f409f5">  235</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a68b4b4644e123ad5d6987fc4a7f409f5">addLocalScale</a>(glm::vec3 newScale) {</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        scale += newScale;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    }</div>
 </div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span></div>
-<div class="foldopen" id="foldopen00242" data-start="{" data-end="}">
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a0d5f668fe034d249dfc7a7cd395d5e38">  242</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a0d5f668fe034d249dfc7a7cd395d5e38">getUpVector</a>() {</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        glm::vec3 forward = <a class="code hl_function" href="structvex_1_1TransformComponent.html#ab48e5ab669ee8a7894d2f7e1d69ca3ad">getForwardVector</a>();</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        glm::vec3 right = <a class="code hl_function" href="structvex_1_1TransformComponent.html#af049921935e81975e20e84d3e65f005e">getRightVector</a>();</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        <span class="keywordflow">return</span> glm::normalize(glm::cross(right, forward));</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span></div>
+<div class="foldopen" id="foldopen00241" data-start="{" data-end="}">
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a54d10024f0005d57ac442e9ec4b6f95f">  241</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a54d10024f0005d57ac442e9ec4b6f95f">addPitch</a>(<span class="keywordtype">float</span> deltaPitch) {</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        lastTransformed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaPitch), glm::vec3(1.0f, 0.0f, 0.0f));</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        m_rotationQuat = m_rotationQuat * deltaQuat;</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        m_rotationQuat = glm::normalize(m_rotationQuat);</div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    }</div>
 </div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>};</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span></div>
+<div class="foldopen" id="foldopen00250" data-start="{" data-end="}">
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975">  250</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975">addYaw</a>(<span class="keywordtype">float</span> deltaYaw) {</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        lastTransformed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaYaw), glm::vec3(0.0f, 1.0f, 0.0f));</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>        m_rotationQuat = deltaQuat * m_rotationQuat;</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        m_rotationQuat = glm::normalize(m_rotationQuat);</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    }</div>
 </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="preprocessor">#if defined(OPAQUE)</span></div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="preprocessor">    #undef OPAQUE</span></div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="preprocessor">#if defined(TRANSPARENT)</span></div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="preprocessor">    #undef TRANSPARENT</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="keyword">enum class</span> RenderType  {</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    OPAQUE,</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    TRANSPARENT,</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    CUSTOM</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>};</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span></div>
-<div class="foldopen" id="foldopen00264" data-start="{" data-end="};">
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno"><a class="line" href="structvex_1_1MeshComponent.html">  264</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> {</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <a class="code hl_struct" href="structvex_1_1MeshData.html">MeshData</a> meshData;</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    uint32_t <span class="keywordtype">id</span> = UINT32_MAX;</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    std::vector&lt;std::string&gt; textureNames;</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>    RenderType renderType = RenderType::OPAQUE;</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>};</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span></div>
+<div class="foldopen" id="foldopen00259" data-start="{" data-end="}">
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a32a174429892ac4cc8ba2f6a32ea8ca9">  259</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1TransformComponent.html#a32a174429892ac4cc8ba2f6a32ea8ca9">addRoll</a>(<span class="keywordtype">float</span> deltaRoll) {</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        lastTransformed = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>        glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaRoll), glm::vec3(0.0f, 0.0f, 1.0f));</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>        m_rotationQuat = m_rotationQuat * deltaQuat;</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        m_rotationQuat = glm::normalize(m_rotationQuat);</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    }</div>
 </div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    glm::vec3 getForwardVector()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        <span class="keywordflow">return</span> glm::normalize(-glm::vec3(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()[2]));</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    }</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span></div>
-<div class="foldopen" id="foldopen00272" data-start="{" data-end="};">
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno"><a class="line" href="structvex_1_1NameComponent.html">  272</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1NameComponent.html">NameComponent</a> {</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    std::string name;</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>};</div>
+<div class="foldopen" id="foldopen00273" data-start="{" data-end="}">
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#a32f8ea4f5db3bf9bb72187bf6a530da6">  273</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#a32f8ea4f5db3bf9bb72187bf6a530da6">getRightVector</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        <span class="keywordflow">return</span> glm::normalize(glm::vec3(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()[0]));</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    }</div>
 </div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span></div>
-<div class="foldopen" id="foldopen00277" data-start="{" data-end="};">
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno"><a class="line" href="structvex_1_1CameraComponent.html">  277</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CameraComponent.html">CameraComponent</a> {</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <span class="keywordtype">float</span> fov = 45.0f;</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keywordtype">float</span> nearPlane = 0.1f;</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    <span class="keywordtype">float</span> farPlane = 100.0f;</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    uint32_t <span class="keywordtype">id</span> = UINT32_MAX; <span class="comment">// For editor use</span></div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span></div>
+<div class="foldopen" id="foldopen00279" data-start="{" data-end="}">
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="structvex_1_1TransformComponent.html#af2f159c65bd306e3a2f46ac84325367f">  279</a></span>    glm::vec3 <a class="code hl_function" href="structvex_1_1TransformComponent.html#af2f159c65bd306e3a2f46ac84325367f">getUpVector</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        <span class="keywordflow">return</span> glm::normalize(glm::vec3(<a class="code hl_function" href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">matrix</a>()[1]));</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    }</div>
+</div>
 <div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>};</div>
 </div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>}</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="preprocessor">#if defined(OPAQUE)</span></div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="preprocessor">    #undef OPAQUE</span></div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span><span class="preprocessor">#if defined(TRANSPARENT)</span></div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span><span class="preprocessor">    #undef TRANSPARENT</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="keyword">enum class</span> RenderType {</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    OPAQUE,</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    TRANSPARENT,</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    CUSTOM</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>};</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span></div>
+<div class="foldopen" id="foldopen00299" data-start="{" data-end="};">
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno"><a class="line" href="structvex_1_1MeshComponent.html">  299</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> {</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <a class="code hl_struct" href="structvex_1_1MeshData.html">MeshData</a> meshData;</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    uint32_t <span class="keywordtype">id</span> = UINT32_MAX;</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    std::vector&lt;std::string&gt; textureNames;</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    RenderType renderType = RenderType::OPAQUE;</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>};</div>
+</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span></div>
+<div class="foldopen" id="foldopen00307" data-start="{" data-end="};">
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno"><a class="line" href="structvex_1_1NameComponent.html">  307</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1NameComponent.html">NameComponent</a> {</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    std::string name;</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>};</div>
+</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span></div>
+<div class="foldopen" id="foldopen00312" data-start="{" data-end="};">
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno"><a class="line" href="structvex_1_1CameraComponent.html">  312</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CameraComponent.html">CameraComponent</a> {</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    <span class="keywordtype">float</span> fov = 45.0f;</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    <span class="keywordtype">float</span> nearPlane = 0.1f;</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    <span class="keywordtype">float</span> farPlane = 100.0f;</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    uint32_t <span class="keywordtype">id</span> = UINT32_MAX; <span class="comment">// For editor use</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>};</div>
+</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>}</div>
 <div class="ttc" id="aMesh_8hpp_html"><div class="ttname"><a href="Mesh_8hpp.html">Mesh.hpp</a></div><div class="ttdoc">This file defines MeshData struct and all other structs needed for it.</div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
-<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="#l00277">BasicComponents.hpp:277</a></div></div>
-<div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="#l00264">BasicComponents.hpp:264</a></div></div>
+<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="#l00312">BasicComponents.hpp:312</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="#l00299">BasicComponents.hpp:299</a></div></div>
 <div class="ttc" id="astructvex_1_1MeshData_html"><div class="ttname"><a href="structvex_1_1MeshData.html">vex::MeshData</a></div><div class="ttdoc">Mesh data structure for loading and managing mesh data.</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8hpp_source.html#l00039">Mesh.hpp:39</a></div></div>
-<div class="ttc" id="astructvex_1_1NameComponent_html"><div class="ttname"><a href="structvex_1_1NameComponent.html">vex::NameComponent</a></div><div class="ttdoc">Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.</div><div class="ttdef"><b>Definition</b> <a href="#l00272">BasicComponents.hpp:272</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a003f2d383fa0f4e450498274dce097fc"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">vex::TransformComponent::matrix</a></div><div class="ttdeci">glm::mat4 matrix() const</div><div class="ttdoc">Method used by renderer to calculate the transformation matrix.</div><div class="ttdef"><b>Definition</b> <a href="#l00116">BasicComponents.hpp:116</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a0d5f668fe034d249dfc7a7cd395d5e38"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a0d5f668fe034d249dfc7a7cd395d5e38">vex::TransformComponent::getUpVector</a></div><div class="ttdeci">glm::vec3 getUpVector()</div><div class="ttdoc">Method to get normalized up vector.</div><div class="ttdef"><b>Definition</b> <a href="#l00242">BasicComponents.hpp:242</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a2537f55c8fae546db89fa078ef5268a0"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0">vex::TransformComponent::addLocalRotation</a></div><div class="ttdeci">void addLocalRotation(glm::vec3 newRotation)</div><div class="ttdoc">Method to add local rotation, needed when object is parented as rotation parameter stores local rotat...</div><div class="ttdef"><b>Definition</b> <a href="#l00189">BasicComponents.hpp:189</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a27dafee59fd73df4757b560c9aad25ab"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab">vex::TransformComponent::setWorldRotation</a></div><div class="ttdeci">void setWorldRotation(glm::vec3 newRotation)</div><div class="ttdoc">Method to set world rotation, needed when object is parented as rotation parameter stores local rotat...</div><div class="ttdef"><b>Definition</b> <a href="#l00168">BasicComponents.hpp:168</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a2cf9d77e82d9bcace981ab78293000a5"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a2cf9d77e82d9bcace981ab78293000a5">vex::TransformComponent::getWorldPosition</a></div><div class="ttdeci">glm::vec3 getWorldPosition() const</div><div class="ttdoc">Method to get world position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="#l00131">BasicComponents.hpp:131</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a32a174429892ac4cc8ba2f6a32ea8ca9"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a32a174429892ac4cc8ba2f6a32ea8ca9">vex::TransformComponent::addRoll</a></div><div class="ttdeci">void addRoll(float deltaRoll)</div><div class="ttdoc">Method to add to the local roll (rotation around Z-axis).</div><div class="ttdef"><b>Definition</b> <a href="#l00215">BasicComponents.hpp:215</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a3346a06d17b9ec57b71eef7715c3412c"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, glm::vec3 pos, glm::vec3 rot, entt::entity p=entt::null)</div><div class="ttdoc">Constructor 3: Registry, Position, Rotation, (optional Parent)</div><div class="ttdef"><b>Definition</b> <a href="#l00061">BasicComponents.hpp:61</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a3a0801b084b3dc21fdefd0ef4deaab67"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">vex::TransformComponent::getWorldScale</a></div><div class="ttdeci">glm::vec3 getWorldScale() const</div><div class="ttdoc">Method to get world scale, needed when object is parented as scale parameter stores local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00149">BasicComponents.hpp:149</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a3b31694107b20c78502858890a8bb8f2"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2">vex::TransformComponent::setLocalPosition</a></div><div class="ttdeci">void setLocalPosition(glm::vec3 newPosition)</div><div class="ttdoc">Set the local position.</div><div class="ttdef"><b>Definition</b> <a href="#l00101">BasicComponents.hpp:101</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a479a07f769ca676199405d681fccc787"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a479a07f769ca676199405d681fccc787">vex::TransformComponent::getLocalScale</a></div><div class="ttdeci">glm::vec3 getLocalScale() const</div><div class="ttdoc">Get the local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00096">BasicComponents.hpp:96</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a54d10024f0005d57ac442e9ec4b6f95f"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a54d10024f0005d57ac442e9ec4b6f95f">vex::TransformComponent::addPitch</a></div><div class="ttdeci">void addPitch(float deltaPitch)</div><div class="ttdoc">Method to add to the local pitch (rotation around X-axis).</div><div class="ttdef"><b>Definition</b> <a href="#l00203">BasicComponents.hpp:203</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a6806d21d1442fd8d8e6bc162d84092cf"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf">vex::TransformComponent::operator=</a></div><div class="ttdeci">TransformComponent &amp; operator=(const TransformComponent &amp;other)</div><div class="ttdoc">Copy Assignment Operator. Copies all data members and maintains the reference to the same registry.</div><div class="ttdef"><b>Definition</b> <a href="#l00040">BasicComponents.hpp:40</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a68b4b4644e123ad5d6987fc4a7f409f5"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a68b4b4644e123ad5d6987fc4a7f409f5">vex::TransformComponent::addLocalScale</a></div><div class="ttdeci">void addLocalScale(glm::vec3 newScale)</div><div class="ttdoc">Method to add local scale, needed when object is parented as scale parameter stores local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00196">BasicComponents.hpp:196</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a6a59286f9d82e211afcc8022d2f5fa43"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a6a59286f9d82e211afcc8022d2f5fa43">vex::TransformComponent::getLocalPosition</a></div><div class="ttdeci">glm::vec3 getLocalPosition() const</div><div class="ttdoc">Get the local position.</div><div class="ttdef"><b>Definition</b> <a href="#l00086">BasicComponents.hpp:86</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a6c5c98c948ef4f34b620e0385e5774f5"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">vex::TransformComponent::getWorldRotation</a></div><div class="ttdeci">glm::vec3 getWorldRotation() const</div><div class="ttdoc">Method to get world rotation, needed when object is parented as rotation parameter stores local rotat...</div><div class="ttdef"><b>Definition</b> <a href="#l00137">BasicComponents.hpp:137</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a79214f23e2537a7806063822d6a39859"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a79214f23e2537a7806063822d6a39859">vex::TransformComponent::setParent</a></div><div class="ttdeci">void setParent(entt::entity newParent)</div><div class="ttdoc">Set the parent entity.</div><div class="ttdef"><b>Definition</b> <a href="#l00076">BasicComponents.hpp:76</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a7cf317a269169a2930cc61da68c3da88"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a7cf317a269169a2930cc61da68c3da88">vex::TransformComponent::setLocalRotation</a></div><div class="ttdeci">void setLocalRotation(glm::vec3 newRotation)</div><div class="ttdoc">Set the local rotation.</div><div class="ttdef"><b>Definition</b> <a href="#l00106">BasicComponents.hpp:106</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a7db17dc36cac01aedb4ce6f829f5ae4a"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a7db17dc36cac01aedb4ce6f829f5ae4a">vex::TransformComponent::setLocalScale</a></div><div class="ttdeci">void setLocalScale(glm::vec3 newScale)</div><div class="ttdoc">Set the local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00111">BasicComponents.hpp:111</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a8134355d65be1d0d5fca521fbd8ba975"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975">vex::TransformComponent::addYaw</a></div><div class="ttdeci">void addYaw(float deltaYaw)</div><div class="ttdoc">Method to add to the local yaw (rotation around Y-axis).</div><div class="ttdef"><b>Definition</b> <a href="#l00209">BasicComponents.hpp:209</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a8cb6295bdf09984a476b8dc7073f7478"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a8cb6295bdf09984a476b8dc7073f7478">vex::TransformComponent::getParent</a></div><div class="ttdeci">entt::entity getParent() const</div><div class="ttdoc">Get the parent entity.</div><div class="ttdef"><b>Definition</b> <a href="#l00081">BasicComponents.hpp:81</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a93e879969afa509ed59ea3a2526430b0"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a93e879969afa509ed59ea3a2526430b0">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, glm::vec3 pos, entt::entity p=entt::null)</div><div class="ttdoc">Constructor 2: Registry, Position, (optional Parent)</div><div class="ttdef"><b>Definition</b> <a href="#l00057">BasicComponents.hpp:57</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a9436c3a66ec2b6ad04bd2eacd6de341a"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a9436c3a66ec2b6ad04bd2eacd6de341a">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry)</div><div class="ttdoc">Constructor 1: Registry only.</div><div class="ttdef"><b>Definition</b> <a href="#l00053">BasicComponents.hpp:53</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_a9fad49e87b97014f7bc749b318c30f20"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20">vex::TransformComponent::setWorldScale</a></div><div class="ttdeci">void setWorldScale(glm::vec3 newScale)</div><div class="ttdoc">Method to set world scale, needed when object is parented as scale parameter stores local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00175">BasicComponents.hpp:175</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_aa330fe4f875724411e007dab5b9a8444"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p=entt::null)</div><div class="ttdoc">Constructor 4: Registry, Position, Rotation, Scale, (optional Parent)</div><div class="ttdef"><b>Definition</b> <a href="#l00065">BasicComponents.hpp:65</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_aabdd7a9fce7e11affdcade2ce972fdb8"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, entt::entity p)</div><div class="ttdoc">Constructor 5: Registry, Parent only (useful for empty child objects)</div><div class="ttdef"><b>Definition</b> <a href="#l00069">BasicComponents.hpp:69</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_ab48e5ab669ee8a7894d2f7e1d69ca3ad"><div class="ttname"><a href="structvex_1_1TransformComponent.html#ab48e5ab669ee8a7894d2f7e1d69ca3ad">vex::TransformComponent::getForwardVector</a></div><div class="ttdeci">glm::vec3 getForwardVector() const</div><div class="ttdoc">Method to get normalized forward vector.</div><div class="ttdef"><b>Definition</b> <a href="#l00221">BasicComponents.hpp:221</a></div></div>
+<div class="ttc" id="astructvex_1_1NameComponent_html"><div class="ttname"><a href="structvex_1_1NameComponent.html">vex::NameComponent</a></div><div class="ttdoc">Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.</div><div class="ttdef"><b>Definition</b> <a href="#l00307">BasicComponents.hpp:307</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a003f2d383fa0f4e450498274dce097fc"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">vex::TransformComponent::matrix</a></div><div class="ttdeci">glm::mat4 matrix() const</div><div class="ttdoc">Method used by renderer to calculate the transformation matrix.</div><div class="ttdef"><b>Definition</b> <a href="#l00150">BasicComponents.hpp:150</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a2537f55c8fae546db89fa078ef5268a0"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0">vex::TransformComponent::addLocalRotation</a></div><div class="ttdeci">void addLocalRotation(glm::vec3 newRotation)</div><div class="ttdoc">Method to add local rotation (Euler angles in degrees).</div><div class="ttdef"><b>Definition</b> <a href="#l00226">BasicComponents.hpp:226</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a27dafee59fd73df4757b560c9aad25ab"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab">vex::TransformComponent::setWorldRotation</a></div><div class="ttdeci">void setWorldRotation(glm::vec3 newRotation)</div><div class="ttdoc">Method to set world rotation, needed when object is parented as rotation parameter stores local rotat...</div><div class="ttdef"><b>Definition</b> <a href="#l00201">BasicComponents.hpp:201</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a2cf9d77e82d9bcace981ab78293000a5"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a2cf9d77e82d9bcace981ab78293000a5">vex::TransformComponent::getWorldPosition</a></div><div class="ttdeci">glm::vec3 getWorldPosition() const</div><div class="ttdoc">Method to get world position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="#l00164">BasicComponents.hpp:164</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a32a174429892ac4cc8ba2f6a32ea8ca9"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a32a174429892ac4cc8ba2f6a32ea8ca9">vex::TransformComponent::addRoll</a></div><div class="ttdeci">void addRoll(float deltaRoll)</div><div class="ttdoc">Method to add to the local roll (rotation around Z-axis).</div><div class="ttdef"><b>Definition</b> <a href="#l00259">BasicComponents.hpp:259</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a32f8ea4f5db3bf9bb72187bf6a530da6"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a32f8ea4f5db3bf9bb72187bf6a530da6">vex::TransformComponent::getRightVector</a></div><div class="ttdeci">glm::vec3 getRightVector() const</div><div class="ttdoc">Method to get normalized right vector.</div><div class="ttdef"><b>Definition</b> <a href="#l00273">BasicComponents.hpp:273</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a3346a06d17b9ec57b71eef7715c3412c"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, glm::vec3 pos, glm::vec3 rot, entt::entity p=entt::null)</div><div class="ttdoc">Constructor 3: Registry, Position, Rotation (Euler degrees), (optional Parent)</div><div class="ttdef"><b>Definition</b> <a href="#l00064">BasicComponents.hpp:64</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a3a0801b084b3dc21fdefd0ef4deaab67"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67">vex::TransformComponent::getWorldScale</a></div><div class="ttdeci">glm::vec3 getWorldScale() const</div><div class="ttdoc">Method to get world scale, needed when object is parented as scale parameter stores local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00176">BasicComponents.hpp:176</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a3b31694107b20c78502858890a8bb8f2"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2">vex::TransformComponent::setLocalPosition</a></div><div class="ttdeci">void setLocalPosition(glm::vec3 newPosition)</div><div class="ttdoc">Set the local position.</div><div class="ttdef"><b>Definition</b> <a href="#l00112">BasicComponents.hpp:112</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a479a07f769ca676199405d681fccc787"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a479a07f769ca676199405d681fccc787">vex::TransformComponent::getLocalScale</a></div><div class="ttdeci">glm::vec3 getLocalScale() const</div><div class="ttdoc">Get the local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00107">BasicComponents.hpp:107</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a54d10024f0005d57ac442e9ec4b6f95f"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a54d10024f0005d57ac442e9ec4b6f95f">vex::TransformComponent::addPitch</a></div><div class="ttdeci">void addPitch(float deltaPitch)</div><div class="ttdoc">Method to add to the local pitch (rotation around X-axis).</div><div class="ttdef"><b>Definition</b> <a href="#l00241">BasicComponents.hpp:241</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a6806d21d1442fd8d8e6bc162d84092cf"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf">vex::TransformComponent::operator=</a></div><div class="ttdeci">TransformComponent &amp; operator=(const TransformComponent &amp;other)</div><div class="ttdoc">Copy Assignment Operator. Copies all data members and maintains the reference to the same registry.</div><div class="ttdef"><b>Definition</b> <a href="#l00045">BasicComponents.hpp:45</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a68b4b4644e123ad5d6987fc4a7f409f5"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a68b4b4644e123ad5d6987fc4a7f409f5">vex::TransformComponent::addLocalScale</a></div><div class="ttdeci">void addLocalScale(glm::vec3 newScale)</div><div class="ttdoc">Method to add local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00235">BasicComponents.hpp:235</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a6a59286f9d82e211afcc8022d2f5fa43"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a6a59286f9d82e211afcc8022d2f5fa43">vex::TransformComponent::getLocalPosition</a></div><div class="ttdeci">glm::vec3 getLocalPosition() const</div><div class="ttdoc">Get the local position.</div><div class="ttdef"><b>Definition</b> <a href="#l00097">BasicComponents.hpp:97</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a6c5c98c948ef4f34b620e0385e5774f5"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5">vex::TransformComponent::getWorldRotation</a></div><div class="ttdeci">glm::vec3 getWorldRotation() const</div><div class="ttdoc">Method to get world rotation, needed when object is parented as rotation parameter stores local rotat...</div><div class="ttdef"><b>Definition</b> <a href="#l00170">BasicComponents.hpp:170</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a79214f23e2537a7806063822d6a39859"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a79214f23e2537a7806063822d6a39859">vex::TransformComponent::setParent</a></div><div class="ttdeci">void setParent(entt::entity newParent)</div><div class="ttdoc">Set the parent entity.</div><div class="ttdef"><b>Definition</b> <a href="#l00087">BasicComponents.hpp:87</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a7cf317a269169a2930cc61da68c3da88"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a7cf317a269169a2930cc61da68c3da88">vex::TransformComponent::setLocalRotation</a></div><div class="ttdeci">void setLocalRotation(glm::vec3 newRotation)</div><div class="ttdoc">Set the local rotation (using Euler angles in degrees).</div><div class="ttdef"><b>Definition</b> <a href="#l00117">BasicComponents.hpp:117</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a7db17dc36cac01aedb4ce6f829f5ae4a"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a7db17dc36cac01aedb4ce6f829f5ae4a">vex::TransformComponent::setLocalScale</a></div><div class="ttdeci">void setLocalScale(glm::vec3 newScale)</div><div class="ttdoc">Set the local scale.</div><div class="ttdef"><b>Definition</b> <a href="#l00123">BasicComponents.hpp:123</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a8134355d65be1d0d5fca521fbd8ba975"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975">vex::TransformComponent::addYaw</a></div><div class="ttdeci">void addYaw(float deltaYaw)</div><div class="ttdoc">Method to add to the local yaw (rotation around Y-axis).</div><div class="ttdef"><b>Definition</b> <a href="#l00250">BasicComponents.hpp:250</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a8cb6295bdf09984a476b8dc7073f7478"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a8cb6295bdf09984a476b8dc7073f7478">vex::TransformComponent::getParent</a></div><div class="ttdeci">entt::entity getParent() const</div><div class="ttdoc">Get the parent entity.</div><div class="ttdef"><b>Definition</b> <a href="#l00092">BasicComponents.hpp:92</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a8db494d1118de04f51b7ae2c788ad88a"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a8db494d1118de04f51b7ae2c788ad88a">vex::TransformComponent::getWorldQuaternion</a></div><div class="ttdeci">glm::quat getWorldQuaternion() const</div><div class="ttdoc">Method to get the world rotation as a quaternion.</div><div class="ttdef"><b>Definition</b> <a href="#l00130">BasicComponents.hpp:130</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a93e879969afa509ed59ea3a2526430b0"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a93e879969afa509ed59ea3a2526430b0">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, glm::vec3 pos, entt::entity p=entt::null)</div><div class="ttdoc">Constructor 2: Registry, Position, (optional Parent)</div><div class="ttdef"><b>Definition</b> <a href="#l00060">BasicComponents.hpp:60</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a9436c3a66ec2b6ad04bd2eacd6de341a"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a9436c3a66ec2b6ad04bd2eacd6de341a">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry)</div><div class="ttdoc">Constructor 1: Registry only.</div><div class="ttdef"><b>Definition</b> <a href="#l00056">BasicComponents.hpp:56</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_a9fad49e87b97014f7bc749b318c30f20"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20">vex::TransformComponent::setWorldScale</a></div><div class="ttdeci">void setWorldScale(glm::vec3 newScale)</div><div class="ttdoc">Method to set world scale, needed when object is parented as rotation parameter stores local rotation...</div><div class="ttdef"><b>Definition</b> <a href="#l00209">BasicComponents.hpp:209</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_aa330fe4f875724411e007dab5b9a8444"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p=entt::null)</div><div class="ttdoc">Constructor 4: Registry, Position, Rotation (Euler degrees), Scale, (optional Parent)</div><div class="ttdef"><b>Definition</b> <a href="#l00068">BasicComponents.hpp:68</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_aa3b792628e571cd834999392dfdaa598"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aa3b792628e571cd834999392dfdaa598">vex::TransformComponent::setWorldQuaternion</a></div><div class="ttdeci">void setWorldQuaternion(glm::quat targetWorldQuat)</div><div class="ttdoc">Method to set world rotation using a quaternion (for physics systems).</div><div class="ttdef"><b>Definition</b> <a href="#l00136">BasicComponents.hpp:136</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_aabdd7a9fce7e11affdcade2ce972fdb8"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(entt::registry &amp;registry, entt::entity p)</div><div class="ttdoc">Constructor 5: Registry, Parent only (useful for empty child objects)</div><div class="ttdef"><b>Definition</b> <a href="#l00072">BasicComponents.hpp:72</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_ad47fe6cd20b433b4a71bc6fcbd6b9b3b"><div class="ttname"><a href="structvex_1_1TransformComponent.html#ad47fe6cd20b433b4a71bc6fcbd6b9b3b">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent()=delete</div><div class="ttdoc">Default constructor is deleted since registry is required.</div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_ae70065fea511392b32fa96d64debcaf9"><div class="ttname"><a href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(const TransformComponent &amp;other)</div><div class="ttdoc">Copy Constructor. Copies all data members and maintains the reference to the same registry.</div><div class="ttdef"><b>Definition</b> <a href="#l00031">BasicComponents.hpp:31</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_aee6d0544270a1ac673b1c53b46c36a54"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aee6d0544270a1ac673b1c53b46c36a54">vex::TransformComponent::getLocalRotation</a></div><div class="ttdeci">glm::vec3 getLocalRotation() const</div><div class="ttdoc">Get the local rotation.</div><div class="ttdef"><b>Definition</b> <a href="#l00091">BasicComponents.hpp:91</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_af049921935e81975e20e84d3e65f005e"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af049921935e81975e20e84d3e65f005e">vex::TransformComponent::getRightVector</a></div><div class="ttdeci">glm::vec3 getRightVector()</div><div class="ttdoc">Method to get normalized right vector.</div><div class="ttdef"><b>Definition</b> <a href="#l00234">BasicComponents.hpp:234</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_af2ed6bb049ad3b9b1298976f1dfd436c"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c">vex::TransformComponent::addLocalPosition</a></div><div class="ttdeci">void addLocalPosition(glm::vec3 newPosition)</div><div class="ttdoc">Method to add local position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="#l00182">BasicComponents.hpp:182</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html_af48e50f85921fb3464ff3ce2d4909086"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">vex::TransformComponent::setWorldPosition</a></div><div class="ttdeci">void setWorldPosition(glm::vec3 newPosition)</div><div class="ttdoc">Method to set world position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="#l00161">BasicComponents.hpp:161</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_ae70065fea511392b32fa96d64debcaf9"><div class="ttname"><a href="structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9">vex::TransformComponent::TransformComponent</a></div><div class="ttdeci">TransformComponent(const TransformComponent &amp;other)</div><div class="ttdoc">Copy Constructor. Copies all data members and maintains the reference to the same registry.</div><div class="ttdef"><b>Definition</b> <a href="#l00036">BasicComponents.hpp:36</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_aee6d0544270a1ac673b1c53b46c36a54"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aee6d0544270a1ac673b1c53b46c36a54">vex::TransformComponent::getLocalRotation</a></div><div class="ttdeci">glm::vec3 getLocalRotation() const</div><div class="ttdoc">Get the local rotation (as Euler angles in degrees).</div><div class="ttdef"><b>Definition</b> <a href="#l00102">BasicComponents.hpp:102</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_af2ed6bb049ad3b9b1298976f1dfd436c"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c">vex::TransformComponent::addLocalPosition</a></div><div class="ttdeci">void addLocalPosition(glm::vec3 newPosition)</div><div class="ttdoc">Method to add local position.</div><div class="ttdef"><b>Definition</b> <a href="#l00220">BasicComponents.hpp:220</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_af2f159c65bd306e3a2f46ac84325367f"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af2f159c65bd306e3a2f46ac84325367f">vex::TransformComponent::getUpVector</a></div><div class="ttdeci">glm::vec3 getUpVector() const</div><div class="ttdoc">Method to get normalized up vector.</div><div class="ttdef"><b>Definition</b> <a href="#l00279">BasicComponents.hpp:279</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html_af48e50f85921fb3464ff3ce2d4909086"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">vex::TransformComponent::setWorldPosition</a></div><div class="ttdeci">void setWorldPosition(glm::vec3 newPosition)</div><div class="ttdoc">Method to set world position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="#l00188">BasicComponents.hpp:188</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

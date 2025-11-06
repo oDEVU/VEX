@@ -25,8 +25,9 @@ var searchData=
   ['setstyle_22',['setStyle',['../classvex_1_1VexUI.html#a003fd3aa45ad3730338a8649fe06bfc8',1,'vex::VexUI']]],
   ['settext_23',['setText',['../classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618',1,'vex::VexUI']]],
   ['setworldposition_24',['setWorldPosition',['../structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086',1,'vex::TransformComponent']]],
-  ['setworldrotation_25',['setWorldRotation',['../structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab',1,'vex::TransformComponent']]],
-  ['setworldscale_26',['setWorldScale',['../structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20',1,'vex::TransformComponent']]],
-  ['setzindex_27',['setZIndex',['../classvex_1_1VexUI.html#a3330bb72abd6ecbe257c4813cc4842c3',1,'vex::VexUI']]],
-  ['shutdown_28',['shutdown',['../classvex_1_1PhysicsSystem.html#a9344768ca2718429a24ca7a3ee94ff87',1,'vex::PhysicsSystem']]]
+  ['setworldquaternion_25',['setWorldQuaternion',['../structvex_1_1TransformComponent.html#aa3b792628e571cd834999392dfdaa598',1,'vex::TransformComponent']]],
+  ['setworldrotation_26',['setWorldRotation',['../structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab',1,'vex::TransformComponent']]],
+  ['setworldscale_27',['setWorldScale',['../structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20',1,'vex::TransformComponent']]],
+  ['setzindex_28',['setZIndex',['../classvex_1_1VexUI.html#a3330bb72abd6ecbe257c4813cc4842c3',1,'vex::VexUI']]],
+  ['shutdown_29',['shutdown',['../classvex_1_1PhysicsSystem.html#a9344768ca2718429a24ca7a3ee94ff87',1,'vex::PhysicsSystem']]]
 ];
