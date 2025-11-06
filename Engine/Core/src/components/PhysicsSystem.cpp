@@ -87,7 +87,10 @@ namespace vex {
         for (auto e : view) {
             auto& tc = view.get<TransformComponent>(e);
             auto& pc = view.get<PhysicsComponent>(e);
-            bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), JPH::EActivation::Activate);
+            if(tc.transformedLately()){
+                bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), JPH::EActivation::Activate);
+                tc.updatedPhysicsTransform();
+            }
         }
 
         // With this it doesnt rotate with physics calculations

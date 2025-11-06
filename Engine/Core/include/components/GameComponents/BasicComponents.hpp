@@ -29,6 +29,7 @@ struct TransformComponent {
     glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
     glm::vec3 scale = {1.0f, 1.0f, 1.0f};
     entt::entity parent = entt::null;
+    bool lastTransformed = false;
     entt::registry& m_registry;
     public:
     /// @brief Copy Constructor. Copies all data members and maintains the reference to the same registry.
@@ -74,6 +75,14 @@ struct TransformComponent {
     /// @brief Default constructor is deleted since registry is required
     TransformComponent() = delete;
 
+    bool transformedLately(){
+        return lastTransformed;
+    }
+
+    void updatedPhysicsTransform(){
+        lastTransformed = false;
+    }
+
     /// @brief Set the parent entity.
     void setParent(entt::entity newParent) {
         parent = newParent;
@@ -106,6 +115,7 @@ struct TransformComponent {
 
     /// @brief Set the local rotation (using Euler angles in degrees).
     void setLocalRotation(glm::vec3 newRotation) {
+        lastTransformed = true;
         m_rotationQuat = glm::normalize(glm::quat(glm::radians(newRotation)));
     }
 
@@ -189,6 +199,7 @@ struct TransformComponent {
     /// @brief Method to set world rotation, needed when object is parented as rotation parameter stores local rotation.
     /// @param newRotation glm::vec3
     void setWorldRotation(glm::vec3 newRotation) {
+        lastTransformed = true;
         glm::quat targetWorldQuat = glm::quat(glm::radians(newRotation));
         setWorldQuaternion(targetWorldQuat);
     }
@@ -213,6 +224,7 @@ struct TransformComponent {
     /// @brief Method to add local rotation (Euler angles in degrees).
     /// @param newRotation glm::vec3
     void addLocalRotation(glm::vec3 newRotation) {
+        lastTransformed = true;
         glm::quat deltaQuat = glm::quat(glm::radians(newRotation));
         m_rotationQuat = m_rotationQuat * deltaQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);
@@ -227,6 +239,7 @@ struct TransformComponent {
     /// @brief Method to add to the local pitch (rotation around X-axis).
     /// @param deltaPitch float The amount to add in degrees.
     void addPitch(float deltaPitch) {
+        lastTransformed = true;
         glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaPitch), glm::vec3(1.0f, 0.0f, 0.0f));
         m_rotationQuat = m_rotationQuat * deltaQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);
@@ -235,6 +248,7 @@ struct TransformComponent {
     /// @brief Method to add to the local yaw (rotation around Y-axis).
     /// @param deltaYaw float The amount to add in degrees.
     void addYaw(float deltaYaw) {
+        lastTransformed = true;
         glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaYaw), glm::vec3(0.0f, 1.0f, 0.0f));
         m_rotationQuat = deltaQuat * m_rotationQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);
@@ -243,6 +257,7 @@ struct TransformComponent {
     /// @brief Method to add to the local roll (rotation around Z-axis).
     /// @param deltaRoll float The amount to add in degrees.
     void addRoll(float deltaRoll) {
+        lastTransformed = true;
         glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaRoll), glm::vec3(0.0f, 0.0f, 1.0f));
         m_rotationQuat = m_rotationQuat * deltaQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);
