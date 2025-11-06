@@ -24,7 +24,7 @@
         {
           "type": "TransformComponent",
           "position": [0.0, 0.0, 5.0],
-          "rotation": [0.0, 270.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0],
           "scale": [1.0, 1.0, 1.0]
         }
       ]

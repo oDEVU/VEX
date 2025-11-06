@@ -73,20 +73,25 @@ namespace vex {
         delete m_tempAllocator;
     }
 
+    JPH::Quat GlmToJph(const glm::quat& q) {
+        return JPH::Quat(q.x, q.y, q.z, q.w);
+    }
+
     void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;
+
+        // Without this editing transform component doesnt change transform for physics body
+
         auto& bodyInterface = m_physicsSystem->GetBodyInterface();
         auto view = m_registry.view<PhysicsComponent, TransformComponent>();
         for (auto e : view) {
             auto& tc = view.get<TransformComponent>(e);
             auto& pc = view.get<PhysicsComponent>(e);
-            if(tc.getWorldRotation() != QuatToEuler(EulerToQuat(tc.getWorldRotation()))){
-                log("World rotation:       %f, %f, %f", tc.getWorldRotation().x, tc.getWorldRotation().y, tc.getWorldRotation().z);
-                log("Quat rotation:        %f, %f, %f, %f", EulerToQuat(tc.getWorldRotation()).GetX(), EulerToQuat(tc.getWorldRotation()).GetY(), EulerToQuat(tc.getWorldRotation()).GetZ(), EulerToQuat(tc.getWorldRotation()).GetW());
-                log("Euler rotation:       %f, %f, %f", QuatToEuler(EulerToQuat(tc.getWorldRotation())).x, QuatToEuler(EulerToQuat(tc.getWorldRotation())).y, QuatToEuler(EulerToQuat(tc.getWorldRotation())).z);
-            }
-            bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), EulerToQuat(tc.getWorldRotation()), JPH::EActivation::Activate);
+            bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), JPH::EActivation::Activate);
         }
+
+        // With this it doesnt rotate with physics calculations
+
         m_accumulator += deltaTime;
         while (m_accumulator >= m_fixedDt) {
             m_physicsSystem->Update(m_fixedDt, 1, m_tempAllocator, m_jobSystem);
@@ -108,7 +113,7 @@ namespace vex {
 
         auto& t = r.get<TransformComponent>(e);
         JPH::Vec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
-        JPH::Quat rot = EulerToQuat(t.getWorldRotation());
+        JPH::Quat rot(t.getWorldQuaternion().x, t.getWorldQuaternion().y, t.getWorldQuaternion().z, t.getWorldQuaternion().w);
 
         JPH::Ref<JPH::Shape> shape;
         if (pc.shape == ShapeType::BOX)
@@ -187,7 +192,7 @@ namespace vex {
 
         auto& t = r.get<TransformComponent>(e);
         t.setWorldPosition(glm::vec3{pos.GetX(), pos.GetY(), pos.GetZ()});
-        t.setWorldRotation(QuatToEuler(rot));
+        t.setWorldQuaternion(glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ()));
     }
 
     PhysicsComponent& PhysicsSystem::getPhysicsComponentByBodyId(JPH::BodyID id){

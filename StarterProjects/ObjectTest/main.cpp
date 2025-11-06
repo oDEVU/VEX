@@ -90,9 +90,9 @@ public:
         humanEntity1 = vex::createModelFromComponents("human1", humanMesh, humanTransform, *this);
         humanTransform.addLocalPosition(glm::vec3(0.5f,-0.3f,0));
         humanEntity2 = vex::createModelFromComponents("human2", humanMesh, humanTransform, *this);
-        humanTransform.addLocalPosition(glm::vec3(0.5f,0,0));
+        //humanTransform.addLocalPosition(glm::vec3(0.5f,0,0));
         humanEntity3 = vex::createModelFromComponents("human3", humanMesh, humanTransform, *this);
-        humanTransform.addLocalPosition(glm::vec3(0.5f,0,0));
+        //humanTransform.addLocalPosition(glm::vec3(0.5f,0,0));
         humanEntity4 = vex::createModelFromComponents("human4", humanMesh, humanTransform, *this);
 
         humanEntity2->ParentTo(humanEntity1->GetEntity());

@@ -1,12 +1,17 @@
 /**
- *  @file   BasicComponents.hpp
- *  @brief  Contains basic components like transform, camera, name components..
- *  @author Eryk Roszkowski
+ * @file   BasicComponents.hpp
+ * @brief  Contains basic components like transform, camera, name components..
+ * @author Eryk Roszkowski
  ***********************************************/
 
 #pragma once
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 #include <vector>
 #include <string>
 #include <entt/entt.hpp>
@@ -18,11 +23,10 @@
 namespace vex{
 
 /// @brief Struct containing transform data and methods.
-/// @todo Implement methods for setting position, rotation, and scale.
 struct TransformComponent {
     private:
     glm::vec3 position = {0.0f, 0.0f, 0.0f};
-    glm::vec3 rotation = {0.0f, 0.0f, 0.0f};
+    glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
     glm::vec3 scale = {1.0f, 1.0f, 1.0f};
     entt::entity parent = entt::null;
     entt::registry& m_registry;
@@ -31,7 +35,7 @@ struct TransformComponent {
     TransformComponent(const TransformComponent& other)
         : m_registry(other.m_registry), // Initialize the reference from the other's reference
           position(other.position),
-          rotation(other.rotation),
+          m_rotationQuat(other.m_rotationQuat), // Copy the quaternion
           scale(other.scale),
           parent(other.parent)
     {}
@@ -39,10 +43,8 @@ struct TransformComponent {
     /// @brief Copy Assignment Operator. Copies all data members and maintains the reference to the same registry.
     TransformComponent& operator=(const TransformComponent& other) {
         if (this != &other) {
-            // registry_ref cannot be reassigned. Assuming destination component belongs to the same registry.
-            // registry_ref = other.registry_ref; // FORBIDDEN: Cannot rebind a reference
             position = other.position;
-            rotation = other.rotation;
+            m_rotationQuat = other.m_rotationQuat; // Assign the quaternion
             scale = other.scale;
             parent = other.parent;
         }
@@ -57,13 +59,13 @@ struct TransformComponent {
     TransformComponent(entt::registry& registry, glm::vec3 pos, entt::entity p = entt::null)
         : m_registry(registry), position(pos), parent(p) {}
 
-    /// @brief Constructor 3: Registry, Position, Rotation, (optional Parent)
+    /// @brief Constructor 3: Registry, Position, Rotation (Euler degrees), (optional Parent)
     TransformComponent(entt::registry& registry, glm::vec3 pos, glm::vec3 rot, entt::entity p = entt::null)
-        : m_registry(registry), position(pos), rotation(rot), parent(p) {}
+        : m_registry(registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), parent(p) {}
 
-    /// @brief Constructor 4: Registry, Position, Rotation, Scale, (optional Parent)
+    /// @brief Constructor 4: Registry, Position, Rotation (Euler degrees), Scale, (optional Parent)
     TransformComponent(entt::registry& registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p = entt::null)
-        : m_registry(registry), position(pos), rotation(rot), scale(s), parent(p) {}
+        : m_registry(registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), scale(s), parent(p) {}
 
     /// @brief Constructor 5: Registry, Parent only (useful for empty child objects)
     TransformComponent(entt::registry& registry, entt::entity p)
@@ -87,9 +89,9 @@ struct TransformComponent {
         return position;
     }
 
-    /// @brief Get the local rotation.
+    /// @brief Get the local rotation (as Euler angles in degrees).
     glm::vec3 getLocalRotation() const {
-        return rotation;
+        return glm::degrees(glm::eulerAngles(m_rotationQuat));
     }
 
     /// @brief Get the local scale.
@@ -102,9 +104,9 @@ struct TransformComponent {
         position = newPosition;
     }
 
-    /// @brief Set the local rotation.
+    /// @brief Set the local rotation (using Euler angles in degrees).
     void setLocalRotation(glm::vec3 newRotation) {
-        rotation = newRotation;
+        m_rotationQuat = glm::normalize(glm::quat(glm::radians(newRotation)));
     }
 
     /// @brief Set the local scale.
@@ -112,14 +114,35 @@ struct TransformComponent {
         scale = newScale;
     }
 
+        // --- WORLD QUATERNION METHODS FOR PHYSICS SYSTEMS ---
+
+        /// @brief Method to get the world rotation as a quaternion.
+        glm::quat getWorldQuaternion() const {
+            return glm::normalize(glm::quat_cast(matrix()));
+        }
+
+        /// @brief Method to set world rotation using a quaternion (for physics systems).
+        /// @param targetWorldQuat glm::quat The desired world rotation quaternion.
+        void setWorldQuaternion(glm::quat targetWorldQuat) {
+            if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+                glm::quat parentWorldQuat = glm::quat_cast(m_registry.get<TransformComponent>(parent).matrix());
+                glm::quat parentInverse = glm::inverse(parentWorldQuat);
+                m_rotationQuat = parentInverse * targetWorldQuat;
+            } else {
+                m_rotationQuat = targetWorldQuat;
+            }
+            m_rotationQuat = glm::normalize(m_rotationQuat);
+        }
+
+    // --------------------------------------------------
+
     /// @brief Method used by renderer to calculate the transformation matrix.
     glm::mat4 matrix() const {
-        glm::mat4 local(1.0f);
-        local = glm::translate(local, position);
-        local = glm::rotate(local, glm::radians(rotation.x), {1, 0, 0});
-        local = glm::rotate(local, glm::radians(rotation.y), {0, 1, 0});
-        local = glm::rotate(local, glm::radians(rotation.z), {0, 0, 1});
-        local = glm::scale(local, scale);
+        glm::mat4 local = glm::mat4(1.0f);
+        local = glm::translate(local, position); // Najpierw translacja
+        local *= glm::mat4_cast(m_rotationQuat); // Następnie rotacja (mnożenie macierzy)
+        local = glm::scale(local, scale);        // Na koniec skala (mnożenie macierzy)
+
         if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
             return m_registry.get<TransformComponent>(parent).matrix() * local;
         }
@@ -135,13 +158,7 @@ struct TransformComponent {
     /// @brief Method to get world rotation, needed when object is parented as rotation parameter stores local rotation.
     /// @return glm::vec3
     glm::vec3 getWorldRotation() const {
-        glm::vec3 worldRot = rotation;
-        entt::entity current = parent;
-        while (current != entt::null && m_registry.valid(current) && m_registry.all_of<TransformComponent>(current)) {
-            worldRot += m_registry.get<TransformComponent>(current).rotation;
-            current = m_registry.get<TransformComponent>(current).parent;
-        }
-        return worldRot;
+        return glm::degrees(glm::eulerAngles(getWorldQuaternion()));
     }
 
     /// @brief Method to get world scale, needed when object is parented as scale parameter stores local scale.
@@ -159,90 +176,93 @@ struct TransformComponent {
     /// @brief Method to set world position, needed when object is parented as position parameter stores local position.
     /// @param newPosition glm::vec3
     void setWorldPosition(glm::vec3 newPosition) {
-        glm::vec3 worldOffset = getWorldPosition() - getLocalPosition();
-        position = newPosition + worldOffset;
+        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+            glm::mat4 parentWorldMatrix = m_registry.get<TransformComponent>(parent).matrix();
+            glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
+            glm::vec4 newLocalPos4 = inverseParentMatrix * glm::vec4(newPosition, 1.0f);
+            position = glm::vec3(newLocalPos4);
+        } else {
+            position = newPosition;
+        }
     }
 
     /// @brief Method to set world rotation, needed when object is parented as rotation parameter stores local rotation.
     /// @param newRotation glm::vec3
     void setWorldRotation(glm::vec3 newRotation) {
-        glm::vec3 worldOffset = getWorldRotation() - getLocalRotation();
-        rotation = newRotation + worldOffset;
+        glm::quat targetWorldQuat = glm::quat(glm::radians(newRotation));
+        setWorldQuaternion(targetWorldQuat);
     }
 
-    /// @brief Method to set world scale, needed when object is parented as scale parameter stores local scale.
+    /// @brief Method to set world scale, needed when object is parented as rotation parameter stores local rotation.
     /// @param newScale glm::vec3
     void setWorldScale(glm::vec3 newScale) {
-        glm::vec3 worldOffset = getWorldScale() - getLocalScale();
-        scale = newScale + worldOffset;
+        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+            glm::vec3 parentWorldScale = m_registry.get<TransformComponent>(parent).getWorldScale();
+            scale = newScale / parentWorldScale;
+        } else {
+            scale = newScale;
+        }
     }
 
-    /// @brief Method to add local position, needed when object is parented as position parameter stores local position.
+    /// @brief Method to add local position.
     /// @param newPosition glm::vec3
     void addLocalPosition(glm::vec3 newPosition) {
-        //glm::vec3 worldOffset = getWorldPosition(registry) - getLocalPosition(registry);
         position += newPosition;
     }
 
-    /// @brief Method to add local rotation, needed when object is parented as rotation parameter stores local rotation.
+    /// @brief Method to add local rotation (Euler angles in degrees).
     /// @param newRotation glm::vec3
     void addLocalRotation(glm::vec3 newRotation) {
-        //glm::vec3 worldOffset = getWorldRotation(registry) - getLocalRotation(registry);
-        rotation += newRotation;
+        glm::quat deltaQuat = glm::quat(glm::radians(newRotation));
+        m_rotationQuat = m_rotationQuat * deltaQuat;
+        m_rotationQuat = glm::normalize(m_rotationQuat);
     }
 
-    /// @brief Method to add local scale, needed when object is parented as scale parameter stores local scale.
+    /// @brief Method to add local scale.
     /// @param newScale glm::vec3
     void addLocalScale(glm::vec3 newScale) {
-        //glm::vec3 worldOffset = getWorldScale(registry) - getLocalScale(registry);
         scale += newScale;
     }
 
     /// @brief Method to add to the local pitch (rotation around X-axis).
     /// @param deltaPitch float The amount to add in degrees.
     void addPitch(float deltaPitch) {
-        rotation.x += deltaPitch;
+        glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaPitch), glm::vec3(1.0f, 0.0f, 0.0f));
+        m_rotationQuat = m_rotationQuat * deltaQuat;
+        m_rotationQuat = glm::normalize(m_rotationQuat);
     }
 
     /// @brief Method to add to the local yaw (rotation around Y-axis).
     /// @param deltaYaw float The amount to add in degrees.
     void addYaw(float deltaYaw) {
-        rotation.y += deltaYaw;
+        glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaYaw), glm::vec3(0.0f, 1.0f, 0.0f));
+        m_rotationQuat = deltaQuat * m_rotationQuat;
+        m_rotationQuat = glm::normalize(m_rotationQuat);
     }
 
     /// @brief Method to add to the local roll (rotation around Z-axis).
     /// @param deltaRoll float The amount to add in degrees.
     void addRoll(float deltaRoll) {
-        rotation.z += deltaRoll;
+        glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaRoll), glm::vec3(0.0f, 0.0f, 1.0f));
+        m_rotationQuat = m_rotationQuat * deltaQuat;
+        m_rotationQuat = glm::normalize(m_rotationQuat);
     }
 
-    /// @brief Method to get normalized forward vector.
-    /// @return glm::vec3
-    glm::vec3 getForwardVector() const {
-        float pitch = glm::radians(getWorldRotation().x);
-        float yaw = glm::radians(-getWorldRotation().y);
 
-        return glm::normalize(glm::vec3(
-            cos(yaw) * cos(pitch),
-            sin(pitch),
-            sin(yaw) * cos(pitch)
-        ));
+    glm::vec3 getForwardVector() const {
+        return glm::normalize(-glm::vec3(matrix()[2]));
     }
 
     /// @brief Method to get normalized right vector.
     /// @return glm::vec3
-    glm::vec3 getRightVector() {
-        glm::vec3 forward = getForwardVector();
-        glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-        return glm::normalize(glm::cross(forward, worldUp));
+    glm::vec3 getRightVector() const {
+        return glm::normalize(glm::vec3(matrix()[0]));
     }
 
     /// @brief Method to get normalized up vector.
     /// @return glm::vec3
-    glm::vec3 getUpVector() {
-        glm::vec3 forward = getForwardVector();
-        glm::vec3 right = getRightVector();
-        return glm::normalize(glm::cross(right, forward));
+    glm::vec3 getUpVector() const {
+        return glm::normalize(glm::vec3(matrix()[1]));
     }
 };
 
@@ -253,7 +273,7 @@ struct TransformComponent {
     #undef TRANSPARENT
 #endif
 
-enum class RenderType  {
+enum class RenderType {
     OPAQUE,
     TRANSPARENT,
     CUSTOM

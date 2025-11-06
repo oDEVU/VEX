@@ -62,21 +62,10 @@ public:
 
         // Axis inputs dont need delta time since movement beetween frames will be proportionaly smaller
         inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis) {
-            GetComponent<vex::TransformComponent>().addYaw(axis * 0.05);
+            GetComponent<vex::TransformComponent>().addYaw(-axis * 0.05);
         });
         inputComp.addMouseAxisBinding(vex::MouseAxis::Y, [this](float axis) {
-            // dirty fix to fix camera fliping
-            if(GetComponent<vex::TransformComponent>().getWorldRotation().x < 90 && GetComponent<vex::TransformComponent>().getWorldRotation().x > -90){
-                GetComponent<vex::TransformComponent>().addPitch(-axis * 0.05);
-            }
-
-            if(GetComponent<vex::TransformComponent>().getWorldRotation().x >= 90){
-                GetComponent<vex::TransformComponent>().setWorldRotation({89.9, GetComponent<vex::TransformComponent>().getWorldRotation().y, GetComponent<vex::TransformComponent>().getWorldRotation().z});
-            }else if(GetComponent<vex::TransformComponent>().getWorldRotation().x <= -90){
-                GetComponent<vex::TransformComponent>().setWorldRotation({-89.9, GetComponent<vex::TransformComponent>().getWorldRotation().y, GetComponent<vex::TransformComponent>().getWorldRotation().z});
-            }
-
-            //log("Camera rotation: %f, %f, %f", GetComponent<vex::TransformComponent>().getWorldRotation().x, GetComponent<vex::TransformComponent>().getWorldRotation().y, GetComponent<vex::TransformComponent>().getWorldRotation().z);
+            GetComponent<vex::TransformComponent>().addPitch(-axis * 0.05);
         });
 
         AddComponent(inputComp);
