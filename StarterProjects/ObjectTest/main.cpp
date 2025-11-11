@@ -123,7 +123,7 @@ public:
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{5.0f, 0.5f, 5.0f}};
         cube = vex::createModelFromComponents("cube", cubeMesh, cubeTransform, *this);
-        vex::PhysicsComponent cubePhysics = vex::PhysicsComponent::Box({10.0f, 0.5f, 10.0f}, true);
+        vex::PhysicsComponent cubePhysics = vex::PhysicsComponent::Box({5.0f, 0.5f, 5.0f}, vex::BodyType::STATIC);
         cube->AddComponent(cubePhysics);
 
         vex::TransformComponent cube2Transform = vex::TransformComponent{
@@ -132,7 +132,7 @@ public:
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{0.5f, 0.5f, 0.5f}};
         cube2 = vex::createModelFromComponents("cube2", cubeMesh, cube2Transform, *this);
-        vex::PhysicsComponent cube2Physics = vex::PhysicsComponent::Box({0.5f, 0.5f, 0.5f}, false);
+        vex::PhysicsComponent cube2Physics = vex::PhysicsComponent::Box({0.5f, 0.5f, 0.5f}, vex::BodyType::DYNAMIC);
         cube2->AddComponent(cube2Physics);
 
         cube2Transform.addLocalPosition(glm::vec3{0.25f, 3.0f, 0.0f});

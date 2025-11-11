@@ -94,4 +94,5 @@
 #include <Jolt/RegisterTypes.h>
 #include <Jolt/Physics/PhysicsSettings.h>
 #include <Jolt/Physics/Body/BodyInterface.h>
+#include <Jolt/Physics/Body/MotionProperties.h>
 #include <Jolt/Physics/Collision/NarrowPhaseQuery.h>

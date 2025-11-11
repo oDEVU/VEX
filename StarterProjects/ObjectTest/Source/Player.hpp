@@ -6,7 +6,9 @@
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
+#include "components/PhysicsSystem.hpp"
 #include "components/SceneManager.hpp"
+#include <cmath>
 #include <memory>
 
 namespace vex {
@@ -15,6 +17,7 @@ public:
     Player(Engine& engine, const std::string& name) : GameObject(engine, name) {
         AddComponent(TransformComponent{engine.getRegistry()});
         AddComponent(UiComponent{engine.createVexUI()});
+        AddComponent(PhysicsComponent::Sphere(0.5f, vex::BodyType::KINEMATIC));
     }
 
     void BeginPlay() override {
@@ -93,6 +96,9 @@ public:
 
     void Update(float deltaTime) override {
         GetComponent<UiComponent>().m_vexUI->setText("fps", "FPS: " + std::to_string((int)(1.f/deltaTime)));
+        auto pc = GetComponent<PhysicsComponent>();
+        m_engine.getPhysicsSystem()->SetGravityFactor(pc.bodyId, 0.f);
+        //m_engine.getPhysicsSystem()->SetAngularFactor(pc.bodyId, glm::vec3(0.0f, 1.0f, 0.0f));
 
         // temponary just to test stuff, dont do that, dont retrive object everyframe.
         std::shared_ptr<GameObject> object = m_engine.getSceneManager()->GetGameObjectByName("Assets/scenes/main.json", "MyModel");

@@ -87,10 +87,19 @@ namespace vex {
         for (auto e : view) {
             auto& tc = view.get<TransformComponent>(e);
             auto& pc = view.get<PhysicsComponent>(e);
-            if(tc.transformedLately()){
-                bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), JPH::EActivation::Activate);
-                tc.updatedPhysicsTransform();
-            }
+            //if(pc.bodyType == BodyType::DYNAMIC){
+                if(tc.transformedLately()){
+                    bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), JPH::EActivation::Activate);
+                    tc.updatedPhysicsTransform();
+                }
+                /*}else if(pc.bodyType == BodyType::KINEMATIC){
+                //if(tc.transformedLately()){
+                    bodyInterface.MoveKinematic(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), deltaTime);
+                    tc.updatedPhysicsTransform();
+                    //}else{
+
+                    //}
+            }*/
         }
 
         // With this it doesnt rotate with physics calculations
@@ -128,7 +137,14 @@ namespace vex {
         else if (pc.shape == ShapeType::CYLINDER)
             shape = new JPH::CylinderShape(pc.cylinderRadius, pc.cylinderHeight);
 
-        JPH::EMotionType motion = pc.isStatic ? JPH::EMotionType::Static : JPH::EMotionType::Dynamic;
+        JPH::EMotionType motion = JPH::EMotionType::Static;
+        if(pc.bodyType == BodyType::STATIC){
+            motion = JPH::EMotionType::Static;
+        }else if(pc.bodyType == BodyType::KINEMATIC){
+            motion = JPH::EMotionType::Kinematic;
+        }else if(pc.bodyType == BodyType::DYNAMIC){
+            motion = JPH::EMotionType::Dynamic;
+        }
         JPH::BodyCreationSettings settings(shape, JPH::RVec3(pos), rot, motion, pc.objectLayer);
         settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
         settings.mMassPropertiesOverride.mMass = pc.mass;
@@ -194,7 +210,7 @@ namespace vex {
         JPH::Quat rot = bi.GetRotation(id);
 
         auto& t = r.get<TransformComponent>(e);
-        t.setWorldPosition(glm::vec3{pos.GetX(), pos.GetY(), pos.GetZ()});
+        t.setWorldPositionPhys(glm::vec3{pos.GetX(), pos.GetY(), pos.GetZ()});
         t.setWorldQuaternion(glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ()));
     }
 

@@ -110,6 +110,7 @@ struct TransformComponent {
 
     /// @brief Set the local position.
     void setLocalPosition(glm::vec3 newPosition) {
+        lastTransformed = true;
         position = newPosition;
     }
 
@@ -186,6 +187,20 @@ struct TransformComponent {
     /// @brief Method to set world position, needed when object is parented as position parameter stores local position.
     /// @param newPosition glm::vec3
     void setWorldPosition(glm::vec3 newPosition) {
+        lastTransformed = true;
+        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+            glm::mat4 parentWorldMatrix = m_registry.get<TransformComponent>(parent).matrix();
+            glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
+            glm::vec4 newLocalPos4 = inverseParentMatrix * glm::vec4(newPosition, 1.0f);
+            position = glm::vec3(newLocalPos4);
+        } else {
+            position = newPosition;
+        }
+    }
+
+    /// @brief Method to set world position by physics component.
+    /// @param newPosition glm::vec3
+    void setWorldPositionPhys(glm::vec3 newPosition) {
         if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
             glm::mat4 parentWorldMatrix = m_registry.get<TransformComponent>(parent).matrix();
             glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
@@ -218,6 +233,7 @@ struct TransformComponent {
     /// @brief Method to add local position.
     /// @param newPosition glm::vec3
     void addLocalPosition(glm::vec3 newPosition) {
+        lastTransformed = true;
         position += newPosition;
     }
 

@@ -46,10 +46,14 @@
          BOX, SPHERE, CAPSULE, CYLINDER
      };
 
+     enum class BodyType{
+         STATIC, DYNAMIC, KINEMATIC
+     };
+
      /// @brief Structure representing a physics component.
      struct PhysicsComponent {
          ShapeType shape = ShapeType::BOX;
-         bool isStatic = false;
+         BodyType bodyType = BodyType::STATIC;
          float mass = 1.0f;
          float friction = 0.5f;
          float bounce = 0.1f;
@@ -68,47 +72,47 @@
 
          explicit PhysicsComponent(ShapeType s) : shape(s) {}
 
-         static PhysicsComponent Box(glm::vec3 halfExtents = {0.5f, 0.5f, 0.5f}, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
+         static PhysicsComponent Box(glm::vec3 halfExtents = {0.5f, 0.5f, 0.5f}, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::BOX;
              pc.boxHalfExtents = halfExtents;
              pc.mass = mass;
-             pc.isStatic = isStatic;
+             pc.bodyType = bodyType;
              pc.friction = friction;
              pc.bounce = bounce;
              return pc;
          }
 
-         static PhysicsComponent Sphere(float radius = 0.5f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
+         static PhysicsComponent Sphere(float radius = 0.5f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::SPHERE;
              pc.sphereRadius = radius;
              pc.mass = mass;
-             pc.isStatic = isStatic;
+             pc.bodyType = bodyType;
              pc.friction = friction;
              pc.bounce = bounce;
              return pc;
          }
 
-         static PhysicsComponent Capsule(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
+         static PhysicsComponent Capsule(float radius = 0.5f, float height = 1.0f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::CAPSULE;
              pc.capsuleRadius = radius;
              pc.capsuleHeight = height;
              pc.mass = mass;
-             pc.isStatic = isStatic;
+             pc.bodyType = bodyType;
              pc.friction = friction;
              pc.bounce = bounce;
              return pc;
          }
 
-         static PhysicsComponent Cylinder(float radius = 0.5f, float height = 1.0f, bool isStatic = false, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
+         static PhysicsComponent Cylinder(float radius = 0.5f, float height = 1.0f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
              PhysicsComponent pc;
              pc.shape = ShapeType::CYLINDER;
              pc.cylinderRadius = radius;
              pc.cylinderHeight = height;
              pc.mass = mass;
-             pc.isStatic = isStatic;
+             pc.bodyType = bodyType;
              pc.friction = friction;
              pc.bounce = bounce;
              return pc;
@@ -137,6 +141,12 @@
          /// @brief Allows for updating gravity.
          void SetGravityVector(const glm::vec3& gravity){
              m_physicsSystem->SetGravity(JPH::Vec3(gravity.x, gravity.y, gravity.z));
+         }
+
+         /// @brief Allows for updating gravity factor per object.
+         void SetGravityFactor(const JPH::BodyID &inBodyID, float inGravityFactor){
+             auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+             bodyInterface.SetGravityFactor(inBodyID, inGravityFactor);
          }
 
          /// @brief Allows for updating friction.
@@ -195,7 +205,7 @@
         /// @brief Allows for getting angular velocity.
         glm::vec3 GetAngularVelocity(JPH::BodyID bodyId){
             auto& bodyInterface = m_physicsSystem->GetBodyInterface();
-            JPH::Vec3 velocity = bodyInterface.GetAngularVelocity(bodyId);
+            auto velocity = bodyInterface.GetAngularVelocity(bodyId);
             return glm::vec3(velocity.GetX(), velocity.GetY(), velocity.GetZ());
         }
 
