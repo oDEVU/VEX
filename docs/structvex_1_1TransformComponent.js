@@ -30,7 +30,10 @@ var structvex_1_1TransformComponent =
     [ "setLocalScale", "structvex_1_1TransformComponent.html#a7db17dc36cac01aedb4ce6f829f5ae4a", null ],
     [ "setParent", "structvex_1_1TransformComponent.html#a79214f23e2537a7806063822d6a39859", null ],
     [ "setWorldPosition", "structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086", null ],
+    [ "setWorldPositionPhys", "structvex_1_1TransformComponent.html#a53b6a4be479e2ce68f658dc2bae3f0a5", null ],
     [ "setWorldQuaternion", "structvex_1_1TransformComponent.html#aa3b792628e571cd834999392dfdaa598", null ],
     [ "setWorldRotation", "structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab", null ],
-    [ "setWorldScale", "structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20", null ]
+    [ "setWorldScale", "structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20", null ],
+    [ "transformedLately", "structvex_1_1TransformComponent.html#a3fc63dce8a4f8b53f9ea1047bc178d54", null ],
+    [ "updatedPhysicsTransform", "structvex_1_1TransformComponent.html#ac8e509a9c7040e7919caf9e9d5b720b6", null ]
 ];

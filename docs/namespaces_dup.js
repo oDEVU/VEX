@@ -2,9 +2,12 @@ var namespaces_dup =
 [
     [ "vex", null, [
       [ "PS1Effects", "namespacevex_1_1PS1Effects.html", null ],
+      [ "BodyIDHasher", "structvex_1_1BodyIDHasher.html", null ],
+      [ "BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ],
       [ "CameraComponent", "structvex_1_1CameraComponent.html", null ],
       [ "CameraObject", "classvex_1_1CameraObject.html", null ],
       [ "CameraUBO", "structvex_1_1CameraUBO.html", "structvex_1_1CameraUBO" ],
+      [ "CollisionHit", "structvex_1_1CollisionHit.html", null ],
       [ "ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
       [ "Engine", "classvex_1_1Engine.html", "classvex_1_1Engine" ],
       [ "enviroment", "structvex_1_1enviroment.html", "structvex_1_1enviroment" ],
@@ -23,13 +26,15 @@ var namespaces_dup =
       [ "ModelObject", "classvex_1_1ModelObject.html", "classvex_1_1ModelObject" ],
       [ "ModelUBO", "structvex_1_1ModelUBO.html", "structvex_1_1ModelUBO" ],
       [ "MouseAxisBinding", "structvex_1_1MouseAxisBinding.html", null ],
-      [ "MyBroadPhaseLayerInterface", "classvex_1_1MyBroadPhaseLayerInterface.html", null ],
-      [ "MyObjectLayerPairFilter", "classvex_1_1MyObjectLayerPairFilter.html", null ],
-      [ "MyObjectVsBroadPhaseLayerFilter", "classvex_1_1MyObjectVsBroadPhaseLayerFilter.html", null ],
+      [ "MyActivationListener", "classvex_1_1MyActivationListener.html", null ],
+      [ "MyContactListener", "classvex_1_1MyContactListener.html", null ],
       [ "NameComponent", "structvex_1_1NameComponent.html", null ],
+      [ "ObjectLayerPairFilterImpl", "classvex_1_1ObjectLayerPairFilterImpl.html", null ],
+      [ "ObjectVsBroadPhaseLayerFilterImpl", "classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html", null ],
       [ "PhysicsComponent", "structvex_1_1PhysicsComponent.html", "structvex_1_1PhysicsComponent" ],
       [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html", "classvex_1_1PhysicsSystem" ],
       [ "PushConstants", "structvex_1_1PushConstants.html", "structvex_1_1PushConstants" ],
+      [ "RaycastHit", "structvex_1_1RaycastHit.html", null ],
       [ "Renderer", "classvex_1_1Renderer.html", "classvex_1_1Renderer" ],
       [ "ResolutionManager", "classvex_1_1ResolutionManager.html", "classvex_1_1ResolutionManager" ],
       [ "Scene", "classvex_1_1Scene.html", "classvex_1_1Scene" ],
@@ -55,6 +60,12 @@ var namespaces_dup =
       [ "VulkanSwapchainManager", "classvex_1_1VulkanSwapchainManager.html", "classvex_1_1VulkanSwapchainManager" ],
       [ "Widget", "structvex_1_1Widget.html", null ],
       [ "Window", "classvex_1_1Window.html", "classvex_1_1Window" ],
+      [ "BodyType", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a", [
+        [ "STATIC", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aafe6f99ef1ec99efbdc19a9786cf1facc", null ],
+        [ "DYNAMIC", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aa0fcc90da4811c877ba9f9c12f7d60bc9", null ],
+        [ "KINEMATIC", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aa019b36cb8fbb31ba1f7c7b7595eb964d", null ],
+        [ "SENSOR", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aa72700b6ac14b90435377dcbaeb77e908", null ]
+      ] ],
       [ "InputActionState", "InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee", [
         [ "Pressed", "InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baeead78a68f6a85421ae121c2cb5b73a1040", null ],
         [ "Released", "InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baeeaea1e34304a5d8ffa7c9b0ed8ede4ef1a", null ],
@@ -79,7 +90,9 @@ var namespaces_dup =
         [ "BOX", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249eae657cce1913c857166b0475f18668ef5", null ],
         [ "SPHERE", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249ea6f7cea7381e843e2ee0338b4a92b0d43", null ],
         [ "CAPSULE", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249ea67586f12c9792da11a4bdf60360d40e9", null ],
-        [ "CYLINDER", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249eaddec32fe897072b48368b1abe03de2aa", null ]
+        [ "CYLINDER", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249eaddec32fe897072b48368b1abe03de2aa", null ],
+        [ "CONVEX_HULL", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249eaed6cdbbdde02ddd2a9bbdb59eed21678", null ],
+        [ "MESH", "PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249ea5b65fe46c5dd90ebcec69c472c3be1d9", null ]
       ] ],
       [ "TextAlign", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886", [
         [ "Left", "VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886a945d5e233cf7d6240f6b783b36a374ff", null ],

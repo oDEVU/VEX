@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['shapetype_0',['ShapeType',['../PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249e',1,'vex']]]
+  ['resolutionmode_0',['ResolutionMode',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7e',1,'vex']]]
 ];

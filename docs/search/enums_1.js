@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['mouseaxis_0',['MouseAxis',['../InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236',1,'vex']]]
+  ['inputactionstate_0',['InputActionState',['../InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee',1,'vex']]],
+  ['inputmode_1',['InputMode',['../InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4',1,'vex']]]
 ];

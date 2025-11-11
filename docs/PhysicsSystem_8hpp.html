@@ -123,6 +123,9 @@ $(function(){initNavTree('PhysicsSystem_8hpp.html',''); initResizable(true); });
 <code>#include &lt;mutex&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;<a class="el" href="BasicComponents_8hpp_source.html">components/GameComponents/BasicComponents.hpp</a>&gt;</code><br />
 <code>#include &quot;<a class="el" href="JoltSafe_8hpp_source.html">components/JoltSafe.hpp</a>&quot;</code><br />
 </div>
@@ -130,17 +133,29 @@ $(function(){initNavTree('PhysicsSystem_8hpp.html',''); initResizable(true); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1MyBroadPhaseLayerInterface.html">vex::MyBroadPhaseLayerInterface</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1BodyIDHasher.html">vex::BodyIDHasher</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1MyObjectVsBroadPhaseLayerFilter.html">vex::MyObjectVsBroadPhaseLayerFilter</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1BPLayerInterfaceImpl.html">vex::BPLayerInterfaceImpl</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1MyObjectLayerPairFilter.html">vex::MyObjectLayerPairFilter</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html">vex::ObjectVsBroadPhaseLayerFilterImpl</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1ObjectLayerPairFilterImpl.html">vex::ObjectLayerPairFilterImpl</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1MyActivationListener.html">vex::MyActivationListener</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1CollisionHit.html">vex::CollisionHit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a collision hit.  <a href="structvex_1_1CollisionHit.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1RaycastHit.html">vex::RaycastHit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a raycast hit.  <a href="structvex_1_1RaycastHit.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1PhysicsComponent.html">vex::PhysicsComponent</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a physics component.  <a href="structvex_1_1PhysicsComponent.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1PhysicsSystem.html">vex::PhysicsSystem</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class representing a physics system.  <a href="classvex_1_1PhysicsSystem.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1MyContactListener.html">vex::MyContactListener</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
@@ -150,13 +165,25 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a6e60c194c597809af12d22fb3962249e" id="r_a6e60c194c597809af12d22fb3962249e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e60c194c597809af12d22fb3962249e">vex::ShapeType</a> { <b>BOX</b>
+<tr class="memitem:a6e60c194c597809af12d22fb3962249e" id="r_a6e60c194c597809af12d22fb3962249e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e60c194c597809af12d22fb3962249e">vex::ShapeType</a> { <br />
+&#160;&#160;<b>BOX</b>
 , <b>SPHERE</b>
 , <b>CAPSULE</b>
 , <b>CYLINDER</b>
+, <br />
+&#160;&#160;<b>CONVEX_HULL</b>
+, <b>MESH</b>
+<br />
  }</td></tr>
 <tr class="memdesc:a6e60c194c597809af12d22fb3962249e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of available shape types for physics components.  <a href="#a6e60c194c597809af12d22fb3962249e">More...</a><br /></td></tr>
 <tr class="separator:a6e60c194c597809af12d22fb3962249e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a289b9087eda84617c50bd2c860f4a36a" id="r_a289b9087eda84617c50bd2c860f4a36a"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a289b9087eda84617c50bd2c860f4a36a">vex::BodyType</a> { <b>STATIC</b>
+, <b>DYNAMIC</b>
+, <b>KINEMATIC</b>
+, <b>SENSOR</b>
+ }</td></tr>
+<tr class="memdesc:a289b9087eda84617c50bd2c860f4a36a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of available body types for physics components.  <a href="#a289b9087eda84617c50bd2c860f4a36a">More...</a><br /></td></tr>
+<tr class="separator:a289b9087eda84617c50bd2c860f4a36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file defines PhysicsSystem class. </p>
@@ -181,6 +208,32 @@ Enumerations</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a289b9087eda84617c50bd2c860f4a36a" name="a289b9087eda84617c50bd2c860f4a36a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a289b9087eda84617c50bd2c860f4a36a">&#9670;&#160;</a></span>BodyType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a289b9087eda84617c50bd2c860f4a36a">vex::BodyType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enumeration of available body types for physics components. </p>
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00071">71</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a6e60c194c597809af12d22fb3962249e" name="a6e60c194c597809af12d22fb3962249e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6e60c194c597809af12d22fb3962249e">&#9670;&#160;</a></span>ShapeType</h2>
 
@@ -203,7 +256,7 @@ Enumerations</h2></td></tr>
 
 <p>Enumeration of available shape types for physics components. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00045">45</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00066">66</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>

@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['uicomponent_0',['UiComponent',['../structvex_1_1UiComponent.html',1,'vex']]],
-  ['uipushconstants_1',['UIPushConstants',['../structvex_1_1UIPushConstants.html',1,'vex']]],
-  ['uiquad_2',['UIQuad',['../structvex_1_1UIQuad.html',1,'vex']]],
-  ['uistyle_3',['UIStyle',['../structvex_1_1UIStyle.html',1,'vex']]],
-  ['uivertex_4',['UIVertex',['../structvex_1_1UIVertex.html',1,'vex']]]
+  ['scene_0',['Scene',['../classvex_1_1Scene.html',1,'vex']]],
+  ['scenemanager_1',['SceneManager',['../classvex_1_1SceneManager.html',1,'vex']]],
+  ['submesh_2',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
+  ['submeshbuffers_3',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]]
 ];

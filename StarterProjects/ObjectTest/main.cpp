@@ -32,9 +32,11 @@ public:
             const SDL_KeyboardEvent& key_event = event.key;
 
             // Physical key position (recommended for games)
+            #ifdef DEBUG
             if (key_event.scancode == SDL_SCANCODE_ESCAPE) {
                 m_running = false;
             }
+            #endif
 
             if (key_event.scancode == SDL_SCANCODE_P) {
                 animate = !animate;
@@ -87,8 +89,11 @@ public:
             glm::vec3{0.0f, 0.3f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{1.0f, 1.0f, 1.0f}};
+        //vex::PhysicsComponent humanPhysics = vex::PhysicsComponent::Mesh(humanMesh, vex::BodyType::KINEMATIC);
+        vex::PhysicsComponent humanPhysics = vex::PhysicsComponent::Box({0.5f, 1.0f, 0.1f}, vex::BodyType::KINEMATIC);
+
         humanEntity1 = vex::createModelFromComponents("human1", humanMesh, humanTransform, *this);
-        humanTransform.addLocalPosition(glm::vec3(0.5f,-0.3f,0));
+        humanTransform.addLocalPosition(glm::vec3(1.0f,-0.3f,0));
         humanEntity2 = vex::createModelFromComponents("human2", humanMesh, humanTransform, *this);
         //humanTransform.addLocalPosition(glm::vec3(0.5f,0,0));
         humanEntity3 = vex::createModelFromComponents("human3", humanMesh, humanTransform, *this);
@@ -99,9 +104,19 @@ public:
         humanEntity3->ParentTo(humanEntity2->GetEntity());
         humanEntity4->ParentTo(humanEntity3->GetEntity());
 
+        humanEntity1->AddComponent(humanPhysics);
+        humanEntity2->AddComponent(humanPhysics);
+        humanEntity3->AddComponent(humanPhysics);
+        humanEntity4->AddComponent(humanPhysics);
+
         viperEntity1 = vex::createModelFromPath("Assets/scene.gltf", "viper1", *this);
         viperEntity2 = vex::createModelFromPath("Assets/scene.gltf", "viper2", *this);
         viperEntity2->GetComponent<vex::TransformComponent>().addLocalPosition(glm::vec3{2.0f, 0.0f, 0.0f});
+
+        vex::PhysicsComponent viperPhysics = vex::PhysicsComponent::Mesh(viperEntity1->GetComponent<vex::MeshComponent>(), vex::BodyType::STATIC);
+
+        viperEntity1->AddComponent(viperPhysics);
+        viperEntity2->AddComponent(viperPhysics);
 
 
         viperShadow1 = vex::createModelFromPath("Assets/ViperShadow.obj", "shadow1", *this);
@@ -124,6 +139,17 @@ public:
             glm::vec3{5.0f, 0.5f, 5.0f}};
         cube = vex::createModelFromComponents("cube", cubeMesh, cubeTransform, *this);
         vex::PhysicsComponent cubePhysics = vex::PhysicsComponent::Box({5.0f, 0.5f, 5.0f}, vex::BodyType::STATIC);
+
+        cubePhysics.addCollisionEnterBinding([this](entt::entity self, entt::entity other, const vex::CollisionHit& hit) {
+            log("Hit at (%f, %f, %f)", hit.position.x, hit.position.y, hit.position.z);
+        });
+        cubePhysics.addCollisionStayBinding([this](entt::entity self, entt::entity other, const vex::CollisionHit& hit) {
+            log("Still touching");
+        });
+        cubePhysics.addCollisionExitBinding([this](entt::entity self, entt::entity other) {
+            log("Stopped touching");
+        });
+
         cube->AddComponent(cubePhysics);
 
         vex::TransformComponent cube2Transform = vex::TransformComponent{
@@ -171,7 +197,7 @@ public:
 
         //pass
         if (humanEntity1 && humanEntity1->isValid()) {
-            humanEntity1->GetComponent<vex::TransformComponent>().addYaw(10*deltaTime);
+            humanEntity1->GetComponent<vex::TransformComponent>().addYaw(25*deltaTime);
         }
 
         // testing if i can remove entities at runtime

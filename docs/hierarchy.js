@@ -1,11 +1,19 @@
 var hierarchy =
 [
+    [ "JPH::BodyActivationListener", null, [
+      [ "vex::MyActivationListener", "classvex_1_1MyActivationListener.html", null ]
+    ] ],
+    [ "vex::BodyIDHasher", "structvex_1_1BodyIDHasher.html", null ],
     [ "JPH::BroadPhaseLayerInterface", null, [
-      [ "vex::MyBroadPhaseLayerInterface", "classvex_1_1MyBroadPhaseLayerInterface.html", null ]
+      [ "vex::BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ]
     ] ],
     [ "vex::CameraComponent", "structvex_1_1CameraComponent.html", null ],
     [ "vex::CameraUBO", "structvex_1_1CameraUBO.html", null ],
+    [ "vex::CollisionHit", "structvex_1_1CollisionHit.html", null ],
     [ "vex::ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
+    [ "JPH::ContactListener", null, [
+      [ "vex::MyContactListener", "classvex_1_1MyContactListener.html", null ]
+    ] ],
     [ "vex::Engine", "classvex_1_1Engine.html", null ],
     [ "vex::enviroment", "structvex_1_1enviroment.html", null ],
     [ "vex::VirtualFileSystem::FileData", "structvex_1_1VirtualFileSystem_1_1FileData.html", null ],
@@ -41,14 +49,15 @@ var hierarchy =
     [ "vex::MouseAxisBinding", "structvex_1_1MouseAxisBinding.html", null ],
     [ "vex::NameComponent", "structvex_1_1NameComponent.html", null ],
     [ "JPH::ObjectLayerPairFilter", null, [
-      [ "vex::MyObjectLayerPairFilter", "classvex_1_1MyObjectLayerPairFilter.html", null ]
+      [ "vex::ObjectLayerPairFilterImpl", "classvex_1_1ObjectLayerPairFilterImpl.html", null ]
     ] ],
     [ "JPH::ObjectVsBroadPhaseLayerFilter", null, [
-      [ "vex::MyObjectVsBroadPhaseLayerFilter", "classvex_1_1MyObjectVsBroadPhaseLayerFilter.html", null ]
+      [ "vex::ObjectVsBroadPhaseLayerFilterImpl", "classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html", null ]
     ] ],
     [ "vex::PhysicsComponent", "structvex_1_1PhysicsComponent.html", null ],
     [ "vex::PhysicsSystem", "classvex_1_1PhysicsSystem.html", null ],
     [ "vex::PushConstants", "structvex_1_1PushConstants.html", null ],
+    [ "vex::RaycastHit", "structvex_1_1RaycastHit.html", null ],
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],
     [ "vex::ResolutionManager", "classvex_1_1ResolutionManager.html", null ],
     [ "vex::Scene", "classvex_1_1Scene.html", null ],

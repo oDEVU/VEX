@@ -1,66 +1,76 @@
 #define GLM_ENABLE_EXPERIMENTAL 1
-#include "entt/entity/fwd.hpp"
+#include <entt/entity/fwd.hpp>
 #include <components/PhysicsSystem.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
-#include "components/errorUtils.hpp"
+#include <components/errorUtils.hpp>
 #include <thread>
 
 #include <components/JoltSafe.hpp>
 
 #ifdef _WIN32
-#pragma push_macro("max")  // Save if needed
+#pragma push_macro("max")
 #undef max
 #endif
 
 namespace vex {
 
-        bool PhysicsSystem::init(size_t maxBodies)
-        {
-            JPH::RegisterDefaultAllocator();
+    bool PhysicsSystem::init(size_t maxBodies) {
+        JPH::RegisterDefaultAllocator();
 
-            if (JPH::Factory::sInstance == nullptr) {
-                JPH::Factory::sInstance = new JPH::Factory();
-            }
-
-            JPH::RegisterTypes();
-
-            m_tempAllocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
-
-            m_jobSystem = new JPH::JobSystemThreadPool(
-                1024,
-                256,
-                std::max(1u, std::thread::hardware_concurrency() - 1)
-            );
-
-            m_physicsSystem = new JPH::PhysicsSystem();
-
-            static MyBroadPhaseLayerInterface broadPhaseLayerInterface;
-            static MyObjectVsBroadPhaseLayerFilter objectVsBroadPhaseLayerFilter;
-            static MyObjectLayerPairFilter objectLayerPairFilter;
-
-            m_physicsSystem->Init(
-                (uint32_t)maxBodies,
-                0,
-                1024,
-                1024,
-                broadPhaseLayerInterface,
-                objectVsBroadPhaseLayerFilter,
-                objectLayerPairFilter
-            );
-            m_physicsSystem->SetGravity(JPH::Vec3(0.0f, -1.81f, 0.0f));
-            return true;
+        if (JPH::Factory::sInstance == nullptr) {
+            JPH::Factory::sInstance = new JPH::Factory();
         }
 
-    PhysicsSystem::~PhysicsSystem()
-    {
+        JPH::RegisterTypes();
+
+        m_tempAllocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
+
+        m_jobSystem = new JPH::JobSystemThreadPool(
+            1024,
+            256,
+            std::max(1u, std::thread::hardware_concurrency() - 1)
+        );
+
+        m_physicsSystem = new JPH::PhysicsSystem();
+
+        m_physicsSystem->Init(
+            static_cast<uint32_t>(maxBodies),
+            0,
+            1024,
+            1024,
+            m_bpInterface,
+            m_objVsBpFilter,
+            m_objLayerPairFilter
+        );
+        m_physicsSystem->SetGravity(JPH::Vec3(0.0f, -9.81f, 0.0f));
+
+        m_activationListener = std::make_unique<MyActivationListener>();
+        m_physicsSystem->SetBodyActivationListener(m_activationListener.get());
+
+        m_contactListener = std::make_unique<MyContactListener>(*this);
+        m_physicsSystem->SetContactListener(m_contactListener.get());
+
+        m_destroyConnection = m_registry.on_destroy<PhysicsComponent>().connect<&PhysicsSystem::onPhysicsComponentDestroy>(*this);
+
+        return true;
+    }
+
+    PhysicsSystem::~PhysicsSystem() {
         shutdown();
     }
 
     void PhysicsSystem::shutdown() {
-        JPH::UnregisterTypes(); // optional but recommended
+        //if (m_destroyConnection) m_destroyConnection.disconnect();
 
-        // Delete factory singleton if we created it
+        auto view = m_registry.view<PhysicsComponent>();
+        for (auto e : view) {
+            auto& pc = view.get<PhysicsComponent>(e);
+            DestroyBodyForEntity(pc);
+        }
+
+        JPH::UnregisterTypes();
+
         if (JPH::Factory::sInstance != nullptr) {
             delete JPH::Factory::sInstance;
             JPH::Factory::sInstance = nullptr;
@@ -80,148 +90,344 @@ namespace vex {
     void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;
 
-        // Without this editing transform component doesnt change transform for physics body
-
         auto& bodyInterface = m_physicsSystem->GetBodyInterface();
         auto view = m_registry.view<PhysicsComponent, TransformComponent>();
         for (auto e : view) {
             auto& tc = view.get<TransformComponent>(e);
             auto& pc = view.get<PhysicsComponent>(e);
-            //if(pc.bodyType == BodyType::DYNAMIC){
-                if(tc.transformedLately()){
-                    bodyInterface.SetPositionAndRotationWhenChanged(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), JPH::EActivation::Activate);
-                    tc.updatedPhysicsTransform();
-                }
-                /*}else if(pc.bodyType == BodyType::KINEMATIC){
-                //if(tc.transformedLately()){
-                    bodyInterface.MoveKinematic(pc.bodyId, JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z), GlmToJph(tc.getWorldQuaternion()), deltaTime);
-                    tc.updatedPhysicsTransform();
-                    //}else{
-
+            if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) {
+                CreateBodyForEntity(e, m_registry, pc);
+                continue;
+            }
+            if (tc.transformedLately()) {
+                JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
+                JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
+                //if (pc.bodyType == BodyType::KINEMATIC || pc.isSensor) {
+                    //bodyInterface.MoveKinematic(pc.bodyId, pos, rot, deltaTime);
+                    //} else {
+                    bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
                     //}
-            }*/
+                tc.updatedPhysicsTransform();
+            }
         }
-
-        // With this it doesnt rotate with physics calculations
 
         m_accumulator += deltaTime;
+        int collisionSteps = 1;
         while (m_accumulator >= m_fixedDt) {
-            m_physicsSystem->Update(m_fixedDt, 1, m_tempAllocator, m_jobSystem);
+            m_physicsSystem->Update(m_fixedDt, collisionSteps, m_tempAllocator, m_jobSystem);
             m_accumulator -= m_fixedDt;
         }
+
         for (auto e : view) {
             auto& pc = view.get<PhysicsComponent>(e);
-            if (pc.bodyId.IsInvalid()){
-                CreateBodyForEntity(e, m_registry, pc);
-            }else{
+            if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
                 SyncBodyToTransform(e, m_registry, pc.bodyId);
             }
         }
     }
 
     std::optional<JPH::BodyID> PhysicsSystem::CreateBodyForEntity(entt::entity e, entt::registry& r, PhysicsComponent& pc) {
-        if (!m_physicsSystem) return std::nullopt;
-        if (!r.all_of<TransformComponent>(e)) return std::nullopt;
+        if (!m_physicsSystem || !r.all_of<TransformComponent>(e)) return std::nullopt;
 
         auto& t = r.get<TransformComponent>(e);
-        JPH::Vec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
-        JPH::Quat rot(t.getWorldQuaternion().x, t.getWorldQuaternion().y, t.getWorldQuaternion().z, t.getWorldQuaternion().w);
+        JPH::RVec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
+        JPH::Quat rot = GlmToJph(t.getWorldQuaternion());
 
-        JPH::Ref<JPH::Shape> shape;
-        if (pc.shape == ShapeType::BOX)
+        JPH::ShapeRefC shape;
+        switch (pc.shape) {
+        case ShapeType::BOX:
             shape = new JPH::BoxShape(JPH::Vec3(pc.boxHalfExtents.x, pc.boxHalfExtents.y, pc.boxHalfExtents.z));
-        else if (pc.shape == ShapeType::SPHERE)
+            break;
+        case ShapeType::SPHERE:
             shape = new JPH::SphereShape(pc.sphereRadius);
-        else if (pc.shape == ShapeType::CAPSULE)
-            shape = new JPH::CapsuleShape(pc.capsuleRadius, pc.capsuleHeight);
-        else if (pc.shape == ShapeType::CYLINDER)
-            shape = new JPH::CylinderShape(pc.cylinderRadius, pc.cylinderHeight);
+            break;
+        case ShapeType::CAPSULE:
+            shape = new JPH::CapsuleShape(pc.capsuleHeight / 2.0f, pc.capsuleRadius);
+            break;
+        case ShapeType::CYLINDER:
+            shape = new JPH::CylinderShape(pc.cylinderHeight / 2.0f, pc.cylinderRadius);
+            break;
+        case ShapeType::CONVEX_HULL:
+            if (pc.convexPoints.empty()) {
+                log("Error: Convex hull shape has no points");
+                return std::nullopt;
+            }
+            {
+                JPH::Array<JPH::Vec3> vertices;
+                vertices.reserve(pc.convexPoints.size()/3);
+                for (const auto& p : pc.convexPoints) {
+                    vertices.emplace_back(JPH::Vec3(p.GetX(), p.GetY(), p.GetZ()));
+                }
+                JPH::ConvexHullShapeSettings settings(vertices);
+                shape = settings.Create().Get();
+            }
+            break;
+        case ShapeType::MESH:
+            if (pc.meshVertices.empty() || pc.meshIndices.empty()) {
+                log("Error: Mesh shape has no vertices or indices");
+                return std::nullopt;
+            }
+            {
+                JPH::IndexedTriangleList tris;
+                tris.reserve(pc.meshIndices.size() / 3);
+                for (size_t i = 0; i < pc.meshIndices.size(); i += 3) {
+                    tris.emplace_back(pc.meshIndices[i], pc.meshIndices[i + 1], pc.meshIndices[i + 2]);
+                }
+                if (pc.bodyType == BodyType::DYNAMIC) {
+                    JPH::Array<JPH::Vec3> verts;
+                    verts.reserve(pc.convexPoints.size()/3);
+                    for (const auto& p : pc.convexPoints) {
+                        verts.emplace_back(JPH::Vec3(p.GetX(), p.GetY(), p.GetZ()));
+                    }
+                    log("Warning: Dynamic mesh fallback to convex hull");
+                    JPH::ConvexHullShapeSettings settings(verts);
+                    shape = settings.Create().Get();
+                } else {
+                    JPH::Array<JPH::Float3> verts;
+                    verts.reserve(pc.meshVertices.size());
+                    for (const auto& v : pc.meshVertices) {
+                        verts.emplace_back(v.x, v.y, v.z);
+                    }
+                    JPH::MeshShapeSettings settings(verts, tris);
+                    shape = settings.Create().Get();
+                }
+            }
+            break;
+        }
 
         JPH::EMotionType motion = JPH::EMotionType::Static;
-        if(pc.bodyType == BodyType::STATIC){
-            motion = JPH::EMotionType::Static;
-        }else if(pc.bodyType == BodyType::KINEMATIC){
-            motion = JPH::EMotionType::Kinematic;
-        }else if(pc.bodyType == BodyType::DYNAMIC){
-            motion = JPH::EMotionType::Dynamic;
+        if (pc.bodyType == BodyType::DYNAMIC) motion = JPH::EMotionType::Dynamic;
+        else if (pc.bodyType == BodyType::KINEMATIC) motion = JPH::EMotionType::Kinematic;
+        else if (pc.bodyType == BodyType::SENSOR) motion = JPH::EMotionType::Dynamic;
+
+        JPH::BodyCreationSettings settings(shape, pos, rot, motion, pc.objectLayer);
+        settings.mLinearDamping = pc.linearDamping;
+        settings.mAngularDamping = pc.angularDamping;
+        settings.mAllowSleeping = pc.allowSleeping;
+        settings.mIsSensor = pc.isSensor || pc.bodyType == BodyType::SENSOR;
+        if (pc.bodyType == BodyType::DYNAMIC || pc.bodyType == BodyType::KINEMATIC) {
+            settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateMassAndInertia;
+            settings.mMassPropertiesOverride.mMass = pc.mass;
         }
-        JPH::BodyCreationSettings settings(shape, JPH::RVec3(pos), rot, motion, pc.objectLayer);
-        settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
-        settings.mMassPropertiesOverride.mMass = pc.mass;
 
         auto& bodyInterface = m_physicsSystem->GetBodyInterface();
-        JPH::BodyID bodyId = bodyInterface.CreateAndAddBody(settings, JPH::EActivation::DontActivate);
-        if (bodyId.IsInvalid()) return std::nullopt;
+        JPH::BodyID bodyId = bodyInterface.CreateAndAddBody(settings, JPH::EActivation::Activate);
+        if (bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) return std::nullopt;
 
         bodyInterface.SetFriction(bodyId, pc.friction);
         bodyInterface.SetRestitution(bodyId, pc.bounce);
 
         pc.bodyId = bodyId;
-        bodyInterface.ActivateBody(bodyId);
+        m_bodyToEntity[bodyId] = e;
+
         return bodyId;
     }
 
-    std::optional<JPH::BodyID> PhysicsSystem::RecreateBodyForEntity(entt::entity e, PhysicsComponent& pc){
+    std::optional<JPH::BodyID> PhysicsSystem::RecreateBodyForEntity(entt::entity e, PhysicsComponent& pc) {
         DestroyBodyForEntity(pc);
         return CreateBodyForEntity(e, m_registry, pc);
     }
 
     void PhysicsSystem::DestroyBodyForEntity(PhysicsComponent& pc) {
-        if (!m_physicsSystem || pc.bodyId.IsInvalid()) return;
+        if (!m_physicsSystem || pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) return;
         auto& bi = m_physicsSystem->GetBodyInterface();
         bi.RemoveBody(pc.bodyId);
         bi.DestroyBody(pc.bodyId);
+        m_bodyToEntity.erase(pc.bodyId);
         pc.bodyId = JPH::BodyID(JPH::BodyID::cInvalidBodyID);
     }
 
+    void PhysicsSystem::onPhysicsComponentDestroy(entt::registry& reg, entt::entity e) {
+        if (reg.all_of<PhysicsComponent>(e)) {
+            auto& pc = reg.get<PhysicsComponent>(e);
+            DestroyBodyForEntity(pc);
+        }
+    }
+
     JPH::Quat PhysicsSystem::EulerToQuat(const glm::vec3& eulerDeg) {
-        /*glm::mat4 mat(1.0f);
-        mat = glm::rotate(mat, glm::radians(eulerDeg.y), glm::vec3(0.0f, 1.0f, 0.0f)); // Y first
-        mat = glm::rotate(mat, glm::radians(eulerDeg.x), glm::vec3(1.0f, 0.0f, 0.0f)); // X
-        mat = glm::rotate(mat, glm::radians(eulerDeg.z), glm::vec3(0.0f, 0.0f, 1.0f)); // Z last
-        glm::quat q = glm::quat_cast(mat);
-        return JPH::Quat(q.x, q.y, q.z, q.w);*/
-
-        // Convert to Radians
-            glm::vec3 eulerRad = glm::radians(eulerDeg);
-
-            // Explicitly construct the quaternion using the Y-X-Z order (Yaw-Pitch-Roll)
-            // to match your original matrix implementation.
-            glm::quat q = glm::yawPitchRoll(eulerRad.y, eulerRad.x, eulerRad.z);
-
-            return JPH::Quat(q.x, q.y, q.z, q.w);
+        glm::vec3 eulerRad = glm::radians(eulerDeg);
+        glm::quat q = glm::yawPitchRoll(eulerRad.y, eulerRad.x, eulerRad.z);
+        return JPH::Quat(q.x, q.y, q.z, q.w);
     }
 
     glm::vec3 PhysicsSystem::QuatToEuler(const JPH::Quat& q) {
-        glm::quat gq(q.GetW(), q.GetX(), q.GetY(), q.GetZ());
-        glm::mat4 mat = glm::mat4_cast(gq);
-        float ex, ey, ez;
-        glm::extractEulerAngleXYZ(mat, ex, ey, ez);
-
-        //log("Quaterion: {%f,%f,%f,%f}", q.GetW(), q.GetX(), q.GetY(), q.GetZ());
-        //log("Euler: {%f,%f,%f}", glm::degrees(ex), glm::degrees(ey), glm::degrees(ez));
-
-        return glm::degrees(glm::vec3(ex, ey, ez));
+        glm::quat gq(q.GetX(), q.GetY(), q.GetZ(), q.GetW());
+        return glm::degrees(glm::eulerAngles(gq));
     }
 
     void PhysicsSystem::SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id) {
         auto& bi = m_physicsSystem->GetBodyInterfaceNoLock();
-        JPH::RVec3 pos = bi.GetPosition(id);
+        JPH::RVec3 pos = bi.GetCenterOfMassPosition(id);
         JPH::Quat rot = bi.GetRotation(id);
 
         auto& t = r.get<TransformComponent>(e);
-        t.setWorldPositionPhys(glm::vec3{pos.GetX(), pos.GetY(), pos.GetZ()});
+        t.setWorldPositionPhys(glm::vec3(pos.GetX(), pos.GetY(), pos.GetZ()));
         t.setWorldQuaternion(glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ()));
     }
 
-    PhysicsComponent& PhysicsSystem::getPhysicsComponentByBodyId(JPH::BodyID id){
-        auto view = m_registry.view<PhysicsComponent>();
-        for (auto e : view) {
-            auto& pc = view.get<PhysicsComponent>(e);
-            if (pc.bodyId == id){
-                return pc;
-            }
+    PhysicsComponent& PhysicsSystem::getPhysicsComponentByBodyId(JPH::BodyID id) {
+        auto it = m_bodyToEntity.find(id);
+        if (it != m_bodyToEntity.end()) {
+            return m_registry.get<PhysicsComponent>(it->second);
         }
-        //return nullptr
+        static PhysicsComponent dummy;
+        return dummy;
+    }
+
+    entt::entity PhysicsSystem::getEntityByBodyId(JPH::BodyID id) {
+        auto it = m_bodyToEntity.find(id);
+        return it != m_bodyToEntity.end() ? it->second : entt::null;
+    }
+
+    bool PhysicsSystem::raycast(const glm::vec3& origin, const glm::vec3& direction, float maxDistance, RaycastHit& hit) {
+        if (!m_physicsSystem) return false;
+
+        JPH::RVec3 start(origin.x, origin.y, origin.z);
+        JPH::Vec3 dir(direction.x, direction.y, direction.z);
+        JPH::RRayCast ray(start, dir * maxDistance);
+        JPH::RayCastResult result;
+        if (m_physicsSystem->GetNarrowPhaseQuery().CastRay(ray, result)) {
+            hit.bodyId = result.mBodyID;
+            hit.distance = result.mFraction * maxDistance;
+            hit.position = origin + direction * hit.distance;
+            hit.normal = glm::vec3(0.0f);  // Normal requires collector
+            return true;
+        }
+        return false;
+    }
+
+    void PhysicsSystem::SetFriction(JPH::BodyID bodyId, float friction) {
+        auto& bi = m_physicsSystem->GetBodyInterface();
+        bi.SetFriction(bodyId, friction);
+        getPhysicsComponentByBodyId(bodyId).friction = friction;
+    }
+
+    float PhysicsSystem::GetFriction(JPH::BodyID bodyId) {
+        return m_physicsSystem->GetBodyInterface().GetFriction(bodyId);
+    }
+
+    void PhysicsSystem::SetBounciness(JPH::BodyID bodyId, float bounciness) {
+        auto& bi = m_physicsSystem->GetBodyInterface();
+        bi.SetRestitution(bodyId, bounciness);
+        getPhysicsComponentByBodyId(bodyId).bounce = bounciness;
+    }
+
+    float PhysicsSystem::GetBounciness(JPH::BodyID bodyId) {
+        return m_physicsSystem->GetBodyInterface().GetRestitution(bodyId);
+    }
+
+    void PhysicsSystem::SetLinearVelocity(JPH::BodyID bodyId, const glm::vec3& velocity) {
+        m_physicsSystem->GetBodyInterface().SetLinearVelocity(bodyId, JPH::Vec3(velocity.x, velocity.y, velocity.z));
+    }
+
+    glm::vec3 PhysicsSystem::GetLinearVelocity(JPH::BodyID bodyId) {
+        auto vel = m_physicsSystem->GetBodyInterface().GetLinearVelocity(bodyId);
+        return {vel.GetX(), vel.GetY(), vel.GetZ()};
+    }
+
+    void PhysicsSystem::AddLinearVelocity(JPH::BodyID bodyId, const glm::vec3& velocity) {
+        auto& bi = m_physicsSystem->GetBodyInterface();
+        JPH::Vec3 current = bi.GetLinearVelocity(bodyId);
+        bi.SetLinearVelocity(bodyId, current + JPH::Vec3(velocity.x, velocity.y, velocity.z));
+    }
+
+    void PhysicsSystem::SetAngularVelocity(JPH::BodyID bodyId, const glm::vec3& velocity) {
+        m_physicsSystem->GetBodyInterface().SetAngularVelocity(bodyId, JPH::Vec3(velocity.x, velocity.y, velocity.z));
+    }
+
+    glm::vec3 PhysicsSystem::GetAngularVelocity(JPH::BodyID bodyId) {
+        auto vel = m_physicsSystem->GetBodyInterface().GetAngularVelocity(bodyId);
+        return {vel.GetX(), vel.GetY(), vel.GetZ()};
+    }
+
+    void PhysicsSystem::AddAngularVelocity(JPH::BodyID bodyId, const glm::vec3& velocity) {
+        auto& bi = m_physicsSystem->GetBodyInterface();
+        JPH::Vec3 current = bi.GetAngularVelocity(bodyId);
+        bi.SetAngularVelocity(bodyId, current + JPH::Vec3(velocity.x, velocity.y, velocity.z));
+    }
+
+    void PhysicsSystem::AddTorque(JPH::BodyID bodyId, const glm::vec3& torque) {
+        m_physicsSystem->GetBodyInterface().AddTorque(bodyId, JPH::Vec3(torque.x, torque.y, torque.z));
+    }
+
+    void PhysicsSystem::AddForce(JPH::BodyID bodyId, const glm::vec3& force) {
+        m_physicsSystem->GetBodyInterface().AddForce(bodyId, JPH::Vec3(force.x, force.y, force.z));
+    }
+
+    void PhysicsSystem::AddForceAtPosition(JPH::BodyID bodyId, const glm::vec3& force, const glm::vec3& position) {
+        m_physicsSystem->GetBodyInterface().AddForce(bodyId, JPH::Vec3(force.x, force.y, force.z), JPH::RVec3(position.x, position.y, position.z));
+    }
+
+    void PhysicsSystem::AddImpulse(JPH::BodyID bodyId, const glm::vec3& impulse) {
+        m_physicsSystem->GetBodyInterface().AddImpulse(bodyId, JPH::Vec3(impulse.x, impulse.y, impulse.z));
+    }
+
+    void PhysicsSystem::AddImpulseAtPosition(JPH::BodyID bodyId, const glm::vec3& impulse, const glm::vec3& position) {
+        m_physicsSystem->GetBodyInterface().AddImpulse(bodyId, JPH::Vec3(impulse.x, impulse.y, impulse.z), JPH::RVec3(position.x, position.y, position.z));
+    }
+
+    void PhysicsSystem::AddAngularImpulse(JPH::BodyID bodyId, const glm::vec3& impulse) {
+        m_physicsSystem->GetBodyInterface().AddAngularImpulse(bodyId, JPH::Vec3(impulse.x, impulse.y, impulse.z));
+    }
+
+    void PhysicsSystem::SetBodyActive(JPH::BodyID bodyId, bool active) {
+        auto& bi = m_physicsSystem->GetBodyInterface();
+        active ? bi.ActivateBody(bodyId) : bi.DeactivateBody(bodyId);
+    }
+
+    bool PhysicsSystem::GetBodyActive(JPH::BodyID bodyId) {
+        return m_physicsSystem->GetBodyInterface().IsActive(bodyId);
+    }
+
+    void MyContactListener::OnContactAdded(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings) {
+        entt::entity e1 = m_system.getEntityByBodyId(inBody1.GetID());
+        entt::entity e2 = m_system.getEntityByBodyId(inBody2.GetID());
+        CollisionHit hit;
+        hit.position = glm::vec3(inManifold.mWorldSpaceNormal.GetX(), inManifold.mWorldSpaceNormal.GetY(), inManifold.mWorldSpaceNormal.GetZ());
+        hit.normal = hit.position;
+        hit.impulse = ioSettings.mCombinedRestitution;
+
+        if (e1 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e1)) {
+            auto& pc = m_system.m_registry.get<PhysicsComponent>(e1);
+            if (pc.onCollisionEnter) pc.onCollisionEnter(e1, e2, hit);
+        }
+        if (e2 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e2)) {
+            auto& pc = m_system.m_registry.get<PhysicsComponent>(e2);
+            if (pc.onCollisionEnter) pc.onCollisionEnter(e2, e1, hit);
+        }
+    }
+
+    void MyContactListener::OnContactPersisted(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings) {
+        entt::entity e1 = m_system.getEntityByBodyId(inBody1.GetID());
+        entt::entity e2 = m_system.getEntityByBodyId(inBody2.GetID());
+        CollisionHit hit;
+        hit.position = glm::vec3(inManifold.mWorldSpaceNormal.GetX(), inManifold.mWorldSpaceNormal.GetY(), inManifold.mWorldSpaceNormal.GetZ());
+        hit.normal = hit.position;
+        hit.impulse = ioSettings.mCombinedRestitution;
+
+        if (e1 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e1)) {
+            auto& pc = m_system.m_registry.get<PhysicsComponent>(e1);
+            if (pc.onCollisionStay) pc.onCollisionStay(e1, e2, hit);
+        }
+        if (e2 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e2)) {
+            auto& pc = m_system.m_registry.get<PhysicsComponent>(e2);
+            if (pc.onCollisionStay) pc.onCollisionStay(e2, e1, hit);
+        }
+    }
+
+    void MyContactListener::OnContactRemoved(const JPH::SubShapeIDPair& inSubShapePair) {
+        JPH::BodyID id1 = inSubShapePair.GetBody1ID();
+        JPH::BodyID id2 = inSubShapePair.GetBody2ID();
+        entt::entity e1 = m_system.getEntityByBodyId(id1);
+        entt::entity e2 = m_system.getEntityByBodyId(id2);
+
+        if (e1 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e1)) {
+            auto& pc = m_system.m_registry.get<PhysicsComponent>(e1);
+            if (pc.onCollisionExit) pc.onCollisionExit(e1, e2);
+        }
+        if (e2 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e2)) {
+            auto& pc = m_system.m_registry.get<PhysicsComponent>(e2);
+            if (pc.onCollisionExit) pc.onCollisionExit(e2, e1);
+        }
     }
 }
