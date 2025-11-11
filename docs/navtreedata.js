@@ -53,9 +53,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BasicComponents_8hpp.html",
-"classvex_1_1ModelObject.html",
-"classvex_1_1VulkanResources.html#aab48e7007a73eb6dafda998941208d35",
-"structvex_1_1TransformComponent.html#af2f159c65bd306e3a2f46ac84325367f"
+"classvex_1_1Interface.html#a5b5f3faa74e9d23b5bd53c110e5e866c",
+"classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b",
+"structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

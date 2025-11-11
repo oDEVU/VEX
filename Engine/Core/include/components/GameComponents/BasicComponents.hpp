@@ -75,12 +75,22 @@ struct TransformComponent {
     /// @brief Default constructor is deleted since registry is required
     TransformComponent() = delete;
 
+    /// @brief Check if the transform has been updated recently or if the parent has been updated recently. Used mainly in physics calculations.
     bool transformedLately(){
-        return lastTransformed;
+        bool result = false;
+        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+            result = m_registry.get<TransformComponent>(parent).transformedLately();
+        }
+        return (lastTransformed || result);
     }
 
+    /// @brief Updates transform status after physics calculations. DO NOT CALL MANUALLY if you dont want to invalidate last transform changes for physics objects.
     void updatedPhysicsTransform(){
         lastTransformed = false;
+    }
+
+    void enableLastTransformed(){
+        lastTransformed = true;
     }
 
     /// @brief Set the parent entity.

@@ -192,12 +192,20 @@ namespace vex {
             pc.friction = friction;
             pc.bounce = bounce;
             if (!mesh.meshData.submeshes.empty()) {
-                auto& sm = mesh.meshData.submeshes[0];
-                pc.meshVertices.resize(sm.vertices.size());
-                for (size_t i = 0; i < sm.vertices.size(); ++i) {
-                    pc.meshVertices[i] = sm.vertices[i].position;
+                pc.meshVertices.clear();
+                pc.meshIndices.clear();
+
+                size_t vertexOffset = 0;
+
+                for (const auto& sm : mesh.meshData.submeshes) {
+                    for (const auto& v : sm.vertices) {
+                        pc.meshVertices.push_back(v.position);
+                    }
+                    for (auto idx : sm.indices) {
+                        pc.meshIndices.push_back(static_cast<uint32_t>(idx + vertexOffset));
+                    }
+                    vertexOffset += sm.vertices.size();
                 }
-                pc.meshIndices = sm.indices;
             }
             return pc;
         }
@@ -329,7 +337,7 @@ namespace vex {
 
         std::unordered_map<JPH::BodyID, entt::entity, BodyIDHasher> m_bodyToEntity;
 
-        entt::observer m_destroyObserver;
+        entt::scoped_connection m_destroyConnection;
 
         float m_fixedDt = 1.0f / 60.0f;
         float m_accumulator = 0.0f;

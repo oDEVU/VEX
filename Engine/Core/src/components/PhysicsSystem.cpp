@@ -51,8 +51,7 @@ namespace vex {
         m_contactListener = std::make_unique<MyContactListener>(*this);
         m_physicsSystem->SetContactListener(m_contactListener.get());
 
-        m_destroyObserver = entt::observer(m_registry, entt::collector.template destroy<PhysicsComponent>());
-        m_destroyObserver.connect<&PhysicsSystem::onPhysicsComponentDestroy>(*this);
+        m_destroyConnection = m_registry.on_destroy<PhysicsComponent>().connect<&PhysicsSystem::onPhysicsComponentDestroy>(*this);
 
         return true;
     }
@@ -62,7 +61,7 @@ namespace vex {
     }
 
     void PhysicsSystem::shutdown() {
-        m_destroyObserver.disconnect();
+        //if (m_destroyConnection) m_destroyConnection.disconnect();
 
         auto view = m_registry.view<PhysicsComponent>();
         for (auto e : view) {
@@ -103,11 +102,11 @@ namespace vex {
             if (tc.transformedLately()) {
                 JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
                 JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
-                if (pc.bodyType == BodyType::KINEMATIC || pc.isSensor) {
-                    bodyInterface.MoveKinematic(pc.bodyId, pos, rot, deltaTime);
-                } else {
+                //if (pc.bodyType == BodyType::KINEMATIC || pc.isSensor) {
+                    //bodyInterface.MoveKinematic(pc.bodyId, pos, rot, deltaTime);
+                    //} else {
                     bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
-                }
+                    //}
                 tc.updatedPhysicsTransform();
             }
         }
@@ -154,10 +153,10 @@ namespace vex {
                 return std::nullopt;
             }
             {
-                JPH::Array<JPH::Float3> vertices;
-                vertices.reserve(pc.convexPoints.size());
+                JPH::Array<JPH::Vec3> vertices;
+                vertices.reserve(pc.convexPoints.size()/3);
                 for (const auto& p : pc.convexPoints) {
-                    vertices.emplace_back(p.GetX(), p.GetY(), p.GetZ());
+                    vertices.emplace_back(JPH::Vec3(p.GetX(), p.GetY(), p.GetZ()));
                 }
                 JPH::ConvexHullShapeSettings settings(vertices);
                 shape = settings.Create().Get();
@@ -169,21 +168,26 @@ namespace vex {
                 return std::nullopt;
             }
             {
-                JPH::Array<JPH::Float3> verts;
-                verts.reserve(pc.meshVertices.size());
-                for (const auto& v : pc.meshVertices) {
-                    verts.emplace_back(v.x, v.y, v.z);
-                }
                 JPH::IndexedTriangleList tris;
                 tris.reserve(pc.meshIndices.size() / 3);
                 for (size_t i = 0; i < pc.meshIndices.size(); i += 3) {
                     tris.emplace_back(pc.meshIndices[i], pc.meshIndices[i + 1], pc.meshIndices[i + 2]);
                 }
                 if (pc.bodyType == BodyType::DYNAMIC) {
+                    JPH::Array<JPH::Vec3> verts;
+                    verts.reserve(pc.convexPoints.size()/3);
+                    for (const auto& p : pc.convexPoints) {
+                        verts.emplace_back(JPH::Vec3(p.GetX(), p.GetY(), p.GetZ()));
+                    }
                     log("Warning: Dynamic mesh fallback to convex hull");
                     JPH::ConvexHullShapeSettings settings(verts);
                     shape = settings.Create().Get();
                 } else {
+                    JPH::Array<JPH::Float3> verts;
+                    verts.reserve(pc.meshVertices.size());
+                    for (const auto& v : pc.meshVertices) {
+                        verts.emplace_back(v.x, v.y, v.z);
+                    }
                     JPH::MeshShapeSettings settings(verts, tris);
                     shape = settings.Create().Get();
                 }
@@ -201,7 +205,7 @@ namespace vex {
         settings.mAngularDamping = pc.angularDamping;
         settings.mAllowSleeping = pc.allowSleeping;
         settings.mIsSensor = pc.isSensor || pc.bodyType == BodyType::SENSOR;
-        if (pc.bodyType == BodyType::DYNAMIC) {
+        if (pc.bodyType == BodyType::DYNAMIC || pc.bodyType == BodyType::KINEMATIC) {
             settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateMassAndInertia;
             settings.mMassPropertiesOverride.mMass = pc.mass;
         }

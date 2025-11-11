@@ -127,24 +127,34 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2c9577b29ba09c8e46870814d0d79707"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cf651363a55814603b71d20423bdb7d" id="r_a6cf651363a55814603b71d20423bdb7d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cf651363a55814603b71d20423bdb7d">PhysicsComponent</a> (<a class="el" href="PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249e">ShapeType</a> s)</td></tr>
 <tr class="separator:a6cf651363a55814603b71d20423bdb7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae835b02b6855a3d6092272baf7e4a349" id="r_ae835b02b6855a3d6092272baf7e4a349"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae835b02b6855a3d6092272baf7e4a349">addCollisionEnterBinding</a> (std::function&lt; void(entt::entity, entt::entity, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;)&gt; callback)</td></tr>
+<tr class="separator:ae835b02b6855a3d6092272baf7e4a349"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e98fd977db98920da77abcb687e0549" id="r_a7e98fd977db98920da77abcb687e0549"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e98fd977db98920da77abcb687e0549">addCollisionStayBinding</a> (std::function&lt; void(entt::entity, entt::entity, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;)&gt; callback)</td></tr>
+<tr class="separator:a7e98fd977db98920da77abcb687e0549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd0c106ce0d82fe17ffadfb96be9cef0" id="r_abd0c106ce0d82fe17ffadfb96be9cef0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd0c106ce0d82fe17ffadfb96be9cef0">addCollisionExitBinding</a> (std::function&lt; void(entt::entity, entt::entity)&gt; callback)</td></tr>
+<tr class="separator:abd0c106ce0d82fe17ffadfb96be9cef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aa6c9ade6e246709caf32ad7788e4b241" id="r_aa6c9ade6e246709caf32ad7788e4b241"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6c9ade6e246709caf32ad7788e4b241">Box</a> (glm::vec3 halfExtents={0.5f, 0.5f, 0.5f}, bool isStatic=false, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
-<tr class="separator:aa6c9ade6e246709caf32ad7788e4b241"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b78d9e85d2f848489d8911564fd8d08" id="r_a8b78d9e85d2f848489d8911564fd8d08"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b78d9e85d2f848489d8911564fd8d08">Sphere</a> (float radius=0.5f, bool isStatic=false, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
-<tr class="separator:a8b78d9e85d2f848489d8911564fd8d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cbf02218145e068be01b80d394ad4ff" id="r_a9cbf02218145e068be01b80d394ad4ff"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9cbf02218145e068be01b80d394ad4ff">Capsule</a> (float radius=0.5f, float height=1.0f, bool isStatic=false, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
-<tr class="separator:a9cbf02218145e068be01b80d394ad4ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add43da2e33eca94a5de80d7f3e60631c" id="r_add43da2e33eca94a5de80d7f3e60631c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add43da2e33eca94a5de80d7f3e60631c">Cylinder</a> (float radius=0.5f, float height=1.0f, bool isStatic=false, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
-<tr class="separator:add43da2e33eca94a5de80d7f3e60631c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a411e6fdeae8423308bd1c482156de5ad" id="r_a411e6fdeae8423308bd1c482156de5ad"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a411e6fdeae8423308bd1c482156de5ad">Box</a> (glm::vec3 halfExtents={0.5f, 0.5f, 0.5f}, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="separator:a411e6fdeae8423308bd1c482156de5ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac29a3c343e7fe9f500ff6d35f4ffddfb" id="r_ac29a3c343e7fe9f500ff6d35f4ffddfb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac29a3c343e7fe9f500ff6d35f4ffddfb">Sphere</a> (float radius=0.5f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="separator:ac29a3c343e7fe9f500ff6d35f4ffddfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc26c4d469fd9140ac5c1c25d4ab4fcd" id="r_adc26c4d469fd9140ac5c1c25d4ab4fcd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc26c4d469fd9140ac5c1c25d4ab4fcd">Capsule</a> (float radius=0.5f, float height=1.0f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="separator:adc26c4d469fd9140ac5c1c25d4ab4fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1be7fedba125fb6324925c033586fb85" id="r_a1be7fedba125fb6324925c033586fb85"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1be7fedba125fb6324925c033586fb85">Cylinder</a> (float radius=0.5f, float height=1.0f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="separator:a1be7fedba125fb6324925c033586fb85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d45d7729dafb373ecf85d661239b281" id="r_a7d45d7729dafb373ecf85d661239b281"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d45d7729dafb373ecf85d661239b281">ConvexHull</a> (std::vector&lt; JPH::Vec3 &gt; points, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="separator:a7d45d7729dafb373ecf85d661239b281"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b06ac4ac1ba707a44066b1edd0c7a6f" id="r_a0b06ac4ac1ba707a44066b1edd0c7a6f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b06ac4ac1ba707a44066b1edd0c7a6f">Mesh</a> (<a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> &amp;mesh, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="separator:a0b06ac4ac1ba707a44066b1edd0c7a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:afa2f81b3f545a806e1cd18890682d299" id="r_afa2f81b3f545a806e1cd18890682d299"><td class="memItemLeft" align="right" valign="top"><a class="el" href="PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249e">ShapeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa2f81b3f545a806e1cd18890682d299">shape</a> = ShapeType::BOX</td></tr>
 <tr class="separator:afa2f81b3f545a806e1cd18890682d299"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab795887c3561e4979f8bf21421112d62" id="r_ab795887c3561e4979f8bf21421112d62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab795887c3561e4979f8bf21421112d62">isStatic</a> = false</td></tr>
-<tr class="separator:ab795887c3561e4979f8bf21421112d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a588cf4244698e2a5ebd2b3d449363d7c" id="r_a588cf4244698e2a5ebd2b3d449363d7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a588cf4244698e2a5ebd2b3d449363d7c">bodyType</a> = BodyType::STATIC</td></tr>
+<tr class="separator:a588cf4244698e2a5ebd2b3d449363d7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae499fc504e13b9cb754d47b63c9b8b26" id="r_ae499fc504e13b9cb754d47b63c9b8b26"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae499fc504e13b9cb754d47b63c9b8b26">mass</a> = 1.0f</td></tr>
 <tr class="separator:ae499fc504e13b9cb754d47b63c9b8b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0af527d89a8a8e2d52b040106991fd0b" id="r_a0af527d89a8a8e2d52b040106991fd0b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0af527d89a8a8e2d52b040106991fd0b">friction</a> = 0.5f</td></tr>
@@ -155,6 +165,14 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a2460dda4f22600a8b33c569490a97d8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99829b113ea11a0e3c9418a22623063c" id="r_a99829b113ea11a0e3c9418a22623063c"><td class="memItemLeft" align="right" valign="top">JPH::BodyID&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99829b113ea11a0e3c9418a22623063c">bodyId</a> = JPH::BodyID(JPH::BodyID::cInvalidBodyID)</td></tr>
 <tr class="separator:a99829b113ea11a0e3c9418a22623063c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8532a810f449553dafdb8600577e75fc" id="r_a8532a810f449553dafdb8600577e75fc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8532a810f449553dafdb8600577e75fc">linearDamping</a> = 0.05f</td></tr>
+<tr class="separator:a8532a810f449553dafdb8600577e75fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a661045664eacdc391a998f866db278b0" id="r_a661045664eacdc391a998f866db278b0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a661045664eacdc391a998f866db278b0">angularDamping</a> = 0.05f</td></tr>
+<tr class="separator:a661045664eacdc391a998f866db278b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac78ea2f7ae6b2f1f9f87be0ac4e282a2" id="r_ac78ea2f7ae6b2f1f9f87be0ac4e282a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac78ea2f7ae6b2f1f9f87be0ac4e282a2">isSensor</a> = false</td></tr>
+<tr class="separator:ac78ea2f7ae6b2f1f9f87be0ac4e282a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d44faabe1dc0ae222bca7b606d82517" id="r_a2d44faabe1dc0ae222bca7b606d82517"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d44faabe1dc0ae222bca7b606d82517">allowSleeping</a> = true</td></tr>
+<tr class="separator:a2d44faabe1dc0ae222bca7b606d82517"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c8de4835cc999306d858951a82178d2" id="r_a2c8de4835cc999306d858951a82178d2"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c8de4835cc999306d858951a82178d2">boxHalfExtents</a> = {0.5f, 0.5f, 0.5f}</td></tr>
 <tr class="separator:a2c8de4835cc999306d858951a82178d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91fffd3114755699d01d91eec7120477" id="r_a91fffd3114755699d01d91eec7120477"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91fffd3114755699d01d91eec7120477">sphereRadius</a> = 0.5f</td></tr>
@@ -167,11 +185,23 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a89cdeb9f6b32767300af40d5eea08d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d76ee4e43ab3016447ad78c84ca662d" id="r_a9d76ee4e43ab3016447ad78c84ca662d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d76ee4e43ab3016447ad78c84ca662d">cylinderHeight</a> = 1.0f</td></tr>
 <tr class="separator:a9d76ee4e43ab3016447ad78c84ca662d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94700697ad1915c650ab9772f72974a9" id="r_a94700697ad1915c650ab9772f72974a9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; JPH::Vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94700697ad1915c650ab9772f72974a9">convexPoints</a></td></tr>
+<tr class="separator:a94700697ad1915c650ab9772f72974a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0323d544a953faf73af261290dfacf97" id="r_a0323d544a953faf73af261290dfacf97"><td class="memItemLeft" align="right" valign="top">std::vector&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0323d544a953faf73af261290dfacf97">meshVertices</a></td></tr>
+<tr class="separator:a0323d544a953faf73af261290dfacf97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41f7710b58168540bad3c974ec83d46" id="r_ad41f7710b58168540bad3c974ec83d46"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad41f7710b58168540bad3c974ec83d46">meshIndices</a></td></tr>
+<tr class="separator:ad41f7710b58168540bad3c974ec83d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9264afa7410eafd83cecb4b077cd6d99" id="r_a9264afa7410eafd83cecb4b077cd6d99"><td class="memItemLeft" align="right" valign="top">std::function&lt; void(entt::entity self, entt::entity other, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;hit)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9264afa7410eafd83cecb4b077cd6d99">onCollisionEnter</a></td></tr>
+<tr class="separator:a9264afa7410eafd83cecb4b077cd6d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a730c2b1f62c692aae56ffa04f9e18bd0" id="r_a730c2b1f62c692aae56ffa04f9e18bd0"><td class="memItemLeft" align="right" valign="top">std::function&lt; void(entt::entity self, entt::entity other, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;hit)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a730c2b1f62c692aae56ffa04f9e18bd0">onCollisionStay</a></td></tr>
+<tr class="separator:a730c2b1f62c692aae56ffa04f9e18bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7af9c04a68b896b294033ae3fd90fb4" id="r_aa7af9c04a68b896b294033ae3fd90fb4"><td class="memItemLeft" align="right" valign="top">std::function&lt; void(entt::entity self, entt::entity other)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7af9c04a68b896b294033ae3fd90fb4">onCollisionExit</a></td></tr>
+<tr class="separator:aa7af9c04a68b896b294033ae3fd90fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure representing a physics component. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00050">50</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00091">91</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6cf651363a55814603b71d20423bdb7d" name="a6cf651363a55814603b71d20423bdb7d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6cf651363a55814603b71d20423bdb7d">&#9670;&#160;</a></span>PhysicsComponent()</h2>
@@ -196,13 +226,94 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00069">69</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00122">122</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa6c9ade6e246709caf32ad7788e4b241" name="aa6c9ade6e246709caf32ad7788e4b241"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa6c9ade6e246709caf32ad7788e4b241">&#9670;&#160;</a></span>Box()</h2>
+<a id="ae835b02b6855a3d6092272baf7e4a349" name="ae835b02b6855a3d6092272baf7e4a349"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae835b02b6855a3d6092272baf7e4a349">&#9670;&#160;</a></span>addCollisionEnterBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::PhysicsComponent::addCollisionEnterBinding </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(entt::entity, entt::entity, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;)&gt;</td>          <td class="paramname"><span class="paramname"><em>callback</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00214">214</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abd0c106ce0d82fe17ffadfb96be9cef0" name="abd0c106ce0d82fe17ffadfb96be9cef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd0c106ce0d82fe17ffadfb96be9cef0">&#9670;&#160;</a></span>addCollisionExitBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::PhysicsComponent::addCollisionExitBinding </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(entt::entity, entt::entity)&gt;</td>          <td class="paramname"><span class="paramname"><em>callback</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00224">224</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7e98fd977db98920da77abcb687e0549" name="a7e98fd977db98920da77abcb687e0549"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e98fd977db98920da77abcb687e0549">&#9670;&#160;</a></span>addCollisionStayBinding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::PhysicsComponent::addCollisionStayBinding </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(entt::entity, entt::entity, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;)&gt;</td>          <td class="paramname"><span class="paramname"><em>callback</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00219">219</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a411e6fdeae8423308bd1c482156de5ad" name="a411e6fdeae8423308bd1c482156de5ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a411e6fdeae8423308bd1c482156de5ad">&#9670;&#160;</a></span>Box()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -218,7 +329,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isStatic</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+          <td class="paramtype"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a></td>          <td class="paramname"><span class="paramname"><em>bodyType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BodyType::STATIC</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -243,12 +354,12 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00071">71</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00125">125</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9cbf02218145e068be01b80d394ad4ff" name="a9cbf02218145e068be01b80d394ad4ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cbf02218145e068be01b80d394ad4ff">&#9670;&#160;</a></span>Capsule()</h2>
+<a id="adc26c4d469fd9140ac5c1c25d4ab4fcd" name="adc26c4d469fd9140ac5c1c25d4ab4fcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc26c4d469fd9140ac5c1c25d4ab4fcd">&#9670;&#160;</a></span>Capsule()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -269,7 +380,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isStatic</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+          <td class="paramtype"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a></td>          <td class="paramname"><span class="paramname"><em>bodyType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BodyType::STATIC</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -294,12 +405,58 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00093">93</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00149">149</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
-<a id="add43da2e33eca94a5de80d7f3e60631c" name="add43da2e33eca94a5de80d7f3e60631c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add43da2e33eca94a5de80d7f3e60631c">&#9670;&#160;</a></span>Cylinder()</h2>
+<a id="a7d45d7729dafb373ecf85d661239b281" name="a7d45d7729dafb373ecf85d661239b281"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d45d7729dafb373ecf85d661239b281">&#9670;&#160;</a></span>ConvexHull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a> vex::PhysicsComponent::ConvexHull </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; JPH::Vec3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a></td>          <td class="paramname"><span class="paramname"><em>bodyType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BodyType::STATIC</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>mass</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1.0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>friction</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.5f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>bounce</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.1f</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00175">175</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1be7fedba125fb6324925c033586fb85" name="a1be7fedba125fb6324925c033586fb85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1be7fedba125fb6324925c033586fb85">&#9670;&#160;</a></span>Cylinder()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -320,7 +477,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isStatic</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+          <td class="paramtype"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a></td>          <td class="paramname"><span class="paramname"><em>bodyType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BodyType::STATIC</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -345,12 +502,58 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00105">105</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00162">162</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a8b78d9e85d2f848489d8911564fd8d08" name="a8b78d9e85d2f848489d8911564fd8d08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b78d9e85d2f848489d8911564fd8d08">&#9670;&#160;</a></span>Sphere()</h2>
+<a id="a0b06ac4ac1ba707a44066b1edd0c7a6f" name="a0b06ac4ac1ba707a44066b1edd0c7a6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b06ac4ac1ba707a44066b1edd0c7a6f">&#9670;&#160;</a></span>Mesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a> vex::PhysicsComponent::Mesh </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>mesh</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a></td>          <td class="paramname"><span class="paramname"><em>bodyType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BodyType::STATIC</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>mass</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1.0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>friction</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.5f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>bounce</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.1f</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00187">187</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac29a3c343e7fe9f500ff6d35f4ffddfb" name="ac29a3c343e7fe9f500ff6d35f4ffddfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac29a3c343e7fe9f500ff6d35f4ffddfb">&#9670;&#160;</a></span>Sphere()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -366,7 +569,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isStatic</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+          <td class="paramtype"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a></td>          <td class="paramname"><span class="paramname"><em>bodyType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BodyType::STATIC</span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -391,11 +594,43 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00082">82</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00137">137</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2d44faabe1dc0ae222bca7b606d82517" name="a2d44faabe1dc0ae222bca7b606d82517"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d44faabe1dc0ae222bca7b606d82517">&#9670;&#160;</a></span>allowSleeping</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::PhysicsComponent::allowSleeping = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00102">102</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a661045664eacdc391a998f866db278b0" name="a661045664eacdc391a998f866db278b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a661045664eacdc391a998f866db278b0">&#9670;&#160;</a></span>angularDamping</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vex::PhysicsComponent::angularDamping = 0.05f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00100">100</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a99829b113ea11a0e3c9418a22623063c" name="a99829b113ea11a0e3c9418a22623063c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a99829b113ea11a0e3c9418a22623063c">&#9670;&#160;</a></span>bodyId</h2>
 
@@ -408,7 +643,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00057">57</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00098">98</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a588cf4244698e2a5ebd2b3d449363d7c" name="a588cf4244698e2a5ebd2b3d449363d7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a588cf4244698e2a5ebd2b3d449363d7c">&#9670;&#160;</a></span>bodyType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> vex::PhysicsComponent::bodyType = BodyType::STATIC</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00093">93</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -424,7 +675,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00055">55</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00096">96</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -440,7 +691,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00059">59</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00104">104</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -456,7 +707,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00062">62</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00107">107</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -472,7 +723,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00061">61</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00106">106</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a94700697ad1915c650ab9772f72974a9" name="a94700697ad1915c650ab9772f72974a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94700697ad1915c650ab9772f72974a9">&#9670;&#160;</a></span>convexPoints</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;JPH::Vec3&gt; vex::PhysicsComponent::convexPoints</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00110">110</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -488,7 +755,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00064">64</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00109">109</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -504,7 +771,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00063">63</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00108">108</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -520,23 +787,39 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00054">54</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00095">95</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ab795887c3561e4979f8bf21421112d62" name="ab795887c3561e4979f8bf21421112d62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab795887c3561e4979f8bf21421112d62">&#9670;&#160;</a></span>isStatic</h2>
+<a id="ac78ea2f7ae6b2f1f9f87be0ac4e282a2" name="ac78ea2f7ae6b2f1f9f87be0ac4e282a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac78ea2f7ae6b2f1f9f87be0ac4e282a2">&#9670;&#160;</a></span>isSensor</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool vex::PhysicsComponent::isStatic = false</td>
+          <td class="memname">bool vex::PhysicsComponent::isSensor = false</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00052">52</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00101">101</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8532a810f449553dafdb8600577e75fc" name="a8532a810f449553dafdb8600577e75fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8532a810f449553dafdb8600577e75fc">&#9670;&#160;</a></span>linearDamping</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vex::PhysicsComponent::linearDamping = 0.05f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00099">99</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -552,7 +835,39 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00053">53</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00094">94</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad41f7710b58168540bad3c974ec83d46" name="ad41f7710b58168540bad3c974ec83d46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad41f7710b58168540bad3c974ec83d46">&#9670;&#160;</a></span>meshIndices</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;uint32_t&gt; vex::PhysicsComponent::meshIndices</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00112">112</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0323d544a953faf73af261290dfacf97" name="a0323d544a953faf73af261290dfacf97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0323d544a953faf73af261290dfacf97">&#9670;&#160;</a></span>meshVertices</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;glm::vec3&gt; vex::PhysicsComponent::meshVertices</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00111">111</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -568,7 +883,55 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00056">56</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00097">97</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9264afa7410eafd83cecb4b077cd6d99" name="a9264afa7410eafd83cecb4b077cd6d99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9264afa7410eafd83cecb4b077cd6d99">&#9670;&#160;</a></span>onCollisionEnter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::function&lt;void(entt::entity self, entt::entity other, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a>&amp; hit)&gt; vex::PhysicsComponent::onCollisionEnter</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00115">115</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa7af9c04a68b896b294033ae3fd90fb4" name="aa7af9c04a68b896b294033ae3fd90fb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7af9c04a68b896b294033ae3fd90fb4">&#9670;&#160;</a></span>onCollisionExit</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::function&lt;void(entt::entity self, entt::entity other)&gt; vex::PhysicsComponent::onCollisionExit</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00117">117</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a730c2b1f62c692aae56ffa04f9e18bd0" name="a730c2b1f62c692aae56ffa04f9e18bd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a730c2b1f62c692aae56ffa04f9e18bd0">&#9670;&#160;</a></span>onCollisionStay</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::function&lt;void(entt::entity self, entt::entity other, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a>&amp; hit)&gt; vex::PhysicsComponent::onCollisionStay</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00116">116</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -584,7 +947,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00051">51</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00092">92</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -600,7 +963,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00060">60</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00105">105</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
