@@ -24,6 +24,7 @@ namespace vex {
 
         JPH::RegisterTypes();
 
+        /// @todo make it use max models from context
         m_tempAllocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
 
         m_jobSystem = new JPH::JobSystemThreadPool(
@@ -112,7 +113,8 @@ namespace vex {
         }
 
         m_accumulator += deltaTime;
-        int collisionSteps = 1;
+        /// @todo make it configurable
+        int collisionSteps = 3;
         while (m_accumulator >= m_fixedDt) {
             m_physicsSystem->Update(m_fixedDt, collisionSteps, m_tempAllocator, m_jobSystem);
             m_accumulator -= m_fixedDt;
