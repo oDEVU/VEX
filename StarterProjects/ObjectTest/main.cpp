@@ -134,13 +134,14 @@ public:
         viperShadow2->GetComponent<vex::TransformComponent>().addLocalPosition(glm::vec3{2.0f, -0.03f, 0.0f});
 
 
-        vex::MeshComponent cubeMesh = vex::createMeshFromPath("Assets/cube.obj", *this);
+
+        vex::MeshComponent floorCubeMesh = vex::createMeshFromPath("Assets/floorCube.obj", *this);
         vex::TransformComponent cubeTransform = vex::TransformComponent{
             getRegistry(),
             glm::vec3{0.5f, -1.1f, 0.0f},
             glm::vec3{0.0f, 0.0f, 0.0f},
             glm::vec3{5.0f, 0.5f, 5.0f}};
-        cube = vex::createModelFromComponents("cube", cubeMesh, cubeTransform, *this);
+        cube = vex::createModelFromComponents("cube", floorCubeMesh, cubeTransform, *this);
         vex::PhysicsComponent cubePhysics = vex::PhysicsComponent::Box({5.0f, 0.5f, 5.0f}, vex::BodyType::STATIC);
 
         cubePhysics.addCollisionEnterBinding([this](entt::entity self, entt::entity other, const vex::CollisionHit& hit) {
@@ -154,6 +155,8 @@ public:
         });
 
         cube->AddComponent(cubePhysics);
+
+        vex::MeshComponent cubeMesh = vex::createMeshFromPath("Assets/cube.obj", *this);
 
         vex::TransformComponent cube2Transform = vex::TransformComponent{
             getRegistry(),
@@ -182,7 +185,7 @@ public:
         cube4->AddComponent(inputComp);
 
         testLight->AddComponent(vex::TransformComponent{m_registry});
-        testLight->GetComponent<vex::TransformComponent>().addLocalPosition({1, 2, 0});
+        testLight->GetComponent<vex::TransformComponent>().addLocalPosition({1, 1.5f, 0});
 
         vex::LightComponent lightComp;
         lightComp.color = glm::vec3(1.0f, 0.0f, 1.0f);

@@ -203,7 +203,7 @@ namespace vex {
                         auto& light = lightView.get<LightComponent>(lightEntity);
                         auto& transform = lightView.get<TransformComponent>(lightEntity);
 
-                        log("Found light entity");
+                        //log("Found light entity");
 
                         float dist = glm::distance(transform.getWorldPosition(), mesh.worldCenter);
                         if (dist < (light.radius + mesh.worldRadius)) {
@@ -211,7 +211,7 @@ namespace vex {
                             pushLight.position = glm::vec4(transform.getWorldPosition(), light.radius);
                             pushLight.color = glm::vec4(light.color, light.intensity);
                             m_lights.push_back(pushLight);
-                            log("Added light entity to model");
+                            //log("Added light entity to model");
                         }
                     }
 
@@ -223,7 +223,7 @@ namespace vex {
                     for (size_t i = 0; i < lightUBO.lightCount; ++i)
                     {
                         lightUBO.lights[i] = m_lights[i];
-                        log("Pushed light to lightUBO");
+                        //log("Pushed light to lightUBO");
                     }
                     m_p_resources->updateLightUBO(m_r_context.currentFrame, modelIndex, lightUBO);
 
