@@ -41,6 +41,12 @@ namespace vex {
         /// @param const ModelUBO& data - The data to update the model uniform buffer with.
         void updateModelUBO(uint32_t frameIndex, uint32_t modelIndex, const ModelUBO& data);
 
+        /// @brief Updates the light uniform buffer.
+        /// @param uint32_t frameIndex - The frame index to update.
+        /// @param uint32_t modelIndex - The model index to update.
+        /// @param const SceneLightsUBO& data - The data to update the light uniform buffer with.
+        void updateLightUBO(uint32_t frameIndex, uint32_t modelIndex, const SceneLightsUBO& data);
+
         /// @brief Creates a default texture.
         /// @details Creates 1x1 white texture used for untextured models.
         void createDefaultTexture();
@@ -142,8 +148,10 @@ namespace vex {
 
         std::vector<VkBuffer> m_cameraBuffers;
         std::vector<VkBuffer> m_modelBuffers;
+        std::vector<VkBuffer> m_lightBuffers;
         std::vector<VmaAllocation> m_cameraAllocs;
         std::vector<VmaAllocation> m_modelAllocs;
+        std::vector<VmaAllocation> m_lightAllocs;
 
         VkDescriptorSetLayout m_descriptorSetLayout;
         std::vector<VkDescriptorSet> m_descriptorSets;

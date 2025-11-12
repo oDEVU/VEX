@@ -323,10 +323,26 @@ enum class RenderType {
 /// @brief Struct containing raw meshData, mesh id, texture paths and material properties. It just template and data for rendering backend to load/convert this data to its acceptible format. This is made weirdly cause its made in mind for multiple backends. IDK i hate this system but i have no better idea.
 /// @todo Make creating this component enough to create mesh, not requiring mesh manager to load mesh data.
 struct MeshComponent {
+    // Render Data
     MeshData meshData;
     uint32_t id = UINT32_MAX;
     std::vector<std::string> textureNames;
     RenderType renderType = RenderType::OPAQUE;
+
+    // Simple bounding data
+    glm::vec3 localCenter = glm::vec3(0.0f);
+    float localRadius = 1.0f;
+
+    glm::vec3 worldCenter = glm::vec3(0.0f);
+    float worldRadius = 1.0f;
+};
+
+/// @brief Struct containing light properties.
+/// @todo Allow to load from scene file.
+struct LightComponent {
+    glm::vec3 color;
+    float intensity;
+    float radius;
 };
 
 /// @brief Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.

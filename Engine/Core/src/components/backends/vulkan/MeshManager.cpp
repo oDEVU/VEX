@@ -114,7 +114,25 @@ namespace vex {
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Mesh load failed");
             handle_exception(e);
         }
+
         meshComponent.meshData = std::move(meshData);
+
+        glm::vec3 min = glm::vec3(FLT_MAX);
+        glm::vec3 max = glm::vec3(-FLT_MAX);
+
+        for(auto& submesh : meshData.submeshes) {
+            for(auto& vertex : submesh.vertices) {
+                min = glm::min(min, vertex.position);
+                max = glm::max(max, vertex.position);
+            }
+        }
+
+        glm::vec3 center = (min + max) * 0.5f;
+        float radius = glm::length(max - center);
+
+        meshComponent.localCenter = center;
+        meshComponent.localRadius = radius;
+
         return meshComponent;
     }
 

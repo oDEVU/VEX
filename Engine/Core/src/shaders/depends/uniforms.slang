@@ -9,6 +9,18 @@ public [[vk::binding(1, 0)]] cbuffer ModelUBO {
     public float4x4 model;
 } object;
 
+public struct Light {
+    public float3 position; // xyz
+    public float radius;
+    public float3 color;    // rgb
+    public float intensity; // a
+};
+
+public [[vk::binding(2, 0)]] cbuffer ObjectLightsUBO {
+    public uint lightCount;
+    public Light lights[255];
+} objectLights;
+
 public [[vk::push_constant]] cbuffer PushConstants {
     public float snapResolution;
     public float jitterIntensity;
@@ -23,6 +35,8 @@ public [[vk::push_constant]] cbuffer PushConstants {
     public float ambientLightStrength;
     public float4 sunLight;
     public float4 sunDirection;
+    public uint lightCount;
+    public Light lights[8];
 } push;
 
 public bool isEnabled(uint flag) {

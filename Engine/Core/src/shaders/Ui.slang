@@ -12,12 +12,6 @@ struct VSOutput {
     [[vk::location(2)]] nointerpolation float fragTexIndex : TEXCOORD1;
 };
 
-struct FSInput {
-    [[vk::location(0)]] float2 fragUV : TEXCOORD0;
-    [[vk::location(1)]] float4 fragColor : COLOR;
-    [[vk::location(2)]] nointerpolation float fragTexIndex : TEXCOORD1;
-};
-
 [[vk::push_constant]] cbuffer PushConstants {
     float4x4 ortho;
 } pc;
@@ -38,14 +32,8 @@ VSOutput vertMain(VSInput input) {
 }
 
 [shader("fragment")]
-float4 fragMain(FSInput input) : SV_Target  {
-    float4 color;
-
-    if (input.fragTexIndex < 0.0) {
-        color = input.fragColor;
-    } else {
-        color = texSampler.Sample(texSamplerState, input.fragUV) * input.fragColor;
-    }
-
-    return color;
+float4 fragMain(VSOutput input) : SV_Target  {
+    return (input.fragTexIndex < 0.0)
+        ? input.fragColor
+        : texSampler.Sample(texSamplerState, input.fragUV) * input.fragColor;
 }

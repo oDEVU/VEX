@@ -199,6 +199,8 @@ namespace vex {
         m_cameraAllocs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
         m_modelBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
         m_modelAllocs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_lightBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_lightAllocs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -217,12 +219,17 @@ namespace vex {
             bufferInfo.size = sizeof(ModelUBO) * m_r_context.MAX_MODELS;
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                           &m_modelBuffers[i], &m_modelAllocs[i], nullptr);
+
+            // Light UBO (dynamic)
+            bufferInfo.size = sizeof(SceneLightsUBO) * m_r_context.MAX_MODELS;
+            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
+                            &m_lightBuffers[i], &m_lightAllocs[i], nullptr);
         }
     }
 
     void VulkanResources::createDescriptorResources() {
         log("Setting up VkDescriptorSetLayoutBinding...");
-        std::array<VkDescriptorSetLayoutBinding, 2> uboBindings{};
+        std::array<VkDescriptorSetLayoutBinding, 3> uboBindings{};
         uboBindings[0].binding = 0;
         uboBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         uboBindings[0].descriptorCount = 1;
@@ -232,6 +239,11 @@ namespace vex {
         uboBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         uboBindings[1].descriptorCount = 1;
         uboBindings[1].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+        uboBindings[2].binding = 2;
+        uboBindings[2].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+        uboBindings[2].descriptorCount = 1;
+        uboBindings[2].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 
         VkDescriptorSetLayoutCreateInfo uboLayoutInfo{};
         uboLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -261,7 +273,7 @@ namespace vex {
 
         m_r_context.descriptorSetLayout = m_descriptorSetLayout;
 
-        std::array<VkDescriptorPoolSize, 3> poolSizes{};
+        std::array<VkDescriptorPoolSize, 4> poolSizes{};
 
         // Camera UBO (static)
         poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -271,15 +283,19 @@ namespace vex {
         poolSizes[1].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         poolSizes[1].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_MODELS;
 
+        // Light UBO (dynamic)
+        poolSizes[2].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+        poolSizes[2].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_MODELS;
+
         // Textures
-        poolSizes[2].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[2].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES;
+        poolSizes[3].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        poolSizes[3].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES;
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
         poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (2 + m_r_context.MAX_TEXTURES);
+        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (3 + m_r_context.MAX_TEXTURES);
 
         log("Creating descriptor pool with %d max sets", poolInfo.maxSets);
         if (vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS) {
@@ -301,7 +317,7 @@ namespace vex {
 
         createPerMeshTextureSets();
         for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
-            std::array<VkWriteDescriptorSet, 2> uboWrites{};
+            std::array<VkWriteDescriptorSet, 3> uboWrites{};
 
             // Camera UBO
             VkDescriptorBufferInfo cameraBufferInfo{};
@@ -326,6 +342,18 @@ namespace vex {
             uboWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
             uboWrites[1].descriptorCount = 1;
             uboWrites[1].pBufferInfo = &modelBufferInfo;
+
+            // Light UBO
+            VkDescriptorBufferInfo lightInfo{};
+            lightInfo.buffer = m_lightBuffers[i];
+            lightInfo.range = sizeof(SceneLightsUBO);
+
+            uboWrites[2] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+            uboWrites[2].dstSet = m_descriptorSets[i];
+            uboWrites[2].dstBinding = 2;
+            uboWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+            uboWrites[2].descriptorCount = 1;
+            uboWrites[2].pBufferInfo = &lightInfo;
 
             vkUpdateDescriptorSets(m_r_context.device, uboWrites.size(), uboWrites.data(), 0, nullptr);
         }
@@ -367,6 +395,20 @@ namespace vex {
         char* modelData = static_cast<char*>(mapped) + modelIndex * sizeof(ModelUBO);
         memcpy(modelData, &data, sizeof(ModelUBO));
         vmaUnmapMemory(m_r_context.allocator, m_modelAllocs[frameIndex]);
+    }
+
+    void VulkanResources::updateLightUBO(uint32_t frameIndex, uint32_t modelIndex, const SceneLightsUBO& data) {
+        if (modelIndex >= m_r_context.MAX_MODELS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                         "Model index %u exceeds MAX_MODELS (%u)",
+                         modelIndex, m_r_context.MAX_MODELS);
+            return;
+        }
+        void* mapped;
+        vmaMapMemory(m_r_context.allocator, m_lightAllocs[frameIndex], &mapped);
+        char* lightData = static_cast<char*>(mapped) + modelIndex * sizeof(SceneLightsUBO);
+        memcpy(lightData, &data, sizeof(SceneLightsUBO));
+        vmaUnmapMemory(m_r_context.allocator, m_lightAllocs[frameIndex]);
     }
 
     void VulkanResources::createDefaultTexture() {

@@ -46,7 +46,7 @@ namespace vex {
         /// @param glm::uvec2 currentRenderResolution - Current render resolution.
         /// @details It is called automatically in Renderer for every mesh component having a VulkanMesh.
         void draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-                VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const;
+                VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution, std::vector<Light> lights) const;
 
         // @brief Function to draw a single triangle
             void drawTriangle(

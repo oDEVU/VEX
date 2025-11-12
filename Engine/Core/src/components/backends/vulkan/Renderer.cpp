@@ -1,5 +1,6 @@
 #include "Renderer.hpp"
 #include "components/backends/vulkan/Pipeline.hpp"
+#include "components/backends/vulkan/uniforms.hpp"
 #include "entt/entity/fwd.hpp"
 #include <cstdint>
 #define SDL_MAIN_HANDLED
@@ -188,9 +189,48 @@ namespace vex {
                     auto& mesh = modelView.get<MeshComponent>(entity);
                     glm::mat4 modelMatrix = transform.matrix();
                     m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
+
+                    if(transform.transformedLately()){
+                        mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
+                        mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
+                    }
+
+                    m_lights.clear();
+                    auto lightView = registry.view<TransformComponent, LightComponent>();
+                    //m_lights.reserve(255);
+
+                    for(auto lightEntity : lightView){
+                        auto& light = lightView.get<LightComponent>(lightEntity);
+                        auto& transform = lightView.get<TransformComponent>(lightEntity);
+
+                        log("Found light entity");
+
+                        float dist = glm::distance(transform.getWorldPosition(), mesh.worldCenter);
+                        if (dist < (light.radius + mesh.worldRadius)) {
+                            Light pushLight;
+                            pushLight.position = glm::vec4(transform.getWorldPosition(), light.radius);
+                            pushLight.color = glm::vec4(light.color, light.intensity);
+                            m_lights.push_back(pushLight);
+                            log("Added light entity to model");
+                        }
+                    }
+
+                    SceneLightsUBO lightUBO;
+                    lightUBO.lightCount = static_cast<uint32_t>(m_lights.size());
+                    if(lightUBO.lightCount > m_r_context.MAX_DYNAMIC_LIGHTS){
+                        lightUBO.lightCount = m_r_context.MAX_DYNAMIC_LIGHTS;
+                    }
+                    for (size_t i = 0; i < lightUBO.lightCount; ++i)
+                    {
+                        lightUBO.lights[i] = m_lights[i];
+                        log("Pushed light to lightUBO");
+                    }
+                    m_p_resources->updateLightUBO(m_r_context.currentFrame, modelIndex, lightUBO);
+
+
                     if (mesh.renderType == RenderType::OPAQUE) {
                         auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
-                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
+                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution, m_lights);
                         //modelIndex++;
                     } else if (mesh.renderType == RenderType::TRANSPARENT) {
                         //float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);

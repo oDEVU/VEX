@@ -143,12 +143,17 @@ namespace vex {
             textureIndex = 0;
         }
 
-        uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+        //uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+        uint32_t modelDynamicOffset  = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+        uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
+
 
         std::array<VkDescriptorSet, 2> descriptorSets = {
             resources.getDescriptorSet(frameIndex),
             resources.getTextureDescriptorSet(frameIndex, textureIndex)
         };
+
+        uint32_t dynamicOffsets[2] = { modelDynamicOffset, lightsDynamicOffset };
 
         vkCmdBindDescriptorSets(
             cmd,
@@ -157,8 +162,8 @@ namespace vex {
             0,
             descriptorSets.size(),
             descriptorSets.data(),
-            1,
-            &dynamicOffset
+            2,
+            dynamicOffsets
         );
 
         PushConstants modelPush{};
@@ -249,12 +254,16 @@ namespace vex {
             textureIndex = 0;
         }
 
-        uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+        uint32_t modelDynamicOffset  = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+        uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
+
 
         std::array<VkDescriptorSet, 2> descriptorSets = {
             resources.getDescriptorSet(frameIndex),
             resources.getTextureDescriptorSet(frameIndex, textureIndex)
         };
+
+        uint32_t dynamicOffsets[2] = { modelDynamicOffset, lightsDynamicOffset };
 
         vkCmdBindDescriptorSets(
             cmd,
@@ -263,8 +272,8 @@ namespace vex {
             0,
             descriptorSets.size(),
             descriptorSets.data(),
-            1,
-            &dynamicOffset
+            2,
+            dynamicOffsets
         );
 
         PushConstants modelPush{};
@@ -332,7 +341,7 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution) const {
+            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution, std::vector<Light> lights) const {
 
         std::string currentTexture = "";
         for (size_t i = 0; i < m_submeshBuffers.size(); i++) {
@@ -348,12 +357,16 @@ namespace vex {
                 textureIndex = 0;
             }
 
-            uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+            uint32_t modelDynamicOffset  = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
+            uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
+
 
             std::array<VkDescriptorSet, 2> descriptorSets = {
                 resources.getDescriptorSet(frameIndex),
                 resources.getTextureDescriptorSet(frameIndex, textureIndex)
             };
+
+            uint32_t dynamicOffsets[2] = { modelDynamicOffset, lightsDynamicOffset };
 
             vkCmdBindDescriptorSets(
                 cmd,
@@ -362,8 +375,8 @@ namespace vex {
                 0,
                 descriptorSets.size(),
                 descriptorSets.data(),
-                1,
-                &dynamicOffset
+                2,
+                dynamicOffsets
             );
 
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);

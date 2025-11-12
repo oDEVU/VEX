@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "components/GameComponents/BasicComponents.hpp"
 #include "context.hpp"
 #include "Resources.hpp"
 #include "Pipeline.hpp"
@@ -74,6 +75,7 @@ namespace vex {
         std::chrono::high_resolution_clock::time_point startTime;
         float currentTime = 0.0f;
         std::vector<TransparentTriangle> m_transparentTriangles;
+        std::vector<Light> m_lights;
         std::vector<VkMultiDrawIndexedInfoEXT> m_multiDrawInfos;
         size_t approxTriangles = 0;
     };

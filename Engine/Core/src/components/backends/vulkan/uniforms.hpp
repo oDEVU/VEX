@@ -22,6 +22,17 @@ namespace vex {
         alignas(16) glm::mat4 model;
     };
 
+    /// @brief Light struct for shader
+    struct Light {
+        glm::vec4 position = glm::vec4(0.0f); // w = radius
+        glm::vec4 color = glm::vec4(0.0f);    // w = intensity
+    };
+
+    struct SceneLightsUBO {
+        alignas(4) uint32_t lightCount;
+        alignas(16) Light lights[255]; // Light is already glm::vec4 position + glm::vec4 color
+    };
+
     /// @brief Push constants, holds both environment and model information.
     struct PushConstants {
         alignas(4) float snapResolution;

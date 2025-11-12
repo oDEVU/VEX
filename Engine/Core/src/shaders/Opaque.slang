@@ -23,8 +23,9 @@ struct VSOutput {
     [[vk::location(1)]] noperspective float2 fragUV : TEXCOORD0;
     [[vk::location(2)]] float fragDepth : TEXCOORD1;
     [[vk::location(3)]] float fragDiff : TEXCOORD2;
-    [[vk::location(4)]] noperspective float2 fragUVNum : TEXCOORD3;
-    [[vk::location(5)]] noperspective float fragInvW : TEXCOORD4;
+    [[vk::location(4)]] float3 fragLights : TEXCOORD3;
+    [[vk::location(5)]] noperspective float2 fragUVNum : TEXCOORD4;
+    [[vk::location(6)]] noperspective float fragInvW : TEXCOORD5;
 };
 
 [shader("vertex")]
@@ -47,6 +48,23 @@ VSOutput vertMain(VSInput input, uint vertId : SV_VertexID) {
     float3x3 normalMat = transpose(inverse33((float3x3)object.model));
     output.fragNormal = normalize(mul(normalMat, input.normal));
 
+    float3 dynamicLight = float3(0.0, 0.0, 0.0);
+
+    for (uint i = 0; i < objectLights.lightCount; ++i) {
+        Light light = objectLights.lights[i];
+        float3 toLight = light.position - worldPos.xyz;
+        float dist = length(toLight);
+
+        if (dist < light.radius) {
+            float3 L = normalize(toLight);
+            float NdotL = max(dot(output.fragNormal, L), 0.0);
+            float distSqr = dist * dist;
+            float atten = light.intensity / max(distSqr, 0.01);
+            dynamicLight += NdotL * atten * light.color * light.intensity;
+        }
+    }
+
+    output.fragLights = dynamicLight;
     output.fragDiff = computeDiffuse(output.fragNormal, isEnabled(GOURAUD_SHADING));
     output.fragUV = input.uv;
     output.fragDepth = viewPos.z;
@@ -78,8 +96,13 @@ float4 fragMain(VSOutput input, float4 fragCoord : SV_Position) : SV_Target {
         ? input.fragDiff
         : computeDiffuse(input.fragNormal, true);
 
+    //diff += input.fragLights;
+
     float3 ambient = push.ambientLight.xyz * push.ambientLightStrength;
-    float3 lighting = ambient + (diff * push.sunLight.xyz);
+    float3 sunLight = diff * push.sunLight.xyz;
+    //float3 lighting = ambient + (diff * push.sunLight.xyz);
+    float3 lighting = ambient + sunLight + input.fragLights;
+    lighting = saturate(lighting);
 
     return isUntextured ? (pushColor * float4(lighting, 1.0)) : (texColor * float4(lighting, 1.0));
 }
