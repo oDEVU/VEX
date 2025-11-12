@@ -25,6 +25,10 @@ public [[vk::push_constant]] cbuffer PushConstants {
     public float4 sunDirection;
 } push;
 
+public bool isEnabled(uint flag) {
+    return bool(push.enablePS1Effects & flag);
+}
+
 public static const int VERTEX_SNAPPING = 0x1;
 public static const int AFFINE_WARPING = 0x2;
 public static const int COLOR_QUANTIZATION = 0x4;
