@@ -48,6 +48,7 @@ You must install all the following dependencies for your specific operating syst
 | **Clang** (LLVM) | `winget install -e --id LLVM.LLVM` | The required C++ compiler. You need **7-Zip** for the installation to succeed. Remember to add the Clang binaries to your `PATH`: `C:\Program Files\LLVM\bin`. |
 | **Windows SDK** | Install via the **Visual Studio 2022 Installer**. | Provides essential system headers and libraries. |
 | **Vulkan SDK** | Download from the **[LunarG website](https://www.lunarg.com/vulkan-sdk/)**. | Must include the **Validation Layers**. Other headers (`glm`, `SDL`, `volk`) are already included as submodules, so you don't need to install their SDK versions. |
+| **SlangC** | Make sure to select it during VulkanSDK installation. | Required for shader compilation. |
 
 ---
 
@@ -58,6 +59,7 @@ You must install all the following dependencies for your specific operating syst
 | **ninja-build** | Standard package manager installation. |
 | **clang** | The required C++ compiler. |
 | **Vulkan SDK** | Standard package manager installation (with validation layers). |
+| **slangc** | extranct from vulkan sdk tarball |
 | **System Libraries** | Additional libraries, primarily for **Wayland** and **X11** display support, are also required. A full list will be documented soon. |
 
 ---

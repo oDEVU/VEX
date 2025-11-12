@@ -189,7 +189,13 @@ endif()
 set(SHADER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/shaders)
 set(SHADER_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/shaders)
 
-file(GLOB SHADERS
+# Find slangc (prefer Vulkan SDK, fallback to PATH or env var)
+find_program(SLANGC slangc HINTS $ENV{VULKAN_SDK}/Bin $ENV{SLANGC} ENV PATH)
+if(NOT SLANGC)
+    message(FATAL_ERROR "slangc not found, make sure you have installed it.")
+endif()
+
+file(GLOB GLSL_SHADERS
   ${SHADER_SOURCE_DIR}/*.vert
   ${SHADER_SOURCE_DIR}/*.frag
   ${SHADER_SOURCE_DIR}/*.comp
@@ -202,6 +208,18 @@ file(GLOB SHADERS
   ${SHADER_SOURCE_DIR}/*.rchit
   ${SHADER_SOURCE_DIR}/*.rmiss)
 
+file(GLOB SLANG_SHADERS
+    ${SHADER_SOURCE_DIR}/*Vert.slang
+    ${SHADER_SOURCE_DIR}/*Frag.slang
+)
+
+file(GLOB SLANG_DEPENDENCIES
+    ${SHADER_SOURCE_DIR}/depends/*.slang
+    ${SHADER_SOURCE_DIR}/effects/*.slang
+)
+
+set(SPV_SHADERS "")
+
 add_custom_command(
   COMMAND
     ${CMAKE_COMMAND} -E make_directory ${SHADER_BINARY_DIR}
@@ -209,7 +227,7 @@ add_custom_command(
   COMMENT "Creating ${SHADER_BINARY_DIR}"
 )
 
-foreach(source IN LISTS SHADERS)
+foreach(source IN LISTS GLSL_SHADERS)
     get_filename_component(FILENAME ${source} NAME)
     add_custom_command(
     COMMAND
@@ -220,6 +238,29 @@ foreach(source IN LISTS SHADERS)
     DEPENDS ${source} ${SHADER_BINARY_DIR}
     COMMENT "Compiling ${FILENAME}"
   )
+    list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+endforeach()
+
+foreach(source IN LISTS SLANG_SHADERS)
+    get_filename_component(FILENAME ${source} NAME_WE)
+    if(FILENAME MATCHES ".*Vert$")
+        set(PROFILE "vs_6_0")
+    elseif(FILENAME MATCHES ".*Frag$")
+        set(PROFILE "ps_6_0")
+    else()
+        continue()
+    endif()
+    set(SLANG_FLAGS "-I${SHADER_SOURCE_DIR}")
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        list(APPEND SLANG_FLAGS "-O3")
+        #list(APPEND SLANG_FLAGS "-O2") Rewert to this if O3 is too aggresive C:
+    endif()
+    add_custom_command(
+        COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ${PROFILE} -o ${SHADER_BINARY_DIR}/${FILENAME}.spv ${source}
+        OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}.spv
+        DEPENDS ${source} ${SLANG_DEPENDENCIES} ${SHADER_BINARY_DIR}
+        COMMENT "Compiling Slang ${FILENAME}"
+    )
     list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
 endforeach()
 

@@ -238,8 +238,8 @@ namespace vex {
         attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)};
 
         m_p_pipeline->createGraphicsPipeline(
-            "Engine/shaders/basic.vert.spv",
-            "Engine/shaders/basic.frag.spv",
+            "Engine/shaders/OpaqueVert.spv",
+            "Engine/shaders/OpaqueFrag.spv",
             bindingDesc,
             attributes
         );
@@ -259,8 +259,8 @@ namespace vex {
         uiAttrs[3] = {3, 0, VK_FORMAT_R32_SFLOAT,         offsetof(UIVertex, texIndex)};
 
         m_p_uiPipeline->createUIPipeline(
-            "Engine/shaders/ui.vert.spv",
-            "Engine/shaders/ui.frag.spv",
+            "Engine/shaders/UiVert.spv",
+            "Engine/shaders/UiFrag.spv",
             uiBinding,
             uiAttrs
         );
