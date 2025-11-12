@@ -19,6 +19,7 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 - Transform Hierarchy: Proper object parenting with hierarchical transformation system
 - Object/ECS System Hybrid: Similarly to Unreals Actor system here you can create Object c++ classes with its own components
 - Custom UI system: Json based UI system using facebook/yoga layout engine.
+- Implemented Jolt as physics engine.
 
 ## Other Notes
 - Current builds are early in development and represent basic functionality
