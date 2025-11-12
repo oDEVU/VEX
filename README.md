@@ -125,3 +125,4 @@ All liblaries are included as git submodules. Their respective licenses may diff
 - [Dear ImGui](https://github.com/ocornut/imgui)
 - [nlohmann/json](https://github.com/nlohmann/json/)
 - [yoga](https://github.com/facebook/yoga)
+- [JoltPhysics](https://github.com/jrouwe/JoltPhysics)
