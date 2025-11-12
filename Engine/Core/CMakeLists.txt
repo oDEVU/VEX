@@ -209,8 +209,7 @@ file(GLOB GLSL_SHADERS
   ${SHADER_SOURCE_DIR}/*.rmiss)
 
 file(GLOB SLANG_SHADERS
-    ${SHADER_SOURCE_DIR}/*Vert.slang
-    ${SHADER_SOURCE_DIR}/*Frag.slang
+    ${SHADER_SOURCE_DIR}/*.slang
 )
 
 file(GLOB SLANG_DEPENDENCIES
@@ -243,25 +242,56 @@ endforeach()
 
 foreach(source IN LISTS SLANG_SHADERS)
     get_filename_component(FILENAME ${source} NAME_WE)
-    if(FILENAME MATCHES ".*Vert$")
-        set(PROFILE "vs_6_0")
-    elseif(FILENAME MATCHES ".*Frag$")
-        set(PROFILE "ps_6_0")
-    else()
-        continue()
-    endif()
+
     set(SLANG_FLAGS "-I${SHADER_SOURCE_DIR}")
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         list(APPEND SLANG_FLAGS "-O3")
         #list(APPEND SLANG_FLAGS "-O2") Rewert to this if O3 is too aggresive C:
     endif()
-    add_custom_command(
-        COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ${PROFILE} -o ${SHADER_BINARY_DIR}/${FILENAME}.spv ${source}
-        OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}.spv
-        DEPENDS ${source} ${SLANG_DEPENDENCIES} ${SHADER_BINARY_DIR}
-        COMMENT "Compiling Slang ${FILENAME}"
-    )
-    list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+
+    # Case 1: ends with Vert → only vertex shader
+    if(FILENAME MATCHES ".*Vert$")
+        set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+        add_custom_command(
+            OUTPUT ${OUTPUT_FILE}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_6_0 -o ${OUTPUT_FILE} ${source}
+            DEPENDS ${source} ${SLANG_DEPENDENCIES}
+            COMMENT "Compiling vertex shader ${FILENAME}"
+        )
+        list(APPEND SPV_SHADERS ${OUTPUT_FILE})
+
+    # Case 2: ends with Frag → only fragment shader
+    elseif(FILENAME MATCHES ".*Frag$")
+        set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+        add_custom_command(
+            OUTPUT ${OUTPUT_FILE}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_6_0 -o ${OUTPUT_FILE} ${source}
+            DEPENDS ${source} ${SLANG_DEPENDENCIES}
+            COMMENT "Compiling fragment shader ${FILENAME}"
+        )
+        list(APPEND SPV_SHADERS ${OUTPUT_FILE})
+
+    # Case 3: unified shader → compile both vertMain + fragMain
+    else()
+        set(VERT_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Vert.spv)
+        set(FRAG_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Frag.spv)
+
+        add_custom_command(
+            OUTPUT ${VERT_OUTPUT}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_6_0 -entry vertMain -o ${VERT_OUTPUT} ${source}
+            DEPENDS ${source} ${SLANG_DEPENDENCIES}
+            COMMENT "Compiling combined shader vertex entry 'vertMain' from ${FILENAME}.slang"
+        )
+
+        add_custom_command(
+            OUTPUT ${FRAG_OUTPUT}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_6_0 -entry fragMain -o ${FRAG_OUTPUT} ${source}
+            DEPENDS ${source} ${SLANG_DEPENDENCIES}
+            COMMENT "Compiling combined shader fragment entry 'fragMain' from ${FILENAME}.slang"
+        )
+
+        list(APPEND SPV_SHADERS ${VERT_OUTPUT} ${FRAG_OUTPUT})
+    endif()
 endforeach()
 
 add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})

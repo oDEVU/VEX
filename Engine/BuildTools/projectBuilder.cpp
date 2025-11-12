@@ -188,11 +188,15 @@ int main(int argc, char* argv[]) {
         fs::path deps = build_dir / "_deps";
         fs::path cmake_files = build_dir / "CMakeFiles";
         fs::path cmake_cache = build_dir / "CMakeCache.txt";
+        fs::path cmake_cache_dir = build_dir / ".cache";
         fs::path cmake_install = build_dir / "cmake_install.cmake";
         fs::path compile_commands = build_dir / "compile_commands.json";
         fs::path ninja_deps = build_dir / ".ninja_deps";
         fs::path ninja_log = build_dir / ".ninja_log";
         fs::path build_ninja = build_dir / "build.ninja";
+        fs::path yoga_bin = build_dir / "bin";
+        fs::path yoga_lib = build_dir / "lib";
+        fs::path yoga_tests = build_dir / "yogatests";
 
         for (const auto& entry : fs::directory_iterator(build_dir)) {
             auto path = fs::weakly_canonical(entry.path());
@@ -202,11 +206,15 @@ int main(int argc, char* argv[]) {
                 path != fs::weakly_canonical(deps) &&
                 path != fs::weakly_canonical(cmake_files) &&
                 path != fs::weakly_canonical(cmake_cache) &&
+                path != fs::weakly_canonical(cmake_cache_dir) &&
                 path != fs::weakly_canonical(cmake_install) &&
                 path != fs::weakly_canonical(compile_commands) &&
                 path != fs::weakly_canonical(ninja_deps) &&
                 path != fs::weakly_canonical(ninja_log) &&
                 path != fs::weakly_canonical(build_ninja) &&
+                path != fs::weakly_canonical(yoga_bin) &&
+                path != fs::weakly_canonical(yoga_lib) &&
+                path != fs::weakly_canonical(yoga_tests) &&
                 filename.find("cmake") == std::string::npos) {
                 fs::path dest_path = output_dir / filename;
                 if (fs::exists(dest_path)) {

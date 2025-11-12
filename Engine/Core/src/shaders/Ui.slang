@@ -12,11 +12,21 @@ struct VSOutput {
     [[vk::location(2)]] nointerpolation float fragTexIndex : TEXCOORD1;
 };
 
+struct FSInput {
+    [[vk::location(0)]] float2 fragUV : TEXCOORD0;
+    [[vk::location(1)]] float4 fragColor : COLOR;
+    [[vk::location(2)]] nointerpolation float fragTexIndex : TEXCOORD1;
+};
+
 [[vk::push_constant]] cbuffer PushConstants {
     float4x4 ortho;
 } pc;
 
-VSOutput main(VSInput input) {
+[[vk::binding(0, 1)]] Texture2D<float4> texSampler;
+[[vk::binding(0, 1)]] SamplerState texSamplerState;
+
+[shader("vertex")]
+VSOutput vertMain(VSInput input) {
     VSOutput output;
 
     output.position = mul(pc.ortho, float4(input.inPosition, 0.0, 1.0));
@@ -25,4 +35,17 @@ VSOutput main(VSInput input) {
     output.fragTexIndex = input.inTexIndex;
 
     return output;
+}
+
+[shader("fragment")]
+float4 fragMain(FSInput input) : SV_Target  {
+    float4 color;
+
+    if (input.fragTexIndex < 0.0) {
+        color = input.fragColor;
+    } else {
+        color = texSampler.Sample(texSamplerState, input.fragUV) * input.fragColor;
+    }
+
+    return color;
 }
