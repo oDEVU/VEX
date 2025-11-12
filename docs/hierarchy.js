@@ -41,6 +41,8 @@ var hierarchy =
       [ "vex::VirtualFileSystem::VPKStream", "classvex_1_1VirtualFileSystem_1_1VPKStream.html", null ]
     ] ],
     [ "vex::InputSystem::KeyState", "structvex_1_1InputSystem_1_1KeyState.html", null ],
+    [ "vex::Light", "structvex_1_1Light.html", null ],
+    [ "vex::LightComponent", "structvex_1_1LightComponent.html", null ],
     [ "vex::VirtualFileSystem::LoadedVPK", "structvex_1_1VirtualFileSystem_1_1LoadedVPK.html", null ],
     [ "vex::MeshComponent", "structvex_1_1MeshComponent.html", null ],
     [ "vex::MeshData", "structvex_1_1MeshData.html", null ],
@@ -61,6 +63,7 @@ var hierarchy =
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],
     [ "vex::ResolutionManager", "classvex_1_1ResolutionManager.html", null ],
     [ "vex::Scene", "classvex_1_1Scene.html", null ],
+    [ "vex::SceneLightsUBO", "structvex_1_1SceneLightsUBO.html", null ],
     [ "vex::SceneManager", "classvex_1_1SceneManager.html", null ],
     [ "std::streambuf", null, [
       [ "vex::VirtualFileSystem::VPKStream::VPKStreamBuf", "classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html", null ]

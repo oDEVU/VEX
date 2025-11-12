@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VEX Engine: vex::NameComponent Struct Reference</title>
+<title>VEX Engine: vex::LightComponent Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -79,7 +79,7 @@ $(function() { codefold.init(0); });
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function(){initNavTree('structvex_1_1NameComponent.html',''); initResizable(true); });
+$(function(){initNavTree('structvex_1_1LightComponent.html',''); initResizable(true); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -107,39 +107,76 @@ $(function(){initNavTree('structvex_1_1NameComponent.html',''); initResizable(tr
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="structvex_1_1NameComponent-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">vex::NameComponent Struct Reference</div></div>
+<a href="structvex_1_1LightComponent-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">vex::LightComponent Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.  
+<p>Struct containing light properties.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a129f197db98d4b62ad570fd80408f5c9" id="r_a129f197db98d4b62ad570fd80408f5c9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a129f197db98d4b62ad570fd80408f5c9">name</a></td></tr>
-<tr class="separator:a129f197db98d4b62ad570fd80408f5c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e193c38ad75c3f8fc181bd1a8a3abbb" id="r_a8e193c38ad75c3f8fc181bd1a8a3abbb"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e193c38ad75c3f8fc181bd1a8a3abbb">color</a></td></tr>
+<tr class="separator:a8e193c38ad75c3f8fc181bd1a8a3abbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa59680aed002ee1859dda4dd6f31aac1" id="r_aa59680aed002ee1859dda4dd6f31aac1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa59680aed002ee1859dda4dd6f31aac1">intensity</a></td></tr>
+<tr class="separator:aa59680aed002ee1859dda4dd6f31aac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfb135ec62a20de1f7e254c6034ed886" id="r_acfb135ec62a20de1f7e254c6034ed886"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfb135ec62a20de1f7e254c6034ed886">radius</a></td></tr>
+<tr class="separator:acfb135ec62a20de1f7e254c6034ed886"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Struct that simply contains name of the entity. It is used to identify entity and needs to be unique. </p>
+<div class="textblock"><p>Struct containing light properties. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo</a></b></dt><dd>Allow to load from scene file. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00349">349</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00342">342</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a129f197db98d4b62ad570fd80408f5c9" name="a129f197db98d4b62ad570fd80408f5c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a129f197db98d4b62ad570fd80408f5c9">&#9670;&#160;</a></span>name</h2>
+<a id="a8e193c38ad75c3f8fc181bd1a8a3abbb" name="a8e193c38ad75c3f8fc181bd1a8a3abbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e193c38ad75c3f8fc181bd1a8a3abbb">&#9670;&#160;</a></span>color</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string vex::NameComponent::name</td>
+          <td class="memname">glm::vec3 vex::LightComponent::color</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00350">350</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00343">343</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa59680aed002ee1859dda4dd6f31aac1" name="aa59680aed002ee1859dda4dd6f31aac1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa59680aed002ee1859dda4dd6f31aac1">&#9670;&#160;</a></span>intensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vex::LightComponent::intensity</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00344">344</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acfb135ec62a20de1f7e254c6034ed886" name="acfb135ec62a20de1f7e254c6034ed886"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfb135ec62a20de1f7e254c6034ed886">&#9670;&#160;</a></span>radius</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vex::LightComponent::radius</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00345">345</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -151,7 +188,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>vex</b></li><li class="navelem"><a class="el" href="structvex_1_1NameComponent.html">NameComponent</a></li>
+    <li class="navelem"><b>vex</b></li><li class="navelem"><a class="el" href="structvex_1_1LightComponent.html">LightComponent</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

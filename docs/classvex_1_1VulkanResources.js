@@ -19,6 +19,7 @@ var classvex_1_1VulkanResources =
     [ "textureExists", "classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef", null ],
     [ "unloadTexture", "classvex_1_1VulkanResources.html#a777c49742fa6e898a46d8a6c97d75b0c", null ],
     [ "updateCameraUBO", "classvex_1_1VulkanResources.html#ab303d3de4be84433350e4698a7965c97", null ],
+    [ "updateLightUBO", "classvex_1_1VulkanResources.html#ab4d964bb1cefadb20140dedf53da9893", null ],
     [ "updateModelUBO", "classvex_1_1VulkanResources.html#aab48e7007a73eb6dafda998941208d35", null ],
     [ "updateTextureDescriptor", "classvex_1_1VulkanResources.html#a77672c461906ef7e0994078d8994d27d", null ]
 ];

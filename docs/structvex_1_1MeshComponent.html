@@ -127,6 +127,14 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a53f560d67ee2772bc8094e601b7645ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31e06acdc0e1d0af9cf1964ce34643ce" id="r_a31e06acdc0e1d0af9cf1964ce34643ce"><td class="memItemLeft" align="right" valign="top">RenderType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31e06acdc0e1d0af9cf1964ce34643ce">renderType</a> = RenderType::OPAQUE</td></tr>
 <tr class="separator:a31e06acdc0e1d0af9cf1964ce34643ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9444ca2c154c22721e86e64b65978612" id="r_a9444ca2c154c22721e86e64b65978612"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9444ca2c154c22721e86e64b65978612">localCenter</a> = glm::vec3(0.0f)</td></tr>
+<tr class="separator:a9444ca2c154c22721e86e64b65978612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fba002f32285fb49e2caea07a242563" id="r_a5fba002f32285fb49e2caea07a242563"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fba002f32285fb49e2caea07a242563">localRadius</a> = 1.0f</td></tr>
+<tr class="separator:a5fba002f32285fb49e2caea07a242563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74439471a657571941c7003991b37ba0" id="r_a74439471a657571941c7003991b37ba0"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74439471a657571941c7003991b37ba0">worldCenter</a> = glm::vec3(0.0f)</td></tr>
+<tr class="separator:a74439471a657571941c7003991b37ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a843598838b541a110fa1b7c5ffbc389c" id="r_a843598838b541a110fa1b7c5ffbc389c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a843598838b541a110fa1b7c5ffbc389c">worldRadius</a> = 1.0f</td></tr>
+<tr class="separator:a843598838b541a110fa1b7c5ffbc389c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Struct containing raw meshData, mesh id, texture paths and material properties. It just template and data for rendering backend to load/convert this data to its acceptible format. This is made weirdly cause its made in mind for multiple backends. IDK i hate this system but i have no better idea. </p>
@@ -146,7 +154,39 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00327">327</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00328">328</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9444ca2c154c22721e86e64b65978612" name="a9444ca2c154c22721e86e64b65978612"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9444ca2c154c22721e86e64b65978612">&#9670;&#160;</a></span>localCenter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec3 vex::MeshComponent::localCenter = glm::vec3(0.0f)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00333">333</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5fba002f32285fb49e2caea07a242563" name="a5fba002f32285fb49e2caea07a242563"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fba002f32285fb49e2caea07a242563">&#9670;&#160;</a></span>localRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vex::MeshComponent::localRadius = 1.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00334">334</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -162,7 +202,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00326">326</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00327">327</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -178,7 +218,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00329">329</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00330">330</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -194,7 +234,39 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00328">328</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00329">329</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a74439471a657571941c7003991b37ba0" name="a74439471a657571941c7003991b37ba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74439471a657571941c7003991b37ba0">&#9670;&#160;</a></span>worldCenter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec3 vex::MeshComponent::worldCenter = glm::vec3(0.0f)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00336">336</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a843598838b541a110fa1b7c5ffbc389c" name="a843598838b541a110fa1b7c5ffbc389c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a843598838b541a110fa1b7c5ffbc389c">&#9670;&#160;</a></span>worldRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vex::MeshComponent::worldRadius = 1.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00337">337</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>

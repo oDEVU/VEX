@@ -349,8 +349,8 @@ $(function(){initNavTree('Interface_8cpp_source.html',''); initResizable(true); 
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(<a class="code hl_struct" href="structvex_1_1Vertex.html">Vertex</a>, uv)};</div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        m_p_pipeline-&gt;createGraphicsPipeline(</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>            <span class="stringliteral">&quot;Engine/shaders/basic.vert.spv&quot;</span>,</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="stringliteral">&quot;Engine/shaders/basic.frag.spv&quot;</span>,</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>            <span class="stringliteral">&quot;Engine/shaders/OpaqueVert.spv&quot;</span>,</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="stringliteral">&quot;Engine/shaders/OpaqueFrag.spv&quot;</span>,</div>
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>            bindingDesc,</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>            attributes</div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        );</div>
@@ -370,8 +370,8 @@ $(function(){initNavTree('Interface_8cpp_source.html',''); initResizable(true); 
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>        uiAttrs[3] = {3, 0, VK_FORMAT_R32_SFLOAT,         offsetof(<a class="code hl_struct" href="structvex_1_1UIVertex.html">UIVertex</a>, texIndex)};</div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>        m_p_uiPipeline-&gt;createUIPipeline(</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            <span class="stringliteral">&quot;Engine/shaders/ui.vert.spv&quot;</span>,</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            <span class="stringliteral">&quot;Engine/shaders/ui.frag.spv&quot;</span>,</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            <span class="stringliteral">&quot;Engine/shaders/UiVert.spv&quot;</span>,</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            <span class="stringliteral">&quot;Engine/shaders/UiFrag.spv&quot;</span>,</div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            uiBinding,</div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>            uiAttrs</div>
 <div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>        );</div>
