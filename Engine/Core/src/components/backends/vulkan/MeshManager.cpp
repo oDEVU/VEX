@@ -22,13 +22,21 @@ namespace vex {
 
     ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent = entt::null){
         log("Constructing model: %s...", name.c_str());
+
+        std::string tempName = name;
+
         auto view = engine.getRegistry().view<NameComponent>();
         for (auto entity : view) {
             auto meshComponent = view.get<NameComponent>(entity);
-            if(meshComponent.name == name){
-                throw_error("Object with name: '" + name + "' already exists");
+            if(meshComponent.name == tempName){
+                log("Warning: Object with name: '%s already exists! All objects should have unique names.", tempName.c_str());
+                UUID uuidGenerator;
+                tempName = tempName + uuidGenerator.generate_uuid();
+                log("Info: Object created with name: '%s', it is still recommended to not rely on this name for identification. It is different every app run.", tempName.c_str());
             }
         }
+        //m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
+
         uint32_t newId;
         if (!m_freeModelIds.empty()) {
             newId = m_freeModelIds.back();
@@ -73,7 +81,7 @@ namespace vex {
                 }
 
         try {
-            log("Creating Vulkan mesh for %s", name.c_str());
+            log("Creating Vulkan mesh for %s", tempName.c_str());
             if(m_vulkanMeshes.find(meshComponent.meshData.meshPath) == m_vulkanMeshes.end()){
                 m_vulkanMeshes.emplace(meshComponent.meshData.meshPath, std::make_unique<VulkanMesh>(m_r_context));
                 m_vulkanMeshes.at(meshComponent.meshData.meshPath)->upload(meshComponent.meshData);
@@ -92,8 +100,8 @@ namespace vex {
         }
 
         entt::entity modelEntity = engine.getRegistry().create();
-        ModelObject* modelObject = new ModelObject(engine, name, meshComponent, transformComponent);
-        modelObject->cleanup = [this](std::string& name, MeshComponent meshComponent) { destroyModel(name, meshComponent); };
+        ModelObject* modelObject = new ModelObject(engine, tempName, meshComponent, transformComponent);
+        modelObject->cleanup = [this](std::string& tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };
         return modelObject;
     }
 

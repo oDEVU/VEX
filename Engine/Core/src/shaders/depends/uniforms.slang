@@ -35,8 +35,6 @@ public [[vk::push_constant]] cbuffer PushConstants {
     public float ambientLightStrength;
     public float4 sunLight;
     public float4 sunDirection;
-    public uint lightCount;
-    public Light lights[8];
 } push;
 
 public bool isEnabled(uint flag) {

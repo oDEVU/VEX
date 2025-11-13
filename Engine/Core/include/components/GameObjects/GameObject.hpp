@@ -12,6 +12,7 @@
   #include "components/errorUtils.hpp"
 
   #include "components/GameComponents/BasicComponents.hpp"
+  #include "../../../thirdparty/uuid/UUID.hpp"
 
   namespace vex {
 
@@ -33,14 +34,19 @@
     GameObject(Engine& engine, const std::string& name)
         : m_engine(engine), m_entity(m_engine.getRegistry().create()), m_isValid(true)  {
 
+        std::string tempName = name;
+
         auto view = engine.getRegistry().view<NameComponent>();
         for (auto entity : view) {
             auto meshComponent = view.get<NameComponent>(entity);
-            if(meshComponent.name == name){
-                throw_error("Object with name: '" + name + "' already exists");
+            if(meshComponent.name == tempName){
+                log("Warning: Object with name: '%s already exists! All objects should have unique names.", tempName.c_str());
+                UUID uuidGenerator;
+                tempName = tempName + uuidGenerator.generate_uuid();
+                log("Info: Object created with name: '%s', it is still recommended to not rely on this name for identification. It is different every app run.", tempName.c_str());
             }
         }
-        m_engine.getRegistry().emplace<NameComponent>(m_entity, name);
+        m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
       }
       /// @brief Default destructor for GameObject. It removes the object from the engine's registry, and removes its reference from any child objects.
       virtual ~GameObject() {
