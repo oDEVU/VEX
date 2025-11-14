@@ -327,12 +327,6 @@ namespace vex {
                                                     tri.submeshIndex != batchSubmeshIndex ||
                                                     tri.modelIndex != batchModelIndex);
 
-                                if(frame == 50){
-                                log("tri.mesh != batchMesh: %d", (tri.mesh != batchMesh));
-                                log("tri.submeshIndex != batchSubmeshIndex: %d", (tri.submeshIndex != batchSubmeshIndex));
-                                log("tri.modelIndex != batchModelIndex: %d", (tri.modelIndex != batchModelIndex));
-                                }
-
                                 if (stateChange && !m_multiDrawInfos.empty()) {
                                     batchMesh->bindAndDrawBatched(
                                         commandBuffer,
@@ -345,9 +339,6 @@ namespace vex {
                                         m_r_context.currentRenderResolution
                                     );
 
-                                    if(frame == 50){
-                                        log("Renderer::issueMultiDrawIndexed");
-                                    }
                                     issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
                                     m_multiDrawInfos.clear();
                                 }
@@ -376,9 +367,6 @@ namespace vex {
                                     currentTime,
                                     m_r_context.currentRenderResolution
                                 );
-                                if(frame == 50){
-                                    log("Renderer::issueMultiDrawIndexed");
-                                }
                                 issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
                             }
 

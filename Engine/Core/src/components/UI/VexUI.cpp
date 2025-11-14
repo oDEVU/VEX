@@ -104,8 +104,11 @@ void VexUI::loadFonts(Widget* w) {
 
         int ascent, descent, lineGap;
         stbtt_GetFontVMetrics(&atlas.info, &ascent, &descent, &lineGap); // Get metrics
+        log("UI: font %s metrics: ascent=%d, descent=%d, lineGap=%d", w->style.font.c_str(), ascent, descent, lineGap);
 
         float scale = stbtt_ScaleForPixelHeight(&atlas.info, w->style.fontSize); // Get scale
+        log("UI: font %s scale=%f", w->style.font.c_str(), scale);
+
         atlas.ascent = static_cast<float>(ascent) * scale;
         atlas.descent = static_cast<float>(descent) * scale;
         atlas.scale = scale;

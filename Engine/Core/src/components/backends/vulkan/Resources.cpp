@@ -163,17 +163,29 @@ namespace vex {
         viewInfo.subresourceRange.layerCount = 1;
 
         VkImageView textureView;
+        log("Creating vulkan texture view...");
         if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
             throw_error("Failed to create texture image view!");
         }
 
-        if (m_r_context.textureIndices.count(name)) return;
+        if (m_r_context.textureIndices.contains(name)) {
+            log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
+            return;
+        }
 
         m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
+        log("Assigned texture '%s' to index %u", name.c_str(), m_r_context.textureIndices[name]);
+
         m_textures[name] = textureView;
         m_textureImages[name] = textureImage;
         m_textureAllocations[name] = textureAlloc;
         m_textureViews[name] = textureView;
+
+            if (m_r_context.textureIndices.size() >= m_r_context.MAX_TEXTURES) {
+                throw_error("Exceeded maximum texture count");
+            }
+            m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
+            log("Assigned texture '%s' to index %d", name.c_str(), m_r_context.textureIndices[name]);
 
         VkDescriptorImageInfo imageDescInfo{};
         imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
