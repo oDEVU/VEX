@@ -128,7 +128,7 @@ namespace vex {
         glm::vec3 min = glm::vec3(FLT_MAX);
         glm::vec3 max = glm::vec3(-FLT_MAX);
 
-        for(auto& submesh : meshData.submeshes) {
+        for(auto& submesh : meshComponent.meshData.submeshes) {
             for(auto& vertex : submesh.vertices) {
                 min = glm::min(min, vertex.position);
                 max = glm::max(max, vertex.position);

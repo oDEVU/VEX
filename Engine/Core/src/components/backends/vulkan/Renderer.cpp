@@ -190,7 +190,7 @@ namespace vex {
                     glm::mat4 modelMatrix = transform.matrix();
                     m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
 
-                    if(transform.transformedLately()){
+                    if(transform.transformedLately() || mesh.getIsFresh()){
                         mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
                         mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
                     }
@@ -211,7 +211,7 @@ namespace vex {
                             pushLight.position = glm::vec4(transform.getWorldPosition(), light.radius);
                             pushLight.color = glm::vec4(light.color, light.intensity);
                             m_lights.push_back(pushLight);
-                            //log("Added light entity to model");
+                            //log("mesh %s bounding radious: %f, centre: %f. %f, %f", mesh.meshData.meshPath.c_str(), mesh.worldRadius, mesh.worldCenter.x, mesh.worldCenter.y, mesh.worldCenter.z);
                         }
                     }
 
@@ -246,6 +246,10 @@ namespace vex {
                         );
                     }
                     modelIndex++;
+
+                    if(mesh.getIsFresh()){
+                        mesh.setRendered();
+                    }
                 }
 
                 std::sort(m_transparentTriangles.begin(), m_transparentTriangles.end(),

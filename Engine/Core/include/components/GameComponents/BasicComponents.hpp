@@ -335,6 +335,17 @@ struct MeshComponent {
 
     glm::vec3 worldCenter = glm::vec3(0.0f);
     float worldRadius = 1.0f;
+
+    bool getIsFresh(){
+        return fresh;
+    }
+
+    void setRendered(){
+        fresh = false;
+    }
+
+    private:
+    bool fresh = true;
 };
 
 /// @brief Struct containing light properties.
