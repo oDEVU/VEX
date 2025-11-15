@@ -198,35 +198,49 @@ namespace vex {
 
     void VulkanSwapchainManager::createCommandPool() {
         log("creating command pools");
+
+        m_r_context.commandPools.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+
+        for (int i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            VkCommandPoolCreateInfo poolInfo = {};
+            poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+            poolInfo.queueFamilyIndex = m_r_context.graphicsQueueFamily;
+
+            if (vkCreateCommandPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.commandPools[i]) != VK_SUCCESS) {
+                throw_error("Failed to create command pool");
+            }
+        }
+
         VkCommandPoolCreateInfo poolInfo = {};
         poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT |
+                         VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
         poolInfo.queueFamilyIndex = m_r_context.graphicsQueueFamily;
 
-        if (vkCreateCommandPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.commandPool) != VK_SUCCESS) {
-            throw_error("Failed to create command pool");
+        if (vkCreateCommandPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.singleTimePool) != VK_SUCCESS) {
+            throw_error("Failed to create single time command pool");
         }
+        //m_r_context.singleTimePool = createCommandPool(m_r_context.device, m_r_context.graphicsQueueFamily);
 
         createCommandBuffers();
     }
 
     void VulkanSwapchainManager::createCommandBuffers() {
         log("creating command buffers");
-        uint32_t commandBufferCount = static_cast<uint32_t>(m_r_context.swapchainImages.size());
-        if (commandBufferCount == 0) {
-            throw_error("No swapchain images for command buffer creation");
-        }
 
-        m_r_context.commandBuffers.resize(commandBufferCount);
+        m_r_context.commandBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
-        VkCommandBufferAllocateInfo allocInfo = {};
-        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.commandPool = m_r_context.commandPool;
-        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount = (uint32_t)m_r_context.commandBuffers.size();
+        for (int i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            VkCommandBufferAllocateInfo allocInfo = {};
+            allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+            allocInfo.commandPool = m_r_context.commandPools[i];
+            allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+            allocInfo.commandBufferCount = 1;
 
-        if (vkAllocateCommandBuffers(m_r_context.device, &allocInfo, m_r_context.commandBuffers.data()) != VK_SUCCESS) {
-            throw_error("Failed to allocate command buffers");
+            if (vkAllocateCommandBuffers(m_r_context.device, &allocInfo, &m_r_context.commandBuffers[i]) != VK_SUCCESS) {
+                throw_error("Failed to allocate command buffer");
+            }
         }
 
         createSyncObjects();
@@ -377,7 +391,7 @@ namespace vex {
         log("createImageViews");
         createImageViews();
         log("createCommandBuffers");
-        createCommandBuffers();
+        createCommandPool();
         log("createLowResResources");
         createLowResResources();
     }

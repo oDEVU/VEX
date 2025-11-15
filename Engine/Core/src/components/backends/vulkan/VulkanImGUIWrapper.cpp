@@ -102,7 +102,7 @@ namespace vex {
 
     void VulkanImGUIWrapper::endFrame() {
         ImGui::Render();
-        ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_r_context.commandBuffers[m_r_context.currentImageIndex]);
+        ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_r_context.commandBuffers[m_r_context.currentFrame]);
     }
 
     void VulkanImGUIWrapper::processEvent(const SDL_Event* event) {

@@ -67,18 +67,23 @@ namespace vex {
 
         vkResetFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame]);
 
-        vkDeviceWaitIdle(m_r_context.device);
+        //vkDeviceWaitIdle(m_r_context.device);
 
         //log("Updating camera UBO...");
         m_p_resources->updateCameraUBO({view, proj});
 
         //log("Updating texture Descriptor.");
-        VkImageView textureView = m_p_resources->getTextureView("default");
-        m_p_resources->updateTextureDescriptor(m_r_context.currentFrame, textureView, 0);
+        //VkImageView textureView = m_p_resources->getTextureView("default");
+        //m_p_resources->updateTextureDescriptor(m_r_context.currentFrame, textureView, 0);
 
         //log("Begining comand buffer...");
-        VkCommandBuffer commandBuffer = m_r_context.commandBuffers[m_r_context.currentImageIndex];
-        vkResetCommandBuffer(commandBuffer, 0);
+        VkCommandBuffer commandBuffer = m_r_context.commandBuffers[m_r_context.currentFrame];
+        //vkResetCommandBuffer(commandBuffer, 0);
+        vkResetCommandPool(
+            m_r_context.device,
+            m_r_context.commandPools[m_r_context.currentFrame],
+            0
+        );
 
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -86,13 +91,13 @@ namespace vex {
 
         //log("Translating high res image...");
         transitionImageLayout(commandBuffer,
-                             m_r_context.swapchainImages[m_r_context.currentImageIndex],
-                             VK_IMAGE_LAYOUT_UNDEFINED,
-                             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                             0,
-                             VK_ACCESS_TRANSFER_WRITE_BIT,
-                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                             VK_PIPELINE_STAGE_TRANSFER_BIT);
+            m_r_context.swapchainImages[m_r_context.currentImageIndex],
+            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+            VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            VK_ACCESS_MEMORY_READ_BIT, // src access appropriate for present
+            VK_ACCESS_TRANSFER_WRITE_BIT,
+            VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, // conservative
+            VK_PIPELINE_STAGE_TRANSFER_BIT);
 
         //log("Translating low res image...");
         transitionImageLayout(commandBuffer,
@@ -156,8 +161,8 @@ namespace vex {
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
         //log("vkCmdSetScissor ran");
 
-        VkImageView defaultTexture = m_p_resources->getTextureView("default");
-        m_p_resources->updateTextureDescriptor(m_r_context.currentFrame, defaultTexture, 0);
+        //VkImageView defaultTexture = m_p_resources->getTextureView("default");
+        //m_p_resources->updateTextureDescriptor(m_r_context.currentFrame, defaultTexture, 0);
 
 
         //log("Binding pipeline...");
@@ -525,6 +530,7 @@ namespace vex {
         }
 
         m_r_context.currentFrame = (m_r_context.currentFrame + 1) % m_r_context.MAX_FRAMES_IN_FLIGHT;
+        //log("Frame in flight %d", m_r_context.currentFrame);
     }
 
     void Renderer::transitionImageLayout(VkCommandBuffer cmd, VkImage image,

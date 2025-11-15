@@ -47,8 +47,12 @@ namespace vex {
         VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;
 
         VkPipelineLayout pipelineLayout;
-        VkCommandPool commandPool;
+        //VkCommandPool commandPool;
+
+        std::vector<VkCommandPool> commandPools;
         std::vector<VkCommandBuffer> commandBuffers;
+
+        VkCommandPool singleTimePool;
 
         /// @brief Function to begin single time command, used for stuff like creating vulkan image when loading textures.
         /// @return VkCommandBuffer
@@ -56,7 +60,7 @@ namespace vex {
             VkCommandBufferAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
             allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-            allocInfo.commandPool = commandPool;
+            allocInfo.commandPool = singleTimePool;
             allocInfo.commandBufferCount = 1;
 
             VkCommandBuffer commandBuffer;
@@ -83,7 +87,7 @@ namespace vex {
             vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
             vkQueueWaitIdle(graphicsQueue);
 
-            vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
+            vkFreeCommandBuffers(device, singleTimePool, 1, &commandBuffer);
         }
 
         uint32_t graphicsQueueFamily;
@@ -91,7 +95,7 @@ namespace vex {
 
         uint32_t currentFrame = 0;
         uint32_t currentImageIndex = 0;
-        const uint32_t MAX_FRAMES_IN_FLIGHT = 2;
+        const uint32_t MAX_FRAMES_IN_FLIGHT = 3;
 
         /// @todo Implement something to dynamically allocate resources and not rely on max textures and models
         const uint32_t MAX_TEXTURES = 1024;

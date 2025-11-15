@@ -307,11 +307,7 @@ namespace vex {
         }
 
         m_context.commandBuffers.clear();
-
-        if (m_context.commandPool) {
-            vkDestroyCommandPool(m_context.device, m_context.commandPool, nullptr);
-            m_context.commandPool = VK_NULL_HANDLE;
-        }
+        m_context.commandPools.clear();
 
         for (auto& imageView : m_context.swapchainImageViews) {
             if (imageView) {
