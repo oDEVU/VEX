@@ -44,6 +44,7 @@ var NAVTREE =
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -55,7 +56,7 @@ var NAVTREEINDEX =
 "BasicComponents_8hpp.html",
 "classvex_1_1Interface.html#a5b5f3faa74e9d23b5bd53c110e5e866c",
 "classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b",
-"structvex_1_1TransformComponent.html#a3fc63dce8a4f8b53f9ea1047bc178d54"
+"structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

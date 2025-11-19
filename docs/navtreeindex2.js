@@ -162,10 +162,14 @@ var NAVTREEINDEX2 =
 "functions_w.html":[2,3,0,19],
 "functions_~.html":[2,3,0,20],
 "globals.html":[3,1,0],
-"globals_defs.html":[3,1,2],
+"globals_defs.html":[3,1,3],
 "globals_func.html":[3,1,1],
+"globals_vars.html":[3,1,2],
 "hierarchy.html":[2,2],
 "index.html":[],
+"limits_8hpp.html":[3,0,0,1,0,0,0,3],
+"limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672":[3,0,0,1,0,0,0,3,0],
+"limits_8hpp_source.html":[3,0,0,1,0,0,0,3],
 "namespaces.html":[1,0],
 "namespacevex_1_1PS1Effects.html":[1,0,0,0],
 "pages.html":[],
@@ -245,9 +249,5 @@ var NAVTREEINDEX2 =
 "structvex_1_1TransformComponent.html#a32f8ea4f5db3bf9bb72187bf6a530da6":[2,0,0,41,17],
 "structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c":[1,0,0,42,3],
 "structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c":[2,0,0,41,3],
-"structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67":[1,0,0,42,22],
-"structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67":[2,0,0,41,22],
-"structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2":[1,0,0,42,25],
-"structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2":[2,0,0,41,25],
-"structvex_1_1TransformComponent.html#a3fc63dce8a4f8b53f9ea1047bc178d54":[1,0,0,42,34]
+"structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67":[1,0,0,42,22]
 };

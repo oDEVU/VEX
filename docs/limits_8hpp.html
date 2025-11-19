@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VEX Engine: vex::SceneLightsUBO Struct Reference</title>
+<title>VEX Engine: Core/src/components/backends/vulkan/limits.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,7 +71,7 @@ $(function() { codefold.init(); });
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('structvex_1_1SceneLightsUBO.html','','structvex_1_1SceneLightsUBO-members'); });
+$(function(){initNavTree('limits_8hpp.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -97,54 +97,78 @@ $(function(){initNavTree('structvex_1_1SceneLightsUBO.html','','structvex_1_1Sce
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">vex::SceneLightsUBO Struct Reference</div></div>
+  <div class="headertitle"><div class="title">limits.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>This files defines global variables defining vulkan limits.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &lt;sys/types.h&gt;</code><br />
+<code>#include &lt;glm/glm.hpp&gt;</code><br />
+</div>
+<p><a href="limits_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ae92a56756e934e733ed2fa36b4cec534" id="r_ae92a56756e934e733ed2fa36b4cec534"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae92a56756e934e733ed2fa36b4cec534">lightCount</a></td></tr>
-<tr class="memitem:a3a1ed2a515ce6cd1b83a0af96ef23736" id="r_a3a1ed2a515ce6cd1b83a0af96ef23736"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1Light.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a1ed2a515ce6cd1b83a0af96ef23736">lights</a> [MAX_DYNAMIC_LIGHTS]</td></tr>
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a2d8af3646b57b1d41ad37cc7a9596672" id="r_a2d8af3646b57b1d41ad37cc7a9596672"><td class="memItemLeft" align="right" valign="top">const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a> = 4096</td></tr>
+<tr class="memitem:a5057fca06ea6d234e3e12c26722654e9" id="r_a5057fca06ea6d234e3e12c26722654e9"><td class="memItemLeft" align="right" valign="top">const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5057fca06ea6d234e3e12c26722654e9">MAX_MODELS</a> = 8192</td></tr>
+<tr class="memitem:af18bf505a6121eafd5e33fae44bad81e" id="r_af18bf505a6121eafd5e33fae44bad81e"><td class="memItemLeft" align="right" valign="top">const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af18bf505a6121eafd5e33fae44bad81e">MAX_DYNAMIC_LIGHTS</a> = 255</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="uniforms_8hpp_source.html#l00032">32</a> of file <a class="el" href="uniforms_8hpp_source.html">uniforms.hpp</a>.</p>
-</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="ae92a56756e934e733ed2fa36b4cec534" name="ae92a56756e934e733ed2fa36b4cec534"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae92a56756e934e733ed2fa36b4cec534">&#9670;&#160;</a></span>lightCount</h2>
+<div class="textblock"><p>This files defines global variables defining vulkan limits. </p>
+<dl class="section author"><dt>Author</dt><dd>Eryk Roszkowski </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="limits_8hpp_source.html">limits.hpp</a>.</p>
+</div><a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="af18bf505a6121eafd5e33fae44bad81e" name="af18bf505a6121eafd5e33fae44bad81e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af18bf505a6121eafd5e33fae44bad81e">&#9670;&#160;</a></span>MAX_DYNAMIC_LIGHTS</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t vex::SceneLightsUBO::lightCount</td>
+          <td class="memname">const uint32_t MAX_DYNAMIC_LIGHTS = 255</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="uniforms_8hpp_source.html#l00033">33</a> of file <a class="el" href="uniforms_8hpp_source.html">uniforms.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="limits_8hpp_source.html#l00015">15</a> of file <a class="el" href="limits_8hpp_source.html">limits.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3a1ed2a515ce6cd1b83a0af96ef23736" name="a3a1ed2a515ce6cd1b83a0af96ef23736"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a1ed2a515ce6cd1b83a0af96ef23736">&#9670;&#160;</a></span>lights</h2>
+<a id="a5057fca06ea6d234e3e12c26722654e9" name="a5057fca06ea6d234e3e12c26722654e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5057fca06ea6d234e3e12c26722654e9">&#9670;&#160;</a></span>MAX_MODELS</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structvex_1_1Light.html">Light</a> vex::SceneLightsUBO::lights[MAX_DYNAMIC_LIGHTS]</td>
+          <td class="memname">const uint32_t MAX_MODELS = 8192</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="uniforms_8hpp_source.html#l00034">34</a> of file <a class="el" href="uniforms_8hpp_source.html">uniforms.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="limits_8hpp_source.html#l00014">14</a> of file <a class="el" href="limits_8hpp_source.html">limits.hpp</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Core/src/components/backends/vulkan/<a class="el" href="uniforms_8hpp_source.html">uniforms.hpp</a></li>
-</ul>
+<a id="a2d8af3646b57b1d41ad37cc7a9596672" name="a2d8af3646b57b1d41ad37cc7a9596672"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d8af3646b57b1d41ad37cc7a9596672">&#9670;&#160;</a></span>MAX_TEXTURES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const uint32_t MAX_TEXTURES = 4096</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo</a></b></dt><dd>Implement something to dynamically allocate resources and not rely on max textures and models </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="limits_8hpp_source.html#l00013">13</a> of file <a class="el" href="limits_8hpp_source.html">limits.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
@@ -158,7 +182,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>vex</b></li><li class="navelem"><a href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a></li>
+    <li class="navelem"><a href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><a href="dir_9e1921360d46161c020d536b432a8792.html">backends</a></li><li class="navelem"><a href="dir_08299eacb9396cb3f34cee2e653f299e.html">vulkan</a></li><li class="navelem"><a href="limits_8hpp.html">limits.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

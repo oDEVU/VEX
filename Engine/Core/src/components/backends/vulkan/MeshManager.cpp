@@ -8,6 +8,7 @@
 #include <iterator>
 #include <unordered_set>
 #include <SDL3/SDL.h>
+#include "limits.hpp"
 
 namespace vex {
     MeshManager::MeshManager(VulkanContext& context, std::shared_ptr<VulkanResources>& resources, VirtualFileSystem* vfs)
@@ -43,7 +44,7 @@ namespace vex {
             m_freeModelIds.pop_back();
         } else {
             newId = m_nextModelId++;
-            if (newId >= m_r_context.MAX_MODELS) {
+            if (newId >= MAX_MODELS) {
                 throw_error("Maximum model count exceeded");
             }
         }

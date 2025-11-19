@@ -8,6 +8,7 @@
 #include <entt/entt.hpp>
 #include <components/GameComponents/BasicComponents.hpp>
 #include <components/GameComponents/UiComponent.hpp>
+#include "limits.hpp"
 
 namespace vex {
     glm::vec3 extractCameraPosition(const glm::mat4& view) {
@@ -222,8 +223,8 @@ namespace vex {
 
                     SceneLightsUBO lightUBO;
                     lightUBO.lightCount = static_cast<uint32_t>(m_lights.size());
-                    if(lightUBO.lightCount > m_r_context.MAX_DYNAMIC_LIGHTS){
-                        lightUBO.lightCount = m_r_context.MAX_DYNAMIC_LIGHTS;
+                    if(lightUBO.lightCount > MAX_DYNAMIC_LIGHTS){
+                        lightUBO.lightCount = MAX_DYNAMIC_LIGHTS;
                     }
                     for (size_t i = 0; i < lightUBO.lightCount; ++i)
                     {

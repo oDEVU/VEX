@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VEX Engine: Class Members - Variables</title>
+<title>VEX Engine: Core/src/components/backends/vulkan/limits.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,7 +71,7 @@ $(function() { codefold.init(); });
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('functions_vars.html','',''); });
+$(function(){initNavTree('limits_8hpp_source.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -96,36 +96,28 @@ $(function(){initNavTree('functions_vars.html','',''); });
 </div>
 </div>
 
+<div class="header">
+  <div class="headertitle"><div class="title">limits.hpp</div></div>
+</div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all documented variables with links to the class documentation for each member:</div><ul>
-<li>affineWarping&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a132b454d664718ea4ecd1070c7583959">vex::enviroment</a></li>
-<li>ambientLight&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#ab03745583ed0f9d1b7aa12dea945be20">vex::enviroment</a></li>
-<li>ambientLightStrength&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#ad87ef5444451cd33ec46822445dc2540">vex::enviroment</a></li>
-<li>clearColor&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a787ebfd2502aa09f76ced24b3982730f">vex::enviroment</a></li>
-<li>color&#160;:&#160;<a class="el" href="structvex_1_1UIVertex.html#aaf0ff94db964d29bc86404125a484444">vex::UIVertex</a></li>
-<li>colorQuantization&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a19648949479db58802a3fd85e71b4f5e">vex::enviroment</a></li>
-<li>data&#160;:&#160;<a class="el" href="structvex_1_1VirtualFileSystem_1_1FileData.html#a297d73cd4ee60ea881e0d1c64dc59fd8">vex::VirtualFileSystem::FileData</a></li>
-<li>enablePS1Effects&#160;:&#160;<a class="el" href="structvex_1_1PushConstants.html#ad8a9caab3d87fb4de3e83d7017f7d1c7">vex::PushConstants</a></li>
-<li>gourardShading&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a099696b2a0f948fad8ac1b2624a53383">vex::enviroment</a></li>
-<li>model&#160;:&#160;<a class="el" href="structvex_1_1ModelUBO.html#a893fc29e79861249bd2cad9e7f88c604">vex::ModelUBO</a></li>
-<li>ntfsArtifacts&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a30d511632c871477abae3cdf7f028324">vex::enviroment</a></li>
-<li>passiveVertexJitter&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a44507fe643a64b249ac8d0971abe198f">vex::enviroment</a></li>
-<li>position&#160;:&#160;<a class="el" href="structvex_1_1UIVertex.html#a335a31eac61f5c5eecc283ca102f771b">vex::UIVertex</a></li>
-<li>proj&#160;:&#160;<a class="el" href="structvex_1_1CameraUBO.html#a863ab7518cd70c907345550da35fdc82">vex::CameraUBO</a></li>
-<li>size&#160;:&#160;<a class="el" href="structvex_1_1VirtualFileSystem_1_1FileData.html#a2ecb6cc392713f7718f4610c4489904e">vex::VirtualFileSystem::FileData</a></li>
-<li>sunDirection&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#ab3ab7907a38eab33de0f95f36ff787ab">vex::enviroment</a></li>
-<li>sunLight&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a6e4d74a0a8925df0ed423ccac2c0a92a">vex::enviroment</a></li>
-<li>texIndex&#160;:&#160;<a class="el" href="structvex_1_1UIVertex.html#ac09c638d80b1e96dfe3876e57eee08ca">vex::UIVertex</a></li>
-<li>uv&#160;:&#160;<a class="el" href="structvex_1_1UIVertex.html#ad6f8051d7f89df9aec7e81da71b3ffab">vex::UIVertex</a>, <a class="el" href="structvex_1_1Vertex.html#a1db72ea81494f63be7b4195717a38c5d">vex::Vertex</a></li>
-<li>vertexSnapping&#160;:&#160;<a class="el" href="structvex_1_1enviroment.html#a7b0286a765e6fba844288bbf7bcd8380">vex::enviroment</a></li>
-<li>view&#160;:&#160;<a class="el" href="structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89">vex::CameraUBO</a></li>
-</ul>
-</div><!-- contents -->
+<a href="limits_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;sys/types.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">   13</a></span><span class="keyword">const</span> uint32_t <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a> = 4096; <span class="comment">// This is already a little too much for my liking, i need to change how textures are stored/sent to gpu</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">const</span> uint32_t MAX_MODELS = 8192; <span class="comment">// This can be much higher no problem, but you probably wont even be able to use it as long as you used textured models.</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">const</span> uint32_t MAX_DYNAMIC_LIGHTS = 255; <span class="comment">// This should not be much higher, thats effectivelly per object, so its probably too much.</span></div>
+<div class="ttc" id="alimits_8hpp_html_a2d8af3646b57b1d41ad37cc7a9596672"><div class="ttname"><a href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a></div><div class="ttdeci">const uint32_t MAX_TEXTURES</div><div class="ttdef"><b>Definition</b> <a href="#l00013">limits.hpp:13</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
+    <li class="navelem"><a href="dir_c6310732a22f63c0c2fc5595561e68f1.html">Core</a></li><li class="navelem"><a href="dir_6635075fd29d94b1e79ef2060fed20a6.html">src</a></li><li class="navelem"><a href="dir_3da5c18f2e32f0267c3ca22901fd8466.html">components</a></li><li class="navelem"><a href="dir_9e1921360d46161c020d536b432a8792.html">backends</a></li><li class="navelem"><a href="dir_08299eacb9396cb3f34cee2e653f299e.html">vulkan</a></li><li class="navelem"><a href="limits_8hpp.html">limits.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

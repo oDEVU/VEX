@@ -110,158 +110,159 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;iterator&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;unordered_set&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;SDL3/SDL.h&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    MeshManager::MeshManager(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context, std::shared_ptr&lt;VulkanResources&gt;&amp; resources, <a class="code hl_class" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a>* vfs)</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        : m_r_context(context), m_p_resources(resources), m_vfs(vfs) {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;MeshManager initialized&quot;</span>);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    }</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    MeshManager::~MeshManager() {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        m_vulkanMeshes.clear();</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;MeshManager destroyed&quot;</span>);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    }</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    ModelObject* MeshManager::createModel(<span class="keyword">const</span> std::string&amp; name, MeshComponent meshComponent, TransformComponent transformComponent, Engine&amp; engine, entt::entity parent = entt::null){</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Constructing model: %s...&quot;</span>, name.c_str());</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        std::string tempName = name;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keyword">auto</span> view = engine.getRegistry().view&lt;NameComponent&gt;();</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            <span class="keyword">auto</span> meshComponent = view.get&lt;NameComponent&gt;(entity);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="keywordflow">if</span>(meshComponent.name == tempName){</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Warning: Object with name: &#39;%s already exists! All objects should have unique names.&quot;</span>, tempName.c_str());</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>                UUID uuidGenerator;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                tempName = tempName + uuidGenerator.generate_uuid();</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Info: Object created with name: &#39;%s&#39;, it is still recommended to not rely on this name for identification. It is different every app run.&quot;</span>, tempName.c_str());</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            }</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        }</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="comment">//m_engine.getRegistry().emplace&lt;NameComponent&gt;(m_entity, tempName);</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        uint32_t newId;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordflow">if</span> (!m_freeModelIds.empty()) {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            newId = m_freeModelIds.back();</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            m_freeModelIds.pop_back();</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            newId = m_nextModelId++;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="keywordflow">if</span> (newId &gt;= m_r_context.MAX_MODELS) {</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Maximum model count exceeded&quot;</span>);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            }</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        }</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="comment">//std::string realPath = GetAssetPath(path);</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        meshComponent.id = newId;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        meshComponent.textureNames.clear();</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="comment">//std::filesystem::path meshPath(meshComponent.meshData.meshPath);</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="comment">//meshPath.remove_filename();</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                std::unordered_set&lt;std::string&gt; uniqueTextures;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; submesh : meshComponent.meshData.submeshes) {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                    <span class="keywordflow">if</span> (!submesh.texturePath.empty()) {</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                        uniqueTextures.insert(submesh.texturePath);</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                        meshComponent.textureNames.push_back(submesh.texturePath);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                    }</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                }</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loading %zu submesh textures&quot;</span>, uniqueTextures.size());</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; texPath : uniqueTextures) {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Processing texture: %s&quot;</span>, texPath.c_str());</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                    <span class="keywordflow">if</span> (!m_p_resources-&gt;textureExists(texPath)) {</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                            m_p_resources-&gt;loadTexture(texPath, texPath, m_vfs);</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loaded texture: %s&quot;</span>, texPath.c_str());</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                            SDL_LogError(SDL_LOG_CATEGORY_ERROR,</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                                         <span class="stringliteral">&quot;Failed to load texture %s&quot;</span>,</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                                         texPath.c_str());</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                            <a class="code hl_function" href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a>(e);</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                        }</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Texture already exists: %s&quot;</span>, texPath.c_str());</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                    }</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                }</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating Vulkan mesh for %s&quot;</span>, tempName.c_str());</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            <span class="keywordflow">if</span>(m_vulkanMeshes.find(meshComponent.meshData.meshPath) == m_vulkanMeshes.end()){</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>                m_vulkanMeshes.emplace(meshComponent.meshData.meshPath, std::make_unique&lt;VulkanMesh&gt;(m_r_context));</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                m_vulkanMeshes.at(meshComponent.meshData.meshPath)-&gt;upload(meshComponent.meshData);</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                m_vulkanMeshes.at(meshComponent.meshData.meshPath)-&gt;addInstance();</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            }<span class="keywordflow">else</span>{</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>                m_vulkanMeshes.at(meshComponent.meshData.meshPath)-&gt;addInstance();</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Reusing same mesh model&quot;</span>);</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>            }</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>            <span class="comment">//m_vulkanMeshes.push_back(std::make_unique&lt;VulkanMesh&gt;(m_r_context));</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>            <span class="comment">//log(&quot;vulkanMesh id: %i&quot;, m_vulkanMeshes.size());</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Mesh upload successful&quot;</span>);</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            SDL_LogError(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;Mesh upload failed&quot;</span>);</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            m_vulkanMeshes.erase(meshComponent.meshData.meshPath);</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a>(e);</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        }</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        entt::entity modelEntity = engine.getRegistry().create();</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        ModelObject* modelObject = <span class="keyword">new</span> ModelObject(engine, tempName, meshComponent, transformComponent);</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        modelObject-&gt;cleanup = [<span class="keyword">this</span>](std::string&amp; tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        <span class="keywordflow">return</span> modelObject;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    }</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    MeshComponent MeshManager::loadMesh(<span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        MeshData meshData;</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        MeshComponent meshComponent;</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            std::string realPath = <a class="code hl_function" href="pathUtils_8hpp.html#aab0b916c80e8bc113d5a3184f132a061">GetAssetPath</a>(path);</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loading mesh data from: %s&quot;</span>, realPath.c_str());</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            <span class="keywordflow">if</span> (!m_vfs-&gt;file_exists(realPath)) {</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;File not found: &quot;</span> + realPath);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            }</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            meshData.loadFromFile(realPath, m_vfs);</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>            meshData.meshPath = realPath;</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;Mesh load failed&quot;</span>);</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a>(e);</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        }</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        meshComponent.meshData = std::move(meshData);</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        glm::vec3 min = glm::vec3(FLT_MAX);</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        glm::vec3 max = glm::vec3(-FLT_MAX);</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; submesh : meshComponent.meshData.submeshes) {</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>            <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; vertex : submesh.vertices) {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>                min = glm::min(min, vertex.position);</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>                max = glm::max(max, vertex.position);</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            }</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        }</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        glm::vec3 center = (min + max) * 0.5f;</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        <span class="keywordtype">float</span> radius = glm::length(max - center);</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        meshComponent.localCenter = center;</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        meshComponent.localRadius = radius;</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        <span class="keywordflow">return</span> meshComponent;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    }</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keywordtype">void</span> MeshManager::destroyModel(std::string&amp; name, MeshComponent meshComponent) {</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Freed model id&quot;</span>);</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        m_freeModelIds.push_back(meshComponent.id);</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        <span class="keywordflow">if</span>(getMeshByKey(meshComponent.meshData.meshPath)-&gt;getNumOfInstances() &lt;= 1){</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Erased VulkanMesh data&quot;</span>);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>            m_vulkanMeshes.erase(meshComponent.meshData.meshPath);</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i = 0; i &lt; meshComponent.textureNames.size(); i++){</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>                m_p_resources-&gt;unloadTexture(meshComponent.textureNames[i]);</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>            }</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Unloaded textures&quot;</span>);</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        }<span class="keywordflow">else</span>{</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>            getMeshByKey(meshComponent.meshData.meshPath)-&gt;removeInstance();</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        }</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    }</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>}</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="limits_8hpp.html">limits.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">namespace </span>vex {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    MeshManager::MeshManager(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context, std::shared_ptr&lt;VulkanResources&gt;&amp; resources, <a class="code hl_class" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a>* vfs)</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        : m_r_context(context), m_p_resources(resources), m_vfs(vfs) {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;MeshManager initialized&quot;</span>);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    }</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    MeshManager::~MeshManager() {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        m_vulkanMeshes.clear();</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;MeshManager destroyed&quot;</span>);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    }</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    ModelObject* MeshManager::createModel(<span class="keyword">const</span> std::string&amp; name, MeshComponent meshComponent, TransformComponent transformComponent, Engine&amp; engine, entt::entity parent = entt::null){</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Constructing model: %s...&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        std::string tempName = name;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">auto</span> view = engine.getRegistry().view&lt;NameComponent&gt;();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="keyword">auto</span> meshComponent = view.get&lt;NameComponent&gt;(entity);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            <span class="keywordflow">if</span>(meshComponent.name == tempName){</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Warning: Object with name: &#39;%s already exists! All objects should have unique names.&quot;</span>, tempName.c_str());</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                UUID uuidGenerator;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                tempName = tempName + uuidGenerator.generate_uuid();</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Info: Object created with name: &#39;%s&#39;, it is still recommended to not rely on this name for identification. It is different every app run.&quot;</span>, tempName.c_str());</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            }</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        }</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="comment">//m_engine.getRegistry().emplace&lt;NameComponent&gt;(m_entity, tempName);</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        uint32_t newId;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">if</span> (!m_freeModelIds.empty()) {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            newId = m_freeModelIds.back();</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            m_freeModelIds.pop_back();</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            newId = m_nextModelId++;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <span class="keywordflow">if</span> (newId &gt;= MAX_MODELS) {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Maximum model count exceeded&quot;</span>);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            }</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        }</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="comment">//std::string realPath = GetAssetPath(path);</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        meshComponent.id = newId;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        meshComponent.textureNames.clear();</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="comment">//std::filesystem::path meshPath(meshComponent.meshData.meshPath);</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="comment">//meshPath.remove_filename();</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                std::unordered_set&lt;std::string&gt; uniqueTextures;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; submesh : meshComponent.meshData.submeshes) {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                    <span class="keywordflow">if</span> (!submesh.texturePath.empty()) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                        uniqueTextures.insert(submesh.texturePath);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                        meshComponent.textureNames.push_back(submesh.texturePath);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                    }</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loading %zu submesh textures&quot;</span>, uniqueTextures.size());</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; texPath : uniqueTextures) {</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Processing texture: %s&quot;</span>, texPath.c_str());</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                    <span class="keywordflow">if</span> (!m_p_resources-&gt;textureExists(texPath)) {</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                            m_p_resources-&gt;loadTexture(texPath, texPath, m_vfs);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loaded texture: %s&quot;</span>, texPath.c_str());</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                            SDL_LogError(SDL_LOG_CATEGORY_ERROR,</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                                         <span class="stringliteral">&quot;Failed to load texture %s&quot;</span>,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                                         texPath.c_str());</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                            <a class="code hl_function" href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a>(e);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                        }</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Texture already exists: %s&quot;</span>, texPath.c_str());</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                    }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                }</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating Vulkan mesh for %s&quot;</span>, tempName.c_str());</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            <span class="keywordflow">if</span>(m_vulkanMeshes.find(meshComponent.meshData.meshPath) == m_vulkanMeshes.end()){</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                m_vulkanMeshes.emplace(meshComponent.meshData.meshPath, std::make_unique&lt;VulkanMesh&gt;(m_r_context));</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                m_vulkanMeshes.at(meshComponent.meshData.meshPath)-&gt;upload(meshComponent.meshData);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>                m_vulkanMeshes.at(meshComponent.meshData.meshPath)-&gt;addInstance();</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            }<span class="keywordflow">else</span>{</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>                m_vulkanMeshes.at(meshComponent.meshData.meshPath)-&gt;addInstance();</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Reusing same mesh model&quot;</span>);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>            }</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>            <span class="comment">//m_vulkanMeshes.push_back(std::make_unique&lt;VulkanMesh&gt;(m_r_context));</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            <span class="comment">//log(&quot;vulkanMesh id: %i&quot;, m_vulkanMeshes.size());</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Mesh upload successful&quot;</span>);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            SDL_LogError(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;Mesh upload failed&quot;</span>);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            m_vulkanMeshes.erase(meshComponent.meshData.meshPath);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a>(e);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        }</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        entt::entity modelEntity = engine.getRegistry().create();</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        ModelObject* modelObject = <span class="keyword">new</span> ModelObject(engine, tempName, meshComponent, transformComponent);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        modelObject-&gt;cleanup = [<span class="keyword">this</span>](std::string&amp; tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keywordflow">return</span> modelObject;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    }</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    MeshComponent MeshManager::loadMesh(<span class="keyword">const</span> std::string&amp; path) {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        MeshData meshData;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        MeshComponent meshComponent;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            std::string realPath = <a class="code hl_function" href="pathUtils_8hpp.html#aab0b916c80e8bc113d5a3184f132a061">GetAssetPath</a>(path);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loading mesh data from: %s&quot;</span>, realPath.c_str());</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            <span class="keywordflow">if</span> (!m_vfs-&gt;file_exists(realPath)) {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;File not found: &quot;</span> + realPath);</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>            }</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>            meshData.loadFromFile(realPath, m_vfs);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            meshData.meshPath = realPath;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;Mesh load failed&quot;</span>);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a>(e);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        }</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        meshComponent.meshData = std::move(meshData);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        glm::vec3 min = glm::vec3(FLT_MAX);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        glm::vec3 max = glm::vec3(-FLT_MAX);</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; submesh : meshComponent.meshData.submeshes) {</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>            <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; vertex : submesh.vertices) {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>                min = glm::min(min, vertex.position);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                max = glm::max(max, vertex.position);</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>            }</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        }</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        glm::vec3 center = (min + max) * 0.5f;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        <span class="keywordtype">float</span> radius = glm::length(max - center);</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        meshComponent.localCenter = center;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        meshComponent.localRadius = radius;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        <span class="keywordflow">return</span> meshComponent;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    }</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <span class="keywordtype">void</span> MeshManager::destroyModel(std::string&amp; name, MeshComponent meshComponent) {</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Freed model id&quot;</span>);</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        m_freeModelIds.push_back(meshComponent.id);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        <span class="keywordflow">if</span>(getMeshByKey(meshComponent.meshData.meshPath)-&gt;getNumOfInstances() &lt;= 1){</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Erased VulkanMesh data&quot;</span>);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            m_vulkanMeshes.erase(meshComponent.meshData.meshPath);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i = 0; i &lt; meshComponent.textureNames.size(); i++){</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>                m_p_resources-&gt;unloadTexture(meshComponent.textureNames[i]);</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            }</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Unloaded textures&quot;</span>);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        }<span class="keywordflow">else</span>{</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            getMeshByKey(meshComponent.meshData.meshPath)-&gt;removeInstance();</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        }</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    }</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>}</div>
 <div class="ttc" id="aBasicComponents_8hpp_html"><div class="ttname"><a href="BasicComponents_8hpp.html">BasicComponents.hpp</a></div><div class="ttdoc">Contains basic components like transform, camera, name components..</div></div>
 <div class="ttc" id="aMesh_8hpp_html"><div class="ttname"><a href="Mesh_8hpp.html">Mesh.hpp</a></div><div class="ttdoc">This file defines MeshData struct and all other structs needed for it.</div></div>
 <div class="ttc" id="aclassvex_1_1VirtualFileSystem_html"><div class="ttname"><a href="classvex_1_1VirtualFileSystem.html">vex::VirtualFileSystem</a></div><div class="ttdoc">This class provides abstraction of file system needed for loading packed and unpacked assets.</div><div class="ttdef"><b>Definition</b> <a href="VirtualFileSystem_8hpp_source.html#l00024">VirtualFileSystem.hpp:24</a></div></div>
@@ -269,6 +270,7 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="ttc" id="aerrorUtils_8hpp_html_a1e76fad2fc6915f89fbc9975e63e8f01"><div class="ttname"><a href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a></div><div class="ttdeci">void log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00052">errorUtils.hpp:52</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a8716696aa383ccb523980d921fbc4102"><div class="ttname"><a href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a></div><div class="ttdeci">void throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00043">errorUtils.hpp:43</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a9f39a20c9eb51d59239c0cad36ba6e77"><div class="ttname"><a href="errorUtils_8hpp.html#a9f39a20c9eb51d59239c0cad36ba6e77">handle_exception</a></div><div class="ttdeci">void handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrowing it.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00065">errorUtils.hpp:65</a></div></div>
+<div class="ttc" id="alimits_8hpp_html"><div class="ttname"><a href="limits_8hpp.html">limits.hpp</a></div><div class="ttdoc">This files defines global variables defining vulkan limits.</div></div>
 <div class="ttc" id="apathUtils_8hpp_html_aab0b916c80e8bc113d5a3184f132a061"><div class="ttname"><a href="pathUtils_8hpp.html#aab0b916c80e8bc113d5a3184f132a061">GetAssetPath</a></div><div class="ttdeci">std::string GetAssetPath(const std::string &amp;relativePath)</div><div class="ttdoc">Get the path of an asset. Its different for debug and release builds since VirtualFileSystem implemen...</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8hpp_source.html#l00066">pathUtils.hpp:66</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00024">context.hpp:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -193,31 +193,25 @@ $(function(){initNavTree('context_8hpp_source.html','',''); });
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        uint32_t currentFrame = 0;</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        uint32_t currentImageIndex = 0;</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <span class="keyword">const</span> uint32_t MAX_FRAMES_IN_FLIGHT = 3;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="structvex_1_1VulkanContext.html#a0eefcc95db8121d82137bc76f5335cd2">  101</a></span>        <span class="keyword">const</span> uint32_t <a class="code hl_variable" href="structvex_1_1VulkanContext.html#a0eefcc95db8121d82137bc76f5335cd2">MAX_TEXTURES</a> = 1024;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <span class="keyword">const</span> uint32_t MAX_MODELS = 1024;</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keyword">const</span> uint32_t MAX_DYNAMIC_LIGHTS = 255;</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        std::vector&lt;VkSemaphore&gt; imageAvailableSemaphores;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        std::vector&lt;VkSemaphore&gt; renderFinishedSemaphores;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        std::vector&lt;VkFence&gt; inFlightFences;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        VkDescriptorSetLayout descriptorSetLayout;</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        VkDescriptorSetLayout uboDescriptorSetLayout;</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        VkDescriptorSetLayout textureDescriptorSetLayout;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        std::vector&lt;VkSemaphore&gt; imageAvailableSemaphores;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        std::vector&lt;VkSemaphore&gt; renderFinishedSemaphores;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        std::vector&lt;VkFence&gt; inFlightFences;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        VkDescriptorSetLayout descriptorSetLayout;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        VkDescriptorSetLayout uboDescriptorSetLayout;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        VkDescriptorSetLayout textureDescriptorSetLayout;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        std::unordered_map&lt;std::string, uint32_t&gt; textureIndices;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        uint32_t nextTextureIndex = 0;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        glm::uvec2 currentRenderResolution;</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        std::unordered_map&lt;std::string, uint32_t&gt; textureIndices;</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        uint32_t nextTextureIndex = 0;</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        glm::uvec2 currentRenderResolution;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        <a class="code hl_struct" href="structvex_1_1enviroment.html">enviroment</a> m_enviroment;</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    } <a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <a class="code hl_struct" href="structvex_1_1enviroment.html">enviroment</a> m_enviroment;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    } VulkanContext;</div>
 </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>}</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}</div>
 <div class="ttc" id="aenviroment_8hpp_html"><div class="ttname"><a href="enviroment_8hpp.html">enviroment.hpp</a></div><div class="ttdoc">This file defines enviroment struct.</div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="#l00024">context.hpp:24</a></div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html_a0eefcc95db8121d82137bc76f5335cd2"><div class="ttname"><a href="structvex_1_1VulkanContext.html#a0eefcc95db8121d82137bc76f5335cd2">vex::VulkanContext::MAX_TEXTURES</a></div><div class="ttdeci">const uint32_t MAX_TEXTURES</div><div class="ttdef"><b>Definition</b> <a href="#l00101">context.hpp:101</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html_a146427df3fc36f89efe374be84e960b8"><div class="ttname"><a href="structvex_1_1VulkanContext.html#a146427df3fc36f89efe374be84e960b8">vex::VulkanContext::beginSingleTimeCommands</a></div><div class="ttdeci">VkCommandBuffer beginSingleTimeCommands()</div><div class="ttdoc">Function to begin single time command, used for stuff like creating vulkan image when loading texture...</div><div class="ttdef"><b>Definition</b> <a href="#l00059">context.hpp:59</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html_abb884624fe4e0b8765ed87c5cca04a11"><div class="ttname"><a href="structvex_1_1VulkanContext.html#abb884624fe4e0b8765ed87c5cca04a11">vex::VulkanContext::endSingleTimeCommands</a></div><div class="ttdeci">void endSingleTimeCommands(VkCommandBuffer commandBuffer)</div><div class="ttdoc">Function to end single time command.</div><div class="ttdef"><b>Definition</b> <a href="#l00079">context.hpp:79</a></div></div>
 <div class="ttc" id="astructvex_1_1enviroment_html"><div class="ttname"><a href="structvex_1_1enviroment.html">vex::enviroment</a></div><div class="ttdoc">This struct is used to hold all enviroment settings. eg. shading details or lighting setup.</div><div class="ttdef"><b>Definition</b> <a href="enviroment_8hpp_source.html#l00013">enviroment.hpp:13</a></div></div>

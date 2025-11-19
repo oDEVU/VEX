@@ -1,7 +1,7 @@
 var searchData=
 [
   ['matrix_0',['matrix',['../structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc',1,'vex::TransformComponent']]],
-  ['max_5ftextures_1',['MAX_TEXTURES',['../structvex_1_1VulkanContext.html#a0eefcc95db8121d82137bc76f5335cd2',1,'vex::VulkanContext']]],
+  ['max_5ftextures_1',['MAX_TEXTURES',['../limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672',1,'limits.hpp']]],
   ['mesh_2ehpp_2',['Mesh.hpp',['../Mesh_8hpp.html',1,'']]],
   ['meshcomponent_3',['MeshComponent',['../structvex_1_1MeshComponent.html',1,'vex']]],
   ['meshdata_4',['MeshData',['../structvex_1_1MeshData.html',1,'vex']]],

@@ -6,6 +6,7 @@
 
 #pragma once
 #include <glm/glm.hpp>
+#include "limits.hpp"
 
 namespace vex {
     /// @brief Camera uniform buffer object.
@@ -30,7 +31,7 @@ namespace vex {
 
     struct SceneLightsUBO {
         alignas(4) uint32_t lightCount;
-        alignas(16) Light lights[255]; // Light is already glm::vec4 position + glm::vec4 color
+        alignas(16) Light lights[MAX_DYNAMIC_LIGHTS]; // Light is already glm::vec4 position + glm::vec4 color
     };
 
     /// @brief Push constants, holds both environment and model information.

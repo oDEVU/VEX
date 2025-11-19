@@ -136,10 +136,10 @@ namespace vex {
 
         uint32_t textureIndex = resources.getTextureIndex(textureName);
 
-        if (textureIndex >= m_r_context.MAX_TEXTURES) {
+        if (textureIndex >= MAX_TEXTURES) {
             SDL_LogError(SDL_LOG_CATEGORY_RENDER,
                        "Invalid texture index %u for '%s' (Max: %u)",
-                       textureIndex, textureName.c_str(), m_r_context.MAX_TEXTURES);
+                       textureIndex, textureName.c_str(), MAX_TEXTURES);
             textureIndex = 0;
         }
 
@@ -247,10 +247,10 @@ namespace vex {
 
         uint32_t textureIndex = resources.getTextureIndex(textureName);
 
-        if (textureIndex >= m_r_context.MAX_TEXTURES) {
+        if (textureIndex >= MAX_TEXTURES) {
             SDL_LogError(SDL_LOG_CATEGORY_RENDER,
                        "Invalid texture index %u for '%s' (Max: %u)",
-                       textureIndex, textureName.c_str(), m_r_context.MAX_TEXTURES);
+                       textureIndex, textureName.c_str(), MAX_TEXTURES);
             textureIndex = 0;
         }
 
@@ -350,10 +350,10 @@ namespace vex {
             uint32_t textureIndex = resources.getTextureIndex(textureName);
             //log("Invalid texture index %u for '%s'", textureIndex, textureName.c_str());
 
-            if (textureIndex >= m_r_context.MAX_TEXTURES) {
+            if (textureIndex >= MAX_TEXTURES) {
                 SDL_LogError(SDL_LOG_CATEGORY_RENDER,
                            "Invalid texture index %u for '%s' (Max: %u)",
-                           textureIndex, textureName.c_str(), m_r_context.MAX_TEXTURES);
+                           textureIndex, textureName.c_str(), MAX_TEXTURES);
                 textureIndex = 0;
             }
 

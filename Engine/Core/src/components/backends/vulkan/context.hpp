@@ -97,11 +97,6 @@ namespace vex {
         uint32_t currentImageIndex = 0;
         const uint32_t MAX_FRAMES_IN_FLIGHT = 3;
 
-        /// @todo Implement something to dynamically allocate resources and not rely on max textures and models
-        const uint32_t MAX_TEXTURES = 1024;
-        const uint32_t MAX_MODELS = 1024;
-        const uint32_t MAX_DYNAMIC_LIGHTS = 255;
-
         std::vector<VkSemaphore> imageAvailableSemaphores;
         std::vector<VkSemaphore> renderFinishedSemaphores;
         std::vector<VkFence> inFlightFences;

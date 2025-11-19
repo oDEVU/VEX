@@ -6,6 +6,7 @@
 #include <limits>
 #include <cassert>
 #include <array>
+#include "limits.hpp"
 
 namespace vex {
     VulkanSwapchainManager::VulkanSwapchainManager(VulkanContext& context, SDL_Window* window) : m_r_context(context) {

@@ -3,6 +3,7 @@
 #include <volk.h>
 #include <vk_mem_alloc.h>
 #include <SDL3/SDL_vulkan.h>
+#include "limits.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../../thirdparty/stb/stb_image.h"
@@ -181,7 +182,7 @@ namespace vex {
         m_textureAllocations[name] = textureAlloc;
         m_textureViews[name] = textureView;
 
-            if (m_r_context.textureIndices.size() >= m_r_context.MAX_TEXTURES) {
+            if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
                 throw_error("Exceeded maximum texture count");
             }
             m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
@@ -228,12 +229,12 @@ namespace vex {
                           &m_cameraBuffers[i], &m_cameraAllocs[i], nullptr);
 
             // Model UBO (dynamic)
-            bufferInfo.size = sizeof(ModelUBO) * m_r_context.MAX_MODELS;
+            bufferInfo.size = sizeof(ModelUBO) * MAX_MODELS;
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                           &m_modelBuffers[i], &m_modelAllocs[i], nullptr);
 
             // Light UBO (dynamic)
-            bufferInfo.size = sizeof(SceneLightsUBO) * m_r_context.MAX_MODELS;
+            bufferInfo.size = sizeof(SceneLightsUBO) * MAX_MODELS;
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                             &m_lightBuffers[i], &m_lightAllocs[i], nullptr);
         }
@@ -293,21 +294,21 @@ namespace vex {
 
         // Model UBO (dynamic)
         poolSizes[1].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        poolSizes[1].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_MODELS;
+        poolSizes[1].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_MODELS;
 
         // Light UBO (dynamic)
         poolSizes[2].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
-        poolSizes[2].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_MODELS;
+        poolSizes[2].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_MODELS;
 
         // Textures
         poolSizes[3].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[3].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES;
+        poolSizes[3].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_TEXTURES;
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
         poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (3 + m_r_context.MAX_TEXTURES);
+        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (3 + MAX_TEXTURES);
 
         log("Creating descriptor pool with %d max sets", poolInfo.maxSets);
         if (vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS) {
@@ -396,10 +397,10 @@ namespace vex {
     }
 
     void VulkanResources::updateModelUBO(uint32_t frameIndex, uint32_t modelIndex, const ModelUBO& data) {
-        if (modelIndex >= m_r_context.MAX_MODELS) {
+        if (modelIndex >= MAX_MODELS) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                          "Model index %u exceeds MAX_MODELS (%u)",
-                         modelIndex, m_r_context.MAX_MODELS);
+                         modelIndex, MAX_MODELS);
             return;
         }
         void* mapped;
@@ -410,10 +411,10 @@ namespace vex {
     }
 
     void VulkanResources::updateLightUBO(uint32_t frameIndex, uint32_t modelIndex, const SceneLightsUBO& data) {
-        if (modelIndex >= m_r_context.MAX_MODELS) {
+        if (modelIndex >= MAX_MODELS) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                          "Model index %u exceeds MAX_MODELS (%u)",
-                         modelIndex, m_r_context.MAX_MODELS);
+                         modelIndex, MAX_MODELS);
             return;
         }
         void* mapped;
@@ -505,12 +506,12 @@ namespace vex {
     }
 
     void VulkanResources::createPerMeshTextureSets() {
-        log("Creating %d texture descriptor sets", m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES);
+        log("Creating %d texture descriptor sets", m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_TEXTURES);
 
-        m_textureDescriptorSets.resize(m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES);
+        m_textureDescriptorSets.resize(m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_TEXTURES);
 
         std::vector<VkDescriptorSetLayout> layouts(
-            m_r_context.MAX_FRAMES_IN_FLIGHT * m_r_context.MAX_TEXTURES,
+            m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_TEXTURES,
             m_r_context.textureDescriptorSetLayout
         );
 
@@ -532,7 +533,7 @@ namespace vex {
 
         std::vector<VkWriteDescriptorSet> writes;
         for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
-            for (uint32_t texIdx = 0; texIdx < m_r_context.MAX_TEXTURES; ++texIdx) {
+            for (uint32_t texIdx = 0; texIdx < MAX_TEXTURES; ++texIdx) {
                 VkWriteDescriptorSet write{};
                 write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                 write.dstSet = getTextureDescriptorSet(frame, texIdx);
@@ -549,11 +550,11 @@ namespace vex {
 
 
     VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) {
-        const uint32_t index = frameIndex * m_r_context.MAX_TEXTURES + textureIndex;
+        const uint32_t index = frameIndex * MAX_TEXTURES + textureIndex;
         if (index >= m_textureDescriptorSets.size()) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                        "Texture index out of bounds (Frame: %u, TexIndex: %u, Max: %u)",
-                       frameIndex, textureIndex, m_r_context.MAX_TEXTURES);
+                       frameIndex, textureIndex, MAX_TEXTURES);
             return VK_NULL_HANDLE;
         }
         return m_textureDescriptorSets[index];
@@ -581,10 +582,10 @@ namespace vex {
         void VulkanResources::loadTexture(const std::string& path, const std::string& name, VirtualFileSystem *vfs) {
             std::string fullPath = path;//"Assets/" + std::string(path.c_str());
 
-            if (m_r_context.textureIndices.size() >= m_r_context.MAX_TEXTURES) {
+            if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
                 SDL_LogError(SDL_LOG_CATEGORY_ERROR,
                            "Maximum texture count (%u) reached!",
-                           m_r_context.MAX_TEXTURES);
+                           MAX_TEXTURES);
                 return;
             }
 
@@ -752,7 +753,7 @@ namespace vex {
             m_textureAllocations[name] = textureAlloc;
             m_textureViews[name] = textureView;
 
-                if (m_r_context.textureIndices.size() >= m_r_context.MAX_TEXTURES) {
+                if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
                     throw_error("Exceeded maximum texture count");
                 }
                 m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
