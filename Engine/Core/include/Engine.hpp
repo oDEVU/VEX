@@ -82,6 +82,7 @@ public:
     std::shared_ptr<PhysicsSystem> getPhysicsSystem() { return m_physicsSystem; }
     std::shared_ptr<SceneManager> getSceneManager();
     std::shared_ptr<VexUI> createVexUI();// { return std::make_unique<VexUI>(m_interface->getContext(), m_vfs.get(), m_interface->getResources()); }
+    int GetCurrentFrame() { return m_frame; }
 
     /// @brief Internal virtual function for handling window/keyboard events.
     /// @param SDL_Event - Event to process.

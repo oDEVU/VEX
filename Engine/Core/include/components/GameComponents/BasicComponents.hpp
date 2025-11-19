@@ -328,6 +328,7 @@ struct MeshComponent {
     uint32_t id = UINT32_MAX;
     std::vector<std::string> textureNames;
     RenderType renderType = RenderType::OPAQUE;
+    glm::vec4 color = glm::vec4(1.f);
 
     // Simple bounding data
     glm::vec3 localCenter = glm::vec3(0.0f);

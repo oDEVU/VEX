@@ -341,7 +341,7 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution, std::vector<Light> lights) const {
+            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution, std::vector<Light> lights, glm::vec4 color) const {
 
         std::string currentTexture = "";
         for (size_t i = 0; i < m_submeshBuffers.size(); i++) {
@@ -405,7 +405,7 @@ namespace vex {
                 }
                 modelPush.color = glm::vec4(1.0f);
             } else {
-                modelPush.color = glm::vec4(1.0f);
+                modelPush.color = color;
                 if(!textureName.empty()) {
                     log("Missing texture: %s", textureName.c_str());
                 }

@@ -47,3 +47,8 @@ public static const int COLOR_QUANTIZATION = 0x4;
 public static const int VERTEX_JITTER = 0x8;
 public static const int NTSC_ARTIFACTS = 0x10;
 public static const int GOURAUD_SHADING = 0x20;
+
+public bool HasInValidUV(float2 uv)
+{
+    return uv.x <= -10000.0;
+}

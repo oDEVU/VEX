@@ -1,0 +1,57 @@
+{
+  "environment": {
+    "lighting": {
+      "ambientLight": [0.12, 0.15, 0.3],
+      "ambientLightStrength": 0.3,
+      "sunLight": [0.05, 0.05, 0.05, 1.0],
+      "sunDirection": [1.0, 1.0, -1.0],
+      "clearColor": [0.0, 0.0, 0.0]
+    },
+    "shading": {
+      "gouraud": true,
+      "passiveVertexJitter": true,
+      "vertexSnapping": true,
+      "affineTextureWarping": true,
+      "colorQuantization": true,
+      "ntfsArtifacts": true
+    }
+  },
+  "objects": [
+    {
+      "type": "Player",
+      "name": "Player",
+      "components": [
+        {
+          "type": "TransformComponent",
+          "position": [-65.0, 9.5, -28.0],
+          "rotation": [-25.0, 270.0, 0.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      ]
+    },
+    {
+      "type": "CameraObject",
+      "name": "mainCamera",
+      "parent": "Player",
+      "components": [
+        {
+          "type": "TransformComponent",
+          "position": [0.0, 0.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0],
+          "scale": [1.0, 1.0, 1.0]
+        },
+        {
+          "type": "CameraComponent",
+          "fov": 90.0,
+          "nearPlane": 0.1,
+          "farPlane": 1000.0
+        }
+      ]
+    },
+    {
+      "type": "Map",
+      "name": "Map",
+      "components": []
+    }
+  ]
+}

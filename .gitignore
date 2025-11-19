@@ -4,3 +4,5 @@ Intermediate
 .zed
 .cache
 compile_commands.json
+perf.data
+perf.data.old

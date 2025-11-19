@@ -82,7 +82,7 @@ float4 fragMain(VSOutput input, float4 fragCoord : SV_Position) : SV_Target {
 
     float4 texColor = texSampler.Sample(texSamplerState, uv);
     float4 pushColor = push.color;
-    bool isUntextured = (uv.x < 0.0 || uv.y < 0.0);
+    bool isUntextured = HasInValidUV(uv);//false;//(uv.x < 0.0 || uv.y < 0.0);
 
     if (isEnabled(COLOR_QUANTIZATION)) {
         float4 c = isUntextured ? pushColor : texColor;

@@ -1,0 +1,22 @@
+{
+  "root": {
+    "layout": "column",
+    "justify": "space-between",
+    "align": "flex-start",
+    "zindex": 1,
+    "padding": 8,
+    "children": [
+      {
+        "type": "label",
+        "id": "fps",
+        "text": "FPS: 0",
+        "size": [400, 20],
+        "style": {
+          "font": "Assets/ui/fonts/Pixeled.ttf",
+          "size": 14,
+          "color": [1.0, 1.0, 1.0, 1.0]
+        }
+      }
+    ]
+  }
+}

@@ -235,7 +235,7 @@ namespace vex {
 
                     if (mesh.renderType == RenderType::OPAQUE) {
                         auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
-                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution, m_lights);
+                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution, m_lights, modelView.get<MeshComponent>(entity).color);
                         //modelIndex++;
                     } else if (mesh.renderType == RenderType::TRANSPARENT) {
                         //float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);

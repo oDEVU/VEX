@@ -280,7 +280,7 @@ public:
                         aiMesh->mTextureCoords[0][i].y
                     };
                 } else {
-                    submesh.vertices[i].uv = glm::vec2(-1.0f);
+                    submesh.vertices[i].uv = glm::vec2(-100000.f);
                 }
             }
 

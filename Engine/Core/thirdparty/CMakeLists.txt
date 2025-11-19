@@ -14,7 +14,7 @@ set(SDL_VULKAN ON CACHE BOOL "Enable Vulkan")
 if(WIN32)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
-add_subdirectory(SDL)
+add_subdirectory(SDL SYSTEM)
 
 # volk with multi-platform support
 if(WIN32)
@@ -38,7 +38,7 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         VK_USE_PLATFORM_XCB_KHR
     )
 endif()
-add_subdirectory(volk)
+add_subdirectory(volk SYSTEM)
 
 #yoga
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -50,7 +50,7 @@ set(YOGA_ENABLE_BENCHMARKS OFF CACHE BOOL "Disable Yoga benchmarks" FORCE)
 set(YOGA_SKIP_TESTS TRUE CACHE INTERNAL "Skip Yoga tests" FORCE)
 set(YOGA_SKIP_BENCHMARKS TRUE CACHE INTERNAL "Skip Yoga benchmarks" FORCE)
 set(YOGA_BUILD_TESTS OFF CACHE BOOL "Disable Yoga test builds" FORCE)
-add_subdirectory(yoga)
+add_subdirectory(yoga SYSTEM)
 
 # Check what Yoga target is available
 if(TARGET yoga)
@@ -70,7 +70,7 @@ endif()
 set(VMA_STATIC_VULKAN_FUNCTIONS OFF)
 set(VMA_DYNAMIC_VULKAN_FUNCTIONS ON)
 find_package(Vulkan REQUIRED)
-add_subdirectory(VulkanMemoryAllocator)
+add_subdirectory(VulkanMemoryAllocator SYSTEM)
 
 # assimp
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
@@ -82,19 +82,17 @@ set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
 set(BUILD_GTEST OFF CACHE BOOL "Disable GoogleTest build" FORCE)
 set(BUILD_GMOCK OFF CACHE BOOL "Disable GoogleMock build" FORCE)
 set(INSTALL_GTEST OFF CACHE BOOL "Disable GoogleTest install" FORCE)
-add_subdirectory(assimp)
+add_subdirectory(assimp SYSTEM)
 
-if(WIN32)
-    if(TARGET gtest)
-        target_compile_options(gtest PRIVATE -Wno-character-conversion)
-    endif()
-    if(TARGET gtest_main)
-        target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
-    endif()
+if(TARGET gtest)
+    target_compile_options(gtest PRIVATE -Wno-character-conversion)
+endif()
+if(TARGET gtest_main)
+    target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
 endif()
 
 #entt
-add_subdirectory(entt)
+add_subdirectory(entt SYSTEM)
 
 #jolt
 # set(JPH_SHARED_LIBRARY ON "")
@@ -109,12 +107,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(JPH_DEBUG_RENDERER ON)
 endif()
 
-add_subdirectory(JoltPhysics/Build)
+add_subdirectory(JoltPhysics/Build SYSTEM)
 
 #nlohmann::json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 set(JSON_Install OFF CACHE INTERNAL "")
-add_subdirectory(json)
+add_subdirectory(json SYSTEM)
 
 # dirty fix for assimp not compiling in realese
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
