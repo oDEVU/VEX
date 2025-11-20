@@ -31,6 +31,7 @@ struct TransformComponent {
     entt::entity parent = entt::null;
     bool lastTransformed = false;
     entt::registry& m_registry;
+    bool physicsAffected = false;
     public:
     /// @brief Copy Constructor. Copies all data members and maintains the reference to the same registry.
     TransformComponent(const TransformComponent& other)
@@ -84,9 +85,15 @@ struct TransformComponent {
         return (lastTransformed || result);
     }
 
+    /// @brief returns if objet is affected by physics.
+    bool isPhysicsAffected(){
+        return physicsAffected;
+    }
+
     /// @brief Updates transform status after physics calculations. DO NOT CALL MANUALLY if you dont want to invalidate last transform changes for physics objects.
     void updatedPhysicsTransform(){
         lastTransformed = false;
+        physicsAffected = true;
     }
 
     void enableLastTransformed(){

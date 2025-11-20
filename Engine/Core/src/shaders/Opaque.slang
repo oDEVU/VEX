@@ -8,101 +8,121 @@ import effects.GouraudShading;
 import effects.VertexSnapping;
 import effects.VertexJitter;
 
-[[vk::binding(0, 1)]] Texture2D<float4> texSampler;
-[[vk::binding(0, 1)]] SamplerState texSamplerState;
+[[vk::binding(0, 1)]]
+Texture2D<float4> texSampler;
+[[vk::binding(0, 1)]]
+SamplerState texSamplerState;
 
 struct VSInput {
-    [[vk::location(0)]] float3 position : POSITION;
-    [[vk::location(1)]] float3 normal : NORMAL;
-    [[vk::location(2)]] float2 uv : TEXCOORD0;
+  [[vk::location(0)]]
+  float3 position : POSITION;
+  [[vk::location(1)]]
+  float3 normal : NORMAL;
+  [[vk::location(2)]]
+  float2 uv : TEXCOORD0;
 };
 
 struct VSOutput {
-    float4 position : SV_POSITION;
-    [[vk::location(0)]] float3 fragNormal : NORMAL;
-    [[vk::location(1)]] noperspective float2 fragUV : TEXCOORD0;
-    [[vk::location(2)]] float fragDepth : TEXCOORD1;
-    [[vk::location(3)]] float fragDiff : TEXCOORD2;
-    [[vk::location(4)]] float3 fragLights : TEXCOORD3;
-    [[vk::location(5)]] noperspective float2 fragUVNum : TEXCOORD4;
-    [[vk::location(6)]] noperspective float fragInvW : TEXCOORD5;
+  float4 position : SV_POSITION;
+  [[vk::location(0)]]
+  float3 fragNormal : NORMAL;
+  [[vk::location(1)]]
+  noperspective float2 fragUV : TEXCOORD0;
+  [[vk::location(2)]]
+  float fragDepth : TEXCOORD1;
+  [[vk::location(3)]]
+  float fragDiff : TEXCOORD2;
+  [[vk::location(4)]]
+  float3 fragLights : TEXCOORD3;
+  [[vk::location(5)]]
+  noperspective float2 fragUVNum : TEXCOORD4;
+  [[vk::location(6)]]
+  noperspective float fragInvW : TEXCOORD5;
 };
 
 [shader("vertex")]
-VSOutput vertMain(VSInput input, uint vertId : SV_VertexID) {
-    VSOutput output;
+VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
+  VSOutput output;
 
-    float4 worldPos = mul(object.model, float4(input.position, 1.0));
-    worldPos = applySnapping(worldPos, isEnabled(VERTEX_SNAPPING));
+  float4 worldPos = mul(push.model, float4(input.position, 1.0));
+  worldPos = applySnapping(worldPos, isEnabled(VERTEX_SNAPPING));
 
-    float4 viewPos = mul(camera.view, worldPos);
-    float4 clipPos = mul(camera.proj, viewPos);
+  float4 viewPos = mul(scene.view, worldPos);
+  float4 clipPos = mul(scene.proj, viewPos);
 
-    float2 screenPos = (clipPos.xy / clipPos.w * 0.5 + 0.5) * push.renderResolution;
-    screenPos = applyJitter(screenPos, isEnabled(VERTEX_JITTER));
+  float2 screenPos =
+      (clipPos.xy / clipPos.w * 0.5 + 0.5) * scene.renderResolution;
+  screenPos = applyJitter(screenPos, isEnabled(VERTEX_JITTER));
 
-    clipPos.xy = (screenPos / push.windowResolution * 2.0 - 1.0) * clipPos.w;
+  clipPos.xy = (screenPos / scene.windowResolution * 2.0 - 1.0) * clipPos.w;
 
-    output.position = clipPos;
+  output.position = clipPos;
 
-    float3x3 normalMat = transpose(inverse33((float3x3)object.model));
-    output.fragNormal = normalize(mul(normalMat, input.normal));
+  float3x3 normalMat = transpose(inverse33((float3x3)push.model));
+  output.fragNormal = normalize(mul(normalMat, input.normal));
 
-    float3 dynamicLight = float3(0.0, 0.0, 0.0);
+  float3 dynamicLight = float3(0.0, 0.0, 0.0);
 
-    for (uint i = 0; i < objectLights.lightCount; ++i) {
-        Light light = objectLights.lights[i];
-        float3 toLight = light.position - worldPos.xyz;
-        float dist = length(toLight);
+  for (uint i = 0; i < objectLights.lightCount; ++i) {
+    Light light = objectLights.lights[i];
+    float3 toLight = light.position - worldPos.xyz;
+    float dist = length(toLight);
 
-        if (dist < light.radius) {
-            float3 L = normalize(toLight);
-            float NdotL = max(dot(output.fragNormal, L), 0.0);
-            float distSqr = dist * dist;
-            float atten = light.intensity / max(distSqr, 0.01);
-            dynamicLight += NdotL * atten * light.color * light.intensity;
-        }
+    if (dist < light.radius) {
+      float3 L = normalize(toLight);
+      float NdotL = max(dot(output.fragNormal, L), 0.0);
+      float distSqr = dist * dist;
+      float atten = light.intensity / max(distSqr, 0.01);
+      dynamicLight += NdotL * atten * light.color * light.intensity;
     }
+  }
 
-    output.fragLights = dynamicLight;
-    output.fragDiff = computeDiffuse(output.fragNormal, isEnabled(GOURAUD_SHADING));
-    output.fragUV = input.uv;
-    output.fragDepth = viewPos.z;
-    float invW = 1.0 / clipPos.w;
-    output.fragUVNum = input.uv * invW;
-    output.fragInvW = invW;
+  output.fragLights = dynamicLight;
+  output.fragDiff =
+      computeDiffuse(output.fragNormal, isEnabled(GOURAUD_SHADING));
+  output.fragUV = input.uv;
+  output.fragDepth = viewPos.z;
+  float invW = 1.0 / clipPos.w;
+  output.fragUVNum = input.uv * invW;
+  output.fragInvW = invW;
 
-    return output;
+  return output;
 }
 
 [shader("fragment")]
-float4 fragMain(VSOutput input, float4 fragCoord : SV_Position) : SV_Target {
-    float2 uv = applyAffineUV(input.fragUV, input.fragUVNum, input.fragInvW, isEnabled(AFFINE_WARPING));
-    float2 pixelCoord = fragCoord.xy;
+float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
+  float2 uv = applyAffineUV(input.fragUV, input.fragUVNum, input.fragInvW,
+                            isEnabled(AFFINE_WARPING));
+  float2 pixelCoord = fragCoord.xy;
 
-    float4 texColor = texSampler.Sample(texSamplerState, uv);
-    float4 pushColor = push.color;
-    bool isUntextured = HasInValidUV(uv);//false;//(uv.x < 0.0 || uv.y < 0.0);
+  float4 texColor = texSampler.Sample(texSamplerState, uv);
+  float4 pushColor = push.color;
+  bool isUntextured = HasInValidUV(uv); // false;//(uv.x < 0.0 || uv.y < 0.0);
 
-    if (isEnabled(COLOR_QUANTIZATION)) {
-        float4 c = isUntextured ? pushColor : texColor;
-        c = applyQuantization(c, pixelCoord, true);
-        if (isUntextured) pushColor = c; else texColor = c;
-    }
+  if (isEnabled(COLOR_QUANTIZATION)) {
+    float4 c = isUntextured ? pushColor : texColor;
+    c = applyQuantization(c, pixelCoord, true);
+    if (isUntextured)
+      pushColor = c;
+    else
+      texColor = c;
+  }
 
-    texColor.rgb = applyNTSC(texColor.rgb, uv, pixelCoord, isEnabled(NTSC_ARTIFACTS));
+  texColor.rgb =
+      applyNTSC(texColor.rgb, uv, pixelCoord, isEnabled(NTSC_ARTIFACTS));
 
-    float diff = isEnabled(GOURAUD_SHADING)
-        ? input.fragDiff
-        : computeDiffuse(input.fragNormal, true);
+  float diff = isEnabled(GOURAUD_SHADING)
+                   ? input.fragDiff
+                   : computeDiffuse(input.fragNormal, true);
 
-    //diff += input.fragLights;
+  // diff += input.fragLights;
 
-    float3 ambient = push.ambientLight.xyz * push.ambientLightStrength;
-    float3 sunLight = diff * push.sunLight.xyz;
-    //float3 lighting = ambient + (diff * push.sunLight.xyz);
-    float3 lighting = ambient + sunLight + input.fragLights;
-    lighting = saturate(lighting);
+  float3 ambient = scene.ambientLight.xyz * scene.ambientLightStrength;
+  float3 sunLight = diff * scene.sunLight.xyz;
+  // float3 lighting = ambient + (diff * push.sunLight.xyz);
+  float3 lighting = ambient + sunLight + input.fragLights;
+  lighting = saturate(lighting);
 
-    return isUntextured ? (pushColor * float4(lighting, 1.0)) : (texColor * float4(lighting, 1.0));
+  return isUntextured ? (pushColor * float4(lighting, 1.0))
+                      : (texColor * float4(lighting, 1.0));
 }

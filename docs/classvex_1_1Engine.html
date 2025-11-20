@@ -127,11 +127,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a28373df4e7c7486b85ae6bf4277d73b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function allowing for changing environment settings at runtime.  <br /></td></tr>
 <tr class="memitem:a33dec2c542e1f8889dc19b0a2b55478a" id="r_a33dec2c542e1f8889dc19b0a2b55478a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1enviroment.html">enviroment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33dec2c542e1f8889dc19b0a2b55478a">getEnvironmentSettings</a> ()</td></tr>
 <tr class="memdesc:a33dec2c542e1f8889dc19b0a2b55478a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current environment settings.  <br /></td></tr>
-<tr class="memitem:ad742c09d30ad9c6c6639ee0cdc92bf24" id="r_ad742c09d30ad9c6c6639ee0cdc92bf24"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1Interface.html">Interface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad742c09d30ad9c6c6639ee0cdc92bf24">getInterface</a> ()</td></tr>
+<tr class="memitem:a74eff1e68d585630c2a2524c2ac13599" id="r_a74eff1e68d585630c2a2524c2ac13599"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Interface.html">Interface</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74eff1e68d585630c2a2524c2ac13599">getInterface</a> ()</td></tr>
 <tr class="memitem:a115513ae470c83ccf9103c9143a701ac" id="r_a115513ae470c83ccf9103c9143a701ac"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a115513ae470c83ccf9103c9143a701ac">getFileSystem</a> ()</td></tr>
 <tr class="memitem:acafe558aa2cbe5a6c77a8482b3d2caec" id="r_acafe558aa2cbe5a6c77a8482b3d2caec"><td class="memItemLeft" align="right" valign="top">entt::registry &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acafe558aa2cbe5a6c77a8482b3d2caec">getRegistry</a> ()</td></tr>
-<tr class="memitem:ad98db01547491fb1d4ecd79c33b8a5b6" id="r_ad98db01547491fb1d4ecd79c33b8a5b6"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad98db01547491fb1d4ecd79c33b8a5b6">getPhysicsSystem</a> ()</td></tr>
-<tr class="memitem:a310bb2629cf75d58145852a844c1b4c1" id="r_a310bb2629cf75d58145852a844c1b4c1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1SceneManager.html">SceneManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a310bb2629cf75d58145852a844c1b4c1">getSceneManager</a> ()</td></tr>
+<tr class="memitem:aa14996713917ba83eb7e8f4944c3fb1b" id="r_aa14996713917ba83eb7e8f4944c3fb1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa14996713917ba83eb7e8f4944c3fb1b">getPhysicsSystem</a> ()</td></tr>
+<tr class="memitem:a43a768746bf14be5e95cc3ed4c459f93" id="r_a43a768746bf14be5e95cc3ed4c459f93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1SceneManager.html">SceneManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a> ()</td></tr>
 <tr class="memitem:ad745a460f7ea3921a13f176fce6f152c" id="r_ad745a460f7ea3921a13f176fce6f152c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1VexUI.html">VexUI</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad745a460f7ea3921a13f176fce6f152c">createVexUI</a> ()</td></tr>
 <tr class="memitem:a97bee5a3c7fb37dd9e63c920787175b5" id="r_a97bee5a3c7fb37dd9e63c920787175b5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97bee5a3c7fb37dd9e63c920787175b5">GetCurrentFrame</a> ()</td></tr>
 <tr class="memitem:aeeb81fa77c9f740100285bedda1d9f09" id="r_aeeb81fa77c9f740100285bedda1d9f09"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeeb81fa77c9f740100285bedda1d9f09">processEvent</a> (const SDL_Event &amp;event, float deltaTime)</td></tr>
@@ -146,16 +146,17 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a7403c704f46410053db46d70ef79f842" id="r_a7403c704f46410053db46d70ef79f842"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1Window.html">Window</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7403c704f46410053db46d70ef79f842">m_window</a></td></tr>
-<tr class="memitem:a56753da38a71c213bd11feac11947ca1" id="r_a56753da38a71c213bd11feac11947ca1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1Interface.html">Interface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56753da38a71c213bd11feac11947ca1">m_interface</a></td></tr>
-<tr class="memitem:a3be5ff11404320311c61259062094614" id="r_a3be5ff11404320311c61259062094614"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1ResolutionManager.html">ResolutionManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3be5ff11404320311c61259062094614">m_resolutionManager</a></td></tr>
-<tr class="memitem:a83cf21f2a1925d4acf068d32a5d4ec3c" id="r_a83cf21f2a1925d4acf068d32a5d4ec3c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83cf21f2a1925d4acf068d32a5d4ec3c">m_imgui</a></td></tr>
-<tr class="memitem:ab1660e8fc863604fdac02d530e6021d2" id="r_ab1660e8fc863604fdac02d530e6021d2"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1InputSystem.html">InputSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1660e8fc863604fdac02d530e6021d2">m_inputSystem</a></td></tr>
 <tr class="memitem:a9c795ffc145030df55501125a229b36c" id="r_a9c795ffc145030df55501125a229b36c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c795ffc145030df55501125a229b36c">m_vfs</a></td></tr>
-<tr class="memitem:a09ba096b279c5b3bf2d08cbb0cc0667c" id="r_a09ba096b279c5b3bf2d08cbb0cc0667c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09ba096b279c5b3bf2d08cbb0cc0667c">m_physicsSystem</a></td></tr>
-<tr class="memitem:a0ec8c805aab856c600fc34cb03bc6eee" id="r_a0ec8c805aab856c600fc34cb03bc6eee"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1SceneManager.html">SceneManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ec8c805aab856c600fc34cb03bc6eee">m_sceneManager</a></td></tr>
+<tr class="memitem:a7d8ca0eacc5a95872f480445121d1358" id="r_a7d8ca0eacc5a95872f480445121d1358"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1Interface.html">Interface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d8ca0eacc5a95872f480445121d1358">m_interface</a></td></tr>
+<tr class="memitem:a91ca6cdab0847b73507a852b8ce308fe" id="r_a91ca6cdab0847b73507a852b8ce308fe"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1ResolutionManager.html">ResolutionManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91ca6cdab0847b73507a852b8ce308fe">m_resolutionManager</a></td></tr>
+<tr class="memitem:a595ef58226d73ece12c7719398d75148" id="r_a595ef58226d73ece12c7719398d75148"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a595ef58226d73ece12c7719398d75148">m_imgui</a></td></tr>
+<tr class="memitem:ab1660e8fc863604fdac02d530e6021d2" id="r_ab1660e8fc863604fdac02d530e6021d2"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1InputSystem.html">InputSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1660e8fc863604fdac02d530e6021d2">m_inputSystem</a></td></tr>
+<tr class="memitem:a9778d798886317c17883482239c22060" id="r_a9778d798886317c17883482239c22060"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9778d798886317c17883482239c22060">m_physicsSystem</a></td></tr>
+<tr class="memitem:a53c8827f590b015c42349bf7043751bc" id="r_a53c8827f590b015c42349bf7043751bc"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1SceneManager.html">SceneManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53c8827f590b015c42349bf7043751bc">m_sceneManager</a></td></tr>
 <tr class="memitem:a6386a6bdb687faad84bcd954aaeece51" id="r_a6386a6bdb687faad84bcd954aaeece51"><td class="memItemLeft" align="right" valign="top">entt::registry&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6386a6bdb687faad84bcd954aaeece51">m_registry</a></td></tr>
 <tr class="memitem:aa773ff1a0d1a194516b83089d4cc6c5a" id="r_aa773ff1a0d1a194516b83089d4cc6c5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa773ff1a0d1a194516b83089d4cc6c5a">m_running</a> = true</td></tr>
 <tr class="memitem:a2204e3d5b49692394dda421ceee579bc" id="r_a2204e3d5b49692394dda421ceee579bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2204e3d5b49692394dda421ceee579bc">m_paused</a> = false</td></tr>
+<tr class="memitem:ab0230b32afcce42f98c113c5e52e2360" id="r_ab0230b32afcce42f98c113c5e52e2360"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0230b32afcce42f98c113c5e52e2360">m_internally_paused</a> = false</td></tr>
 <tr class="memitem:a890d6f7445ec52da18ee1e12321a7a33" id="r_a890d6f7445ec52da18ee1e12321a7a33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a890d6f7445ec52da18ee1e12321a7a33">m_frame</a> = 0</td></tr>
 <tr class="memitem:a1f57f53662476564034df2cc4cb3f6e0" id="r_a1f57f53662476564034df2cc4cb3f6e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1GameInfo.html">GameInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f57f53662476564034df2cc4cb3f6e0">m_gameInfo</a></td></tr>
 </table>
@@ -204,7 +205,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00021">21</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00022">22</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -223,7 +224,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00144">144</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00147">147</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -253,7 +254,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Internal virtual function for handling stuff right at the beginning of the game but after initialization of the engine. </p>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00169">169</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00172">172</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -272,7 +273,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00059">59</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00062">62</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -348,7 +349,7 @@ Protected Attributes</h2></td></tr>
 <p>Returns the current environment settings. </p>
 <dl class="section return"><dt>Returns</dt><dd>enviroment - Current environment settings. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00163">163</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00166">166</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -409,14 +410,14 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad742c09d30ad9c6c6639ee0cdc92bf24" name="ad742c09d30ad9c6c6639ee0cdc92bf24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad742c09d30ad9c6c6639ee0cdc92bf24">&#9670;&#160;</a></span>getInterface()</h2>
+<a id="a74eff1e68d585630c2a2524c2ac13599" name="a74eff1e68d585630c2a2524c2ac13599"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74eff1e68d585630c2a2524c2ac13599">&#9670;&#160;</a></span>getInterface()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classvex_1_1Interface.html">Interface</a> &gt; vex::Engine::getInterface </td>
+          <td class="memname"><a class="el" href="classvex_1_1Interface.html">Interface</a> * vex::Engine::getInterface </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -424,12 +425,12 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00055">55</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00058">58</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
-<a id="ad98db01547491fb1d4ecd79c33b8a5b6" name="ad98db01547491fb1d4ecd79c33b8a5b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad98db01547491fb1d4ecd79c33b8a5b6">&#9670;&#160;</a></span>getPhysicsSystem()</h2>
+<a id="aa14996713917ba83eb7e8f4944c3fb1b" name="aa14996713917ba83eb7e8f4944c3fb1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa14996713917ba83eb7e8f4944c3fb1b">&#9670;&#160;</a></span>getPhysicsSystem()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -438,7 +439,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a> &gt; vex::Engine::getPhysicsSystem </td>
+          <td class="memname"><a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a> * vex::Engine::getPhysicsSystem </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -512,14 +513,14 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a310bb2629cf75d58145852a844c1b4c1" name="a310bb2629cf75d58145852a844c1b4c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a310bb2629cf75d58145852a844c1b4c1">&#9670;&#160;</a></span>getSceneManager()</h2>
+<a id="a43a768746bf14be5e95cc3ed4c459f93" name="a43a768746bf14be5e95cc3ed4c459f93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43a768746bf14be5e95cc3ed4c459f93">&#9670;&#160;</a></span>getSceneManager()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classvex_1_1SceneManager.html">SceneManager</a> &gt; vex::Engine::getSceneManager </td>
+          <td class="memname"><a class="el" href="classvex_1_1SceneManager.html">SceneManager</a> * vex::Engine::getSceneManager </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -527,7 +528,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00051">51</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00054">54</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -567,7 +568,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00167">167</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00170">170</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -595,7 +596,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Internal virtual function calling renderers renderFrame function. It also handles camera matrixes since camera object is handled by engine anyway and theres no reason to mass it to renderer. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classvex_1_1Renderer.html#abed362c3e24647d248f6bbe4cdd5f15c" title="Renders a frame using the provided parameters.">vex::Renderer::renderFrame()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a" title="Renders a frame using the provided parameters.">vex::Renderer::renderFrame()</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">float</td><td>deltaTime - Time since last frame. </td></tr>
@@ -603,7 +604,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00170">170</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00173">173</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -624,7 +625,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Function starting and running main game loop. </p>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00063">63</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00066">66</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -651,7 +652,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00159">159</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00162">162</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -748,7 +749,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00152">152</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00155">155</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -783,7 +784,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00168">168</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8cpp_source.html#l00171">171</a> of file <a class="el" href="Engine_8cpp_source.html">Engine.cpp</a>.</p>
 
 </div>
 </div>
@@ -808,7 +809,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00119">119</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00120">120</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
@@ -832,12 +833,12 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00121">121</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00122">122</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a83cf21f2a1925d4acf068d32a5d4ec3c" name="a83cf21f2a1925d4acf068d32a5d4ec3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83cf21f2a1925d4acf068d32a5d4ec3c">&#9670;&#160;</a></span>m_imgui</h2>
+<a id="a595ef58226d73ece12c7719398d75148" name="a595ef58226d73ece12c7719398d75148"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a595ef58226d73ece12c7719398d75148">&#9670;&#160;</a></span>m_imgui</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -846,7 +847,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a>&gt; vex::Engine::m_imgui</td>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a>&gt; vex::Engine::m_imgui</td>
         </tr>
       </table>
   </td>
@@ -856,7 +857,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00108">108</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00110">110</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
@@ -880,12 +881,12 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00109">109</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00111">111</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a56753da38a71c213bd11feac11947ca1" name="a56753da38a71c213bd11feac11947ca1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56753da38a71c213bd11feac11947ca1">&#9670;&#160;</a></span>m_interface</h2>
+<a id="a7d8ca0eacc5a95872f480445121d1358" name="a7d8ca0eacc5a95872f480445121d1358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d8ca0eacc5a95872f480445121d1358">&#9670;&#160;</a></span>m_interface</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -894,7 +895,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classvex_1_1Interface.html">Interface</a>&gt; vex::Engine::m_interface</td>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1Interface.html">Interface</a>&gt; vex::Engine::m_interface</td>
         </tr>
       </table>
   </td>
@@ -904,7 +905,31 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00106">106</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00108">108</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab0230b32afcce42f98c113c5e52e2360" name="ab0230b32afcce42f98c113c5e52e2360"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0230b32afcce42f98c113c5e52e2360">&#9670;&#160;</a></span>m_internally_paused</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::Engine::m_internally_paused = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00119">119</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
@@ -932,8 +957,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a09ba096b279c5b3bf2d08cbb0cc0667c" name="a09ba096b279c5b3bf2d08cbb0cc0667c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09ba096b279c5b3bf2d08cbb0cc0667c">&#9670;&#160;</a></span>m_physicsSystem</h2>
+<a id="a9778d798886317c17883482239c22060" name="a9778d798886317c17883482239c22060"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9778d798886317c17883482239c22060">&#9670;&#160;</a></span>m_physicsSystem</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -942,7 +967,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a>&gt; vex::Engine::m_physicsSystem</td>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1PhysicsSystem.html">PhysicsSystem</a>&gt; vex::Engine::m_physicsSystem</td>
         </tr>
       </table>
   </td>
@@ -952,7 +977,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00111">111</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00112">112</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
@@ -980,8 +1005,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3be5ff11404320311c61259062094614" name="a3be5ff11404320311c61259062094614"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3be5ff11404320311c61259062094614">&#9670;&#160;</a></span>m_resolutionManager</h2>
+<a id="a91ca6cdab0847b73507a852b8ce308fe" name="a91ca6cdab0847b73507a852b8ce308fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91ca6cdab0847b73507a852b8ce308fe">&#9670;&#160;</a></span>m_resolutionManager</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -990,7 +1015,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classvex_1_1ResolutionManager.html">ResolutionManager</a>&gt; vex::Engine::m_resolutionManager</td>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1ResolutionManager.html">ResolutionManager</a>&gt; vex::Engine::m_resolutionManager</td>
         </tr>
       </table>
   </td>
@@ -1000,7 +1025,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00107">107</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00109">109</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
@@ -1028,8 +1053,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0ec8c805aab856c600fc34cb03bc6eee" name="a0ec8c805aab856c600fc34cb03bc6eee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ec8c805aab856c600fc34cb03bc6eee">&#9670;&#160;</a></span>m_sceneManager</h2>
+<a id="a53c8827f590b015c42349bf7043751bc" name="a53c8827f590b015c42349bf7043751bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53c8827f590b015c42349bf7043751bc">&#9670;&#160;</a></span>m_sceneManager</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1038,7 +1063,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classvex_1_1SceneManager.html">SceneManager</a>&gt; vex::Engine::m_sceneManager</td>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1SceneManager.html">SceneManager</a>&gt; vex::Engine::m_sceneManager</td>
         </tr>
       </table>
   </td>
@@ -1048,7 +1073,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00112">112</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00113">113</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>
@@ -1072,7 +1097,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00110">110</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Engine_8hpp_source.html#l00106">106</a> of file <a class="el" href="Engine_8hpp_source.html">Engine.hpp</a>.</p>
 
 </div>
 </div>

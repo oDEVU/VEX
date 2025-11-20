@@ -81,7 +81,7 @@ namespace vex {
         SDL_Window* m_p_window;
         VirtualFileSystem* m_vfs;
         std::unique_ptr<VulkanSwapchainManager> m_p_swapchainManager;
-        std::shared_ptr<VulkanResources> m_p_resources;
+        std::unique_ptr<VulkanResources> m_p_resources;
         std::unique_ptr<VulkanPipeline> m_p_pipeline;
         std::unique_ptr<VulkanPipeline> m_p_uiPipeline;
         std::unique_ptr<MeshManager> m_p_meshManager;

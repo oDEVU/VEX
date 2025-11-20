@@ -23,6 +23,7 @@ var structvex_1_1TransformComponent =
     [ "getWorldQuaternion", "structvex_1_1TransformComponent.html#a8db494d1118de04f51b7ae2c788ad88a", null ],
     [ "getWorldRotation", "structvex_1_1TransformComponent.html#a6c5c98c948ef4f34b620e0385e5774f5", null ],
     [ "getWorldScale", "structvex_1_1TransformComponent.html#a3a0801b084b3dc21fdefd0ef4deaab67", null ],
+    [ "isPhysicsAffected", "structvex_1_1TransformComponent.html#ac8bd4f345f60640fc2960c9f62240ccf", null ],
     [ "matrix", "structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc", null ],
     [ "operator=", "structvex_1_1TransformComponent.html#a6806d21d1442fd8d8e6bc162d84092cf", null ],
     [ "setLocalPosition", "structvex_1_1TransformComponent.html#a3b31694107b20c78502858890a8bb8f2", null ],

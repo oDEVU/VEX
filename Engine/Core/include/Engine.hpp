@@ -76,11 +76,11 @@ public:
     /// @return enviroment - Current environment settings.
     enviroment getEnvironmentSettings();
 
-    std::shared_ptr<Interface> getInterface();// { return m_interface; }
+    Interface* getInterface();// { return m_interface; }
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
     entt::registry& getRegistry() { return m_registry; }
-    std::shared_ptr<PhysicsSystem> getPhysicsSystem() { return m_physicsSystem; }
-    std::shared_ptr<SceneManager> getSceneManager();
+    PhysicsSystem* getPhysicsSystem() { return m_physicsSystem.get(); }
+    SceneManager* getSceneManager();
     std::shared_ptr<VexUI> createVexUI();// { return std::make_unique<VexUI>(m_interface->getContext(), m_vfs.get(), m_interface->getResources()); }
     int GetCurrentFrame() { return m_frame; }
 
@@ -103,19 +103,20 @@ public:
 
 protected:
     std::shared_ptr<Window> m_window;
-    std::shared_ptr<Interface> m_interface;
-    std::shared_ptr<ResolutionManager> m_resolutionManager;
-    std::shared_ptr<ImGUIWrapper> m_imgui;
-    std::unique_ptr<InputSystem> m_inputSystem;
     std::shared_ptr<VirtualFileSystem> m_vfs;
-    std::shared_ptr<PhysicsSystem> m_physicsSystem;
-    std::shared_ptr<SceneManager> m_sceneManager;
-    //std::shared_ptr<VexUI> m_vexUI;
+
+    std::unique_ptr<Interface> m_interface;
+    std::unique_ptr<ResolutionManager> m_resolutionManager;
+    std::unique_ptr<ImGUIWrapper> m_imgui;
+    std::unique_ptr<InputSystem> m_inputSystem;
+    std::unique_ptr<PhysicsSystem> m_physicsSystem;
+    std::unique_ptr<SceneManager> m_sceneManager;
 
     entt::registry m_registry;
 
     bool m_running = true;
     bool m_paused = false;
+    bool m_internally_paused = false; // to pause if the window is in the background.
     int m_frame = 0;
 
     GameInfo m_gameInfo;

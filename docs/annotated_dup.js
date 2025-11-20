@@ -5,7 +5,6 @@ var annotated_dup =
       [ "BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ],
       [ "CameraComponent", "structvex_1_1CameraComponent.html", null ],
       [ "CameraObject", "classvex_1_1CameraObject.html", null ],
-      [ "CameraUBO", "structvex_1_1CameraUBO.html", "structvex_1_1CameraUBO" ],
       [ "CollisionHit", "structvex_1_1CollisionHit.html", null ],
       [ "ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
       [ "Engine", "classvex_1_1Engine.html", "classvex_1_1Engine" ],
@@ -25,7 +24,6 @@ var annotated_dup =
       [ "MeshData", "structvex_1_1MeshData.html", null ],
       [ "MeshManager", "classvex_1_1MeshManager.html", null ],
       [ "ModelObject", "classvex_1_1ModelObject.html", "classvex_1_1ModelObject" ],
-      [ "ModelUBO", "structvex_1_1ModelUBO.html", "structvex_1_1ModelUBO" ],
       [ "MouseAxisBinding", "structvex_1_1MouseAxisBinding.html", null ],
       [ "MyActivationListener", "classvex_1_1MyActivationListener.html", null ],
       [ "MyContactListener", "classvex_1_1MyContactListener.html", null ],
@@ -34,13 +32,14 @@ var annotated_dup =
       [ "ObjectVsBroadPhaseLayerFilterImpl", "classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html", null ],
       [ "PhysicsComponent", "structvex_1_1PhysicsComponent.html", "structvex_1_1PhysicsComponent" ],
       [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html", "classvex_1_1PhysicsSystem" ],
-      [ "PushConstants", "structvex_1_1PushConstants.html", "structvex_1_1PushConstants" ],
+      [ "PushConstants", "structvex_1_1PushConstants.html", null ],
       [ "RaycastHit", "structvex_1_1RaycastHit.html", null ],
       [ "Renderer", "classvex_1_1Renderer.html", "classvex_1_1Renderer" ],
       [ "ResolutionManager", "classvex_1_1ResolutionManager.html", "classvex_1_1ResolutionManager" ],
       [ "Scene", "classvex_1_1Scene.html", "classvex_1_1Scene" ],
       [ "SceneLightsUBO", "structvex_1_1SceneLightsUBO.html", null ],
       [ "SceneManager", "classvex_1_1SceneManager.html", "classvex_1_1SceneManager" ],
+      [ "SceneUBO", "structvex_1_1SceneUBO.html", "structvex_1_1SceneUBO" ],
       [ "Submesh", "structvex_1_1Submesh.html", null ],
       [ "TransformComponent", "structvex_1_1TransformComponent.html", "structvex_1_1TransformComponent" ],
       [ "TransparentTriangle", "structvex_1_1TransparentTriangle.html", null ],
@@ -62,5 +61,7 @@ var annotated_dup =
       [ "VulkanSwapchainManager", "classvex_1_1VulkanSwapchainManager.html", "classvex_1_1VulkanSwapchainManager" ],
       [ "Widget", "structvex_1_1Widget.html", null ],
       [ "Window", "classvex_1_1Window.html", "classvex_1_1Window" ]
-    ] ]
+    ] ],
+    [ "Frustum", "structFrustum.html", "structFrustum" ],
+    [ "Plane", "structPlane.html", "structPlane" ]
 ];

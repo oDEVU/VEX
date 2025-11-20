@@ -15,6 +15,7 @@
 
 #include <cstdint>
 #include <filesystem>
+#include <memory>
 
 namespace vex {
 
@@ -25,39 +26,41 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
         log("Project version not set!");
     }
 
-    m_window = std::make_unique<Window>(title, width, height);
+    log("Creating window..");
+    m_window = std::make_shared<Window>(title, width, height);
     m_resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
-    m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
-    m_vfs = std::make_unique<VirtualFileSystem>();
+
+    log("Initializing virtual file system..");
+    m_vfs = std::make_shared<VirtualFileSystem>();
     m_vfs->initialize(GetExecutableDir().string());
-
-    m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
-    m_physicsSystem->init();
-
-    m_sceneManager = std::make_unique<SceneManager>();
 
     auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
-    //m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
-    //m_vexUI->init();
 
+    log("Initializing engine components...");
+
+    m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
+    m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
+    m_physicsSystem->init();
+
+    m_sceneManager = std::make_unique<SceneManager>();
     log("Engine initialized successfully");
 }
 
 
-std::shared_ptr<SceneManager> Engine::getSceneManager() {
-    return m_sceneManager;
+SceneManager* Engine::getSceneManager() {
+    return m_sceneManager.get();
 }
 
-std::shared_ptr<Interface> Engine::getInterface() {
-    return m_interface;
+Interface* Engine::getInterface() {
+    return m_interface.get();
 }
 
 std::shared_ptr<VexUI> Engine::createVexUI(){
-    return std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
+    return std::make_shared<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
 }
 
 void Engine::run() {
@@ -74,8 +77,6 @@ void Engine::run() {
             m_inputSystem->processEvent(event, deltaTime);
             processEvent(event, deltaTime);
             m_imgui->processEvent(&event);
-            //m_vexUI->processEvent(event);
-            //
             auto uiView = m_registry.view<UiComponent>();
             std::vector<UiComponent> uiObjects;
             for (auto entity : uiView) {
@@ -90,9 +91,11 @@ void Engine::run() {
                 case SDL_EVENT_DID_ENTER_FOREGROUND:
                     log("Binding window to Vulkan...");
                     m_interface->bindWindow(m_window->GetSDLWindow());
+                    m_internally_paused = false;
                     break;
                 case SDL_EVENT_WILL_ENTER_BACKGROUND:
                     m_interface->unbindWindow();
+                    m_internally_paused = true;
                     break;
                 case SDL_EVENT_WINDOW_RESIZED:
                     m_resolutionManager->update();
@@ -116,7 +119,7 @@ void Engine::run() {
                 }
             }
 
-            if(!m_paused){
+            if(!(m_paused || m_internally_paused)){
                 update(deltaTime);
                 m_sceneManager->scenesUpdate(deltaTime);
                 m_physicsSystem->update(deltaTime);
@@ -170,30 +173,11 @@ void Engine::beginGame() {}
 void Engine::render() {
     //log("Render function called");
     auto renderRes = m_resolutionManager->getRenderResolution();
-
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 proj = glm::mat4(1.0f);
-
     auto cameraEntity = getCamera();
-    auto& transform = m_registry.get<TransformComponent>(cameraEntity);
-    auto& camera = m_registry.get<CameraComponent>(cameraEntity);
-
-    view = glm::lookAt(
-        transform.getWorldPosition(),
-        transform.getWorldPosition() + transform.getForwardVector(),
-        transform.getUpVector()
-    );
-    proj = glm::perspective(
-        glm::radians(camera.fov),
-        renderRes.x / static_cast<float>(renderRes.y),
-        camera.nearPlane,
-        camera.farPlane
-    );
-    proj[1][1] *= -1;
 
     //log("Calling Renderer::renderFrame()");
     try{
-        m_interface->getRenderer().renderFrame(view, proj, renderRes, m_registry, *m_imgui, m_frame);
+        m_interface->getRenderer().renderFrame(cameraEntity, renderRes, m_registry, *m_imgui, m_frame);
     } catch (const std::exception& e) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Frame not in fact rendered :C");
         handle_exception(e);

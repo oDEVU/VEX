@@ -82,6 +82,9 @@ namespace vex {
         uint32_t frameIndex,
         std::vector<TransparentTriangle>& outTriangles
     ) {
+        glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
+        glm::vec3 translation_vector = glm::vec3(modelMatrix[3]);
+
         for (uint32_t submeshIndex = 0; submeshIndex < m_cpuSubmeshData.size(); ++submeshIndex) {
             const auto& submesh = m_cpuSubmeshData[submeshIndex];
             const auto& indices = submesh.indices;
@@ -98,15 +101,10 @@ namespace vex {
 
                 glm::vec3 center_model = (p0 + p1 + p2) / 3.0f;
 
-                glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
-                glm::vec3 translation_vector = glm::vec3(modelMatrix[3]);
-
                 glm::vec3 center_world = rotation_scale_matrix * center_model + translation_vector;
 
                 glm::vec3 d = center_world - cameraPos;
                 float distanceSq = glm::dot(d, d);
-
-                //uint32_t bucket = (uint32_t)glm::clamp(distanceSq / 10000 * (BUCKETS-1), 0.0f, (float)(BUCKETS-1));
 
                 outTriangles.push_back({
                     distanceSq,
@@ -114,122 +112,11 @@ namespace vex {
                     frameIndex,
                     i,
                     submeshIndex,
-                    this
+                    this,
+                    modelMatrix
                 });
             }
         }
-    }
-
-    void VulkanMesh::drawTriangle(
-        VkCommandBuffer cmd,
-        VkPipelineLayout pipelineLayout,
-        VulkanResources& resources,
-        uint32_t frameIndex,
-        uint32_t modelIndex,
-        uint32_t submeshIndex,
-        uint32_t firstIndex,
-        float currentTime,
-        glm::uvec2 currentRenderResolution
-    ) const {
-        const auto& buffers = m_submeshBuffers[submeshIndex];
-        const auto& textureName = m_submeshTextures[submeshIndex];
-
-        uint32_t textureIndex = resources.getTextureIndex(textureName);
-
-        if (textureIndex >= MAX_TEXTURES) {
-            SDL_LogError(SDL_LOG_CATEGORY_RENDER,
-                       "Invalid texture index %u for '%s' (Max: %u)",
-                       textureIndex, textureName.c_str(), MAX_TEXTURES);
-            textureIndex = 0;
-        }
-
-        //uint32_t dynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
-        uint32_t modelDynamicOffset  = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
-        uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
-
-
-        std::array<VkDescriptorSet, 2> descriptorSets = {
-            resources.getDescriptorSet(frameIndex),
-            resources.getTextureDescriptorSet(frameIndex, textureIndex)
-        };
-
-        uint32_t dynamicOffsets[2] = { modelDynamicOffset, lightsDynamicOffset };
-
-        vkCmdBindDescriptorSets(
-            cmd,
-            VK_PIPELINE_BIND_POINT_GRAPHICS,
-            pipelineLayout,
-            0,
-            descriptorSets.size(),
-            descriptorSets.data(),
-            2,
-            dynamicOffsets
-        );
-
-        PushConstants modelPush{};
-        const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
-
-        if (textureExists) {
-            modelPush.color = glm::vec4(1.0f);
-        } else {
-            modelPush.color = glm::vec4(1.0f);
-            if(!textureName.empty()) {
-                log("Missing texture: %s", textureName.c_str());
-            }
-        }
-
-        modelPush.snapResolution = 1.f;
-        modelPush.jitterIntensity = 0.5f;
-
-        if(m_r_context.m_enviroment.vertexSnapping){
-            modelPush.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
-        }
-
-        if(m_r_context.m_enviroment.passiveVertexJitter){
-            modelPush.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
-        }
-
-        if(m_r_context.m_enviroment.affineWarping){
-            modelPush.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
-        }
-
-        if(m_r_context.m_enviroment.colorQuantization){
-            modelPush.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
-        }
-
-        if(m_r_context.m_enviroment.ntfsArtifacts){
-            modelPush.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
-        }
-
-        if(m_r_context.m_enviroment.gourardShading){
-            modelPush.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
-        }
-
-        modelPush.renderResolution = currentRenderResolution;
-        modelPush.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
-        modelPush.time = currentTime;
-        modelPush.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(currentRenderResolution.y);
-
-        modelPush.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
-        modelPush.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
-        modelPush.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
-        modelPush.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
-
-        vkCmdPushConstants(
-            cmd,
-            pipelineLayout,
-            VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-            0,
-            sizeof(PushConstants),
-            &modelPush
-        );
-
-        VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
-        VkDeviceSize offsets[] = {0};
-        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
-        vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
-
-        vkCmdDrawIndexed(cmd, 3, 1, firstIndex, 0, 0);
     }
 
     void VulkanMesh::bindAndDrawBatched(
@@ -239,8 +126,7 @@ namespace vex {
         uint32_t frameIndex,
         uint32_t modelIndex,
         uint32_t submeshIndex,
-        float currentTime,
-        glm::uvec2 currentRenderResolution
+        glm::mat4 modelMatrix
     ) const {
         const auto& buffers = m_submeshBuffers[submeshIndex];
         const auto& textureName = m_submeshTextures[submeshIndex];
@@ -254,7 +140,6 @@ namespace vex {
             textureIndex = 0;
         }
 
-        uint32_t modelDynamicOffset  = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
         uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
 
 
@@ -263,7 +148,7 @@ namespace vex {
             resources.getTextureDescriptorSet(frameIndex, textureIndex)
         };
 
-        uint32_t dynamicOffsets[2] = { modelDynamicOffset, lightsDynamicOffset };
+        uint32_t dynamicOffsets[1] = { lightsDynamicOffset };
 
         vkCmdBindDescriptorSets(
             cmd,
@@ -272,7 +157,7 @@ namespace vex {
             0,
             descriptorSets.size(),
             descriptorSets.data(),
-            2,
+            1,
             dynamicOffsets
         );
 
@@ -288,42 +173,7 @@ namespace vex {
             }
         }
 
-        modelPush.snapResolution = 1.f;
-        modelPush.jitterIntensity = 0.5f;
-
-        if(m_r_context.m_enviroment.vertexSnapping){
-            modelPush.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
-        }
-
-        if(m_r_context.m_enviroment.passiveVertexJitter){
-            modelPush.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
-        }
-
-        if(m_r_context.m_enviroment.affineWarping){
-            modelPush.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
-        }
-
-        if(m_r_context.m_enviroment.colorQuantization){
-            modelPush.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
-        }
-
-        if(m_r_context.m_enviroment.ntfsArtifacts){
-            modelPush.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
-        }
-
-        if(m_r_context.m_enviroment.gourardShading){
-            modelPush.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
-        }
-
-        modelPush.renderResolution = currentRenderResolution;
-        modelPush.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
-        modelPush.time = currentTime;
-        modelPush.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(currentRenderResolution.y);
-
-        modelPush.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
-        modelPush.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
-        modelPush.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
-        modelPush.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
+        modelPush.model = modelMatrix;
 
         vkCmdPushConstants(
             cmd,
@@ -341,12 +191,28 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, float currentTime, glm::uvec2 currentRenderResolution, std::vector<Light> lights, glm::vec4 color) const {
+            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, glm::vec4 color) const {
 
         std::string currentTexture = "";
+
+            uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
+            uint32_t dynamicOffsets[1] = { lightsDynamicOffset };
+
+            VkDescriptorSet globalSet = resources.getDescriptorSet(frameIndex);
+            vkCmdBindDescriptorSets(
+                cmd,
+                VK_PIPELINE_BIND_POINT_GRAPHICS,
+                pipelineLayout,
+                0,
+                1,
+                &globalSet,
+                1,
+                dynamicOffsets
+            );
+
         for (size_t i = 0; i < m_submeshBuffers.size(); i++) {
             const auto& buffers = m_submeshBuffers[i];
-            const auto& textureName = m_submeshTextures[i];
+            std::string textureName = m_submeshTextures[i];
             uint32_t textureIndex = resources.getTextureIndex(textureName);
             //log("Invalid texture index %u for '%s'", textureIndex, textureName.c_str());
 
@@ -357,41 +223,21 @@ namespace vex {
                 textureIndex = 0;
             }
 
-            uint32_t modelDynamicOffset  = modelIndex * static_cast<uint32_t>(sizeof(ModelUBO));
-            uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
-
-
-            std::array<VkDescriptorSet, 2> descriptorSets = {
-                resources.getDescriptorSet(frameIndex),
-                resources.getTextureDescriptorSet(frameIndex, textureIndex)
-            };
-
-            uint32_t dynamicOffsets[2] = { modelDynamicOffset, lightsDynamicOffset };
-
-            vkCmdBindDescriptorSets(
-                cmd,
-                VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipelineLayout,
-                0,
-                descriptorSets.size(),
-                descriptorSets.data(),
-                2,
-                dynamicOffsets
-            );
-
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
 
-            if (textureExists) {
-                if (currentTexture != textureName) {
-                    VkImageView textureView = resources.getTextureView(textureName);
-                    if (textureView != VK_NULL_HANDLE) {
-                        VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
-                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                              pipelineLayout, 1, 1, &texSet,
-                                              0, nullptr);
-                        currentTexture = textureName;
-                    }
-                }
+            //log("Texture exists: %s, textureName: %s", textureExists ? "true" : "false", textureName.c_str());
+
+            if (!textureExists) {
+                textureName = "default";
+            }
+
+            if (currentTexture != textureName) {
+                VkImageView textureView = resources.getTextureView(textureName);
+                VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                          pipelineLayout, 1, 1, &texSet,
+                                          0, nullptr);
+                currentTexture = textureName;
             }
 
             PushConstants modelPush{};
@@ -406,47 +252,12 @@ namespace vex {
                 modelPush.color = glm::vec4(1.0f);
             } else {
                 modelPush.color = color;
-                if(!textureName.empty()) {
+                if(!textureName.empty() && textureName != "default") {
                     log("Missing texture: %s", textureName.c_str());
                 }
             }
 
-            modelPush.snapResolution = 1.f;
-            modelPush.jitterIntensity = 0.5f;
-
-            if(m_r_context.m_enviroment.vertexSnapping){
-                modelPush.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
-            }
-
-            if(m_r_context.m_enviroment.passiveVertexJitter){
-                modelPush.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
-            }
-
-            if(m_r_context.m_enviroment.affineWarping){
-                modelPush.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
-            }
-
-            if(m_r_context.m_enviroment.colorQuantization){
-                modelPush.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
-            }
-
-            if(m_r_context.m_enviroment.ntfsArtifacts){
-                modelPush.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
-            }
-
-            if(m_r_context.m_enviroment.gourardShading){
-                modelPush.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
-            }
-
-            modelPush.renderResolution = currentRenderResolution;
-            modelPush.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
-            modelPush.time = currentTime;
-            modelPush.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(currentRenderResolution.y);
-
-            modelPush.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
-            modelPush.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
-            modelPush.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
-            modelPush.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
+            modelPush.model = modelMatrix;
 
             vkCmdPushConstants(
                 cmd,

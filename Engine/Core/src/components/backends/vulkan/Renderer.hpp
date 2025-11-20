@@ -15,8 +15,10 @@
 #include "VulkanMesh.hpp"
 #include "components/UI/VexUI.hpp"
 #include "MeshManager.hpp"
+#include "entt/entity/fwd.hpp"
 #include <glm/glm.hpp>
 #include <chrono>
+#include <components/GameComponents/UiComponent.hpp>
 
 namespace vex {
     /// @brief Class responsible for rendering the scene using Vulkan backend.
@@ -30,7 +32,7 @@ namespace vex {
         /// @param std::unique_ptr<MeshManager>& meshManager - MeshManager.
         /// @details Its created and handled by VulkanInteface constructor.
         Renderer(VulkanContext& context,
-                 std::shared_ptr<VulkanResources>& resources,
+                 std::unique_ptr<VulkanResources>& resources,
                  std::unique_ptr<VulkanPipeline>& pipeline,
                  std::unique_ptr<VulkanPipeline>& uiPipeline,
                  std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
@@ -46,7 +48,7 @@ namespace vex {
         /// @param entt::registry& registry - Entity registry.
         /// @param ImGUIWrapper& ui - ImGUI wrapper.
         /// @param uint64_t frame - Frame number.
-        void renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& ui, uint64_t frame);
+        void renderFrame(const entt::entity cameraEntity, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& ui, uint64_t frame);
 
     private:
         /// @brief Helper function for image transition
@@ -67,7 +69,7 @@ namespace vex {
         void issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands);
 
         VulkanContext& m_r_context;
-        std::shared_ptr<VulkanResources>& m_p_resources;
+        std::unique_ptr<VulkanResources>& m_p_resources;
         std::unique_ptr<VulkanPipeline>& m_p_pipeline;
         std::unique_ptr<VulkanPipeline>& m_p_uiPipeline;
         std::unique_ptr<VulkanSwapchainManager>& m_p_swapchainManager;
@@ -75,8 +77,11 @@ namespace vex {
         std::chrono::high_resolution_clock::time_point startTime;
         float currentTime = 0.0f;
         std::vector<TransparentTriangle> m_transparentTriangles;
-        std::vector<Light> m_lights;
+        std::vector<UiComponent> m_uiObjects;
         std::vector<VkMultiDrawIndexedInfoEXT> m_multiDrawInfos;
         size_t approxTriangles = 0;
+
+
+        SceneUBO m_sceneUBO;
     };
 }

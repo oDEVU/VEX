@@ -7,7 +7,7 @@
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
 #include <components/GameComponents/BasicComponents.hpp>
-#include <components/GameComponents/UiComponent.hpp>
+#include "frustum.hpp"
 #include "limits.hpp"
 
 namespace vex {
@@ -17,7 +17,7 @@ namespace vex {
     }
 
     Renderer::Renderer(VulkanContext& context,
-                       std::shared_ptr<VulkanResources>& resources,
+                       std::unique_ptr<VulkanResources>& resources,
                        std::unique_ptr<VulkanPipeline>& pipeline,
                        std::unique_ptr<VulkanPipeline>& uiPipeline,
                        std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
@@ -36,7 +36,7 @@ namespace vex {
         log("Renderer destroyed");
     }
 
-    void Renderer::renderFrame(const glm::mat4& view, const glm::mat4& proj, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, uint64_t frame) {
+    void Renderer::renderFrame(const entt::entity cameraEntity, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, uint64_t frame) {
         //log("Begining rendering...");
         if (renderResolution != m_r_context.currentRenderResolution) {
             m_r_context.currentRenderResolution = renderResolution;
@@ -70,8 +70,67 @@ namespace vex {
 
         //vkDeviceWaitIdle(m_r_context.device);
 
-        //log("Updating camera UBO...");
-        m_p_resources->updateCameraUBO({view, proj});
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 proj = glm::mat4(1.0f);
+
+        auto& transform = registry.get<TransformComponent>(cameraEntity);
+        auto& camera = registry.get<CameraComponent>(cameraEntity);
+
+        view = glm::lookAt(
+            transform.getWorldPosition(),
+            transform.getWorldPosition() + transform.getForwardVector(),
+            transform.getUpVector()
+        );
+        proj = glm::perspective(
+            glm::radians(camera.fov),
+            renderResolution.x / static_cast<float>(renderResolution.y),
+            camera.nearPlane,
+            camera.farPlane
+        );
+        proj[1][1] *= -1;
+
+        //log("Updating scene UBO...");
+        m_sceneUBO.view = view;
+        m_sceneUBO.proj = proj;
+
+        m_sceneUBO.snapResolution = 1.f;
+        m_sceneUBO.jitterIntensity = 0.5f;
+
+        if(m_r_context.m_enviroment.vertexSnapping){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
+        }
+
+        if(m_r_context.m_enviroment.passiveVertexJitter){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
+        }
+
+        if(m_r_context.m_enviroment.affineWarping){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
+        }
+
+        if(m_r_context.m_enviroment.colorQuantization){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
+        }
+
+        if(m_r_context.m_enviroment.ntfsArtifacts){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
+        }
+
+        if(m_r_context.m_enviroment.gourardShading){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
+        }
+
+        m_sceneUBO.renderResolution = m_r_context.currentRenderResolution;
+        m_sceneUBO.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
+        m_sceneUBO.time = currentTime;
+        m_sceneUBO.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(m_r_context.currentRenderResolution.y);
+
+        m_sceneUBO.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
+        m_sceneUBO.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
+        m_sceneUBO.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
+        m_sceneUBO.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
+
+        m_p_resources->updateSceneUBO(m_sceneUBO);
 
         //log("Updating texture Descriptor.");
         //VkImageView textureView = m_p_resources->getTextureView("default");
@@ -187,69 +246,73 @@ namespace vex {
 
                 //log("Extracting camera pos...");
                 glm::vec3 cameraPos = extractCameraPosition(view);
-
+                Frustum camFrustum;
+                camFrustum.update(proj * view);
 
                 //log("Rendering non transparent meshes");
                 for (auto entity : modelView) {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
                     glm::mat4 modelMatrix = transform.matrix();
-                    m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
+                    //m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
 
-                    if(transform.transformedLately() || mesh.getIsFresh()){
+                    if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected()){
                         mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
                         mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
                     }
 
-                    m_lights.clear();
+                    if (!camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius)) {
+                        //log("Mesh %s is outside of camera frustum", mesh.meshData.meshPath.c_str());
+                        continue;
+                    }
+
+                    //m_lights.clear();
                     auto lightView = registry.view<TransformComponent, LightComponent>();
-                    //m_lights.reserve(255);
+
+                    SceneLightsUBO lightUBO;
+                    lightUBO.lightCount = 0;
 
                     for(auto lightEntity : lightView){
+
+                        if (lightUBO.lightCount >= MAX_DYNAMIC_LIGHTS) {
+                            lightUBO.lightCount = MAX_DYNAMIC_LIGHTS;
+                            log("Limit reached of per object dynamic lights, rest of the light wont affect this mesh.");
+                            break;
+                        }
+
                         auto& light = lightView.get<LightComponent>(lightEntity);
                         auto& transform = lightView.get<TransformComponent>(lightEntity);
 
-                        //log("Found light entity");
-
                         float dist = glm::distance(transform.getWorldPosition(), mesh.worldCenter);
                         if (dist < (light.radius + mesh.worldRadius)) {
-                            Light pushLight;
-                            pushLight.position = glm::vec4(transform.getWorldPosition(), light.radius);
-                            pushLight.color = glm::vec4(light.color, light.intensity);
-                            m_lights.push_back(pushLight);
-                            //log("mesh %s bounding radious: %f, centre: %f. %f, %f", mesh.meshData.meshPath.c_str(), mesh.worldRadius, mesh.worldCenter.x, mesh.worldCenter.y, mesh.worldCenter.z);
+                            auto& targetLight = lightUBO.lights[lightUBO.lightCount];
+                            targetLight.position = glm::vec4(transform.getWorldPosition(), light.radius);
+                            targetLight.color = glm::vec4(light.color, light.intensity);
+                            lightUBO.lightCount++;
                         }
-                    }
-
-                    SceneLightsUBO lightUBO;
-                    lightUBO.lightCount = static_cast<uint32_t>(m_lights.size());
-                    if(lightUBO.lightCount > MAX_DYNAMIC_LIGHTS){
-                        lightUBO.lightCount = MAX_DYNAMIC_LIGHTS;
-                    }
-                    for (size_t i = 0; i < lightUBO.lightCount; ++i)
-                    {
-                        lightUBO.lights[i] = m_lights[i];
-                        //log("Pushed light to lightUBO");
                     }
                     m_p_resources->updateLightUBO(m_r_context.currentFrame, modelIndex, lightUBO);
 
 
                     if (mesh.renderType == RenderType::OPAQUE) {
                         auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
-                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution, m_lights, modelView.get<MeshComponent>(entity).color);
+                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, modelMatrix, modelView.get<MeshComponent>(entity).color);
                         //modelIndex++;
                     } else if (mesh.renderType == RenderType::TRANSPARENT) {
                         //float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);
                         //transparentEntities.emplace_back(entity, distance);
                         //
-                        auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
-                        vulkanMesh->extractTransparentTriangles(
-                            modelMatrix,
-                            cameraPos,
-                            modelIndex,
-                            m_r_context.currentFrame,
-                            m_transparentTriangles
-                        );
+                        //float distToCam = glm::distance(transform.getWorldPosition(), cameraPos);
+                        //if (distToCam < camera.farPlane + mesh.worldRadius) {
+                            auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
+                            vulkanMesh->extractTransparentTriangles(
+                                modelMatrix,
+                                cameraPos,
+                                modelIndex,
+                                m_r_context.currentFrame,
+                                m_transparentTriangles
+                            );
+                            //}
                     }
                     modelIndex++;
 
@@ -331,6 +394,7 @@ namespace vex {
                             VulkanMesh* batchMesh = nullptr;
                             uint32_t batchSubmeshIndex = UINT32_MAX;
                             uint32_t batchModelIndex = UINT32_MAX;
+                            glm::mat4 batchModelMatrix = glm::mat4(1.0f);
 
                             for (const auto& tri : m_transparentTriangles) {
                                 bool stateChange = (tri.mesh != batchMesh ||
@@ -345,8 +409,7 @@ namespace vex {
                                         m_r_context.currentFrame,
                                         batchModelIndex,
                                         batchSubmeshIndex,
-                                        currentTime,
-                                        m_r_context.currentRenderResolution
+                                        batchModelMatrix
                                     );
 
                                     issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
@@ -357,6 +420,7 @@ namespace vex {
                                     batchMesh = tri.mesh;
                                     batchSubmeshIndex = tri.submeshIndex;
                                     batchModelIndex = tri.modelIndex;
+                                    batchModelMatrix = tri.modelMatrix;
                                 }
 
                                 VkMultiDrawIndexedInfoEXT drawInfo{};
@@ -374,8 +438,7 @@ namespace vex {
                                     m_r_context.currentFrame,
                                     batchModelIndex,
                                     batchSubmeshIndex,
-                                    currentTime,
-                                    m_r_context.currentRenderResolution
+                                    batchModelMatrix
                                 );
                                 issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
                             }
@@ -386,19 +449,19 @@ namespace vex {
             //log("Rendering VEXUI and ImGUI...");
             //vui.render(commandBuffer, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), m_r_context.currentFrame);
             //
+            m_uiObjects.clear();
             auto uiView = registry.view<UiComponent>();
-            std::vector<UiComponent> uiObjects;
             for (auto entity : uiView) {
                 if(uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                    uiObjects.emplace_back(uiView.get<UiComponent>(entity));
+                    m_uiObjects.emplace_back(uiView.get<UiComponent>(entity));
                 }else{
                     log("UiComponent not initialized");
                 }
             }
 
-            std::sort(uiObjects.begin(), uiObjects.end(), [](const UiComponent &f, const UiComponent &s) { return f.m_vexUI->getZIndex() < s.m_vexUI->getZIndex(); });
+            std::sort(m_uiObjects.begin(), m_uiObjects.end(), [](const UiComponent &f, const UiComponent &s) { return f.m_vexUI->getZIndex() < s.m_vexUI->getZIndex(); });
 
-            for(const auto& uiObject : uiObjects) {
+            for(const auto& uiObject : m_uiObjects) {
                 if(uiObject.visible){
                     uiObject.m_vexUI->render(commandBuffer, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), m_r_context.currentFrame);
                 }

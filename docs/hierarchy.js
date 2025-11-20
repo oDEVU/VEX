@@ -8,7 +8,6 @@ var hierarchy =
       [ "vex::BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ]
     ] ],
     [ "vex::CameraComponent", "structvex_1_1CameraComponent.html", null ],
-    [ "vex::CameraUBO", "structvex_1_1CameraUBO.html", null ],
     [ "vex::CollisionHit", "structvex_1_1CollisionHit.html", null ],
     [ "vex::ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
     [ "JPH::ContactListener", null, [
@@ -18,6 +17,7 @@ var hierarchy =
     [ "vex::enviroment", "structvex_1_1enviroment.html", null ],
     [ "vex::VirtualFileSystem::FileData", "structvex_1_1VirtualFileSystem_1_1FileData.html", null ],
     [ "vex::FontAtlas", "structvex_1_1FontAtlas.html", null ],
+    [ "Frustum", "structFrustum.html", null ],
     [ "vex::GameInfo", "structvex_1_1GameInfo.html", null ],
     [ "vex::GameObject", "classvex_1_1GameObject.html", [
       [ "vex::CameraObject", "classvex_1_1CameraObject.html", null ],
@@ -47,7 +47,6 @@ var hierarchy =
     [ "vex::MeshComponent", "structvex_1_1MeshComponent.html", null ],
     [ "vex::MeshData", "structvex_1_1MeshData.html", null ],
     [ "vex::MeshManager", "classvex_1_1MeshManager.html", null ],
-    [ "vex::ModelUBO", "structvex_1_1ModelUBO.html", null ],
     [ "vex::MouseAxisBinding", "structvex_1_1MouseAxisBinding.html", null ],
     [ "vex::NameComponent", "structvex_1_1NameComponent.html", null ],
     [ "JPH::ObjectLayerPairFilter", null, [
@@ -58,6 +57,7 @@ var hierarchy =
     ] ],
     [ "vex::PhysicsComponent", "structvex_1_1PhysicsComponent.html", null ],
     [ "vex::PhysicsSystem", "classvex_1_1PhysicsSystem.html", null ],
+    [ "Plane", "structPlane.html", null ],
     [ "vex::PushConstants", "structvex_1_1PushConstants.html", null ],
     [ "vex::RaycastHit", "structvex_1_1RaycastHit.html", null ],
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],
@@ -65,6 +65,7 @@ var hierarchy =
     [ "vex::Scene", "classvex_1_1Scene.html", null ],
     [ "vex::SceneLightsUBO", "structvex_1_1SceneLightsUBO.html", null ],
     [ "vex::SceneManager", "classvex_1_1SceneManager.html", null ],
+    [ "vex::SceneUBO", "structvex_1_1SceneUBO.html", null ],
     [ "std::streambuf", null, [
       [ "vex::VirtualFileSystem::VPKStream::VPKStreamBuf", "classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html", null ]
     ] ],

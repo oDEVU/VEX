@@ -31,15 +31,9 @@ namespace vex {
         /// @brief Creates uniform buffers.
         void createUniformBuffers();
 
-        /// @brief Updates the camera uniform buffer.
-        /// @param const CameraUBO& data - The data to update the camera uniform buffer with.
-        void updateCameraUBO(const CameraUBO& data);
-
-        /// @brief Updates the model uniform buffer.
-        /// @param uint32_t frameIndex - The frame index to update.
-        /// @param uint32_t modelIndex - The model index to update.
-        /// @param const ModelUBO& data - The data to update the model uniform buffer with.
-        void updateModelUBO(uint32_t frameIndex, uint32_t modelIndex, const ModelUBO& data);
+        /// @brief Updates the scene uniform buffer.
+        /// @param const SceneUBO& data - The data to update the scene uniform buffer with.
+        void updateSceneUBO(const SceneUBO& data);
 
         /// @brief Updates the light uniform buffer.
         /// @param uint32_t frameIndex - The frame index to update.
@@ -146,11 +140,9 @@ namespace vex {
 
         VulkanContext& m_r_context;
 
-        std::vector<VkBuffer> m_cameraBuffers;
-        std::vector<VkBuffer> m_modelBuffers;
+        std::vector<VkBuffer> m_sceneBuffers;
         std::vector<VkBuffer> m_lightBuffers;
-        std::vector<VmaAllocation> m_cameraAllocs;
-        std::vector<VmaAllocation> m_modelAllocs;
+        std::vector<VmaAllocation> m_sceneAllocs;
         std::vector<VmaAllocation> m_lightAllocs;
 
         VkDescriptorSetLayout m_descriptorSetLayout;

@@ -1,7 +1,7 @@
 {
   "environment": {
     "lighting": {
-      "ambientLight": [0.12, 0.15, 0.3],
+      "ambientLight": [0.06, 0.08, 0.15],
       "ambientLightStrength": 0.3,
       "sunLight": [0.05, 0.05, 0.05, 1.0],
       "sunDirection": [1.0, 1.0, -1.0],

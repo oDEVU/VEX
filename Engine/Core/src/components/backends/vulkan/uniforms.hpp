@@ -9,18 +9,27 @@
 #include "limits.hpp"
 
 namespace vex {
-    /// @brief Camera uniform buffer object.
-    struct CameraUBO {
+    /// @brief Scene uniform buffer object. Holds data that is bind once per scene.
+    struct SceneUBO {
         /// @brief View matrix
         alignas(16) glm::mat4 view;
         /// @brief Projection matrix
         alignas(16) glm::mat4 proj;
-    };
 
-    /// @brief Model uniform buffer object.
-    struct ModelUBO {
-        /// @brief Model matrix
-        alignas(16) glm::mat4 model;
+        alignas(4) float snapResolution;
+        alignas(4) float jitterIntensity;
+        /// @brief contains multiple PS1Effects thanks to bitwise operations.
+        alignas(4) int enablePS1Effects;
+
+        alignas(4) float time;
+        alignas(8) glm::vec2 renderResolution;
+        alignas(8) glm::vec2 windowResolution;
+        alignas(4) float upscaleRatio;
+
+        alignas(16) glm::vec4 ambientLight;
+        alignas(4) float ambientLightStrength;
+        alignas(16) glm::vec4 sunLight;
+        alignas(16) glm::vec4 sunDirection;
     };
 
     /// @brief Light struct for shader
@@ -34,25 +43,10 @@ namespace vex {
         alignas(16) Light lights[MAX_DYNAMIC_LIGHTS]; // Light is already glm::vec4 position + glm::vec4 color
     };
 
-    /// @brief Push constants, holds both environment and model information.
+    /// @brief Push constants, holds model information.
     struct PushConstants {
-        alignas(4) float snapResolution;
-        alignas(4) float jitterIntensity;
-        /// @brief contains multiple PS1Effects thanks to bitwise operations.
-        alignas(4) int enablePS1Effects;
-
         alignas(16) glm::vec4 color;
-
-        alignas(4) float time;
-        alignas(8) glm::vec2 renderResolution;
-        alignas(8) glm::vec2 windowResolution;
-        alignas(4) float upscaleRatio;
-        alignas(4) int renderingMode;
-
-        alignas(16) glm::vec4 ambientLight;
-        alignas(4) float ambientLightStrength;
-        alignas(16) glm::vec4 sunLight;
-        alignas(16) glm::vec4 sunDirection;
+        alignas(16) glm::mat4 model;
     };
 
     /// @brief PS1Effects namespace for easier setting of them in push constant.

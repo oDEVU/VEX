@@ -5,7 +5,7 @@ var searchData=
   ['vex_3a_3aps1effects_2',['PS1Effects',['../namespacevex_1_1PS1Effects.html',1,'vex']]],
   ['vexui_3',['VexUI',['../classvex_1_1VexUI.html',1,'vex::VexUI'],['../classvex_1_1VexUI.html#a5c081cf41b22e86604dd8016fbce0684',1,'vex::VexUI::VexUI()']]],
   ['vexui_2ehpp_4',['VexUI.hpp',['../VexUI_8hpp.html',1,'']]],
-  ['view_5',['view',['../structvex_1_1CameraUBO.html#a0e68f563a160add421760319ca18eb89',1,'vex::CameraUBO']]],
+  ['view_5',['view',['../structvex_1_1SceneUBO.html#aff32b4ef5b2c8dc91b5657cda6b90470',1,'vex::SceneUBO']]],
   ['virtualfilesystem_6',['VirtualFileSystem',['../classvex_1_1VirtualFileSystem.html',1,'vex::VirtualFileSystem'],['../classvex_1_1VirtualFileSystem.html#a36825cf97628d454a9ff9dc6c2143039',1,'vex::VirtualFileSystem::VirtualFileSystem()']]],
   ['virtualfilesystem_2ehpp_7',['VirtualFileSystem.hpp',['../VirtualFileSystem_8hpp.html',1,'']]],
   ['vpkassimpiosystem_8',['VPKAssimpIOSystem',['../classvex_1_1VPKAssimpIOSystem.html',1,'vex']]],
