@@ -4,6 +4,29 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS" CACHE STRING "Modified CXX flags for thirdparty on Windows" FORCE)
 endif()
 
+# i hate google tests
+include(FetchContent)
+
+set(GTEST_DUMMY_DIR "${CMAKE_CURRENT_BINARY_DIR}/googletest-dummy")
+file(MAKE_DIRECTORY ${GTEST_DUMMY_DIR})
+
+file(WRITE "${GTEST_DUMMY_DIR}/CMakeLists.txt"
+    "add_library(gtest INTERFACE)\n"
+    "add_library(gtest_main INTERFACE)\n"
+    "add_library(gmock INTERFACE)\n"
+    "add_library(gmock_main INTERFACE)\n"
+    "add_library(GTest::gtest ALIAS gtest)\n"
+    "add_library(GTest::gtest_main ALIAS gtest_main)\n"
+    "add_library(GTest::gmock ALIAS gmock)\n"
+    "add_library(GTest::gmock_main ALIAS gmock_main)\n"
+)
+
+FetchContent_Declare(
+    googletest
+    SOURCE_DIR ${GTEST_DUMMY_DIR}
+)
+FetchContent_MakeAvailable(googletest)
+
 # SDL3 with Wayland support
 set(SDL_TEST OFF CACHE BOOL "Disable SDL tests")
 set(SDL_STATIC ON CACHE BOOL "Build shared library")
@@ -52,6 +75,21 @@ set(YOGA_SKIP_BENCHMARKS TRUE CACHE INTERNAL "Skip Yoga benchmarks" FORCE)
 set(YOGA_BUILD_TESTS OFF CACHE BOOL "Disable Yoga test builds" FORCE)
 add_subdirectory(yoga SYSTEM)
 
+foreach(BAD_TARGET yogatest yogatests tests yogabench yogabenchmarks)
+    if(TARGET ${BAD_TARGET})
+        message(STATUS "Target '${BAD_TARGET}' detected. Forcefully excluding from build.")
+        set_target_properties(${BAD_TARGET} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+    endif()
+endforeach()
+
+# Force disable yoga test targets if they were created
+if(TARGET yogatest)
+    set_target_properties(yogatest PROPERTIES EXCLUDE_FROM_ALL TRUE)
+endif()
+if(TARGET yogabench)
+    set_target_properties(yogabench PROPERTIES EXCLUDE_FROM_ALL TRUE)
+endif()
+
 # Check what Yoga target is available
 if(TARGET yoga)
     message(STATUS "Yoga target found: yoga")
@@ -84,11 +122,24 @@ set(BUILD_GMOCK OFF CACHE BOOL "Disable GoogleMock build" FORCE)
 set(INSTALL_GTEST OFF CACHE BOOL "Disable GoogleTest install" FORCE)
 add_subdirectory(assimp SYSTEM)
 
-if(TARGET gtest)
-    target_compile_options(gtest PRIVATE -Wno-character-conversion)
-endif()
-if(TARGET gtest_main)
-    target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
+# Force disable Assimp's GoogleTest targets if they were created
+foreach(BAD_TARGET gtest gtest_main unit tests)
+    if(TARGET ${BAD_TARGET})
+        set_target_properties(${BAD_TARGET} PROPERTIES EXCLUDE_FROM_ALL TRUE)
+    endif()
+endforeach()
+
+include(CheckCXXCompilerFlag)
+
+check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNING)
+
+if(COMPILER_HAS_CHAR_CONV_WARNING)
+    if(TARGET gtest)
+        target_compile_options(gtest PRIVATE -Wno-character-conversion)
+    endif()
+    if(TARGET gtest_main)
+        target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
+    endif()
 endif()
 
 #entt
@@ -115,15 +166,22 @@ set(JSON_Install OFF CACHE INTERNAL "")
 add_subdirectory(json SYSTEM)
 
 # dirty fix for assimp not compiling in realese
+# Note: Modified to use COMPILER_HAS_CHAR_CONV_WARNING to prevent Clang 20 crash
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     if(WIN32)
-        target_compile_options(assimp PRIVATE -Wno-array-bounds -Wno-character-conversion)
+        target_compile_options(assimp PRIVATE -Wno-array-bounds)
+        if(COMPILER_HAS_CHAR_CONV_WARNING)
+            target_compile_options(assimp PRIVATE -Wno-character-conversion)
+        endif()
     else()
         target_compile_options(assimp PRIVATE -Wno-array-bounds)
     endif()
 else()
     if(WIN32)
-        target_compile_options(assimp PRIVATE -Wno-character-conversion -Wno-error)
+        target_compile_options(assimp PRIVATE -Wno-error)
+        if(COMPILER_HAS_CHAR_CONV_WARNING)
+            target_compile_options(assimp PRIVATE -Wno-character-conversion)
+        endif()
     else()
         target_compile_options(assimp PRIVATE -Wno-error)
     endif()

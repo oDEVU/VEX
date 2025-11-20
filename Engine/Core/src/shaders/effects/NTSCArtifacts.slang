@@ -1,17 +1,13 @@
 module NTSCArtifacts;
 import depends.uniforms;
-
-[[vk::binding(0, 1)]]
-Texture2D<float4> texSampler;
-[[vk::binding(0, 1)]]
-SamplerState texSamplerState;
+import depends.texsampler;
 
 public float3 applyNTSC(float3 texColor, float2 uv, float2 pixelCoord,
                         bool enable) {
   if (!enable)
     return texColor;
   float2 bleedUV = float2(uv.x + sin(scene.time * 0.5) * 0.0005, uv.y);
-  float3 bleedColor = texSampler.Sample(texSamplerState, bleedUV).rgb;
+  float3 bleedColor = texSampler.Sample(bleedUV).rgb;
   texColor = lerp(texColor, bleedColor, 0.15);
   float scanline = lerp(0.95, 1.0, fmod(pixelCoord.y, 2.0));
   texColor *= scanline;

@@ -1,4 +1,3 @@
-#pragma once
 #include "components/InputSystem.hpp"
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>

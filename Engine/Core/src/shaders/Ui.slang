@@ -16,8 +16,8 @@ struct VSOutput {
     float4x4 ortho;
 } pc;
 
-[[vk::binding(0, 1)]] Texture2D<float4> texSampler;
-[[vk::binding(0, 1)]] SamplerState texSamplerState;
+[[vk::binding(0, 1)]]
+Sampler2D<float4> texSampler;
 
 [shader("vertex")]
 VSOutput vertMain(VSInput input) {
@@ -35,5 +35,5 @@ VSOutput vertMain(VSInput input) {
 float4 fragMain(VSOutput input) : SV_Target  {
     return (input.fragTexIndex < 0.0)
         ? input.fragColor
-        : texSampler.Sample(texSamplerState, input.fragUV) * input.fragColor;
+        : texSampler.Sample(input.fragUV) * input.fragColor;
 }

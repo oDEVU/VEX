@@ -28,7 +28,7 @@ public:
     using vex::Engine::Engine; // Inherit constructor
     bool animate = true;
 
-    void processEvent(const SDL_Event& event, float deltaTime) {
+    void processEvent(const SDL_Event& event, float deltaTime) override {
         if (event.type == SDL_EVENT_KEY_DOWN) {
             const SDL_KeyboardEvent& key_event = event.key;
 

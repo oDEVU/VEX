@@ -14,7 +14,7 @@
 #if DEBUG
 #include <cpptrace/cpptrace.hpp>
 
-inline void throw_error(const std::string& msg) {
+[[noreturn]] inline void throw_error(const std::string& msg) {
     throw cpptrace::runtime_error(msg.c_str());
 }
 
@@ -40,7 +40,7 @@ inline void handle_exception(const std::exception& e) {
 /// @code
 ///     throw_error("An error occurred");
 /// @endcode
-inline void throw_error(const std::string& msg) {
+[[noreturn]] inline void throw_error(const std::string& msg) {
     throw std::runtime_error(msg.c_str());
 }
 

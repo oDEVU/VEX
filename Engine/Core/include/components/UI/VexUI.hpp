@@ -6,7 +6,9 @@
 
 #pragma once
 
-#define VK_NO_PROTOTYPES 1
+#ifndef VK_NO_PROTOTYPES
+    #define VK_NO_PROTOTYPES 1
+#endif
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 1
 #include <vk_mem_alloc.h>
@@ -125,9 +127,11 @@ public:
     /// @code
     /// Widget& scoreWidget = m_vexUI->getWidget("score");
     /// @endcode
-    Widget& getWidget(const std::string& id) {
-        if (Widget* w = findById(m_root, id)) return *w;
+    Widget* getWidget(const std::string& id) {
+        if (Widget* w = findById(m_root, id)) return w;
+
         log("Widget not found");
+        return nullptr;
     }
 
     /// @brief Get a UI element's style.
@@ -137,9 +141,10 @@ public:
     /// @code
     /// UIStyle& scoreStyle = m_vexUI->getStyle("score");
     /// @endcode
-    UIStyle getStyle(const std::string& id) {
-        if (Widget* w = findById(m_root, id)) return w->style;
+    UIStyle* getStyle(const std::string& id) {
+        if (Widget* w = findById(m_root, id)) return &w->style;
         log("Widget not found");
+        return nullptr;
     }
 
     /// @brief Set a UI element's style.

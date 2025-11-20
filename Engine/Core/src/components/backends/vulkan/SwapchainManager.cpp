@@ -465,5 +465,6 @@ namespace vex {
             }
         }
         throw_error("Failed to find supported depth format");
+        return VK_FORMAT_UNDEFINED;
     }
 }

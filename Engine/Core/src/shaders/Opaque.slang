@@ -1,5 +1,6 @@
 import depends.uniforms;
 import depends.math;
+import depends.texsampler;
 
 import effects.AffineWarping;
 import effects.ColorQuantization;
@@ -7,11 +8,6 @@ import effects.NTSCArtifacts;
 import effects.GouraudShading;
 import effects.VertexSnapping;
 import effects.VertexJitter;
-
-[[vk::binding(0, 1)]]
-Texture2D<float4> texSampler;
-[[vk::binding(0, 1)]]
-SamplerState texSamplerState;
 
 struct VSInput {
   [[vk::location(0)]]
@@ -95,7 +91,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
                             isEnabled(AFFINE_WARPING));
   float2 pixelCoord = fragCoord.xy;
 
-  float4 texColor = texSampler.Sample(texSamplerState, uv);
+  float4 texColor = texSampler.Sample(uv);
   float4 pushColor = push.color;
   bool isUntextured = HasInValidUV(uv); // false;//(uv.x < 0.0 || uv.y < 0.0);
 

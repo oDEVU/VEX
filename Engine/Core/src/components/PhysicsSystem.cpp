@@ -1,4 +1,6 @@
-#define GLM_ENABLE_EXPERIMENTAL 1
+#ifndef GLM_ENABLE_EXPERIMENTAL
+    #define GLM_ENABLE_EXPERIMENTAL 1
+#endif
 #include <entt/entity/fwd.hpp>
 #include <components/PhysicsSystem.hpp>
 #include <glm/gtc/constants.hpp>

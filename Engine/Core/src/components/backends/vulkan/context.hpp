@@ -21,7 +21,7 @@
 namespace vex {
     /// @brief Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.
     /// @todo cleanup
-    typedef struct {
+    struct VulkanContext {
         VkInstance instance;
         VkPhysicalDevice physicalDevice;
         VkDevice device;
@@ -111,5 +111,5 @@ namespace vex {
         glm::uvec2 currentRenderResolution;
 
         enviroment m_enviroment;
-    } VulkanContext;
+    };
 }
