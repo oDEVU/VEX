@@ -34,6 +34,7 @@ namespace vex {
         Renderer(VulkanContext& context,
                  std::unique_ptr<VulkanResources>& resources,
                  std::unique_ptr<VulkanPipeline>& pipeline,
+                 std::unique_ptr<VulkanPipeline>& transPipeline,
                  std::unique_ptr<VulkanPipeline>& uiPipeline,
                  std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
                  std::unique_ptr<MeshManager>& meshManager);
@@ -71,6 +72,7 @@ namespace vex {
         VulkanContext& m_r_context;
         std::unique_ptr<VulkanResources>& m_p_resources;
         std::unique_ptr<VulkanPipeline>& m_p_pipeline;
+        std::unique_ptr<VulkanPipeline>& m_p_transPipeline;
         std::unique_ptr<VulkanPipeline>& m_p_uiPipeline;
         std::unique_ptr<VulkanSwapchainManager>& m_p_swapchainManager;
         std::unique_ptr<MeshManager>& m_p_meshManager;

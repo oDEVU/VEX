@@ -38,6 +38,19 @@ namespace vex {
             const std::vector<VkVertexInputAttributeDescription>& attributeDescriptions
         );
 
+        /// @brief Creates a graphics VkPipeline.
+        /// @param std::string& vertShaderPath - Path to the vertex shader.
+        /// @param std::string& fragShaderPath - Path to the fragment shader.
+        /// @param VkVertexInputBindingDescription& bindingDescription - Vertex input binding description.
+        /// @param std::vector<VkVertexInputAttributeDescription>& attributeDescriptions - Vertex input attribute descriptions.
+        /// @details Creates a graphics pipeline using the provided shader paths and vertex input descriptions and puts some needed data in the context for later use, like layouts.
+        void createTransparentPipeline(
+            const std::string& vertShaderPath,
+            const std::string& fragShaderPath,
+            const VkVertexInputBindingDescription& bindingDescription,
+            const std::vector<VkVertexInputAttributeDescription>& attributeDescriptions
+        );
+
         /// @brief Creates a UI VkPipeline.
         /// @param std::string& vertShaderPath - Path to the vertex shader.
         /// @param std::string& fragShaderPath - Path to the fragment shader.

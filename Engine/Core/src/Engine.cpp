@@ -139,8 +139,10 @@ void Engine::run() {
             beginGame();
         }
 
-        render();
-        m_frame++;
+        if(!m_internally_paused){
+            render();
+            m_frame++;
+        }
     }
 }
 

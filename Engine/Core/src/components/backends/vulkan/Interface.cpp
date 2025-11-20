@@ -244,6 +244,16 @@ namespace vex {
             attributes
         );
 
+        log("Initializing Transparent Pipeline...");
+        m_p_transPipeline = std::make_unique<VulkanPipeline>(m_context);
+
+        m_p_transPipeline->createTransparentPipeline(
+            "Engine/shaders/TransparentVert.spv",
+            "Engine/shaders/TransparentFrag.spv",
+            bindingDesc,
+            attributes
+        );
+
         log("Initializing UI Pipeline...");
         m_p_uiPipeline = std::make_unique<VulkanPipeline>(m_context);
 
@@ -266,7 +276,7 @@ namespace vex {
         );
 
         log("Initializing Renderer...");
-        m_p_renderer = std::make_unique<Renderer>(m_context, m_p_resources, m_p_pipeline, m_p_uiPipeline, m_p_swapchainManager, m_p_meshManager);
+        m_p_renderer = std::make_unique<Renderer>(m_context, m_p_resources, m_p_pipeline, m_p_transPipeline, m_p_uiPipeline, m_p_swapchainManager, m_p_meshManager);
 
         log("Vulkan interface initialized successfully");
     }

@@ -112,6 +112,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a98622acc241688b8fa46d13af4cd376b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1VulkanPipeline.html" title="A class managing creating vulkan pipelines. Both form meshes and UI elements.">VulkanPipeline</a>.  <br /></td></tr>
 <tr class="memitem:aac43b2e87b883999cc2abfd635834a80" id="r_aac43b2e87b883999cc2abfd635834a80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac43b2e87b883999cc2abfd635834a80">createGraphicsPipeline</a> (const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</td></tr>
 <tr class="memdesc:aac43b2e87b883999cc2abfd635834a80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a graphics VkPipeline.  <br /></td></tr>
+<tr class="memitem:ac4c66041196d8c8d8f1410125923a34b" id="r_ac4c66041196d8c8d8f1410125923a34b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4c66041196d8c8d8f1410125923a34b">createTransparentPipeline</a> (const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</td></tr>
+<tr class="memdesc:ac4c66041196d8c8d8f1410125923a34b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a graphics VkPipeline.  <br /></td></tr>
 <tr class="memitem:a4e6b47a0e253b2f2e6a2f7118adea69d" id="r_a4e6b47a0e253b2f2e6a2f7118adea69d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e6b47a0e253b2f2e6a2f7118adea69d">createUIPipeline</a> (const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDesc, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attrDesc)</td></tr>
 <tr class="memdesc:a4e6b47a0e253b2f2e6a2f7118adea69d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a UI VkPipeline.  <br /></td></tr>
 <tr class="memitem:aa2b529bcec43595666b92dca25adbd1a" id="r_aa2b529bcec43595666b92dca25adbd1a"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2b529bcec43595666b92dca25adbd1a">get</a> () const</td></tr>
@@ -229,6 +231,51 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac4c66041196d8c8d8f1410125923a34b" name="ac4c66041196d8c8d8f1410125923a34b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c66041196d8c8d8f1410125923a34b">&#9670;&#160;</a></span>createTransparentPipeline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VulkanPipeline::createTransparentPipeline </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>vertShaderPath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>fragShaderPath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const VkVertexInputBindingDescription &amp;</td>          <td class="paramname"><span class="paramname"><em>bindingDescription</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>attributeDescriptions</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a graphics VkPipeline. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::string&amp;</td><td>vertShaderPath - Path to the vertex shader. </td></tr>
+    <tr><td class="paramname">std::string&amp;</td><td>fragShaderPath - Path to the fragment shader. </td></tr>
+    <tr><td class="paramname">VkVertexInputBindingDescription&amp;</td><td>bindingDescription - <a class="el" href="structvex_1_1Vertex.html" title="Vertex structure for mesh data.">Vertex</a> input binding description. </td></tr>
+    <tr><td class="paramname">std::vector&lt;VkVertexInputAttributeDescription&gt;&amp;</td><td>attributeDescriptions - <a class="el" href="structvex_1_1Vertex.html" title="Vertex structure for mesh data.">Vertex</a> input attribute descriptions.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Creates a graphics pipeline using the provided shader paths and vertex input descriptions and puts some needed data in the context for later use, like layouts. </p>
+
+<p class="definition">Definition at line <a class="el" href="Pipeline_8cpp_source.html#l00225">225</a> of file <a class="el" href="Pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a4e6b47a0e253b2f2e6a2f7118adea69d" name="a4e6b47a0e253b2f2e6a2f7118adea69d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e6b47a0e253b2f2e6a2f7118adea69d">&#9670;&#160;</a></span>createUIPipeline()</h2>
 
@@ -270,7 +317,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Creates a UI pipeline using the provided shader paths and vertex input descriptions and puts some needed data in the context for later use, like layouts. </p>
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8cpp_source.html#l00225">225</a> of file <a class="el" href="Pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8cpp_source.html#l00411">411</a> of file <a class="el" href="Pipeline_8cpp_source.html">Pipeline.cpp</a>.</p>
 
 </div>
 </div>
@@ -301,7 +348,7 @@ Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>VkPipeline - The VkPipeline.</dd></dl>
 <p>Used by renderer (and vex UI since it manages its own rendering logic). </p>
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00056">56</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00069">69</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +379,7 @@ Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>VkPipelineLayout - The VkPipelineLayout.</dd></dl>
 <p>Used by renderer (and vex UI since it manages its own rendering logic). </p>
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00061">61</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00074">74</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -412,7 +459,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00073">73</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00086">86</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -436,7 +483,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00071">71</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00084">84</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -460,7 +507,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00070">70</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00083">83</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -484,7 +531,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00069">69</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00082">82</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>

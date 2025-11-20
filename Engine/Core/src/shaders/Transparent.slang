@@ -70,7 +70,7 @@ VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
 
     if (dist < light.radius) {
       float3 L = normalize(toLight);
-      float NdotL = max(dot(output.fragNormal, L), 0.0);
+      float NdotL = abs(dot(output.fragNormal, L));
       float distSqr = dist * dist;
       float atten = light.intensity / max(distSqr, 0.01);
       dynamicLight += NdotL * atten * light.color * light.intensity;
@@ -79,7 +79,7 @@ VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
 
   output.fragLights = dynamicLight;
   output.fragDiff =
-      computeDiffuse(output.fragNormal, isEnabled(GOURAUD_SHADING), false);
+      computeDiffuse(output.fragNormal, isEnabled(GOURAUD_SHADING), true);
   output.fragUV = input.uv;
   output.fragDepth = viewPos.z;
   float invW = 1.0 / clipPos.w;
@@ -99,6 +99,14 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float4 pushColor = push.color;
   bool isUntextured = HasInValidUV(uv); // false;//(uv.x < 0.0 || uv.y < 0.0);
 
+  if (isUntextured) {
+    if (pushColor.a < 0.05)
+      discard;
+  } else {
+    if (texColor.a < 0.05)
+      discard;
+  }
+
   if (isEnabled(COLOR_QUANTIZATION)) {
     float4 c = isUntextured ? pushColor : texColor;
     c = applyQuantization(c, pixelCoord, true);
@@ -113,7 +121,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
 
   float diff = isEnabled(GOURAUD_SHADING)
                    ? input.fragDiff
-                   : computeDiffuse(input.fragNormal, true, false);
+                   : computeDiffuse(input.fragNormal, true, true);
 
   // diff += input.fragLights;
 
@@ -123,9 +131,6 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float3 lighting = ambient + sunLight + input.fragLights;
   lighting = saturate(lighting);
 
-  float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
-                                   : (texColor * float4(lighting, 1.0));
-  finalColor.a = 1.0;
-
-  return finalColor;
+  return isUntextured ? (pushColor * float4(lighting, 1.0))
+                      : (texColor * float4(lighting, 1.0));
 }

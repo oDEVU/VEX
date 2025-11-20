@@ -96,6 +96,11 @@ struct TransformComponent {
         physicsAffected = true;
     }
 
+    /// @brief Set the physics affected status.
+    void setPhysicsAffected(bool value){
+        physicsAffected = value;
+    }
+
     void enableLastTransformed(){
         lastTransformed = true;
     }

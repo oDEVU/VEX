@@ -132,6 +132,7 @@ namespace vex {
         if (!m_physicsSystem || !r.all_of<TransformComponent>(e)) return std::nullopt;
 
         auto& t = r.get<TransformComponent>(e);
+        t.setPhysicsAffected(true);
         JPH::RVec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
         JPH::Quat rot = GlmToJph(t.getWorldQuaternion());
 

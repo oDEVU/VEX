@@ -44,7 +44,7 @@
           "type": "CameraComponent",
           "fov": 90.0,
           "nearPlane": 0.1,
-          "farPlane": 1000.0
+          "farPlane": 100.0
         }
       ]
     },

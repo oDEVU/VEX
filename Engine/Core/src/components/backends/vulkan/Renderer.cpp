@@ -19,12 +19,14 @@ namespace vex {
     Renderer::Renderer(VulkanContext& context,
                        std::unique_ptr<VulkanResources>& resources,
                        std::unique_ptr<VulkanPipeline>& pipeline,
+                       std::unique_ptr<VulkanPipeline>& transPipeline,
                        std::unique_ptr<VulkanPipeline>& uiPipeline,
                        std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
                        std::unique_ptr<MeshManager>& meshManager)
         : m_r_context(context),
           m_p_resources(resources),
           m_p_pipeline(pipeline),
+          m_p_transPipeline(transPipeline),
           m_p_uiPipeline(uiPipeline),
           m_p_swapchainManager(swapchainManager),
           m_p_meshManager(meshManager) {
@@ -391,6 +393,8 @@ namespace vex {
 
                             vkCmdDrawIndexed(commandBuffer, 3, 1, tri.firstIndex, 0, 0);
                             }*/
+                            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_transPipeline->get());
+
                             VulkanMesh* batchMesh = nullptr;
                             uint32_t batchSubmeshIndex = UINT32_MAX;
                             uint32_t batchModelIndex = UINT32_MAX;
@@ -404,7 +408,7 @@ namespace vex {
                                 if (stateChange && !m_multiDrawInfos.empty()) {
                                     batchMesh->bindAndDrawBatched(
                                         commandBuffer,
-                                        m_p_pipeline->layout(),
+                                        m_p_transPipeline->layout(),
                                         *m_p_resources,
                                         m_r_context.currentFrame,
                                         batchModelIndex,
@@ -433,7 +437,7 @@ namespace vex {
                             if (!m_multiDrawInfos.empty() && batchMesh != nullptr) {
                                 batchMesh->bindAndDrawBatched(
                                     commandBuffer,
-                                    m_p_pipeline->layout(),
+                                    m_p_transPipeline->layout(),
                                     *m_p_resources,
                                     m_r_context.currentFrame,
                                     batchModelIndex,
