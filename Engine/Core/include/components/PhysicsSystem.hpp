@@ -322,8 +322,18 @@ namespace vex {
         /// @brief Performs a raycast in the physics world.
         bool raycast(const glm::vec3& origin, const glm::vec3& direction, float maxDistance, RaycastHit& hit);
 
+        /// @brief Allows for getting collision steps (collision accuracy).
+        /// @return int - number of collision steps
+        int GetCollisionSteps() { return collisionSteps; }
+
+        /// @brief Allows for setting collision steps (collision accuracy).
+        /// @param int steps - number of collision steps
+        void setCollisionSteps(int steps) { collisionSteps = steps; }
+
     private:
         friend class MyContactListener;
+
+        int collisionSteps = 3;
 
         JPH::TempAllocatorImpl* m_tempAllocator = nullptr;
         JPH::JobSystem* m_jobSystem = nullptr;

@@ -251,6 +251,8 @@ namespace vex {
                 Frustum camFrustum;
                 camFrustum.update(proj * view);
 
+                trnasMatrixes.clear();
+
                 //log("Rendering non transparent meshes");
                 for (auto entity : modelView) {
                     auto& transform = modelView.get<TransformComponent>(entity);
@@ -314,6 +316,8 @@ namespace vex {
                                 m_r_context.currentFrame,
                                 m_transparentTriangles
                             );
+
+                            trnasMatrixes[modelIndex] = modelMatrix;
                             //}
                     }
                     modelIndex++;
@@ -424,7 +428,7 @@ namespace vex {
                                     batchMesh = tri.mesh;
                                     batchSubmeshIndex = tri.submeshIndex;
                                     batchModelIndex = tri.modelIndex;
-                                    batchModelMatrix = tri.modelMatrix;
+                                    batchModelMatrix = trnasMatrixes[tri.modelIndex];
                                 }
 
                                 VkMultiDrawIndexedInfoEXT drawInfo{};

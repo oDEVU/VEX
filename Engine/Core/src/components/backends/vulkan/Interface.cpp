@@ -288,6 +288,7 @@ namespace vex {
         m_p_meshManager.reset();
         m_p_resources.reset();
         m_p_pipeline.reset();
+        m_p_transPipeline.reset();
         m_p_uiPipeline.reset();
         m_p_swapchainManager->cleanupSwapchain();
         m_p_swapchainManager.reset();

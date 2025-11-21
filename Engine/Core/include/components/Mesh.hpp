@@ -33,6 +33,7 @@ namespace vex {
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
         std::string texturePath;
+        std::vector<glm::vec3> triangleCenters;
     };
 
     /// @brief Mesh data structure for loading and managing mesh data

@@ -115,8 +115,7 @@ namespace vex {
         }
 
         m_accumulator += deltaTime;
-        /// @todo make it configurable
-        int collisionSteps = 3;
+
         while (m_accumulator >= m_fixedDt) {
             m_physicsSystem->Update(m_fixedDt, collisionSteps, m_tempAllocator, m_jobSystem);
             m_accumulator -= m_fixedDt;

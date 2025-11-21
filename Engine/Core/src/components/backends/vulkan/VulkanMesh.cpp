@@ -37,7 +37,7 @@ namespace vex {
         m_submeshTextures.reserve(meshData.submeshes.size());
         m_cpuSubmeshData = meshData.submeshes;
 
-        for (const auto& srcSubmesh : meshData.submeshes) {
+        for (auto& srcSubmesh : m_cpuSubmeshData) {
             SubmeshBuffers buffers{};
 
             VkBufferCreateInfo bufferInfo{};
@@ -69,6 +69,13 @@ namespace vex {
             m_submeshBuffers.push_back(buffers);
             m_submeshTextures.push_back(srcSubmesh.texturePath);
 
+            for (size_t i = 0; i < srcSubmesh.indices.size(); i += 3) {
+                const auto& p0 = srcSubmesh.vertices[srcSubmesh.indices[i+0]].position;
+                const auto& p1 = srcSubmesh.vertices[srcSubmesh.indices[i+1]].position;
+                const auto& p2 = srcSubmesh.vertices[srcSubmesh.indices[i+2]].position;
+                srcSubmesh.triangleCenters.push_back((p0 + p1 + p2) / 3.0f);
+            }
+
             log("Uploaded submesh: %zu vertices, %u indices, texture: '%s'",
                    srcSubmesh.vertices.size(), buffers.indexCount,
                    srcSubmesh.texturePath.c_str());
@@ -87,19 +94,10 @@ namespace vex {
 
         for (uint32_t submeshIndex = 0; submeshIndex < m_cpuSubmeshData.size(); ++submeshIndex) {
             const auto& submesh = m_cpuSubmeshData[submeshIndex];
-            const auto& indices = submesh.indices;
-            const auto& vertices = submesh.vertices;
+            const size_t indexCount = submesh.indices.size();
 
-            for (uint32_t i = 0; i < indices.size(); i += 3) {
-                uint32_t i0 = indices[i + 0];
-                uint32_t i1 = indices[i + 1];
-                uint32_t i2 = indices[i + 2];
-
-                const glm::vec3& p0 = vertices[i0].position;
-                const glm::vec3& p1 = vertices[i1].position;
-                const glm::vec3& p2 = vertices[i2].position;
-
-                glm::vec3 center_model = (p0 + p1 + p2) / 3.0f;
+            for (uint32_t i = 0; i < indexCount; i += 3) {
+                glm::vec3 center_model = submesh.triangleCenters[i/3];
 
                 glm::vec3 center_world = rotation_scale_matrix * center_model + translation_vector;
 
@@ -112,8 +110,7 @@ namespace vex {
                     frameIndex,
                     i,
                     submeshIndex,
-                    this,
-                    modelMatrix
+                    this
                 });
             }
         }

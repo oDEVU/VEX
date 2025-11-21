@@ -106,11 +106,22 @@ namespace vex {
         return modelObject;
     }
 
-    MeshComponent MeshManager::loadMesh(const std::string& path) {
+    MeshComponent MeshManager::loadMesh(const std::string& path, Engine& engine) {
         MeshData meshData;
         MeshComponent meshComponent;
+        std::string realPath = GetAssetPath(path);
+
+        auto view = engine.getRegistry().view<MeshComponent>();
+        for (auto entity : view) {
+            auto mc = view.get<MeshComponent>(entity);
+            if(mc.meshData.meshPath == realPath){
+                log("Mesh component is already loaded, copying data.");
+                meshComponent = mc;
+                return meshComponent;
+            }
+        }
+
         try {
-            std::string realPath = GetAssetPath(path);
             log("Loading mesh data from: %s", realPath.c_str());
 
             if (!m_vfs->file_exists(realPath)) {

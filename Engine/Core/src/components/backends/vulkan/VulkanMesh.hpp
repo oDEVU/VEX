@@ -99,6 +99,6 @@ struct TransparentTriangle {
         uint32_t submeshIndex;
         VulkanMesh* mesh;
 
-        glm::mat4 modelMatrix;
+        //glm::mat4 modelMatrix;
     };
 }
