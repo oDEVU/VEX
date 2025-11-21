@@ -10,6 +10,12 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 ### Built-in ImGui, error handling, and debugging tools for debug builds
 ![ObjectTest debug build 03-10-2025](/RepoStuff/VEX_Debug.gif)
 
+### Performant Physics system implemented
+![StraterProjects/PhysicsTest](/RepoStuff/Physics.gif)
+
+### Dynamic Vertex lighting
+![StraterProjects/LightingTest](/RepoStuff/Lighting.gif)
+
 ### Custom asset packing system with support for auto-registered custom classes
 ![ObjectTest debug build and build tools 03-10-2025](/RepoStuff/VEX_features.gif)
 
@@ -18,19 +24,18 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 - Virtual File System: Abstracted file access supporting virtual paths, with ability to load normal files
 - Transform Hierarchy: Proper object parenting with hierarchical transformation system
 - Object/ECS System Hybrid: Similarly to Unreals Actor system here you can create Object c++ classes with its own components
+- Scene System: Json based with abbility to load custom classes, like player/enemy/gun, as long as they register them selfs.
 - Custom UI system: Json based UI system using facebook/yoga layout engine.
-- Implemented Jolt as physics engine.
+- Physics System: Simply implemented Jolt as its performant and stable.
 
 ## Other Notes
-- Current builds are early in development and represent basic functionality
+- Current builds are early in development. But making a game is possible.
 - Currently mostly tested on Linux with AMD GPUs (both discrete and integrated), Windows builds are now possible but not every merge is tested for windows compatibility.
-- An editor is planned, but requires a working engine core to do so
+- An editor is planned, but requires a working engine core to do so.
 
 ## Engine documentation
-Engine documentation can be found under: https://odevu.github.io/VEX/
-It can also be regenerated locally by using doxygen.
-
-There are also code sample avaiable for creating in engine projects: https://odevu.github.io/VEX/samples/
+- Core Documentation: Detailed, doxygen-generated reference for engine modification and development. [https://odevu.github.io/VEX/](https://odevu.github.io/VEX/)
+- Code Samples: Simple, system-by-system examples focused on game creation and engine usage. [https://odevu.github.io/VEX/samples/](https://odevu.github.io/VEX/samples/)
 
 ## Building the Project (Curently you build engine with a project)
 This guide provides the necessary steps for setting up your environment, compiling the custom build tools, and finally compiling the project itself.
@@ -106,9 +111,7 @@ You need to provide the tool with the path to your project's root folder and spe
 - Support for animated 3D models
 ### Should be implemented but can make games without:
 - Vertex colors for models (for AO or fog effects)
-- Vertex lighting implementation
 ### Things that will make me happy but wont help me do games:
-- Frustum culling
 - offscreen rendering (to a texture for example, with support for multiple render targets)
 - Better shader pipeline
 
