@@ -133,14 +133,14 @@ include(CheckCXXCompilerFlag)
 
 check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNING)
 
-if(COMPILER_HAS_CHAR_CONV_WARNING)
-    if(TARGET gtest)
-        target_compile_options(gtest PRIVATE -Wno-character-conversion)
-    endif()
-    if(TARGET gtest_main)
-        target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
-    endif()
-endif()
+#if(COMPILER_HAS_CHAR_CONV_WARNING)
+#    if(TARGET gtest)
+#        target_compile_options(gtest PRIVATE -Wno-character-conversion)
+#    endif()
+#    if(TARGET gtest_main)
+#        target_compile_options(gtest_main PRIVATE -Wno-character-conversion)
+#    endif()
+#endif()
 
 #entt
 add_subdirectory(entt SYSTEM)

@@ -333,8 +333,8 @@ namespace vex {
                                   return a.distanceToCamera > b.distanceToCamera;
                               }
 
-                              if (a.mesh != b.mesh) {
-                                  return a.mesh < b.mesh;
+                              if (a.modelIndex != b.modelIndex) {
+                                  return a.modelIndex < b.modelIndex;
                               }
 
                               return a.submeshIndex < b.submeshIndex;
@@ -417,7 +417,9 @@ namespace vex {
                                         m_r_context.currentFrame,
                                         batchModelIndex,
                                         batchSubmeshIndex,
-                                        batchModelMatrix
+                                        batchModelMatrix,
+                                        tri.modelIndex != batchModelIndex,
+                                        tri.submeshIndex != batchSubmeshIndex
                                     );
 
                                     issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
@@ -429,6 +431,15 @@ namespace vex {
                                     batchSubmeshIndex = tri.submeshIndex;
                                     batchModelIndex = tri.modelIndex;
                                     batchModelMatrix = trnasMatrixes[tri.modelIndex];
+                                }
+
+                                bool canMerge = !m_multiDrawInfos.empty() && !stateChange;
+                                if (canMerge) {
+                                    auto& lastDraw = m_multiDrawInfos.back();
+                                    if (tri.firstIndex == (lastDraw.firstIndex + lastDraw.indexCount)) {
+                                        lastDraw.indexCount += 3;
+                                        continue;
+                                    }
                                 }
 
                                 VkMultiDrawIndexedInfoEXT drawInfo{};
@@ -446,7 +457,9 @@ namespace vex {
                                     m_r_context.currentFrame,
                                     batchModelIndex,
                                     batchSubmeshIndex,
-                                    batchModelMatrix
+                                    batchModelMatrix,
+                                    true,
+                                    true
                                 );
                                 issueMultiDrawIndexed(commandBuffer, m_multiDrawInfos);
                             }

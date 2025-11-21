@@ -1,5 +1,6 @@
 #include "VulkanMesh.hpp"
 #include "components/Mesh.hpp"
+#include "glm/common.hpp"
 #include "glm/fwd.hpp"
 
 #include <SDL3/SDL.h>
@@ -95,11 +96,10 @@ namespace vex {
         for (uint32_t submeshIndex = 0; submeshIndex < m_cpuSubmeshData.size(); ++submeshIndex) {
             const auto& submesh = m_cpuSubmeshData[submeshIndex];
             const size_t indexCount = submesh.indices.size();
+            const glm::vec3* centers = submesh.triangleCenters.data();
 
             for (uint32_t i = 0; i < indexCount; i += 3) {
-                glm::vec3 center_model = submesh.triangleCenters[i/3];
-
-                glm::vec3 center_world = rotation_scale_matrix * center_model + translation_vector;
+                glm::vec3 center_world = rotation_scale_matrix * centers[i/3] + translation_vector;
 
                 glm::vec3 d = center_world - cameraPos;
                 float distanceSq = glm::dot(d, d);
@@ -123,63 +123,70 @@ namespace vex {
         uint32_t frameIndex,
         uint32_t modelIndex,
         uint32_t submeshIndex,
-        glm::mat4 modelMatrix
+        glm::mat4 modelMatrix,
+        bool modelChanged,
+        bool submeshChanged
     ) const {
         const auto& buffers = m_submeshBuffers[submeshIndex];
         const auto& textureName = m_submeshTextures[submeshIndex];
 
-        uint32_t textureIndex = resources.getTextureIndex(textureName);
+        if(modelChanged){
+            uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
+            uint32_t dynamicOffsets[1] = { lightsDynamicOffset };
 
-        if (textureIndex >= MAX_TEXTURES) {
-            SDL_LogError(SDL_LOG_CATEGORY_RENDER,
-                       "Invalid texture index %u for '%s' (Max: %u)",
-                       textureIndex, textureName.c_str(), MAX_TEXTURES);
-            textureIndex = 0;
+            VkDescriptorSet globalSet = resources.getDescriptorSet(frameIndex);
+            vkCmdBindDescriptorSets(
+                cmd,
+                VK_PIPELINE_BIND_POINT_GRAPHICS,
+                pipelineLayout,
+                0,
+                1,
+                &globalSet,
+                1,
+                dynamicOffsets
+            );
         }
 
-        uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
+        if(submeshChanged || modelChanged){
+            uint32_t textureIndex = resources.getTextureIndex(textureName);
 
-
-        std::array<VkDescriptorSet, 2> descriptorSets = {
-            resources.getDescriptorSet(frameIndex),
-            resources.getTextureDescriptorSet(frameIndex, textureIndex)
-        };
-
-        uint32_t dynamicOffsets[1] = { lightsDynamicOffset };
-
-        vkCmdBindDescriptorSets(
-            cmd,
-            VK_PIPELINE_BIND_POINT_GRAPHICS,
-            pipelineLayout,
-            0,
-            descriptorSets.size(),
-            descriptorSets.data(),
-            1,
-            dynamicOffsets
-        );
-
-        PushConstants modelPush{};
-        const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
-
-        if (textureExists) {
-            modelPush.color = glm::vec4(1.0f);
-        } else {
-            modelPush.color = glm::vec4(1.0f);
-            if(!textureName.empty()) {
-                log("Missing texture: %s", textureName.c_str());
+            if (textureIndex >= MAX_TEXTURES) {
+                SDL_LogError(SDL_LOG_CATEGORY_RENDER,
+                           "Invalid texture index %u for '%s' (Max: %u)",
+                           textureIndex, textureName.c_str(), MAX_TEXTURES);
+                textureIndex = 0;
             }
+
+            VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
+            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                      pipelineLayout, 1, 1, &texSet,
+                                      0, nullptr);
         }
 
-        modelPush.model = modelMatrix;
+        if(modelChanged){
+            PushConstants modelPush{};
+            const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
 
-        vkCmdPushConstants(
-            cmd,
-            pipelineLayout,
-            VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-            0,
-            sizeof(PushConstants),
-            &modelPush
-        );
+            if (textureExists) {
+                modelPush.color = glm::vec4(1.0f);
+            } else {
+                modelPush.color = glm::vec4(1.0f);
+                if(!textureName.empty()) {
+                    log("Missing texture: %s", textureName.c_str());
+                }
+            }
+
+            modelPush.model = modelMatrix;
+
+            vkCmdPushConstants(
+                cmd,
+                pipelineLayout,
+                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                0,
+                sizeof(PushConstants),
+                &modelPush
+            );
+        }
 
         VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
         VkDeviceSize offsets[] = {0};

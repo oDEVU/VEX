@@ -56,7 +56,9 @@ namespace vex {
                 uint32_t frameIndex,
                 uint32_t modelIndex,
                 uint32_t submeshIndex,
-                glm::mat4 modelMatrix
+                glm::mat4 modelMatrix,
+                bool modelChanged,
+                bool submeshChanged
             ) const;
 
         /// @brief Helper function to get number of mesh components using this VulkanMesh instance, needed for mesh manager to know when to unload VulkanMesh.
