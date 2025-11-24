@@ -402,7 +402,8 @@ namespace vex {
                             VulkanMesh* batchMesh = nullptr;
                             uint32_t batchSubmeshIndex = UINT32_MAX;
                             uint32_t batchModelIndex = UINT32_MAX;
-                            glm::mat4 batchModelMatrix = glm::mat4(1.0f);
+                            const auto& [key, value] = *trnasMatrixes.begin();
+                            glm::mat4 batchModelMatrix = value;
 
                             for (const auto& tri : m_transparentTriangles) {
                                 bool stateChange = (tri.mesh != batchMesh ||
@@ -418,7 +419,7 @@ namespace vex {
                                         batchModelIndex,
                                         batchSubmeshIndex,
                                         batchModelMatrix,
-                                        tri.modelIndex != batchModelIndex,
+                                        true,//tri.modelIndex != batchModelIndex, // <- Doesnt work. Why? Needs to be fixed.
                                         tri.submeshIndex != batchSubmeshIndex
                                     );
 
