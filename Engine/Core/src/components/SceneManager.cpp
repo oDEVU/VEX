@@ -116,4 +116,15 @@ GameObject* SceneManager::GetGameObjectByName(const std::string& scene, const st
 GameObject* SceneManager::GetGameObjectByEntity(const std::string& scene, entt::entity& entity){
     return m_scenes[scene]->GetGameObjectByEntity(entity);
 }
+
+std::vector<std::string> SceneManager::GetAllSceneNames() const {
+    std::vector<std::string> names;
+    names.reserve(m_scenes.size());
+
+    for (const auto& [name, scene] : m_scenes) {
+        names.push_back(name);
+    }
+
+    return names;
+}
 }

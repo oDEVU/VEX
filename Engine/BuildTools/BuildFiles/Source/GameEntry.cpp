@@ -28,8 +28,17 @@ extern "C" {
             if (ctx->version == 1) {
                 engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
             } else {
-                /// @todo: implement scene objects reload not whole scene reloading
-                engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
+                if(!engine->getLastLoadedScenes().empty()){
+                    for (const auto& sceneName : engine->getLastLoadedScenes()) {
+                        vex::log("[DEBUG] Reloading scene: %s", sceneName.c_str());
+                        //fflush(stdout);
+                        engine->getSceneManager()->loadScene(sceneName, *engine);
+                    }
+                }else{
+                    vex::log("[DEBUG] Loaded scenes are empty");
+                    //fflush(stdout);
+                    engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
+                }
             }
             break;
 
@@ -38,6 +47,7 @@ extern "C" {
 
         case CR_UNLOAD:
             vex::log("[DEBUG] Unloading...");
+            engine->prepareScenesForHotReload();
             engine->getSceneManager()->clearScenes();
             //engine->getRegistry().clear();
             break;

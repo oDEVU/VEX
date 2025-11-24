@@ -53,6 +53,11 @@ GameObject* GetGameObjectByName(const std::string& scene, const std::string& nam
 /// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
 GameObject* GetGameObjectByEntity(const std::string& scene, entt::entity& entity);
 
+/// @brief Function to get all scene names.
+/// @return std::vector<std::string> - Vector of scene names.
+std::vector<std::string> GetAllSceneNames() const;
+
+
 private:
 std::map<std::string, std::shared_ptr<Scene>> m_scenes;
 };

@@ -86,6 +86,11 @@ public:
     std::shared_ptr<VexUI> createVexUI();// { return std::make_unique<VexUI>(m_interface->getContext(), m_vfs.get(), m_interface->getResources()); }
     int GetCurrentFrame() { return m_frame; }
 
+    std::vector<std::string> getLastLoadedScenes() { return lastLoadedScenes; }
+    void prepareScenesForHotReload();// {
+       // lastLoadedScenes = getSceneManager()->GetAllSceneNames();
+       //}
+
     /// @brief Internal virtual function for handling window/keyboard events.
     /// @param SDL_Event - Event to process.
     /// @param float - Time since last frame.
@@ -122,5 +127,6 @@ protected:
     int m_frame = 0;
 
     GameInfo m_gameInfo;
+    std::vector<std::string> lastLoadedScenes;
 };
 }

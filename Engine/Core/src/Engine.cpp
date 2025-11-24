@@ -170,6 +170,10 @@ enviroment Engine::getEnvironmentSettings() {
     return m_interface->getEnvironment();
 }
 
+void Engine::prepareScenesForHotReload() {
+   lastLoadedScenes = getSceneManager()->GetAllSceneNames();
+}
+
 void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
 void Engine::update(float deltaTime) {}
 void Engine::beginGame() {}
