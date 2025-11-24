@@ -73,9 +73,9 @@ You must install all the following dependencies for your specific operating syst
 ### Build Steps
 
 #### 1. Build the Building Tools
-The engine uses a custom compilation utility called **`ProjectBuilder`**. You must build this tool first.
+The engine uses a custom compilation utility called **`ProjectBuilder`** to build game projects. You need to build it with engine and then use it to build you projects.
 
-1.  Navigate to the **`Engine/BuildTools`** directory in your terminal.
+1.  Navigate to the **`Engine`** directory in your terminal.
 2.  Run the script for your platform:
     * **Windows:** `build-windows.bat`
     * **Linux:** `./build-linux.sh`
