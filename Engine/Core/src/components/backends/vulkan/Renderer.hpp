@@ -21,6 +21,15 @@
 #include <components/GameComponents/UiComponent.hpp>
 
 namespace vex {
+    /// @brief Data structure to pass state between render stages
+        struct SceneRenderData {
+            VkCommandBuffer commandBuffer;
+            uint32_t frameIndex;
+            uint32_t imageIndex;
+            VkDescriptorSet imguiTextureID;
+            bool isSwapchainValid;
+        };
+
     /// @brief Class responsible for rendering the scene using Vulkan backend.
     class Renderer {
     public:
@@ -36,13 +45,41 @@ namespace vex {
                  std::unique_ptr<VulkanPipeline>& pipeline,
                  std::unique_ptr<VulkanPipeline>& transPipeline,
                  std::unique_ptr<VulkanPipeline>& uiPipeline,
+                 std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
                  std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
                  std::unique_ptr<MeshManager>& meshManager);
 
         /// @brief Destructor for Renderer class.
         ~Renderer();
 
-        /// @brief Renders a frame using the provided parameters.
+        /// @brief Prepares frame, acquires image, handles resize
+        /// @param glm::uvec2 renderResolution - Resolution of the render target.
+        /// @param SceneRenderData& outData - Output data for the frame.
+        /// @return bool - True if the frame was prepared successfully, false otherwise.
+        bool beginFrame(glm::uvec2 renderResolution, SceneRenderData& outData);
+
+        /// @brief Renders 3D scene and VexUI to low-res texture
+        /// @param SceneRenderData& data - Data for the frame.
+        /// @param const entt::entity cameraEntity - Entity representing the camera.
+        /// @param entt::registry& registry - Registry containing entities and components.
+        void renderScene(SceneRenderData& data,
+                         const entt::entity cameraEntity,
+                         entt::registry& registry,
+                         int frame);
+
+        /// @brief Composite to screen (Fullscreen Quad or ImGui)
+        /// @param SceneRenderData& data - Data for the frame.
+        /// @param ImGUIWrapper& ui - ImGUI wrapper.
+        /// @param bool isEditorMode - Whether the editor mode is active.
+        void composeFrame(SceneRenderData& data,
+                          ImGUIWrapper& ui,
+                          bool isEditorMode);
+
+        /// @brief Submits and Presents
+        /// @param SceneRenderData& data - Data for the frame.
+        void endFrame(SceneRenderData& data);
+
+        /// @brief [Deprecated] Renders a frame using the provided parameters.
         /// @param const glm::mat4& view - View matrix.
         /// @param const glm::mat4& proj - Projection matrix.
         /// @param glm::uvec2 renderResolution - Render resolution.
@@ -69,22 +106,31 @@ namespace vex {
 
         void issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands);
 
+        void updateScreenDescriptor(VkImageView view);
+
         VulkanContext& m_r_context;
         std::unique_ptr<VulkanResources>& m_p_resources;
         std::unique_ptr<VulkanPipeline>& m_p_pipeline;
         std::unique_ptr<VulkanPipeline>& m_p_transPipeline;
         std::unique_ptr<VulkanPipeline>& m_p_uiPipeline;
+        std::unique_ptr<VulkanPipeline>& m_p_fullscreenPipeline;
         std::unique_ptr<VulkanSwapchainManager>& m_p_swapchainManager;
         std::unique_ptr<MeshManager>& m_p_meshManager;
+
         std::chrono::high_resolution_clock::time_point startTime;
         float currentTime = 0.0f;
+
         std::vector<TransparentTriangle> m_transparentTriangles;
         std::map<uint32_t, glm::mat4> trnasMatrixes;
         std::vector<UiComponent> m_uiObjects;
         std::vector<VkMultiDrawIndexedInfoEXT> m_multiDrawInfos;
         size_t approxTriangles = 0;
 
-
         SceneUBO m_sceneUBO;
+
+        VkDescriptorSet m_screenDescriptorSet = VK_NULL_HANDLE;
+        VkSampler m_screenSampler = VK_NULL_HANDLE;
+        VkImageView m_lastUsedView = VK_NULL_HANDLE;
+        VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;
     };
 }

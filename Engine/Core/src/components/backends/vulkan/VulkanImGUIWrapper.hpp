@@ -28,6 +28,7 @@ namespace vex {
         /// @param VulkanContext& vulkanContext - The Vulkan context containing vulkan resources..
         VulkanImGUIWrapper(SDL_Window* window, VulkanContext& vulkanContext);
         virtual ~VulkanImGUIWrapper();
+        VkDescriptorSet addTexture(VkSampler sampler, VkImageView imageView, VkImageLayout layout);
 #if DEBUG
         /// @brief Initializes ImGUI for Vulkan backend, called by the engine while initializing.
         void init() override;

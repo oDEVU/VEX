@@ -240,7 +240,7 @@ namespace vex {
         uboBindings[0].binding = 0;
         uboBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         uboBindings[0].descriptorCount = 1;
-        uboBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        uboBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 
         uboBindings[1].binding = 1;
         uboBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
@@ -343,6 +343,11 @@ namespace vex {
 
             vkUpdateDescriptorSets(m_r_context.device, uboWrites.size(), uboWrites.data(), 0, nullptr);
         }
+    }
+
+    VkDescriptorSet VulkanResources::getUBODescriptorSet(uint32_t frameIndex) const {
+        if (frameIndex >= m_descriptorSets.size()) return VK_NULL_HANDLE;
+        return m_descriptorSets[frameIndex];
     }
 
     void VulkanResources::updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex){

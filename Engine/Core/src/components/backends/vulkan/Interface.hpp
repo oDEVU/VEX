@@ -85,6 +85,7 @@ namespace vex {
         std::unique_ptr<VulkanPipeline> m_p_pipeline;
         std::unique_ptr<VulkanPipeline> m_p_transPipeline;
         std::unique_ptr<VulkanPipeline> m_p_uiPipeline;
+        std::unique_ptr<VulkanPipeline> m_p_fullscreenPipeline;
         std::unique_ptr<MeshManager> m_p_meshManager;
         std::unique_ptr<Renderer> m_p_renderer;
     };

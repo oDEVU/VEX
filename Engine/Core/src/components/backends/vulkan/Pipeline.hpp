@@ -63,6 +63,14 @@ namespace vex {
             const VkVertexInputBindingDescription& bindingDesc,
             const std::vector<VkVertexInputAttributeDescription>& attrDesc);
 
+        /// @brief Creates a fullscreen VkPipeline.
+        /// @param std::string& vertPath - Path to the vertex shader.
+        /// @param std::string& fragPath - Path to the fragment shader.
+        /// @details Creates a fullscreen pipeline using the provided shader paths and puts some needed data in the context for later use, like layouts.
+        void createFullscreenPipeline(
+            const std::string& vertPath,
+            const std::string& fragPath);
+
         /// @brief Returns the VkPipeline.
         /// @return VkPipeline - The VkPipeline.
         /// @details Used by renderer (and vex UI since it manages its own rendering logic).

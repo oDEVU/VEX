@@ -28,6 +28,14 @@ namespace vex {
 #endif
     }
 
+    VkDescriptorSet VulkanImGUIWrapper::addTexture(VkSampler sampler, VkImageView imageView, VkImageLayout layout) {
+    #if DEBUG
+        return ImGui_ImplVulkan_AddTexture(sampler, imageView, layout);
+    #else
+        return VK_NULL_HANDLE;
+    #endif
+    }
+
 #if DEBUG
     void VulkanImGUIWrapper::init() {
         log("Initialization of DearImGUI");

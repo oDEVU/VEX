@@ -391,8 +391,8 @@ namespace vex {
         createSwapchain();
         log("createImageViews");
         createImageViews();
-        log("createCommandBuffers");
-        createCommandPool();
+        //log("createCommandBuffers");
+        //createCommandPool();
         log("createLowResResources");
         createLowResResources();
     }
@@ -433,8 +433,8 @@ namespace vex {
             SDL_GetWindowSizeInPixels(m_p_window, &width, &height);
 
             VkExtent2D actualExtent = {
-                static_cast<uint32_t>(m_r_context.currentRenderResolution.x),
-                static_cast<uint32_t>(m_r_context.currentRenderResolution.y)
+                static_cast<uint32_t>(width),
+                static_cast<uint32_t>(height)
             };
 
             actualExtent.width = std::clamp(

@@ -50,7 +50,7 @@ VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
       (clipPos.xy / clipPos.w * 0.5 + 0.5) * scene.renderResolution;
   screenPos = applyJitter(screenPos, isEnabled(VERTEX_JITTER));
 
-  clipPos.xy = (screenPos / scene.windowResolution * 2.0 - 1.0) * clipPos.w;
+  clipPos.xy = (screenPos / scene.renderResolution * 2.0 - 1.0) * clipPos.w;
 
   output.position = clipPos;
 

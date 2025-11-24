@@ -17,26 +17,539 @@ namespace vex {
     }
 
     Renderer::Renderer(VulkanContext& context,
-                       std::unique_ptr<VulkanResources>& resources,
-                       std::unique_ptr<VulkanPipeline>& pipeline,
-                       std::unique_ptr<VulkanPipeline>& transPipeline,
-                       std::unique_ptr<VulkanPipeline>& uiPipeline,
-                       std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
-                       std::unique_ptr<MeshManager>& meshManager)
-        : m_r_context(context),
-          m_p_resources(resources),
-          m_p_pipeline(pipeline),
-          m_p_transPipeline(transPipeline),
-          m_p_uiPipeline(uiPipeline),
-          m_p_swapchainManager(swapchainManager),
-          m_p_meshManager(meshManager) {
+                           std::unique_ptr<VulkanResources>& resources,
+                           std::unique_ptr<VulkanPipeline>& pipeline,
+                           std::unique_ptr<VulkanPipeline>& transPipeline,
+                           std::unique_ptr<VulkanPipeline>& uiPipeline,
+                           std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
+                           std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
+                           std::unique_ptr<MeshManager>& meshManager)
+            : m_r_context(context),
+              m_p_resources(resources),
+              m_p_pipeline(pipeline),
+              m_p_transPipeline(transPipeline),
+              m_p_uiPipeline(uiPipeline),
+              m_p_fullscreenPipeline(fullscreenPipeline),
+              m_p_swapchainManager(swapchainManager),
+              m_p_meshManager(meshManager) {
         startTime = std::chrono::high_resolution_clock::now();
+
+                VkSamplerCreateInfo samplerInfo{};
+                samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+                samplerInfo.magFilter = VK_FILTER_NEAREST;
+                samplerInfo.minFilter = VK_FILTER_NEAREST;
+                samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+                samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+                samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+                samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+                samplerInfo.maxAnisotropy = 1.0f;
+
+                if (vkCreateSampler(m_r_context.device, &samplerInfo, nullptr, &m_screenSampler) != VK_SUCCESS) {
+                    throw_error("Failed to create screen sampler");
+                }
+
+                VkDescriptorSetAllocateInfo allocInfo{};
+                allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+
+                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 };
+                VkDescriptorPoolCreateInfo poolInfo = {};
+                poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+                poolInfo.poolSizeCount = 1;
+                poolInfo.pPoolSizes = &poolSize;
+                poolInfo.maxSets = 1;
+
+                VkDescriptorPool localPool;
+                vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &localPool);
+
+                allocInfo.descriptorPool = localPool;
+                allocInfo.descriptorSetCount = 1;
+                allocInfo.pSetLayouts = &m_r_context.textureDescriptorSetLayout;
+
+                vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_screenDescriptorSet);
+
         log("Renderer initialized successfully");
     }
 
     Renderer::~Renderer() {
+        if (m_screenSampler) vkDestroySampler(m_r_context.device, m_screenSampler, nullptr);
         log("Renderer destroyed");
     }
+
+    bool Renderer::beginFrame(glm::uvec2 renderResolution, SceneRenderData& outData) {
+            if (renderResolution != m_r_context.currentRenderResolution) {
+                m_r_context.currentRenderResolution = renderResolution;
+                m_p_pipeline->updateViewport(renderResolution);
+                //m_p_swapchainManager->recreateSwapchain();
+                //m_lastUsedView = VK_NULL_HANDLE;
+                log("Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
+                //return false;
+            }
+
+            vkWaitForFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame], VK_TRUE, UINT64_MAX);
+
+            VkResult result = vkAcquireNextImageKHR(
+                m_r_context.device,
+                m_r_context.swapchain,
+                UINT64_MAX,
+                m_r_context.imageAvailableSemaphores[m_r_context.currentFrame],
+                VK_NULL_HANDLE,
+                &m_r_context.currentImageIndex
+            );
+
+            if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+                m_p_swapchainManager->recreateSwapchain();
+                outData.isSwapchainValid = false;
+                log("Swapchain out of date");
+                return false;
+            } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+                throw_error("Failed to acquire swap chain image!");
+            }
+
+            vkResetFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame]);
+            vkResetCommandPool(m_r_context.device, m_r_context.commandPools[m_r_context.currentFrame], 0);
+
+            outData.commandBuffer = m_r_context.commandBuffers[m_r_context.currentFrame];
+            outData.frameIndex = m_r_context.currentFrame;
+            outData.imageIndex = m_r_context.currentImageIndex;
+            outData.isSwapchainValid = true;
+
+            VkCommandBufferBeginInfo beginInfo{};
+            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+            vkBeginCommandBuffer(outData.commandBuffer, &beginInfo);
+
+            return true;
+        }
+
+        void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame) {
+            VkCommandBuffer cmd = data.commandBuffer;
+
+            if (m_lastUsedView != m_r_context.lowResColorView) {
+                updateScreenDescriptor(m_r_context.lowResColorView);
+                m_cachedImGuiDescriptor = VK_NULL_HANDLE;
+                m_lastUsedView = m_r_context.lowResColorView;
+            }
+
+            transitionImageLayout(cmd,
+                                m_r_context.lowResColorImage,
+                                VK_IMAGE_LAYOUT_UNDEFINED,
+                                VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                0,
+                                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+
+            transitionImageLayout(cmd,
+                                m_r_context.depthImage,
+                                VK_IMAGE_LAYOUT_UNDEFINED,
+                                VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                                0,
+                                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+                                VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT);
+
+            VkRenderingAttachmentInfo colorAttachment{};
+            colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+            colorAttachment.imageView = m_r_context.lowResColorView;
+            colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            colorAttachment.clearValue.color = {{m_r_context.m_enviroment.clearColor.x, m_r_context.m_enviroment.clearColor.y, m_r_context.m_enviroment.clearColor.z, 1.0f}};
+
+            VkRenderingAttachmentInfo depthAttachment{};
+            depthAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+            depthAttachment.imageView = m_r_context.depthImageView;
+            depthAttachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            depthAttachment.clearValue.depthStencil = {1.0f, 0};
+
+            VkRenderingInfo renderingInfo{};
+            renderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+            renderingInfo.renderArea.offset = {0, 0};
+            renderingInfo.renderArea.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y};
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = 1;
+            renderingInfo.pColorAttachments = &colorAttachment;
+            renderingInfo.pDepthAttachment = &depthAttachment;
+
+            vkCmdBeginRendering(cmd, &renderingInfo);
+
+            VkViewport viewport{};
+            viewport.width = (float)m_r_context.currentRenderResolution.x;
+            viewport.height = (float)m_r_context.currentRenderResolution.y;
+            viewport.minDepth = 0.0f; viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+            VkRect2D scissor{};
+            scissor.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y};
+            vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+            glm::mat4 view = glm::mat4(1.0f);
+            glm::mat4 proj = glm::mat4(1.0f);
+            auto& transform = registry.get<TransformComponent>(cameraEntity);
+            auto& camera = registry.get<CameraComponent>(cameraEntity);
+
+            view = glm::lookAt(transform.getWorldPosition(), transform.getWorldPosition() + transform.getForwardVector(), transform.getUpVector());
+            proj = glm::perspective(glm::radians(camera.fov), (float)m_r_context.currentRenderResolution.x / (float)m_r_context.currentRenderResolution.y, camera.nearPlane, camera.farPlane);
+            proj[1][1] *= -1;
+
+            //log("Updating scene UBO...");
+            m_sceneUBO.view = view;
+            m_sceneUBO.proj = proj;
+
+            m_sceneUBO.snapResolution = 1.f;
+            m_sceneUBO.jitterIntensity = 0.5f;
+
+            if(m_r_context.m_enviroment.vertexSnapping){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
+            }
+
+            if(m_r_context.m_enviroment.passiveVertexJitter){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
+            }
+
+            if(m_r_context.m_enviroment.affineWarping){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
+            }
+
+            if(m_r_context.m_enviroment.colorQuantization){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
+            }
+
+            if(m_r_context.m_enviroment.ntfsArtifacts){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
+            }
+
+            if(m_r_context.m_enviroment.gourardShading){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
+            }
+
+            m_sceneUBO.renderResolution = m_r_context.currentRenderResolution;
+            m_sceneUBO.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
+            m_sceneUBO.time = currentTime;
+            m_sceneUBO.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(m_r_context.currentRenderResolution.y);
+
+            m_sceneUBO.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
+            m_sceneUBO.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
+            m_sceneUBO.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
+            m_sceneUBO.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
+
+            m_p_resources->updateSceneUBO(m_sceneUBO);
+
+            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_pipeline->get());
+
+            glm::vec3 cameraPos = extractCameraPosition(view);
+            Frustum camFrustum;
+            camFrustum.update(proj * view);
+            m_transparentTriangles.clear();
+            trnasMatrixes.clear();
+            uint32_t modelIndex = 0;
+
+            auto modelView = registry.view<TransformComponent, MeshComponent>();
+            for (auto entity : modelView) {
+                auto& transform = modelView.get<TransformComponent>(entity);
+                auto& mesh = modelView.get<MeshComponent>(entity);
+                glm::mat4 modelMatrix = transform.matrix();
+
+                if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected()){
+                    mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
+                    mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
+                }
+
+                if (!camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius)) {
+                    continue;
+                }
+
+                auto lightView = registry.view<TransformComponent, LightComponent>();
+
+                SceneLightsUBO lightUBO;
+                lightUBO.lightCount = 0;
+
+                for(auto lightEntity : lightView){
+
+                    if (lightUBO.lightCount >= MAX_DYNAMIC_LIGHTS) {
+                        lightUBO.lightCount = MAX_DYNAMIC_LIGHTS;
+                        log("Limit reached of per object dynamic lights, rest of the light wont affect this mesh.");
+                        break;
+                    }
+
+                    auto& light = lightView.get<LightComponent>(lightEntity);
+                    auto& transform = lightView.get<TransformComponent>(lightEntity);
+
+                    float dist = glm::distance(transform.getWorldPosition(), mesh.worldCenter);
+                    if (dist < (light.radius + mesh.worldRadius)) {
+                        auto& targetLight = lightUBO.lights[lightUBO.lightCount];
+                        targetLight.position = glm::vec4(transform.getWorldPosition(), light.radius);
+                        targetLight.color = glm::vec4(light.color, light.intensity);
+                        lightUBO.lightCount++;
+                    }
+                }
+                m_p_resources->updateLightUBO(m_r_context.currentFrame, modelIndex, lightUBO);
+
+                if (mesh.renderType == RenderType::OPAQUE) {
+                    auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
+                    vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
+                } else if (mesh.renderType == RenderType::TRANSPARENT) {
+                     auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
+                     vulkanMesh->extractTransparentTriangles(
+                         modelMatrix,
+                         cameraPos,
+                         modelIndex,
+                         m_r_context.currentFrame,
+                         m_transparentTriangles
+                     );
+                     trnasMatrixes[modelIndex] = modelMatrix;
+                }
+                modelIndex++;
+                if(mesh.getIsFresh()) mesh.setRendered();
+            }
+
+            if (!m_transparentTriangles.empty()) {
+                std::sort(m_transparentTriangles.begin(), m_transparentTriangles.end(),
+                          [](const auto& a, const auto& b) {
+                              if (a.distanceToCamera != b.distanceToCamera) {
+                                  return a.distanceToCamera > b.distanceToCamera;
+                              }
+
+                              if (a.modelIndex != b.modelIndex) {
+                                  return a.modelIndex < b.modelIndex;
+                              }
+
+                              return a.submeshIndex < b.submeshIndex;
+                          });
+
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_transPipeline->get());
+
+                VulkanMesh* batchMesh = nullptr;
+                uint32_t batchSubmeshIndex = UINT32_MAX;
+                uint32_t batchModelIndex = UINT32_MAX;
+                const auto& [key, value] = *trnasMatrixes.begin();
+                glm::mat4 batchModelMatrix = value;
+
+                for (const auto& tri : m_transparentTriangles) {
+                    bool stateChange = (tri.mesh != batchMesh ||
+                                        tri.submeshIndex != batchSubmeshIndex ||
+                                        tri.modelIndex != batchModelIndex);
+
+                    if (stateChange && !m_multiDrawInfos.empty()) {
+                        batchMesh->bindAndDrawBatched(
+                            cmd,
+                            m_p_transPipeline->layout(),
+                            *m_p_resources,
+                            m_r_context.currentFrame,
+                            batchModelIndex,
+                            batchSubmeshIndex,
+                            batchModelMatrix,
+                            true,//tri.modelIndex != batchModelIndex, // <- Doesnt work. Why? Needs to be fixed.
+                            tri.submeshIndex != batchSubmeshIndex
+                        );
+
+                        issueMultiDrawIndexed(cmd, m_multiDrawInfos);
+                        m_multiDrawInfos.clear();
+                    }
+
+                    if (stateChange) {
+                        batchMesh = tri.mesh;
+                        batchSubmeshIndex = tri.submeshIndex;
+                        batchModelIndex = tri.modelIndex;
+                        batchModelMatrix = trnasMatrixes[tri.modelIndex];
+                    }
+
+                    bool canMerge = !m_multiDrawInfos.empty() && !stateChange;
+                    if (canMerge) {
+                        auto& lastDraw = m_multiDrawInfos.back();
+                        if (tri.firstIndex == (lastDraw.firstIndex + lastDraw.indexCount)) {
+                            lastDraw.indexCount += 3;
+                            continue;
+                        }
+                    }
+
+                    VkMultiDrawIndexedInfoEXT drawInfo{};
+                    drawInfo.firstIndex = tri.firstIndex;
+                    drawInfo.indexCount = 3;
+                    drawInfo.vertexOffset = 0;
+                    m_multiDrawInfos.push_back(drawInfo);
+                }
+
+                if (!m_multiDrawInfos.empty() && batchMesh != nullptr) {
+                    batchMesh->bindAndDrawBatched(
+                        cmd,
+                        m_p_transPipeline->layout(),
+                        *m_p_resources,
+                        m_r_context.currentFrame,
+                        batchModelIndex,
+                        batchSubmeshIndex,
+                        batchModelMatrix,
+                        true,
+                        true
+                    );
+                    issueMultiDrawIndexed(cmd, m_multiDrawInfos);
+                }
+
+                m_multiDrawInfos.clear();
+            }
+
+
+            if (frame != 0) {
+                m_uiObjects.clear();
+                auto uiView = registry.view<UiComponent>();
+                for (auto entity : uiView) {
+                    if(uiView.get<UiComponent>(entity).m_vexUI->isInitialized())
+                        m_uiObjects.emplace_back(uiView.get<UiComponent>(entity));
+                }
+                std::sort(m_uiObjects.begin(), m_uiObjects.end(), [](const UiComponent &f, const UiComponent &s) { return f.m_vexUI->getZIndex() < s.m_vexUI->getZIndex(); });
+
+                for(const auto& uiObject : m_uiObjects) {
+                    if(uiObject.visible){
+                        uiObject.m_vexUI->render(cmd, m_p_uiPipeline->get(), m_p_uiPipeline->layout(), data.frameIndex);
+                    }
+                }
+            }
+
+            vkCmdEndRendering(cmd);
+
+            transitionImageLayout(cmd, m_r_context.lowResColorImage,
+                                         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                         VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                         VK_ACCESS_SHADER_READ_BIT,
+                                         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+        }
+
+        void Renderer::composeFrame(SceneRenderData& data, ImGUIWrapper& ui, bool isEditorMode) {
+            VkCommandBuffer cmd = data.commandBuffer;
+
+            transitionImageLayout(cmd, m_r_context.swapchainImages[data.imageIndex],
+                                 VK_IMAGE_LAYOUT_UNDEFINED,
+                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                 0,
+                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                 VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+
+            VkRenderingAttachmentInfo colorAttachment{};
+            colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+            colorAttachment.imageView = m_r_context.swapchainImageViews[data.imageIndex];
+            colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            colorAttachment.clearValue.color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+
+            VkRenderingInfo renderingInfo{};
+            renderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+            renderingInfo.renderArea.offset = {0, 0};
+            renderingInfo.renderArea.extent = m_r_context.swapchainExtent;
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = 1;
+            renderingInfo.pColorAttachments = &colorAttachment;
+
+            vkCmdBeginRendering(cmd, &renderingInfo);
+
+            VkViewport viewport{};
+            viewport.width = (float)m_r_context.swapchainExtent.width;
+            viewport.height = (float)m_r_context.swapchainExtent.height;
+            viewport.minDepth = 0.0f; viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+            VkRect2D scissor{};
+            scissor.extent = m_r_context.swapchainExtent;
+            vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+            if (isEditorMode) {
+                if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
+                    m_cachedImGuiDescriptor = static_cast<VulkanImGUIWrapper&>(ui).addTexture(
+                        m_screenSampler,
+                        m_r_context.lowResColorView,
+                        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                    );
+                    data.imguiTextureID = m_cachedImGuiDescriptor;
+                } else {
+                    data.imguiTextureID = m_cachedImGuiDescriptor;
+                }
+
+                ui.beginFrame();
+                ui.executeUIFunctions();
+                ui.endFrame();
+            } else {
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->get());
+
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(),
+                                        0, 1, &m_screenDescriptorSet, 0, nullptr);
+
+                vkCmdDraw(cmd, 3, 1, 0, 0);
+            }
+
+            vkCmdEndRendering(cmd);
+
+            transitionImageLayout(cmd, m_r_context.swapchainImages[data.imageIndex],
+                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                 VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                 0,
+                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                 VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
+        }
+
+        void Renderer::endFrame(SceneRenderData& data) {
+            if (!data.isSwapchainValid) return;
+
+            vkEndCommandBuffer(data.commandBuffer);
+
+            VkSubmitInfo submitInfo{};
+            submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+            VkSemaphore waitSemaphores[] = {m_r_context.imageAvailableSemaphores[data.frameIndex]};
+            VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+            submitInfo.waitSemaphoreCount = 1;
+            submitInfo.pWaitSemaphores = waitSemaphores;
+            submitInfo.pWaitDstStageMask = waitStages;
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &data.commandBuffer;
+
+            VkSemaphore signalSemaphores[] = {m_r_context.renderFinishedSemaphores[data.frameIndex]};
+            submitInfo.signalSemaphoreCount = 1;
+            submitInfo.pSignalSemaphores = signalSemaphores;
+
+            vkQueueSubmit(m_r_context.graphicsQueue, 1, &submitInfo, m_r_context.inFlightFences[data.frameIndex]);
+
+            VkPresentInfoKHR presentInfo{};
+            presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+            presentInfo.waitSemaphoreCount = 1;
+            presentInfo.pWaitSemaphores = signalSemaphores;
+
+            VkSwapchainKHR swapchains[] = {m_r_context.swapchain};
+            presentInfo.swapchainCount = 1;
+            presentInfo.pSwapchains = swapchains;
+            presentInfo.pImageIndices = &m_r_context.currentImageIndex;
+
+            VkResult result = vkQueuePresentKHR(m_r_context.presentQueue, &presentInfo);
+
+            if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+                m_p_swapchainManager->recreateSwapchain();
+            } else if (result != VK_SUCCESS) {
+                throw_error("Failed to present swap chain image!");
+            }
+
+            m_r_context.currentFrame = (m_r_context.currentFrame + 1) % m_r_context.MAX_FRAMES_IN_FLIGHT;
+        }
+
+        void Renderer::updateScreenDescriptor(VkImageView view) {
+            VkDescriptorImageInfo imageInfo{};
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            imageInfo.imageView = view;
+            imageInfo.sampler = m_screenSampler;
+
+            VkWriteDescriptorSet write{};
+            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            write.dstSet = m_screenDescriptorSet;
+            write.dstBinding = 0;
+            write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            write.descriptorCount = 1;
+            write.pImageInfo = &imageInfo;
+
+            vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+        }
 
     void Renderer::renderFrame(const entt::entity cameraEntity, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& m_ui, uint64_t frame) {
         //log("Begining rendering...");
@@ -618,6 +1131,8 @@ namespace vex {
         m_r_context.currentFrame = (m_r_context.currentFrame + 1) % m_r_context.MAX_FRAMES_IN_FLIGHT;
         //log("Frame in flight %d", m_r_context.currentFrame);
     }
+
+
 
     void Renderer::transitionImageLayout(VkCommandBuffer cmd, VkImage image,
                                          VkImageLayout oldLayout, VkImageLayout newLayout,

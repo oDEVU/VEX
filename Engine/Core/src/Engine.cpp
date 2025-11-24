@@ -188,7 +188,15 @@ void Engine::render() {
 
     //log("Calling Renderer::renderFrame()");
     try{
-        m_interface->getRenderer().renderFrame(cameraEntity, renderRes, m_registry, *m_imgui, m_frame);
+        vex::SceneRenderData renderData;
+
+        if (!m_interface->getRenderer().beginFrame(renderRes, renderData)) {
+            return;
+        }
+
+        m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
+        m_interface->getRenderer().composeFrame(renderData, *m_imgui, false);
+        m_interface->getRenderer().endFrame(renderData);
     } catch (const std::exception& e) {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Frame not in fact rendered :C");
         handle_exception(e);

@@ -1,4 +1,5 @@
 #include "glm/ext/matrix_clip_space.hpp"
+#include <climits>
 #include <components/UI/VexUI.hpp>
 #include <components/UI/UIVertex.hpp>
 #include <glm/glm.hpp>
@@ -601,9 +602,25 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
 
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
+    VkDescriptorSet globalUBO = m_res->getUBODescriptorSet(currentFrame);
+        if (globalUBO != VK_NULL_HANDLE) {
+            // We must provide an offset because Binding 1 is DYNAMIC.
+            // We use 0 since the UI doesn't actually read lights, but the API demands a valid offset.
+            uint32_t dynamicOffset = 0;
+
+            vkCmdBindDescriptorSets(
+                cmd,
+                VK_PIPELINE_BIND_POINT_GRAPHICS,
+                pipelineLayout,
+                0,
+                1, &globalUBO,
+                1, &dynamicOffset // <--- Changed from 0, nullptr
+            );
+        }
+
     glm::mat4 ortho = glm::ortho(
-        0.0f, static_cast<float>(m_ctx.swapchainExtent.width),
-        0.0f, static_cast<float>(m_ctx.swapchainExtent.height),
+        0.0f, static_cast<float>(m_ctx.currentRenderResolution.x),
+        0.0f, static_cast<float>(m_ctx.currentRenderResolution.y),
         -1.0f, 1.0f
     );
 
@@ -627,7 +644,7 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
     uint32_t totalVertices = verts.size() / floatsPerVertex;
     uint32_t currentVertex = 0;
 
-    int currentTexIndex = -1;
+    int currentTexIndex = INT_MIN;
     VkDescriptorSet currentTexSet = VK_NULL_HANDLE;
 
     while (currentVertex < totalVertices) {

@@ -147,6 +147,10 @@ namespace vex {
         VkPhysicalDeviceFeatures deviceFeatures = {};
         deviceFeatures.samplerAnisotropy = VK_TRUE;
 
+        VkPhysicalDeviceVulkan11Features vulkan11Features{};
+        vulkan11Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;
+        vulkan11Features.shaderDrawParameters = VK_TRUE;
+
         VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features{};
         extendedDynamicState2Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
         extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
@@ -163,10 +167,11 @@ namespace vex {
 
         multiDrawFeatures.pNext = &extendedDynamicState2Features;
         dynamicRenderingFeature.pNext = &multiDrawFeatures;
+        vulkan11Features.pNext = &dynamicRenderingFeature;
 
         VkDeviceCreateInfo deviceCreateInfo{};
         deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        deviceCreateInfo.pNext = &dynamicRenderingFeature;
+        deviceCreateInfo.pNext = &vulkan11Features;
         deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
         deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
         deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
@@ -275,8 +280,28 @@ namespace vex {
             uiAttrs
         );
 
+        log("Initializing Fullscreen Pipeline...");
+        m_p_fullscreenPipeline = std::make_unique<VulkanPipeline>(m_context);
+
+        VkVertexInputBindingDescription emptyBinding{};
+        std::vector<VkVertexInputAttributeDescription> emptyAttrs;
+
+        m_p_fullscreenPipeline->createFullscreenPipeline(
+            "Engine/shaders/ScreenVert.spv",
+            "Engine/shaders/ScreenFrag.spv"
+        );
+
         log("Initializing Renderer...");
-        m_p_renderer = std::make_unique<Renderer>(m_context, m_p_resources, m_p_pipeline, m_p_transPipeline, m_p_uiPipeline, m_p_swapchainManager, m_p_meshManager);
+        m_p_renderer = std::make_unique<Renderer>(
+            m_context,
+            m_p_resources,
+            m_p_pipeline,
+            m_p_transPipeline,
+            m_p_uiPipeline,
+            m_p_fullscreenPipeline,
+            m_p_swapchainManager,
+            m_p_meshManager
+        );
 
         log("Vulkan interface initialized successfully");
     }

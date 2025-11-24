@@ -58,6 +58,11 @@ namespace vex {
             return defaultTextureName;
         }
 
+        /// @brief Returns the uniform buffer descriptor set for the given frame index.
+        /// @param uint32_t frameIndex - The frame index to get the descriptor set for.
+        /// @return VkDescriptorSet - The uniform buffer descriptor set.
+        VkDescriptorSet getUBODescriptorSet(uint32_t frameIndex) const;
+
         /// @brief Loads a texture from a file.
         /// @param const std::string& path - The path to the texture file.
         /// @param const std::string& name - The name of the texture.
