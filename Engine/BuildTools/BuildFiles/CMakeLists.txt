@@ -33,7 +33,23 @@ endif()
 
 project(${PROJECT_NAME})
 
-add_subdirectory(${ENGINE_PATH}/Core ${CMAKE_BINARY_DIR}/Engine)
+#add_subdirectory(${ENGINE_PATH}/Core ${CMAKE_BINARY_DIR}/Engine)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Debug")
+else()
+    set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Release")
+endif()
+
+set(VEX_TARGETS_FILE "${VEX_BUILD_DIR}/VEXTargets.cmake")
+
+if(EXISTS "${VEX_TARGETS_FILE}")
+    message(STATUS "Linking shared VEX Engine from: ${VEX_BUILD_DIR}")
+    include("${VEX_TARGETS_FILE}")
+else()
+    message(FATAL_ERROR "VEX Engine targets not found at: ${VEX_TARGETS_FILE}\nPlease run the ProjectBuilder to compile the engine first.")
+endif()
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_STANDARD 20)
@@ -104,9 +120,3 @@ else()
 endif()
 
 add_dependencies(${PROJECT_NAME} copy_Assets)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:VEX>
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )

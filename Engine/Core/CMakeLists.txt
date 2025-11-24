@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
 
 project(VEX)
 set(NAMESPACE_NAME "VEX")
@@ -34,9 +34,6 @@ get_target_property(defs VEX COMPILE_DEFINITIONS)
 message(STATUS "Compile definitions for VEX: ${defs}")
 
 add_subdirectory(thirdparty)
-
-# Link to consolidated third-party interface
-target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
 
 generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME}_export.h
@@ -125,65 +122,6 @@ target_sources(${PROJECT_NAME}
         ${public_header_files}
         ${source_files}
 )
-
-target_include_directories(${PROJECT_NAME}
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
-
-#==============================================================================
-# INSTALLATION (Only for standalone engine builds)
-#==============================================================================
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
-
-    install(TARGETS ${PROJECT_NAME}
-        EXPORT ${PROJECT_NAME}Targets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Library
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Library
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  COMPONENT Library
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} COMPONENT Development
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
-
-    install(EXPORT ${PROJECT_NAME}Targets
-        FILE ${PROJECT_NAME}Targets.cmake
-        NAMESPACE ${NAMESPACE_NAME}::
-        DESTINATION ${ConfigPackageLocation}
-        COMPONENT Development
-    )
-
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glm/glm
-            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
-
-    configure_package_config_file(
-        ${PROJECT_NAME}Config.cmake.in
-        ${PROJECT_NAME}Config.cmake
-        INSTALL_DESTINATION "${ConfigPackageLocation}"
-        PATH_VARS CMAKE_INSTALL_PREFIX
-    )
-
-    write_basic_package_version_file(
-        ${PROJECT_NAME}ConfigVersion.cmake
-        VERSION ${CPP_LIBRARY_VERSION_STRING}
-        COMPATIBILITY AnyNewerVersion
-    )
-
-    install(
-        FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-        DESTINATION
-            ${ConfigPackageLocation}
-        COMPONENT
-            Development
-    )
-endif()
 
 #==============================================================================
 # COMPILE SHADERS
@@ -297,3 +235,87 @@ foreach(source IN LISTS SLANG_SHADERS)
 endforeach()
 
 add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})
+
+target_link_libraries(${PROJECT_NAME} PRIVATE thirdparty_engine)
+
+set(TP_RESOLVED_INCLUDES "")
+set(TP_RESOLVED_DEFINITIONS "")
+
+macro(extract_properties INPUT_TARGET)
+    if(TARGET ${INPUT_TARGET})
+        set(_REAL_TARGET ${INPUT_TARGET})
+
+        get_target_property(_ALIASED ${INPUT_TARGET} ALIASED_TARGET)
+        if(_ALIASED)
+            set(_REAL_TARGET ${_ALIASED})
+        endif()
+
+        get_target_property(_INCS ${_REAL_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
+        if(_INCS AND NOT "${_INCS}" MATCHES "NOTFOUND")
+            list(APPEND TP_RESOLVED_INCLUDES ${_INCS})
+        endif()
+
+        get_target_property(_SYS_INCS ${_REAL_TARGET} INTERFACE_SYSTEM_INCLUDE_DIRECTORIES)
+        if(_SYS_INCS AND NOT "${_SYS_INCS}" MATCHES "NOTFOUND")
+            list(APPEND TP_RESOLVED_INCLUDES ${_SYS_INCS})
+        endif()
+
+        get_target_property(_DEFS ${_REAL_TARGET} INTERFACE_COMPILE_DEFINITIONS)
+        if(_DEFS AND NOT "${_DEFS}" MATCHES "NOTFOUND")
+            list(APPEND TP_RESOLVED_DEFINITIONS ${_DEFS})
+        endif()
+    endif()
+endmacro()
+
+extract_properties(thirdparty_engine)
+
+get_target_property(TP_DEPS thirdparty_engine INTERFACE_LINK_LIBRARIES)
+if(TP_DEPS)
+    foreach(LIB ${TP_DEPS})
+        extract_properties(${LIB})
+    endforeach()
+endif()
+
+extract_properties(SDL3::SDL3)
+extract_properties(SDL3-static)
+extract_properties(SDL3-shared)
+
+if(DEFINED SDL3_SOURCE_DIR)
+    list(APPEND TP_RESOLVED_INCLUDES "${SDL3_SOURCE_DIR}/include")
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include")
+    list(APPEND TP_RESOLVED_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include")
+endif()
+
+list(REMOVE_DUPLICATES TP_RESOLVED_INCLUDES)
+list(REMOVE_DUPLICATES TP_RESOLVED_DEFINITIONS)
+
+message(STATUS ">> VEX Exporting Definitions: ${TP_RESOLVED_DEFINITIONS}")
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+foreach(DIR ${TP_RESOLVED_INCLUDES})
+    if(DIR)
+        target_include_directories(${PROJECT_NAME} PUBLIC
+            $<BUILD_INTERFACE:${DIR}>
+        )
+    endif()
+endforeach()
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+    ${TP_RESOLVED_DEFINITIONS}
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES INTERFACE_LINK_LIBRARIES "")
+
+export(TARGETS VEX
+    FILE "${CMAKE_BINARY_DIR}/VEXTargets.cmake"
+    NAMESPACE VEX::
+)

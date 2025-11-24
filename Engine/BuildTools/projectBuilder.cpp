@@ -59,6 +59,68 @@ inline std::filesystem::path GetExecutableDir() {
     return exePath.parent_path();
 }
 
+std::string GetEngineRelPath(const std::filesystem::path& jsonPath) {
+    std::ifstream file(jsonPath);
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.find("\"engine_path\"") != std::string::npos) {
+            size_t colon = line.find(":");
+            size_t firstQuote = line.find("\"", colon);
+            size_t secondQuote = line.find("\"", firstQuote + 1);
+            if (firstQuote != std::string::npos && secondQuote != std::string::npos) {
+                return line.substr(firstQuote + 1, secondQuote - firstQuote - 1) + "/Core";
+            }
+        }
+    }
+    return "";
+}
+
+bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std::string& buildType, const std::string& parallel) {
+    namespace fs = std::filesystem;
+
+    std::string engineRelPath = GetEngineRelPath(projectDir / "VexProject.json");
+    if (engineRelPath.empty()) {
+        std::cerr << "Error: Could not find 'engine_path' in VexProject.json\n";
+        return false;
+    }
+
+    fs::path enginePath = fs::weakly_canonical(projectDir / engineRelPath);
+
+    std::string config = (buildType == "-d" || buildType == "-debug") ? "Debug" : "Release";
+
+    fs::path engineBuildDir = enginePath / "bin" / config;
+    fs::path targetFile = engineBuildDir / "VEXTargets.cmake";
+    fs::path libFile = engineBuildDir / "libVEX.so";
+
+    if (fs::exists(targetFile) && fs::exists(libFile)) {
+        return true;
+    }
+
+    std::cout << ">> Shared VEX Engine (" << config << ") missing. Building it now...\n";
+    std::cout << ">> Engine Path: " << enginePath.string() << "\n";
+
+    fs::create_directories(engineBuildDir);
+
+    fs::path cmakeSource = enginePath;
+
+    std::string configCmd = "cmake -G Ninja -S \"" + cmakeSource.string() + "\" -B \"" + engineBuildDir.string() +
+                            "\" -DCMAKE_BUILD_TYPE=" + config + " -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++";
+
+    if (std::system(configCmd.c_str()) != 0) {
+        std::cerr << "Engine Configuration Failed.\n";
+        return false;
+    }
+
+    std::string buildCmd = "cmake --build \"" + engineBuildDir.string() + "\" --config " + config + " " + parallel;
+    if (std::system(buildCmd.c_str()) != 0) {
+        std::cerr << "Engine Build Failed.\n";
+        return false;
+    }
+
+    std::cout << ">> Engine built successfully.\n";
+    return true;
+}
+
 int main(int argc, char* argv[]) {
     namespace fs = std::filesystem;
 
@@ -95,6 +157,10 @@ int main(int argc, char* argv[]) {
         std::cerr << "Project directory does not exist: \"" << project_dir.string() << "\" or does not contain VexProject.json\n";
         return 1;
     }
+
+    if (!EnsureSharedEngineBuilt(project_dir, build_type, parallel)) {
+            return 1;
+        }
 
     fs::path intermediate_dir = project_dir / "Intermediate";
     if (!fs::exists(intermediate_dir) || !fs::is_directory(intermediate_dir)) {
@@ -242,22 +308,44 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    output_dir = output_dir / "Engine";
+    std::string engine_rel_path = GetEngineRelPath(vex_project_file);
+    fs::path engine_root = fs::weakly_canonical(project_dir / engine_rel_path);
 
-    try {
-        fs::path libvex_path = output_dir / "libVEX.a";
-        fs::path shaders_path = output_dir / "shaders";
-        for (const auto& entry : fs::directory_iterator(output_dir)) {
-            auto path = fs::weakly_canonical(entry.path());
-            if (path != fs::weakly_canonical(libvex_path) &&
-                path != fs::weakly_canonical(shaders_path)) {
-                fs::remove_all(entry.path());
+    std::string config_name = (build_type == "-d" || build_type == "-debug") ? "Debug" : "Release";
+
+    fs::path engine_bin_dir = engine_root / "bin" / config_name;
+
+    std::cout << ">> Linking Shared Engine artifacts from: " << engine_bin_dir.string() << "\n";
+
+    if (fs::exists(engine_bin_dir)) {
+        for (const auto& entry : fs::directory_iterator(engine_bin_dir)) {
+            const auto& src_path = entry.path();
+
+                if (fs::is_directory(src_path) && src_path.filename() == "shaders") {
+                    fs::path dest_shaders = output_dir / "Engine/shaders";
+
+                    if (fs::exists(dest_shaders)) {
+                        fs::remove_all(dest_shaders);
+                    }
+                    fs::create_directories(dest_shaders);
+
+                    fs::copy(src_path, dest_shaders, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+                    std::cout << "   [+] Copied Shaders\n";
+                }
+                else if (fs::is_regular_file(src_path)) {
+                    std::string ext = src_path.extension().string();
+                    if (ext == ".so" || ext == ".dll" || ext == ".lib" || ext == ".pdb" || ext == ".dylib") {
+                        fs::path dest_file = output_dir / src_path.filename();
+                        fs::copy_file(src_path, dest_file, fs::copy_options::overwrite_existing);
+                        std::cout << "   [+] Copied " << src_path.filename().string() << "\n";
+                    }
+                }
             }
+        } else {
+            std::cerr << ">> CRITICAL WARNING: Engine binary directory not found at " << engine_bin_dir.string() << "\n";
+            std::cerr << ">> The game will likely fail to launch.\n";
+            return 1;
         }
-    } catch (const fs::filesystem_error& e) {
-        std::cerr << e.what() << '\n';
-        return 1;
-    }
 
     try {
         fs::path build_path = intermediate_dir / "build";

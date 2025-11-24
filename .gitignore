@@ -1,7 +1,9 @@
 build
 Build
+bin
 Intermediate
 .zed
+.vscode
 .cache
 compile_commands.json
 perf.data
