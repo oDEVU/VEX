@@ -63,6 +63,23 @@ public:
             pauseGame();
         });
 
+
+        inputComp.addBinding(SDL_SCANCODE_1, vex::InputActionState::Pressed, [this](float) {
+            GetEngine().setResolutionMode(vex::ResolutionMode::NATIVE);
+        });
+
+        inputComp.addBinding(SDL_SCANCODE_2, vex::InputActionState::Pressed, [this](float) {
+            GetEngine().setResolutionMode(vex::ResolutionMode::PS1_SHARP);
+        });
+
+        inputComp.addBinding(SDL_SCANCODE_3, vex::InputActionState::Pressed, [this](float) {
+            GetEngine().setResolutionMode(vex::ResolutionMode::RES_240P);
+        });
+
+        inputComp.addBinding(SDL_SCANCODE_4, vex::InputActionState::Pressed, [this](float) {
+            GetEngine().setResolutionMode(vex::ResolutionMode::RES_480P);
+        });
+
         // Axis inputs dont need delta time since movement beetween frames will be proportionaly smaller
         inputComp.addMouseAxisBinding(vex::MouseAxis::X, [this](float axis) {
             GetComponent<vex::TransformComponent>().addYaw(-axis * 0.05);
@@ -101,7 +118,7 @@ public:
         //m_engine.getPhysicsSystem()->SetAngularFactor(pc.bodyId, glm::vec3(0.0f, 1.0f, 0.0f));
 
         // temponary just to test stuff, dont do that, dont retrive object everyframe.
-        std::shared_ptr<GameObject> object = m_engine.getSceneManager()->GetGameObjectByName("Assets/scenes/main.json", "MyModel");
+        GameObject* object = m_engine.getSceneManager()->GetGameObjectByName("Assets/scenes/main.json", "MyModel");
         if (object) {
             object->GetComponent<TransformComponent>().addPitch(0.1f);
         }

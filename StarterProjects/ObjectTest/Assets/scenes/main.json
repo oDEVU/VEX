@@ -63,6 +63,11 @@
           "farPlane": 100.0
         }
       ]
+    },
+    {
+      "type": "Map",
+      "name": "Map",
+      "components": []
     }
   ]
 }

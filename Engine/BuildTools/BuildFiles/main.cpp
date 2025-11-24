@@ -7,8 +7,8 @@
 #include "components/GameInfo.hpp"
 
 int main(int argc, char* argv[]) {
-    vex::GameInfo gInfo{"VexGame", 0, 1, 0};
-    vex::Engine engine("Vex Game", 1280, 720, gInfo);
+    vex::GameInfo gInfo{VEX_PROJECT_TITLE, 0, 1, 0};
+    vex::Engine engine(VEX_PROJECT_TITLE, 1280, 720, gInfo);
 
     cr_plugin ctx = {};
     ctx.userdata = &engine;
@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
             }
     });
 
-    cr_plugin_close(ctx);
+    //cr_plugin_close(ctx);
+    std::quick_exit(0);
     return 0;
 }

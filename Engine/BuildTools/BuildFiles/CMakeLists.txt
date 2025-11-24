@@ -64,6 +64,10 @@ target_link_libraries(GameModule PUBLIC VEX::VEX)
 target_compile_definitions(GameModule PRIVATE GAME_MODULE_EXPORTS)
 
 add_executable(${PROJECT_NAME} "main.cpp")
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    VEX_PROJECT_TITLE=\"${PROJECT_NAME}\"
+)
 target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
 
 if(WIN32)
