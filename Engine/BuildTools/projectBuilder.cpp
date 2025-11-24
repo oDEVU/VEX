@@ -130,6 +130,20 @@ int main(int argc, char* argv[]) {
     }
     fs::copy(cmakelists_src, cmakelists_dest);
 
+    fs::path main_src = "BuildFiles/main.cpp";
+    fs::path main_dest = intermediate_dir / "main.cpp";
+    if (fs::exists(main_dest)) {
+        fs::remove_all(main_dest);
+    }
+    fs::copy(main_src, main_dest);
+
+    fs::path module_src = "BuildFiles/Source/GameEntry.cpp";
+    fs::path module_dest = intermediate_dir / "Source" / "GameEntry.cpp";
+    if (fs::exists(module_dest)) {
+        fs::remove_all(module_dest);
+    }
+    fs::copy(module_src, module_dest);
+
     // Change working directory to Intermediate
     try {
         fs::current_path(intermediate_dir);

@@ -3,8 +3,9 @@ cmake_minimum_required(VERSION 3.16)
 project(VEX)
 set(NAMESPACE_NAME "VEX")
 
-option(BUILD_SHARED_LIBS "Build the shared library" OFF)
+option(BUILD_SHARED_LIBS "Build the shared library" ON)
 set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -18,7 +19,7 @@ set(CPP_LIBRARY_VERSION_MINOR 1)
 set(CPP_LIBRARY_VERSION_PATCH 0)
 set(CPP_LIBRARY_VERSION_STRING ${CPP_LIBRARY_VERSION_MAJOR}.${CPP_LIBRARY_VERSION_MINOR}.${CPP_LIBRARY_VERSION_PATCH})
 
-add_library(${PROJECT_NAME})
+add_library(${PROJECT_NAME} SHARED)
 add_library(${NAMESPACE_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 message(STATUS "VEX build type: ${CMAKE_BUILD_TYPE}")
@@ -75,6 +76,7 @@ set(source_files
         src/components/ResolutionManager.cpp
         src/components/Scene.cpp
         src/components/SceneManager.cpp
+        src/components/errorUtils.cpp
         src/components/Window.cpp
         src/components/Window.hpp
         src/components/VirtualFileSystem.cpp
@@ -115,8 +117,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${CPP_LIBRARY_VERSION_STRING}
     SOVERSION ${CPP_LIBRARY_VERSION_MAJOR}
     PUBLIC_HEADER "${public_header_files}"
-    CXX_VISIBILITY_PRESET hidden
-    VISIBILITY_INLINES_HIDDEN 1
+    CXX_VISIBILITY_PRESET default  # fix it with exports later
+    VISIBILITY_INLINES_HIDDEN 0
 )
 target_sources(${PROJECT_NAME}
     PRIVATE

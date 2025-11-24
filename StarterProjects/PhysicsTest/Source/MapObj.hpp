@@ -64,6 +64,14 @@ public:
     void Update(float deltaTime) override {
 
     }
+
+    ~Map() {
+        delete Model;
+        delete wall1;
+        delete wall2;
+        delete wall3;
+        delete wall4;
+    }
 private:
 vex::ModelObject* Model;
 vex::ModelObject* wall1;

@@ -6,6 +6,7 @@
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/enviroment.hpp"
 #include "VirtualFileSystem.hpp"
+#include <memory>
 #include <nlohmann/json.hpp>
 #include <cstdint>
 #include <fstream>
@@ -104,15 +105,15 @@ void SceneManager::scenesUpdate(float deltaTime){
     }
 }
 
-void SceneManager::AddGameObjectToScene(const std::string& scene, std::shared_ptr<GameObject> gameObject){
-    m_scenes[scene]->AddGameObject(gameObject);
+void SceneManager::AddGameObjectToScene(const std::string& scene, std::unique_ptr<GameObject> gameObject){
+    m_scenes[scene]->AddGameObject(std::move(gameObject));
 }
 
-std::shared_ptr<GameObject> SceneManager::GetGameObjectByName(const std::string& scene, const std::string& name){
+GameObject* SceneManager::GetGameObjectByName(const std::string& scene, const std::string& name){
     return m_scenes[scene]->GetGameObjectByName(name);
 }
 
-std::shared_ptr<GameObject> SceneManager::GetGameObjectByEntity(const std::string& scene, entt::entity& entity){
+GameObject* SceneManager::GetGameObjectByEntity(const std::string& scene, entt::entity& entity){
     return m_scenes[scene]->GetGameObjectByEntity(entity);
 }
 }

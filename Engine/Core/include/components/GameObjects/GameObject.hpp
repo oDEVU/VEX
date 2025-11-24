@@ -48,24 +48,43 @@
         }
         m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
       }
-      /// @brief Default destructor for GameObject. It removes the object from the engine's registry, and removes its reference from any child objects.
-      virtual ~GameObject() {
-          if (m_isValid) {
-              auto view = m_engine.getRegistry().view<TransformComponent>();
-              for (auto entity : view) {
-                  auto& transform = view.get<TransformComponent>(entity);
-                  if (transform.getParent() == m_entity) {
-                      transform.setParent(entt::null);
-                  }
-              }
+
+      /// @brief Destroys the GameObject and removes it from the engine's registry.
+      void Destroy() {
+          if (!m_isValid) return;
+
+              log("[GameObject] Destroying entity ID: %d", (int)m_entity);
+
               if (m_engine.getRegistry().valid(m_entity)) {
-                  m_engine.getRegistry().destroy(m_entity);
+                   auto view = m_engine.getRegistry().view<TransformComponent>();
+                   for (auto entity : view) {
+                       auto& transform = view.get<TransformComponent>(entity);
+                       if (transform.getParent() == m_entity) {
+                           transform.setParent(entt::null);
+                       }
+                   }
+                   m_engine.getRegistry().destroy(m_entity);
               }
+
               m_entity = entt::null;
               m_isValid = false;
           }
-        log("GameObject destructor called");
-    };
+
+          /// @brief Destruktor woła Destroy
+          virtual ~GameObject() {
+              Destroy();
+          };
+
+          GameObject(const GameObject&) = delete;
+          GameObject& operator=(const GameObject&) = delete;
+
+          /// @brief Pozwolenie na przenoszenie
+          GameObject(GameObject&& other) noexcept
+              : m_engine(other.m_engine), m_entity(other.m_entity), m_isValid(other.m_isValid) {
+              other.m_entity = entt::null;
+              other.m_isValid = false;
+          }
+
       /// @brief virtual void function you override to implement custom behavior when the game starts.
       virtual void BeginPlay() {}
       /// @brief virtual void function you override to implement custom behavior when the game updates (eg. every frame).

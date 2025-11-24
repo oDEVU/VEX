@@ -7,11 +7,13 @@
 #pragma once
 
 #include <components/Scene.hpp>
+#include <memory>
+#include "VEX/VEX_export.h"
 
 namespace vex {
 
 /// @brief SceneManager class implements scene management functionality like loading and unloading scenes, holding game objects.
-class SceneManager {
+class VEX_EXPORT SceneManager {
 public:
 /// @brief Function to load a scene from a file. Simply calls clearScene() and loadSceneWithoutClearing().
 /// @param std::string& path - Path to the scene file.
@@ -37,19 +39,19 @@ void scenesUpdate(float deltaTime);
 /// @brief Function to add a game object to a scene.
 /// @param const std::string& scene - Name of the scene to add the game object to.
 /// @param std::shared_ptr<GameObject> gameObject - Shared pointer to the game object to add.
-void AddGameObjectToScene(const std::string& scene, std::shared_ptr<GameObject> gameObject);
+void AddGameObjectToScene(const std::string& scene, std::unique_ptr<GameObject> gameObject);
 
 /// @brief Function to get game object by its unique name.
 /// @param const std::string& scene - Name of the scene to get the game object from.
 /// @param const std::string& name - Name of the game object to get.
 /// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
-std::shared_ptr<GameObject> GetGameObjectByName(const std::string& scene, const std::string& name);
+GameObject* GetGameObjectByName(const std::string& scene, const std::string& name);
 
 /// @brief Function to get game object by its unique name.
 /// @param const std::string& scene - Name of the scene to get the game object from.
 /// @param const entt::entity& entity - Entity of the game object to get.
 /// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
-std::shared_ptr<GameObject> GetGameObjectByEntity(const std::string& scene, entt::entity& entity);
+GameObject* GetGameObjectByEntity(const std::string& scene, entt::entity& entity);
 
 private:
 std::map<std::string, std::shared_ptr<Scene>> m_scenes;

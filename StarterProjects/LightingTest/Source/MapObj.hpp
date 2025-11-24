@@ -114,6 +114,11 @@ public:
     void Update(float deltaTime) override {
 
     }
+
+    ~Map() {
+        delete Model;
+        delete Transparent;
+    }
 private:
 vex::ModelObject* Model;
 vex::ModelObject* Transparent;

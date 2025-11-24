@@ -30,12 +30,12 @@ inline std::filesystem::path GetExecutableDir() {
     wchar_t wPath[MAX_PATH];
     DWORD len = GetModuleFileNameW(NULL, wPath, MAX_PATH);
     if (len == 0 || len == MAX_PATH) {
-        throw_error("Failed to get executable path on Windows");
+        vex::throw_error("Failed to get executable path on Windows");
     }
     // Convert UTF-16 to UTF-8
     int utf8Size = WideCharToMultiByte(CP_UTF8, 0, wPath, -1, nullptr, 0, nullptr, nullptr);
     if (utf8Size == 0) {
-        throw_error("Failed to convert executable path to UTF-8");
+        vex::throw_error("Failed to convert executable path to UTF-8");
     }
     std::string utf8Path(utf8Size, '\0');
     WideCharToMultiByte(CP_UTF8, 0, wPath, -1, utf8Path.data(), utf8Size, nullptr, nullptr);
@@ -45,7 +45,7 @@ inline std::filesystem::path GetExecutableDir() {
     char pathBuf[MAXPATHLEN];
     uint32_t size = sizeof(pathBuf);
     if (_NSGetExecutablePath(pathBuf, &size) != 0) {
-        throw_error("Failed to get executable path on macOS");
+        vex::throw_error("Failed to get executable path on macOS");
     }
     exePath = std::filesystem::canonical(pathBuf); // Resolve symlinks/aliases
 #else
@@ -53,7 +53,7 @@ inline std::filesystem::path GetExecutableDir() {
     char pathBuf[1024];
     ssize_t len = ::readlink("/proc/self/exe", pathBuf, sizeof(pathBuf) - 1);
     if (len == -1) {
-        throw_error("Failed to read /proc/self/exe on Linux");
+        vex::throw_error("Failed to read /proc/self/exe on Linux");
     }
     pathBuf[len] = '\0';
     exePath = std::filesystem::path(pathBuf);

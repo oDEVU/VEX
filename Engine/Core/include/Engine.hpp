@@ -21,6 +21,8 @@
 #include "components/UI/VexUI.hpp"
 #include "components/PhysicsSystem.hpp"
 
+#include "VEX/VEX_export.h"
+
 namespace vex {
 
 class Window;
@@ -29,7 +31,7 @@ class VirtualFileSystem;
 class SceneManager;
 
 /// @brief Class for interaction with engine systems, your game main class will Inherit from it.
-class Engine {
+class VEX_EXPORT Engine {
 public:
     /// @brief Constructor for Engine class, that will handle initialization of every system with given params.
     /// @param char* title       - Title of the game window.
@@ -41,7 +43,7 @@ public:
     ~Engine();
 
     /// @brief Function starting and running main game loop.
-    void run();
+    void run(std::function<void()> onUpdateLoop = nullptr);
 
     entt::entity getCamera() {
         auto view = m_registry.view<CameraComponent>();

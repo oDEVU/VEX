@@ -63,10 +63,11 @@ std::shared_ptr<VexUI> Engine::createVexUI(){
     return std::make_shared<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
 }
 
-void Engine::run() {
+void Engine::run(std::function<void()> onUpdateLoop) {
     Uint64 lastTime = SDL_GetPerformanceCounter();
 
     while (m_running) {
+        if (onUpdateLoop) onUpdateLoop();
 
         Uint64 now = SDL_GetPerformanceCounter();
         float deltaTime = (float)((now - lastTime) / (float)SDL_GetPerformanceFrequency());
@@ -176,6 +177,10 @@ void Engine::render() {
     //log("Render function called");
     auto renderRes = m_resolutionManager->getRenderResolution();
     auto cameraEntity = getCamera();
+
+    if (cameraEntity == entt::null) {
+        return;
+    }
 
     //log("Calling Renderer::renderFrame()");
     try{

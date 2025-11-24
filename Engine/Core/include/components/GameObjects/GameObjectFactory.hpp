@@ -11,11 +11,13 @@
 #include "components/GameObjects/GameObject.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 
+#include "VEX/VEX_export.h"
+
 #include <functional>
 #include <unordered_map>
 #include <string>
 
-namespace vex {
+namespace VEX_EXPORT vex {
 ///@brief Class responsible for registering and then creating GameObjects eg. Player, CameraObject. It is needed to load GameObjects from scene files but not all GameObjects can be registered. It requires your GameObject to not change constructor parameters.
 class GameObjectFactory {
 public:
@@ -39,6 +41,10 @@ public:
         }
         log("Error: Type '%S' not registered", type.c_str());
         return nullptr;
+    }
+
+    void UnregisterGameObjects(){
+        //creators.clear();
     }
 
 private:

@@ -12,10 +12,13 @@
 #include "Engine.hpp"
 #include "entt/entity/fwd.hpp"
 
+#include "VEX/VEX_export.h"
+#include <algorithm>
+
 namespace vex {
 
 /// @brief Scene class implements scene functionality like loading and holding game objects.
-class Scene {
+class VEX_EXPORT Scene {
 public:
 /// @brief Constructor loads a scene from a file.
 /// @param std::string& path - Path to the scene file.
@@ -32,21 +35,21 @@ void sceneBegin();
 void sceneUpdate(float deltaTime);
 
 /// @brief Function to add a game object to the scene.
-/// @param std::shared_ptr<GameObject> gameObject - Shared pointer to the game object to add.
-void AddGameObject(std::shared_ptr<GameObject> gameObject);
+/// @param std::unique_ptr<GameObject> gameObject - Shared pointer to the game object to add.
+void AddGameObject(std::unique_ptr<GameObject> gameObject);
 
 /// @brief Function to get game object by its unique name.
 /// @param const std::string& name - Name of the game object to get.
-/// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
-std::shared_ptr<GameObject> GetGameObjectByName(const std::string& name);
+/// @return GameObject* - Shared pointer to the game object.
+GameObject* GetGameObjectByName(const std::string& name);
 
 /// @brief Function to get game object by its entity.
 /// @param entt::entity& entity - Entity of the game object to get.
-/// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
-std::shared_ptr<GameObject> GetGameObjectByEntity(entt::entity& entity);
+/// @return GameObject* - Shared pointer to the game object.
+GameObject* GetGameObjectByEntity(entt::entity& entity);
 
 private:
-std::vector<std::shared_ptr<GameObject>> m_objects;
+std::vector<std::unique_ptr<GameObject>> m_objects;
 };
 
 } // namespace vex

@@ -129,7 +129,8 @@ Scene::Scene(const std::string& path, Engine& engine) {
                 }
 
         if (gameObj) {
-            m_objects.emplace_back(gameObj);
+            auto ptr = std::unique_ptr<GameObject>(gameObj);
+            m_objects.push_back(std::move(ptr));
         }
     }
 }
@@ -158,25 +159,25 @@ void Scene::sceneUpdate(float deltaTime){
     }
 }
 
-void Scene::AddGameObject(std::shared_ptr<GameObject> gameObject){
+void Scene::AddGameObject(std::unique_ptr<GameObject> gameObject){
     if (gameObject) {
-        m_objects.emplace_back(gameObject);
+        m_objects.push_back(std::move(gameObject));
     }
 }
 
-std::shared_ptr<GameObject> Scene::GetGameObjectByName(const std::string& name){
+GameObject* Scene::GetGameObjectByName(const std::string& name){
     for(const auto& obj : m_objects){
         if(obj->GetComponent<NameComponent>().name == name){
-            return obj;
+            return obj.get();
         }
     }
     return nullptr;
 }
 
-std::shared_ptr<GameObject> Scene::GetGameObjectByEntity(entt::entity& entity){
+GameObject* Scene::GetGameObjectByEntity(entt::entity& entity){
     for(const auto& obj : m_objects){
         if(obj->GetEntity() == entity){
-            return obj;
+            return obj.get();
         }
     }
     return nullptr;

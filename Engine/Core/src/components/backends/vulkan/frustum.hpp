@@ -8,6 +8,8 @@
 #include <glm/glm.hpp>
 #include <array>
 
+namespace vex {
+
 struct Plane {
     glm::vec3 normal;
     float distance;
@@ -64,3 +66,5 @@ struct Frustum {
         return true;
     }
 };
+
+}

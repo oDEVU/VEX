@@ -63,6 +63,9 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 add_subdirectory(volk SYSTEM)
 
+# cr
+add_subdirectory(cr SYSTEM)
+
 #yoga
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_compile_options(-Wno-array-bounds)
@@ -144,6 +147,9 @@ check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNI
 
 #entt
 add_subdirectory(entt SYSTEM)
+target_compile_definitions(EnTT INTERFACE
+    ENTT_STANDARD_CPP
+)
 
 #jolt
 # set(JPH_SHARED_LIBRARY ON "")
@@ -239,6 +245,7 @@ add_library(thirdparty_engine INTERFACE)
 target_link_libraries(thirdparty_engine INTERFACE
     SDL3-static
     volk
+    cr
     VulkanMemoryAllocator
     assimp
     thirdparty_glm

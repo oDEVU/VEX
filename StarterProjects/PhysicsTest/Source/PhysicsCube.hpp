@@ -42,6 +42,13 @@ public:
             spawned++;
         }
     }
+
+    ~PCube() {
+        for(auto& cube : cubeObjects){
+            delete cube;
+        }
+        cubeObjects.clear();
+    }
 private:
     int cubes = 300, spawned = 0;
     std::vector<ModelObject*> cubeObjects;

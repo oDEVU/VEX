@@ -33,6 +33,8 @@ endif()
 
 project(${PROJECT_NAME})
 
+add_subdirectory(${ENGINE_PATH}/Core ${CMAKE_BINARY_DIR}/Engine)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_STANDARD 20)
 
@@ -41,7 +43,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB GAME_SRC CONFIGURE_DEPENDS "Source/*.h" "Source/*.cpp")
 
-add_executable(${PROJECT_NAME} ${GAME_SRC})
+add_library(GameModule SHARED ${GAME_SRC})
+target_link_libraries(GameModule PUBLIC VEX::VEX)
+target_compile_definitions(GameModule PRIVATE GAME_MODULE_EXPORTS)
+
+add_executable(${PROJECT_NAME} "main.cpp")
+target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -71,9 +78,9 @@ else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
 endif()
 
-target_sources(${PROJECT_NAME} PRIVATE main.cpp)
-add_subdirectory(${ENGINE_PATH}/Core  ${CMAKE_BINARY_DIR}/Engine)
-target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
+#target_sources(${PROJECT_NAME} PRIVATE main.cpp)
+#add_subdirectory(${ENGINE_PATH}/Core  ${CMAKE_BINARY_DIR}/Engine)
+#target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
 
 set(ASSETS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Assets")
 set(ASSETS_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/Assets")
@@ -97,3 +104,9 @@ else()
 endif()
 
 add_dependencies(${PROJECT_NAME} copy_Assets)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:VEX>
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
