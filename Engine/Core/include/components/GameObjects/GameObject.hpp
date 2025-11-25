@@ -31,7 +31,7 @@
   class GameObject {
   public:
     /// @brief Default constructor for GameObject. You need to call it from your derived class, it gives your object a unique identifier and registers it with the engine.
-    GameObject(Engine& engine, const std::string& name)
+    GameObject(Engine& engine, const std::string& name);/*
         : m_engine(engine), m_entity(m_engine.getRegistry().create()), m_isValid(true)  {
 
         std::string tempName = name;
@@ -47,10 +47,10 @@
             }
         }
         m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
-      }
+        }*/
 
       /// @brief Destroys the GameObject and removes it from the engine's registry.
-      void Destroy() {
+      void Destroy();/* {
           if (!m_isValid) return;
 
               log("[GameObject] Destroying entity ID: %d", (int)m_entity);
@@ -68,12 +68,12 @@
 
               m_entity = entt::null;
               m_isValid = false;
-          }
+          }*/
 
           /// @brief Destruktor woła Destroy
-          virtual ~GameObject() {
+          virtual ~GameObject();/* {
               Destroy();
-          };
+              };*/
 
           GameObject(const GameObject&) = delete;
           GameObject& operator=(const GameObject&) = delete;

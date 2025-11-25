@@ -190,7 +190,9 @@ public:
                aiGetVersionRevision());
 
         log("Creating assimp importer...");
-        Assimp::Importer importer;
+
+        auto importerPtr = std::make_unique<Assimp::Importer>();
+        Assimp::Importer& importer = *importerPtr;
 
         std::string realPath = path;
 
@@ -286,11 +288,11 @@ public:
 
             // Indices
             log("Loading indices...");
-            submesh.indices.resize(aiMesh->mNumFaces * 3);
+            submesh.indices.reserve(aiMesh->mNumFaces * 3);
             for (unsigned i = 0; i < aiMesh->mNumFaces; i++) {
                 aiFace face = aiMesh->mFaces[i];
                 for (unsigned j = 0; j < face.mNumIndices; j++) {
-                    submesh.indices[i*3 + j] = face.mIndices[j];
+                    submesh.indices.push_back(face.mIndices[j]);
                 }
             }
 

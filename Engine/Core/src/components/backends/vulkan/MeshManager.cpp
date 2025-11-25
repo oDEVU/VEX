@@ -100,7 +100,7 @@ namespace vex {
             handle_exception(e);
         }
 
-        entt::entity modelEntity = engine.getRegistry().create();
+        //entt::entity modelEntity = engine.getRegistry().create();
         ModelObject* modelObject = new ModelObject(engine, tempName, meshComponent, transformComponent);
         modelObject->cleanup = [this](std::string& tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };
         return modelObject;

@@ -6,6 +6,16 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS" CACHE STRING "Modified CXX flags for thirdparty on Windows" FORCE)
 endif()
 
+if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        message(STATUS ">> FORCING DEBUG RUNTIME (msvcrtd) FOR ALL THIRDPARTY LIBS")
+        add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd" CACHE STRING "Force Debug Runtime" FORCE)
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd" CACHE STRING "Force Debug Runtime" FORCE)
+        add_link_options("-Wl,/nodefaultlib:msvcrt" "-Wl,/defaultlib:msvcrtd")
+    endif()
+endif()
+
 # i hate google tests
 include(FetchContent)
 
@@ -149,9 +159,16 @@ check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNI
 
 #entt
 add_subdirectory(entt SYSTEM)
-target_compile_definitions(EnTT INTERFACE
-    ENTT_STANDARD_CPP
-)
+if(NOT WIN32)
+    target_compile_definitions(EnTT INTERFACE
+        ENTT_STANDARD_CPP,
+        ENTT_NOEXCEPTION
+    )
+else()
+    target_compile_definitions(EnTT INTERFACE
+        ENTT_NOEXCEPTION
+    )
+endif()
 
 #jolt
 # set(JPH_SHARED_LIBRARY ON "")

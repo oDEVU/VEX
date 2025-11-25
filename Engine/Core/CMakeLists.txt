@@ -7,6 +7,15 @@ option(BUILD_SHARED_LIBS "Build the shared library" ON)
 set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
+        add_link_options("-Wl,/nodefaultlib:msvcrt" "-Wl,/defaultlib:msvcrtd")
+    endif()
+endif()
+
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 include(GenerateExportHeader)
@@ -102,6 +111,7 @@ set(source_files
         src/components/backends/vulkan/MeshManager.cpp
         src/components/backends/vulkan/MeshManager.hpp
         src/components/GameObjects/Creators/ModelCreator.cpp
+        src/components/GameObjects/GameObject.cpp
     )
 
 #if(CMAKE_BUILD_TYPE STREQUAL "Debug")

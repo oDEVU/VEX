@@ -116,17 +116,33 @@ Scene::Scene(const std::string& path, Engine& engine) {
             }
         }
 
-                std::string parent = obj.value("parent", "");
-                if (!parent.empty()) {
-                    for(const auto& m_obj : m_objects) {
-                        if (m_obj->GetComponent<NameComponent>().name == parent) {
-                            gameObj->ParentTo(m_obj->GetEntity());
-                            //gameObj->GetComponent<TransformComponent>().parent = m_obj->GetEntity();
-                            log("Parented object '%s' to '%s'", gameObj->GetComponent<NameComponent>().name.c_str(), m_obj->GetComponent<NameComponent>().name.c_str());
-                            break;
+        std::string parent = obj.value("parent", "");
+                        if (!parent.empty()) {
+                            bool parentFound = false;
+                            for(const auto& m_obj : m_objects) {
+                                // FIX: Check if m_obj is valid and its entity exists in registry
+                                if (!m_obj || !m_obj->isValid() || !engine.getRegistry().valid(m_obj->GetEntity())) {
+                                    continue;
+                                }
+
+                                entt::entity e = m_obj->GetEntity();
+                                bool valid = engine.getRegistry().valid(e);
+
+                                log("Checking Object at %p | Entity ID: %u (Hex: %X) | Valid in Registry: %d",
+                                        (void*)m_obj.get(), (uint32_t)e, (uint32_t)e, valid);
+
+                                // Safe to access component now
+                                if (m_obj->GetComponent<NameComponent>().name == parent) {
+                                    gameObj->ParentTo(m_obj->GetEntity());
+                                    log("Parented object '%s' to '%s'", name.c_str(), parent.c_str());
+                                    parentFound = true;
+                                    break;
+                                }
+                            }
+                            if (!parentFound) {
+                                log("Warning: Parent '%s' not found for object '%s'", parent.c_str(), name.c_str());
+                            }
                         }
-                    }
-                }
 
         if (gameObj) {
             auto ptr = std::unique_ptr<GameObject>(gameObj);
