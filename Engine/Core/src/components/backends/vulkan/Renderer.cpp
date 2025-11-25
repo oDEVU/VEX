@@ -10,6 +10,10 @@
 #include "frustum.hpp"
 #include "limits.hpp"
 
+#if defined(max)
+    #undef max
+#endif
+
 namespace vex {
     glm::vec3 extractCameraPosition(const glm::mat4& view) {
         glm::mat4 invView = glm::inverse(view);
@@ -1177,17 +1181,33 @@ namespace vex {
     }
 
     void Renderer::issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands) {
-        const int32_t instanceCount = 1;
-        const int32_t vertexOffset = 0;
+        if (commands.empty()) return;
 
-        vkCmdDrawMultiIndexedEXT(
-            cmd,
-            static_cast<uint32_t>(commands.size()),
-            commands.data(), // No cast needed, pointer type is correct
-            1, // Stride is guaranteed to be correct
-            0,
-            static_cast<uint32_t>(sizeof(VkMultiDrawIndexedInfoEXT)),
-            nullptr//reinterpret_cast<const int32_t*>(&instanceCount)
-        );
+                if (m_r_context.supportsMultiDraw) {
+                    vkCmdDrawMultiIndexedEXT(
+                        cmd,
+                        static_cast<uint32_t>(commands.size()),
+                        commands.data(),
+                        1,
+                        0,
+                        static_cast<uint32_t>(sizeof(VkMultiDrawIndexedInfoEXT)),
+                        nullptr
+                    );
+                } else {
+                    if(basicDiag){
+                        log("MultiDraw unsuported using fallback");
+                        basicDiag = false;
+                    }
+                    for (const auto& draw : commands) {
+                        vkCmdDrawIndexed(
+                            cmd,
+                            draw.indexCount,
+                            1,
+                            draw.firstIndex,
+                            draw.vertexOffset,
+                            0
+                        );
+                    }
+                }
     }
 }

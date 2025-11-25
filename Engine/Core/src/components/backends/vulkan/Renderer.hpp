@@ -120,6 +120,8 @@ namespace vex {
         std::chrono::high_resolution_clock::time_point startTime;
         float currentTime = 0.0f;
 
+        bool basicDiag = true;
+
         std::vector<TransparentTriangle> m_transparentTriangles;
         std::map<uint32_t, glm::mat4> trnasMatrixes;
         std::vector<UiComponent> m_uiObjects;

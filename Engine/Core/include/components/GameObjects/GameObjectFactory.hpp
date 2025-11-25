@@ -17,9 +17,9 @@
 #include <unordered_map>
 #include <string>
 
-namespace VEX_EXPORT vex {
+namespace vex {
 ///@brief Class responsible for registering and then creating GameObjects eg. Player, CameraObject. It is needed to load GameObjects from scene files but not all GameObjects can be registered. It requires your GameObject to not change constructor parameters.
-class GameObjectFactory {
+class VEX_EXPORT GameObjectFactory {
 public:
     using Creator = std::function<GameObject*(Engine&, const std::string&)>;
 

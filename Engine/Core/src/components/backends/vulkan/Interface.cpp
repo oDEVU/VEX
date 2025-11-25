@@ -137,14 +137,68 @@ namespace vex {
         std::vector<const char*> deviceExtensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
             VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
-            VK_EXT_MULTI_DRAW_EXTENSION_NAME,
             VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME
 #ifdef __APPLE__
             , VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
 #endif
         };
+                VkPhysicalDeviceExtendedDynamicState2FeaturesEXT supportedDynState2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT };
+                VkPhysicalDeviceMultiDrawFeaturesEXT supportedMultiDraw = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT };
+                VkPhysicalDeviceDynamicRenderingFeatures supportedDynRender = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES };
+                VkPhysicalDeviceVulkan11Features supported11 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES };
 
-        VkPhysicalDeviceFeatures deviceFeatures = {};
+                supportedDynState2.pNext = &supportedMultiDraw;
+                supportedMultiDraw.pNext = &supportedDynRender;
+                supportedDynRender.pNext = &supported11;
+
+                VkPhysicalDeviceFeatures2 queryFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 };
+                queryFeatures.pNext = &supportedDynState2;
+                vkGetPhysicalDeviceFeatures2(m_context.physicalDevice, &queryFeatures);
+
+                void* pNextChain = nullptr;
+                m_context.supportsMultiDraw = false;
+
+                VkPhysicalDeviceVulkan11Features vulkan11Features = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES };
+                if (supported11.shaderDrawParameters) vulkan11Features.shaderDrawParameters = VK_TRUE;
+                vulkan11Features.pNext = pNextChain;
+                pNextChain = &vulkan11Features;
+
+                VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeature = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES };
+                if (supportedDynRender.dynamicRendering) dynamicRenderingFeature.dynamicRendering = VK_TRUE;
+                dynamicRenderingFeature.pNext = pNextChain;
+                pNextChain = &dynamicRenderingFeature;
+
+                VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT };
+                if (supportedMultiDraw.multiDraw) {
+                    multiDrawFeatures.multiDraw = VK_TRUE;
+                    deviceExtensions.push_back(VK_EXT_MULTI_DRAW_EXTENSION_NAME);
+                    m_context.supportsMultiDraw = true;
+
+                    multiDrawFeatures.pNext = pNextChain;
+                    pNextChain = &multiDrawFeatures;
+                }
+
+                VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT };
+                if (supportedDynState2.extendedDynamicState2) extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
+
+                if (supportedDynState2.extendedDynamicState2LogicOp) extendedDynamicState2Features.extendedDynamicState2LogicOp = VK_TRUE;
+                if (supportedDynState2.extendedDynamicState2PatchControlPoints) extendedDynamicState2Features.extendedDynamicState2PatchControlPoints = VK_TRUE;
+
+                extendedDynamicState2Features.pNext = pNextChain;
+                pNextChain = &extendedDynamicState2Features;
+
+                VkPhysicalDeviceFeatures deviceFeatures = {};
+                if (queryFeatures.features.samplerAnisotropy) deviceFeatures.samplerAnisotropy = VK_TRUE;
+
+                VkDeviceCreateInfo deviceCreateInfo = { VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO };
+                deviceCreateInfo.pNext = pNextChain;
+                deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+                deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
+                deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
+                deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
+                deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
+
+        /*VkPhysicalDeviceFeatures deviceFeatures = {};
         deviceFeatures.samplerAnisotropy = VK_TRUE;
 
         VkPhysicalDeviceVulkan11Features vulkan11Features{};
@@ -176,7 +230,7 @@ namespace vex {
         deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
         deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
         deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
-        deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
+        deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();*/
 
         if (vkCreateDevice(m_context.physicalDevice, &deviceCreateInfo, nullptr, &m_context.device) != VK_SUCCESS) {
             throw_error("Failed to create logical device");

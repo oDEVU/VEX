@@ -6,6 +6,10 @@
 
 #pragma once
 
+#if defined(_WIN32)
+  #define NOMINMAX
+#endif
+
 #include <cstdint>
 #include <memory>
 #define SDL_MAIN_HANDLED

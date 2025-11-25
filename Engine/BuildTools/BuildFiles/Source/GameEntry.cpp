@@ -4,6 +4,18 @@
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 
+#if defined(_WIN32) && defined(_DEBUG)
+#include <Jolt/Jolt.h>
+
+namespace JPH {
+    static bool DummyAssertFailed(const char* inExpression, const char* inMessage, const char* inFile, uint32_t inLine) {
+        return true;
+    }
+
+    AssertFailedFunction AssertFailed = DummyAssertFailed;
+}
+#endif
+
 extern "C" {
     __attribute__((visibility("default")))
     int cr_main(struct cr_plugin *ctx, enum cr_op operation) {

@@ -25,6 +25,12 @@ public:
 /// @param Engine& engine - Reference to the engine instance.
 Scene(const std::string& path, Engine& engine);
 
+Scene(const Scene&) = delete;
+Scene& operator=(const Scene&) = delete;
+
+Scene(Scene&&) = default;
+Scene& operator=(Scene&&) = default;
+
 /// @brief Destructor clears the current scene.
 ~Scene();
 

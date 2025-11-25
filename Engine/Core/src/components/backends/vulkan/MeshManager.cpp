@@ -31,7 +31,7 @@ namespace vex {
             auto meshComponent = view.get<NameComponent>(entity);
             if(meshComponent.name == tempName){
                 log("Warning: Object with name: '%s already exists! All objects should have unique names.", tempName.c_str());
-                UUID uuidGenerator;
+                tp::UUID uuidGenerator;
                 tempName = tempName + uuidGenerator.generate_uuid();
                 log("Info: Object created with name: '%s', it is still recommended to not rely on this name for identification. It is different every app run.", tempName.c_str());
             }

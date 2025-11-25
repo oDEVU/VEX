@@ -111,5 +111,7 @@ namespace vex {
         glm::uvec2 currentRenderResolution;
 
         enviroment m_enviroment;
+
+        bool supportsMultiDraw = false;
     };
 }
