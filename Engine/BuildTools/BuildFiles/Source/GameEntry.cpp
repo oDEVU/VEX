@@ -16,25 +16,31 @@ namespace JPH {
 }
 #endif
 
-extern "C" {
-    __attribute__((visibility("default")))
-    int cr_main(struct cr_plugin *ctx, enum cr_op operation) {
+
+#ifdef __linux__
+extern "C" __attribute__((visibility("default"))) int cr_main(struct cr_plugin *ctx, enum cr_op operation) {
+#else
+extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op operation) {
+#endif
 
     vex::Engine* engine = (vex::Engine*)ctx->userdata;
 
     if (!engine) {
                 vex::log("[DEBUG] CRITICAL: Engine pointer is NULL!");
-                //fflush(stdout);
+                fflush(stdout);
                 return -1;
             }
 
     switch (operation) {
         case CR_LOAD:
         vex::log("[DEBUG] Entering CR_LOAD...");
+        fflush(stdout);
             if (engine->getSceneManager()) {
                                 vex::log("[DEBUG] SceneManager pointer seems valid: %p", (void*)engine->getSceneManager());
+                                fflush(stdout);
                             } else {
                                 vex::log("[DEBUG] CRITICAL: SceneManager is NULL!\n");
+                                fflush(stdout);
                             }
 
             if (ctx->version == 1) {
@@ -43,11 +49,13 @@ extern "C" {
                 if(!engine->getLastLoadedScenes().empty()){
                     for (const auto& sceneName : engine->getLastLoadedScenes()) {
                         vex::log("[DEBUG] Reloading scene: %s", sceneName.c_str());
+                        fflush(stdout);
                         //fflush(stdout);
                         engine->getSceneManager()->loadScene(sceneName, *engine);
                     }
                 }else{
                     vex::log("[DEBUG] Loaded scenes are empty");
+                    fflush(stdout);
                     //fflush(stdout);
                     engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
                 }
@@ -59,6 +67,7 @@ extern "C" {
 
         case CR_UNLOAD:
             vex::log("[DEBUG] Unloading...");
+            fflush(stdout);
             engine->prepareScenesForHotReload();
             engine->getSceneManager()->clearScenes();
             //engine->getRegistry().clear();
@@ -70,5 +79,4 @@ extern "C" {
     }
 
     return 0;
-}
 }

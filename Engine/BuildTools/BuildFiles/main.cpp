@@ -11,14 +11,13 @@ int main(int argc, char* argv[]) {
     vex::Engine engine(VEX_PROJECT_TITLE, 1280, 720, gInfo);
 
     cr_plugin ctx = {};
-    ctx.userdata = &engine;
     std::string buildDir = std::filesystem::current_path().string();
     std::string libName = "GameModule";
 
     #ifdef __linux__
          std::string libPath = buildDir + "/libGameModule.so";
     #else
-        std::string libPath = buildDir + "/GameModule.dll";
+        std::string libPath = buildDir + "\\GameModule.dll";
     #endif
 
     vex::log("Attempting to load game module from: %s", libPath.c_str());
@@ -27,6 +26,8 @@ int main(int argc, char* argv[]) {
         vex::log("CRITICAL ERROR: Failed to load Game Module! Check path and file permissions.");
         return 1;
     }
+
+    ctx.userdata = &engine;
 
     vex::log("Starting Engine Loop with Hot Reload...");
 
