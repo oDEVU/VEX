@@ -60,6 +60,8 @@ set(source_files
         EditorCamera.cpp
         EditorImGUIWrapper.hpp
         EditorImGUIWrapper.cpp
+        DialogWindow.cpp
+        DialogWindow.hpp
     )
 
 target_sources(${PROJECT_NAME}

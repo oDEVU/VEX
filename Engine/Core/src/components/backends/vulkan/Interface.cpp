@@ -369,6 +369,7 @@ namespace vex {
         m_p_pipeline.reset();
         m_p_transPipeline.reset();
         m_p_uiPipeline.reset();
+        m_p_fullscreenPipeline.reset();
         m_p_swapchainManager->cleanupSwapchain();
         m_p_swapchainManager.reset();
 
@@ -396,8 +397,24 @@ namespace vex {
             }
         }
 
+        if (!m_context.commandBuffers.empty()) {
+            for (size_t i = 0; i < m_context.commandPools.size(); i++) {
+                vkFreeCommandBuffers(m_context.device, m_context.commandPools[i], 1, &m_context.commandBuffers[i]);
+            }
+        }
         m_context.commandBuffers.clear();
+
+        for (auto& pool : m_context.commandPools) {
+            if (pool != VK_NULL_HANDLE) {
+                vkDestroyCommandPool(m_context.device, pool, nullptr);
+            }
+        }
         m_context.commandPools.clear();
+
+        if (m_context.singleTimePool != VK_NULL_HANDLE) {
+            vkDestroyCommandPool(m_context.device, m_context.singleTimePool, nullptr);
+            m_context.singleTimePool = VK_NULL_HANDLE;
+        }
 
         for (auto& imageView : m_context.swapchainImageViews) {
             if (imageView) {

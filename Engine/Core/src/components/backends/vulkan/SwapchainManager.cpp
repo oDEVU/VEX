@@ -124,6 +124,16 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createDepthResources() {
+        if (m_r_context.depthImage != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.depthImage, m_r_context.depthAllocation);
+            m_r_context.depthImage = VK_NULL_HANDLE;
+            m_r_context.depthAllocation = VK_NULL_HANDLE;
+        }
+        if (m_r_context.depthImageView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.depthImageView, nullptr);
+            m_r_context.depthImageView = VK_NULL_HANDLE;
+        }
+
         log("Creating depth resources...");
 
         VkFormat depthFormat = findDepthFormat();
@@ -355,12 +365,15 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {
-                    if (m_r_context.lowResColorView) {
-                        vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
-                    }
-                    if (m_r_context.lowResColorImage) {
-                        vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
-                    }
+        if (m_r_context.lowResColorView) {
+            vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
+            m_r_context.lowResColorView = VK_NULL_HANDLE;
+        }
+        if (m_r_context.lowResColorImage) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
+            m_r_context.lowResColorImage = VK_NULL_HANDLE;
+            m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
+        }
 
         if (m_r_context.depthImageView) {
             vkDestroyImageView(m_r_context.device, m_r_context.depthImageView, nullptr);
@@ -369,6 +382,7 @@ namespace vex {
         if (m_r_context.depthImage) {
             vmaDestroyImage(m_r_context.allocator, m_r_context.depthImage, m_r_context.depthAllocation);
             m_r_context.depthImage = VK_NULL_HANDLE;
+            m_r_context.depthAllocation = VK_NULL_HANDLE;
         }
 
         for (auto& imageView : m_r_context.swapchainImageViews) {
@@ -376,8 +390,10 @@ namespace vex {
         }
         m_r_context.swapchainImageViews.clear();
 
-        vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
-        m_r_context.swapchain = VK_NULL_HANDLE;
+        if (m_r_context.swapchain) {
+            vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
+            m_r_context.swapchain = VK_NULL_HANDLE;
+        }
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
@@ -389,12 +405,12 @@ namespace vex {
         cleanupSwapchain();
 
         createSwapchain();
-        log("createImageViews");
-        createImageViews();
+        //log("createImageViews");
+        //createImageViews();
         //log("createCommandBuffers");
         //createCommandPool();
-        log("createLowResResources");
-        createLowResResources();
+        //log("createLowResResources");
+        //createLowResResources();
     }
 
     VkSurfaceFormatKHR VulkanSwapchainManager::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
