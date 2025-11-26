@@ -57,10 +57,11 @@ namespace vex {
             setResolutionMode(ResolutionMode::NATIVE);
         }
         glm::uvec2 currentRes = m_resolutionManager->getRenderResolution();
+        glm::uvec2 viewportRes{currentRes.x/2, currentRes.y/2};
 
         try {
             SceneRenderData renderData;
-            if (!m_interface->getRenderer().beginFrame(currentRes, renderData)) {
+            if (!m_interface->getRenderer().beginFrame(viewportRes, renderData)) {
                 return;
             }
             m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
