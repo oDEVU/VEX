@@ -128,6 +128,7 @@ namespace vex {
 
         ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;
         dockFlags |= ImGuiDockNodeFlags_NoUndocking;
+        dockFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
 
         if (!ImGui::DockBuilderGetNode(dockspace_id)) {
             ImGui::DockBuilderRemoveNode(dockspace_id);

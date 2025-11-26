@@ -19,7 +19,7 @@ namespace vex {
     std::vector<char> VulkanPipeline::readFile(const std::string& filename) {
         log("Reading shader...");
 
-        std::string realPath = GetAssetPath(filename);
+        std::string realPath = "./" + filename;
 
         std::ifstream file(realPath, std::ios::ate | std::ios::binary);
         if (!file.is_open()) {

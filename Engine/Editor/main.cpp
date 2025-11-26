@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
     }
 
     vex::GameInfo gInfo{"VEX Editor", 0, 1, 0};
-    vex::Editor engine("VEX Editor", 1280, 720, gInfo, modulePath.string());
+    vex::Editor engine("VEX Editor", 1280, 720, gInfo, projectPath.string());
     ctx.userdata = &engine;
 
     vex::log("Starting Engine Loop with Hot Reload...");

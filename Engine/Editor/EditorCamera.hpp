@@ -7,9 +7,7 @@
 #include <components/GameObjects/CameraObject.hpp>
 class EditorCameraObject : public vex::CameraObject {
 public:
-    EditorCameraObject(vex::Engine& engine, const std::string& name, SDL_Window* window)
-        : CameraObject(engine, name), m_window(window) {
-    }
+    EditorCameraObject(vex::Engine& engine, const std::string& name, SDL_Window* window);
 
     void processEvent(const SDL_Event& event, float deltaTime);
     void Update(float deltaTime) override;

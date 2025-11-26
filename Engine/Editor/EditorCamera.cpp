@@ -1,6 +1,14 @@
 #include "EditorCamera.hpp"
 #include <components/GameComponents/BasicComponents.hpp>
 
+
+EditorCameraObject::EditorCameraObject(vex::Engine& engine, const std::string& name, SDL_Window* window)
+    : CameraObject(engine, name), m_window(window) {
+        GetComponent<vex::CameraComponent>().fov = 60;
+        GetComponent<vex::CameraComponent>().farPlane = 1000;
+
+}
+
 void EditorCameraObject::processEvent(const SDL_Event& event, float deltaTime) {
     if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP) {
         bool isPressed = (event.type == SDL_EVENT_KEY_DOWN);
