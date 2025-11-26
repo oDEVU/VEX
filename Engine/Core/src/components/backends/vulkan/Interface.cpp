@@ -456,10 +456,4 @@ namespace vex {
         vkDestroySurfaceKHR(m_context.instance, m_context.surface, nullptr);
         m_context.surface = VK_NULL_HANDLE;
     }
-
-    void Interface::setRenderResolution(glm::uvec2 resolution) {
-        m_context.currentRenderResolution = resolution;
-        m_p_swapchainManager->recreateSwapchain();
-        m_p_pipeline->updateViewport(resolution);
-    }
 }

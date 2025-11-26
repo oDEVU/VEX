@@ -83,10 +83,11 @@ namespace vex {
             if (renderResolution != m_r_context.currentRenderResolution) {
                 m_r_context.currentRenderResolution = renderResolution;
                 m_p_pipeline->updateViewport(renderResolution);
-                //m_p_swapchainManager->recreateSwapchain();
-                //m_lastUsedView = VK_NULL_HANDLE;
-                log("Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
-                //return false;
+                m_p_swapchainManager->recreateSwapchain();
+                m_lastUsedView = VK_NULL_HANDLE;
+                m_cachedImGuiDescriptor = VK_NULL_HANDLE;
+                updateScreenDescriptor(m_r_context.lowResColorView);
+                printf("Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
             }
 
             vkWaitForFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame], VK_TRUE, UINT64_MAX);
@@ -183,6 +184,8 @@ namespace vex {
             viewport.height = (float)m_r_context.currentRenderResolution.y;
             viewport.minDepth = 0.0f; viewport.maxDepth = 1.0f;
             vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+            std::cout << "textureView x:" << viewport.width << ", y:" << viewport.height << std::endl;
 
             VkRect2D scissor{};
             scissor.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y};
@@ -496,6 +499,9 @@ namespace vex {
         }
 
         void Renderer::endFrame(SceneRenderData& data) {
+            std::cout << "currentRes x:" << m_r_context.currentRenderResolution.x << ", y:" << m_r_context.currentRenderResolution.y << std::endl;
+            std::cout << "swapchainExtent x:" << m_r_context.swapchainExtent.width << ", y:" << m_r_context.swapchainExtent.height << std::endl;
+            std::cout << "IsValid: " << data.isSwapchainValid << std::endl;
             if (!data.isSwapchainValid) return;
 
             vkEndCommandBuffer(data.commandBuffer);
@@ -586,8 +592,6 @@ namespace vex {
         }
 
         vkResetFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame]);
-
-        //vkDeviceWaitIdle(m_r_context.device);
 
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 proj = glm::mat4(1.0f);

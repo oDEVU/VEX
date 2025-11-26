@@ -46,9 +46,6 @@ namespace vex {
         /// @brief Simply unbinds window.
         void unbindWindow();
 
-        /// @brief Updates render resolution and manages window size change.
-        void setRenderResolution(glm::uvec2 resolution);
-
         /// @brief Creates default texture for untextured meshes. (to be exact, it calls VulkanResources method for it)
         void createDefaultTexture();
 

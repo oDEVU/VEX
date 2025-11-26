@@ -100,8 +100,8 @@ void Engine::run(std::function<void()> onUpdateLoop) {
                     break;
                 case SDL_EVENT_WINDOW_RESIZED:
                     m_resolutionManager->update();
-                    auto renderRes = m_resolutionManager->getRenderResolution();
-                    m_interface->setRenderResolution(renderRes);
+                    //auto renderRes = m_resolutionManager->getRenderResolution();
+                    //m_interface->setRenderResolution(renderRes);
                     break;
             }
         }
@@ -162,8 +162,8 @@ Engine::Engine(SkipInit) {
 void Engine::setResolutionMode(ResolutionMode mode) {
     m_resolutionManager->setMode(mode);
     m_resolutionManager->update();
-    auto renderRes = m_resolutionManager->getRenderResolution();
-    m_interface->setRenderResolution(renderRes);
+    //auto renderRes = m_resolutionManager->getRenderResolution();
+    //m_interface->setRenderResolution(renderRes);
 }
 
 void Engine::setEnvironmentSettings(enviroment settings) {
@@ -189,6 +189,8 @@ void Engine::render() {
     if (cameraEntity == entt::null) {
         return;
     }
+
+    std::cout << "renderRes x:" << renderRes.x << ", y:" << renderRes.y << std::endl;
 
     //log("Calling Renderer::renderFrame()");
     try{
