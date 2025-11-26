@@ -90,10 +90,14 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
 
     fs::path engineBuildDir = enginePath / "bin" / config;
     fs::path targetFile = engineBuildDir / "VEXTargets.cmake";
-    fs::path libFile = engineBuildDir / "libVEX.so";
-    fs::path dllFile = engineBuildDir / "VEX.dll";
 
-    if (fs::exists(targetFile) && (fs::exists(libFile) || fs::exists(dllFile))) {
+    #ifdef __linux__
+        fs::path libFile = engineBuildDir / "libVEX.so";
+    #else
+        fs::path libFile = engineBuildDir / "VEX.dll";
+    #endif
+
+    if (fs::exists(targetFile) && fs::exists(libFile)) {
         return true;
     }
 

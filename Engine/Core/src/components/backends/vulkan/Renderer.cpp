@@ -461,20 +461,20 @@ namespace vex {
             vkCmdSetScissor(cmd, 0, 1, &scissor);
 
             if (isEditorMode) {
-                if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
-                    m_cachedImGuiDescriptor = static_cast<VulkanImGUIWrapper&>(ui).addTexture(
-                        m_screenSampler,
-                        m_r_context.lowResColorView,
-                        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-                    );
-                    data.imguiTextureID = m_cachedImGuiDescriptor;
-                } else {
-                    data.imguiTextureID = m_cachedImGuiDescriptor;
-                }
+                    VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
 
-                ui.beginFrame();
-                ui.executeUIFunctions();
-                ui.endFrame();
+                    if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
+                        m_cachedImGuiDescriptor = vkUI.addTexture(
+                            m_screenSampler,
+                            m_r_context.lowResColorView,
+                            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                        );
+                        data.imguiTextureID = m_cachedImGuiDescriptor;
+                    } else {
+                        data.imguiTextureID = m_cachedImGuiDescriptor;
+                    }
+
+                    vkUI.draw(cmd);
             } else {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->get());
 

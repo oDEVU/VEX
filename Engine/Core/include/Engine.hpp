@@ -34,6 +34,8 @@ class Interface;
 class VirtualFileSystem;
 class SceneManager;
 
+struct SkipInit {};
+
 /// @brief Class for interaction with engine systems, your game main class will Inherit from it.
 class VEX_EXPORT Engine {
 public:
@@ -113,6 +115,8 @@ public:
     virtual void render();
 
 protected:
+    Engine(SkipInit);
+
     std::shared_ptr<Window> m_window;
     std::shared_ptr<VirtualFileSystem> m_vfs;
 

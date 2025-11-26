@@ -21,6 +21,17 @@
 #include <unistd.h>
 #endif
 
+/// @brief Internal storage for the Asset Root override (Used by Editor)
+inline std::string& GetAssetRootOverride() {
+    static std::string path = "";
+    return path;
+}
+
+/// @brief Called by the Editor to force GetAssetPath to look in the Project folder
+inline void SetAssetRoot(const std::string& projectPath) {
+    GetAssetRootOverride() = projectPath;
+}
+
 /// @brief Get the directory of the executable.
 inline std::filesystem::path GetExecutableDir() {
     std::filesystem::path exePath;
@@ -65,11 +76,15 @@ inline std::filesystem::path GetExecutableDir() {
 /// @brief Get the path of an asset. Its different for debug and release builds since VirtualFileSystem implements asset loading differently depending on build type.
 inline std::string GetAssetPath(const std::string& relativePath) {
 
-#if DEBUG
-    static std::filesystem::path exeDir = GetExecutableDir();
-    return (exeDir / relativePath).string();
-#else
-    return relativePath;
-#endif
+    const std::string& overridePath = GetAssetRootOverride();
+    if (!overridePath.empty()) {
+        return (std::filesystem::path(overridePath) / relativePath).string();
+    }
 
+    #if DEBUG
+        static std::filesystem::path exeDir = GetExecutableDir();
+        return (exeDir / relativePath).string();
+    #else
+        return relativePath;
+    #endif
 }

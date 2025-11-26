@@ -155,6 +155,10 @@ Engine::~Engine() {
     SDL_Quit();
 }
 
+Engine::Engine(SkipInit) {
+    std::cout << "Engine initialization handed of to Editor\n";
+}
+
 void Engine::setResolutionMode(ResolutionMode mode) {
     m_resolutionManager->setMode(mode);
     m_resolutionManager->update();

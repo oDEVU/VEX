@@ -6,7 +6,7 @@ namespace vex {
 
         // WHY THE FUCK WAYLAND IS SO BLURRY NO MATTER WHAT I DO?!?!?
         #ifdef __linux__
-            SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "1");
+           /*SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "1");
             SDL_SetHint("SDL_HINT_RENDER_SCALE_QUALITY", "nearest");
             SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
             SDL_SetHint("SDL_RENDER_DRIVER", "vulkan");
@@ -14,7 +14,14 @@ namespace vex {
             SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
             SDL_SetHint("SDL_VIDEO_WAYLAND_MODE_EMULATION", "1");
             SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "x11,wayland", SDL_HINT_OVERRIDE);
-            setenv("SDL_VIDEODRIVER", "x11,wayland", 1);
+            setenv("SDL_VIDEODRIVER", "x11,wayland", 1);*/
+            SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
+            SDL_SetHint("SDL_RENDER_DRIVER", "vulkan");
+            SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
+            SDL_SetHint("SDL_VIDEO_WAYLAND_MODE_EMULATION", "1");
+            SDL_SetHint("SDL_HINT_RENDER_SCALE_QUALITY", "nearest");
+            SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "wayland,x11", SDL_HINT_OVERRIDE);
+            setenv("SDL_VIDEODRIVER", "wayland,x11", 1);
         #endif
 
         if (!SDL_Init(SDL_INIT_VIDEO)) {

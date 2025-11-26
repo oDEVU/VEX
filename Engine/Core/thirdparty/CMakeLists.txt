@@ -159,16 +159,10 @@ check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNI
 
 #entt
 add_subdirectory(entt SYSTEM)
-if(NOT WIN32)
-    target_compile_definitions(EnTT INTERFACE
-        ENTT_STANDARD_CPP,
-        ENTT_NOEXCEPTION
-    )
-else()
+
     target_compile_definitions(EnTT INTERFACE
         ENTT_NOEXCEPTION
     )
-endif()
 
 #jolt
 # set(JPH_SHARED_LIBRARY ON "")

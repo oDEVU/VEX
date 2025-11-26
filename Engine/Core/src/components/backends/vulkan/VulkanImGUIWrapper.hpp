@@ -41,12 +41,15 @@ namespace vex {
         /// @brief Gets the ImGuiIO instance.
         /// @return ImGuiIO& - The ImGuiIO instance.
         ImGuiIO& getIO() override;
+        void draw(VkCommandBuffer commandBuffer);
 #else
     void init() override { return; }
     void beginFrame() override { return; }
     void endFrame() override { return; }
     void processEvent(const SDL_Event* event) override { return; }
+    void draw(VkCommandBuffer commandBuffer) { return; }
 #endif
+
 
     private:
 #if DEBUG

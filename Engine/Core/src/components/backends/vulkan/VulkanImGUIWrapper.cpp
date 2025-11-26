@@ -45,7 +45,7 @@ namespace vex {
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-        //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
         if (!vkCreateSampler || !vkCreateDescriptorPool) {
             throw_error("Critical Vulkan function pointers are null!");
@@ -110,7 +110,19 @@ namespace vex {
 
     void VulkanImGUIWrapper::endFrame() {
         ImGui::Render();
-        ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), m_r_context.commandBuffers[m_r_context.currentFrame]);
+
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+        }
+    }
+
+    void VulkanImGUIWrapper::draw(VkCommandBuffer commandBuffer) {
+        ImDrawData* drawData = ImGui::GetDrawData();
+        if (drawData) {
+            ImGui_ImplVulkan_RenderDrawData(drawData, commandBuffer);
+        }
     }
 
     void VulkanImGUIWrapper::processEvent(const SDL_Event* event) {
