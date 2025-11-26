@@ -56,6 +56,10 @@ add_executable(${PROJECT_NAME} "main.cpp")
 set(source_files
         Editor.cpp
         Editor.hpp
+        EditorCamera.hpp
+        EditorCamera.cpp
+        EditorImGUIWrapper.hpp
+        EditorImGUIWrapper.cpp
     )
 
 target_sources(${PROJECT_NAME}

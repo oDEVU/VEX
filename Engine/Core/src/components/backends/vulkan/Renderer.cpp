@@ -62,10 +62,9 @@ namespace vex {
                 poolInfo.pPoolSizes = &poolSize;
                 poolInfo.maxSets = 1;
 
-                VkDescriptorPool localPool;
-                vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &localPool);
+                vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_localPool);
 
-                allocInfo.descriptorPool = localPool;
+                allocInfo.descriptorPool = m_localPool;
                 allocInfo.descriptorSetCount = 1;
                 allocInfo.pSetLayouts = &m_r_context.textureDescriptorSetLayout;
 
@@ -76,18 +75,19 @@ namespace vex {
 
     Renderer::~Renderer() {
         if (m_screenSampler) vkDestroySampler(m_r_context.device, m_screenSampler, nullptr);
+        if (m_localPool) vkDestroyDescriptorPool(m_r_context.device, m_localPool, nullptr);
         log("Renderer destroyed");
     }
 
     bool Renderer::beginFrame(glm::uvec2 renderResolution, SceneRenderData& outData) {
             if (renderResolution != m_r_context.currentRenderResolution) {
+                log("Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
                 m_r_context.currentRenderResolution = renderResolution;
                 m_p_pipeline->updateViewport(renderResolution);
                 m_p_swapchainManager->recreateSwapchain();
                 m_lastUsedView = VK_NULL_HANDLE;
                 m_cachedImGuiDescriptor = VK_NULL_HANDLE;
                 updateScreenDescriptor(m_r_context.lowResColorView);
-                log("Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
             }
 
             vkWaitForFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame], VK_TRUE, UINT64_MAX);
@@ -424,6 +424,20 @@ namespace vex {
                                          VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
         }
 
+        VkDescriptorSet Renderer::getImGuiTextureID(ImGUIWrapper& ui) {
+            if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
+                VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
+                if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
+                    m_cachedImGuiDescriptor = vkUI.addTexture(
+                        m_screenSampler,
+                        m_r_context.lowResColorView,
+                        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                    );
+                }
+            }
+            return m_cachedImGuiDescriptor;
+        }
+
         void Renderer::composeFrame(SceneRenderData& data, ImGUIWrapper& ui, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
 
@@ -467,15 +481,9 @@ namespace vex {
                     VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
 
                     if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
-                        m_cachedImGuiDescriptor = vkUI.addTexture(
-                            m_screenSampler,
-                            m_r_context.lowResColorView,
-                            VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-                        );
-                        data.imguiTextureID = m_cachedImGuiDescriptor;
-                    } else {
-                        data.imguiTextureID = m_cachedImGuiDescriptor;
+                        getImGuiTextureID(ui);
                     }
+                    data.imguiTextureID = m_cachedImGuiDescriptor;
 
                     vkUI.draw(cmd);
             } else {

@@ -67,6 +67,11 @@ namespace vex {
                          entt::registry& registry,
                          int frame);
 
+        /// @brief Get the ImGui texture ID
+        /// @param ImGUIWrapper& ui - ImGUI wrapper.
+        /// @return VkDescriptorSet - Descriptor set for the ImGui texture.
+        VkDescriptorSet getImGuiTextureID(ImGUIWrapper& ui);
+
         /// @brief Composite to screen (Fullscreen Quad or ImGui)
         /// @param SceneRenderData& data - Data for the frame.
         /// @param ImGUIWrapper& ui - ImGUI wrapper.
@@ -134,5 +139,6 @@ namespace vex {
         VkSampler m_screenSampler = VK_NULL_HANDLE;
         VkImageView m_lastUsedView = VK_NULL_HANDLE;
         VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;
+        VkDescriptorPool m_localPool = VK_NULL_HANDLE;
     };
 }

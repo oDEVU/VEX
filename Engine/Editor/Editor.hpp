@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine.hpp"
+#include "EditorCamera.hpp"
+#include <memory>
 
 namespace vex {
 
@@ -12,6 +14,9 @@ namespace vex {
 
         // We override render to inject our Editor UI logic
         void render() override;
+        void update(float deltaTime) override;
+        void processEvent(const SDL_Event& event, float deltaTime) override;
+
 
     private:
         // Helper to draw the dockspace and viewport window
@@ -19,6 +24,7 @@ namespace vex {
 
         // State to track if the viewport size changed
         glm::uvec2 m_viewportSize = {1280, 720};
+        std::unique_ptr<EditorCameraObject> m_camera;
     };
 
 }

@@ -75,7 +75,6 @@ void Engine::run(std::function<void()> onUpdateLoop) {
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            m_inputSystem->processEvent(event, deltaTime);
             processEvent(event, deltaTime);
             m_imgui->processEvent(&event);
             auto uiView = m_registry.view<UiComponent>();
@@ -105,45 +104,7 @@ void Engine::run(std::function<void()> onUpdateLoop) {
                     break;
             }
         }
-
-        m_inputSystem->update(deltaTime);
-
-        if(m_frame > 0){
-
-            auto uiView = m_registry.view<UiComponent>();
-            std::vector<UiComponent> uiObjects;
-            for (auto entity : uiView) {
-                if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                    //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
-                    uiView.get<UiComponent>(entity).m_vexUI->init();
-                    uiView.get<UiComponent>(entity).m_vexUI->update();
-                }
-            }
-
-            if(!(m_paused || m_internally_paused)){
-                update(deltaTime);
-                m_sceneManager->scenesUpdate(deltaTime);
-                m_physicsSystem->update(deltaTime);
-            }
-        }else{
-
-            auto uiView = m_registry.view<UiComponent>();
-            std::vector<UiComponent> uiObjects;
-            for (auto entity : uiView) {
-                if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                    //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
-                    uiView.get<UiComponent>(entity).m_vexUI->init();
-                    uiView.get<UiComponent>(entity).m_vexUI->update();
-                }
-            }
-
-            beginGame();
-        }
-
-        if(!m_internally_paused){
-            render();
-            m_frame++;
-        }
+        update(deltaTime);
     }
 }
 
@@ -178,8 +139,49 @@ void Engine::prepareScenesForHotReload() {
    lastLoadedScenes = getSceneManager()->GetAllSceneNames();
 }
 
-void Engine::processEvent(const SDL_Event& event, float deltaTime) {}
-void Engine::update(float deltaTime) {}
+void Engine::processEvent(const SDL_Event& event, float deltaTime) {
+    m_inputSystem->processEvent(event, deltaTime);
+}
+
+void Engine::update(float deltaTime) {
+    m_inputSystem->update(deltaTime);
+
+    if(m_frame > 0){
+
+        auto uiView = m_registry.view<UiComponent>();
+        std::vector<UiComponent> uiObjects;
+        for (auto entity : uiView) {
+            if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
+                //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
+                uiView.get<UiComponent>(entity).m_vexUI->init();
+                uiView.get<UiComponent>(entity).m_vexUI->update();
+            }
+        }
+
+        if(!(m_paused || m_internally_paused)){
+            m_sceneManager->scenesUpdate(deltaTime);
+            m_physicsSystem->update(deltaTime);
+        }
+    }else{
+
+        auto uiView = m_registry.view<UiComponent>();
+        std::vector<UiComponent> uiObjects;
+        for (auto entity : uiView) {
+            if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
+                uiView.get<UiComponent>(entity).m_vexUI->init();
+                uiView.get<UiComponent>(entity).m_vexUI->update();
+            }
+        }
+
+        beginGame();
+    }
+
+    if(!m_internally_paused){
+        render();
+        m_frame++;
+    }
+}
+
 void Engine::beginGame() {}
 void Engine::render() {
     //log("Render function called");
@@ -190,7 +192,7 @@ void Engine::render() {
         return;
     }
 
-    std::cout << "renderRes x:" << renderRes.x << ", y:" << renderRes.y << std::endl;
+    //std::cout << "renderRes x:" << renderRes.x << ", y:" << renderRes.y << std::endl;
 
     //log("Calling Renderer::renderFrame()");
     try{
