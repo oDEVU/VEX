@@ -46,7 +46,7 @@ namespace vex {
         m_sceneManager = std::make_unique<SceneManager>();
         setInputMode(InputMode::UI);
 
-        m_camera = std::make_unique<EditorCameraObject>(*this, "VexEditorCamera");
+        m_camera = std::make_unique<EditorCameraObject>(*this, "VexEditorCamera", m_window->GetSDLWindow());
         log("Editor initialized successfully");
     }
 
@@ -55,6 +55,7 @@ namespace vex {
     }
 
     void Editor::update(float deltaTime) {
+        m_camera->Update(deltaTime);
         render();
     }
 
@@ -153,6 +154,10 @@ namespace vex {
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
         ImGui::Begin("Viewport", nullptr, childFlags);
+
+        if (m_camera) {
+            m_camera->setViewportHovered(ImGui::IsWindowHovered());
+        }
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         outNewResolution = { (uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y };
