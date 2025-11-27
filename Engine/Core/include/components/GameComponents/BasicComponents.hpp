@@ -26,6 +26,17 @@ namespace vex{
 
 /// @brief Struct containing transform data and methods.
 struct TransformComponent {
+    #ifdef DEBUG
+    public:
+    glm::vec3 position = {0.0f, 0.0f, 0.0f};
+    glm::vec3 rotation = {0.0f, 0.0f, 0.0f};
+    glm::vec3 scale = {1.0f, 1.0f, 1.0f};
+    glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+    entt::entity parent = entt::null;
+    bool lastTransformed = false;
+    entt::registry& m_registry;
+    bool physicsAffected = false;
+    #else
     private:
     glm::vec3 position = {0.0f, 0.0f, 0.0f};
     glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
@@ -35,6 +46,7 @@ struct TransformComponent {
     entt::registry& m_registry;
     bool physicsAffected = false;
     public:
+    #endif
     /// @brief Copy Constructor. Copies all data members and maintains the reference to the same registry.
     TransformComponent(const TransformComponent& other)
         : m_registry(other.m_registry), // Initialize the reference from the other's reference
@@ -86,6 +98,13 @@ struct TransformComponent {
         }
         return (lastTransformed || result);
     }
+
+    #ifdef DEBUG
+    void convertRot(){
+        setLocalRotation(rotation);
+        rotation = glm::degrees(glm::eulerAngles(m_rotationQuat));
+    }
+    #endif
 
     /// @brief returns if objet is affected by physics.
     bool isPhysicsAffected(){

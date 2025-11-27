@@ -35,3 +35,6 @@
 [submodule "Engine/Core/thirdparty/JoltPhysics"]
 	path = Engine/Core/thirdparty/JoltPhysics
 	url = https://github.com/jrouwe/JoltPhysics.git
+[submodule "Engine/Core/thirdparty/ImReflect"]
+	path = Engine/Core/thirdparty/ImReflect
+	url = https://github.com/Sven-vh/ImReflect.git

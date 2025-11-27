@@ -53,13 +53,24 @@ GameObject* GetGameObjectByName(const std::string& scene, const std::string& nam
 /// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
 GameObject* GetGameObjectByEntity(const std::string& scene, entt::entity& entity);
 
+/// @brief Function to get all game objects.
+/// @param const std::string& scene - Name of the scene to get the game objects from.
+/// @return const std::vector<std::unique_ptr<GameObject>>& - Vector of game objects.
+const std::vector<std::unique_ptr<GameObject>>& GetAllObjects(const std::string& scene) const { return m_scenes.at(scene)->GetAllObjects(); }
+
 /// @brief Function to get all scene names.
 /// @return std::vector<std::string> - Vector of scene names.
 std::vector<std::string> GetAllSceneNames() const;
 
+#if DEBUG
+std::string getLastSceneName() const { return lastSceneName; }
+#endif
 
 private:
 std::map<std::string, std::shared_ptr<Scene>> m_scenes;
+#if DEBUG
+std::string lastSceneName;
+#endif
 };
 
 } // namespace vex

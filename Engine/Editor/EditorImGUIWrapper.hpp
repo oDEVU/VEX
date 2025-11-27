@@ -7,8 +7,13 @@ class EditorImGUIWrapper : public vex::VulkanImGUIWrapper {
 public:
 
     EditorImGUIWrapper(SDL_Window* window, vex::VulkanContext& vulkanContext)
-        : vex::VulkanImGUIWrapper(window, vulkanContext) {
-    }
+        : vex::VulkanImGUIWrapper(window, vulkanContext) {}
+
+    void init() override {
+            vex::VulkanImGUIWrapper::init();
+            ImGuiIO& io = ImGui::GetIO();
+            io.IniFilename = "editorLayout.ini";
+        }
 
     void processEvent(const SDL_Event* event) override;
 };

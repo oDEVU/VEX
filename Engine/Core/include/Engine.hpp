@@ -114,6 +114,9 @@ public:
     /// @param float deltaTime - Time since last frame.
     virtual void render();
 
+    /// @brief Simply sets m_running to false, Effectivelly soft shuting down the engine.
+    void quit(){ m_running = false; }
+
 protected:
     Engine(SkipInit);
 

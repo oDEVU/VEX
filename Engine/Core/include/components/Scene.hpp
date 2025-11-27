@@ -54,6 +54,9 @@ GameObject* GetGameObjectByName(const std::string& name);
 /// @return GameObject* - Shared pointer to the game object.
 GameObject* GetGameObjectByEntity(entt::entity& entity);
 
+/// @brief Function to get all game objects in the scene.
+/// @return const std::vector<std::unique_ptr<GameObject>>& - Reference to the vector of game objects.
+const std::vector<std::unique_ptr<GameObject>>& GetAllObjects() const { return m_objects; }
 private:
 std::vector<std::unique_ptr<GameObject>> m_objects;
 };

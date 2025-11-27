@@ -120,8 +120,8 @@ set(source_files
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LANGUAGES CXX
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED OFF
+    CXX_STANDARD 23
+    CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
     VERSION ${CPP_LIBRARY_VERSION_STRING}
     SOVERSION ${CPP_LIBRARY_VERSION_MAJOR}
@@ -212,7 +212,7 @@ foreach(source IN LISTS SLANG_SHADERS)
         )
         list(APPEND SPV_SHADERS ${OUTPUT_FILE})
 
-    # Case 2: ends with Frag → only fragment shader
+        # Case 2: ends with Frag → only fragment shader
     elseif(FILENAME MATCHES ".*Frag$")
         set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
         add_custom_command(
@@ -223,7 +223,7 @@ foreach(source IN LISTS SLANG_SHADERS)
         )
         list(APPEND SPV_SHADERS ${OUTPUT_FILE})
 
-    # Case 3: unified shader → compile both vertMain + fragMain
+        # Case 3: unified shader → compile both vertMain + fragMain
     else()
         set(VERT_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Vert.spv)
         set(FRAG_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Frag.spv)
@@ -248,7 +248,17 @@ endforeach()
 
 add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE thirdparty_engine)
+target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
+
+if(TARGET ImGui)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        # Tell linker: "Take the whole ImGui archive, don't throw anything away"
+        target_link_libraries(${PROJECT_NAME} PRIVATE -Wl,--whole-archive ImGui -Wl,--no-whole-archive)
+    elseif(MSVC)
+        # Windows equivalent
+        target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:ImGui")
+    endif()
+endif()
 
 set(TP_RESOLVED_INCLUDES "")
 set(TP_RESOLVED_DEFINITIONS "")

@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(VEX_BuildTools)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # VPAK Packer executable
 add_executable(VPAK_Packer

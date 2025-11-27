@@ -4,6 +4,7 @@
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
+#include "components/PhysicsSystem.hpp"
 #include "components/enviroment.hpp"
 #include "VirtualFileSystem.hpp"
 #include <memory>
@@ -70,10 +71,51 @@ namespace vex {
         obj.AddComponent(comp);
     }
 
-    // Loadable Components
+    void LoadPhysicsComponent(GameObject& obj, const nlohmann::json& json) {
+        // TODO: parsing logic later, added to test editor.
+        vex::PhysicsComponent pc;
+        obj.AddComponent(pc);
+    }
+
     REGISTER_COMPONENT(TransformComponent, LoadTransformComponent);
     REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
     REGISTER_COMPONENT(MeshComponent, LoadMeshComponent);
+
+    #if DEBUG
+    template<>
+    void vex::GenericComponentInspector<vex::PhysicsComponent>(GameObject& obj) {
+        if (obj.HasComponent<vex::PhysicsComponent>()) {
+            if (ImGui::CollapsingHeader("PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                auto& pc = obj.GetComponent<vex::PhysicsComponent>();
+
+                ImReflect::Input("Shape", pc.shape); // Draw Enum
+
+                if (pc.shape == ShapeType::BOX)
+                    ImGui::DragFloat3("Extents", &pc.boxHalfExtents.x);
+                else if (pc.shape == ShapeType::SPHERE)
+                    ImGui::DragFloat("Radius", &pc.sphereRadius);
+                else if (pc.shape == ShapeType::CAPSULE)
+                    ImGui::DragFloat2("Capsule", &pc.capsuleRadius);
+                else if (pc.shape == ShapeType::CYLINDER)
+                    ImGui::DragFloat2("Cylinder", &pc.cylinderRadius);
+
+                ImReflect::Input("Mass", pc.mass);
+                ImReflect::Input("Friction", pc.friction);
+                ImReflect::Input("Bounciness", pc.bounce);
+                ImReflect::Input("Linear Damping", pc.linearDamping);
+                ImReflect::Input("Angular Damping", pc.angularDamping);
+                ImReflect::Input("Sensor", pc.isSensor);
+                ImReflect::Input("Allow Sleeping", pc.allowSleeping);
+
+                if (ImGui::Button("Remove")) {
+                    obj.GetEngine().getRegistry().remove<vex::PhysicsComponent>(obj.GetEntity());
+                }
+            }
+        }
+    }
+    #endif
+
+    REGISTER_COMPONENT(PhysicsComponent, LoadPhysicsComponent);
 
     /// @todo Add physics component loading function
 
@@ -92,6 +134,9 @@ void SceneManager::unloadScene(const std::string& path) {
 
 void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& engine) {
     m_scenes.emplace(path, std::make_shared<Scene>(path, engine));
+    #if DEBUG
+    lastSceneName = path;
+    #endif
     m_scenes[path]->sceneBegin();
 }
 

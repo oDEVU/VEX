@@ -1,8 +1,14 @@
 #include "Editor.hpp"
 #include "EditorImGUIWrapper.hpp"
+#include "Tools/PropertiesMenu.hpp"
+#include "Tools/SceneMenu.hpp"
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <glm/glm.hpp>
+
+#include "components/GameComponents/BasicComponents.hpp"
+#include "ImReflect.hpp"
 
 #include "../Core/include/components/SceneManager.hpp"
 #include "../Core/include/components/ResolutionManager.hpp"
@@ -46,12 +52,12 @@ namespace vex {
         m_sceneManager = std::make_unique<SceneManager>();
         setInputMode(InputMode::UI);
 
+        log("Initializing editor components...");
+
         m_camera = std::make_unique<EditorCameraObject>(*this, "VexEditorCamera", m_window->GetSDLWindow());
+        m_editorMenuBar = std::make_unique<EditorMenuBar>(*m_imgui, *this);
+
         log("Editor initialized successfully");
-    }
-
-    Editor::~Editor() {
-
     }
 
     void Editor::update(float deltaTime) {
@@ -115,7 +121,8 @@ namespace vex {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                                         ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
-                                        ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+                                        ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground |
+                                        ImGuiWindowFlags_MenuBar;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
@@ -123,6 +130,8 @@ namespace vex {
 
         ImGui::Begin("EditorDockSpace", nullptr, window_flags);
         ImGui::PopStyleVar(3);
+
+        m_editorMenuBar->DrawBar();
 
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 
@@ -137,13 +146,16 @@ namespace vex {
 
             ImGuiID dock_main_id = dockspace_id;
             ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
-            ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
-            ImGuiID dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.2f, nullptr, &dock_main_id);
+            ImGuiID dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.4f, nullptr, &dock_main_id);
+            ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.4f, nullptr, &dock_main_id);
+            ImGuiID dock_right_top_id, dock_right_bottom_id;
+            ImGui::DockBuilderSplitNode(dock_right_id, ImGuiDir_Down, 0.5f, &dock_right_bottom_id, &dock_right_top_id);
 
             ImGui::DockBuilderDockWindow("Viewport", dock_main_id);
-            ImGui::DockBuilderDockWindow("Inspector", dock_right_id);
-            ImGui::DockBuilderDockWindow("Scene Hierarchy", dock_left_id);
+            ImGui::DockBuilderDockWindow("Inspector", dock_left_id);
             ImGui::DockBuilderDockWindow("Assets", dock_bottom_id);
+            ImGui::DockBuilderDockWindow("Scene", dock_right_top_id);
+            ImGui::DockBuilderDockWindow("Properties", dock_right_bottom_id);
 
             ImGui::DockBuilderFinish(dockspace_id);
         }
@@ -166,7 +178,7 @@ namespace vex {
         if (data.imguiTextureID) {
             ImGui::Image((ImTextureID)data.imguiTextureID, viewportPanelSize);
         }else {
-            ImGui::Text("Viewport Texture Missing");
+            ImGui::Text("Viewport Texture Could not be retrieved.");
         }
 
         ImGui::End();
@@ -176,12 +188,18 @@ namespace vex {
         ImGui::Text("[Game Objects]");
         ImGui::End();
 
-        ImGui::Begin("Scene Hierarchy", nullptr, childFlags);
-        ImGui::Text("[Game Objects]");
-        ImGui::End();
-
         ImGui::Begin("Assets", nullptr, childFlags);
         ImGui::Text("[Loaded files]");
+        ImGui::End();
+
+        ImGui::Begin("Scene", nullptr, childFlags);
+            DrawSceneHierarchy(*this, m_selectedObject);
+        ImGui::End();
+
+        ImGui::Begin("Properties", nullptr, childFlags);
+            if(m_selectedObject){
+                DrawPropertiesOfAnObject(m_selectedObject);
+            }
         ImGui::End();
     }
 }

@@ -160,7 +160,7 @@ check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNI
 #entt
 add_subdirectory(entt SYSTEM)
 
-    target_compile_definitions(EnTT INTERFACE
+target_compile_definitions(EnTT INTERFACE
         ENTT_NOEXCEPTION
     )
 
@@ -225,12 +225,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(IMGUI_PATH  "imgui")
     file(GLOB IMGUI_SOURCES
         ${IMGUI_PATH}/*.cpp
+        ${IMGUI_PATH}/misc/cpp/*.cpp
         ${IMGUI_PATH}/backends/imgui_impl_vulkan.cpp
         ${IMGUI_PATH}/backends/imgui_impl_sdl3.cpp
     )
     add_library("ImGui" STATIC ${IMGUI_SOURCES})
     target_include_directories("ImGui" PUBLIC
         ${IMGUI_PATH}
+        ${IMGUI_PATH}/misc/cpp/
         ${CMAKE_CURRENT_SOURCE_DIR}/SDL/include
     )
 
@@ -238,6 +240,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(ImGui PRIVATE
         IMGUI_IMPL_VULKAN_USE_VOLK
     )
+
+
+
+    set(IMREFLECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ImReflect")
+
+    add_library(ImReflect INTERFACE)
+    target_include_directories(ImReflect INTERFACE ${IMREFLECT_PATH})
+    target_link_libraries(ImGui INTERFACE ImReflect)
 endif()
 
 # glm
@@ -279,6 +289,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(thirdparty_engine INTERFACE
         cpptrace::cpptrace
         ImGui
+        ImReflect
     )
 endif()
 

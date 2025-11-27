@@ -1,6 +1,9 @@
 #pragma once
 #include "Engine.hpp"
 #include "EditorCamera.hpp"
+
+#include "Tools/EditorMenuBar.hpp"
+
 #include <memory>
 
 namespace vex {
@@ -10,7 +13,9 @@ namespace vex {
     class Editor : public Engine {
     public:
         Editor(const char* title, int width, int height, GameInfo gInfo, const std::string& projectBinaryPath);
-        ~Editor();
+        ~Editor(){
+            delete m_selectedObject;
+        }
 
         // We override render to inject our Editor UI logic
         void render() override;
@@ -25,6 +30,8 @@ namespace vex {
         // State to track if the viewport size changed
         glm::uvec2 m_viewportSize = {1280, 720};
         std::unique_ptr<EditorCameraObject> m_camera;
+        std::unique_ptr<EditorMenuBar> m_editorMenuBar;
+        GameObject* m_selectedObject = nullptr;
     };
 
 }

@@ -16,7 +16,7 @@ void EditorCameraObject::processEvent(const SDL_Event& event, float deltaTime) {
         keyStates[key_event.scancode] = isPressed;
     }
 
-    if (event.type == SDL_EVENT_MOUSE_WHEEL) {
+    if (event.type == SDL_EVENT_MOUSE_WHEEL && m_isFlying) {
         if (event.wheel.y > 0) {
             m_movementSpeed *= 1.2f;
         } else if (event.wheel.y < 0) {
