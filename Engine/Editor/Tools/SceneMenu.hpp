@@ -4,11 +4,21 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <cxxabi.h>
 
 #include "Engine.hpp"
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObject.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
+
+std::string Demangle(const char* name) {
+    int status = -1;
+    std::unique_ptr<char, void(*)(void*)> res {
+        abi::__cxa_demangle(name, NULL, NULL, &status),
+        std::free
+    };
+    return (status == 0) ? res.get() : name;
+}
 
 // Renders a list of objects. Updates the 'selected' pointer when clicked.
 inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObject*>& selectedObject) {
@@ -38,6 +48,21 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
             selectedObject.second = obj.get();
             selectedObject.first = false;
         }
+
+        if (ImGui::IsItemHovered()) {
+            const char* rawName = typeid(*obj).name();
+            std::string className = Demangle(rawName);
+
+            ImGui::BeginTooltip();
+
+            ImGui::TextColored(ImVec4(0.2f, 0.4f, 1.0f, 1.0f), "Object Details");
+            ImGui::Separator();
+
+            ImGui::Text("C++ Class: %s", className.c_str());
+            ImGui::Text("Entity ID: %u", (uint32_t)obj->GetEntity());
+
+            ImGui::EndTooltip();
+        }
     }
 
     for (const auto& obj : runtimeObjects) {
@@ -60,5 +85,21 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
             selectedObject.first = true;
         }
         ImGui::PopStyleColor();
+
+        if (ImGui::IsItemHovered()) {
+            const char* rawName = typeid(*obj).name();
+            std::string className = Demangle(rawName);
+
+            ImGui::BeginTooltip();
+
+            ImGui::TextColored(ImVec4(0.2f, 0.4f, 1.0f, 1.0f), "Object Details");
+            ImGui::Separator();
+
+            ImGui::Text("C++ Class: %s", className.c_str());
+            ImGui::Text("Entity ID: %u", (uint32_t)obj->GetEntity());
+            ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.0f, 1.0f), "Warning: Object created at runtime");
+
+            ImGui::EndTooltip();
+        }
     }
 }
