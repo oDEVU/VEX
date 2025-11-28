@@ -1,6 +1,8 @@
 // GameObject.cpp
 #include "components/GameObjects/GameObject.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
+#include "components/SceneManager.hpp"
+#include "components/Scene.hpp"
 #include "../../../thirdparty/uuid/UUID.hpp"
 
 namespace vex {
@@ -24,6 +26,10 @@ namespace vex {
 
         // CRITICAL: This now uses the Engine's ID for NameComponent
         m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
+        auto* scene = m_engine.getSceneManager()->GetScene(m_engine.getSceneManager()->getLastSceneName());
+        if(scene){
+            scene->RegisterGameObject(this);
+        }
     }
 
     void GameObject::Destroy() {

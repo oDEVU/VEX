@@ -14,13 +14,14 @@
 
 #include "VEX/VEX_export.h"
 #include <algorithm>
+#include <memory>
 
 namespace vex {
 
 /// @brief Scene class implements scene functionality like loading and holding game objects.
 class VEX_EXPORT Scene {
 public:
-/// @brief Constructor loads a scene from a file.
+/// @brief Constructor creates empty scene object.
 /// @param std::string& path - Path to the scene file.
 /// @param Engine& engine - Reference to the engine instance.
 Scene(const std::string& path, Engine& engine);
@@ -40,7 +41,7 @@ void sceneBegin();
 /// @param float deltaTime - Delta time since last frame.
 void sceneUpdate(float deltaTime);
 
-/// @brief Function to add a game object to the scene.
+/// @brief [Deprecated] Function to add a game object to the scene.
 /// @param std::unique_ptr<GameObject> gameObject - Shared pointer to the game object to add.
 void AddGameObject(std::unique_ptr<GameObject> gameObject);
 
@@ -54,11 +55,31 @@ GameObject* GetGameObjectByName(const std::string& name);
 /// @return GameObject* - Shared pointer to the game object.
 GameObject* GetGameObjectByEntity(entt::entity& entity);
 
+/// @brief Function to register a game object in the scene.
+/// @param GameObject* gameObject - Pointer to the game object to register.
+void RegisterGameObject(GameObject* gameObject);
+
+/// @brief Function to destroy a game object in the scene.
+/// @param GameObject* gameObject - Pointer to the game object to destroy.
+void DestroyGameObject(GameObject* gameObject);
+
 /// @brief Function to get all game objects in the scene.
-/// @return const std::vector<std::unique_ptr<GameObject>>& - Reference to the vector of game objects.
-const std::vector<std::unique_ptr<GameObject>>& GetAllObjects() const { return m_objects; }
+/// @return const std::vector<std::shared_ptr<GameObject>>& - Reference to the vector of game objects.
+const std::vector<std::shared_ptr<GameObject>>& GetAllObjects() const { return m_objects; }
+
+/// @brief Function to get all added game objects in the scene.
+/// @return const std::vector<std::shared_ptr<GameObject>>& - Reference to the vector of game objects.
+const std::vector<std::shared_ptr<GameObject>>& GetAllAddedObjects() const { return m_addedObjects; }
 private:
-std::vector<std::unique_ptr<GameObject>> m_objects;
+
+/// @brief Function to load the scene from a file path saved in the constructor.
+void load();
+
+std::vector<std::shared_ptr<GameObject>> m_objects;
+std::vector<std::shared_ptr<GameObject>> m_addedObjects;
+std::string m_path;
+Engine* m_engine;
+bool m_creatingFromScene = false;
 };
 
 } // namespace vex

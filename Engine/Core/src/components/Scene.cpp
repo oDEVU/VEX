@@ -14,14 +14,23 @@
 namespace vex {
 
 Scene::Scene(const std::string& path, Engine& engine) {
-    //std::ifstream file(path);
-    std::string realPath = GetAssetPath(path);
-    if (!engine.getFileSystem()->file_exists(realPath)) {
+    m_path = path;
+    m_engine = &engine;
+}
+
+Scene::~Scene() {
+    m_objects.clear();
+    m_addedObjects.clear();
+}
+
+void Scene::load(){
+    std::string realPath = GetAssetPath(m_path);
+    if (!m_engine->getFileSystem()->file_exists(realPath)) {
         log("Error: Could not open scene file: %s", realPath.c_str());
         return;
     }
 
-    auto fileData = engine.getFileSystem()->load_file(realPath);
+    auto fileData = m_engine->getFileSystem()->load_file(realPath);
 
     log("Scene data: \n%s",fileData->data.data()); // It works on my PC lol, (this comment exists cause there was a compter that had seqfault here couple times)
 
@@ -80,7 +89,7 @@ Scene::Scene(const std::string& path, Engine& engine) {
         }
     }
 
-    engine.setEnvironmentSettings(env);
+    m_engine->setEnvironmentSettings(env);
 
     auto objects = json["objects"];
     if (!objects.is_array()) {
@@ -96,7 +105,8 @@ Scene::Scene(const std::string& path, Engine& engine) {
             continue;
         }
 
-        GameObject* gameObj = GameObjectFactory::getInstance().create(type, engine, name);
+        m_creatingFromScene = true;
+        GameObject* gameObj = GameObjectFactory::getInstance().create(type, *m_engine, name);
         if (!gameObj) {
             log("Error: Failed to create GameObject of type '%s'", type.c_str());
             continue;
@@ -121,12 +131,12 @@ Scene::Scene(const std::string& path, Engine& engine) {
                             bool parentFound = false;
                             for(const auto& m_obj : m_objects) {
                                 // FIX: Check if m_obj is valid and its entity exists in registry
-                                if (!m_obj || !m_obj->isValid() || !engine.getRegistry().valid(m_obj->GetEntity())) {
+                                if (!m_obj || !m_obj->isValid() || !m_engine->getRegistry().valid(m_obj->GetEntity())) {
                                     continue;
                                 }
 
                                 entt::entity e = m_obj->GetEntity();
-                                bool valid = engine.getRegistry().valid(e);
+                                bool valid = m_engine->getRegistry().valid(e);
 
                                 log("Checking Object at %p | Entity ID: %u (Hex: %X) | Valid in Registry: %d",
                                         (void*)m_obj.get(), (uint32_t)e, (uint32_t)e, valid);
@@ -145,18 +155,23 @@ Scene::Scene(const std::string& path, Engine& engine) {
                         }
 
         if (gameObj) {
-            auto ptr = std::unique_ptr<GameObject>(gameObj);
-            m_objects.push_back(std::move(ptr));
+            //DestroyGameObject(*gameObj);
+            //auto ptr = std::shared_ptr<GameObject>(gameObj);
+            //m_objects.push_back(std::move(ptr));
         }
     }
 }
 
-Scene::~Scene() {
-    m_objects.clear();
-}
-
 void Scene::sceneBegin(){
+    load();
     for (auto& obj : m_objects) {
+        try{
+            obj->BeginPlay();
+        }catch(const std::exception& e){
+            log("Error: %s", e.what());
+        }
+    }
+    for(auto& obj : m_addedObjects){
         try{
             obj->BeginPlay();
         }catch(const std::exception& e){
@@ -173,11 +188,47 @@ void Scene::sceneUpdate(float deltaTime){
             log("Error: %s", e.what());
         }
     }
+    for (auto& obj : m_addedObjects) {
+        try{
+            obj->Update(deltaTime);
+        }catch(const std::exception& e){
+            log("Error: %s", e.what());
+        }
+    }
 }
 
 void Scene::AddGameObject(std::unique_ptr<GameObject> gameObject){
     if (gameObject) {
-        m_objects.push_back(std::move(gameObject));
+        m_addedObjects.push_back(std::move(gameObject));
+    }
+}
+
+void Scene::RegisterGameObject(GameObject* obj) {
+    if (!obj) return;
+    if(m_creatingFromScene){
+        m_objects.emplace_back(std::shared_ptr<GameObject>(obj));
+    }else{
+        m_addedObjects.emplace_back(std::shared_ptr<GameObject>(obj));
+    }
+    m_creatingFromScene = false;
+    log("Scene adopted object: %s", obj->GetComponent<NameComponent>().name.c_str());
+}
+
+void Scene::DestroyGameObject(GameObject* obj) {
+    if (!obj) return;
+
+    for(auto it = m_objects.begin(); it != m_objects.end(); ++it) {
+        if(it->get()->GetEntity() == obj->GetEntity()) {
+            m_objects.erase(it);
+            break;
+        }
+    }
+
+    for(auto it = m_addedObjects.begin(); it != m_addedObjects.end(); ++it) {
+        if(it->get()->GetEntity() == obj->GetEntity()) {
+            m_addedObjects.erase(it);
+            break;
+        }
     }
 }
 
@@ -187,11 +238,21 @@ GameObject* Scene::GetGameObjectByName(const std::string& name){
             return obj.get();
         }
     }
+    for(const auto& obj : m_addedObjects){
+        if(obj->GetComponent<NameComponent>().name == name){
+            return obj.get();
+        }
+    }
     return nullptr;
 }
 
 GameObject* Scene::GetGameObjectByEntity(entt::entity& entity){
     for(const auto& obj : m_objects){
+        if(obj->GetEntity() == entity){
+            return obj.get();
+        }
+    }
+    for(const auto& obj : m_addedObjects){
         if(obj->GetEntity() == entity){
             return obj.get();
         }

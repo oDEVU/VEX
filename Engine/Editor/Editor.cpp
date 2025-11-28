@@ -197,8 +197,8 @@ namespace vex {
         ImGui::End();
 
         ImGui::Begin("Properties", nullptr, childFlags);
-            if(m_selectedObject){
-                DrawPropertiesOfAnObject(m_selectedObject);
+            if(m_selectedObject.second){
+                DrawPropertiesOfAnObject(m_selectedObject.second, m_selectedObject.first);
             }
         ImGui::End();
     }

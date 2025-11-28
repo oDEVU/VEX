@@ -11,8 +11,15 @@
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObject.hpp"
 
-inline void DrawPropertiesOfAnObject(vex::GameObject* object){
+inline void DrawPropertiesOfAnObject(vex::GameObject* object, bool temporary){
     if(!object) return;
+
+    if(temporary){
+        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255,225,0,255));
+        ImGui::Text("[WARNING]");
+        ImGui::TextWrapped("This object was created at runtime. Anything you edit here will be not be saved. To edit this object you need to find where in code it was created.");
+        ImGui::PopStyleColor();
+    }
 
     char buffer[256];
     strncpy(buffer, object->GetComponent<vex::NameComponent>().name.c_str(), sizeof(buffer));

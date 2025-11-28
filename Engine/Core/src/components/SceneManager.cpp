@@ -77,9 +77,30 @@ namespace vex {
         obj.AddComponent(pc);
     }
 
+
+    void LoadLightComponent(GameObject& obj, const nlohmann::json& json) {
+        LightComponent comp;
+        if (json.contains("color") && json["color"].is_array() && json["color"].size() >= 3) {
+            glm::vec3 color(
+                json["color"][0].get<float>(),
+                json["color"][1].get<float>(),
+                json["color"][2].get<float>()
+            );
+            comp.color = color;
+        }
+        if (json.contains("intensity") && !json["intensity"].is_array()){
+            comp.intensity = json["intensity"].get<float>();
+        }
+        if (json.contains("radius") && !json["radius"].is_array()){
+            comp.intensity = json["radius"].get<float>();
+        }
+        obj.AddComponent(comp);
+    }
+
     REGISTER_COMPONENT(TransformComponent, LoadTransformComponent);
     REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
     REGISTER_COMPONENT(MeshComponent, LoadMeshComponent);
+    REGISTER_COMPONENT(LightComponent, LoadLightComponent);
 
     #if DEBUG
     template<>
@@ -133,10 +154,8 @@ void SceneManager::unloadScene(const std::string& path) {
 }
 
 void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& engine) {
-    m_scenes.emplace(path, std::make_shared<Scene>(path, engine));
-    #if DEBUG
     lastSceneName = path;
-    #endif
+    m_scenes.emplace(path, std::make_shared<Scene>(path, engine));
     m_scenes[path]->sceneBegin();
 }
 
