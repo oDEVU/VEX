@@ -63,6 +63,7 @@ namespace vex {
     void Editor::update(float deltaTime) {
         m_camera->Update(deltaTime);
         render();
+        m_frame = 1;
     }
 
     void Editor::processEvent(const SDL_Event& event, float deltaTime) {
@@ -91,7 +92,7 @@ namespace vex {
                 return;
             }
             renderData.imguiTextureID = m_interface->getRenderer().getImGuiTextureID(*m_imgui);
-            m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
+            m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame, true);
             m_imgui->beginFrame();
             m_imgui->executeUIFunctions();
 

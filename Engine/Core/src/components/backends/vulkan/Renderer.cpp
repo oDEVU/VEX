@@ -125,7 +125,7 @@ namespace vex {
             return true;
         }
 
-        void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame) {
+        void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
 
             if (m_lastUsedView != m_r_context.lowResColorView) {
@@ -258,9 +258,18 @@ namespace vex {
                 auto& mesh = modelView.get<MeshComponent>(entity);
                 glm::mat4 modelMatrix = transform.matrix();
 
-                if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected()){
+                if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected() || isEditorMode){
                     mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
                     mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
+
+                    #if DEBUG
+                    if(isEditorMode && frame > 0){
+                        transform.setLocalRotation(transform.rotation);
+                    }else if(isEditorMode){
+                        transform.rotation = transform.getLocalRotation();
+                    }
+                    transform.rotation = glm::mod(transform.rotation, glm::vec3(360.0f));
+                    #endif
                 }
 
                 if (!camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius)) {

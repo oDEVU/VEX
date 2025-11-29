@@ -65,7 +65,8 @@ namespace vex {
         void renderScene(SceneRenderData& data,
                          const entt::entity cameraEntity,
                          entt::registry& registry,
-                         int frame);
+                         int frame,
+                         bool isEditorMode = false);
 
         /// @brief Get the ImGui texture ID
         /// @param ImGUIWrapper& ui - ImGUI wrapper.
