@@ -6,6 +6,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <glm/glm.hpp>
+#include <volk.h>
 
 #include "components/GameComponents/BasicComponents.hpp"
 #include "ImReflect.hpp"
@@ -59,6 +60,8 @@ namespace vex {
         m_assetBrowser = std::make_unique<AssetBrowser>(assetsPath.string());
         loadAssetIcons();
 
+        m_projectBinaryPath = projectBinaryPath;
+
         m_camera = std::make_unique<EditorCameraObject>(*this, "VexEditorCamera", m_window->GetSDLWindow());
         m_editorMenuBar = std::make_unique<EditorMenuBar>(*m_imgui, *this);
 
@@ -66,6 +69,16 @@ namespace vex {
     }
 
     void Editor::update(float deltaTime) {
+        if (!m_pendingSceneToLoad.empty() && !m_waitForGui) {
+            m_interface->WaitForGPUToFinish();
+            getSceneManager()->loadScene(m_pendingSceneToLoad, *this);
+            m_pendingSceneToLoad.clear();
+            m_waitForGui = true;
+            m_frame = 0;
+        }else if(!m_pendingSceneToLoad.empty() && m_waitForGui){
+            m_waitForGui = false;
+        }
+
         m_camera->Update(deltaTime);
         render();
         m_frame = 1;
@@ -116,6 +129,10 @@ namespace vex {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Editor render failed");
             handle_exception(e);
         }
+    }
+
+    void Editor::requestSceneReload(const std::string& scenePath){
+        m_pendingSceneToLoad = scenePath;
     }
 
     void Editor::loadAssetIcons() {
@@ -250,7 +267,7 @@ namespace vex {
                     log("Opening file: %s", openedFile.c_str());
                     if (m_assetBrowser->GetExtension(openedFile) == ".json") {
                         if (m_assetBrowser->GetJSONAssetType(openedFile) == 1){
-                            getSceneManager()->loadScene(openedFile, *this);
+                            requestSceneReload(openedFile);
                         }
                     }
                 }
@@ -268,5 +285,13 @@ namespace vex {
                 DrawPropertiesOfAnObject(m_selectedObject.second, m_selectedObject.first);
             }
         ImGui::End();
+
+        if (!m_pendingSceneToLoad.empty() || m_pendingSceneToLoad != "") {
+
+            if (ImGui::Begin("Opening scene...", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+                ImGui::Text("Loading scene: %s", m_pendingSceneToLoad.c_str());
+            }
+            ImGui::End();
+        }
     }
 }

@@ -147,18 +147,7 @@ public:
     }
 
     ~Map() {
-        delete humanEntity1;
-        delete humanEntity2;
-        delete humanEntity3;
-        delete humanEntity4;
-        delete viperEntity1;
-        delete viperEntity2;
-        delete viperShadow1;
-        delete viperShadow2;
-        delete cube;
-        delete cube2;
-        delete cube3;
-        delete cube4;
+        // Theres no need to delete these objects cause scene already takes care of it. Additionally it can cause double free if you do it.
     }
 private:
 vex::ModelObject* humanEntity1;

@@ -9,14 +9,16 @@
 
 #include "EditorWindow.hpp"
 
+namespace vex { class Editor; }
+
 class EditorMenuBar{
 public:
-    EditorMenuBar(vex::ImGUIWrapper& imGUIWrapper, vex::Engine& m_engine) : m_ImGUIWrapper(imGUIWrapper), m_engine(m_engine) {};
+    EditorMenuBar(vex::ImGUIWrapper& imGUIWrapper, vex::Editor& editor) : m_ImGUIWrapper(imGUIWrapper), m_editor(editor) {};
     ~EditorMenuBar() {};
     void DrawBar();
     void OpenScene();
 private:
     vex::ImGUIWrapper& m_ImGUIWrapper;
-    vex::Engine& m_engine;
+    vex::Editor& m_editor;
     std::vector<std::shared_ptr<BasicEditorWindow>> m_Windows;
 };

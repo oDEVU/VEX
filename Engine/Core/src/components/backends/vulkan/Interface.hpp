@@ -73,6 +73,9 @@ namespace vex {
         /// @return enviroment
         enviroment getEnvironment() { return m_context.m_enviroment;}
 
+        /// @brief helper function to wait for GPU to finish
+        void WaitForGPUToFinish();
+
     private:
         VulkanContext m_context;
         SDL_Window* m_p_window;

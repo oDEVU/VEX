@@ -66,11 +66,7 @@ public:
     }
 
     ~Map() {
-        delete Model;
-        delete wall1;
-        delete wall2;
-        delete wall3;
-        delete wall4;
+        // Theres no need to delete these objects cause scene already takes care of it. Additionally it can cause double free if you do it.
     }
 private:
 vex::ModelObject* Model;

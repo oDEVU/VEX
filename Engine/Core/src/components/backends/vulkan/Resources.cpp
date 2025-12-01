@@ -766,6 +766,9 @@ namespace vex {
             m_textureImages.erase(name);
             m_textureAllocations.erase(name);
             m_textureViews.erase(name);
+
+            m_r_context.textureIndices.erase(name);
+
             log("Texture %s unloaded", name.c_str());
         }
 

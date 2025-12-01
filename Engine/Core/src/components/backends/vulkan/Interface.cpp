@@ -450,6 +450,10 @@ namespace vex {
         m_p_resources->createDefaultTexture();
     }
 
+    void Interface::WaitForGPUToFinish() {
+        vkDeviceWaitIdle(m_context.device);
+    }
+
     void Interface::bindWindow(SDL_Window *m_p_window) {
         log("Binding window...");
         if (m_context.surface) return;

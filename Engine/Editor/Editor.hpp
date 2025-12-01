@@ -22,6 +22,11 @@ namespace vex {
         void update(float deltaTime) override;
         void processEvent(const SDL_Event& event, float deltaTime) override;
 
+        void requestSceneReload(const std::string& scenePath);
+
+        std::string getProjectBinaryPath() const { return m_projectBinaryPath; }
+        AssetBrowser* getAssetBrowser() const { return m_assetBrowser.get(); }
+        const BrowserIcons& GetEditorIcons() const { return m_icons; }
 
     private:
         // Helper to draw the dockspace and viewport window
@@ -33,8 +38,14 @@ namespace vex {
         glm::uvec2 m_viewportSize = {1280, 720};
         std::unique_ptr<EditorCameraObject> m_camera;
         std::unique_ptr<EditorMenuBar> m_editorMenuBar;
-        std::pair<bool, GameObject*> m_selectedObject = {false, nullptr};std::unique_ptr<AssetBrowser> m_assetBrowser;
+        std::pair<bool, GameObject*> m_selectedObject = {false, nullptr};
+        std::unique_ptr<AssetBrowser> m_assetBrowser;
         BrowserIcons m_icons;
+
+        std::string m_pendingSceneToLoad = "";
+        bool m_waitForGui = true;
+
+        std::string m_projectBinaryPath;
     };
 
 }

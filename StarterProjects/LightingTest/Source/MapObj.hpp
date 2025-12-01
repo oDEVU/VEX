@@ -116,8 +116,7 @@ public:
     }
 
     ~Map() {
-        delete Model;
-        delete Transparent;
+        // There's no need to delete the light objects here, as they will be automatically deleted when the scene is destroyed.
     }
 private:
 vex::ModelObject* Model;

@@ -44,10 +44,7 @@ public:
     }
 
     ~PCube() {
-        for(auto& cube : cubeObjects){
-            delete cube;
-        }
-        cubeObjects.clear();
+        // There's no need to delete the cube objects here, as they will be automatically deleted when the scene is destroyed.
     }
 private:
     int cubes = 300, spawned = 0;
