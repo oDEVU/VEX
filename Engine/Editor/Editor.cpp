@@ -54,6 +54,11 @@ namespace vex {
 
         log("Initializing editor components...");
 
+        std::filesystem::path assetsPath = projectBinaryPath;
+        assetsPath = assetsPath / "Assets";
+        m_assetBrowser = std::make_unique<AssetBrowser>(assetsPath.string());
+        loadAssetIcons();
+
         m_camera = std::make_unique<EditorCameraObject>(*this, "VexEditorCamera", m_window->GetSDLWindow());
         m_editorMenuBar = std::make_unique<EditorMenuBar>(*m_imgui, *this);
 
@@ -110,6 +115,53 @@ namespace vex {
         } catch (const std::exception& e) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Editor render failed");
             handle_exception(e);
+        }
+    }
+
+    void Editor::loadAssetIcons() {
+        auto* resources = m_interface->getResources();
+        auto* vfs = m_vfs.get();
+        auto* vulkanGUI = static_cast<VulkanImGUIWrapper*>(m_imgui.get());
+            if (!vulkanGUI) {
+                log("Failed to cast ImGUI wrapper to VulkanImGUIWrapper");
+                return;
+            }
+        std::vector<std::pair<std::string, ImTextureID*>> targets = {
+            { "../Assets/icons/folder-fill.png", &m_icons.folder },
+            { "../Assets/icons/file-fill.png",   &m_icons.file },
+            { "../Assets/icons/box-3-fill.png",   &m_icons.mesh },
+            { "../Assets/icons/file-image-fill.png",   &m_icons.texture },
+            { "../Assets/icons/map-2-fill.png",   &m_icons.scene },
+            { "../Assets/icons/file-text-fill.png",   &m_icons.text },
+            { "../Assets/icons/window-fill.png",   &m_icons.ui }
+        };
+
+        VkSampler sampler = resources->getTextureSampler();
+
+        for (auto& [path, targetPtr] : targets) {
+            std::string name = "editor_" + path; // Unique name for resource manager
+
+            try {
+                std::filesystem::path correctPath = GetExecutableDir() / path;
+                resources->loadTexture(correctPath.string(), name, vfs);
+
+                VkDescriptorSet ds = vulkanGUI->addTexture(
+                    sampler,
+                    resources->getTextureView(name),
+                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                );
+
+                *targetPtr = (ImTextureID)ds;
+
+            } catch (const std::exception& e) {
+                log("Failed to load icon: %s", path.c_str());
+                VkDescriptorSet ds = vulkanGUI->addTexture(
+                    sampler,
+                    resources->getTextureView("default"),
+                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                );
+                *targetPtr = (ImTextureID)ds;
+            }
         }
     }
 
@@ -190,7 +242,21 @@ namespace vex {
         ImGui::End();
 
         ImGui::Begin("Assets", nullptr, childFlags);
-        ImGui::Text("[Loaded files]");
+
+        if (m_assetBrowser) {
+                std::string openedFile = m_assetBrowser->Draw(m_icons);
+
+                if (!openedFile.empty()) {
+                    log("Opening file: %s", openedFile.c_str());
+                    if (m_assetBrowser->GetExtension(openedFile) == ".json") {
+                        if (m_assetBrowser->GetJSONAssetType(openedFile) == 1){
+                            getSceneManager()->loadScene(openedFile, *this);
+                        }
+                    }
+                }
+            }else{
+                ImGui::Text("Could not load assets");
+            }
         ImGui::End();
 
         ImGui::Begin("Scene", nullptr, childFlags);

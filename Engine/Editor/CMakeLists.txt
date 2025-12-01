@@ -64,6 +64,8 @@ set(source_files
         DialogWindow.hpp
         Tools/EditorMenuBar.cpp
         Tools/EditorMenuBar.hpp
+        Tools/AssetBrowser.cpp
+        Tools/AssetBrowser.hpp
     )
 
 target_sources(${PROJECT_NAME}

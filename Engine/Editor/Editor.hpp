@@ -3,6 +3,7 @@
 #include "EditorCamera.hpp"
 
 #include "Tools/EditorMenuBar.hpp"
+#include "Tools/AssetBrowser.hpp"
 
 #include <memory>
 
@@ -26,11 +27,14 @@ namespace vex {
         // Helper to draw the dockspace and viewport window
         void drawEditorLayout(const SceneRenderData& data, glm::uvec2& outNewResolution);
 
+        void loadAssetIcons();
+
         // State to track if the viewport size changed
         glm::uvec2 m_viewportSize = {1280, 720};
         std::unique_ptr<EditorCameraObject> m_camera;
         std::unique_ptr<EditorMenuBar> m_editorMenuBar;
-        std::pair<bool, GameObject*> m_selectedObject = {false, nullptr};
+        std::pair<bool, GameObject*> m_selectedObject = {false, nullptr};std::unique_ptr<AssetBrowser> m_assetBrowser;
+        BrowserIcons m_icons;
     };
 
 }

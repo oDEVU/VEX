@@ -139,6 +139,9 @@ namespace vex {
             if (it != m_r_context.textureIndices.end()) return it->second;
             return 0;
         }
+        /// @brief Returns the texture sampler.
+        /// @return VkSampler - The texture sampler.
+        VkSampler getTextureSampler() const { return m_textureSampler; }
 
     private:
         const std::string defaultTextureName = "default";
