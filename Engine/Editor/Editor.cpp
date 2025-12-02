@@ -133,6 +133,8 @@ namespace vex {
 
     void Editor::requestSceneReload(const std::string& scenePath){
         m_pendingSceneToLoad = scenePath;
+        m_selectedObject.first = false;
+        m_selectedObject.second = nullptr;
     }
 
     void Editor::loadAssetIcons() {

@@ -121,7 +121,7 @@ namespace vex {
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         outNewResolution = { (uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y };
 
-        ImGui::Text(m_dialogContent.c_str());
+        ImGui::Text("%s", m_dialogContent.c_str());
 
         ImGui::End();
         ImGui::PopStyleVar();

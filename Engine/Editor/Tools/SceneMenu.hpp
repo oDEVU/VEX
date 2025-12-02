@@ -50,7 +50,8 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
         }
 
         if (ImGui::IsItemHovered()) {
-            const char* rawName = typeid(*obj).name();
+            vex::GameObject* raw = obj.get();
+            const char* rawName = typeid(*raw).name();
             std::string className = Demangle(rawName);
 
             ImGui::BeginTooltip();
@@ -87,7 +88,8 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
         ImGui::PopStyleColor();
 
         if (ImGui::IsItemHovered()) {
-            const char* rawName = typeid(*obj).name();
+            vex::GameObject* raw = obj.get();
+            const char* rawName = typeid(*raw).name();
             std::string className = Demangle(rawName);
 
             ImGui::BeginTooltip();
