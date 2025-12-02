@@ -30,7 +30,7 @@ namespace vex {
         VmaAllocator allocator;
         VkSurfaceKHR surface;
 
-        VkSwapchainKHR swapchain;
+        VkSwapchainKHR swapchain= VK_NULL_HANDLE;
         std::vector<VkImage> swapchainImages;
         VkFormat swapchainImageFormat;
         VkExtent2D swapchainExtent;
@@ -38,7 +38,7 @@ namespace vex {
 
         VkImage depthImage = VK_NULL_HANDLE;
         VmaAllocation depthAllocation = VK_NULL_HANDLE;
-        VkImageView depthImageView;
+        VkImageView depthImageView = VK_NULL_HANDLE;
         VkFormat depthFormat;
 
         VkImage lowResColorImage = VK_NULL_HANDLE;
@@ -101,9 +101,9 @@ namespace vex {
         std::vector<VkSemaphore> renderFinishedSemaphores;
         std::vector<VkFence> inFlightFences;
 
-        VkDescriptorSetLayout descriptorSetLayout;
-        VkDescriptorSetLayout uboDescriptorSetLayout;
-        VkDescriptorSetLayout textureDescriptorSetLayout;
+        VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorSetLayout uboDescriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorSetLayout textureDescriptorSetLayout = VK_NULL_HANDLE;
 
         std::unordered_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;
