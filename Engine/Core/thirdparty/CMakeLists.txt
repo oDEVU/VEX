@@ -241,8 +241,20 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         IMGUI_IMPL_VULKAN_USE_VOLK
     )
 
+    #imguizmo
+    set(IMGUIZMO_PATH  "ImGuizmo")
+    file(GLOB IMGUIZMO_SOURCES
+        ${IMGUIZMO_PATH}/*.cpp
+    )
 
+    add_library("ImGuizmo" STATIC ${IMGUIZMO_SOURCES})
+    target_include_directories("ImGuizmo" PUBLIC
+        ${IMGUIZMO_PATH}
+    )
 
+    target_link_libraries("ImGuizmo" PRIVATE ImGui)
+
+    #imreflect
     set(IMREFLECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ImReflect")
 
     add_library(ImReflect INTERFACE)
@@ -289,6 +301,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(thirdparty_engine INTERFACE
         cpptrace::cpptrace
         ImGui
+        ImGuizmo
         ImReflect
     )
 endif()

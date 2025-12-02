@@ -5,6 +5,8 @@
 #include "Tools/EditorMenuBar.hpp"
 #include "Tools/AssetBrowser.hpp"
 
+#include <ImGuizmo.h>
+
 #include <memory>
 
 namespace vex {
@@ -32,7 +34,13 @@ namespace vex {
         // Helper to draw the dockspace and viewport window
         void drawEditorLayout(const SceneRenderData& data, glm::uvec2& outNewResolution);
 
+        void drawGizmo(const glm::vec2& viewportPos, const glm::vec2& viewportSize);
+
         void loadAssetIcons();
+
+        float raySphereIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& sphereCenter, float sphereRadius);
+
+        void ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject);
 
         // State to track if the viewport size changed
         glm::uvec2 m_viewportSize = {1280, 720};
@@ -46,6 +54,13 @@ namespace vex {
         bool m_waitForGui = true;
 
         std::string m_projectBinaryPath;
+
+        ImGuizmo::OPERATION m_currentGizmoOperation = ImGuizmo::TRANSLATE;
+        ImGuizmo::MODE m_currentGizmoMode = ImGuizmo::WORLD;
+        bool m_useSnap = false;
+        float m_snapValue[3] = { 0.5f, 0.5f, 0.5f };
+
+        bool m_isHoveringGizmoUI = false;
     };
 
 }

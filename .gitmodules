@@ -38,3 +38,6 @@
 [submodule "Engine/Core/thirdparty/ImReflect"]
 	path = Engine/Core/thirdparty/ImReflect
 	url = https://github.com/Sven-vh/ImReflect.git
+[submodule "Engine/Core/thirdparty/ImGuizmo"]
+	path = Engine/Core/thirdparty/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

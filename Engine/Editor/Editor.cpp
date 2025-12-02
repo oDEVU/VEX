@@ -6,6 +6,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <volk.h>
 
 #include "components/GameComponents/BasicComponents.hpp"
@@ -158,7 +159,7 @@ namespace vex {
         VkSampler sampler = resources->getTextureSampler();
 
         for (auto& [path, targetPtr] : targets) {
-            std::string name = "editor_" + path; // Unique name for resource manager
+            std::string name = "editor_" + path;
 
             try {
                 std::filesystem::path correctPath = GetExecutableDir() / path;
@@ -180,6 +181,122 @@ namespace vex {
                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
                 );
                 *targetPtr = (ImTextureID)ds;
+            }
+        }
+    }
+
+    void Editor::drawGizmo(const glm::vec2& viewportPos, const glm::vec2& viewportSize) {
+        m_isHoveringGizmoUI = false;
+
+        auto selectedEntity = m_selectedObject.second ? m_selectedObject.second->GetEntity() : entt::null;
+        if (selectedEntity == entt::null || !m_registry.all_of<TransformComponent>(selectedEntity)) return;
+
+        ImGuizmo::SetOrthographic(false);
+        ImGuizmo::SetDrawlist();
+        ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
+
+
+        auto& camTC = m_registry.get<TransformComponent>(m_camera->GetEntity());
+        auto& camComp = m_registry.get<CameraComponent>(m_camera->GetEntity());
+
+        glm::mat4 view = glm::lookAt(
+            camTC.getWorldPosition(),
+            camTC.getWorldPosition() + camTC.getForwardVector(),
+            camTC.getUpVector()
+        );
+
+        float aspect = viewportSize.x / viewportSize.y;
+        glm::mat4 proj = glm::perspective(glm::radians(camComp.fov), aspect, camComp.nearPlane, camComp.farPlane);
+
+        auto& tc = m_registry.get<TransformComponent>(selectedEntity);
+        glm::mat4 transformMatrix = tc.matrix();
+
+        ImGui::SetCursorScreenPos(ImVec2(viewportPos.x + 10, viewportPos.y + 10));
+
+        auto GizmoButton = [&](const char* label, ImGuizmo::OPERATION op) {
+            bool wasActive = (m_currentGizmoOperation == op);
+            if (wasActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0.5f, 0, 1));
+            if (ImGui::Button(label)) m_currentGizmoOperation = op;
+            if (wasActive) ImGui::PopStyleColor();
+            if (ImGui::IsItemHovered()) m_isHoveringGizmoUI = true;
+            ImGui::SameLine();
+        };
+
+        GizmoButton("T", ImGuizmo::TRANSLATE);
+        GizmoButton("R", ImGuizmo::ROTATE);
+        GizmoButton("S", ImGuizmo::SCALE);
+
+        ImGui::Dummy(ImVec2(10, 0)); ImGui::SameLine();
+
+        if(m_currentGizmoMode == ImGuizmo::WORLD) {
+            if(ImGui::Button("World")) m_currentGizmoMode = ImGuizmo::LOCAL;
+        } else {
+            if(ImGui::Button("Local")) m_currentGizmoMode = ImGuizmo::WORLD;
+        }
+
+        if (ImGui::IsKeyPressed(ImGuiKey_LeftCtrl)) m_useSnap = true;
+        else if (ImGui::IsKeyReleased(ImGuiKey_LeftCtrl)) m_useSnap = false;
+
+        float snap[3] = { 0.f, 0.f, 0.f };
+        if(m_useSnap) {
+            if (m_currentGizmoOperation == ImGuizmo::TRANSLATE) { snap[0] = snap[1] = snap[2] = 0.5f; }
+            else if (m_currentGizmoOperation == ImGuizmo::ROTATE) { snap[0] = 45.0f; }
+            else if (m_currentGizmoOperation == ImGuizmo::SCALE) { snap[0] = snap[1] = snap[2] = 0.1f; }
+        }
+
+        bool manipulated = ImGuizmo::Manipulate(
+            glm::value_ptr(view),
+            glm::value_ptr(proj),
+            m_currentGizmoOperation,
+            m_currentGizmoMode,
+            glm::value_ptr(transformMatrix),
+            nullptr,
+            m_useSnap ? snap : nullptr
+        );
+
+        if (manipulated) {
+            glm::mat4 localMatrix = transformMatrix;
+
+            entt::entity parent = tc.getParent();
+            if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+                glm::mat4 parentMatrix = m_registry.get<TransformComponent>(parent).matrix();
+                localMatrix = glm::inverse(parentMatrix) * transformMatrix;
+            }
+
+            glm::vec3 translation, scale, skew;
+            glm::quat rotation;
+            glm::vec4 perspective;
+            glm::decompose(localMatrix, scale, rotation, translation, skew, perspective);
+
+            tc.setLocalPosition(translation);
+            tc.setLocalScale(scale);
+
+            glm::vec3 eulerRot = glm::degrees(glm::eulerAngles(rotation));
+            tc.setLocalRotation(eulerRot);
+
+            tc.enableLastTransformed();
+        }
+    }
+
+    float Editor::raySphereIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& sphereCenter, float sphereRadius) {
+        glm::vec3 L = sphereCenter - rayOrigin;
+        float tca = glm::dot(L, rayDir);
+        if (tca < 0) return -1.0f;
+        float d2 = glm::dot(L, L) - tca * tca;
+        float radius2 = sphereRadius * sphereRadius;
+        if (d2 > radius2) return -1.0f;
+        float thc = sqrt(radius2 - d2);
+        return tca - thc;
+    }
+
+    void Editor::ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
+        auto* obj = getSceneManager()->GetGameObjectByEntity(getSceneManager()->getLastSceneName(), entity);
+        if(obj){
+            if (obj->GetComponent<TransformComponent>().getParent() != entt::null) {
+                ExtractObjectByEntity(obj->GetComponent<TransformComponent>().getParent(), selectedObject);
+            }else{
+                selectedObject.first = false;
+                selectedObject.second = obj;
             }
         }
     }
@@ -245,10 +362,73 @@ namespace vex {
         }
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+        ImVec2 viewportPos = ImGui::GetWindowPos();
+        ImVec2 cursorScreenPos = ImGui::GetCursorScreenPos();
+
         outNewResolution = { (uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y };
 
         if (data.imguiTextureID) {
             ImGui::Image((ImTextureID)data.imguiTextureID, viewportPanelSize);
+            bool isViewportHovered = ImGui::IsItemHovered();
+
+            drawGizmo(glm::vec2(cursorScreenPos.x, cursorScreenPos.y),
+                                  glm::vec2(viewportPanelSize.x, viewportPanelSize.y));
+
+            if (isViewportHovered && !m_isHoveringGizmoUI && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGuizmo::IsOver()) {
+                ImVec2 mousePos = ImGui::GetMousePos();
+                float mouseX = mousePos.x - viewportPos.x;
+                float mouseY = mousePos.y - viewportPos.y;
+
+                float ndcX = (mouseX / viewportPanelSize.x) * 2.0f - 1.0f;
+                float ndcY = (mouseY / viewportPanelSize.y) * 2.0f - 1.0f;
+
+                auto& camTC = m_registry.get<TransformComponent>(m_camera->GetEntity());
+                auto& camComp = m_registry.get<CameraComponent>(m_camera->GetEntity());
+
+                glm::mat4 view = glm::lookAt(camTC.getWorldPosition(), camTC.getWorldPosition() + camTC.getForwardVector(), camTC.getUpVector());
+                glm::mat4 proj = glm::perspective(glm::radians(camComp.fov), viewportPanelSize.x / viewportPanelSize.y, camComp.nearPlane, camComp.farPlane);
+                proj[1][1] *= -1; // Vulkan Y-Flip
+
+                glm::mat4 invProjView = glm::inverse(proj * view);
+
+                glm::vec4 rayStartClip = glm::vec4(ndcX, ndcY, 0.0f, 1.0f);
+                glm::vec4 rayStartWorld = invProjView * rayStartClip;
+                rayStartWorld /= rayStartWorld.w;
+
+                glm::vec4 rayEndClip = glm::vec4(ndcX, ndcY, 1.0f, 1.0f);
+                glm::vec4 rayEndWorld = invProjView * rayEndClip;
+                rayEndWorld /= rayEndWorld.w;
+
+                glm::vec3 rayDir = glm::normalize(glm::vec3(rayEndWorld) - glm::vec3(rayStartWorld));
+                glm::vec3 rayOrigin = glm::vec3(rayStartWorld);
+
+                float closestDist = std::numeric_limits<float>::max();
+                entt::entity hitEntity = entt::null;
+
+                auto viewGroup = m_registry.view<TransformComponent, MeshComponent>();
+
+                for (auto entity : viewGroup) {
+                    const auto& mesh = viewGroup.get<MeshComponent>(entity);
+                    float dist = raySphereIntersect(rayOrigin, rayDir, mesh.worldCenter, mesh.worldRadius);
+
+                    if (dist > 0.0f && dist < closestDist) {
+                        closestDist = dist;
+                        hitEntity = entity;
+                    }
+                }
+                if (hitEntity != entt::null) {
+                    //m_selectedObject.first = false;
+
+                    ExtractObjectByEntity(hitEntity, m_selectedObject);
+
+                    log("Selected Entity ID: %d", (uint32_t)hitEntity);
+                } else {
+                    m_selectedObject.first = false;
+                    m_selectedObject.second = nullptr;
+                }
+            }else{
+                //log("Item hovered: %d\nMouse Clicked: %d\nImGuizmo Over: %d", ImGui::IsItemHovered(), ImGui::IsMouseClicked(ImGuiMouseButton_Left), ImGuizmo::IsOver());
+            }
         }else {
             ImGui::Text("Viewport Texture Could not be retrieved.");
         }

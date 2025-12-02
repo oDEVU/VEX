@@ -15,5 +15,7 @@ public:
             io.IniFilename = "editorLayout.ini";
         }
 
+    void beginFrame() override;
+
     void processEvent(const SDL_Event* event) override;
 };

@@ -4,6 +4,7 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_vulkan.h>
 #include <filesystem>
+#include <ImGuizmo.h>
 #endif
 
 namespace vex {
@@ -40,6 +41,9 @@ namespace vex {
 #if DEBUG
     void VulkanImGUIWrapper::init() {
         log("Initialization of DearImGUI");
+
+        volatile auto forceLink = ImGuizmo::BeginFrame;
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
