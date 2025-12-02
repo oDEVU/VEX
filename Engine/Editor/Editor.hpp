@@ -39,6 +39,7 @@ namespace vex {
         void loadAssetIcons();
 
         float raySphereIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& sphereCenter, float sphereRadius);
+        float rayTriangleIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2);
 
         void ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject);
 

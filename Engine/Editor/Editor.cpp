@@ -289,6 +289,32 @@ namespace vex {
         return tca - thc;
     }
 
+    float Editor::rayTriangleIntersect(
+        const glm::vec3& rayOrigin, const glm::vec3& rayDir,
+        const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2)
+    {
+        const float EPSILON = 0.0000001f;
+        glm::vec3 edge1 = v1 - v0;
+        glm::vec3 edge2 = v2 - v0;
+        glm::vec3 h = glm::cross(rayDir, edge2);
+        float a = glm::dot(edge1, h);
+
+        if (a > -EPSILON && a < EPSILON) return -1.0f;
+
+        float f = 1.0f / a;
+        glm::vec3 s = rayOrigin - v0;
+        float u = f * glm::dot(s, h);
+        if (u < 0.0f || u > 1.0f) return -1.0f;
+
+        glm::vec3 q = glm::cross(s, edge1);
+        float v = f * glm::dot(rayDir, q);
+        if (v < 0.0f || u + v > 1.0f) return -1.0f;
+
+        float t = f * glm::dot(edge2, q);
+        if (t > EPSILON) return t;
+        else return -1.0f;
+    }
+
     void Editor::ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
         auto* obj = getSceneManager()->GetGameObjectByEntity(getSceneManager()->getLastSceneName(), entity);
         if(obj){
@@ -408,12 +434,49 @@ namespace vex {
                 auto viewGroup = m_registry.view<TransformComponent, MeshComponent>();
 
                 for (auto entity : viewGroup) {
-                    const auto& mesh = viewGroup.get<MeshComponent>(entity);
-                    float dist = raySphereIntersect(rayOrigin, rayDir, mesh.worldCenter, mesh.worldRadius);
+                    auto& mesh = viewGroup.get<MeshComponent>(entity);
+                    auto& transform = viewGroup.get<TransformComponent>(entity);
 
-                    if (dist > 0.0f && dist < closestDist) {
-                        closestDist = dist;
-                        hitEntity = entity;
+                    if (raySphereIntersect(rayOrigin, rayDir, mesh.worldCenter, mesh.worldRadius) < 0.0f) {
+                        continue;
+                    }
+
+                    glm::mat4 modelMat = transform.matrix();
+                    glm::mat4 invModel = glm::inverse(modelMat);
+
+                    glm::vec4 localOrigin4 = invModel * glm::vec4(rayOrigin, 1.0f);
+                    glm::vec3 localOrigin = glm::vec3(localOrigin4) / localOrigin4.w;
+                    glm::vec3 localDir = glm::vec3(invModel * glm::vec4(rayDir, 0.0f));
+                    localDir = glm::normalize(localDir);
+
+                    float localClosest = std::numeric_limits<float>::max();
+                    bool hitMesh = false;
+
+                    for (const auto& submesh : mesh.meshData.submeshes) {
+                        for (size_t i = 0; i < submesh.indices.size(); i += 3) {
+                            const auto& v0 = submesh.vertices[submesh.indices[i]].position;
+                            const auto& v1 = submesh.vertices[submesh.indices[i+1]].position;
+                            const auto& v2 = submesh.vertices[submesh.indices[i+2]].position;
+
+                            float t = rayTriangleIntersect(localOrigin, localDir, v0, v1, v2);
+
+                            if (t > 0.0f && t < localClosest) {
+                                localClosest = t;
+                                hitMesh = true;
+                            }
+                        }
+                    }
+
+                    if (hitMesh) {
+                        glm::vec3 hitPointLocal = localOrigin + (localDir * localClosest);
+                        glm::vec3 hitPointWorld = glm::vec3(modelMat * glm::vec4(hitPointLocal, 1.0f));
+
+                        float dist = glm::distance(rayOrigin, hitPointWorld);
+
+                        if (dist < closestDist) {
+                            closestDist = dist;
+                            hitEntity = entity;
+                        }
                     }
                 }
                 if (hitEntity != entt::null) {
