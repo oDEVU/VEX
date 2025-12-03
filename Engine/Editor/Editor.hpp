@@ -2,10 +2,13 @@
 #include "Engine.hpp"
 #include "EditorCamera.hpp"
 
+#include "editorProperties.hpp"
+
 #include "Tools/EditorMenuBar.hpp"
 #include "Tools/AssetBrowser.hpp"
 
 #include <ImGuizmo.h>
+#include <nlohmann/json.hpp>
 
 #include <memory>
 
@@ -30,6 +33,8 @@ namespace vex {
         AssetBrowser* getAssetBrowser() const { return m_assetBrowser.get(); }
         const BrowserIcons& GetEditorIcons() const { return m_icons; }
 
+        EditorProperties* getEditorProperties() { return &m_editorProperties; }
+
     private:
         // Helper to draw the dockspace and viewport window
         void drawEditorLayout(const SceneRenderData& data, glm::uvec2& outNewResolution);
@@ -42,6 +47,27 @@ namespace vex {
         float rayTriangleIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2);
 
         void ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject);
+
+        void SaveConfig(const EditorProperties& data, const std::string& filename) {
+            std::ofstream file(filename);
+            if (file.is_open()) {
+                nlohmann::json j = data;
+                file << j.dump(4);
+            }
+        }
+
+        void LoadConfig(EditorProperties& data, const std::string& filename) {
+            std::ifstream file(filename);
+            if (file.is_open()) {
+                try {
+                    nlohmann::json j;
+                    file >> j;
+                    data = j;
+                } catch (const std::exception& e) {
+                    std::cerr << "JSON parsing error: " << e.what() << std::endl;
+                }
+            }
+        }
 
         // State to track if the viewport size changed
         glm::uvec2 m_viewportSize = {1280, 720};
@@ -62,6 +88,11 @@ namespace vex {
         float m_snapValue[3] = { 0.5f, 0.5f, 0.5f };
 
         bool m_isHoveringGizmoUI = false;
+
+        EditorProperties m_editorProperties;
+        EditorProperties m_SavedEditorProperties;
+
+        int m_fps = 0;
     };
 
 }

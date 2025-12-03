@@ -17,6 +17,7 @@ public:
     ~EditorMenuBar() {};
     void DrawBar();
     void OpenScene();
+    void OpenEditorSettings();
 private:
     vex::ImGUIWrapper& m_ImGUIWrapper;
     vex::Editor& m_editor;

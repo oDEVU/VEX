@@ -3,11 +3,13 @@
 
 #include "../Editor.hpp"
 #include "../DialogWindow.hpp"
+#include "../editorProperties.hpp"
 
 #include "components/GameInfo.hpp"
 #include "components/errorUtils.hpp"
 
 #include <nlohmann/json.hpp>
+#include <ImReflect.hpp>
 
 void EditorMenuBar::DrawBar(){
     std::erase_if(m_Windows, [](const std::shared_ptr<BasicEditorWindow>& window) {
@@ -31,18 +33,41 @@ void EditorMenuBar::DrawBar(){
             }
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Edit")) {
-            if (ImGui::MenuItem("Undo")) {}
-            if (ImGui::MenuItem("Redo")) {}
+        if (ImGui::BeginMenu("Build")) {
+            if (ImGui::MenuItem("Build Debug")) {}
+            if (ImGui::MenuItem("Build Release")) {}
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Preferences")) {
+            if (ImGui::MenuItem("Editor Settings")) {
+                OpenEditorSettings();
+            }
             if (ImGui::MenuItem("Project Settings")) {}
-            if (ImGui::MenuItem("Editor Settings")) {}
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
     }
+}
+
+void EditorMenuBar::OpenEditorSettings(){
+    std::shared_ptr<BasicEditorWindow> openSceneWindow = std::make_shared<BasicEditorWindow>();
+
+    EditorProperties* editorProperties = m_editor.getEditorProperties();
+
+        openSceneWindow->Create = [this, openSceneWindow, editorProperties](vex::ImGUIWrapper& wrapper){
+            wrapper.addUIFunction([=, this](){
+                if (!openSceneWindow->isOpen) return;
+                ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+
+                if (ImGui::Begin("Editor Settings", &openSceneWindow->isOpen)) {
+                    ImReflect::Input("##data", editorProperties);
+                }
+                ImGui::End();
+            });
+        };
+
+        m_Windows.push_back(openSceneWindow);
+        openSceneWindow->Create(m_ImGUIWrapper);
 }
 
 void EditorMenuBar::OpenScene(){

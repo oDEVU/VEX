@@ -25,6 +25,9 @@ namespace vex {
         int GetJSONAssetType(const std::string path);
         std::string GetExtension(const std::string path);
 
+        void setThumbnailSize(float size) { m_thumbnailSize = size; }
+        void setPadding(float padding) { m_padding = padding; }
+
     private:
         std::filesystem::path m_rootPath;
         std::filesystem::path m_currentPath;

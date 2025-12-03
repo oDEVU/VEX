@@ -66,6 +66,9 @@ namespace vex {
         m_camera = std::make_unique<EditorCameraObject>(*this, "VexEditorCamera", m_window->GetSDLWindow());
         m_editorMenuBar = std::make_unique<EditorMenuBar>(*m_imgui, *this);
 
+        LoadConfig(m_editorProperties, "editor_config.json");
+        m_SavedEditorProperties = m_editorProperties;
+
         log("Editor initialized successfully");
     }
 
@@ -78,6 +81,17 @@ namespace vex {
             m_frame = 0;
         }else if(!m_pendingSceneToLoad.empty() && m_waitForGui){
             m_waitForGui = false;
+        }
+
+        m_fps = static_cast<int>(1.0f / deltaTime);
+
+        m_assetBrowser->setThumbnailSize(m_editorProperties.assetBrowserThumbnailSize);
+        m_camera->GetComponent<vex::CameraComponent>().fov = m_editorProperties.editorCameraFov;
+        m_camera->GetComponent<vex::CameraComponent>().farPlane = m_editorProperties.editorCameraRenderDistance;
+
+        if(m_SavedEditorProperties != m_editorProperties){
+            SaveConfig(m_editorProperties, "editor_config.json");
+            m_SavedEditorProperties = m_editorProperties;
         }
 
         m_camera->Update(deltaTime);
@@ -396,6 +410,25 @@ namespace vex {
         if (data.imguiTextureID) {
             ImGui::Image((ImTextureID)data.imguiTextureID, viewportPanelSize);
             bool isViewportHovered = ImGui::IsItemHovered();
+
+            if(m_editorProperties.showFPS) {
+                char fpsText[32];
+                sprintf(fpsText, "FPS: %d", m_fps);
+
+                ImU32 fpsColor;
+                if (m_fps >= 60) {
+                    fpsColor = IM_COL32(0, 255, 0, 255);
+                } else if (m_fps >= 30) {
+                    fpsColor = IM_COL32(255, 255, 0, 255);
+                } else {
+                    fpsColor = IM_COL32(255, 0, 0, 255);
+                }
+
+                ImVec2 textPos = ImVec2(cursorScreenPos.x + 10.0f, cursorScreenPos.y + 50.0f);
+                auto* drawList = ImGui::GetWindowDrawList();
+                drawList->AddText(ImVec2(textPos.x + 1.0f, textPos.y + 1.0f), IM_COL32(0, 0, 0, 255), fpsText);
+                drawList->AddText(textPos, fpsColor, fpsText);
+            }
 
             drawGizmo(glm::vec2(cursorScreenPos.x, cursorScreenPos.y),
                                   glm::vec2(viewportPanelSize.x, viewportPanelSize.y));
