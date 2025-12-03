@@ -7,8 +7,12 @@
 
 #include "components/GameInfo.hpp"
 #include "components/errorUtils.hpp"
+#include "components/Scene.hpp"
+#include "components/SceneManager.hpp"
+#include "imgui.h"
 
 #include <nlohmann/json.hpp>
+#include <filesystem>
 #include <ImReflect.hpp>
 
 void EditorMenuBar::DrawBar(){
@@ -24,9 +28,12 @@ void EditorMenuBar::DrawBar(){
             if (ImGui::MenuItem("Open Scene")) {
                 OpenScene();
             }
-            if (ImGui::MenuItem("Save Scene")) {}
-            if (ImGui::MenuItem("Save Scene As")) {}
-            if (ImGui::MenuItem("Save All Scenes")) {}
+            if (ImGui::MenuItem("Save Scene")) {
+                m_editor.getSceneManager()->GetScene(m_editor.getSceneManager()->getLastSceneName())->Save(m_editor.getSceneManager()->getLastSceneName());
+            }
+            if (ImGui::MenuItem("Save Scene As")) {
+                SaveSceneAs();
+            }
             if (ImGui::MenuItem("Quit Project")) {
                 // Implemet saving window if not saved
                 // std::quick_exit(0);
@@ -116,6 +123,71 @@ void EditorMenuBar::OpenScene(){
                         ImGui::CloseCurrentPopup();
                     }
                     ImGui::EndPopup();
+                }
+            }
+            ImGui::End();
+        });
+    };
+
+    m_Windows.push_back(openSceneWindow);
+    openSceneWindow->Create(m_ImGUIWrapper);
+}
+
+void EditorMenuBar::SaveSceneAs() {
+    std::shared_ptr<BasicEditorWindow> openSceneWindow = std::make_shared<BasicEditorWindow>();
+    std::string startPath = m_editor.getProjectBinaryPath() + "/Assets";
+    auto dialogBrowser = std::make_shared<vex::AssetBrowser>(startPath);
+    auto showError = std::make_shared<bool>(false);
+
+    auto saveFolder = std::make_shared<std::string>(startPath);
+    auto fileName   = std::make_shared<std::string>("NewScene.json");
+
+    auto* scene = m_editor.getSceneManager()->GetScene(m_editor.getSceneManager()->getLastSceneName());
+
+    openSceneWindow->Create = [this, openSceneWindow, dialogBrowser, showError, scene, saveFolder, fileName](vex::ImGUIWrapper& wrapper) {
+        wrapper.addUIFunction([=, this]() {
+            if (!openSceneWindow->isOpen) return;
+            ImGui::SetNextWindowSize(ImVec2(600, 450), ImGuiCond_FirstUseEver);
+
+            if (ImGui::Begin("Save Scene As", &openSceneWindow->isOpen)) {
+
+                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
+
+                if (!selectedFile.empty()) {
+                    std::filesystem::path p(selectedFile);
+
+                    if (p.has_extension()) {
+                        *saveFolder = p.parent_path().string();
+                        *fileName   = p.filename().string();
+                    } else {
+                        *saveFolder = selectedFile;
+                    }
+                }
+                else if (dialogBrowser->getCurrentPath() != *saveFolder) {
+                    *saveFolder = dialogBrowser->getCurrentPath();
+                }
+
+                ImGui::Separator();
+                ImGui::Text("Save Options");
+
+                ImReflect::Input("Filename", *fileName);
+
+                if (ImGui::Button("Save", ImVec2(100, 0))) {
+                    if (saveFolder->empty() || fileName->empty()) {
+                        vex::log("Error: Folder or Filename cannot be empty.");
+                    }
+                    else {
+                        std::filesystem::path finalPath(*saveFolder);
+                        finalPath /= *fileName;
+
+                        if (!finalPath.has_extension()) {
+                            finalPath += ".json";
+                        }
+
+                        scene->Save(finalPath.string());
+                        vex::log("Saved scene to: %s", finalPath.string().c_str());
+                        openSceneWindow->isOpen = false;
+                    }
                 }
             }
             ImGui::End();

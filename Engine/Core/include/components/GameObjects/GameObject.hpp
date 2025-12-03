@@ -118,9 +118,21 @@
       void ParentTo(entt::entity entity){
           GetComponent<TransformComponent>().setParent(entity);
       }
+
+      /// @brief Function that sets the type of the GameObject.
+      /// @param type - Type of the GameObject.
+      void setObjectType(const std::string& type) {
+              objectType = type;
+          }
+
+      /// @brief Function that returns the type of the GameObject.
+      /// @return Type of the GameObject.
+      const std::string& getObjectType() const { return objectType; }
+
       protected:
       Engine& m_engine;
       entt::entity m_entity;
       bool m_isValid;
+      std::string objectType;
   };
   }

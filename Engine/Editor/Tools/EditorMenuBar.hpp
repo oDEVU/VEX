@@ -18,6 +18,7 @@ public:
     void DrawBar();
     void OpenScene();
     void OpenEditorSettings();
+    void SaveSceneAs();
 private:
     vex::ImGUIWrapper& m_ImGUIWrapper;
     vex::Editor& m_editor;

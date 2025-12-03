@@ -22,7 +22,7 @@
       "name": "Player",
       "components": [
         {
-          "type": "TransformComponent",
+          "type": "vex::TransformComponent",
           "position": [-65.0, 9.5, -28.0],
           "rotation": [-25.0, 270.0, 0.0],
           "scale": [1.0, 1.0, 1.0]
@@ -35,13 +35,13 @@
       "parent": "Player",
       "components": [
         {
-          "type": "TransformComponent",
+          "type": "vex::TransformComponent",
           "position": [0.0, 0.0, 0.0],
           "rotation": [0.0, 0.0, 0.0],
           "scale": [1.0, 1.0, 1.0]
         },
         {
-          "type": "CameraComponent",
+          "type": "vex::CameraComponent",
           "fov": 90.0,
           "nearPlane": 0.1,
           "farPlane": 1000.0

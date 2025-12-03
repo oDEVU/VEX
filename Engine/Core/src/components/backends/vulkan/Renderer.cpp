@@ -267,7 +267,7 @@ namespace vex {
                     transform.setRegistry(registry);
                 }
 
-                if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected() || isEditorMode){
+                if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected() || isEditorMode || mesh.worldRadius <= 0.0f){
                     mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
                     mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
 

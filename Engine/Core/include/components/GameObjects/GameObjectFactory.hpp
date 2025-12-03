@@ -31,7 +31,12 @@ public:
     template<typename T>
     void registerClass(const std::string& name) {
         static_assert(std::is_base_of_v<GameObject, T>, "T must derive from GameObject");
-        creators[name] = [](Engine& e, const std::string& n) { return new T(e, n); };
+        creators[name] = [name](Engine& e, const std::string& n) {
+            //return new T(e, n);
+            T* newObject = new T(e, n);
+            newObject->setObjectType(name);
+            return newObject;
+        };
     }
 
     GameObject* create(const std::string& type, Engine& engine, const std::string& name) {

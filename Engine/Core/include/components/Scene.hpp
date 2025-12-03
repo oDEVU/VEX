@@ -70,6 +70,11 @@ const std::vector<std::shared_ptr<GameObject>>& GetAllObjects() const { return m
 /// @brief Function to get all added game objects in the scene.
 /// @return const std::vector<std::shared_ptr<GameObject>>& - Reference to the vector of game objects.
 const std::vector<std::shared_ptr<GameObject>>& GetAllAddedObjects() const { return m_addedObjects; }
+
+/// @brief Function to save the scene to a file path.
+/// @param const std::string& outputPath - Path to save the scene to.
+void Save(const std::string& outputPath);
+
 private:
 
 /// @brief Function to load the scene from a file path saved in the constructor.

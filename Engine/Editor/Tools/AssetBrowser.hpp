@@ -28,6 +28,8 @@ namespace vex {
         void setThumbnailSize(float size) { m_thumbnailSize = size; }
         void setPadding(float padding) { m_padding = padding; }
 
+        std::string getCurrentPath() const { return m_currentPath.string(); }
+
     private:
         std::filesystem::path m_rootPath;
         std::filesystem::path m_currentPath;

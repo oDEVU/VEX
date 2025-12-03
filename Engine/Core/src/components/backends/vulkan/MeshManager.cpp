@@ -119,7 +119,7 @@ namespace vex {
             }
 
             meshData.loadFromFile(realPath, m_vfs);
-            meshData.meshPath = realPath;
+            meshData.meshPath = path;
         } catch (const std::exception& e) {
             SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Mesh load failed");
             handle_exception(e);

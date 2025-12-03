@@ -259,4 +259,112 @@ GameObject* Scene::GetGameObjectByEntity(entt::entity& entity){
     }
     return nullptr;
 }
+
+void Scene::Save(const std::string& path) {
+    nlohmann::json sceneJson;
+
+    const auto& env = m_engine->getEnvironmentSettings();
+    sceneJson["environment"]["lighting"] = {
+        {"ambientLightStrength", env.ambientLightStrength},
+        {"ambientLight", {env.ambientLight.r, env.ambientLight.g, env.ambientLight.b}},
+        {"sunLight", {env.sunLight.r, env.sunLight.g, env.sunLight.b}},
+        {"sunDirection", {env.sunDirection.x, env.sunDirection.y, env.sunDirection.z}},
+        {"clearColor", {env.clearColor.r, env.clearColor.g, env.clearColor.b}}
+    };
+
+    sceneJson["environment"]["shading"] = {
+        {"gouraud", env.gourardShading},
+        {"passiveVertexJitter", env.passiveVertexJitter},
+        {"vertexSnapping", env.vertexSnapping},
+        {"affineTextureWarping", env.affineWarping},
+        {"colorQuantization", env.colorQuantization},
+        {"ntfsArtifacts", env.ntfsArtifacts}
+    };
+
+    std::unordered_map<entt::entity, std::vector<GameObject*>> hierarchyMap;
+    std::vector<GameObject*> rootObjects;
+
+    for (const auto& objPtr : m_objects) {
+        if (!objPtr || !objPtr->isValid()) continue;
+
+        GameObject* obj = objPtr.get();
+        entt::entity parentEntity = entt::null;
+
+        if (obj->HasComponent<TransformComponent>()) {
+            parentEntity = obj->GetComponent<TransformComponent>().getParent();
+        }
+
+        if (parentEntity != entt::null && m_engine->getRegistry().valid(parentEntity)) {
+            hierarchyMap[parentEntity].push_back(obj);
+        } else {
+            rootObjects.push_back(obj);
+        }
+    }
+
+    std::vector<GameObject*> sortedObjects;
+    std::deque<GameObject*> processQueue;
+
+    for (auto* root : rootObjects) {
+        processQueue.push_back(root);
+    }
+
+    while (!processQueue.empty()) {
+        GameObject* currentObj = processQueue.front();
+        processQueue.pop_front();
+
+        sortedObjects.push_back(currentObj);
+
+        entt::entity currentEntity = currentObj->GetEntity();
+
+        if (hierarchyMap.find(currentEntity) != hierarchyMap.end()) {
+            for (auto* child : hierarchyMap[currentEntity]) {
+                processQueue.push_back(child);
+            }
+        }
+    }
+
+    nlohmann::json objectsArray = nlohmann::json::array();
+
+    for (GameObject* obj : sortedObjects) {
+        nlohmann::json objJson;
+
+        std::string name = obj->GetComponent<NameComponent>().name;
+        objJson["name"] = name;
+        objJson["type"] = obj->getObjectType();
+
+        if (obj->HasComponent<TransformComponent>()) {
+            entt::entity parentEntity = obj->GetComponent<TransformComponent>().getParent();
+            if (parentEntity != entt::null && m_engine->getRegistry().valid(parentEntity)) {
+                GameObject* parentObj = GetGameObjectByEntity(parentEntity);
+                if (parentObj) {
+                    objJson["parent"] = parentObj->GetComponent<NameComponent>().name;
+                }
+            }
+        }
+
+        nlohmann::json componentsArray = nlohmann::json::array();
+        const auto& regNames = ComponentRegistry::getInstance().getRegisteredNames();
+
+        for (const auto& compName : regNames) {
+            nlohmann::json compData = ComponentRegistry::getInstance().saveComponent(*obj, compName);
+            if (!compData.is_null()) {
+                compData["type"] = compName;
+                componentsArray.push_back(compData);
+            }
+        }
+
+        objJson["components"] = componentsArray;
+        objectsArray.push_back(objJson);
+    }
+
+    sceneJson["objects"] = objectsArray;
+
+    std::ofstream file(path);
+    if (file.is_open()) {
+        file << std::setw(4) << sceneJson << std::endl;
+        log("Scene saved successfully to: %s", path.c_str());
+    } else {
+        log("Error: Failed to write scene file to: %s", path.c_str());
+    }
+}
 }
