@@ -21,12 +21,12 @@ namespace vex {
         log("MeshManager destroyed");
     }
 
-    ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent = entt::null){
+    ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, entt::entity parent = entt::null){
         log("Constructing model: %s...", name.c_str());
 
         std::string tempName = name;
 
-        auto view = engine.getRegistry().view<NameComponent>();
+        auto view = m_p_engine->getRegistry().view<NameComponent>();
         for (auto entity : view) {
             auto meshComponent = view.get<NameComponent>(entity);
             if(meshComponent.name == tempName){
@@ -36,7 +36,7 @@ namespace vex {
                 log("Info: Object created with name: '%s', it is still recommended to not rely on this name for identification. It is different every app run.", tempName.c_str());
             }
         }
-        //m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
+        //m_m_p_engine->getRegistry().emplace<NameComponent>(m_entity, tempName);
 
         uint32_t newId;
         if (!m_freeModelIds.empty()) {
@@ -100,26 +100,16 @@ namespace vex {
             handle_exception(e);
         }
 
-        //entt::entity modelEntity = engine.getRegistry().create();
-        ModelObject* modelObject = new ModelObject(engine, tempName, meshComponent, transformComponent);
+        //entt::entity modelEntity = m_p_engine->getRegistry().create();
+        ModelObject* modelObject = new ModelObject(*m_p_engine, tempName, meshComponent, transformComponent);
         modelObject->cleanup = [this](std::string& tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };
         return modelObject;
     }
 
-    MeshComponent MeshManager::loadMesh(const std::string& path, Engine& engine) {
+    MeshComponent MeshManager::loadMesh(const std::string& path) {
         MeshData meshData;
         MeshComponent meshComponent;
         std::string realPath = GetAssetPath(path);
-
-        auto view = engine.getRegistry().view<MeshComponent>();
-        for (auto entity : view) {
-            auto mc = view.get<MeshComponent>(entity);
-            if(mc.meshData.meshPath == realPath){
-                log("Mesh component is already loaded, copying data.");
-                meshComponent = mc;
-                return meshComponent;
-            }
-        }
 
         try {
             log("Loading mesh data from: %s", realPath.c_str());
@@ -156,11 +146,18 @@ namespace vex {
         return meshComponent;
     }
 
+    std::unique_ptr<VulkanMesh>& MeshManager::getVulkanMeshByMesh(MeshComponent& meshComponent) {
+        if (!m_vulkanMeshes.count(meshComponent.meshData.meshPath)){
+            meshComponent = loadMesh(meshComponent.meshData.meshPath);
+        }
+        return m_vulkanMeshes.at(meshComponent.meshData.meshPath);
+    }
+
     void MeshManager::destroyModel(std::string& name, MeshComponent meshComponent) {
         log("Freed model id");
         m_freeModelIds.push_back(meshComponent.id);
 
-        if(getMeshByKey(meshComponent.meshData.meshPath)->getNumOfInstances() <= 1){
+        if(getVulkanMeshByMesh(meshComponent)->getNumOfInstances() <= 1){
             log("Erased VulkanMesh data");
             m_vulkanMeshes.erase(meshComponent.meshData.meshPath);
             for(size_t i = 0; i < meshComponent.textureNames.size(); i++){
@@ -168,7 +165,7 @@ namespace vex {
             }
             log("Unloaded textures");
         }else{
-            getMeshByKey(meshComponent.meshData.meshPath)->removeInstance();
+            getVulkanMeshByMesh(meshComponent)->removeInstance();
         }
     }
 }

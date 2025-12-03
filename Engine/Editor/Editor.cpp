@@ -52,6 +52,8 @@ namespace vex {
         m_physicsSystem->init();
 
         m_sceneManager = std::make_unique<SceneManager>();
+
+        getInterface()->getMeshManager().init(static_cast<Engine*>(this));
         setInputMode(InputMode::UI);
 
         log("Initializing editor components...");

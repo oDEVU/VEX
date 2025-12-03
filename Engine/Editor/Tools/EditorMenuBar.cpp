@@ -25,6 +25,7 @@ void EditorMenuBar::DrawBar(){
                 OpenScene();
             }
             if (ImGui::MenuItem("Save Scene")) {}
+            if (ImGui::MenuItem("Save Scene As")) {}
             if (ImGui::MenuItem("Save All Scenes")) {}
             if (ImGui::MenuItem("Quit Project")) {
                 // Implemet saving window if not saved

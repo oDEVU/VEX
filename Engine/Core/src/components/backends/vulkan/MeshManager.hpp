@@ -23,16 +23,18 @@ namespace vex {
         MeshManager(VulkanContext& context, std::unique_ptr<VulkanResources>& resources, VirtualFileSystem* vfs);
         ~MeshManager();
 
-        MeshComponent loadMesh(const std::string& path, Engine& engine);
-        ModelObject* createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent);
-        void destroyModel(std::string& name, MeshComponent meshComponent);
-        std::unique_ptr<VulkanMesh>& getMeshByKey(std::string& key) {
-            //log("Curently %i vulkan meshes loaded.", m_vulkanMeshes.size());
-            return m_vulkanMeshes.at(key);
+        void init(Engine* engine){
+            m_p_engine = engine;
         }
+
+        MeshComponent loadMesh(const std::string& path);
+        ModelObject* createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, entt::entity parent);
+        void destroyModel(std::string& name, MeshComponent meshComponent);
+        std::unique_ptr<VulkanMesh>& getVulkanMeshByMesh(MeshComponent& meshComponent);
 
     private:
         VulkanContext& m_r_context;
+        Engine* m_p_engine = nullptr;
         VirtualFileSystem* m_vfs;
         std::unique_ptr<VulkanResources>& m_p_resources;
         std::map<std::string, std::unique_ptr<VulkanMesh>> m_vulkanMeshes;

@@ -22,6 +22,8 @@
 #include "components/errorUtils.hpp"
 #include "entt/entity/fwd.hpp"
 
+#include "components/errorUtils.hpp"
+
 namespace vex{
 
 /// @brief Struct containing transform data and methods.
@@ -34,7 +36,7 @@ struct TransformComponent {
     glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
     entt::entity parent = entt::null;
     bool lastTransformed = false;
-    entt::registry& m_registry;
+    entt::registry* m_registry = nullptr;
     bool physicsAffected = false;
     #else
     private:
@@ -43,7 +45,7 @@ struct TransformComponent {
     glm::vec3 scale = {1.0f, 1.0f, 1.0f};
     entt::entity parent = entt::null;
     bool lastTransformed = false;
-    entt::registry& m_registry;
+    entt::registry* m_registry = nullptr;
     bool physicsAffected = false;
     public:
     #endif
@@ -69,34 +71,49 @@ struct TransformComponent {
 
     /// @brief Constructor 1: Registry only
     TransformComponent(entt::registry& registry)
-        : m_registry(registry) {}
+        : m_registry(&registry) {}
 
     /// @brief Constructor 2: Registry, Position, (optional Parent)
     TransformComponent(entt::registry& registry, glm::vec3 pos, entt::entity p = entt::null)
-        : m_registry(registry), position(pos), parent(p) {}
+        : m_registry(&registry), position(pos), parent(p) {}
 
     /// @brief Constructor 3: Registry, Position, Rotation (Euler degrees), (optional Parent)
     TransformComponent(entt::registry& registry, glm::vec3 pos, glm::vec3 rot, entt::entity p = entt::null)
-        : m_registry(registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), parent(p) {}
+        : m_registry(&registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), parent(p) {}
 
     /// @brief Constructor 4: Registry, Position, Rotation (Euler degrees), Scale, (optional Parent)
     TransformComponent(entt::registry& registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p = entt::null)
-        : m_registry(registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), scale(s), parent(p) {}
+        : m_registry(&registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), scale(s), parent(p) {}
 
     /// @brief Constructor 5: Registry, Parent only (useful for empty child objects)
     TransformComponent(entt::registry& registry, entt::entity p)
-        : m_registry(registry), parent(p) {}
+        : m_registry(&registry), parent(p) {}
 
     /// @brief Default constructor is deleted since registry is required
-    TransformComponent() = delete;
+    TransformComponent() = default;
 
     /// @brief Check if the transform has been updated recently or if the parent has been updated recently. Used mainly in physics calculations.
     bool transformedLately(){
         bool result = false;
-        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
-            result = m_registry.get<TransformComponent>(parent).transformedLately();
+
+        if (!isReady()) {
+            log("TransformComponent is not ready, registry is not valid");
+            return false;
+        }
+
+        if (parent != entt::null && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+            result = m_registry->get<TransformComponent>(parent).transformedLately();
         }
         return (lastTransformed || result);
+    }
+
+    void setRegistry(entt::registry& reg) {
+        lastTransformed = true;
+        m_registry = &reg;
+    }
+
+    bool isReady() const {
+        return m_registry != nullptr;
     }
 
     #ifdef DEBUG
@@ -178,8 +195,8 @@ struct TransformComponent {
         /// @brief Method to set world rotation using a quaternion (for physics systems).
         /// @param targetWorldQuat glm::quat The desired world rotation quaternion.
         void setWorldQuaternion(glm::quat targetWorldQuat) {
-            if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
-                glm::quat parentWorldQuat = glm::quat_cast(m_registry.get<TransformComponent>(parent).matrix());
+            if (parent != entt::null && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+                glm::quat parentWorldQuat = glm::quat_cast(m_registry->get<TransformComponent>(parent).matrix());
                 glm::quat parentInverse = glm::inverse(parentWorldQuat);
                 m_rotationQuat = parentInverse * targetWorldQuat;
             } else {
@@ -197,8 +214,8 @@ struct TransformComponent {
         local *= glm::mat4_cast(m_rotationQuat); // Następnie rotacja (mnożenie macierzy)
         local = glm::scale(local, scale);        // Na koniec skala (mnożenie macierzy)
 
-        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
-            return m_registry.get<TransformComponent>(parent).matrix() * local;
+        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+            return m_registry->get<TransformComponent>(parent).matrix() * local;
         }
         return local;
     }
@@ -220,9 +237,9 @@ struct TransformComponent {
     glm::vec3 getWorldScale() const {
         glm::vec3 worldScale = scale;
         entt::entity current = parent;
-        while (current != entt::null && m_registry.valid(current) && m_registry.all_of<TransformComponent>(current)) {
-            worldScale *= m_registry.get<TransformComponent>(current).scale;
-            current = m_registry.get<TransformComponent>(current).parent;
+        while (current != entt::null && m_registry && m_registry->valid(current) && m_registry->all_of<TransformComponent>(current)) {
+            worldScale *= m_registry->get<TransformComponent>(current).scale;
+            current = m_registry->get<TransformComponent>(current).parent;
         }
         return worldScale;
     }
@@ -231,8 +248,8 @@ struct TransformComponent {
     /// @param newPosition glm::vec3
     void setWorldPosition(glm::vec3 newPosition) {
         lastTransformed = true;
-        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
-            glm::mat4 parentWorldMatrix = m_registry.get<TransformComponent>(parent).matrix();
+        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+            glm::mat4 parentWorldMatrix = m_registry->get<TransformComponent>(parent).matrix();
             glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
             glm::vec4 newLocalPos4 = inverseParentMatrix * glm::vec4(newPosition, 1.0f);
             position = glm::vec3(newLocalPos4);
@@ -244,8 +261,8 @@ struct TransformComponent {
     /// @brief Method to set world position by physics component.
     /// @param newPosition glm::vec3
     void setWorldPositionPhys(glm::vec3 newPosition) {
-        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
-            glm::mat4 parentWorldMatrix = m_registry.get<TransformComponent>(parent).matrix();
+        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+            glm::mat4 parentWorldMatrix = m_registry->get<TransformComponent>(parent).matrix();
             glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
             glm::vec4 newLocalPos4 = inverseParentMatrix * glm::vec4(newPosition, 1.0f);
             position = glm::vec3(newLocalPos4);
@@ -265,8 +282,8 @@ struct TransformComponent {
     /// @brief Method to set world scale, needed when object is parented as rotation parameter stores local rotation.
     /// @param newScale glm::vec3
     void setWorldScale(glm::vec3 newScale) {
-        if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
-            glm::vec3 parentWorldScale = m_registry.get<TransformComponent>(parent).getWorldScale();
+        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+            glm::vec3 parentWorldScale = m_registry->get<TransformComponent>(parent).getWorldScale();
             scale = newScale / parentWorldScale;
         } else {
             scale = newScale;

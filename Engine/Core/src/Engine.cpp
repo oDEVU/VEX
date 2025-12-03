@@ -47,6 +47,8 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_physicsSystem->init();
 
     m_sceneManager = std::make_unique<SceneManager>();
+
+    getInterface()->getMeshManager().init(this);
     log("Engine initialized successfully");
 }
 

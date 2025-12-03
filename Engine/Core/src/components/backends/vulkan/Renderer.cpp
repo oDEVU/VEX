@@ -196,6 +196,11 @@ namespace vex {
             auto& transform = registry.get<TransformComponent>(cameraEntity);
             auto& camera = registry.get<CameraComponent>(cameraEntity);
 
+
+            if(!transform.isReady()){
+                transform.setRegistry(registry);
+            }
+
             view = glm::lookAt(transform.getWorldPosition(), transform.getWorldPosition() + transform.getForwardVector(), transform.getUpVector());
             proj = glm::perspective(glm::radians(camera.fov), (float)m_r_context.currentRenderResolution.x / (float)m_r_context.currentRenderResolution.y, camera.nearPlane, camera.farPlane);
             proj[1][1] *= -1;
@@ -258,6 +263,10 @@ namespace vex {
                 auto& mesh = modelView.get<MeshComponent>(entity);
                 glm::mat4 modelMatrix = transform.matrix();
 
+                if(!transform.isReady()){
+                    transform.setRegistry(registry);
+                }
+
                 if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected() || isEditorMode){
                     mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
                     mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
@@ -292,6 +301,10 @@ namespace vex {
                     auto& light = lightView.get<LightComponent>(lightEntity);
                     auto& transform = lightView.get<TransformComponent>(lightEntity);
 
+                    if(!transform.isReady()){
+                        transform.setRegistry(registry);
+                    }
+
                     float dist = glm::distance(transform.getWorldPosition(), mesh.worldCenter);
                     if (dist < (light.radius + mesh.worldRadius)) {
                         auto& targetLight = lightUBO.lights[lightUBO.lightCount];
@@ -303,10 +316,10 @@ namespace vex {
                 m_p_resources->updateLightUBO(m_r_context.currentFrame, modelIndex, lightUBO);
 
                 if (mesh.renderType == RenderType::OPAQUE) {
-                    auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
+                    auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
                     vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
                 } else if (mesh.renderType == RenderType::TRANSPARENT) {
-                     auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
+                     auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
                      vulkanMesh->extractTransparentTriangles(
                          modelMatrix,
                          cameraPos,
@@ -616,6 +629,10 @@ namespace vex {
         auto& transform = registry.get<TransformComponent>(cameraEntity);
         auto& camera = registry.get<CameraComponent>(cameraEntity);
 
+        if(!transform.isReady()){
+            transform.setRegistry(registry);
+        }
+
         view = glm::lookAt(
             transform.getWorldPosition(),
             transform.getWorldPosition() + transform.getForwardVector(),
@@ -795,10 +812,15 @@ namespace vex {
                 for (auto entity : modelView) {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
+
+                    if(!transform.isReady()){
+                        transform.setRegistry(registry);
+                    }
+
                     glm::mat4 modelMatrix = transform.matrix();
                     //m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{modelMatrix});
 
-                    if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected()){
+                    if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected() || mesh.worldRadius <= 0.0f){
                         mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
                         mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
                     }
@@ -825,6 +847,10 @@ namespace vex {
                         auto& light = lightView.get<LightComponent>(lightEntity);
                         auto& transform = lightView.get<TransformComponent>(lightEntity);
 
+                        if(!transform.isReady()){
+                            transform.setRegistry(registry);
+                        }
+
                         float dist = glm::distance(transform.getWorldPosition(), mesh.worldCenter);
                         if (dist < (light.radius + mesh.worldRadius)) {
                             auto& targetLight = lightUBO.lights[lightUBO.lightCount];
@@ -837,7 +863,7 @@ namespace vex {
 
 
                     if (mesh.renderType == RenderType::OPAQUE) {
-                        auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
+                        auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(modelView.get<MeshComponent>(entity));
                         vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, modelMatrix, modelView.get<MeshComponent>(entity).color);
                         //modelIndex++;
                     } else if (mesh.renderType == RenderType::TRANSPARENT) {
@@ -846,7 +872,7 @@ namespace vex {
                         //
                         //float distToCam = glm::distance(transform.getWorldPosition(), cameraPos);
                         //if (distToCam < camera.farPlane + mesh.worldRadius) {
-                            auto& vulkanMesh = m_p_meshManager->getMeshByKey(mesh.meshData.meshPath);
+                            auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
                             vulkanMesh->extractTransparentTriangles(
                                 modelMatrix,
                                 cameraPos,
@@ -885,7 +911,7 @@ namespace vex {
                     auto& transform = modelView.get<TransformComponent>(entity);
                     auto& mesh = modelView.get<MeshComponent>(entity);
                     m_p_resources->updateModelUBO(m_r_context.currentFrame, modelIndex, ModelUBO{transform.matrix(registry)});
-                    auto& vulkanMesh = m_p_meshManager->getMeshByKey(modelView.get<MeshComponent>(entity).meshData.meshPath);
+                    auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(modelView.get<MeshComponent>(entity).meshData.meshPath);
                     vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, currentTime, m_r_context.currentRenderResolution);
                     modelIndex++;
                     }*/

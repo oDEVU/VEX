@@ -8,6 +8,7 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/errorUtils.hpp"
 #include "components/GameObjects/GameObject.hpp"
+#include "SerializationUtils.hpp"
 #include <nlohmann/json.hpp>
 #include <functional>
 #include <unordered_map>
@@ -18,23 +19,43 @@
 #if DEBUG
     #include <ImReflect.hpp>
 
+    IMGUI_REFLECT(glm::vec2, x, y);
     IMGUI_REFLECT(glm::vec3, x, y, z);
     IMGUI_REFLECT(glm::vec4, x, y, z, w);
     IMGUI_REFLECT(glm::quat, x, y, z, w);
-    IMGUI_REFLECT(vex::TransformComponent, position, rotation, scale);
     IMGUI_REFLECT(vex::MeshData, meshPath);
-    IMGUI_REFLECT(vex::MeshComponent, meshData, renderType, color);
-    IMGUI_REFLECT(vex::LightComponent, color, intensity, radius);
-    IMGUI_REFLECT(vex::CameraComponent, fov, nearPlane, farPlane);
-    IMGUI_REFLECT(vex::PhysicsComponent, shape, boxHalfExtents, sphereRadius, capsuleRadius, capsuleHeight, cylinderRadius, cylinderHeight, bodyType, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
+#else
+    #define IMGUI_REFLECT(...);
 #endif
 
 namespace vex {
+
+    template<typename T>
+    void GenericComponentInspector(GameObject& obj) {
+    #if DEBUG
+        if (obj.HasComponent<T>()) {
+            std::string name = entt::type_id<T>().name().data();
+            std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+            if (ImGui::CollapsingHeader(extracted.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+                auto& component = obj.GetComponent<T>();
+
+                ImReflect::Input("##data", component);
+
+                if (ImGui::Button("Remove")) {
+                    obj.GetEngine().getRegistry().remove<T>(obj.GetEntity());
+                }
+            }
+        }
+    #else
+        (void)obj;
+    #endif
+    }
 
 /// @brief Class registering GameComponents mainly used to load them in SceneManager.
 class ComponentRegistry {
 public:
     using ComponentLoader = std::function<void(GameObject&, const nlohmann::json&)>;
+    using ComponentSaver = std::function<nlohmann::json(GameObject&)>;
     using ComponentInspector = std::function<void(GameObject&)>;
 
     static ComponentRegistry& getInstance() {
@@ -42,9 +63,38 @@ public:
         return instance;
     }
 
-    void registerComponent(const std::string& type, ComponentLoader loader, ComponentInspector inspector) {
-            loaders[type] = loader;
-            inspectors[type] = inspector;
+    // Generic Register Function
+        template<typename T>
+        void registerComponent(const std::string& name) {
+            // 1. Loader: Relies on from_json(json, T) being defined (either Auto or Manual)
+            loaders[name] = [](GameObject& obj, const nlohmann::json& j) {
+                if (!obj.HasComponent<T>()) {
+                     // Try default construction. Note: TransformComponent needs handling if no default ctor.
+                     // Assuming you added a default ctor or logic to handle it.
+                     if constexpr (std::is_default_constructible_v<T>) {
+                         obj.AddComponent<T>(T());
+                     }
+                }
+                if (obj.HasComponent<T>()) {
+                    T& comp = obj.GetComponent<T>();
+                    j.get_to(comp); // Calls global from_json
+                }
+            };
+
+            // 2. Saver: Relies on to_json(json, T) being defined
+            savers[name] = [](GameObject& obj) -> nlohmann::json {
+                if (obj.HasComponent<T>()) {
+                    return obj.GetComponent<T>(); // Calls global to_json
+                }
+                return nullptr;
+            };
+
+            // 3. Inspector: Registers the Generic template.
+            // If you specialize this template for a type (like PhysicsComponent),
+            // the compiler will pick your specialization automatically.
+            inspectors[name] = &GenericComponentInspector<T>;
+
+            registeredNames.push_back(name);
         }
 
     bool loadComponent(GameObject& obj, const std::string& type, const nlohmann::json& json) {
@@ -57,6 +107,11 @@ public:
         return false;
     }
 
+    nlohmann::json saveComponent(GameObject& obj, const std::string& type) {
+        if (savers.find(type) != savers.end()) return savers[type](obj);
+        return nullptr;
+    }
+
     void drawInspectorForObject(GameObject& obj) {
             for (auto& [name, inspector] : inspectors) {
                 inspector(obj);
@@ -67,33 +122,22 @@ public:
         return inspectors;
     }
 
+    const std::vector<std::string>& getRegisteredNames() const { return registeredNames; }
+
 private:
     ComponentRegistry() = default;
+    std::vector<std::string> registeredNames;
     std::unordered_map<std::string, ComponentLoader> loaders;
+    std::unordered_map<std::string, ComponentSaver> savers;
     std::unordered_map<std::string, ComponentInspector> inspectors;
 };
 
-template<typename T>
-void GenericComponentInspector(GameObject& obj) {
-#if DEBUG
-    if (obj.HasComponent<T>()) {
-        std::string name = entt::type_id<T>().name().data();
-        std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
-        if (ImGui::CollapsingHeader(extracted.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-            auto& component = obj.GetComponent<T>();
-
-            ImReflect::Input("##data", component);
-
-            if (ImGui::Button("Remove")) {
-                obj.GetEngine().getRegistry().remove<T>(obj.GetEntity());
-            }
-        }
-    }
-#else
-    (void)obj;
-#endif
 }
 
+/// @brief Helper macros to generate unique names based on line number
+#define VEX_CAT_IMPL(a, b) a##b
+#define VEX_CAT(a, b) VEX_CAT_IMPL(a, b)
+#define VEX_UNIQUE_NAME(prefix) VEX_CAT(prefix, __LINE__)
 
 /// @brief Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.
 /// @details Example usage:
@@ -114,17 +158,26 @@ void GenericComponentInspector(GameObject& obj) {
 ///
 /// REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
 /// @endcode
-#define REGISTER_COMPONENT(ComponentType, LoadFunction) \
+#define REGISTER_COMPONENT(Type, ...) \
+    namespace vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Type, __VA_ARGS__) } \
+    IMGUI_REFLECT(Type, __VA_ARGS__) \
     namespace { \
-        struct ComponentType##Registrar { \
-            ComponentType##Registrar() { \
-                ComponentRegistry::getInstance().registerComponent( \
-                    #ComponentType, \
-                    LoadFunction, \
-                    &vex::GenericComponentInspector<ComponentType> \
-                ); \
+        struct VEX_UNIQUE_NAME(Registrar_) { \
+            VEX_UNIQUE_NAME(Registrar_)() { \
+                vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type); \
             } \
         }; \
-        static ComponentType##Registrar ComponentType##registrar; \
+        static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
     }
-}
+
+/// @brief Same macro just skips json registration for more complex components, it requires manual registration.
+#define REGISTER_COMPONENT_CUSTOM(Type, ...) \
+    IMGUI_REFLECT(Type, __VA_ARGS__) \
+    namespace { \
+        struct VEX_UNIQUE_NAME(Registrar_) { \
+            VEX_UNIQUE_NAME(Registrar_)() { \
+                vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type); \
+            } \
+        }; \
+        static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
+    }
