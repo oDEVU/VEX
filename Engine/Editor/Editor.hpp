@@ -36,6 +36,11 @@ namespace vex {
         EditorProperties* getEditorProperties() { return &m_editorProperties; }
 
         void OnHotReload();
+
+        void refreshForObject() override {
+            m_frame = 0;
+            m_refresh = true;
+        }
     private:
         // Helper to draw the dockspace and viewport window
         void drawEditorLayout(const SceneRenderData& data, glm::uvec2& outNewResolution);
@@ -94,6 +99,8 @@ namespace vex {
         EditorProperties m_SavedEditorProperties;
 
         int m_fps = 0;
+
+        bool m_refresh = false;
     };
 
 }

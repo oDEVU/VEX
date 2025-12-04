@@ -1,0 +1,168 @@
+{
+    "environment": {
+        "lighting": {
+            "ambientLight": [
+                0.4710424542427063,
+                0.6297299861907959,
+                1.0
+            ],
+            "ambientLightStrength": 0.30000001192092896,
+            "clearColor": [
+                0.2084941864013672,
+                0.35690170526504517,
+                1.0
+            ],
+            "sunDirection": [
+                0.75,
+                1.0,
+                0.5
+            ],
+            "sunLight": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "shading": {
+            "affineTextureWarping": true,
+            "gouraud": true,
+            "ntfsArtifacts": true,
+            "passiveVertexJitter": true,
+            "screenDither": true,
+            "screenQuantization": true,
+            "textureQuantization": true,
+            "vertexSnapping": true
+        }
+    },
+    "objects": [
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        5.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                }
+            ],
+            "name": "DebugCamera",
+            "type": "Player"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        5.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "path": "Assets/human.obj",
+                    "renderType": 0,
+                    "type": "vex::MeshComponent"
+                }
+            ],
+            "name": "MyModel",
+            "type": "GameObject"
+        },
+        {
+            "components": [],
+            "name": "Map",
+            "type": "Map"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        -2.9048194885253906,
+                        -0.3609691560268402,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "color": [
+                        1.0,
+                        1.0,
+                        0.0
+                    ],
+                    "intensity": 2.0,
+                    "radius": 15.0,
+                    "type": "vex::LightComponent"
+                }
+            ],
+            "name": "EditorCreatedLight",
+            "type": "GameObject"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "farPlane": 100.0,
+                    "fov": 60.0,
+                    "nearPlane": 0.10000000149011612,
+                    "type": "vex::CameraComponent"
+                }
+            ],
+            "name": "newCamera",
+            "parent": "DebugCamera",
+            "type": "CameraObject"
+        }
+    ]
+}

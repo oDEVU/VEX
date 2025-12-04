@@ -24,7 +24,7 @@ void EditorMenuBar::DrawBar(){
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("New Scene")) {
-                vex::log("New Scene");
+                NewScene();
             }
             if (ImGui::MenuItem("Open Scene")) {
                 OpenScene();
@@ -280,4 +280,79 @@ void EditorMenuBar::RunBuild(bool isDebug) {
             state->isFinished = true;
         }
     }).detach();
+}
+
+void EditorMenuBar::NewScene() {
+    std::shared_ptr<BasicEditorWindow> newSceneWindow = std::make_shared<BasicEditorWindow>();
+    std::string startPath = m_editor.getProjectBinaryPath() + "/Assets";
+    auto dialogBrowser = std::make_shared<vex::AssetBrowser>(startPath);
+
+   auto saveFolder = std::make_shared<std::string>(startPath);
+    auto fileName   = std::make_shared<std::string>("NewScene.json");
+
+    newSceneWindow->Create = [this, newSceneWindow, dialogBrowser, saveFolder, fileName](vex::ImGUIWrapper& wrapper) {
+        wrapper.addUIFunction([=, this]() {
+            if (!newSceneWindow->isOpen) return;
+            ImGui::SetNextWindowSize(ImVec2(600, 450), ImGuiCond_FirstUseEver);
+
+            if (ImGui::Begin("Create New Scene", &newSceneWindow->isOpen)) {
+
+                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
+
+                if (!selectedFile.empty()) {
+                    std::filesystem::path p(selectedFile);
+                    if (p.has_extension()) {
+                        *saveFolder = p.parent_path().string();
+                        *fileName   = p.filename().string();
+                    } else {
+                        *saveFolder = selectedFile;
+                    }
+                }
+                else if (dialogBrowser->getCurrentPath() != *saveFolder) {
+                    *saveFolder = dialogBrowser->getCurrentPath();
+                }
+
+                ImGui::Separator();
+                ImGui::Text("New Scene Options");
+
+                ImReflect::Input("Filename", *fileName);
+
+                if (ImGui::Button("Create & Open", ImVec2(120, 0))) {
+                    if (saveFolder->empty() || fileName->empty()) {
+                        vex::log("Error: Folder or Filename cannot be empty.");
+                    }
+                    else {
+                        std::filesystem::path destPath(*saveFolder);
+                        destPath /= *fileName;
+
+                        if (!destPath.has_extension()) {
+                            destPath += ".json";
+                        }
+
+                        std::filesystem::path sourcePath = std::filesystem::path("../Assets/default/default.json");
+
+                        try {
+                            if (std::filesystem::exists(sourcePath)) {
+                                std::filesystem::copy_file(sourcePath, destPath, std::filesystem::copy_options::overwrite_existing);
+                                vex::log("New scene created: %s", destPath.string().c_str());
+
+                                m_editor.requestSceneReload(destPath.string());
+                                newSceneWindow->isOpen = false;
+                            }
+                            else {
+                                vex::log("Error: Could not find default scene template at: %s", sourcePath.string().c_str());
+                            }
+                        }
+                        catch (const std::filesystem::filesystem_error& e) {
+                            vex::log("Filesystem Error: %s", e.what());
+                        }
+                    }
+                }
+            }
+            ImGui::End();
+        });
+    };
+
+    m_Windows.push_back(newSceneWindow);
+    newSceneWindow->Create(m_ImGUIWrapper);
 }

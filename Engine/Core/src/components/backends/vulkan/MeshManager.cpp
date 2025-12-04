@@ -10,6 +10,9 @@
 #include <SDL3/SDL.h>
 #include "limits.hpp"
 
+#include <filesystem>
+#include <algorithm>
+
 namespace vex {
     MeshManager::MeshManager(VulkanContext& context, std::unique_ptr<VulkanResources>& resources, VirtualFileSystem* vfs)
         : m_r_context(context), m_p_resources(resources), m_vfs(vfs) {
@@ -153,8 +156,18 @@ namespace vex {
 
             #if DEBUG
             std::string realPath = GetAssetPath(meshComponent.meshData.meshPath);
-            if (!m_vfs->file_exists(realPath)) {
-                // skip
+
+            if (meshComponent.meshData.meshPath == "" || !m_vfs->file_exists(realPath)) {
+                return nullMesh;
+            }
+
+            std::filesystem::path p(realPath);
+            std::string ext = p.extension().string();
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+            bool isValidMesh = (ext == ".fbx" || ext == ".obj" || ext == ".gltf" || ext == ".glb");
+
+            if (!isValidMesh) {
                 return nullMesh;
             }
             #endif

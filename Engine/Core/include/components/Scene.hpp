@@ -75,6 +75,10 @@ const std::vector<std::shared_ptr<GameObject>>& GetAllAddedObjects() const { ret
 /// @param const std::string& outputPath - Path to save the scene to.
 void Save(const std::string& outputPath);
 
+/// @brief Function to add a game object specifically for Editor usage (saved to file).
+/// @param GameObject* gameObject - Pointer to the object.
+void AddEditorGameObject(GameObject* gameObject);
+
 private:
 
 /// @brief Function to load the scene from a file path saved in the constructor.

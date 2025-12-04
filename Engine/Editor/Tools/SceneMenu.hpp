@@ -7,11 +7,18 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <cxxabi.h>
+#include <functional>
 
 #include "Engine.hpp"
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObject.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
+
+struct SceneAction {
+    enum Type { NONE, DELETE, DUPLICATE, RENAME_START };
+    Type type = NONE;
+    vex::GameObject* target = nullptr;
+};
 
 inline std::string Demangle(const char* name) {
     int status = -1;
@@ -26,7 +33,8 @@ inline void DrawEntityNode(
     vex::GameObject* obj,
     std::pair<bool, vex::GameObject*>& selectedObject,
     const std::unordered_map<entt::entity, std::vector<vex::GameObject*>>& childrenMap,
-    const std::unordered_set<entt::entity>& runtimeSet
+    const std::unordered_set<entt::entity>& runtimeSet,
+    SceneAction& outAction
 ) {
     if (!obj) return;
 
@@ -66,6 +74,35 @@ inline void DrawEntityNode(
         selectedObject.first = isRuntime;
     }
 
+    if (ImGui::BeginPopupContextItem()) {
+            if (ImGui::MenuItem("Rename")) {
+                outAction.type = SceneAction::RENAME_START;
+                outAction.target = obj;
+            }
+
+            if (ImGui::MenuItem("Duplicate")) {
+                outAction.type = SceneAction::DUPLICATE;
+                outAction.target = obj;
+            }
+
+            ImGui::Separator();
+
+            if (obj->HasComponent<vex::TransformComponent>()) {
+                if (obj->GetComponent<vex::TransformComponent>().getParent() != entt::null) {
+                    if (ImGui::MenuItem("Unparent")) {
+                        obj->GetComponent<vex::TransformComponent>().setParent(entt::null);
+                    }
+                }
+            }
+
+            if (ImGui::MenuItem("Delete")) {
+                outAction.type = SceneAction::DELETE;
+                outAction.target = obj;
+            }
+
+            ImGui::EndPopup();
+        }
+
     if (ImGui::IsItemHovered()) {
         vex::GameObject* raw = obj;
         const char* rawName = typeid(*raw).name();
@@ -85,7 +122,7 @@ inline void DrawEntityNode(
     if (isOpen && hasChildren) {
         const auto& children = childrenMap.at(entityID);
         for (auto* child : children) {
-            DrawEntityNode(child, selectedObject, childrenMap, runtimeSet);
+            DrawEntityNode(child, selectedObject, childrenMap, runtimeSet, outAction);
         }
         ImGui::TreePop();
     }
@@ -98,7 +135,7 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
     const auto& runtimeObjects = engine.getSceneManager()->GetAllAddedObjects(sceneName);
 
     if (objects.empty() && runtimeObjects.empty()) {
-        ImGui::TextDisabled("No Scene Loaded");
+        ImGui::TextDisabled("No objects in scene");
         return;
     }
 
@@ -136,7 +173,123 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
     processObjects(objects, false);
     processObjects(runtimeObjects, true);
 
+    SceneAction action;
+
     for (auto* root : rootNodes) {
-        DrawEntityNode(root, selectedObject, childrenMap, runtimeSet);
+        DrawEntityNode(root, selectedObject, childrenMap, runtimeSet, action);
     }
+
+    static bool showRenameModal = false;
+        static char renameBuffer[128] = "";
+        static vex::GameObject* objectToRename = nullptr;
+
+        if (action.type == SceneAction::RENAME_START) {
+            objectToRename = action.target;
+            std::string currentName = objectToRename->GetComponent<vex::NameComponent>().name;
+            strncpy(renameBuffer, currentName.c_str(), sizeof(renameBuffer));
+            showRenameModal = true;
+            ImGui::OpenPopup("Rename Object");
+        }
+
+        if (ImGui::BeginPopupModal("Rename Object", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+            if (objectToRename) {
+                ImGui::InputText("New Name", renameBuffer, sizeof(renameBuffer));
+
+                if (ImGui::Button("Save") || ImGui::IsKeyPressed(ImGuiKey_Enter)) {
+                    objectToRename->GetComponent<vex::NameComponent>().name = std::string(renameBuffer);
+                    showRenameModal = false;
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel")) {
+                    showRenameModal = false;
+                    ImGui::CloseCurrentPopup();
+                }
+            } else {
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
+
+        if (action.type == SceneAction::DUPLICATE && action.target) {
+
+                std::function<void(vex::GameObject*, entt::entity)> recursiveCopy =
+                    [&](vex::GameObject* src, entt::entity parentEntity) {
+
+                    std::string newName = src->GetComponent<vex::NameComponent>().name + " (Copy)";
+                    vex::GameObject* newObj = vex::GameObjectFactory::getInstance().create(src->getObjectType(), engine, newName);
+
+                    if (!newObj) return;
+
+                    const auto& regNames = vex::ComponentRegistry::getInstance().getRegisteredNames();
+                    for (const auto& compName : regNames) {
+                        nlohmann::json compData = vex::ComponentRegistry::getInstance().saveComponent(*src, compName);
+                        if (!compData.is_null()) {
+                             vex::ComponentRegistry::getInstance().loadComponent(*newObj, compName, compData);
+                        }
+                    }
+
+                    if (newObj->HasComponent<vex::NameComponent>()) {
+                        newObj->GetComponent<vex::NameComponent>().name = newName;
+                    }
+
+                    if (newObj->HasComponent<vex::TransformComponent>()) {
+                        if (parentEntity != entt::null) {
+                             newObj->GetComponent<vex::TransformComponent>().setParent(parentEntity);
+                        } else if (src->HasComponent<vex::TransformComponent>()) {
+                             entt::entity originalParent = src->GetComponent<vex::TransformComponent>().getParent();
+                             if (originalParent != entt::null) {
+                                 newObj->GetComponent<vex::TransformComponent>().setParent(originalParent);
+                             }
+                        }
+                    }
+
+                    engine.getSceneManager()->GetScene(sceneName)->AddEditorGameObject(newObj);
+
+                    if (childrenMap.find(src->GetEntity()) != childrenMap.end()) {
+                        for (auto* child : childrenMap.at(src->GetEntity())) {
+                            if (runtimeSet.find(child->GetEntity()) == runtimeSet.end()) {
+                                recursiveCopy(child, newObj->GetEntity());
+                            }
+                        }
+                    }
+                };
+
+                std::string rootNewName = action.target->GetComponent<vex::NameComponent>().name;
+
+                std::string originalName = action.target->GetComponent<vex::NameComponent>().name;
+                action.target->GetComponent<vex::NameComponent>().name = rootNewName;
+
+                recursiveCopy(action.target, entt::null);
+
+                action.target->GetComponent<vex::NameComponent>().name = originalName;
+
+                engine.refreshForObject();
+            }
+
+        if (action.type == SceneAction::DELETE && action.target) {
+
+                std::function<void(vex::GameObject*)> recursiveDelete =
+                    [&](vex::GameObject* targetObj) {
+
+                    if (childrenMap.find(targetObj->GetEntity()) != childrenMap.end()) {
+                        auto children = childrenMap.at(targetObj->GetEntity());
+                        for (auto* child : children) {
+                            recursiveDelete(child);
+                        }
+                    }
+
+                    if (selectedObject.second == targetObj) {
+                        selectedObject.first = false;
+                        selectedObject.second = nullptr;
+                    }
+
+                    auto* scene = engine.getSceneManager()->GetScene(sceneName);
+                    if (scene) {
+                        scene->DestroyGameObject(targetObj);
+                    }
+                };
+
+                recursiveDelete(action.target);
+            }
 }

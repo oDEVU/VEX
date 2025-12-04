@@ -371,4 +371,23 @@ void Scene::Save(const std::string& path) {
         log("Error: Failed to write scene file to: %s", path.c_str());
     }
 }
+
+void Scene::AddEditorGameObject(GameObject* gameObject) {
+    if (!gameObject) return;
+
+    auto it = std::find_if(m_addedObjects.begin(), m_addedObjects.end(),
+        [gameObject](const std::shared_ptr<GameObject>& ptr) {
+            return ptr.get() == gameObject;
+        });
+
+    if (it != m_addedObjects.end()) {
+        m_objects.push_back(*it);
+        m_addedObjects.erase(it);
+
+        log("Promoted object to persistent Scene: %s", gameObject->GetComponent<NameComponent>().name.c_str());
+    } else {
+        m_objects.emplace_back(std::shared_ptr<GameObject>(gameObject));
+        log("Added new persistent object to Scene: %s", gameObject->GetComponent<NameComponent>().name.c_str());
+    }
+}
 }

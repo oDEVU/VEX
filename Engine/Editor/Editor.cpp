@@ -100,7 +100,11 @@ namespace vex {
 
         m_camera->Update(deltaTime);
         render();
-        m_frame = 1;
+        if(!m_refresh){
+            m_frame = 1;
+        }else{
+            m_refresh = false;
+        }
     }
 
     void Editor::processEvent(const SDL_Event& event, float deltaTime) {
@@ -378,14 +382,14 @@ namespace vex {
             ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
 
             ImGuiID dock_main_id = dockspace_id;
-            ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
-            ImGuiID dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.4f, nullptr, &dock_main_id);
-            ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.4f, nullptr, &dock_main_id);
+            ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.3f, nullptr, &dock_main_id);
+            ImGuiID dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.45f, nullptr, &dock_main_id);
+            ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
             ImGuiID dock_right_top_id, dock_right_bottom_id;
             ImGui::DockBuilderSplitNode(dock_right_id, ImGuiDir_Down, 0.5f, &dock_right_bottom_id, &dock_right_top_id);
 
             ImGui::DockBuilderDockWindow("Viewport", dock_main_id);
-            ImGui::DockBuilderDockWindow("Inspector", dock_left_id);
+            ImGui::DockBuilderDockWindow("Game Objects", dock_left_id);
             ImGui::DockBuilderDockWindow("Assets", dock_bottom_id);
             ImGui::DockBuilderDockWindow("Scene", dock_right_top_id);
             ImGui::DockBuilderDockWindow("Properties", dock_right_bottom_id);
@@ -537,9 +541,38 @@ namespace vex {
         ImGui::End();
         ImGui::PopStyleVar();
 
-        ImGui::Begin("Inspector", nullptr, childFlags);
-        ImGui::Text("[Game Objects]");
-        ImGui::End();
+        ImGui::Begin("Game Objects", nullptr, childFlags);
+                std::vector<std::string> objectTypes = GameObjectFactory::getInstance().GetRegisteredObjectTypes();
+
+                ImGui::Text("Available Objects:");
+                ImGui::Separator();
+
+                for (const auto& type : objectTypes) {
+                    if (ImGui::Button(type.c_str(), ImVec2(-1, 0))) {
+                        std::string currentScene = getSceneManager()->getLastSceneName();
+                        if (!currentScene.empty()) {
+
+                            std::string newName = "New " + type;
+                            GameObject* newObj = GameObjectFactory::getInstance().create(type, *this, newName);
+
+                            if(m_selectedObject.second){
+                                newObj->AddComponent(TransformComponent{});
+                                newObj->ParentTo(m_selectedObject.second->GetEntity());
+                            }
+
+                            m_frame = 0;
+                            m_refresh = true;
+                            newObj->BeginPlay();
+
+                            if (newObj) {
+                                getSceneManager()->GetScene(currentScene)->AddEditorGameObject(newObj);
+                            }
+                        } else {
+                            log("Error: No scene loaded. Cannot create object.");
+                        }
+                    }
+                }
+                ImGui::End();
 
         ImGui::Begin("Assets", nullptr, childFlags);
 

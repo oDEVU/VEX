@@ -114,6 +114,11 @@ public:
     /// @param float deltaTime - Time since last frame.
     virtual void render();
 
+    /// @brief Internal virtual function for editor.
+    virtual void refreshForObject() {
+        log("Editor use only");
+    }
+
     /// @brief Simply sets m_running to false, Effectivelly soft shuting down the engine.
     void quit(){ m_running = false; }
 

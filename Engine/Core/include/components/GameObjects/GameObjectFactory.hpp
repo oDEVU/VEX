@@ -48,6 +48,15 @@ public:
         return nullptr;
     }
 
+    std::vector<std::string> GetRegisteredObjectTypes() {
+        std::vector<std::string> types;
+        types.reserve(creators.size());
+        for(const auto& [name, creator] : creators) {
+            types.push_back(name);
+        }
+        return types;
+    }
+
     void UnregisterGameObjects(){
         //creators.clear();
     }

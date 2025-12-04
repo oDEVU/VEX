@@ -1,0 +1,38 @@
+{
+    "environment": {
+        "lighting": {
+            "ambientLight": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "ambientLightStrength": 0.0,
+            "clearColor": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "sunDirection": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "sunLight": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "shading": {
+            "affineTextureWarping": false,
+            "gouraud": false,
+            "ntfsArtifacts": false,
+            "passiveVertexJitter": false,
+            "screenDither": false,
+            "screenQuantization": false,
+            "textureQuantization": false,
+            "vertexSnapping": false
+        }
+    },
+    "objects": []
+}
