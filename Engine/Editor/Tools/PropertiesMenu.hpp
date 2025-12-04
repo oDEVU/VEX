@@ -31,4 +31,34 @@ inline void DrawPropertiesOfAnObject(vex::GameObject* object, bool temporary){
     ImGui::Separator();
     vex::ComponentRegistry::getInstance().drawInspectorForObject(*object);
 
+    ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        float width = ImGui::GetContentRegionAvail().x;
+        ImGui::SetCursorPosX((width - 150) * 0.5f);
+
+        if (ImGui::Button("Add Component", ImVec2(150, 0))) {
+            ImGui::OpenPopup("AddComponentPopup");
+        }
+
+        if (ImGui::BeginPopup("AddComponentPopup")) {
+            auto availableComponents = vex::ComponentRegistry::getInstance().getMissingComponents(*object);
+
+            if (availableComponents.empty()) {
+                ImGui::TextDisabled("No more components available");
+            } else {
+                ImGui::TextDisabled("Available Components");
+                ImGui::Separator();
+
+                for (const auto& compName : availableComponents) {
+                    if (ImGui::Selectable(compName.c_str())) {
+                        vex::ComponentRegistry::getInstance().createComponent(*object, compName);
+                        ImGui::CloseCurrentPopup();
+                    }
+                }
+            }
+            ImGui::EndPopup();
+        }
+
 }

@@ -89,7 +89,28 @@ REGISTER_COMPONENT_CUSTOM(vex::MeshComponent, meshData, renderType, color);
 
 REGISTER_COMPONENT(vex::CameraComponent, fov, nearPlane, farPlane);
 REGISTER_COMPONENT(vex::LightComponent, color, intensity, radius);
-REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
+//REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
+
+REGISTER_COMPONENT(vex::PhysicsComponent,
+    shape,
+    bodyType,
+    isSensor,
+    allowSleeping,
+
+    mass,
+    friction,
+    bounce,
+    linearDamping,
+    angularDamping,
+
+    boxHalfExtents,
+    sphereRadius,
+    capsuleRadius,
+    capsuleHeight,
+    cylinderRadius,
+    cylinderHeight
+);
+
 namespace vex {
 
     REGISTER_GAME_OBJECT(CameraObject);

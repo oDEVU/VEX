@@ -19,6 +19,7 @@ public:
     void OpenScene();
     void OpenEditorSettings();
     void SaveSceneAs();
+    void RunBuild(bool isDebug);
 private:
     vex::ImGUIWrapper& m_ImGUIWrapper;
     vex::Editor& m_editor;

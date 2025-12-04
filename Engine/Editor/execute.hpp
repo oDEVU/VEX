@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <cstdio>
@@ -12,7 +13,7 @@
     #include <unistd.h>
 #endif
 
-void executeCommandRealTime(const std::string& cmd, std::function<void(const std::string&)> lineCallback) {
+inline void executeCommandRealTime(const std::string& cmd, std::function<void(const std::string&)> lineCallback) {
     FILE* pipe = POPEN_FUNC(cmd.c_str(), "r");
 
     if (!pipe) {

@@ -105,6 +105,10 @@ int main(int argc, char* argv[]) {
                 vex::log("CR Error: %d (Failure type: %d)", result, ctx.failure);
                 vex::throw_error("DAMN");
             }
+
+            if (ctx.version != oldVersion) {
+                engine.OnHotReload();
+            }
     });
 
     //cr_plugin_close(ctx);

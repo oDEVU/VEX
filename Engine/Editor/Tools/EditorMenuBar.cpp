@@ -4,6 +4,7 @@
 #include "../Editor.hpp"
 #include "../DialogWindow.hpp"
 #include "../editorProperties.hpp"
+#include "../execute.hpp"
 
 #include "components/GameInfo.hpp"
 #include "components/errorUtils.hpp"
@@ -42,8 +43,12 @@ void EditorMenuBar::DrawBar(){
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Build")) {
-            if (ImGui::MenuItem("Build Debug")) {}
-            if (ImGui::MenuItem("Build Release")) {}
+            if (ImGui::MenuItem("Build Debug")) {
+                RunBuild(true);
+            }
+            if (ImGui::MenuItem("Build Release")) {
+                RunBuild(false);
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Preferences")) {
@@ -196,4 +201,83 @@ void EditorMenuBar::SaveSceneAs() {
 
     m_Windows.push_back(openSceneWindow);
     openSceneWindow->Create(m_ImGUIWrapper);
+}
+
+void EditorMenuBar::RunBuild(bool isDebug) {
+    struct BuildState {
+        std::string logs = "";
+        bool isFinished = false;
+        std::mutex logMutex;
+        bool autoScroll = true;
+    };
+    auto state = std::make_shared<BuildState>();
+
+    std::string projectPath = m_editor.getProjectBinaryPath();
+    std::string configFlag = isDebug ? " -d" : " -r";
+    std::string command;
+
+    #ifdef _WIN32
+        command = "..\\..\\BuildTools\\build\\ProjectBuilder.exe \"" + projectPath + "\"" + configFlag;
+    #else
+        command = "../../BuildTools/build/ProjectBuilder \"" + projectPath + "\"" + configFlag;
+    #endif
+
+    vex::log("Starting Build: %s", command.c_str());
+
+    std::shared_ptr<BasicEditorWindow> buildWindow = std::make_shared<BasicEditorWindow>();
+
+    buildWindow->Create = [this, buildWindow, state, isDebug](vex::ImGUIWrapper& wrapper) {
+        wrapper.addUIFunction([=]() {
+            if (!buildWindow->isOpen) return;
+
+            ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+
+            std::string title = isDebug ? "Building Debug..." : "Building Release...";
+            if (state->isFinished) title += " (Finished)";
+
+            if (ImGui::Begin(title.c_str(), &buildWindow->isOpen)) {
+
+                if(ImGui::Button("Clear")) {
+                    std::lock_guard<std::mutex> lock(state->logMutex);
+                    state->logs.clear();
+                }
+                ImGui::SameLine();
+                ImGui::Checkbox("Auto-scroll", &state->autoScroll);
+
+                ImGui::Separator();
+
+                ImGui::BeginChild("BuildLogRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+                {
+                    std::lock_guard<std::mutex> lock(state->logMutex);
+                    ImGui::TextUnformatted(state->logs.c_str());
+                }
+
+                if (state->autoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+                    ImGui::SetScrollHereY(1.0f);
+                }
+
+                ImGui::EndChild();
+            }
+            ImGui::End();
+        });
+    };
+
+    m_Windows.push_back(buildWindow);
+    buildWindow->Create(m_ImGUIWrapper);
+
+    std::thread([command, state]() {
+        executeCommandRealTime(command,
+            [state](const std::string& line) {
+                std::lock_guard<std::mutex> lock(state->logMutex);
+                state->logs += line;
+            }
+        );
+
+        {
+            std::lock_guard<std::mutex> lock(state->logMutex);
+            state->logs += "\n=== Build Finished ===\n";
+            state->isFinished = true;
+        }
+    }).detach();
 }

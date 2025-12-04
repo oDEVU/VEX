@@ -35,6 +35,7 @@ namespace vex {
 
         EditorProperties* getEditorProperties() { return &m_editorProperties; }
 
+        void OnHotReload();
     private:
         // Helper to draw the dockspace and viewport window
         void drawEditorLayout(const SceneRenderData& data, glm::uvec2& outNewResolution);

@@ -212,6 +212,8 @@ namespace vex {
             m_sceneUBO.snapResolution = 1.f;
             m_sceneUBO.jitterIntensity = 0.5f;
 
+            m_sceneUBO.enablePS1Effects = 0;
+
             if(m_r_context.m_enviroment.vertexSnapping){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
             }
@@ -652,6 +654,8 @@ namespace vex {
 
         m_sceneUBO.snapResolution = 1.f;
         m_sceneUBO.jitterIntensity = 0.5f;
+
+        m_sceneUBO.enablePS1Effects = 0;
 
         if(m_r_context.m_enviroment.vertexSnapping){
             m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;

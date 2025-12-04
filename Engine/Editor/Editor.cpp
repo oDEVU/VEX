@@ -1,6 +1,8 @@
 #include "Editor.hpp"
 #include "EditorImGUIWrapper.hpp"
+
 #include "Tools/PropertiesMenu.hpp"
+#include "Tools/worldSettingsMenu.hpp"
 #include "Tools/SceneMenu.hpp"
 
 #include <imgui.h>
@@ -387,6 +389,7 @@ namespace vex {
             ImGui::DockBuilderDockWindow("Assets", dock_bottom_id);
             ImGui::DockBuilderDockWindow("Scene", dock_right_top_id);
             ImGui::DockBuilderDockWindow("Properties", dock_right_bottom_id);
+            ImGui::DockBuilderDockWindow("World Settings", dock_right_bottom_id);
 
             ImGui::DockBuilderFinish(dockspace_id);
         }
@@ -566,12 +569,27 @@ namespace vex {
             }
         ImGui::End();
 
+        ImGui::Begin("World Settings", nullptr, childFlags);
+            DrawWorldSettings(*this);
+        ImGui::End();
+
         if (!m_pendingSceneToLoad.empty() || m_pendingSceneToLoad != "") {
 
             if (ImGui::Begin("Opening scene...", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
                 ImGui::Text("Loading scene: %s", m_pendingSceneToLoad.c_str());
             }
             ImGui::End();
+        }
+    }
+
+    void Editor::OnHotReload() {
+        log("Hot Reload detected: Deselecting objects and reloading scene...");
+
+        m_selectedObject.first = false;
+        m_selectedObject.second = nullptr;
+
+        if (getSceneManager() && !getSceneManager()->getLastSceneName().empty()) {
+            requestSceneReload(getSceneManager()->getLastSceneName());
         }
     }
 }

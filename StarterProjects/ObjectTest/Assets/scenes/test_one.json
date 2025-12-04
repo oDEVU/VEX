@@ -2,19 +2,19 @@
     "environment": {
         "lighting": {
             "ambientLight": [
-                0.4710424542427063,
-                0.6297299861907959,
+                0.0,
+                0.3000004291534424,
                 1.0
             ],
-            "ambientLightStrength": 0.30000001192092896,
+            "ambientLightStrength": 0.019999999552965164,
             "clearColor": [
-                0.2084941864013672,
-                0.35690170526504517,
-                1.0
+                0.0,
+                0.0,
+                0.0
             ],
             "sunDirection": [
-                0.75,
                 1.0,
+                0.800000011920929,
                 0.5
             ],
             "sunLight": [
@@ -24,12 +24,12 @@
             ]
         },
         "shading": {
-            "affineTextureWarping": true,
-            "colorQuantization": true,
-            "gouraud": true,
-            "ntfsArtifacts": true,
-            "passiveVertexJitter": true,
-            "vertexSnapping": true
+            "affineTextureWarping": false,
+            "colorQuantization": false,
+            "gouraud": false,
+            "ntfsArtifacts": false,
+            "passiveVertexJitter": false,
+            "vertexSnapping": false
         }
     },
     "objects": [
@@ -61,9 +61,9 @@
             "components": [
                 {
                     "position": [
-                        0.0,
-                        5.0,
-                        0.0
+                        -1.5145983695983887,
+                        1.3913536071777344,
+                        1.149413824081421
                     ],
                     "rotation": [
                         0.0,
@@ -87,6 +87,16 @@
                     "path": "Assets/human.obj",
                     "renderType": 0,
                     "type": "vex::MeshComponent"
+                },
+                {
+                    "color": [
+                        -8.0,
+                        -8.0,
+                        -8.0
+                    ],
+                    "intensity": 1.0,
+                    "radius": 3.0,
+                    "type": "vex::LightComponent"
                 }
             ],
             "name": "MyModel",

@@ -36,6 +36,8 @@ namespace vex {
         if (obj.HasComponent<T>()) {
             std::string name = entt::type_id<T>().name().data();
             std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+
+            ImGui::PushID(name.c_str());
             if (ImGui::CollapsingHeader(extracted.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
                 auto& component = obj.GetComponent<T>();
 
@@ -45,6 +47,7 @@ namespace vex {
                     obj.GetEngine().getRegistry().remove<T>(obj.GetEntity());
                 }
             }
+            ImGui::PopID();
         }
     #else
         (void)obj;
@@ -57,6 +60,8 @@ public:
     using ComponentLoader = std::function<void(GameObject&, const nlohmann::json&)>;
     using ComponentSaver = std::function<nlohmann::json(GameObject&)>;
     using ComponentInspector = std::function<void(GameObject&)>;
+    using ComponentChecker = std::function<bool(const GameObject&)>;
+    using ComponentCreator = std::function<void(GameObject&)>;
 
     static ComponentRegistry& getInstance() {
         static ComponentRegistry instance;
@@ -94,6 +99,20 @@ public:
             // the compiler will pick your specialization automatically.
             inspectors[name] = &GenericComponentInspector<T>;
 
+            checkers[name] = [](const GameObject& obj) {
+                return obj.HasComponent<T>();
+            };
+
+            creators[name] = [](GameObject& obj) {
+                if (!obj.HasComponent<T>()) {
+                    if constexpr (std::is_default_constructible_v<T>) {
+                        obj.AddComponent<T>(T());
+                    } else {
+                        log("Error: Component '%s' is not default constructible.", typeid(T).name());
+                    }
+                }
+            };
+
             registeredNames.push_back(name);
         }
 
@@ -118,6 +137,24 @@ public:
             }
         }
 
+        std::vector<std::string> getMissingComponents(const GameObject& obj) {
+                std::vector<std::string> missing;
+                for (const auto& name : registeredNames) {
+                    if (checkers.find(name) != checkers.end() && !checkers[name](obj)) {
+                        missing.push_back(name);
+                    }
+                }
+                return missing;
+            }
+
+            void createComponent(GameObject& obj, const std::string& name) {
+                    if (creators.find(name) != creators.end()) {
+                        creators[name](obj);
+                    } else {
+                        log("Error: Cannot create component '%s', not registered.", name.c_str());
+                    }
+                }
+
     const std::unordered_map<std::string, ComponentInspector>& getInspectors() const {
         return inspectors;
     }
@@ -130,6 +167,8 @@ private:
     std::unordered_map<std::string, ComponentLoader> loaders;
     std::unordered_map<std::string, ComponentSaver> savers;
     std::unordered_map<std::string, ComponentInspector> inspectors;
+    std::unordered_map<std::string, ComponentChecker> checkers;
+    std::unordered_map<std::string, ComponentCreator> creators;
 };
 
 }
