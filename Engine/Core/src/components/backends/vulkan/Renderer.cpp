@@ -330,17 +330,22 @@ namespace vex {
 
                 if (mesh.renderType == RenderType::OPAQUE) {
                     auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
-                    vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
+                    if (vulkanMesh) {
+                        vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
+                    }
                 } else if (mesh.renderType == RenderType::TRANSPARENT) {
                      auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
-                     vulkanMesh->extractTransparentTriangles(
-                         modelMatrix,
-                         cameraPos,
-                         modelIndex,
-                         m_r_context.currentFrame,
-                         m_transparentTriangles
-                     );
-                     trnasMatrixes[modelIndex] = modelMatrix;
+
+                     if (vulkanMesh) {
+                         vulkanMesh->extractTransparentTriangles(
+                             modelMatrix,
+                             cameraPos,
+                             modelIndex,
+                             m_r_context.currentFrame,
+                             m_transparentTriangles
+                         );
+                         trnasMatrixes[modelIndex] = modelMatrix;
+                     }
                 }
                 modelIndex++;
                 if(mesh.getIsFresh()) mesh.setRendered();
@@ -887,8 +892,10 @@ namespace vex {
 
                     if (mesh.renderType == RenderType::OPAQUE) {
                         auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(modelView.get<MeshComponent>(entity));
-                        vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, modelMatrix, modelView.get<MeshComponent>(entity).color);
-                        //modelIndex++;
+
+                        if (vulkanMesh) {
+                            vulkanMesh->draw(commandBuffer, m_p_pipeline->layout(), *m_p_resources, m_r_context.currentFrame, modelIndex, modelMatrix, modelView.get<MeshComponent>(entity).color);
+                        }//modelIndex++;
                     } else if (mesh.renderType == RenderType::TRANSPARENT) {
                         //float distance = glm::length(transform.getWorldPosition(registry) - cameraPos);
                         //transparentEntities.emplace_back(entity, distance);
@@ -896,16 +903,18 @@ namespace vex {
                         //float distToCam = glm::distance(transform.getWorldPosition(), cameraPos);
                         //if (distToCam < camera.farPlane + mesh.worldRadius) {
                             auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
-                            vulkanMesh->extractTransparentTriangles(
-                                modelMatrix,
-                                cameraPos,
-                                modelIndex,
-                                m_r_context.currentFrame,
-                                m_transparentTriangles
-                            );
 
-                            trnasMatrixes[modelIndex] = modelMatrix;
-                            //}
+                            if (vulkanMesh) {
+                                vulkanMesh->extractTransparentTriangles(
+                                    modelMatrix,
+                                    cameraPos,
+                                    modelIndex,
+                                    m_r_context.currentFrame,
+                                    m_transparentTriangles
+                                );
+
+                                trnasMatrixes[modelIndex] = modelMatrix;
+                            }
                     }
                     modelIndex++;
 

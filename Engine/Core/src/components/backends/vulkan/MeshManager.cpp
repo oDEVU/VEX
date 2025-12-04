@@ -148,6 +148,17 @@ namespace vex {
 
     std::unique_ptr<VulkanMesh>& MeshManager::getVulkanMeshByMesh(MeshComponent& meshComponent) {
         if (!m_vulkanMeshes.count(meshComponent.meshData.meshPath)){
+
+            static std::unique_ptr<VulkanMesh> nullMesh = nullptr;
+
+            #if DEBUG
+            std::string realPath = GetAssetPath(meshComponent.meshData.meshPath);
+            if (!m_vfs->file_exists(realPath)) {
+                // skip
+                return nullMesh;
+            }
+            #endif
+
             meshComponent = loadMesh(meshComponent.meshData.meshPath);
         }
         return m_vulkanMeshes.at(meshComponent.meshData.meshPath);
