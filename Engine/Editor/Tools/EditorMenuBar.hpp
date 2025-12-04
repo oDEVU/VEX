@@ -19,9 +19,10 @@ public:
     void OpenScene();
     void OpenEditorSettings();
     void SaveSceneAs();
-    void RunBuild(bool isDebug);
+    void RunBuild(bool isDebug, bool runAfter = false);
     void NewScene();
 private:
+    std::string GetProjectName();
     vex::ImGUIWrapper& m_ImGUIWrapper;
     vex::Editor& m_editor;
     std::vector<std::shared_ptr<BasicEditorWindow>> m_Windows;

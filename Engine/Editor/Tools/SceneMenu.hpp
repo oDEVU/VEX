@@ -50,6 +50,14 @@ inline void DrawEntityNode(
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 
+    bool isSelected = (selectedObject.second == obj);
+
+    if (isSelected) {
+        flags |= ImGuiTreeNodeFlags_Selected;
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(1.00f, 0.23f, 0.01f, 0.30f));
+        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.00f, 0.23f, 0.01f, 0.40f));
+    }
+
     if (selectedObject.second == obj) {
         flags |= ImGuiTreeNodeFlags_Selected;
     }
@@ -60,13 +68,17 @@ inline void DrawEntityNode(
     }
 
     if (isRuntime) {
-        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 225, 0, 255));
+        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 59, 3, 255));
     }
 
     bool isOpen = ImGui::TreeNodeEx((void*)(uint64_t)entityID, flags, "%s", name.c_str());
 
     if (isRuntime) {
         ImGui::PopStyleColor();
+    }
+
+    if (isSelected) {
+        ImGui::PopStyleColor(2);
     }
 
     if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
@@ -109,12 +121,12 @@ inline void DrawEntityNode(
         std::string className = Demangle(rawName);
 
         ImGui::BeginTooltip();
-        ImGui::TextColored(ImVec4(0.2f, 0.4f, 1.0f, 1.0f), "Object Details");
+        ImGui::TextColored(ImVec4(1.00f, 0.23f, 0.01f, 1.0f), "Object Details");
         ImGui::Separator();
         ImGui::Text("C++ Class: %s", className.c_str());
         ImGui::Text("Entity ID: %u", (uint32_t)entityID);
         if (isRuntime) {
-            ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.0f, 1.0f), "Warning: Object created at runtime\n(Won't be saved)");
+            ImGui::TextColored(ImVec4(0.47f, 0.05f, 0.05f, 1.0f), "Warning: Object created at runtime\n(Won't be saved)");
         }
         ImGui::EndTooltip();
     }

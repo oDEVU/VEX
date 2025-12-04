@@ -44,10 +44,10 @@ void EditorMenuBar::DrawBar(){
         }
         if (ImGui::BeginMenu("Build")) {
             if (ImGui::MenuItem("Build Debug")) {
-                RunBuild(true);
+                RunBuild(true, false);
             }
             if (ImGui::MenuItem("Build Release")) {
-                RunBuild(false);
+                RunBuild(false, false);
             }
             ImGui::EndMenu();
         }
@@ -57,6 +57,38 @@ void EditorMenuBar::DrawBar(){
             }
             if (ImGui::MenuItem("Project Settings")) {}
             ImGui::EndMenu();
+        }
+
+        float runMenuWidth = ImGui::CalcTextSize("Run").x + 40.0f;
+        float currentPos = ImGui::GetCursorPosX();
+        float rightPos = ImGui::GetWindowWidth() - runMenuWidth;
+
+        if (rightPos > currentPos) {
+            ImGui::SetCursorPosX(rightPos);
+        }
+
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.00f, 0.23f, 0.01f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.30f, 0.03f, 0.03f, 1.0f));
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.94f, 0.85f, 0.85f, 1.0f));
+
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
+
+        if (ImGui::Button("Run", ImVec2(runMenuWidth - 10, 0))) {
+            ImGui::OpenPopup("RunPopup");
+        }
+
+        ImGui::PopStyleVar();
+        ImGui::PopStyleColor(4);
+
+        if (ImGui::BeginPopup("RunPopup")) {
+            if (ImGui::MenuItem("Debug")) {
+                RunBuild(true, true);
+            }
+            if (ImGui::MenuItem("Release")) {
+                RunBuild(false, true);
+            }
+            ImGui::EndPopup();
         }
         ImGui::EndMenuBar();
     }
@@ -203,7 +235,25 @@ void EditorMenuBar::SaveSceneAs() {
     openSceneWindow->Create(m_ImGUIWrapper);
 }
 
-void EditorMenuBar::RunBuild(bool isDebug) {
+std::string EditorMenuBar::GetProjectName() {
+    std::filesystem::path projectFile = std::filesystem::path(m_editor.getProjectBinaryPath()) / "VexProject.json";
+
+    std::ifstream file(projectFile);
+    if (file.is_open()) {
+        try {
+            nlohmann::json j;
+            file >> j;
+            if (j.contains("project_name")) {
+                return j["project_name"].get<std::string>();
+            }
+        } catch (...) {
+            vex::log("Error: Failed to parse VexProject.json");
+        }
+    }
+    return "";
+}
+
+void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
     struct BuildState {
         std::string logs = "";
         bool isFinished = false;
@@ -266,13 +316,48 @@ void EditorMenuBar::RunBuild(bool isDebug) {
     m_Windows.push_back(buildWindow);
     buildWindow->Create(m_ImGUIWrapper);
 
-    std::thread([command, state]() {
+    std::thread([command, state, this, isDebug, runAfter]() {
         executeCommandRealTime(command,
             [state](const std::string& line) {
                 std::lock_guard<std::mutex> lock(state->logMutex);
                 state->logs += line;
             }
         );
+
+        if (runAfter) {
+            std::string projectName = GetProjectName();
+            if (projectName.empty()) {
+                std::lock_guard<std::mutex> lock(state->logMutex);
+                state->logs += "\n[Error] Could not retrieve Project Name from VexProject.json. Cannot run.\n";
+            } else {
+                std::filesystem::path runPath(m_editor.getProjectBinaryPath());
+                runPath = runPath / "Build" / (isDebug ? "Debug" : "Release");
+                runPath = runPath / projectName;
+
+                #ifdef _WIN32
+                    runPath += ".exe";
+                #endif
+
+                if (std::filesystem::exists(runPath)) {
+                    {
+                        std::lock_guard<std::mutex> lock(state->logMutex);
+                        state->logs += "\n=== Build Complete. Launching: " + runPath.string() + " ===\n";
+                    }
+
+                    std::string runCmd = "\"" + runPath.string() + "\"";
+
+                    executeCommandRealTime(runCmd,
+                        [state](const std::string& line) {
+                            std::lock_guard<std::mutex> lock(state->logMutex);
+                            state->logs += line;
+                        }
+                    );
+                } else {
+                    std::lock_guard<std::mutex> lock(state->logMutex);
+                    state->logs += "\n[Error] Executable not found at: " + runPath.string() + "\n";
+                }
+            }
+        }
 
         {
             std::lock_guard<std::mutex> lock(state->logMutex);

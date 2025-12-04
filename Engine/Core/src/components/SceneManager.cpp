@@ -74,9 +74,16 @@ namespace vex {
                         ImReflect::Input("Sensor", pc.isSensor);
                         ImReflect::Input("Allow Sleeping", pc.allowSleeping);
 
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.71f, 0.10f, 0.10f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.30f, 0.03f, 0.03f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.94f, 0.85f, 0.85f, 1.0f)); // White Text
+
                         if (ImGui::Button("Remove")) {
                             obj.GetEngine().getRegistry().remove<vex::PhysicsComponent>(obj.GetEntity());
                         }
+
+                        ImGui::PopStyleColor(4);
                     }
                 }
             }

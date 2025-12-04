@@ -237,7 +237,7 @@ namespace vex {
 
         auto GizmoButton = [&](const char* label, ImGuizmo::OPERATION op) {
             bool wasActive = (m_currentGizmoOperation == op);
-            if (wasActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0.5f, 0, 1));
+            if (wasActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.00f, 0.23f, 0.01f, 1.0f));
             if (ImGui::Button(label)) m_currentGizmoOperation = op;
             if (wasActive) ImGui::PopStyleColor();
             if (ImGui::IsItemHovered()) m_isHoveringGizmoUI = true;

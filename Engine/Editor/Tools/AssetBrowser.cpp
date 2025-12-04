@@ -114,7 +114,7 @@ namespace vex {
 
                 float textWidth = ImGui::CalcTextSize(filename.c_str()).x;
 
-                if (textWidth < (columnWidth * 1.5f)) {
+                if (textWidth < (columnWidth * 1.1f)) {
                     float textOffset = (columnWidth - textWidth) * 0.5f;
                     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textOffset);
                     ImGui::Text("%s", filename.c_str());
