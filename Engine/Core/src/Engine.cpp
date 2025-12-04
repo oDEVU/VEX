@@ -2,6 +2,7 @@
 #include "Engine.hpp"
 #include "SDL3/SDL_events.h"
 
+#include "components/GameComponents/BasicComponents.hpp"
 #include "components/VirtualFileSystem.hpp"
 #include "components/Window.hpp"
 #include "components/pathUtils.hpp"
@@ -106,6 +107,14 @@ void Engine::run(std::function<void()> onUpdateLoop) {
                     break;
             }
         }
+
+        auto transformView = m_registry.view<TransformComponent>();
+        for (auto entity : transformView) {
+            if(!transformView.get<TransformComponent>(entity).isReady()){
+                transformView.get<TransformComponent>(entity).setRegistry(m_registry);
+            }
+        }
+
         update(deltaTime);
     }
 }
