@@ -15,7 +15,9 @@ namespace vex {
             changed |= ImGui::Checkbox("Vertex Jitter (Passive)", &env.passiveVertexJitter);
             changed |= ImGui::Checkbox("Vertex Snapping (Active)", &env.vertexSnapping);
             changed |= ImGui::Checkbox("Affine Texture Warping", &env.affineWarping);
-            changed |= ImGui::Checkbox("Color Quantization", &env.colorQuantization);
+            changed |= ImGui::Checkbox("Screen Color Quantization", &env.screenQuantization);
+            changed |= ImGui::Checkbox("Texture Color Quantization", &env.textureQuantization);
+            changed |= ImGui::Checkbox("Screen Dithering", &env.screenDither);
             changed |= ImGui::Checkbox("NTSC Artifacts", &env.ntfsArtifacts);
         }
 

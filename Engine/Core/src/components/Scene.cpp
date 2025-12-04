@@ -47,7 +47,9 @@ void Scene::load(){
         env.passiveVertexJitter = shading.value("passiveVertexJitter", env.passiveVertexJitter);
         env.vertexSnapping = shading.value("vertexSnapping", env.vertexSnapping);
         env.affineWarping = shading.value("affineTextureWarping", env.affineWarping);
-        env.colorQuantization = shading.value("colorQuantization", env.colorQuantization);
+        env.screenQuantization = shading.value("screenQuantization", env.screenQuantization);
+        env.textureQuantization = shading.value("textureQuantization", env.textureQuantization);
+        env.screenDither = shading.value("screenDither", env.screenDither);
         env.ntfsArtifacts = shading.value("ntfsArtifacts", env.ntfsArtifacts);
     }
 
@@ -277,7 +279,9 @@ void Scene::Save(const std::string& path) {
         {"passiveVertexJitter", env.passiveVertexJitter},
         {"vertexSnapping", env.vertexSnapping},
         {"affineTextureWarping", env.affineWarping},
-        {"colorQuantization", env.colorQuantization},
+        {"screenQuantization", env.screenQuantization},
+        {"textureQuantization", env.textureQuantization},
+        {"screenDither", env.screenDither},
         {"ntfsArtifacts", env.ntfsArtifacts}
     };
 

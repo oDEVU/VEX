@@ -95,7 +95,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float4 pushColor = push.color;
   bool isUntextured = HasInValidUV(uv); // false;//(uv.x < 0.0 || uv.y < 0.0);
 
-  if (isEnabled(COLOR_QUANTIZATION)) {
+  if (isEnabled(TEXTURE_QUANTIZATION)) {
     float4 c = isUntextured ? pushColor : texColor;
     c = applyQuantization(c, pixelCoord, true);
     if (isUntextured)
@@ -122,6 +122,18 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
                                    : (texColor * float4(lighting, 1.0));
   finalColor.a = 1.0;
+
+  if (isEnabled(COLOR_QUANTIZATION)) {
+    float4 c = finalColor;
+    c = applyQuantization(c, pixelCoord, true);
+    finalColor = c;
+  }
+
+  if (isEnabled(SCREEN_DITHER)) {
+    float3 c = finalColor.rgb;
+    c = applyDither(c, pixelCoord);
+    finalColor.rgb = c;
+  }
 
   return finalColor;
 }

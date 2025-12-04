@@ -1,57 +1,118 @@
 {
-  "environment": {
-    "lighting": {
-      "ambientLight": [0.06, 0.08, 0.15],
-      "ambientLightStrength": 0.3,
-      "sunLight": [0.05, 0.05, 0.05, 1.0],
-      "sunDirection": [1.0, 1.0, -1.0],
-      "clearColor": [0.0, 0.0, 0.0]
-    },
-    "shading": {
-      "gouraud": true,
-      "passiveVertexJitter": true,
-      "vertexSnapping": true,
-      "affineTextureWarping": true,
-      "colorQuantization": true,
-      "ntfsArtifacts": true
-    }
-  },
-  "objects": [
-    {
-      "type": "Player",
-      "name": "Player",
-      "components": [
-        {
-          "type": "vex::TransformComponent",
-          "position": [-65.0, 9.5, -28.0],
-          "rotation": [-25.0, 270.0, 0.0],
-          "scale": [1.0, 1.0, 1.0]
+    "environment": {
+        "lighting": {
+            "ambientLight": [
+                0.05999999865889549,
+                0.07999999821186066,
+                0.15000000596046448
+            ],
+            "ambientLightStrength": 0.30000001192092896,
+            "clearColor": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "sunDirection": [
+                1.0,
+                1.0,
+                -1.0
+            ],
+            "sunLight": [
+                0.05000000074505806,
+                0.05000000074505806,
+                0.05000000074505806
+            ]
+        },
+        "shading": {
+            "affineTextureWarping": true,
+            "gouraud": true,
+            "ntfsArtifacts": true,
+            "passiveVertexJitter": true,
+            "screenDither": true,
+            "screenQuantization": false,
+            "textureQuantization": true,
+            "vertexSnapping": true
         }
-      ]
     },
-    {
-      "type": "CameraObject",
-      "name": "mainCamera",
-      "parent": "Player",
-      "components": [
+    "objects": [
         {
-          "type": "vex::TransformComponent",
-          "position": [0.0, 0.0, 0.0],
-          "rotation": [0.0, 0.0, 0.0],
-          "scale": [1.0, 1.0, 1.0]
+            "components": [
+                {
+                    "position": [
+                        -65.0,
+                        9.5,
+                        -28.0
+                    ],
+                    "rotation": [
+                        335.0,
+                        -90.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                }
+            ],
+            "name": "Player",
+            "type": "Player"
         },
         {
-          "type": "vex::CameraComponent",
-          "fov": 90.0,
-          "nearPlane": 0.1,
-          "farPlane": 1000.0
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                }
+            ],
+            "name": "Map",
+            "type": "Map"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "farPlane": 1000.0,
+                    "fov": 90.0,
+                    "nearPlane": 0.10000000149011612,
+                    "type": "vex::CameraComponent"
+                }
+            ],
+            "name": "mainCamera",
+            "parent": "Player",
+            "type": "CameraObject"
         }
-      ]
-    },
-    {
-      "type": "Map",
-      "name": "Map",
-      "components": []
-    }
-  ]
+    ]
 }

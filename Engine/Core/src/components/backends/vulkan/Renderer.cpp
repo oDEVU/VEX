@@ -226,8 +226,8 @@ namespace vex {
                 m_sceneUBO.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
             }
 
-            if(m_r_context.m_enviroment.colorQuantization){
-                m_sceneUBO.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
+            if(m_r_context.m_enviroment.screenQuantization){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::SCREEN_QUANTIZATION;
             }
 
             if(m_r_context.m_enviroment.ntfsArtifacts){
@@ -236,6 +236,14 @@ namespace vex {
 
             if(m_r_context.m_enviroment.gourardShading){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
+            }
+
+            if(m_r_context.m_enviroment.textureQuantization){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::TEXTURE_QUANTIZATION;
+            }
+
+            if(m_r_context.m_enviroment.screenDither){
+                m_sceneUBO.enablePS1Effects |= PS1Effects::SCREEN_DITHER;
             }
 
             m_sceneUBO.renderResolution = m_r_context.currentRenderResolution;
@@ -669,8 +677,8 @@ namespace vex {
             m_sceneUBO.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
         }
 
-        if(m_r_context.m_enviroment.colorQuantization){
-            m_sceneUBO.enablePS1Effects |= PS1Effects::COLOR_QUANTIZATION;
+        if(m_r_context.m_enviroment.screenQuantization){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::SCREEN_QUANTIZATION;
         }
 
         if(m_r_context.m_enviroment.ntfsArtifacts){
@@ -679,6 +687,14 @@ namespace vex {
 
         if(m_r_context.m_enviroment.gourardShading){
             m_sceneUBO.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
+        }
+
+        if(m_r_context.m_enviroment.textureQuantization){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::TEXTURE_QUANTIZATION;
+        }
+
+        if(m_r_context.m_enviroment.screenDither){
+            m_sceneUBO.enablePS1Effects |= PS1Effects::SCREEN_DITHER;
         }
 
         m_sceneUBO.renderResolution = m_r_context.currentRenderResolution;
