@@ -128,6 +128,9 @@ namespace vex {
         void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
 
+            auto now = std::chrono::high_resolution_clock::now();
+            currentTime = std::chrono::duration<float>(now - startTime).count();
+
             if (m_lastUsedView != m_r_context.lowResColorView) {
                 updateScreenDescriptor(m_r_context.lowResColorView);
                 m_cachedImGuiDescriptor = VK_NULL_HANDLE;
