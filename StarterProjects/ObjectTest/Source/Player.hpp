@@ -118,7 +118,7 @@ public:
         //m_engine.getPhysicsSystem()->SetAngularFactor(pc.bodyId, glm::vec3(0.0f, 1.0f, 0.0f));
 
         // temponary just to test stuff, dont do that, dont retrive object everyframe.
-        GameObject* object = m_engine.getSceneManager()->GetGameObjectByName("Assets/scenes/main.json", "MyModel");
+        GameObject* object = m_engine.getSceneManager()->GetScene("Assets/scenes/main.json")->GetAllGameObjectsByName("MyModel")[0];
         if (object) {
             object->GetComponent<TransformComponent>().addPitch(0.1f);
         }

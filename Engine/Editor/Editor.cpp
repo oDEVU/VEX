@@ -338,7 +338,7 @@ namespace vex {
     }
 
     void Editor::ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
-        auto* obj = getSceneManager()->GetGameObjectByEntity(getSceneManager()->getLastSceneName(), entity);
+        auto* obj = getSceneManager()->GetScene(getSceneManager()->getLastSceneName())->GetGameObjectByEntity(entity);
         if(obj){
             if (obj->GetComponent<TransformComponent>().getParent() != entt::null) {
                 ExtractObjectByEntity(obj->GetComponent<TransformComponent>().getParent(), selectedObject);

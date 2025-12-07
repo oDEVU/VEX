@@ -234,18 +234,34 @@ void Scene::DestroyGameObject(GameObject* obj) {
     }
 }
 
-GameObject* Scene::GetGameObjectByName(const std::string& name){
+std::vector<GameObject*> Scene::GetAllGameObjectsByName(const std::string& name){
+    std::vector<GameObject*> returnVector;
     for(const auto& obj : m_objects){
         if(obj->GetComponent<NameComponent>().name == name){
-            return obj.get();
+            returnVector.push_back(obj.get());
         }
     }
     for(const auto& obj : m_addedObjects){
         if(obj->GetComponent<NameComponent>().name == name){
-            return obj.get();
+            returnVector.push_back(obj.get());
         }
     }
-    return nullptr;
+    return returnVector;
+}
+
+std::vector<GameObject*> Scene::GetAllGameObjectsByClassName(const std::string& classname){
+    std::vector<GameObject*> returnVector;
+    for(const auto& obj : m_objects){
+        if(obj->getObjectType() == classname){
+            returnVector.push_back(obj.get());
+        }
+    }
+    for(const auto& obj : m_addedObjects){
+        if(obj->getObjectType() == classname){
+            returnVector.push_back(obj.get());
+        }
+    }
+    return returnVector;
 }
 
 GameObject* Scene::GetGameObjectByEntity(entt::entity& entity){

@@ -36,23 +36,6 @@ void clearScenes();
 /// @param float deltaTime - Delta time since last frame.
 void scenesUpdate(float deltaTime);
 
-/// @brief Function to add a game object to a scene.
-/// @param const std::string& scene - Name of the scene to add the game object to.
-/// @param std::shared_ptr<GameObject> gameObject - Shared pointer to the game object to add.
-void AddGameObjectToScene(const std::string& scene, std::unique_ptr<GameObject> gameObject);
-
-/// @brief Function to get game object by its unique name.
-/// @param const std::string& scene - Name of the scene to get the game object from.
-/// @param const std::string& name - Name of the game object to get.
-/// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
-GameObject* GetGameObjectByName(const std::string& scene, const std::string& name);
-
-/// @brief Function to get game object by its unique name.
-/// @param const std::string& scene - Name of the scene to get the game object from.
-/// @param const entt::entity& entity - Entity of the game object to get.
-/// @return std::shared_ptr<GameObject> - Shared pointer to the game object.
-GameObject* GetGameObjectByEntity(const std::string& scene, entt::entity& entity);
-
 /// @brief Function to get all game objects.
 /// @param const std::string& scene - Name of the scene to get the game objects from.
 /// @return const std::vector<std::shared_ptr<GameObject>>& - Vector of game objects.

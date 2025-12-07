@@ -148,18 +148,6 @@ void SceneManager::scenesUpdate(float deltaTime){
     }
 }
 
-void SceneManager::AddGameObjectToScene(const std::string& scene, std::unique_ptr<GameObject> gameObject){
-    m_scenes[scene]->AddGameObject(std::move(gameObject));
-}
-
-GameObject* SceneManager::GetGameObjectByName(const std::string& scene, const std::string& name){
-    return m_scenes[scene]->GetGameObjectByName(name);
-}
-
-GameObject* SceneManager::GetGameObjectByEntity(const std::string& scene, entt::entity& entity){
-    return m_scenes[scene]->GetGameObjectByEntity(entity);
-}
-
 std::vector<std::string> SceneManager::GetAllSceneNames() const {
     std::vector<std::string> names;
     names.reserve(m_scenes.size());

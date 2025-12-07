@@ -45,14 +45,19 @@ void sceneUpdate(float deltaTime);
 /// @param std::unique_ptr<GameObject> gameObject - Shared pointer to the game object to add.
 void AddGameObject(std::unique_ptr<GameObject> gameObject);
 
-/// @brief Function to get game object by its unique name.
+/// @brief Function to get all game objects with name.
 /// @param const std::string& name - Name of the game object to get.
-/// @return GameObject* - Shared pointer to the game object.
-GameObject* GetGameObjectByName(const std::string& name);
+/// @return std::vector<GameObject*> - vector of pointers to the game object.
+std::vector<GameObject*> GetAllGameObjectsByName(const std::string& name);
+
+/// @brief Function to get all gameobject of class
+/// @param const std::string classname - class name in string form.
+/// @return std::vector<GameObject*> - vector of pointers to the game object.
+std::vector<GameObject*> GetAllGameObjectsByClassName(const std::string& classname);
 
 /// @brief Function to get game object by its entity.
 /// @param entt::entity& entity - Entity of the game object to get.
-/// @return GameObject* - Shared pointer to the game object.
+/// @return GameObject* - pointer to the game object.
 GameObject* GetGameObjectByEntity(entt::entity& entity);
 
 /// @brief Function to register a game object in the scene.
@@ -78,6 +83,10 @@ void Save(const std::string& outputPath);
 /// @brief Function to add a game object specifically for Editor usage (saved to file).
 /// @param GameObject* gameObject - Pointer to the object.
 void AddEditorGameObject(GameObject* gameObject);
+
+std::string GetScenePath(){
+    return m_path;
+}
 
 private:
 

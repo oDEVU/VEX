@@ -25,10 +25,12 @@
         },
         "shading": {
             "affineTextureWarping": false,
-            "colorQuantization": false,
             "gouraud": false,
             "ntfsArtifacts": false,
             "passiveVertexJitter": false,
+            "screenDither": false,
+            "screenQuantization": false,
+            "textureQuantization": false,
             "vertexSnapping": false
         }
     },
@@ -106,6 +108,51 @@
             "components": [],
             "name": "Map",
             "type": "Map"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        5.74713134765625,
+                        1.9063008949160576e-08,
+                        5.441570281982422
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.10000000149011612,
+                        0.10000000149011612,
+                        0.10000000149011612
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "color": [
+                        0.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "path": "Assets/cube.obj",
+                    "renderType": 0,
+                    "type": "vex::MeshComponent"
+                },
+                {
+                    "color": [
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "intensity": 3.0,
+                    "radius": 20.0,
+                    "type": "vex::LightComponent"
+                }
+            ],
+            "name": "EditorTestModel",
+            "type": "GameObject"
         },
         {
             "components": [
