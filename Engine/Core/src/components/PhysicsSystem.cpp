@@ -7,6 +7,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <components/errorUtils.hpp>
 #include <thread>
+#include <execution>
 
 #include <components/JoltSafe.hpp>
 
@@ -105,11 +106,7 @@ namespace vex {
             if (tc.transformedLately()) {
                 JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
                 JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
-                //if (pc.bodyType == BodyType::KINEMATIC || pc.isSensor) {
-                    //bodyInterface.MoveKinematic(pc.bodyId, pos, rot, deltaTime);
-                    //} else {
                     bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
-                    //}
                 tc.updatedPhysicsTransform();
             }
         }
@@ -121,10 +118,22 @@ namespace vex {
             m_accumulator -= m_fixedDt;
         }
 
-        for (auto e : view) {
-            auto& pc = view.get<PhysicsComponent>(e);
-            if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
-                SyncBodyToTransform(e, m_registry, pc.bodyId);
+        //for (auto e : view) {
+        if(view.size_hint() > 64){
+            //log("--- mt ---");
+            std::for_each(std::execution::par_unseq, view.begin(), view.end(), [&](auto e) {
+                auto& pc = view.get<PhysicsComponent>(e);
+                if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
+                    SyncBodyToTransform(e, m_registry, pc.bodyId);
+                }
+            });
+        }else{
+            //log("--- st ---");
+            for (auto e : view) {
+                auto& pc = view.get<PhysicsComponent>(e);
+                if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
+                    SyncBodyToTransform(e, m_registry, pc.bodyId);
+                }
             }
         }
     }

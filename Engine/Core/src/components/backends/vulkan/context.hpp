@@ -15,6 +15,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include <flat_map>
 #include <string>
 #include "components/enviroment.hpp"
 
@@ -105,7 +106,7 @@ namespace vex {
         VkDescriptorSetLayout uboDescriptorSetLayout = VK_NULL_HANDLE;
         VkDescriptorSetLayout textureDescriptorSetLayout = VK_NULL_HANDLE;
 
-        std::unordered_map<std::string, uint32_t> textureIndices;
+        std::flat_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;
 
         glm::uvec2 currentRenderResolution;

@@ -36,7 +36,9 @@ namespace vex {
             }
         }
 
-        for (auto& [name, image] : m_textureImages) {
+        /// @todo, cleanup this properly
+
+        /*/for (auto& [name, image] : m_textureImages) {
             if (m_textureViews[name] != VK_NULL_HANDLE) {
                 vkDestroyImageView(m_r_context.device, m_textureViews[name], nullptr);
                 m_textureViews[name] = VK_NULL_HANDLE;
@@ -45,7 +47,11 @@ namespace vex {
                 vmaDestroyImage(m_r_context.allocator, image, m_textureAllocations[name]);
                 image = VK_NULL_HANDLE;
             }
-        }
+        }*/
+
+        m_textureImages.clear();
+        m_textureAllocations.clear();
+        m_textureViews.clear();
 
         if (m_descriptorPool != VK_NULL_HANDLE) {
             vkDestroyDescriptorPool(m_r_context.device, m_descriptorPool, nullptr);

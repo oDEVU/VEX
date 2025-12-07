@@ -6,10 +6,12 @@
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/enviroment.hpp"
 #include "VirtualFileSystem.hpp"
+#include <execution>
 #include <nlohmann/json.hpp>
 #include <cstdint>
 #include <fstream>
 #include <filesystem>
+#include <exception>
 
 namespace vex {
 
@@ -166,24 +168,45 @@ void Scene::load(){
 
 void Scene::sceneBegin(){
     load();
-    for (auto& obj : m_objects) {
-        try{
-            obj->BeginPlay();
-        }catch(const std::exception& e){
-            log("Error: %s", e.what());
+
+    // experimental, new thing i learned idk if it will help performance at all.
+    uint32_t size = m_objects.size();
+    size += m_addedObjects.size();
+    if(size > 50){
+        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](auto& obj){
+            try{
+                obj->BeginPlay();
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
+        });
+        std::for_each(std::execution::par_unseq, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
+            try{
+                obj->BeginPlay();
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
+        });
+    }else{
+        for (auto& obj : m_objects) {
+            try{
+                obj->BeginPlay();
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
         }
-    }
-    for(auto& obj : m_addedObjects){
-        try{
-            obj->BeginPlay();
-        }catch(const std::exception& e){
-            log("Error: %s", e.what());
+        for (auto& obj : m_addedObjects) {
+            try{
+                obj->BeginPlay();
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
         }
     }
 }
 
 void Scene::sceneUpdate(float deltaTime){
-    for (auto& obj : m_objects) {
+    /*for (auto& obj : m_objects) {
         try{
             obj->Update(deltaTime);
         }catch(const std::exception& e){
@@ -195,6 +218,41 @@ void Scene::sceneUpdate(float deltaTime){
             obj->Update(deltaTime);
         }catch(const std::exception& e){
             log("Error: %s", e.what());
+        }
+        }*/
+
+
+    uint32_t size = m_objects.size();
+    size += m_addedObjects.size();
+    if(size > 50){
+        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](auto& obj){
+            try{
+                obj->Update(deltaTime);
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
+        });
+        std::for_each(std::execution::par_unseq, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
+            try{
+                obj->Update(deltaTime);
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
+        });
+    }else{
+        for (auto& obj : m_objects) {
+            try{
+                obj->Update(deltaTime);
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
+        }
+        for (auto& obj : m_addedObjects) {
+            try{
+                obj->Update(deltaTime);
+            }catch(const std::exception& e){
+                log("Error: %s", e.what());
+            }
         }
     }
 }

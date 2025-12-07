@@ -10,22 +10,7 @@ namespace vex {
     GameObject::GameObject(Engine& engine, const std::string& name)
         : m_engine(engine), m_entity(m_engine.getRegistry().create()), m_isValid(true)
     {
-        std::string tempName = name;
-
-        // This logic now runs INSIDE VEX.DLL, using VEX's EnTT Type IDs
-        auto view = engine.getRegistry().view<NameComponent>();
-        for (auto entity : view) {
-            const auto& comp = view.get<NameComponent>(entity);
-            if (comp.name == tempName) {
-                log("Warning: Duplicate object name '%s'.", tempName.c_str());
-                // vex::UUID uuidGenerator; // Use namespace if you added one
-                // tempName = tempName + uuidGenerator.generate_uuid();
-                tempName = tempName + "_" + std::to_string((uint32_t)m_entity); // Simple fallback
-            }
-        }
-
-        // CRITICAL: This now uses the Engine's ID for NameComponent
-        m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
+        m_engine.getRegistry().emplace<NameComponent>(m_entity, name);
         auto* scene = m_engine.getSceneManager()->GetScene(m_engine.getSceneManager()->getLastSceneName());
         if(scene){
             scene->RegisterGameObject(this);

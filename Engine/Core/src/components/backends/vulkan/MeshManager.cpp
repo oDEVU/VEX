@@ -29,18 +29,6 @@ namespace vex {
 
         std::string tempName = name;
 
-        auto view = m_p_engine->getRegistry().view<NameComponent>();
-        for (auto entity : view) {
-            auto meshComponent = view.get<NameComponent>(entity);
-            if(meshComponent.name == tempName){
-                log("Warning: Object with name: '%s already exists! All objects should have unique names.", tempName.c_str());
-                tp::UUID uuidGenerator;
-                tempName = tempName + uuidGenerator.generate_uuid();
-                log("Info: Object created with name: '%s', it is still recommended to not rely on this name for identification. It is different every app run.", tempName.c_str());
-            }
-        }
-        //m_m_p_engine->getRegistry().emplace<NameComponent>(m_entity, tempName);
-
         uint32_t newId;
         if (!m_freeModelIds.empty()) {
             newId = m_freeModelIds.back();
