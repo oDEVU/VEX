@@ -553,43 +553,49 @@ namespace vex {
             std::string fullPath = path;//"Assets/" + std::string(path.c_str());
 
             if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
-                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                           "Maximum texture count (%u) reached!",
-                           MAX_TEXTURES);
+                log(LogLevel::ERROR, "Maximum texture count (%u) reached!", MAX_TEXTURES);
                 return;
             }
 
+            stbi_uc* pixels = nullptr;
+            int texWidth, texHeight, texChannels;
+
+            try {
                 // Use VFS to check if file exists and get data
                 if (!vfs->file_exists(fullPath)) {
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Texture file not found in VFS: %s", fullPath.c_str());
+                    log(LogLevel::ERROR, "Texture file not found in VFS: %s", fullPath.c_str());
                     throw_error("Missing texture in VFS: " + fullPath);
                 }
 
                 log("VFS loading image...");
-                int texWidth, texHeight, texChannels;
+                //int texWidth, texHeight, texChannels;
 
                 // Load file data through VFS
                 auto fileData = vfs->load_file(fullPath);  // This returns std::unique_ptr<FileData>
                 if (!fileData) {
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "VFS failed to load texture: %s", fullPath.c_str());
+                    log(LogLevel::ERROR, "VFS failed to load texture: %s", fullPath.c_str());
                     throw_error("VFS failed to load texture: " + fullPath);
                 }
 
                 // Use stbi_load_from_memory instead of stbi_load
-                stbi_uc* pixels = stbi_load_from_memory(
+                pixels = stbi_load_from_memory(
                     reinterpret_cast<const stbi_uc*>(fileData->data.data()),  // fileData is a pointer
                     static_cast<int>(fileData->size),                         // fileData->size is member
                     &texWidth, &texHeight, &texChannels, STBI_rgb_alpha
                 );
 
                 if (!pixels) {
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "STBI failed: %s", stbi_failure_reason());
-                    throw_error("Failed to load texture pixels from VFS data");
+                    throw_error("STBI failed: " + std::string(stbi_failure_reason()));
                 }
+            } catch (const std::exception& e) {
+                log(LogLevel::ERROR, "Failed to load image data for %s", fullPath.c_str());
+                if (pixels) stbi_image_free(pixels);
+                throw;
+            }
 
-                log("Image loaded from VFS: %dx%d, %d channels", texWidth, texHeight, texChannels);
+            log("Image loaded from VFS: %dx%d, %d channels", texWidth, texHeight, texChannels);
 
-                VkDeviceSize imageSize = texWidth * texHeight * 4;
+            VkDeviceSize imageSize = texWidth * texHeight * 4;
 
             if (!pixels) {
                 throw_error("Failed to load texture: " + fullPath);

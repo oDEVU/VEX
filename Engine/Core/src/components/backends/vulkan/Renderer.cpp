@@ -80,8 +80,9 @@ namespace vex {
     }
 
     bool Renderer::beginFrame(glm::uvec2 renderResolution, SceneRenderData& outData) {
+        try {
             if (renderResolution != m_r_context.currentRenderResolution) {
-                log("Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
+                log(LogLevel::WARNING, "Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
                 m_r_context.currentRenderResolution = renderResolution;
                 m_p_pipeline->updateViewport(renderResolution);
                 m_p_swapchainManager->recreateSwapchain();
@@ -104,7 +105,7 @@ namespace vex {
             if (result == VK_ERROR_OUT_OF_DATE_KHR) {
                 m_p_swapchainManager->recreateSwapchain();
                 outData.isSwapchainValid = false;
-                log("Swapchain out of date");
+                log(LogLevel::WARNING, "Swapchain out of date");
                 return false;
             } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
                 throw_error("Failed to acquire swap chain image!");
@@ -123,7 +124,12 @@ namespace vex {
             vkBeginCommandBuffer(outData.commandBuffer, &beginInfo);
 
             return true;
+        } catch (const std::exception& e) {
+            log(LogLevel::ERROR, "beginFrame failed");
+            handle_exception(e);
+            return false;
         }
+    }
 
         void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
@@ -180,7 +186,12 @@ namespace vex {
             renderingInfo.pColorAttachments = &colorAttachment;
             renderingInfo.pDepthAttachment = &depthAttachment;
 
-            vkCmdBeginRendering(cmd, &renderingInfo);
+            try {
+                vkCmdBeginRendering(cmd, &renderingInfo);
+            } catch (const std::exception& e) {
+                handle_exception(e);
+                return;
+            }
 
             VkViewport viewport{};
             viewport.width = (float)m_r_context.currentRenderResolution.x;
@@ -307,7 +318,7 @@ namespace vex {
 
                     if (lightUBO.lightCount >= MAX_DYNAMIC_LIGHTS) {
                         lightUBO.lightCount = MAX_DYNAMIC_LIGHTS;
-                        log("Limit reached of per object dynamic lights, rest of the light wont affect this mesh.");
+                        log(LogLevel::WARNING, "Limit reached of per object dynamic lights, rest of the light wont affect this mesh.");
                         break;
                     }
 
@@ -505,7 +516,13 @@ namespace vex {
             renderingInfo.colorAttachmentCount = 1;
             renderingInfo.pColorAttachments = &colorAttachment;
 
-            vkCmdBeginRendering(cmd, &renderingInfo);
+
+            try {
+                vkCmdBeginRendering(cmd, &renderingInfo);
+            } catch (const std::exception& e) {
+                handle_exception(e);
+                return;
+            }
 
             VkViewport viewport{};
             viewport.width = (float)m_r_context.swapchainExtent.width;
@@ -569,24 +586,31 @@ namespace vex {
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = signalSemaphores;
 
-            vkQueueSubmit(m_r_context.graphicsQueue, 1, &submitInfo, m_r_context.inFlightFences[data.frameIndex]);
+            try {
+                if (vkQueueSubmit(m_r_context.graphicsQueue, 1, &submitInfo, m_r_context.inFlightFences[m_r_context.currentFrame]) != VK_SUCCESS) {
+                    throw_error("Failed to submit draw command buffer!");
+                }
 
-            VkPresentInfoKHR presentInfo{};
-            presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-            presentInfo.waitSemaphoreCount = 1;
-            presentInfo.pWaitSemaphores = signalSemaphores;
+                VkPresentInfoKHR presentInfo{};
+                presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+                presentInfo.waitSemaphoreCount = 1;
+                presentInfo.pWaitSemaphores = signalSemaphores;
 
-            VkSwapchainKHR swapchains[] = {m_r_context.swapchain};
-            presentInfo.swapchainCount = 1;
-            presentInfo.pSwapchains = swapchains;
-            presentInfo.pImageIndices = &m_r_context.currentImageIndex;
+                VkSwapchainKHR swapchains[] = {m_r_context.swapchain};
+                presentInfo.swapchainCount = 1;
+                presentInfo.pSwapchains = swapchains;
+                presentInfo.pImageIndices = &m_r_context.currentImageIndex;
 
-            VkResult result = vkQueuePresentKHR(m_r_context.presentQueue, &presentInfo);
+                VkResult result = vkQueuePresentKHR(m_r_context.presentQueue, &presentInfo);
 
-            if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
-                m_p_swapchainManager->recreateSwapchain();
-            } else if (result != VK_SUCCESS) {
-                throw_error("Failed to present swap chain image!");
+                if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+                    m_p_swapchainManager->recreateSwapchain();
+                } else if (result != VK_SUCCESS) {
+                    throw_error("Failed to present swap chain image!");
+                }
+            } catch (const std::exception& e) {
+                log(LogLevel::ERROR, "Queue Submit/Present failed");
+                handle_exception(e);
             }
 
             m_r_context.currentFrame = (m_r_context.currentFrame + 1) % m_r_context.MAX_FRAMES_IN_FLIGHT;

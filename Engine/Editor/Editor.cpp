@@ -149,7 +149,7 @@ namespace vex {
             m_interface->getRenderer().endFrame(renderData);
 
         } catch (const std::exception& e) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Editor render failed");
+            log(LogLevel::ERROR, "Editor render failed");
             handle_exception(e);
         }
     }
@@ -165,7 +165,7 @@ namespace vex {
         auto* vfs = m_vfs.get();
         auto* vulkanGUI = static_cast<VulkanImGUIWrapper*>(m_imgui.get());
             if (!vulkanGUI) {
-                log("Failed to cast ImGUI wrapper to VulkanImGUIWrapper");
+                log(LogLevel::ERROR, "Failed to cast ImGUI wrapper to VulkanImGUIWrapper");
                 return;
             }
         std::vector<std::pair<std::string, ImTextureID*>> targets = {
@@ -196,7 +196,7 @@ namespace vex {
                 *targetPtr = (ImTextureID)ds;
 
             } catch (const std::exception& e) {
-                log("Failed to load icon: %s", path.c_str());
+                log(LogLevel::ERROR, "Failed to load icon: %s", path.c_str());
                 VkDescriptorSet ds = vulkanGUI->addTexture(
                     sampler,
                     resources->getTextureView("default"),
@@ -568,7 +568,7 @@ namespace vex {
                                 getSceneManager()->GetScene(currentScene)->AddEditorGameObject(newObj);
                             }
                         } else {
-                            log("Error: No scene loaded. Cannot create object.");
+                            log(LogLevel::ERROR, "No scene loaded. Cannot create object.");
                         }
                     }
                 }

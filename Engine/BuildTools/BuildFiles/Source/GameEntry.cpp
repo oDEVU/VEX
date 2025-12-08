@@ -26,51 +26,56 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
     vex::Engine* engine = (vex::Engine*)ctx->userdata;
 
     if (!engine) {
-                vex::log("[DEBUG] CRITICAL: Engine pointer is NULL!");
-                fflush(stdout);
-                return -1;
-            }
+        vex::log(vex::LogLevel::CRITICAL, "Engine pointer is NULL!");
+        fflush(stdout);
+        return -1;
+    }
 
     switch (operation) {
         case CR_LOAD:
-        vex::log("[DEBUG] Entering CR_LOAD...");
-        fflush(stdout);
-            if (engine->getSceneManager()) {
-                                vex::log("[DEBUG] SceneManager pointer seems valid: %p", (void*)engine->getSceneManager());
-                                fflush(stdout);
-                            } else {
-                                vex::log("[DEBUG] CRITICAL: SceneManager is NULL!\n");
-                                fflush(stdout);
-                            }
-
-            if (ctx->version == 1) {
-                engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
-            } else {
-                if(!engine->getLastLoadedScenes().empty()){
-                    for (const auto& sceneName : engine->getLastLoadedScenes()) {
-                        vex::log("[DEBUG] Reloading scene: %s", sceneName.c_str());
+                    try {
+                        vex::log(vex::LogLevel::INFO, "[DEBUG] Entering CR_LOAD...");
                         fflush(stdout);
-                        //fflush(stdout);
-                        engine->getSceneManager()->loadScene(sceneName, *engine);
+
+                        if (!engine->getSceneManager()) {
+                            vex::throw_error("SceneManager is NULL!");
+                        }
+
+                        vex::log(vex::LogLevel::INFO, "[DEBUG] SceneManager pointer valid: %p", (void*)engine->getSceneManager());
+
+                        if (ctx->version == 1) {
+                            engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
+                        } else {
+                            if(!engine->getLastLoadedScenes().empty()){
+                                for (const auto& sceneName : engine->getLastLoadedScenes()) {
+                                    vex::log(vex::LogLevel::INFO, "[DEBUG] Reloading scene: %s", sceneName.c_str());
+                                    engine->getSceneManager()->loadScene(sceneName, *engine);
+                                }
+                            } else {
+                                vex::log(vex::LogLevel::INFO, "[DEBUG] Loaded scenes empty, loading default.");
+                                engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
+                            }
+                        }
+                    } catch (const std::exception& e) {
+                        vex::log(vex::LogLevel::ERROR, "Exception during CR_LOAD");
+                        vex::handle_exception(e);
+                        return -1;
                     }
-                }else{
-                    vex::log("[DEBUG] Loaded scenes are empty");
-                    fflush(stdout);
-                    //fflush(stdout);
-                    engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
-                }
-            }
-            break;
+                    break;
 
         case CR_STEP:
             break;
 
         case CR_UNLOAD:
-            vex::log("[DEBUG] Unloading...");
-            fflush(stdout);
-            engine->prepareScenesForHotReload();
-            engine->getSceneManager()->clearScenes();
-            //engine->getRegistry().clear();
+            try {
+                vex::log(vex::LogLevel::INFO, "[DEBUG] Unloading...");
+                fflush(stdout);
+                engine->prepareScenesForHotReload();
+                engine->getSceneManager()->clearScenes();
+            } catch (const std::exception& e) {
+                vex::log(vex::LogLevel::ERROR, "Exception during CR_UNLOAD");
+                vex::handle_exception(e);
+            }
             break;
 
         case CR_CLOSE:

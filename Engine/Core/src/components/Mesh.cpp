@@ -118,7 +118,7 @@ public:
             return true;
         }
 
-        log("File not found: '%s'", file_path.c_str());
+        log(LogLevel::WARNING, "File not found: '%s'", file_path.c_str());
         return false;
     }
 
@@ -157,7 +157,7 @@ public:
                 final_path = just_filename;
                 log("Opening file as filename only: '%s'", final_path.c_str());
             } else {
-                log("Failed to find file: '%s'", file_path.c_str());
+                log(LogLevel::ERROR, "Failed to find file: '%s'", file_path.c_str());
                 return nullptr;
             }
         }
@@ -204,7 +204,8 @@ public:
         #endif
 
         if (!vfs->file_exists(realPath)){
-            throw_error("File: [" + realPath + "] doesnt exists");
+            handle_exception(std::runtime_error("File: [" + realPath + "] doesnt exist"));
+            return;
         }
 
         const aiScene* scene = nullptr;
@@ -237,7 +238,8 @@ public:
 
 #endif
         if (!scene) {
-            throw_error("Assimp failed to load file: " + std::string(importer.GetErrorString()));
+            handle_exception(std::runtime_error("Assimp failed to load file: " + std::string(importer.GetErrorString())));
+            return;
         }
 
         if (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {

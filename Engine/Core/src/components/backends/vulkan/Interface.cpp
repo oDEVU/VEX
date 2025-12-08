@@ -16,6 +16,8 @@ namespace vex {
 
         m_context.currentRenderResolution = initialResolution;
 
+        try {
+
         log("Loading Vulkan library...");
         if (!SDL_Vulkan_LoadLibrary(nullptr)) {
             throw_error(SDL_GetError());
@@ -358,6 +360,10 @@ namespace vex {
         );
 
         log("Vulkan interface initialized successfully");
+
+        } catch (const std::exception& e) {
+            handle_critical_exception(e);
+        }
     }
 
     Interface::~Interface() {

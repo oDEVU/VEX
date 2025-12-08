@@ -29,7 +29,7 @@ bool VirtualFileSystem::initialize(const std::string& base_path) {
         // Fall back to loose files even in release if VPK doesn't exist
         m_use_packed_assets = false;
         //std::cout << "VPK file [ path: " << vpk_path << "] not found, falling back to loose files" << std::endl;
-        log("VPK file [ path: %s ] not found, falling back to loose files", vpk_path.c_str());
+        log(LogLevel::WARNING, "VPK file [ path: %s ] not found, falling back to loose files", vpk_path.c_str());
         return true;
     }
 #endif
@@ -42,7 +42,7 @@ bool VirtualFileSystem::load_vpk_file(const std::string& vpk_path) {
     m_loaded_vpk->file_stream.open(vpk_path, std::ios::binary);
     if (!m_loaded_vpk->file_stream) {
         //std::cerr << "Failed to open VPK file: " << vpk_path << std::endl;
-        log("Failed to open VPK file: %s", vpk_path.c_str());
+        log(LogLevel::ERROR, "Failed to open VPK file: %s", vpk_path.c_str());
         throw_error("Failed to open VPK file.");
         m_loaded_vpk.reset();
         return false;

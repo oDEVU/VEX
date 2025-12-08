@@ -62,9 +62,7 @@ namespace vex {
                             m_p_resources->loadTexture(texPath, texPath, m_vfs);
                             log("Loaded texture: %s", texPath.c_str());
                         } catch (const std::exception& e) {
-                            SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                                         "Failed to load texture %s",
-                                         texPath.c_str());
+                            log(LogLevel::ERROR, "Failed to load texture %s", texPath.c_str());
                             handle_exception(e);
                         }
                     } else {
@@ -86,7 +84,7 @@ namespace vex {
             //log("vulkanMesh id: %i", m_vulkanMeshes.size());
             log("Mesh upload successful");
         } catch (const std::exception& e) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Mesh upload failed");
+            log(LogLevel::ERROR, "Mesh upload failed");
             m_vulkanMeshes.erase(meshComponent.meshData.meshPath);
             handle_exception(e);
         }
@@ -112,7 +110,7 @@ namespace vex {
             meshData.loadFromFile(realPath, m_vfs);
             meshData.meshPath = path;
         } catch (const std::exception& e) {
-            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Mesh load failed");
+            log(LogLevel::ERROR, "Mesh load failed: %s", path.c_str());
             handle_exception(e);
         }
 

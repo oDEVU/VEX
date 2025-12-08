@@ -40,77 +40,87 @@ namespace vex {
 
 #if DEBUG
     void VulkanImGUIWrapper::init() {
-        log("Initialization of DearImGUI");
+        try {
+            log("Initialization of DearImGUI");
 
-        volatile auto forceLink = ImGuizmo::BeginFrame;
+            volatile auto forceLink = ImGuizmo::BeginFrame;
 
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
+            IMGUI_CHECKVERSION();
+            try {
+                ImGui::CreateContext();
+            } catch (const std::exception& e) {
+                log(LogLevel::ERROR, "ImGUI Init Failed");
+                handle_exception(e);
+            }
+            ImGuiIO& io = ImGui::GetIO();
 
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+            io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+            io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-        if(std::filesystem::exists("../Assets/Sono-SemiBold.ttf")){
-            ImFont* myFont = io.Fonts->AddFontFromFileTTF("../Assets/Sono-SemiBold.ttf", 14.0f);
+            if(std::filesystem::exists("../Assets/Sono-SemiBold.ttf")){
+                ImFont* myFont = io.Fonts->AddFontFromFileTTF("../Assets/Sono-SemiBold.ttf", 14.0f);
 
-            if (myFont == nullptr) {
-                log("Failed to load editor font!");
+                if (myFont == nullptr) {
+                    log(LogLevel::WARNING, "Failed to load editor font!");
+                    io.Fonts->AddFontDefault();
+                }
+            }else{
+                log(LogLevel::WARNING, "Failed to load editor font!");
                 io.Fonts->AddFontDefault();
             }
-        }else{
-            log("Failed to load editor font!");
-            io.Fonts->AddFontDefault();
-        }
 
-        if (!vkCreateSampler || !vkCreateDescriptorPool) {
-            throw_error("Critical Vulkan function pointers are null!");
-        }
-
-        ImGui_ImplSDL3_InitForVulkan(m_p_window);
-
-        createDescriptorPool();
-
-        ImGui_ImplVulkan_InitInfo init_info = {};
-        init_info.Instance = m_r_context.instance;
-        init_info.PhysicalDevice = m_r_context.physicalDevice;
-        init_info.Device = m_r_context.device;
-        init_info.QueueFamily = m_r_context.graphicsQueueFamily;
-        init_info.Queue = m_r_context.graphicsQueue;
-        init_info.PipelineCache = VK_NULL_HANDLE;
-        init_info.MinImageCount = m_r_context.swapchainImages.size();
-        init_info.ImageCount = m_r_context.swapchainImages.size();
-        init_info.CheckVkResultFn = [](VkResult err) {
-            if (err != VK_SUCCESS) {
-                SDL_LogError(SDL_LOG_CATEGORY_ERROR, "ImGui Vulkan error: %d", err);
+            if (!vkCreateSampler || !vkCreateDescriptorPool) {
+                throw_error("Critical Vulkan function pointers are null!");
             }
-        };
-        init_info.Allocator = nullptr;
-        init_info.DescriptorPool = m_imguiPool;
-        init_info.UseDynamicRendering = true;
 
-        // Setup for dynamic rendering
-        VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo = {};
-        pipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-        pipelineRenderingCreateInfo.colorAttachmentCount = 1;
-        pipelineRenderingCreateInfo.pColorAttachmentFormats = &m_r_context.swapchainImageFormat;
-        pipelineRenderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;
+            ImGui_ImplSDL3_InitForVulkan(m_p_window);
 
-        ImGui_ImplVulkan_PipelineInfo pipelineInfoMain = {};
-        pipelineInfoMain.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-        pipelineInfoMain.PipelineRenderingCreateInfo = pipelineRenderingCreateInfo;
+            createDescriptorPool();
 
-        init_info.PipelineInfoMain = pipelineInfoMain;
+            ImGui_ImplVulkan_InitInfo init_info = {};
+            init_info.Instance = m_r_context.instance;
+            init_info.PhysicalDevice = m_r_context.physicalDevice;
+            init_info.Device = m_r_context.device;
+            init_info.QueueFamily = m_r_context.graphicsQueueFamily;
+            init_info.Queue = m_r_context.graphicsQueue;
+            init_info.PipelineCache = VK_NULL_HANDLE;
+            init_info.MinImageCount = m_r_context.swapchainImages.size();
+            init_info.ImageCount = m_r_context.swapchainImages.size();
+            init_info.CheckVkResultFn = [](VkResult err) {
+                if (err != VK_SUCCESS) {
+                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "ImGui Vulkan error: %d", err);
+                }
+            };
+            init_info.Allocator = nullptr;
+            init_info.DescriptorPool = m_imguiPool;
+            init_info.UseDynamicRendering = true;
 
-        log("Initing ImGui Vulkan backend");
-        if (!ImGui_ImplVulkan_Init(&init_info)) {
-            throw_error("Failed to initialize ImGui Vulkan backend");
+            // Setup for dynamic rendering
+            VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo = {};
+            pipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
+            pipelineRenderingCreateInfo.colorAttachmentCount = 1;
+            pipelineRenderingCreateInfo.pColorAttachmentFormats = &m_r_context.swapchainImageFormat;
+            pipelineRenderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;
+
+            ImGui_ImplVulkan_PipelineInfo pipelineInfoMain = {};
+            pipelineInfoMain.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+            pipelineInfoMain.PipelineRenderingCreateInfo = pipelineRenderingCreateInfo;
+
+            init_info.PipelineInfoMain = pipelineInfoMain;
+
+            log("Initing ImGui Vulkan backend");
+            if (!ImGui_ImplVulkan_Init(&init_info)) {
+                throw_error("Failed to initialize ImGui Vulkan backend");
+            }
+
+            setupStyle();
+
+            m_initialized = true;
+        } catch (const std::exception& e) {
+            log(LogLevel::ERROR, "ImGUI Init Failed");
+            handle_exception(e);
         }
-
-        setupStyle();
-
-        m_initialized = true;
     }
 
     void VulkanImGUIWrapper::beginFrame() {

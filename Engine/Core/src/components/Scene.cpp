@@ -28,9 +28,11 @@ Scene::~Scene() {
 void Scene::load(){
     std::string realPath = GetAssetPath(m_path);
     if (!m_engine->getFileSystem()->file_exists(realPath)) {
-        log("Error: Could not open scene file: %s", realPath.c_str());
+        log(LogLevel::ERROR, "Could not open scene file: %s", realPath.c_str());
         return;
     }
+
+    try {
 
     auto fileData = m_engine->getFileSystem()->load_file(realPath);
 
@@ -97,7 +99,7 @@ void Scene::load(){
 
     auto objects = json["objects"];
     if (!objects.is_array()) {
-        log("Error: Scene file must have 'objects' array");
+        log(LogLevel::ERROR, "Scene file must have 'objects' array");
         return;
     }
 
@@ -105,25 +107,25 @@ void Scene::load(){
         std::string type = obj.value("type", "");
         std::string name = obj.value("name", "");
         if (type.empty() || name.empty()) {
-            log("Error: Object missing type or name");
+            log(LogLevel::ERROR, "Object missing type or name");
             continue;
         }
 
         m_creatingFromScene = true;
         GameObject* gameObj = GameObjectFactory::getInstance().create(type, *m_engine, name);
         if (!gameObj) {
-            log("Error: Failed to create GameObject of type '%s'", type.c_str());
+            log(LogLevel::ERROR, "Failed to create GameObject of type '%s'", type.c_str());
             continue;
         }
 
         auto components = obj["components"];
         if (!components.is_array()) {
-            log("Object '%s' has no components to load", name.c_str());
+            log(LogLevel::WARNING, "Object '%s' has no components to load", name.c_str());
         } else {
             for (const auto& comp : components) {
                 std::string compType = comp.value("type", "");
                 if (compType.empty()) {
-                    log("Error: Component missing type for object '%s'", name.c_str());
+                    log(LogLevel::ERROR, "Component missing type for object '%s'", name.c_str());
                     continue;
                 }
                 ComponentRegistry::getInstance().loadComponent(*gameObj, compType, comp);
@@ -154,7 +156,7 @@ void Scene::load(){
                                 }
                             }
                             if (!parentFound) {
-                                log("Warning: Parent '%s' not found for object '%s'", parent.c_str(), name.c_str());
+                                log(LogLevel::WARNING, "Parent '%s' not found for object '%s'", parent.c_str(), name.c_str());
                             }
                         }
 
@@ -163,6 +165,10 @@ void Scene::load(){
             //auto ptr = std::shared_ptr<GameObject>(gameObj);
             //m_objects.push_back(std::move(ptr));
         }
+    }
+    } catch (const std::exception& e) {
+        log(LogLevel::ERROR, "Failed to load scene: %s", m_path.c_str());
+        handle_exception(e);
     }
 }
 
@@ -177,14 +183,14 @@ void Scene::sceneBegin(){
             try{
                 obj->BeginPlay();
             }catch(const std::exception& e){
-                log("Error: %s", e.what());
+                handle_exception(e);
             }
         });
         std::for_each(std::execution::par_unseq, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
             try{
                 obj->BeginPlay();
             }catch(const std::exception& e){
-                log("Error: %s", e.what());
+                handle_exception(e);
             }
         });
     }else{
@@ -192,14 +198,14 @@ void Scene::sceneBegin(){
             try{
                 obj->BeginPlay();
             }catch(const std::exception& e){
-                log("Error: %s", e.what());
+                handle_exception(e);
             }
         }
         for (auto& obj : m_addedObjects) {
             try{
                 obj->BeginPlay();
             }catch(const std::exception& e){
-                log("Error: %s", e.what());
+                handle_exception(e);
             }
         }
     }

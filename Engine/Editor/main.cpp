@@ -96,19 +96,22 @@ int main(int argc, char* argv[]) {
     vex::log("Starting Engine Loop with Hot Reload...");
 
     engine.run([&]() {
+        try {
             unsigned int oldVersion = ctx.version;
 
             int result = cr_plugin_update(ctx);
 
             if (result != 0) {
-                createBasicDialog("Error", "Could not reload game module!", dialogGameInfo);
-                vex::log("CR Error: %d (Failure type: %d)", result, ctx.failure);
-                vex::throw_error("DAMN");
+                vex::log(vex::LogLevel::ERROR, "CR Error: %d (Failure type: %d)", result, ctx.failure);
+                vex::throw_error("Hot Reload Update Failed");
             }
 
             if (ctx.version != oldVersion) {
                 engine.OnHotReload();
             }
+        } catch (const std::exception& e) {
+            vex::handle_exception(e);
+        }
     });
 
     //cr_plugin_close(ctx);

@@ -162,7 +162,7 @@ namespace vex {
             break;
         case ShapeType::CONVEX_HULL:
             if (pc.convexPoints.empty()) {
-                log("Error: Convex hull shape has no points");
+                log(LogLevel::ERROR, "Convex hull shape has no points");
                 return std::nullopt;
             }
             {
@@ -177,7 +177,7 @@ namespace vex {
             break;
         case ShapeType::MESH:
             if (pc.meshVertices.empty() || pc.meshIndices.empty()) {
-                log("Error: Mesh shape has no vertices or indices");
+                log(LogLevel::ERROR, "Mesh shape has no vertices or indices");
                 return std::nullopt;
             }
             {
@@ -192,7 +192,7 @@ namespace vex {
                     for (const auto& p : pc.convexPoints) {
                         verts.emplace_back(JPH::Vec3(p.GetX(), p.GetY(), p.GetZ()));
                     }
-                    log("Warning: Dynamic mesh fallback to convex hull");
+                    log(LogLevel::WARNING, "Dynamic mesh fallback to convex hull");
                     JPH::ConvexHullShapeSettings settings(verts);
                     shape = settings.Create().Get();
                 } else {

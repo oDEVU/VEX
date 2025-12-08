@@ -128,7 +128,7 @@ Engine::~Engine() {
 }
 
 Engine::Engine(SkipInit) {
-    std::cout << "Engine initialization handed of to Editor\n";
+    log("Engine initialization handed of to Editor");
 }
 
 void Engine::setResolutionMode(ResolutionMode mode) {
@@ -217,7 +217,7 @@ void Engine::render() {
         m_interface->getRenderer().composeFrame(renderData, *m_imgui, false);
         m_interface->getRenderer().endFrame(renderData);
     } catch (const std::exception& e) {
-        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Frame not in fact rendered :C");
+        log(LogLevel::ERROR, "Frame render failed");
         handle_exception(e);
     }
     //log("Frame Rendered");
