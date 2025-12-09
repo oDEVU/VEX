@@ -18,7 +18,7 @@ namespace vex {
             changed |= ImGui::Checkbox("Screen Color Quantization", &env.screenQuantization);
             changed |= ImGui::Checkbox("Texture Color Quantization", &env.textureQuantization);
             changed |= ImGui::Checkbox("Screen Dithering", &env.screenDither);
-            changed |= ImGui::Checkbox("NTSC Artifacts", &env.ntfsArtifacts);
+            changed |= ImGui::Checkbox("CRT Artifacts", &env.ntfsArtifacts);
         }
 
         if (ImGui::CollapsingHeader("Lighting & Atmosphere", ImGuiTreeNodeFlags_DefaultOpen)) {

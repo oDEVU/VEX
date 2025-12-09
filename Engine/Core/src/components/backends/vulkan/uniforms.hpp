@@ -16,20 +16,22 @@ namespace vex {
         /// @brief Projection matrix
         alignas(16) glm::mat4 proj;
 
+        alignas(16) glm::vec4 ambientLight;
+        alignas(16) glm::vec4 sunLight;
+        alignas(16) glm::vec4 sunDirection;
+
+        alignas(8) glm::vec2 renderResolution;
+        alignas(8) glm::vec2 windowResolution;
+
         alignas(4) float snapResolution;
         alignas(4) float jitterIntensity;
         /// @brief contains multiple PS1Effects thanks to bitwise operations.
         alignas(4) int enablePS1Effects;
 
         alignas(4) float time;
-        alignas(8) glm::vec2 renderResolution;
-        alignas(8) glm::vec2 windowResolution;
+        alignas(4) int frame;
         alignas(4) float upscaleRatio;
-
-        alignas(16) glm::vec4 ambientLight;
         alignas(4) float ambientLightStrength;
-        alignas(16) glm::vec4 sunLight;
-        alignas(16) glm::vec4 sunDirection;
     };
 
     /// @brief Light struct for shader

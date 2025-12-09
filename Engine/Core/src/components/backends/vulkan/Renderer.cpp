@@ -263,6 +263,7 @@ namespace vex {
             m_sceneUBO.renderResolution = m_r_context.currentRenderResolution;
             m_sceneUBO.windowResolution = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height};
             m_sceneUBO.time = currentTime;
+            m_sceneUBO.frame = frame;
             m_sceneUBO.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(m_r_context.currentRenderResolution.y);
 
             m_sceneUBO.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
@@ -546,8 +547,22 @@ namespace vex {
             } else {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->get());
 
+                VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                uint32_t dynamicOffset = 0;
+
+                vkCmdBindDescriptorSets(
+                        cmd,
+                        VK_PIPELINE_BIND_POINT_GRAPHICS,
+                        m_p_fullscreenPipeline->layout(),
+                        0,
+                        1,
+                        &sceneSet,//&m_r_context.descriptorSets[data.frameIndex],
+                        1,
+                        &dynamicOffset
+                    );
+
                 vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(),
-                                        0, 1, &m_screenDescriptorSet, 0, nullptr);
+                                        1, 1, &m_screenDescriptorSet, 0, nullptr);
 
                 vkCmdDraw(cmd, 3, 1, 0, 0);
             }

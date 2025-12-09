@@ -624,10 +624,13 @@ namespace vex {
         colorBlending.attachmentCount = 1;
         colorBlending.pAttachments = &colorBlendAttachment;
 
-        std::array<VkDescriptorSetLayout, 1> setLayouts = { m_r_context.textureDescriptorSetLayout };
+        std::array<VkDescriptorSetLayout, 2> setLayouts = {
+            m_r_context.uboDescriptorSetLayout,
+            m_r_context.textureDescriptorSetLayout
+        };
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
-        pipelineLayoutInfo.setLayoutCount = 1;
+        pipelineLayoutInfo.setLayoutCount = setLayouts.size();
         pipelineLayoutInfo.pSetLayouts = setLayouts.data();
 
         if (vkCreatePipelineLayout(m_r_context.device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) {

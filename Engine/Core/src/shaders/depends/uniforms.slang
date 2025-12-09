@@ -4,17 +4,21 @@ public[[vk::binding(0, 0)]]
 cbuffer SceneUBO {
   public float4x4 view;
   public float4x4 proj;
+
+  public float4 ambientLight;
+  public float4 sunLight;
+  public float4 sunDirection;
+
+  public float2 renderResolution;
+  public float2 windowResolution;
+
   public float snapResolution;
   public float jitterIntensity;
   public int enablePS1Effects;
   public float time;
-  public float2 renderResolution;
-  public float2 windowResolution;
+  public int frame;
   public float upscaleRatio;
-  public float4 ambientLight;
   public float ambientLightStrength;
-  public float4 sunLight;
-  public float4 sunDirection;
 }
 scene;
 
