@@ -1,8 +1,8 @@
 var classvex_1_1VexUI =
 [
     [ "VexUI", "classvex_1_1VexUI.html#a5c081cf41b22e86604dd8016fbce0684", null ],
-    [ "getStyle", "classvex_1_1VexUI.html#a601ee02c87191445c9a3f7078784b202", null ],
-    [ "getWidget", "classvex_1_1VexUI.html#a1eca1eba19ae99f2da6eeb7beceed431", null ],
+    [ "getStyle", "classvex_1_1VexUI.html#ab8115b22664ab50579cb4c39abae9d53", null ],
+    [ "getWidget", "classvex_1_1VexUI.html#ad6868de87d3b86da6b18730bab421717", null ],
     [ "getZIndex", "classvex_1_1VexUI.html#a4a05532a109fb7863680159559fe31f6", null ],
     [ "init", "classvex_1_1VexUI.html#a574755bc5cf4a1aaafef0b5b95611a72", null ],
     [ "isInitialized", "classvex_1_1VexUI.html#a9bbc53e1d2b45083b807ab9ce23c75dc", null ],

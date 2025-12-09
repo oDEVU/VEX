@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['widgettype_0',['WidgetType',['../VexUI_8hpp.html#a7f58754048eee9edc68ba1d810291eba',1,'vex']]]
+  ['mouseaxis_0',['MouseAxis',['../InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236',1,'vex']]]
 ];

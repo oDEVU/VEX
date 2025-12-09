@@ -1,6 +1,25 @@
 var searchData=
 [
-  ['filedata_0',['FileData',['../structvex_1_1VirtualFileSystem_1_1FileData.html',1,'vex::VirtualFileSystem']]],
-  ['fontatlas_1',['FontAtlas',['../structvex_1_1FontAtlas.html',1,'vex']]],
-  ['frustum_2',['Frustum',['../structFrustum.html',1,'']]]
+  ['cameracomponent_0',['CameraComponent',['../structvex_1_1CameraComponent.html',1,'vex']]],
+  ['cameraobject_1',['CameraObject',['../classvex_1_1CameraObject.html',1,'vex']]],
+  ['cblockstats_5ft_2',['cblockStats_t',['../structcblockStats__t.html',1,'']]],
+  ['cdict_5fcollection_5ft_3',['cdict_collection_t',['../structcdict__collection__t.html',1,'']]],
+  ['cie_5ffde_5fprefix_5fs_4',['cie_fde_prefix_s',['../structcie__fde__prefix__s.html',1,'']]],
+  ['collisionhit_5',['CollisionHit',['../structvex_1_1CollisionHit.html',1,'vex']]],
+  ['componentregistry_6',['ComponentRegistry',['../classvex_1_1ComponentRegistry.html',1,'vex']]],
+  ['compress_5fargs_7',['compress_args',['../structcompress__args.html',1,'']]],
+  ['compressinstructions_8',['compressInstructions',['../structcompressInstructions.html',1,'']]],
+  ['config_5ft_9',['config_t',['../structconfig__t.html',1,'']]],
+  ['constraint_5ft_10',['constraint_t',['../structconstraint__t.html',1,'']]],
+  ['contexts_5ft_11',['contexts_t',['../structcontexts__t.html',1,'']]],
+  ['cover_5fbest_5fs_12',['COVER_best_s',['../structCOVER__best__s.html',1,'']]],
+  ['cover_5fctx_5ft_13',['COVER_ctx_t',['../structCOVER__ctx__t.html',1,'']]],
+  ['cover_5fdictselection_14',['COVER_dictSelection',['../structCOVER__dictSelection.html',1,'']]],
+  ['cover_5fepoch_5finfo_5ft_15',['COVER_epoch_info_t',['../structCOVER__epoch__info__t.html',1,'']]],
+  ['cover_5fmap_5fpair_5ft_5fs_16',['COVER_map_pair_t_s',['../structCOVER__map__pair__t__s.html',1,'']]],
+  ['cover_5fmap_5fs_17',['COVER_map_s',['../structCOVER__map__s.html',1,'']]],
+  ['cover_5fsegment_5ft_18',['COVER_segment_t',['../structCOVER__segment__t.html',1,'']]],
+  ['cover_5ftryparameters_5fdata_5fs_19',['COVER_tryParameters_data_s',['../structCOVER__tryParameters__data__s.html',1,'']]],
+  ['cress_5ft_20',['cRess_t',['../structcRess__t.html',1,'']]],
+  ['curl_5fdata_5ft_21',['curl_data_t',['../structcurl__data__t.html',1,'']]]
 ];

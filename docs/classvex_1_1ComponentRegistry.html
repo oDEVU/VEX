@@ -109,11 +109,22 @@ $(function(){initNavTree('classvex_1_1ComponentRegistry.html','','classvex_1_1Co
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ae287b952fb58aa38757a8ec038e7309f" id="r_ae287b952fb58aa38757a8ec038e7309f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae287b952fb58aa38757a8ec038e7309f">ComponentLoader</a> = std::function&lt;void(<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;, const nlohmann::json&amp;)&gt;</td></tr>
+<tr class="memitem:ac58bd32cd8bf709c2af1ab39d777c176" id="r_ac58bd32cd8bf709c2af1ab39d777c176"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac58bd32cd8bf709c2af1ab39d777c176">ComponentSaver</a> = std::function&lt;nlohmann::json(<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td></tr>
+<tr class="memitem:a8c4d1a0dcf3b8914a4d9324df65080ad" id="r_a8c4d1a0dcf3b8914a4d9324df65080ad"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c4d1a0dcf3b8914a4d9324df65080ad">ComponentInspector</a> = std::function&lt;void(<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td></tr>
+<tr class="memitem:a22335768f57b0caa26d0182db1f50a08" id="r_a22335768f57b0caa26d0182db1f50a08"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22335768f57b0caa26d0182db1f50a08">ComponentChecker</a> = std::function&lt;bool(const <a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td></tr>
+<tr class="memitem:aa83132021bdefa126bf4374be2bf6b73" id="r_aa83132021bdefa126bf4374be2bf6b73"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa83132021bdefa126bf4374be2bf6b73">ComponentCreator</a> = std::function&lt;void(<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a90cb8cfba828e8190b72a1f8401031f3" id="r_a90cb8cfba828e8190b72a1f8401031f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90cb8cfba828e8190b72a1f8401031f3">registerComponent</a> (const std::string &amp;type, ComponentLoader loader)</td></tr>
+<tr class="memitem:a6a88b2ca1f8dd50bb3fb838dfb6c1daa" id="r_a6a88b2ca1f8dd50bb3fb838dfb6c1daa"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a6a88b2ca1f8dd50bb3fb838dfb6c1daa template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a88b2ca1f8dd50bb3fb838dfb6c1daa">registerComponent</a> (const std::string &amp;name)</td></tr>
 <tr class="memitem:a42e4df6a19410afc5a7f8d7337e66969" id="r_a42e4df6a19410afc5a7f8d7337e66969"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42e4df6a19410afc5a7f8d7337e66969">loadComponent</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj, const std::string &amp;type, const nlohmann::json &amp;json)</td></tr>
+<tr class="memitem:a0e0ddf666b509fe51d3f17deff0d6221" id="r_a0e0ddf666b509fe51d3f17deff0d6221"><td class="memItemLeft" align="right" valign="top">nlohmann::json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e0ddf666b509fe51d3f17deff0d6221">saveComponent</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj, const std::string &amp;type)</td></tr>
+<tr class="memitem:af362295b8118ca95e0766d7fb09be4e6" id="r_af362295b8118ca95e0766d7fb09be4e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af362295b8118ca95e0766d7fb09be4e6">drawInspectorForObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj)</td></tr>
+<tr class="memitem:a68e619ee85d50c162e8bb31bd408e6f5" id="r_a68e619ee85d50c162e8bb31bd408e6f5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68e619ee85d50c162e8bb31bd408e6f5">getMissingComponents</a> (const <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj)</td></tr>
+<tr class="memitem:a58888ec4c065c1cde1f5eee1b643c423" id="r_a58888ec4c065c1cde1f5eee1b643c423"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58888ec4c065c1cde1f5eee1b643c423">createComponent</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj, const std::string &amp;name)</td></tr>
+<tr class="memitem:a03fd9fb2920e16b47d3c97698be4d034" id="r_a03fd9fb2920e16b47d3c97698be4d034"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, ComponentInspector &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03fd9fb2920e16b47d3c97698be4d034">getInspectors</a> () const</td></tr>
+<tr class="memitem:a9a317391f0c1263d40354203f8ac7b36" id="r_a9a317391f0c1263d40354203f8ac7b36"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a317391f0c1263d40354203f8ac7b36">getRegisteredNames</a> () const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -121,13 +132,66 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:aa8b6bae56e5d3710be2a17b3a2a4e879" id="r_aa8b6bae56e5d3710be2a17b3a2a4e879"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8b6bae56e5d3710be2a17b3a2a4e879">registeredNames</a></td></tr>
 <tr class="memitem:a12cce78c48174d7ddd03f2ad0d6210c5" id="r_a12cce78c48174d7ddd03f2ad0d6210c5"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, ComponentLoader &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12cce78c48174d7ddd03f2ad0d6210c5">loaders</a></td></tr>
+<tr class="memitem:af58c6f910010eece270ac6fe80b2040e" id="r_af58c6f910010eece270ac6fe80b2040e"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, ComponentSaver &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af58c6f910010eece270ac6fe80b2040e">savers</a></td></tr>
+<tr class="memitem:a8744cbd6540daf729734b1af02ffde1c" id="r_a8744cbd6540daf729734b1af02ffde1c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, ComponentInspector &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8744cbd6540daf729734b1af02ffde1c">inspectors</a></td></tr>
+<tr class="memitem:a23c5b00d7cccf8b26968f8ea74522e91" id="r_a23c5b00d7cccf8b26968f8ea74522e91"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, ComponentChecker &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23c5b00d7cccf8b26968f8ea74522e91">checkers</a></td></tr>
+<tr class="memitem:a8ab65d9de488eab18e167195210327c9" id="r_a8ab65d9de488eab18e167195210327c9"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, ComponentCreator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ab65d9de488eab18e167195210327c9">creators</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class registering GameComponents mainly used to load them in <a class="el" href="classvex_1_1SceneManager.html" title="SceneManager class implements scene management functionality like loading and unloading scenes,...">SceneManager</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00020">20</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00065">65</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="a22335768f57b0caa26d0182db1f50a08" name="a22335768f57b0caa26d0182db1f50a08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22335768f57b0caa26d0182db1f50a08">&#9670;&#160;</a></span>ComponentChecker</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using vex::ComponentRegistry::ComponentChecker = std::function&lt;bool(const <a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00070">70</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa83132021bdefa126bf4374be2bf6b73" name="aa83132021bdefa126bf4374be2bf6b73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa83132021bdefa126bf4374be2bf6b73">&#9670;&#160;</a></span>ComponentCreator</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using vex::ComponentRegistry::ComponentCreator = std::function&lt;void(<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00071">71</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8c4d1a0dcf3b8914a4d9324df65080ad" name="a8c4d1a0dcf3b8914a4d9324df65080ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c4d1a0dcf3b8914a4d9324df65080ad">&#9670;&#160;</a></span>ComponentInspector</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using vex::ComponentRegistry::ComponentInspector = std::function&lt;void(<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00069">69</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ae287b952fb58aa38757a8ec038e7309f" name="ae287b952fb58aa38757a8ec038e7309f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae287b952fb58aa38757a8ec038e7309f">&#9670;&#160;</a></span>ComponentLoader</h2>
 
@@ -140,11 +204,112 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00022">22</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00067">67</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac58bd32cd8bf709c2af1ab39d777c176" name="ac58bd32cd8bf709c2af1ab39d777c176"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac58bd32cd8bf709c2af1ab39d777c176">&#9670;&#160;</a></span>ComponentSaver</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using vex::ComponentRegistry::ComponentSaver = std::function&lt;nlohmann::json(<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00068">68</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a58888ec4c065c1cde1f5eee1b643c423" name="a58888ec4c065c1cde1f5eee1b643c423"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58888ec4c065c1cde1f5eee1b643c423">&#9670;&#160;</a></span>createComponent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ComponentRegistry::createComponent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00157">157</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af362295b8118ca95e0766d7fb09be4e6" name="af362295b8118ca95e0766d7fb09be4e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af362295b8118ca95e0766d7fb09be4e6">&#9670;&#160;</a></span>drawInspectorForObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ComponentRegistry::drawInspectorForObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00141">141</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a03fd9fb2920e16b47d3c97698be4d034" name="a03fd9fb2920e16b47d3c97698be4d034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03fd9fb2920e16b47d3c97698be4d034">&#9670;&#160;</a></span>getInspectors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::unordered_map&lt; std::string, ComponentInspector &gt; &amp; vex::ComponentRegistry::getInspectors </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00165">165</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a706210ce937decbf504f6baedb5cd70a" name="a706210ce937decbf504f6baedb5cd70a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a706210ce937decbf504f6baedb5cd70a">&#9670;&#160;</a></span>getInstance()</h2>
 
@@ -168,7 +333,61 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00024">24</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00073">73</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a68e619ee85d50c162e8bb31bd408e6f5" name="a68e619ee85d50c162e8bb31bd408e6f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68e619ee85d50c162e8bb31bd408e6f5">&#9670;&#160;</a></span>getMissingComponents()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; vex::ComponentRegistry::getMissingComponents </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00147">147</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9a317391f0c1263d40354203f8ac7b36" name="a9a317391f0c1263d40354203f8ac7b36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a317391f0c1263d40354203f8ac7b36">&#9670;&#160;</a></span>getRegisteredNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; std::string &gt; &amp; vex::ComponentRegistry::getRegisteredNames </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00169">169</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -204,15 +423,17 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00033">33</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00126">126</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a90cb8cfba828e8190b72a1f8401031f3" name="a90cb8cfba828e8190b72a1f8401031f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90cb8cfba828e8190b72a1f8401031f3">&#9670;&#160;</a></span>registerComponent()</h2>
+<a id="a6a88b2ca1f8dd50bb3fb838dfb6c1daa" name="a6a88b2ca1f8dd50bb3fb838dfb6c1daa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a88b2ca1f8dd50bb3fb838dfb6c1daa">&#9670;&#160;</a></span>registerComponent()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -220,12 +441,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void vex::ComponentRegistry::registerComponent </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">ComponentLoader</td>          <td class="paramname"><span class="paramname"><em>loader</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -235,11 +452,114 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00029">29</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00080">80</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0e0ddf666b509fe51d3f17deff0d6221" name="a0e0ddf666b509fe51d3f17deff0d6221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e0ddf666b509fe51d3f17deff0d6221">&#9670;&#160;</a></span>saveComponent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">nlohmann::json vex::ComponentRegistry::saveComponent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>type</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00136">136</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a23c5b00d7cccf8b26968f8ea74522e91" name="a23c5b00d7cccf8b26968f8ea74522e91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23c5b00d7cccf8b26968f8ea74522e91">&#9670;&#160;</a></span>checkers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, ComponentChecker&gt; vex::ComponentRegistry::checkers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00177">177</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8ab65d9de488eab18e167195210327c9" name="a8ab65d9de488eab18e167195210327c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ab65d9de488eab18e167195210327c9">&#9670;&#160;</a></span>creators</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, ComponentCreator&gt; vex::ComponentRegistry::creators</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00178">178</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8744cbd6540daf729734b1af02ffde1c" name="a8744cbd6540daf729734b1af02ffde1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8744cbd6540daf729734b1af02ffde1c">&#9670;&#160;</a></span>inspectors</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, ComponentInspector&gt; vex::ComponentRegistry::inspectors</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00176">176</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a12cce78c48174d7ddd03f2ad0d6210c5" name="a12cce78c48174d7ddd03f2ad0d6210c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a12cce78c48174d7ddd03f2ad0d6210c5">&#9670;&#160;</a></span>loaders</h2>
 
@@ -260,7 +580,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00045">45</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00174">174</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa8b6bae56e5d3710be2a17b3a2a4e879" name="aa8b6bae56e5d3710be2a17b3a2a4e879"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8b6bae56e5d3710be2a17b3a2a4e879">&#9670;&#160;</a></span>registeredNames</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; vex::ComponentRegistry::registeredNames</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00173">173</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af58c6f910010eece270ac6fe80b2040e" name="af58c6f910010eece270ac6fe80b2040e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af58c6f910010eece270ac6fe80b2040e">&#9670;&#160;</a></span>savers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, ComponentSaver&gt; vex::ComponentRegistry::savers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00175">175</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>

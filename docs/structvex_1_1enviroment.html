@@ -116,10 +116,14 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a7b0286a765e6fba844288bbf7bcd8380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables vertex snapping. (PS1 style jitter when camera is moving)  <br /></td></tr>
 <tr class="memitem:a132b454d664718ea4ecd1070c7583959" id="r_a132b454d664718ea4ecd1070c7583959"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a132b454d664718ea4ecd1070c7583959">affineWarping</a> = true</td></tr>
 <tr class="memdesc:a132b454d664718ea4ecd1070c7583959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables affine texxture warping. (PS1 style texture warping in extreme camera angles)  <br /></td></tr>
-<tr class="memitem:a19648949479db58802a3fd85e71b4f5e" id="r_a19648949479db58802a3fd85e71b4f5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19648949479db58802a3fd85e71b4f5e">colorQuantization</a> = true</td></tr>
-<tr class="memdesc:a19648949479db58802a3fd85e71b4f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables color quantization. (PS1 style color compresion artifacts)  <br /></td></tr>
+<tr class="memitem:a2d2e86a7807ad6b8cc9eb5d3bce8eb0b" id="r_a2d2e86a7807ad6b8cc9eb5d3bce8eb0b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d2e86a7807ad6b8cc9eb5d3bce8eb0b">screenQuantization</a> = true</td></tr>
+<tr class="memdesc:a2d2e86a7807ad6b8cc9eb5d3bce8eb0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables whole screen color quantization. (PS1 style color compresion artifacts)  <br /></td></tr>
 <tr class="memitem:a30d511632c871477abae3cdf7f028324" id="r_a30d511632c871477abae3cdf7f028324"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30d511632c871477abae3cdf7f028324">ntfsArtifacts</a> = true</td></tr>
 <tr class="memdesc:a30d511632c871477abae3cdf7f028324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables NTFS artifacts. (PS1 style NTFS artifacts)  <br /></td></tr>
+<tr class="memitem:a4afe3adb4279894f489843ec54bf408d" id="r_a4afe3adb4279894f489843ec54bf408d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4afe3adb4279894f489843ec54bf408d">textureQuantization</a> = true</td></tr>
+<tr class="memdesc:a4afe3adb4279894f489843ec54bf408d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables texture quantization. (PS1 style texture quantization)  <br /></td></tr>
+<tr class="memitem:a4eb1c21367b170ac05bfddb132c7fd89" id="r_a4eb1c21367b170ac05bfddb132c7fd89"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4eb1c21367b170ac05bfddb132c7fd89">screenDither</a> = true</td></tr>
+<tr class="memdesc:a4eb1c21367b170ac05bfddb132c7fd89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables screen dithering. (PS1 style dithering)  <br /></td></tr>
 <tr class="memitem:ab03745583ed0f9d1b7aa12dea945be20" id="r_ab03745583ed0f9d1b7aa12dea945be20"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab03745583ed0f9d1b7aa12dea945be20">ambientLight</a> = glm::vec3(1.0f)</td></tr>
 <tr class="memdesc:ab03745583ed0f9d1b7aa12dea945be20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ambient light color.  <br /></td></tr>
 <tr class="memitem:ad87ef5444451cd33ec46822445dc2540" id="r_ad87ef5444451cd33ec46822445dc2540"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad87ef5444451cd33ec46822445dc2540">ambientLightStrength</a> = 0.1f</td></tr>
@@ -168,7 +172,7 @@ Public Attributes</h2></td></tr>
 
 <p>Ambient light color. </p>
 
-<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00027">27</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00031">31</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
 
 </div>
 </div>
@@ -186,7 +190,7 @@ Public Attributes</h2></td></tr>
 
 <p>Ambient light strength. </p>
 
-<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00029">29</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00033">33</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
 
 </div>
 </div>
@@ -204,25 +208,7 @@ Public Attributes</h2></td></tr>
 
 <p>Background color (Esentially sky color if not implemented any skybox) </p>
 
-<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00035">35</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a19648949479db58802a3fd85e71b4f5e" name="a19648949479db58802a3fd85e71b4f5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19648949479db58802a3fd85e71b4f5e">&#9670;&#160;</a></span>colorQuantization</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool vex::enviroment::colorQuantization = true</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Enables color quantization. (PS1 style color compresion artifacts) </p>
-
-<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00023">23</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00039">39</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
 
 </div>
 </div>
@@ -280,6 +266,42 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4eb1c21367b170ac05bfddb132c7fd89" name="a4eb1c21367b170ac05bfddb132c7fd89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eb1c21367b170ac05bfddb132c7fd89">&#9670;&#160;</a></span>screenDither</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::enviroment::screenDither = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables screen dithering. (PS1 style dithering) </p>
+
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00029">29</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2d2e86a7807ad6b8cc9eb5d3bce8eb0b" name="a2d2e86a7807ad6b8cc9eb5d3bce8eb0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d2e86a7807ad6b8cc9eb5d3bce8eb0b">&#9670;&#160;</a></span>screenQuantization</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::enviroment::screenQuantization = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables whole screen color quantization. (PS1 style color compresion artifacts) </p>
+
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00023">23</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ab3ab7907a38eab33de0f95f36ff787ab" name="ab3ab7907a38eab33de0f95f36ff787ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab3ab7907a38eab33de0f95f36ff787ab">&#9670;&#160;</a></span>sunDirection</h2>
 
@@ -294,7 +316,7 @@ Public Attributes</h2></td></tr>
 
 <p>Sun direction. </p>
 
-<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00033">33</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00037">37</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
 
 </div>
 </div>
@@ -312,7 +334,25 @@ Public Attributes</h2></td></tr>
 
 <p>Sun light color. </p>
 
-<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00031">31</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00035">35</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4afe3adb4279894f489843ec54bf408d" name="a4afe3adb4279894f489843ec54bf408d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4afe3adb4279894f489843ec54bf408d">&#9670;&#160;</a></span>textureQuantization</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::enviroment::textureQuantization = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables texture quantization. (PS1 style texture quantization) </p>
+
+<p class="definition">Definition at line <a class="el" href="enviroment_8hpp_source.html#l00027">27</a> of file <a class="el" href="enviroment_8hpp_source.html">enviroment.hpp</a>.</p>
 
 </div>
 </div>

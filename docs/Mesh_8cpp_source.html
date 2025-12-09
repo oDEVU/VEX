@@ -121,8 +121,8 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">size_t</span> position_;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    VPKAssimpStream(<span class="keyword">const</span> <span class="keywordtype">char</span>* data, <span class="keywordtype">size_t</span> size)</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        : buffer_(data, data + size), position_(0) {}</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    VPKAssimpStream(<span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_struct" href="structdata.html">data</a>, <span class="keywordtype">size_t</span> size)</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        : buffer_(<a class="code hl_struct" href="structdata.html">data</a>, <a class="code hl_struct" href="structdata.html">data</a> + size), position_(0) {}</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    ~VPKAssimpStream() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
@@ -200,18 +200,18 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordtype">bool</span> Exists(<span class="keyword">const</span> <span class="keywordtype">char</span>* pFile)<span class="keyword"> const override </span>{</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        std::string file_path(pFile);</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Assimp checking if file exists: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Assimp checking if file exists: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="comment">// First try the path as-is</span></div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">if</span> (vfs_-&gt;file_exists(file_path)) {</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;File exists as-is: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;File exists as-is: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        }</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="comment">// Try relative to the base directory</span></div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        std::string relative_path = base_dir_ + file_path;</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordflow">if</span> (vfs_-&gt;file_exists(relative_path)) {</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;File exists relative to base: &#39;%s&#39;&quot;</span>, relative_path.c_str());</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;File exists relative to base: &#39;%s&#39;&quot;</span>, relative_path.c_str());</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        }</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
@@ -219,11 +219,11 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        std::filesystem::path path_obj(file_path);</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        std::string just_filename = path_obj.filename().string();</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordflow">if</span> (vfs_-&gt;file_exists(just_filename)) {</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;File exists as filename only: &#39;%s&#39;&quot;</span>, just_filename.c_str());</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;File exists as filename only: &#39;%s&#39;&quot;</span>, just_filename.c_str());</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        }</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;File not found: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::WARNING, <span class="stringliteral">&quot;File not found: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    }</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
@@ -238,7 +238,7 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        }</div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        std::string file_path(pFile);</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Assimp trying to open: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Assimp trying to open: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        std::string final_path;</div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
@@ -247,12 +247,12 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="comment">// 1. Try as-is</span></div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <span class="keywordflow">if</span> (vfs_-&gt;file_exists(file_path)) {</div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            final_path = file_path;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Opening file as-is: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Opening file as-is: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        }</div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        <span class="comment">// 2. Try relative to base directory</span></div>
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (vfs_-&gt;file_exists(base_dir_ + file_path)) {</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>            final_path = base_dir_ + file_path;</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Opening file relative to base: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Opening file relative to base: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        }</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        <span class="comment">// 3. Try just the filename</span></div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        <span class="keywordflow">else</span> {</div>
@@ -260,9 +260,9 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>            std::string just_filename = path_obj.filename().string();</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>            <span class="keywordflow">if</span> (vfs_-&gt;file_exists(just_filename)) {</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>                final_path = just_filename;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Opening file as filename only: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Opening file as filename only: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Failed to find file: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to find file: &#39;%s&#39;&quot;</span>, file_path.c_str());</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            }</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        }</div>
@@ -270,11 +270,11 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        <span class="comment">// Read the file data into memory first</span></div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        <span class="keyword">auto</span> file_data = vfs_-&gt;load_file(final_path);</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <span class="keywordflow">if</span> (!file_data) {</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Failed to load file data: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Failed to load file data: &#39;%s&#39;&quot;</span>, final_path.c_str());</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        }</div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Successfully loaded file: &#39;%s&#39; (%zu bytes)&quot;</span>, final_path.c_str(), file_data-&gt;size);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Successfully loaded file: &#39;%s&#39; (%zu bytes)&quot;</span>, final_path.c_str(), file_data-&gt;size);</div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        <span class="comment">// Create stream from memory buffer</span></div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code hl_class" href="classvex_1_1VPKAssimpStream.html">VPKAssimpStream</a>(<span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span><span class="keywordtype">char</span>*<span class="keyword">&gt;</span>(file_data-&gt;data.data()), file_data-&gt;size);</div>
@@ -290,136 +290,140 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        <span class="comment">//static VirtualFileSystem* vfs = nullptr; // set this</span></div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="comment">// Temporary debug code</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Using Assimp version: %d.%d.%d&quot;</span>,</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Using Assimp version: %d.%d.%d&quot;</span>,</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>               aiGetVersionMajor(),</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>               aiGetVersionMinor(),</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>               aiGetVersionRevision());</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating assimp importer...&quot;</span>);</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        Assimp::Importer importer;</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        std::string realPath = path;</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating assimp importer...&quot;</span>);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="keyword">auto</span> importerPtr = std::make_unique&lt;Assimp::Importer&gt;();</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        Assimp::Importer&amp; importer = *importerPtr;</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="preprocessor">        #if NDEBUG</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>                <span class="comment">// Set up custom IO system if using VFS</span></div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>                <span class="keywordflow">if</span> (vfs) {</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>                    importer.SetIOHandler(<span class="keyword">new</span> <a class="code hl_class" href="classvex_1_1VPKAssimpIOSystem.html">VPKAssimpIOSystem</a>(vfs, realPath));</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>                }</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="preprocessor">        #endif</span></div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <span class="keywordflow">if</span> (!vfs-&gt;<a class="code hl_function" href="classvex_1_1VirtualFileSystem.html#af7e5ffbb87270ae0927501e9284ba0b5">file_exists</a>(realPath)){</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;File: [&quot;</span> + realPath + <span class="stringliteral">&quot;] doesnt exists&quot;</span>);</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        }</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        <span class="keyword">const</span> aiScene* scene = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        std::string realPath = path;</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="preprocessor">        #if NDEBUG</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>                <span class="comment">// Set up custom IO system if using VFS</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>                <span class="keywordflow">if</span> (vfs) {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>                    importer.SetIOHandler(<span class="keyword">new</span> <a class="code hl_class" href="classvex_1_1VPKAssimpIOSystem.html">VPKAssimpIOSystem</a>(vfs, realPath));</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>                }</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="preprocessor">        #endif</span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        <span class="keywordflow">if</span> (!vfs-&gt;<a class="code hl_function" href="classvex_1_1VirtualFileSystem.html#af7e5ffbb87270ae0927501e9284ba0b5">file_exists</a>(realPath)){</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>            handle_exception(std::runtime_error(<span class="stringliteral">&quot;File: [&quot;</span> + realPath + <span class="stringliteral">&quot;] doesnt exist&quot;</span>));</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        }</div>
 <div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="preprocessor">#if NDEBUG</span></div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            <span class="keyword">auto</span> fileData = vfs-&gt;<a class="code hl_function" href="classvex_1_1VirtualFileSystem.html#a2c225e9af2e7e8b64d2b346319c4f4c2">load_file</a>(realPath);</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>            <span class="keywordflow">if</span> (!fileData) {</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to load file from VFS: &quot;</span> + realPath);</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>            }</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loading from VFS memory buffer, size: %zu&quot;</span>, fileData-&gt;size);</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>            <span class="comment">// Get file extension for format hint</span></div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            std::string extension = std::filesystem::path(realPath).extension().string();</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>            <span class="keyword">const</span> <span class="keywordtype">char</span>* formatHint = extension.c_str();</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            <span class="comment">// Use ReadFileFromMemory instead of ReadFile</span></div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            scene = importer.ReadFileFromMemory(</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>                fileData-&gt;data.data(),</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>                fileData-&gt;size,</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>                aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs,</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>                formatHint);</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        scene = importer.ReadFile(realPath,</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            aiProcess_Triangulate |</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            aiProcess_GenNormals |</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            aiProcess_FlipUVs);</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        <span class="keywordflow">if</span> (!scene) {</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Assimp failed to load file: &quot;</span> + std::string(importer.GetErrorString()));</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        }</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <span class="keywordflow">if</span> (scene-&gt;mFlags &amp; AI_SCENE_FLAGS_INCOMPLETE) {</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Assimp scene incomplete: &quot;</span> + std::string(importer.GetErrorString()));</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <span class="keyword">const</span> aiScene* scene = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="preprocessor">#if NDEBUG</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>            <span class="keyword">auto</span> fileData = vfs-&gt;<a class="code hl_function" href="classvex_1_1VirtualFileSystem.html#a2c225e9af2e7e8b64d2b346319c4f4c2">load_file</a>(realPath);</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>            <span class="keywordflow">if</span> (!fileData) {</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to load file from VFS: &quot;</span> + realPath);</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>            }</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            log(<span class="stringliteral">&quot;Loading from VFS memory buffer, size: %zu&quot;</span>, fileData-&gt;size);</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>            <span class="comment">// Get file extension for format hint</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            std::string extension = std::filesystem::path(realPath).extension().string();</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            <span class="keyword">const</span> <span class="keywordtype">char</span>* formatHint = extension.c_str();</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            <span class="comment">// Use ReadFileFromMemory instead of ReadFile</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            scene = importer.ReadFileFromMemory(</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>                fileData-&gt;data.data(),</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>                fileData-&gt;size,</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>                aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs,</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>                formatHint);</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        scene = importer.ReadFile(realPath,</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            aiProcess_Triangulate |</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            aiProcess_GenNormals |</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            aiProcess_FlipUVs);</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        <span class="keywordflow">if</span> (!scene) {</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>            <a class="code hl_function" href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">handle_exception</a>(std::runtime_error(<span class="stringliteral">&quot;Assimp failed to load file: &quot;</span> + std::string(importer.GetErrorString())));</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        }</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        <span class="keywordflow">if</span> (!scene-&gt;mRootNode) {</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Assimp scene has no root node&quot;</span>);</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        }</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <span class="keywordflow">if</span> (!scene-&gt;mMeshes) {</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Assimp scene has invalid mesh array&quot;</span>);</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        }</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        <span class="keywordflow">if</span> (scene-&gt;mNumMeshes == 0) {</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Model contains no meshes&quot;</span>);</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        }</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        submeshes.clear();</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        submeshes.resize(scene-&gt;mNumMeshes);</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> m = 0; m &lt; scene-&gt;mNumMeshes; m++) {</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Processing mesh %i...&quot;</span>, m);</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>            aiMesh* aiMesh = scene-&gt;mMeshes[m];</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>            Submesh&amp; submesh = submeshes[m];</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            <span class="comment">// Vertices</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loading verticies...&quot;</span>);</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            submesh.vertices.resize(aiMesh-&gt;mNumVertices);</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; aiMesh-&gt;mNumVertices; i++) {</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                submesh.vertices[i].position = {</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>                    aiMesh-&gt;mVertices[i].x,</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>                    aiMesh-&gt;mVertices[i].y,</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                    aiMesh-&gt;mVertices[i].z</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                };</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                submesh.vertices[i].normal = {</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                    aiMesh-&gt;mNormals[i].x,</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                    aiMesh-&gt;mNormals[i].y,</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                    aiMesh-&gt;mNormals[i].z</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                };</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>                <span class="keywordflow">if</span> (aiMesh-&gt;mTextureCoords[0]) {</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>                    submesh.vertices[i].uv = {</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                        aiMesh-&gt;mTextureCoords[0][i].x,</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>                        aiMesh-&gt;mTextureCoords[0][i].y</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>                    };</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>                    submesh.vertices[i].uv = glm::vec2(-100000.f);</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>                }</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>            }</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>            <span class="comment">// Indices</span></div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Loading indices...&quot;</span>);</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>            submesh.indices.resize(aiMesh-&gt;mNumFaces * 3);</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; aiMesh-&gt;mNumFaces; i++) {</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>                aiFace face = aiMesh-&gt;mFaces[i];</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>                <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> j = 0; j &lt; face.mNumIndices; j++) {</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>                    submesh.indices[i*3 + j] = face.mIndices[j];</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>                }</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>            }</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>            <span class="comment">// Textures</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Getting texture path...&quot;</span>);</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            std::filesystem::path meshPath(realPath);</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>            meshPath.remove_filename();</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            <span class="keywordflow">if</span> (aiMesh-&gt;mMaterialIndex &gt;= 0) {</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>                aiMaterial* material = scene-&gt;mMaterials[aiMesh-&gt;mMaterialIndex];</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>                aiString texPath;</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>                <span class="keywordflow">if</span> (material-&gt;GetTexture(aiTextureType_DIFFUSE, 0, &amp;texPath) == AI_SUCCESS) {</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>                    submesh.texturePath = meshPath.string() + texPath.C_Str();</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>                }</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>            }</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        }</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        <span class="comment">// Clean up custom IO system</span></div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        <span class="keywordflow">if</span> (vfs) {</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>            importer.SetIOHandler(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        }</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    }</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>}</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        <span class="keywordflow">if</span> (scene-&gt;mFlags &amp; AI_SCENE_FLAGS_INCOMPLETE) {</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Assimp scene incomplete: &quot;</span> + std::string(importer.GetErrorString()));</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        }</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        <span class="keywordflow">if</span> (!scene-&gt;mRootNode) {</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Assimp scene has no root node&quot;</span>);</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        }</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        <span class="keywordflow">if</span> (!scene-&gt;mMeshes) {</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Assimp scene has invalid mesh array&quot;</span>);</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>        }</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        <span class="keywordflow">if</span> (scene-&gt;mNumMeshes == 0) {</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Model contains no meshes&quot;</span>);</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        }</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        submeshes.clear();</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>        submeshes.resize(scene-&gt;mNumMeshes);</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> m = 0; m &lt; scene-&gt;mNumMeshes; m++) {</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            log(<span class="stringliteral">&quot;Processing mesh %i...&quot;</span>, m);</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            aiMesh* aiMesh = scene-&gt;mMeshes[m];</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            Submesh&amp; submesh = submeshes[m];</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>            <span class="comment">// Vertices</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            log(<span class="stringliteral">&quot;Loading verticies...&quot;</span>);</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>            submesh.vertices.resize(aiMesh-&gt;mNumVertices);</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; aiMesh-&gt;mNumVertices; i++) {</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                submesh.vertices[i].position = {</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                    aiMesh-&gt;mVertices[i].x,</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                    aiMesh-&gt;mVertices[i].y,</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                    aiMesh-&gt;mVertices[i].z</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                };</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                submesh.vertices[i].normal = {</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                    aiMesh-&gt;mNormals[i].x,</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>                    aiMesh-&gt;mNormals[i].y,</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>                    aiMesh-&gt;mNormals[i].z</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                };</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>                <span class="keywordflow">if</span> (aiMesh-&gt;mTextureCoords[0]) {</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>                    submesh.vertices[i].uv = {</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>                        aiMesh-&gt;mTextureCoords[0][i].x,</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>                        aiMesh-&gt;mTextureCoords[0][i].y</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>                    };</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>                    submesh.vertices[i].uv = glm::vec2(-100000.f);</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>                }</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>            }</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>            <span class="comment">// Indices</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>            log(<span class="stringliteral">&quot;Loading indices...&quot;</span>);</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>            submesh.indices.reserve(aiMesh-&gt;mNumFaces * 3);</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; aiMesh-&gt;mNumFaces; i++) {</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>                aiFace face = aiMesh-&gt;mFaces[i];</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>                <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> j = 0; j &lt; face.mNumIndices; j++) {</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>                    submesh.indices.push_back(face.mIndices[j]);</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>                }</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            }</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>            <span class="comment">// Textures</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            log(<span class="stringliteral">&quot;Getting texture path...&quot;</span>);</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>            std::filesystem::path meshPath(realPath);</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>            meshPath.remove_filename();</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span> </div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>            <span class="keywordflow">if</span> (aiMesh-&gt;mMaterialIndex &gt;= 0) {</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>                aiMaterial* material = scene-&gt;mMaterials[aiMesh-&gt;mMaterialIndex];</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>                aiString texPath;</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>                <span class="keywordflow">if</span> (material-&gt;GetTexture(aiTextureType_DIFFUSE, 0, &amp;texPath) == AI_SUCCESS) {</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>                    submesh.texturePath = meshPath.string() + texPath.C_Str();</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>                }</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>            }</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        }</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        <span class="comment">// Clean up custom IO system</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        <span class="keywordflow">if</span> (vfs) {</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>            importer.SetIOHandler(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        }</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    }</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>}</div>
 <div class="ttc" id="aMesh_8hpp_html"><div class="ttname"><a href="Mesh_8hpp.html">Mesh.hpp</a></div><div class="ttdoc">This file defines MeshData struct and all other structs needed for it.</div></div>
 <div class="ttc" id="aVirtualFileSystem_8hpp_html"><div class="ttname"><a href="VirtualFileSystem_8hpp.html">VirtualFileSystem.hpp</a></div><div class="ttdoc">This file defines VirtualFileSystem and VPKStream classes.</div></div>
 <div class="ttc" id="aclassvex_1_1VPKAssimpIOSystem_html"><div class="ttname"><a href="classvex_1_1VPKAssimpIOSystem.html">vex::VPKAssimpIOSystem</a></div><div class="ttdef"><b>Definition</b> <a href="#l00076">Mesh.cpp:76</a></div></div>
@@ -428,8 +432,10 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1VirtualFileSystem_html_a2c225e9af2e7e8b64d2b346319c4f4c2"><div class="ttname"><a href="classvex_1_1VirtualFileSystem.html#a2c225e9af2e7e8b64d2b346319c4f4c2">vex::VirtualFileSystem::load_file</a></div><div class="ttdeci">std::unique_ptr&lt; FileData &gt; load_file(const std::string &amp;virtual_path)</div><div class="ttdoc">Loads file from a specified path. For packed assets path is unique file id.</div><div class="ttdef"><b>Definition</b> <a href="VirtualFileSystem_8cpp_source.html#l00107">VirtualFileSystem.cpp:107</a></div></div>
 <div class="ttc" id="aclassvex_1_1VirtualFileSystem_html_af7e5ffbb87270ae0927501e9284ba0b5"><div class="ttname"><a href="classvex_1_1VirtualFileSystem.html#af7e5ffbb87270ae0927501e9284ba0b5">vex::VirtualFileSystem::file_exists</a></div><div class="ttdeci">bool file_exists(const std::string &amp;virtual_path)</div><div class="ttdoc">Checks if a file exists in the virtual file system.</div><div class="ttdef"><b>Definition</b> <a href="VirtualFileSystem_8cpp_source.html#l00196">VirtualFileSystem.cpp:196</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a1e76fad2fc6915f89fbc9975e63e8f01"><div class="ttname"><a href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a></div><div class="ttdeci">void log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00052">errorUtils.hpp:52</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a8716696aa383ccb523980d921fbc4102"><div class="ttname"><a href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a></div><div class="ttdeci">void throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00043">errorUtils.hpp:43</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00093">errorUtils.cpp:93</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00097">errorUtils.cpp:97</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00110">errorUtils.cpp:110</a></div></div>
+<div class="ttc" id="astructdata_html"><div class="ttname"><a href="structdata.html">data</a></div><div class="ttdef"><b>Definition</b> <a href="poolTests_8c_source.html#l00028">poolTests.c:28</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

@@ -119,13 +119,13 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    }</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    std::vector&lt;char&gt; VulkanPipeline::readFile(<span class="keyword">const</span> std::string&amp; filename) {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Reading shader...&quot;</span>);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        log(<span class="stringliteral">&quot;Reading shader...&quot;</span>);</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        std::string realPath = <a class="code hl_function" href="pathUtils_8hpp.html#aab0b916c80e8bc113d5a3184f132a061">GetAssetPath</a>(filename);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        std::string realPath = <span class="stringliteral">&quot;./&quot;</span> + filename;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        std::ifstream file(realPath, std::ios::ate | std::ios::binary);</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keywordflow">if</span> (!file.is_open()) {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to open shader file: &quot;</span> + realPath);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to open shader file: &quot;</span> + realPath);</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        }</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordtype">size_t</span> fileSize = file.tellg();</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        std::vector&lt;char&gt; buffer(fileSize);</div>
@@ -150,7 +150,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keyword">auto</span> vertShaderCode = readFile(vertShaderPath);</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">auto</span> fragShaderCode = readFile(fragShaderPath);</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating shader modules...&quot;</span>);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating shader modules...&quot;</span>);</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">auto</span> createShaderModule = [&amp;](<span class="keyword">const</span> std::vector&lt;char&gt;&amp; code) {</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            VkShaderModuleCreateInfo createInfo{};</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;</div>
@@ -159,7 +159,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            VkShaderModule shaderModule;</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create shader module&quot;</span>);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create shader module&quot;</span>);</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            }</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <span class="keywordflow">return</span> shaderModule;</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        };</div>
@@ -167,7 +167,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Defining shader stages...&quot;</span>);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Defining shader stages...&quot;</span>);</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        VkPipelineShaderStageCreateInfo vertShaderStageInfo{};</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;</div>
@@ -182,7 +182,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating vertex input state...&quot;</span>);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating vertex input state...&quot;</span>);</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        VkPipelineVertexInputStateCreateInfo vertexInputInfo{};</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        vertexInputInfo.vertexBindingDescriptionCount = 1;</div>
@@ -190,7 +190,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        vertexInputInfo.vertexAttributeDescriptionCount = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(attributeDescriptions.size());</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating pipeline state...&quot;</span>);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating pipeline state...&quot;</span>);</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        VkPipelineInputAssemblyStateCreateInfo inputAssembly{};</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;</div>
@@ -208,7 +208,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        scissor.offset = {0, 0};</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        scissor.extent = {m_currentRenderResolution.x, m_currentRenderResolution.y};</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating viewport state...&quot;</span>);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating viewport state...&quot;</span>);</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        VkPipelineViewportStateCreateInfo viewportState{};</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        viewportState.viewportCount = 1;</div>
@@ -216,7 +216,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        viewportState.scissorCount = 1;</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        viewportState.pScissors = &amp;scissor;</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating resterazer...&quot;</span>);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating resterazer...&quot;</span>);</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        VkPipelineRasterizationStateCreateInfo rasterizer{};</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        rasterizer.depthClampEnable = VK_FALSE;</div>
@@ -227,7 +227,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        rasterizer.depthBiasEnable = VK_FALSE;</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating multisampling...&quot;</span>);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating multisampling...&quot;</span>);</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        VkPipelineMultisampleStateCreateInfo multisampling{};</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        multisampling.sampleShadingEnable = VK_FALSE;</div>
@@ -253,7 +253,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        colorBlending.attachmentCount = 1;</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        colorBlending.pAttachments = &amp;colorBlendAttachment;</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating Pipeline layout...&quot;</span>);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Pipeline layout...&quot;</span>);</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>            VkPushConstantRange pushConstantRange{};</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>            pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;</div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            pushConstantRange.offset = 0;</div>
@@ -271,9 +271,9 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>            pipelineLayoutInfo.pushConstantRangeCount = 1;</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>            pipelineLayoutInfo.pPushConstantRanges = &amp;pushConstantRange;</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating pipeline layout with %d descriptor sets&quot;</span>, setLayouts.size());</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating pipeline layout with %d descriptor sets&quot;</span>, setLayouts.size());</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create pipeline layout!&quot;</span>);</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create pipeline layout!&quot;</span>);</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>            }</div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        VkPipelineDepthStencilStateCreateInfo depthStencil{};</div>
@@ -302,7 +302,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating Graphics pipeline...&quot;</span>);</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Graphics pipeline...&quot;</span>);</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        VkGraphicsPipelineCreateInfo pipelineInfo{};</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        pipelineInfo.stageCount = 2;</div>
@@ -319,10 +319,10 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create graphics pipeline&quot;</span>);</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        }</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Cleanup shader modules...&quot;</span>);</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Cleanup shader modules...&quot;</span>);</div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        vkDestroyShaderModule(m_r_context.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        vkDestroyShaderModule(m_r_context.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    }</div>
@@ -338,7 +338,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        <span class="keyword">auto</span> vertShaderCode = readFile(vertShaderPath);</div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        <span class="keyword">auto</span> fragShaderCode = readFile(fragShaderPath);</div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating shader modules...&quot;</span>);</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating shader modules...&quot;</span>);</div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>        <span class="keyword">auto</span> createShaderModule = [&amp;](<span class="keyword">const</span> std::vector&lt;char&gt;&amp; code) {</div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            VkShaderModuleCreateInfo createInfo{};</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;</div>
@@ -347,7 +347,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>            VkShaderModule shaderModule;</div>
 <div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create shader module&quot;</span>);</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create shader module&quot;</span>);</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>            }</div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            <span class="keywordflow">return</span> shaderModule;</div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        };</div>
@@ -355,7 +355,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);</div>
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Defining shader stages...&quot;</span>);</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Defining shader stages...&quot;</span>);</div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        VkPipelineShaderStageCreateInfo vertShaderStageInfo{};</div>
 <div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>        vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;</div>
@@ -370,7 +370,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span> </div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>        VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};</div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating vertex input state...&quot;</span>);</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating vertex input state...&quot;</span>);</div>
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        VkPipelineVertexInputStateCreateInfo vertexInputInfo{};</div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        vertexInputInfo.vertexBindingDescriptionCount = 1;</div>
@@ -378,7 +378,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        vertexInputInfo.vertexAttributeDescriptionCount = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(attributeDescriptions.size());</div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating pipeline state...&quot;</span>);</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating pipeline state...&quot;</span>);</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>        VkPipelineInputAssemblyStateCreateInfo inputAssembly{};</div>
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>        inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;</div>
@@ -396,7 +396,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        scissor.offset = {0, 0};</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>        scissor.extent = {m_currentRenderResolution.x, m_currentRenderResolution.y};</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating viewport state...&quot;</span>);</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating viewport state...&quot;</span>);</div>
 <div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        VkPipelineViewportStateCreateInfo viewportState{};</div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        viewportState.viewportCount = 1;</div>
@@ -404,7 +404,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>        viewportState.scissorCount = 1;</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        viewportState.pScissors = &amp;scissor;</div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating resterazer...&quot;</span>);</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating resterazer...&quot;</span>);</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>        VkPipelineRasterizationStateCreateInfo rasterizer{};</div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>        rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>        rasterizer.depthClampEnable = VK_FALSE;</div>
@@ -415,7 +415,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;</div>
 <div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        rasterizer.depthBiasEnable = VK_FALSE;</div>
 <div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating multisampling...&quot;</span>);</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating multisampling...&quot;</span>);</div>
 <div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        VkPipelineMultisampleStateCreateInfo multisampling{};</div>
 <div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;</div>
 <div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        multisampling.sampleShadingEnable = VK_FALSE;</div>
@@ -441,7 +441,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>        colorBlending.attachmentCount = 1;</div>
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        colorBlending.pAttachments = &amp;colorBlendAttachment;</div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating Pipeline layout...&quot;</span>);</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Pipeline layout...&quot;</span>);</div>
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>            VkPushConstantRange pushConstantRange{};</div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>            pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;</div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>            pushConstantRange.offset = 0;</div>
@@ -459,9 +459,9 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>            pipelineLayoutInfo.pushConstantRangeCount = 1;</div>
 <div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>            pipelineLayoutInfo.pPushConstantRanges = &amp;pushConstantRange;</div>
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span> </div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating pipeline layout with %d descriptor sets&quot;</span>, setLayouts.size());</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating pipeline layout with %d descriptor sets&quot;</span>, setLayouts.size());</div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create pipeline layout!&quot;</span>);</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create pipeline layout!&quot;</span>);</div>
 <div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>            }</div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
 <div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>        VkPipelineDepthStencilStateCreateInfo depthStencil{};</div>
@@ -490,7 +490,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
 <div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>        renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
 <div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span> </div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Creating Graphics pipeline...&quot;</span>);</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Graphics pipeline...&quot;</span>);</div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>        VkGraphicsPipelineCreateInfo pipelineInfo{};</div>
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>        pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;</div>
 <div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>        pipelineInfo.stageCount = 2;</div>
@@ -507,10 +507,10 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>        pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
 <div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
 <div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create graphics pipeline&quot;</span>);</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>        }</div>
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a>(<span class="stringliteral">&quot;Cleanup shader modules...&quot;</span>);</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Cleanup shader modules...&quot;</span>);</div>
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>        vkDestroyShaderModule(m_r_context.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        vkDestroyShaderModule(m_r_context.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>    }</div>
@@ -534,7 +534,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span> </div>
 <div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>            VkShaderModule shaderModule;</div>
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI shader module&quot;</span>);</div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI shader module&quot;</span>);</div>
 <div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>            }</div>
 <div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>            <span class="keywordflow">return</span> shaderModule;</div>
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>        };</div>
@@ -640,7 +640,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span> </div>
 <div class="line"><a id="l00532" name="l00532"></a><span class="lineno">  532</span>        <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo,</div>
 <div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span>                                   <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI pipeline layout!&quot;</span>);</div>
+<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI pipeline layout!&quot;</span>);</div>
 <div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span>        }</div>
 <div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span> </div>
 <div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span>        VkPipelineRenderingCreateInfo renderingCreateInfo{};</div>
@@ -666,26 +666,136 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span> </div>
 <div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1,</div>
 <div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>                                      &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI graphics pipeline&quot;</span>);</div>
+<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>        }</div>
 <div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span> </div>
 <div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>        vkDestroyShaderModule(m_r_context.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>        vkDestroyShaderModule(m_r_context.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>    }</div>
 </div>
-<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>}</div>
+<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span> </div>
+<div class="foldopen" id="foldopen00567" data-start="{" data-end="}">
+<div class="line"><a id="l00567" name="l00567"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html#aba1457018582186f98cb75739148351f">  567</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#aba1457018582186f98cb75739148351f">VulkanPipeline::createFullscreenPipeline</a>(<span class="keyword">const</span> std::string&amp; vertPath, <span class="keyword">const</span> std::string&amp; fragPath) {</div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>        <span class="keyword">auto</span> vertShaderCode = readFile(vertPath);</div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>        <span class="keyword">auto</span> fragShaderCode = readFile(fragPath);</div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span> </div>
+<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>        <span class="keyword">auto</span> createShaderModule = [&amp;](<span class="keyword">const</span> std::vector&lt;char&gt;&amp; code) {</div>
+<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>            VkShaderModuleCreateInfo createInfo{};</div>
+<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>            createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;</div>
+<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>            createInfo.codeSize = code.size();</div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>            createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
+<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span> </div>
+<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>            VkShaderModule shaderModule;</div>
+<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI shader module&quot;</span>);</div>
+<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>            }</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>            <span class="keywordflow">return</span> shaderModule;</div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>        };</div>
+<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span> </div>
+<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>        VkShaderModule vertModule = createShaderModule(vertShaderCode);</div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>        VkShaderModule fragModule = createShaderModule(fragShaderCode);</div>
+<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span> </div>
+<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>        VkPipelineShaderStageCreateInfo vertStage{};</div>
+<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>        vertStage.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;</div>
+<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>        vertStage.stage  = VK_SHADER_STAGE_VERTEX_BIT;</div>
+<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span>        vertStage.module = vertModule;</div>
+<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span>        vertStage.pName  = <span class="stringliteral">&quot;main&quot;</span>;</div>
+<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span> </div>
+<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>        VkPipelineShaderStageCreateInfo fragStage{};</div>
+<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>        fragStage.sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;</div>
+<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>        fragStage.stage  = VK_SHADER_STAGE_FRAGMENT_BIT;</div>
+<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>        fragStage.module = fragModule;</div>
+<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>        fragStage.pName  = <span class="stringliteral">&quot;main&quot;</span>;</div>
+<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span> </div>
+<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span>        VkPipelineShaderStageCreateInfo stages[] = { vertStage, fragStage };</div>
+<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span> </div>
+<div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>        VkPipelineVertexInputStateCreateInfo vertexInputInfo{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span> </div>
+<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>        VkPipelineInputAssemblyStateCreateInfo inputAssembly{VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;</div>
+<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span> </div>
+<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>        VkPipelineViewportStateCreateInfo viewportState{VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>        viewportState.viewportCount = 1;</div>
+<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span>        viewportState.scissorCount = 1;</div>
+<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span> </div>
+<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>        VkPipelineRasterizationStateCreateInfo rasterizer{VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;</div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>        rasterizer.lineWidth = 1.0f;</div>
+<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>        rasterizer.cullMode = VK_CULL_MODE_NONE;</div>
+<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;</div>
+<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span> </div>
+<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>        VkPipelineMultisampleStateCreateInfo multisampling{VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>        multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;</div>
+<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span> </div>
+<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>        VkPipelineColorBlendAttachmentState colorBlendAttachment{};</div>
+<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span>        colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;</div>
+<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>        colorBlendAttachment.blendEnable = VK_FALSE;</div>
+<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span> </div>
+<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>        VkPipelineColorBlendStateCreateInfo colorBlending{VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>        colorBlending.attachmentCount = 1;</div>
+<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>        colorBlending.pAttachments = &amp;colorBlendAttachment;</div>
+<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span> </div>
+<div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span>        std::array&lt;VkDescriptorSetLayout, 2&gt; setLayouts = {</div>
+<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>            m_r_context.uboDescriptorSetLayout,</div>
+<div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span>            m_r_context.textureDescriptorSetLayout</div>
+<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>        };</div>
+<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span> </div>
+<div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>        VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};</div>
+<div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>        pipelineLayoutInfo.setLayoutCount = setLayouts.size();</div>
+<div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>        pipelineLayoutInfo.pSetLayouts = setLayouts.data();</div>
+<div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span> </div>
+<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>        <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create fullscreen layout&quot;</span>);</div>
+<div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span>        }</div>
+<div class="line"><a id="l00639" name="l00639"></a><span class="lineno">  639</span> </div>
+<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span>        VkPipelineDepthStencilStateCreateInfo depthStencil{VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00641" name="l00641"></a><span class="lineno">  641</span>        depthStencil.depthTestEnable = VK_FALSE;</div>
+<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span>        depthStencil.depthWriteEnable = VK_FALSE;</div>
+<div class="line"><a id="l00643" name="l00643"></a><span class="lineno">  643</span> </div>
+<div class="line"><a id="l00644" name="l00644"></a><span class="lineno">  644</span>        std::vector&lt;VkDynamicState&gt; dynamicStates = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };</div>
+<div class="line"><a id="l00645" name="l00645"></a><span class="lineno">  645</span>        VkPipelineDynamicStateCreateInfo dynamicState{VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00646" name="l00646"></a><span class="lineno">  646</span>        dynamicState.dynamicStateCount = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(dynamicStates.size());</div>
+<div class="line"><a id="l00647" name="l00647"></a><span class="lineno">  647</span>        dynamicState.pDynamicStates = dynamicStates.data();</div>
+<div class="line"><a id="l00648" name="l00648"></a><span class="lineno">  648</span> </div>
+<div class="line"><a id="l00649" name="l00649"></a><span class="lineno">  649</span>        VkPipelineRenderingCreateInfo renderingCreateInfo{VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO};</div>
+<div class="line"><a id="l00650" name="l00650"></a><span class="lineno">  650</span>        renderingCreateInfo.colorAttachmentCount = 1;</div>
+<div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
+<div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span> </div>
+<div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span>        VkGraphicsPipelineCreateInfo pipelineInfo{VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};</div>
+<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span>        pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
+<div class="line"><a id="l00655" name="l00655"></a><span class="lineno">  655</span>        pipelineInfo.stageCount = 2;</div>
+<div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span>        pipelineInfo.pStages = stages;</div>
+<div class="line"><a id="l00657" name="l00657"></a><span class="lineno">  657</span>        pipelineInfo.pVertexInputState = &amp;vertexInputInfo;</div>
+<div class="line"><a id="l00658" name="l00658"></a><span class="lineno">  658</span>        pipelineInfo.pInputAssemblyState = &amp;inputAssembly;</div>
+<div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>        pipelineInfo.pViewportState = &amp;viewportState;</div>
+<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span>        pipelineInfo.pRasterizationState = &amp;rasterizer;</div>
+<div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span>        pipelineInfo.pMultisampleState = &amp;multisampling;</div>
+<div class="line"><a id="l00662" name="l00662"></a><span class="lineno">  662</span>        pipelineInfo.pColorBlendState = &amp;colorBlending;</div>
+<div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span>        pipelineInfo.pDepthStencilState = &amp;depthStencil;</div>
+<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span>        pipelineInfo.pDynamicState = &amp;dynamicState;</div>
+<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>        pipelineInfo.layout = m_layout;</div>
+<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span> </div>
+<div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create fullscreen pipeline&quot;</span>);</div>
+<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>        }</div>
+<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span> </div>
+<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>        vkDestroyShaderModule(m_r_context.device, vertModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>        vkDestroyShaderModule(m_r_context.device, fragModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>    }</div>
+</div>
+<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>}</div>
 <div class="ttc" id="aPipeline_8hpp_html"><div class="ttname"><a href="Pipeline_8hpp.html">Pipeline.hpp</a></div><div class="ttdoc">This file defines VulkanPipeline Class.</div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a4e6b47a0e253b2f2e6a2f7118adea69d"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d">vex::VulkanPipeline::createUIPipeline</a></div><div class="ttdeci">void createUIPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDesc, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attrDesc)</div><div class="ttdoc">Creates a UI VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00411">Pipeline.cpp:411</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a98622acc241688b8fa46d13af4cd376b"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">vex::VulkanPipeline::VulkanPipeline</a></div><div class="ttdeci">VulkanPipeline(VulkanContext &amp;r_context)</div><div class="ttdoc">Constructor for VulkanPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00008">Pipeline.cpp:8</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aa4a1d52319fe905983561f4d04473d49"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49">vex::VulkanPipeline::updateViewport</a></div><div class="ttdeci">void updateViewport(glm::uvec2 resolution)</div><div class="ttdoc">Updates viewport to new resolution.</div><div class="ttdef"><b>Definition</b> <a href="#l00035">Pipeline.cpp:35</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aac43b2e87b883999cc2abfd635834a80"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aac43b2e87b883999cc2abfd635834a80">vex::VulkanPipeline::createGraphicsPipeline</a></div><div class="ttdeci">void createGraphicsPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a graphics VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00039">Pipeline.cpp:39</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aba1457018582186f98cb75739148351f"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aba1457018582186f98cb75739148351f">vex::VulkanPipeline::createFullscreenPipeline</a></div><div class="ttdeci">void createFullscreenPipeline(const std::string &amp;vertPath, const std::string &amp;fragPath)</div><div class="ttdoc">Creates a fullscreen VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00567">Pipeline.cpp:567</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_ac4c66041196d8c8d8f1410125923a34b"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#ac4c66041196d8c8d8f1410125923a34b">vex::VulkanPipeline::createTransparentPipeline</a></div><div class="ttdeci">void createTransparentPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a graphics VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00225">Pipeline.cpp:225</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a1e76fad2fc6915f89fbc9975e63e8f01"><div class="ttname"><a href="errorUtils_8hpp.html#a1e76fad2fc6915f89fbc9975e63e8f01">log</a></div><div class="ttdeci">void log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00052">errorUtils.hpp:52</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a8716696aa383ccb523980d921fbc4102"><div class="ttname"><a href="errorUtils_8hpp.html#a8716696aa383ccb523980d921fbc4102">throw_error</a></div><div class="ttdeci">void throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00043">errorUtils.hpp:43</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html_aab0b916c80e8bc113d5a3184f132a061"><div class="ttname"><a href="pathUtils_8hpp.html#aab0b916c80e8bc113d5a3184f132a061">GetAssetPath</a></div><div class="ttdeci">std::string GetAssetPath(const std::string &amp;relativePath)</div><div class="ttdoc">Get the path of an asset. Its different for debug and release builds since VirtualFileSystem implemen...</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8hpp_source.html#l00066">pathUtils.hpp:66</a></div></div>
-<div class="ttc" id="astructvex_1_1PushConstants_html"><div class="ttname"><a href="structvex_1_1PushConstants.html">vex::PushConstants</a></div><div class="ttdoc">Push constants, holds model information.</div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00047">uniforms.hpp:47</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00093">errorUtils.cpp:93</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00097">errorUtils.cpp:97</a></div></div>
+<div class="ttc" id="astructvex_1_1PushConstants_html"><div class="ttname"><a href="structvex_1_1PushConstants.html">vex::PushConstants</a></div><div class="ttdoc">Push constants, holds model information.</div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00049">uniforms.hpp:49</a></div></div>
 <div class="ttc" id="astructvex_1_1UIPushConstants_html"><div class="ttname"><a href="structvex_1_1UIPushConstants.html">vex::UIPushConstants</a></div><div class="ttdoc">Push constants for UI rendering.</div><div class="ttdef"><b>Definition</b> <a href="UIVertex_8hpp_source.html#l00023">UIVertex.hpp:23</a></div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00024">context.hpp:24</a></div></div>
+<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00025">context.hpp:25</a></div></div>
 <div class="ttc" id="auniforms_8hpp_html"><div class="ttname"><a href="uniforms_8hpp.html">uniforms.hpp</a></div><div class="ttdoc">This file defines uniforms and pushconstant for rendering meshes.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

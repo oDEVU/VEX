@@ -1,7 +1,12 @@
 var classvex_1_1Renderer =
 [
-    [ "Renderer", "classvex_1_1Renderer.html#a225f6e597ca87b995704de2571e990b7", null ],
+    [ "Renderer", "classvex_1_1Renderer.html#a5ccf43388679db64d7e213e3abc322b3", null ],
     [ "~Renderer", "classvex_1_1Renderer.html#ab647f7466e1195b57864a5ead4c51cad", null ],
+    [ "beginFrame", "classvex_1_1Renderer.html#a12fe57afbc50cd54c32095a99b544518", null ],
+    [ "composeFrame", "classvex_1_1Renderer.html#a3d76ea1772288bca785e7c8f70d128b9", null ],
+    [ "endFrame", "classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1", null ],
+    [ "getImGuiTextureID", "classvex_1_1Renderer.html#a806d1ad715ef403b147fffe4598fa5f1", null ],
     [ "renderFrame", "classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a", null ],
+    [ "renderScene", "classvex_1_1Renderer.html#a5f81b4d2f47385424d8ee6343b5c8c29", null ],
     [ "transitionImageLayout", "classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11", null ]
 ];

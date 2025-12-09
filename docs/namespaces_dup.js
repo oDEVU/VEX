@@ -1,16 +1,23 @@
 var namespaces_dup =
 [
+    [ "pzstd", "namespacepzstd.html", "namespacepzstd" ],
+    [ "test", "namespacetest.html", null ],
     [ "vex", null, [
       [ "PS1Effects", "namespacevex_1_1PS1Effects.html", null ],
+      [ "AssetBrowser", "classvex_1_1AssetBrowser.html", null ],
       [ "BodyIDHasher", "structvex_1_1BodyIDHasher.html", null ],
       [ "BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ],
+      [ "BrowserIcons", "structvex_1_1BrowserIcons.html", null ],
       [ "CameraComponent", "structvex_1_1CameraComponent.html", null ],
       [ "CameraObject", "classvex_1_1CameraObject.html", null ],
       [ "CollisionHit", "structvex_1_1CollisionHit.html", null ],
       [ "ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
+      [ "DialogWindow", "classvex_1_1DialogWindow.html", "classvex_1_1DialogWindow" ],
+      [ "Editor", "classvex_1_1Editor.html", "classvex_1_1Editor" ],
       [ "Engine", "classvex_1_1Engine.html", "classvex_1_1Engine" ],
       [ "enviroment", "structvex_1_1enviroment.html", "structvex_1_1enviroment" ],
       [ "FontAtlas", "structvex_1_1FontAtlas.html", null ],
+      [ "Frustum", "structvex_1_1Frustum.html", "structvex_1_1Frustum" ],
       [ "GameInfo", "structvex_1_1GameInfo.html", null ],
       [ "GameObject", "classvex_1_1GameObject.html", "classvex_1_1GameObject" ],
       [ "GameObjectFactory", "classvex_1_1GameObjectFactory.html", null ],
@@ -33,6 +40,7 @@ var namespaces_dup =
       [ "ObjectVsBroadPhaseLayerFilterImpl", "classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html", null ],
       [ "PhysicsComponent", "structvex_1_1PhysicsComponent.html", "structvex_1_1PhysicsComponent" ],
       [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html", "classvex_1_1PhysicsSystem" ],
+      [ "Plane", "structvex_1_1Plane.html", "structvex_1_1Plane" ],
       [ "PushConstants", "structvex_1_1PushConstants.html", null ],
       [ "RaycastHit", "structvex_1_1RaycastHit.html", null ],
       [ "Renderer", "classvex_1_1Renderer.html", "classvex_1_1Renderer" ],
@@ -40,7 +48,9 @@ var namespaces_dup =
       [ "Scene", "classvex_1_1Scene.html", "classvex_1_1Scene" ],
       [ "SceneLightsUBO", "structvex_1_1SceneLightsUBO.html", null ],
       [ "SceneManager", "classvex_1_1SceneManager.html", "classvex_1_1SceneManager" ],
+      [ "SceneRenderData", "structvex_1_1SceneRenderData.html", null ],
       [ "SceneUBO", "structvex_1_1SceneUBO.html", "structvex_1_1SceneUBO" ],
+      [ "SkipInit", "structvex_1_1SkipInit.html", null ],
       [ "Submesh", "structvex_1_1Submesh.html", null ],
       [ "TransformComponent", "structvex_1_1TransformComponent.html", "structvex_1_1TransformComponent" ],
       [ "TransparentTriangle", "structvex_1_1TransparentTriangle.html", null ],
@@ -78,6 +88,12 @@ var namespaces_dup =
         [ "UI", "InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4a71ff71526d15db86eb50fcac245d183b", null ],
         [ "GameAndUI", "InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4a6e90e63a482ebbecc447a3dc3b9a7da7", null ]
       ] ],
+      [ "LogLevel", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43e", [
+        [ "INFO", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea551b723eafd6a31d444fcb2f5920fbd3", null ],
+        [ "WARNING", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea059e9861e0400dfbe05c98a841f3f96b", null ],
+        [ "ERROR", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43eabb1ca97ec761fc37101737ba0aa2e7c5", null ],
+        [ "CRITICAL", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea99cd1c61610c76a57cb8d10d6df6b870", null ]
+      ] ],
       [ "MouseAxis", "InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236", [
         [ "X", "InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236a02129bb861061d1a052c592e2dc6b383", null ],
         [ "Y", "InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236a57cec4137b614c87cb4e24a3d003a3e0", null ]
@@ -109,6 +125,11 @@ var namespaces_dup =
       ] ],
       [ "createMeshFromPath", "ModelCreator_8hpp.html#a5dcb905f0645cba8da8ff1145f696231", null ],
       [ "createModelFromComponents", "ModelCreator_8hpp.html#a8d3069775766b45d22978b65d6f85586", null ],
-      [ "createModelFromPath", "ModelCreator_8hpp.html#a60c4f3c10a042909f8123a275a80b150", null ]
+      [ "createModelFromPath", "ModelCreator_8hpp.html#a60c4f3c10a042909f8123a275a80b150", null ],
+      [ "handle_critical_exception", "errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48", null ],
+      [ "handle_exception", "errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5", null ],
+      [ "log", "errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a", null ],
+      [ "log", "errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1", null ],
+      [ "throw_error", "errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f", null ]
     ] ]
 ];

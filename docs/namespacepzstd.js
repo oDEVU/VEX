@@ -1,0 +1,28 @@
+var namespacepzstd =
+[
+    [ "Buffer", "classpzstd_1_1Buffer.html", "classpzstd_1_1Buffer" ],
+    [ "BufferWorkQueue", "classpzstd_1_1BufferWorkQueue.html", "classpzstd_1_1BufferWorkQueue" ],
+    [ "ErrorHolder", "classpzstd_1_1ErrorHolder.html", null ],
+    [ "Logger", "classpzstd_1_1Logger.html", null ],
+    [ "Options", "structpzstd_1_1Options.html", null ],
+    [ "Range", "classpzstd_1_1Range.html", null ],
+    [ "ResourcePool", "classpzstd_1_1ResourcePool.html", "classpzstd_1_1ResourcePool" ],
+    [ "ScopeGuard", "classpzstd_1_1ScopeGuard.html", null ],
+    [ "SharedState", "classpzstd_1_1SharedState.html", null ],
+    [ "SkippableFrame", "classpzstd_1_1SkippableFrame.html", null ],
+    [ "ThreadPool", "classpzstd_1_1ThreadPool.html", "classpzstd_1_1ThreadPool" ],
+    [ "WorkQueue", "classpzstd_1_1WorkQueue.html", "classpzstd_1_1WorkQueue" ],
+    [ "advance", "namespacepzstd.html#a268228edef042a731649322cd2d71536", null ],
+    [ "asyncCompressChunks", "namespacepzstd.html#a3bd8f104d037800560fbf086e32a3735", null ],
+    [ "asyncDecompressFrames", "namespacepzstd.html#a75dcd5ddff14115cc004c2b537c7b865", null ],
+    [ "file_size", "namespacepzstd.html#a6d52d0187faf952a1f5dc0790a73de08", null ],
+    [ "is_directory", "namespacepzstd.html#a9a22e45c7739aaf457e7ce79b7004449", null ],
+    [ "is_directory", "namespacepzstd.html#a3883dde59d1770beea98bcefdaceaa24", null ],
+    [ "is_regular_file", "namespacepzstd.html#a8bc4630a3017a1f5f1e6d16a4e5e0332", null ],
+    [ "is_regular_file", "namespacepzstd.html#ad47e8c3c6b27f44b139fa7a2d19b152f", null ],
+    [ "makeScopeGuard", "namespacepzstd.html#a9a1919616ad956fce968d173822866ab", null ],
+    [ "pzstdMain", "namespacepzstd.html#ae7a16b7775faa2f87537df2714cf8bc1", null ],
+    [ "split", "namespacepzstd.html#aa0e4b54f29c865c2c93afbdc65f82f3f", null ],
+    [ "status", "namespacepzstd.html#a7ea1bbf92a1a49135b33fd5bd6941ad5", null ],
+    [ "writeFile", "namespacepzstd.html#a83fb90c463a6c4c60cfb1d0e6a06f098", null ]
+];

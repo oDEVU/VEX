@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['objectlayerpairfilterimpl_0',['ObjectLayerPairFilterImpl',['../classvex_1_1ObjectLayerPairFilterImpl.html',1,'vex']]],
-  ['objectvsbroadphaselayerfilterimpl_1',['ObjectVsBroadPhaseLayerFilterImpl',['../classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html',1,'vex']]]
+  ['job_0',['job',['../structjob.html',1,'']]],
+  ['joins_5fs_1',['joins_s',['../structjoins__s.html',1,'']]]
 ];

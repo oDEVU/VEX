@@ -6,7 +6,7 @@ var structvex_1_1TransformComponent =
     [ "TransformComponent", "structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c", null ],
     [ "TransformComponent", "structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444", null ],
     [ "TransformComponent", "structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8", null ],
-    [ "TransformComponent", "structvex_1_1TransformComponent.html#ad47fe6cd20b433b4a71bc6fcbd6b9b3b", null ],
+    [ "TransformComponent", "structvex_1_1TransformComponent.html#a2b34b417df4726815ce0cd2bbc5b440e", null ],
     [ "addLocalPosition", "structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c", null ],
     [ "addLocalRotation", "structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0", null ],
     [ "addLocalScale", "structvex_1_1TransformComponent.html#a68b4b4644e123ad5d6987fc4a7f409f5", null ],

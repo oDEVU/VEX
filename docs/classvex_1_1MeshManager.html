@@ -103,24 +103,26 @@ $(function(){initNavTree('classvex_1_1MeshManager.html','','classvex_1_1MeshMana
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adb1d1d0795b739398753412347074995" id="r_adb1d1d0795b739398753412347074995"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb1d1d0795b739398753412347074995">MeshManager</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;resources, <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *vfs)</td></tr>
+<tr class="memitem:adb1d1d0795b739398753412347074995" id="r_adb1d1d0795b739398753412347074995"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb1d1d0795b739398753412347074995">MeshManager</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;<a class="el" href="structresources.html">resources</a>, <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *vfs)</td></tr>
+<tr class="memitem:a578d0073067906d2c47d921ce2c59511" id="r_a578d0073067906d2c47d921ce2c59511"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a578d0073067906d2c47d921ce2c59511">init</a> (<a class="el" href="classvex_1_1Engine.html">Engine</a> *engine)</td></tr>
 <tr class="memitem:a150a60fb93783cd6d7913f140c8fbcbf" id="r_a150a60fb93783cd6d7913f140c8fbcbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a150a60fb93783cd6d7913f140c8fbcbf">loadMesh</a> (const std::string &amp;path)</td></tr>
-<tr class="memitem:ac5e98f3b1d25f2dc5ac2f3cc0bb2f9c7" id="r_ac5e98f3b1d25f2dc5ac2f3cc0bb2f9c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1ModelObject.html">ModelObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5e98f3b1d25f2dc5ac2f3cc0bb2f9c7">createModel</a> (const std::string &amp;name, <a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> meshComponent, <a class="el" href="structvex_1_1TransformComponent.html">TransformComponent</a> transformComponent, <a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, entt::entity parent)</td></tr>
+<tr class="memitem:acc3ac1e3e9a4392c9d9887404e1503f5" id="r_acc3ac1e3e9a4392c9d9887404e1503f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1ModelObject.html">ModelObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc3ac1e3e9a4392c9d9887404e1503f5">createModel</a> (const std::string &amp;name, <a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> meshComponent, <a class="el" href="structvex_1_1TransformComponent.html">TransformComponent</a> transformComponent, entt::entity parent)</td></tr>
 <tr class="memitem:a651df97b135ae5108396d3e55a564b57" id="r_a651df97b135ae5108396d3e55a564b57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a651df97b135ae5108396d3e55a564b57">destroyModel</a> (std::string &amp;name, <a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> meshComponent)</td></tr>
-<tr class="memitem:a07b458cab3a88a1f813bcc3f4adc01cf" id="r_a07b458cab3a88a1f813bcc3f4adc01cf"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07b458cab3a88a1f813bcc3f4adc01cf">getMeshByKey</a> (std::string &amp;key)</td></tr>
+<tr class="memitem:a560b66e26c31dcef094e55278d7fafe1" id="r_a560b66e26c31dcef094e55278d7fafe1"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a560b66e26c31dcef094e55278d7fafe1">getVulkanMeshByMesh</a> (<a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> &amp;meshComponent)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a18b561ba4e99bb78cccea5c5f7150a3b" id="r_a18b561ba4e99bb78cccea5c5f7150a3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18b561ba4e99bb78cccea5c5f7150a3b">m_r_context</a></td></tr>
+<tr class="memitem:a3ab25eaf2ac0b387e3e08761b718989c" id="r_a3ab25eaf2ac0b387e3e08761b718989c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Engine.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ab25eaf2ac0b387e3e08761b718989c">m_p_engine</a> = nullptr</td></tr>
 <tr class="memitem:a3502d52fc8445dd959a99f0a5f0a7e4e" id="r_a3502d52fc8445dd959a99f0a5f0a7e4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3502d52fc8445dd959a99f0a5f0a7e4e">m_vfs</a></td></tr>
 <tr class="memitem:abea22d543f1a763405d07f63204e4309" id="r_abea22d543f1a763405d07f63204e4309"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abea22d543f1a763405d07f63204e4309">m_p_resources</a></td></tr>
-<tr class="memitem:a7ac51545cb30ba91f6335c52ceabc8e5" id="r_a7ac51545cb30ba91f6335c52ceabc8e5"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ac51545cb30ba91f6335c52ceabc8e5">m_vulkanMeshes</a></td></tr>
+<tr class="memitem:af9efd0660077203e9f0f3a749f2a2145" id="r_af9efd0660077203e9f0f3a749f2a2145"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9efd0660077203e9f0f3a749f2a2145">m_vulkanMeshes</a></td></tr>
 <tr class="memitem:a086e04f1fd732a4cd55066e2d22bad65" id="r_a086e04f1fd732a4cd55066e2d22bad65"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a086e04f1fd732a4cd55066e2d22bad65">m_freeModelIds</a></td></tr>
 <tr class="memitem:afad733e2bd673815e2ceed02ce7818dd" id="r_afad733e2bd673815e2ceed02ce7818dd"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afad733e2bd673815e2ceed02ce7818dd">m_nextModelId</a> = 0</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00021">21</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00022">22</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="adb1d1d0795b739398753412347074995" name="adb1d1d0795b739398753412347074995"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adb1d1d0795b739398753412347074995">&#9670;&#160;</a></span>MeshManager()</h2>
@@ -146,7 +148,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00014">14</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00017">17</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -165,13 +167,13 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00019">19</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00022">22</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="ac5e98f3b1d25f2dc5ac2f3cc0bb2f9c7" name="ac5e98f3b1d25f2dc5ac2f3cc0bb2f9c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5e98f3b1d25f2dc5ac2f3cc0bb2f9c7">&#9670;&#160;</a></span>createModel()</h2>
+<a id="acc3ac1e3e9a4392c9d9887404e1503f5" name="acc3ac1e3e9a4392c9d9887404e1503f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc3ac1e3e9a4392c9d9887404e1503f5">&#9670;&#160;</a></span>createModel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,17 +196,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>engine</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">entt::entity</td>          <td class="paramname"><span class="paramname"><em>parent</em></span><span class="paramdefsep"> = </span><span class="paramdefval">entt::null</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00024">24</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00027">27</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -227,12 +224,31 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00148">148</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00166">166</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a07b458cab3a88a1f813bcc3f4adc01cf" name="a07b458cab3a88a1f813bcc3f4adc01cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07b458cab3a88a1f813bcc3f4adc01cf">&#9670;&#160;</a></span>getMeshByKey()</h2>
+<a id="a560b66e26c31dcef094e55278d7fafe1" name="a560b66e26c31dcef094e55278d7fafe1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a560b66e26c31dcef094e55278d7fafe1">&#9670;&#160;</a></span>getVulkanMeshByMesh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &amp; vex::MeshManager::getVulkanMeshByMesh </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>meshComponent</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00138">138</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a578d0073067906d2c47d921ce2c59511" name="a578d0073067906d2c47d921ce2c59511"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a578d0073067906d2c47d921ce2c59511">&#9670;&#160;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -241,9 +257,9 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &amp; vex::MeshManager::getMeshByKey </td>
+          <td class="memname">void vex::MeshManager::init </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>key</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1Engine.html">Engine</a> *</td>          <td class="paramname"><span class="paramname"><em>engine</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -254,7 +270,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00029">29</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00027">27</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -273,7 +289,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00109">109</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00098">98</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -298,7 +314,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00039">39</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00042">42</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -322,7 +338,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00040">40</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00043">43</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3ab25eaf2ac0b387e3e08761b718989c" name="a3ab25eaf2ac0b387e3e08761b718989c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ab25eaf2ac0b387e3e08761b718989c">&#9670;&#160;</a></span>m_p_engine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classvex_1_1Engine.html">Engine</a>* vex::MeshManager::m_p_engine = nullptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00038">38</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -346,7 +386,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00037">37</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00040">40</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -370,7 +410,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00035">35</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00037">37</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -394,12 +434,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00036">36</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00039">39</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a7ac51545cb30ba91f6335c52ceabc8e5" name="a7ac51545cb30ba91f6335c52ceabc8e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ac51545cb30ba91f6335c52ceabc8e5">&#9670;&#160;</a></span>m_vulkanMeshes</h2>
+<a id="af9efd0660077203e9f0f3a749f2a2145" name="af9efd0660077203e9f0f3a749f2a2145"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9efd0660077203e9f0f3a749f2a2145">&#9670;&#160;</a></span>m_vulkanMeshes</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -408,7 +448,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt;std::string, std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a>&gt; &gt; vex::MeshManager::m_vulkanMeshes</td>
+          <td class="memname">std::flat_map&lt;std::string, std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a>&gt; &gt; vex::MeshManager::m_vulkanMeshes</td>
         </tr>
       </table>
   </td>
@@ -418,7 +458,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00038">38</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00041">41</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>

@@ -1,11 +1,15 @@
 var searchData=
 [
-  ['_7egameobject_0',['~GameObject',['../classvex_1_1GameObject.html#a50adafe3621e33b5cb1a778c419f363a',1,'vex::GameObject']]],
-  ['_7einterface_1',['~Interface',['../classvex_1_1Interface.html#a5b5f3faa74e9d23b5bd53c110e5e866c',1,'vex::Interface']]],
-  ['_7emodelobject_2',['~ModelObject',['../classvex_1_1ModelObject.html#aa3dc237babc57e7044871127bc35e00e',1,'vex::ModelObject']]],
-  ['_7ephysicssystem_3',['~PhysicsSystem',['../classvex_1_1PhysicsSystem.html#af0162eccb2cfdc2c320a435797de3e92',1,'vex::PhysicsSystem']]],
-  ['_7erenderer_4',['~Renderer',['../classvex_1_1Renderer.html#ab647f7466e1195b57864a5ead4c51cad',1,'vex::Renderer']]],
-  ['_7escene_5',['~Scene',['../classvex_1_1Scene.html#a259def38aebfd1eb64994c78768bff2f',1,'vex::Scene']]],
-  ['_7evulkanresources_6',['~VulkanResources',['../classvex_1_1VulkanResources.html#a929f9c55cb9204c67b5b8fd7f013a346',1,'vex::VulkanResources']]],
-  ['_7evulkanswapchainmanager_7',['~VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html#a24542bc6c7d15c346c2d554daabb92b9',1,'vex::VulkanSwapchainManager']]]
+  ['uicomponent_0',['UiComponent',['../structvex_1_1UiComponent.html#a9568e58b0e7df47324414bbd081eb968',1,'vex::UiComponent']]],
+  ['unbindwindow_1',['unbindWindow',['../classvex_1_1Interface.html#a4f3a488cea4154de1827da61958073f1',1,'vex::Interface']]],
+  ['unloadscene_2',['unloadScene',['../classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3',1,'vex::SceneManager']]],
+  ['unloadtexture_3',['unloadTexture',['../classvex_1_1VulkanResources.html#a777c49742fa6e898a46d8a6c97d75b0c',1,'vex::VulkanResources']]],
+  ['update_4',['Update',['../classvex_1_1GameObject.html#aff7761eb14e47fee0d495f2f86597b8a',1,'vex::GameObject::Update()'],['../classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec',1,'EditorCameraObject::Update()']]],
+  ['update_5',['update',['../classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f',1,'vex::InputSystem::update()'],['../classvex_1_1PhysicsSystem.html#a5c0ea3867f54b0011652f99e1c51c93b',1,'vex::PhysicsSystem::update()'],['../classvex_1_1VexUI.html#a43c4d01e222e4c629b2883b3037da61d',1,'vex::VexUI::update()'],['../classvex_1_1Engine.html#a9d7355662abceb4069d112e4ab3b67ea',1,'vex::Engine::update()'],['../structvex_1_1Frustum.html#a57bc89c0b05729745dc55c64ae95d4e5',1,'vex::Frustum::update()'],['../classvex_1_1Editor.html#afc38ec50583bd6c8ed02ccb10867980b',1,'vex::Editor::update()']]],
+  ['updatedphysicstransform_6',['updatedPhysicsTransform',['../structvex_1_1TransformComponent.html#ac8e509a9c7040e7919caf9e9d5b720b6',1,'vex::TransformComponent']]],
+  ['updatelightubo_7',['updateLightUBO',['../classvex_1_1VulkanResources.html#ab4d964bb1cefadb20140dedf53da9893',1,'vex::VulkanResources']]],
+  ['updatesceneubo_8',['updateSceneUBO',['../classvex_1_1VulkanResources.html#a3f19b21b5c08c079e4d930c3e39145bf',1,'vex::VulkanResources']]],
+  ['updatetexturedescriptor_9',['updateTextureDescriptor',['../classvex_1_1VulkanResources.html#a77672c461906ef7e0994078d8994d27d',1,'vex::VulkanResources']]],
+  ['updateviewport_10',['updateViewport',['../classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49',1,'vex::VulkanPipeline']]],
+  ['upload_11',['upload',['../classvex_1_1VulkanMesh.html#ac8f9fc0c2c186c80b5085afd662ebd3f',1,'vex::VulkanMesh']]]
 ];

@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a929f9c55cb9204c67b5b8fd7f013a346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple destructor.  <br /></td></tr>
 <tr class="memitem:af6600e8f346f3d771113252bab2739af" id="r_af6600e8f346f3d771113252bab2739af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6600e8f346f3d771113252bab2739af">createUniformBuffers</a> ()</td></tr>
 <tr class="memdesc:af6600e8f346f3d771113252bab2739af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates uniform buffers.  <br /></td></tr>
-<tr class="memitem:a3f19b21b5c08c079e4d930c3e39145bf" id="r_a3f19b21b5c08c079e4d930c3e39145bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f19b21b5c08c079e4d930c3e39145bf">updateSceneUBO</a> (const <a class="el" href="structvex_1_1SceneUBO.html">SceneUBO</a> &amp;data)</td></tr>
+<tr class="memitem:a3f19b21b5c08c079e4d930c3e39145bf" id="r_a3f19b21b5c08c079e4d930c3e39145bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f19b21b5c08c079e4d930c3e39145bf">updateSceneUBO</a> (const <a class="el" href="structvex_1_1SceneUBO.html">SceneUBO</a> &amp;<a class="el" href="structdata.html">data</a>)</td></tr>
 <tr class="memdesc:a3f19b21b5c08c079e4d930c3e39145bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the scene uniform buffer.  <br /></td></tr>
-<tr class="memitem:ab4d964bb1cefadb20140dedf53da9893" id="r_ab4d964bb1cefadb20140dedf53da9893"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4d964bb1cefadb20140dedf53da9893">updateLightUBO</a> (uint32_t frameIndex, uint32_t modelIndex, const <a class="el" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a> &amp;data)</td></tr>
+<tr class="memitem:ab4d964bb1cefadb20140dedf53da9893" id="r_ab4d964bb1cefadb20140dedf53da9893"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4d964bb1cefadb20140dedf53da9893">updateLightUBO</a> (uint32_t frameIndex, uint32_t modelIndex, const <a class="el" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a> &amp;<a class="el" href="structdata.html">data</a>)</td></tr>
 <tr class="memdesc:ab4d964bb1cefadb20140dedf53da9893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the light uniform buffer.  <br /></td></tr>
 <tr class="memitem:abefc56e46967586e0dd33c50c1f815d1" id="r_abefc56e46967586e0dd33c50c1f815d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abefc56e46967586e0dd33c50c1f815d1">createDefaultTexture</a> ()</td></tr>
 <tr class="memdesc:abefc56e46967586e0dd33c50c1f815d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a default texture.  <br /></td></tr>
@@ -124,6 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a77672c461906ef7e0994078d8994d27d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the texture descriptor.  <br /></td></tr>
 <tr class="memitem:a2782052723de88e57d06d9d0cf83dd42" id="r_a2782052723de88e57d06d9d0cf83dd42"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2782052723de88e57d06d9d0cf83dd42">getDefaultTextureName</a> () const</td></tr>
 <tr class="memdesc:a2782052723de88e57d06d9d0cf83dd42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the default texture name.  <br /></td></tr>
+<tr class="memitem:a234ce352ae63fd822c06cd7a3e00c2e4" id="r_a234ce352ae63fd822c06cd7a3e00c2e4"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a234ce352ae63fd822c06cd7a3e00c2e4">getUBODescriptorSet</a> (uint32_t frameIndex) const</td></tr>
+<tr class="memdesc:a234ce352ae63fd822c06cd7a3e00c2e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the uniform buffer descriptor set for the given frame index.  <br /></td></tr>
 <tr class="memitem:ade1db1d3ff7f3acff6ef95b6c7f193a1" id="r_ade1db1d3ff7f3acff6ef95b6c7f193a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade1db1d3ff7f3acff6ef95b6c7f193a1">loadTexture</a> (const std::string &amp;path, const std::string &amp;name, <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *vfs)</td></tr>
 <tr class="memdesc:ade1db1d3ff7f3acff6ef95b6c7f193a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a texture from a file.  <br /></td></tr>
 <tr class="memitem:a777c49742fa6e898a46d8a6c97d75b0c" id="r_a777c49742fa6e898a46d8a6c97d75b0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a777c49742fa6e898a46d8a6c97d75b0c">unloadTexture</a> (const std::string &amp;name)</td></tr>
@@ -144,6 +146,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa0af5335969351df329557105c0a96ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if a texture with the given name exists.  <br /></td></tr>
 <tr class="memitem:af2bd23bc42b01eb8fc369c3d6230a612" id="r_af2bd23bc42b01eb8fc369c3d6230a612"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2bd23bc42b01eb8fc369c3d6230a612">getTextureIndex</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:af2bd23bc42b01eb8fc369c3d6230a612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of a texture with the given name.  <br /></td></tr>
+<tr class="memitem:ae14433bc6241762f5c9950a0fc4acfdc" id="r_ae14433bc6241762f5c9950a0fc4acfdc"><td class="memItemLeft" align="right" valign="top">VkSampler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae14433bc6241762f5c9950a0fc4acfdc">getTextureSampler</a> () const</td></tr>
+<tr class="memdesc:ae14433bc6241762f5c9950a0fc4acfdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the texture sampler.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -166,11 +170,11 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a5fa3208adb0858bbb661d2f1236fc6d2" id="r_a5fa3208adb0858bbb661d2f1236fc6d2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fa3208adb0858bbb661d2f1236fc6d2">m_descriptorSets</a></td></tr>
 <tr class="memitem:a74e7791fb3f26262ded38bb60b231895" id="r_a74e7791fb3f26262ded38bb60b231895"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74e7791fb3f26262ded38bb60b231895">m_descriptorPool</a></td></tr>
 <tr class="memitem:a4de384236678197ab868c5dae3e93b46" id="r_a4de384236678197ab868c5dae3e93b46"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4de384236678197ab868c5dae3e93b46">m_textureDescriptorSets</a></td></tr>
-<tr class="memitem:adb8656e380b1adc2ce2be7a9f9b090f5" id="r_adb8656e380b1adc2ce2be7a9f9b090f5"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb8656e380b1adc2ce2be7a9f9b090f5">m_textures</a></td></tr>
+<tr class="memitem:ad9c74e2829bd0b99b7afd766bfb2900b" id="r_ad9c74e2829bd0b99b7afd766bfb2900b"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9c74e2829bd0b99b7afd766bfb2900b">m_textures</a></td></tr>
 <tr class="memitem:a540cc88fd0041be22666eefca489c655" id="r_a540cc88fd0041be22666eefca489c655"><td class="memItemLeft" align="right" valign="top">VkSampler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a540cc88fd0041be22666eefca489c655">m_textureSampler</a></td></tr>
-<tr class="memitem:a3a01c79bc451b6d97a615b7afa1fe33c" id="r_a3a01c79bc451b6d97a615b7afa1fe33c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VkImage &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a01c79bc451b6d97a615b7afa1fe33c">m_textureImages</a></td></tr>
-<tr class="memitem:ae95624255b4924b490167fd6ed610b18" id="r_ae95624255b4924b490167fd6ed610b18"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae95624255b4924b490167fd6ed610b18">m_textureAllocations</a></td></tr>
-<tr class="memitem:aaaae5b074fc2196698b92b214757b86c" id="r_aaaae5b074fc2196698b92b214757b86c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaaae5b074fc2196698b92b214757b86c">m_textureViews</a></td></tr>
+<tr class="memitem:a5951dde17c8311a0dad3b5967c9c502d" id="r_a5951dde17c8311a0dad3b5967c9c502d"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VkImage &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5951dde17c8311a0dad3b5967c9c502d">m_textureImages</a></td></tr>
+<tr class="memitem:a61af353b5416b79578cb169f3e1e9885" id="r_a61af353b5416b79578cb169f3e1e9885"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61af353b5416b79578cb169f3e1e9885">m_textureAllocations</a></td></tr>
+<tr class="memitem:a01e496cef44e7da7162e8db1e54b7dde" id="r_a01e496cef44e7da7162e8db1e54b7dde"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01e496cef44e7da7162e8db1e54b7dde">m_textureViews</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class manages resources like textures, descriptor sets, and uniform buffers. </p>
@@ -221,6 +225,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Simple destructor. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo</a></b></dt><dd>, cleanup this properly </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00020">20</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
@@ -245,7 +250,7 @@ Private Attributes</h2></td></tr>
 <p>Creates a default texture. </p>
 <p>Creates 1x1 white texture used for untextured models. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00386">386</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00397">397</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -274,7 +279,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create descriptor resources. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00237">237</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00243">243</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -303,7 +308,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create per-mesh texture sets. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00467">467</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00478">478</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -348,7 +353,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Creates a texture from raw data and creates a texture view. Currently used for ui font textures. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00056">56</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00062">62</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -377,7 +382,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create texture sampler. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00522">522</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00533">533</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -398,7 +403,7 @@ Private Attributes</h2></td></tr>
 
 <p>Creates uniform buffers. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00210">210</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00216">216</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -458,7 +463,7 @@ Private Attributes</h2></td></tr>
 <p>Returns a descriptor set layout. </p>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSetLayout - The descriptor set layout. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00120">120</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00125">125</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -494,7 +499,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00089">89</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00094">94</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -530,7 +535,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet* - The pointer to the descriptor set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00102">102</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00107">107</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -563,7 +568,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00511">511</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00522">522</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -599,7 +604,37 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>uint32_t - The index of the texture. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00132">132</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00137">137</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae14433bc6241762f5c9950a0fc4acfdc" name="ae14433bc6241762f5c9950a0fc4acfdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae14433bc6241762f5c9950a0fc4acfdc">&#9670;&#160;</a></span>getTextureSampler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkSampler vex::VulkanResources::getTextureSampler </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the texture sampler. </p>
+<dl class="section return"><dt>Returns</dt><dd>VkSampler - The texture sampler. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00144">144</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -627,7 +662,35 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkImageView - The texture view. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00767">767</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00787">787</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a234ce352ae63fd822c06cd7a3e00c2e4" name="a234ce352ae63fd822c06cd7a3e00c2e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a234ce352ae63fd822c06cd7a3e00c2e4">&#9670;&#160;</a></span>getUBODescriptorSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet vex::VulkanResources::getUBODescriptorSet </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>frameIndex</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the uniform buffer descriptor set for the given frame index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uint32_t</td><td>frameIndex - The frame index to get the descriptor set for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The uniform buffer descriptor set. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00354">354</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -666,7 +729,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Loads a texture from a file and creates a texture view. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00541">541</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00552">552</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -702,7 +765,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool - True if the texture exists, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00125">125</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00130">130</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -730,7 +793,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Unloads a texture and destroys its view. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00739">739</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00756">756</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -768,7 +831,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00372">372</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00383">383</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -795,7 +858,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00365">365</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00376">376</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -834,7 +897,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Updates the texture descriptor for the given frame index and texture index. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00348">348</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00359">359</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -859,7 +922,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00139">139</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00147">147</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -883,7 +946,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00150">150</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00158">158</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -907,7 +970,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00148">148</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00156">156</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -931,7 +994,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00149">149</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00157">157</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -955,7 +1018,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00146">146</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00154">154</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -979,7 +1042,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00144">144</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00152">152</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1003,7 +1066,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00141">141</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00149">149</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1027,7 +1090,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00145">145</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00153">153</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1051,12 +1114,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00143">143</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00151">151</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae95624255b4924b490167fd6ed610b18" name="ae95624255b4924b490167fd6ed610b18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae95624255b4924b490167fd6ed610b18">&#9670;&#160;</a></span>m_textureAllocations</h2>
+<a id="a61af353b5416b79578cb169f3e1e9885" name="a61af353b5416b79578cb169f3e1e9885"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61af353b5416b79578cb169f3e1e9885">&#9670;&#160;</a></span>m_textureAllocations</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1065,7 +1128,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VmaAllocation&gt; vex::VulkanResources::m_textureAllocations</td>
+          <td class="memname">std::flat_map&lt;std::string, VmaAllocation&gt; vex::VulkanResources::m_textureAllocations</td>
         </tr>
       </table>
   </td>
@@ -1075,7 +1138,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00157">157</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00165">165</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1099,12 +1162,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00151">151</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00159">159</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3a01c79bc451b6d97a615b7afa1fe33c" name="a3a01c79bc451b6d97a615b7afa1fe33c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a01c79bc451b6d97a615b7afa1fe33c">&#9670;&#160;</a></span>m_textureImages</h2>
+<a id="a5951dde17c8311a0dad3b5967c9c502d" name="a5951dde17c8311a0dad3b5967c9c502d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5951dde17c8311a0dad3b5967c9c502d">&#9670;&#160;</a></span>m_textureImages</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1113,7 +1176,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VkImage&gt; vex::VulkanResources::m_textureImages</td>
+          <td class="memname">std::flat_map&lt;std::string, VkImage&gt; vex::VulkanResources::m_textureImages</td>
         </tr>
       </table>
   </td>
@@ -1123,12 +1186,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00156">156</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00164">164</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="adb8656e380b1adc2ce2be7a9f9b090f5" name="adb8656e380b1adc2ce2be7a9f9b090f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb8656e380b1adc2ce2be7a9f9b090f5">&#9670;&#160;</a></span>m_textures</h2>
+<a id="ad9c74e2829bd0b99b7afd766bfb2900b" name="ad9c74e2829bd0b99b7afd766bfb2900b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9c74e2829bd0b99b7afd766bfb2900b">&#9670;&#160;</a></span>m_textures</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1137,7 +1200,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textures</td>
+          <td class="memname">std::flat_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textures</td>
         </tr>
       </table>
   </td>
@@ -1147,7 +1210,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00153">153</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00161">161</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1171,12 +1234,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00154">154</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00162">162</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aaaae5b074fc2196698b92b214757b86c" name="aaaae5b074fc2196698b92b214757b86c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaaae5b074fc2196698b92b214757b86c">&#9670;&#160;</a></span>m_textureViews</h2>
+<a id="a01e496cef44e7da7162e8db1e54b7dde" name="a01e496cef44e7da7162e8db1e54b7dde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01e496cef44e7da7162e8db1e54b7dde">&#9670;&#160;</a></span>m_textureViews</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1185,7 +1248,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textureViews</td>
+          <td class="memname">std::flat_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textureViews</td>
         </tr>
       </table>
   </td>
@@ -1195,7 +1258,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00158">158</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00166">166</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>

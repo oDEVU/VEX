@@ -106,158 +106,199 @@ $(function(){initNavTree('SceneManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="GameObjectFactory_8hpp.html">components/GameObjects/GameObjectFactory.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="CameraObject_8hpp.html">components/GameObjects/CameraObject.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="ModelCreator_8hpp.html">components/GameObjects/Creators/ModelCreator.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="enviroment_8hpp.html">components/enviroment.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="VirtualFileSystem_8hpp.html">VirtualFileSystem.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;nlohmann/json.hpp&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;fstream&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">void</span> LoadTransformComponent(<a class="code hl_class" href="classvex_1_1GameObject.html">GameObject</a>&amp; obj, <span class="keyword">const</span> nlohmann::json&amp; json) {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <a class="code hl_struct" href="structvex_1_1TransformComponent.html">TransformComponent</a> comp(obj.GetEngine().getRegistry());</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;position&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;position&quot;</span>].is_array() &amp;&amp; json[<span class="stringliteral">&quot;position&quot;</span>].size() &gt;= 3) {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>            glm::vec3 position(</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>                json[<span class="stringliteral">&quot;position&quot;</span>][0].get&lt;float&gt;(),</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>                json[<span class="stringliteral">&quot;position&quot;</span>][1].get&lt;float&gt;(),</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                json[<span class="stringliteral">&quot;position&quot;</span>][2].get&lt;float&gt;()</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            );</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            comp.setLocalPosition(position);</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="PhysicsSystem_8hpp.html">components/PhysicsSystem.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="enviroment_8hpp.html">components/enviroment.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="VirtualFileSystem_8hpp.html">VirtualFileSystem.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;nlohmann/json.hpp&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;filesystem&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span>vex {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">void</span> to_json(nlohmann::json&amp; j, <span class="keyword">const</span> <a class="code hl_struct" href="structvex_1_1TransformComponent.html">TransformComponent</a>&amp; t) {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            j = nlohmann::json{</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>                {<span class="stringliteral">&quot;position&quot;</span>, t.getLocalPosition()},</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                {<span class="stringliteral">&quot;rotation&quot;</span>, t.getLocalRotation()},</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>                {<span class="stringliteral">&quot;scale&quot;</span>,    t.getLocalScale()}</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            };</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        }</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;rotation&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;rotation&quot;</span>].is_array() &amp;&amp; json[<span class="stringliteral">&quot;rotation&quot;</span>].size() &gt;= 3) {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            glm::vec3 rotation(</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                json[<span class="stringliteral">&quot;rotation&quot;</span>][0].get&lt;float&gt;(),</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                json[<span class="stringliteral">&quot;rotation&quot;</span>][1].get&lt;float&gt;(),</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                json[<span class="stringliteral">&quot;rotation&quot;</span>][2].get&lt;float&gt;()</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            );</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            comp.setLocalRotation(rotation);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        }</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;scale&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;scale&quot;</span>].is_array() &amp;&amp; json[<span class="stringliteral">&quot;scale&quot;</span>].size() &gt;= 3) {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>            glm::vec3 scale(</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                json[<span class="stringliteral">&quot;scale&quot;</span>][0].get&lt;float&gt;(),</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                json[<span class="stringliteral">&quot;scale&quot;</span>][1].get&lt;float&gt;(),</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                json[<span class="stringliteral">&quot;scale&quot;</span>][2].get&lt;float&gt;()</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            );</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            comp.setLocalScale(scale);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        }</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        obj.AddComponent(comp);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    }</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">void</span> LoadCameraComponent(<a class="code hl_class" href="classvex_1_1GameObject.html">GameObject</a>&amp; obj, <span class="keyword">const</span> nlohmann::json&amp; json) {</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <a class="code hl_struct" href="structvex_1_1CameraComponent.html">CameraComponent</a> comp;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;fov&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;fov&quot;</span>].is_array()) {</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            comp.fov = json[<span class="stringliteral">&quot;fov&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        }</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;nearPlane&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;nearPlane&quot;</span>].is_array()) {</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            comp.nearPlane = json[<span class="stringliteral">&quot;nearPlane&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        }</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;farPlane&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;farPlane&quot;</span>].is_array()) {</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            comp.farPlane = json[<span class="stringliteral">&quot;farPlane&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        obj.AddComponent(comp);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    }</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keywordtype">void</span> from_json(<span class="keyword">const</span> nlohmann::json&amp; j, <a class="code hl_struct" href="structvex_1_1TransformComponent.html">TransformComponent</a>&amp; t) {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            <span class="keywordflow">if</span>(j.contains(<span class="stringliteral">&quot;position&quot;</span>)) t.setLocalPosition(j[<span class="stringliteral">&quot;position&quot;</span>]);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keywordflow">if</span>(j.contains(<span class="stringliteral">&quot;rotation&quot;</span>)) t.setLocalRotation(j[<span class="stringliteral">&quot;rotation&quot;</span>]);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            <span class="keywordflow">if</span>(j.contains(<span class="stringliteral">&quot;scale&quot;</span>))    t.setLocalScale(j[<span class="stringliteral">&quot;scale&quot;</span>]);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        }</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="keywordtype">void</span> to_json(nlohmann::json&amp; j, <span class="keyword">const</span> <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>&amp; m) {</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                j[<span class="stringliteral">&quot;path&quot;</span>] = m.meshData.meshPath;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                j[<span class="stringliteral">&quot;renderType&quot;</span>] = (int)m.renderType;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                j[<span class="stringliteral">&quot;color&quot;</span>] = m.color;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            }</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            <span class="keywordtype">void</span> from_json(<span class="keyword">const</span> nlohmann::json&amp; j, <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>&amp; m) {</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                <span class="keywordflow">if</span> (j.contains(<span class="stringliteral">&quot;path&quot;</span>)) {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                    std::string path = j[<span class="stringliteral">&quot;path&quot;</span>];</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                    m.meshData.meshPath = path;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                <span class="keywordflow">if</span> (j.contains(<span class="stringliteral">&quot;renderType&quot;</span>)) m.renderType = (RenderType)j[<span class="stringliteral">&quot;renderType&quot;</span>];</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                <span class="keywordflow">if</span> (j.contains(<span class="stringliteral">&quot;color&quot;</span>)) m.color = j[<span class="stringliteral">&quot;color&quot;</span>];</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            }</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="comment">//REGISTER_COMPONENT(MeshComponent, meshData, renderType, color);</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">        #if DEBUG</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">template</span>&lt;&gt;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            <span class="keywordtype">void</span> vex::GenericComponentInspector&lt;vex::PhysicsComponent&gt;(<a class="code hl_class" href="classvex_1_1GameObject.html">GameObject</a>&amp; obj) {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                <span class="keywordflow">if</span> (obj.HasComponent&lt;vex::PhysicsComponent&gt;()) {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                    <span class="keywordflow">if</span> (ImGui::CollapsingHeader(<span class="stringliteral">&quot;PhysicsComponent&quot;</span>, ImGuiTreeNodeFlags_DefaultOpen)) {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                        <span class="keyword">auto</span>&amp; pc = obj.GetComponent&lt;vex::PhysicsComponent&gt;();</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordtype">void</span> LoadMeshComponent(<a class="code hl_class" href="classvex_1_1GameObject.html">GameObject</a>&amp; obj, <span class="keyword">const</span> nlohmann::json&amp; json) {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> comp;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;path&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;path&quot;</span>].is_array()) {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            comp = <a class="code hl_function" href="ModelCreator_8hpp.html#a5dcb905f0645cba8da8ff1145f696231">createMeshFromPath</a>(json[<span class="stringliteral">&quot;path&quot;</span>], obj.GetEngine());</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;transparent&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;transparent&quot;</span>].is_array()) {</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            <span class="keywordtype">bool</span> transparent = json[<span class="stringliteral">&quot;transparent&quot;</span>].get&lt;<span class="keywordtype">bool</span>&gt;();</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            <span class="keywordflow">if</span>(transparent){</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                comp.renderType = RenderType::TRANSPARENT;</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            }</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        }</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        obj.AddComponent(comp);</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="comment">// Loadable Components</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <a class="code hl_define" href="ComponentFactory_8hpp.html#a3c2eb139ecc6bb3b7733d2d2ecc67685">REGISTER_COMPONENT</a>(<a class="code hl_struct" href="structvex_1_1TransformComponent.html">TransformComponent</a>, LoadTransformComponent);</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <a class="code hl_define" href="ComponentFactory_8hpp.html#a3c2eb139ecc6bb3b7733d2d2ecc67685">REGISTER_COMPONENT</a>(<a class="code hl_struct" href="structvex_1_1CameraComponent.html">CameraComponent</a>, LoadCameraComponent);</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <a class="code hl_define" href="ComponentFactory_8hpp.html#a3c2eb139ecc6bb3b7733d2d2ecc67685">REGISTER_COMPONENT</a>(<a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>, LoadMeshComponent);</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="comment">// Loadable Objects</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <a class="code hl_define" href="GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a>(<a class="code hl_class" href="classvex_1_1CameraObject.html">CameraObject</a>);</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <a class="code hl_define" href="GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a>(<a class="code hl_class" href="classvex_1_1GameObject.html">GameObject</a>);</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="foldopen" id="foldopen00083" data-start="{" data-end="}">
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953">   83</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953">SceneManager::loadScene</a>(<span class="keyword">const</span> std::string&amp; path, <a class="code hl_class" href="classvex_1_1Engine.html">Engine</a>&amp; engine) {</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <a class="code hl_function" href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">clearScenes</a>();</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <a class="code hl_function" href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">loadSceneWithoutClearing</a>(path, engine);</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>}</div>
-</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="foldopen" id="foldopen00088" data-start="{" data-end="}">
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3">   88</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3">SceneManager::unloadScene</a>(<span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    m_scenes.erase(path);</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>}</div>
-</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="foldopen" id="foldopen00092" data-start="{" data-end="}">
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">   92</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">SceneManager::loadSceneWithoutClearing</a>(<span class="keyword">const</span> std::string&amp; path, <a class="code hl_class" href="classvex_1_1Engine.html">Engine</a>&amp; engine) {</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    m_scenes.emplace(path, std::make_shared&lt;Scene&gt;(path, engine));</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    m_scenes[path]-&gt;sceneBegin();</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>}</div>
-</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                        ImReflect::Input(<span class="stringliteral">&quot;Shape&quot;</span>, pc.shape); <span class="comment">// Draw Enum</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                        <span class="keywordflow">if</span> (pc.shape == ShapeType::BOX)</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                            ImGui::DragFloat3(<span class="stringliteral">&quot;Extents&quot;</span>, &amp;pc.boxHalfExtents.x);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (pc.shape == ShapeType::SPHERE)</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                            ImGui::DragFloat(<span class="stringliteral">&quot;Radius&quot;</span>, &amp;pc.sphereRadius);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (pc.shape == ShapeType::CAPSULE)</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                            ImGui::DragFloat2(<span class="stringliteral">&quot;Capsule&quot;</span>, &amp;pc.capsuleRadius);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (pc.shape == ShapeType::CYLINDER)</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                            ImGui::DragFloat2(<span class="stringliteral">&quot;Cylinder&quot;</span>, &amp;pc.cylinderRadius);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                        ImReflect::Input(<span class="stringliteral">&quot;Mass&quot;</span>, pc.mass);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                        ImReflect::Input(<span class="stringliteral">&quot;Friction&quot;</span>, pc.friction);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                        ImReflect::Input(<span class="stringliteral">&quot;Bounciness&quot;</span>, pc.bounce);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                        ImReflect::Input(<span class="stringliteral">&quot;Linear Damping&quot;</span>, pc.linearDamping);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                        ImReflect::Input(<span class="stringliteral">&quot;Angular Damping&quot;</span>, pc.angularDamping);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                        ImReflect::Input(<span class="stringliteral">&quot;Sensor&quot;</span>, pc.isSensor);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                        ImReflect::Input(<span class="stringliteral">&quot;Allow Sleeping&quot;</span>, pc.allowSleeping);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.71f, 0.10f, 0.10f, 1.0f));</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.30f, 0.03f, 0.03f, 1.0f));</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.94f, 0.85f, 0.85f, 1.0f)); <span class="comment">// White Text</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                        <span class="keywordflow">if</span> (ImGui::Button(<span class="stringliteral">&quot;Remove&quot;</span>)) {</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                            obj.GetEngine().getRegistry().remove&lt;vex::PhysicsComponent&gt;(obj.GetEntity());</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                        }</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>                        ImGui::PopStyleColor(4);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                    }</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                }</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            }</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">            #endif</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>}</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><a class="code hl_define" href="ComponentFactory_8hpp.html#a842f06c29165e3b9ae76b9687ac72ed3">REGISTER_COMPONENT_CUSTOM</a>(<a class="code hl_struct" href="structvex_1_1TransformComponent.html">vex::TransformComponent</a>, position, rotation, scale);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><a class="code hl_define" href="ComponentFactory_8hpp.html#a842f06c29165e3b9ae76b9687ac72ed3">REGISTER_COMPONENT_CUSTOM</a>(<a class="code hl_struct" href="structvex_1_1MeshComponent.html">vex::MeshComponent</a>, meshData, renderType, color);</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="foldopen" id="foldopen00097" data-start="{" data-end="}">
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">   97</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">SceneManager::clearScenes</a>() {</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    m_scenes.clear();</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>}</div>
-</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><a class="code hl_define" href="ComponentFactory_8hpp.html#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(<a class="code hl_struct" href="structvex_1_1CameraComponent.html">vex::CameraComponent</a>, fov, nearPlane, farPlane);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><a class="code hl_define" href="ComponentFactory_8hpp.html#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(<a class="code hl_struct" href="structvex_1_1LightComponent.html">vex::LightComponent</a>, color, intensity, radius);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">//REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);</span></div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="foldopen" id="foldopen00101" data-start="{" data-end="}">
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb">  101</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb">SceneManager::scenesUpdate</a>(<span class="keywordtype">float</span> deltaTime){</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; scene : m_scenes) {</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        scene.second-&gt;sceneUpdate(deltaTime);</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    }</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>}</div>
-</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><a class="code hl_define" href="ComponentFactory_8hpp.html#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(<a class="code hl_struct" href="structvex_1_1PhysicsComponent.html">vex::PhysicsComponent</a>,</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    shape,</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    bodyType,</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    isSensor,</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    allowSleeping,</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="foldopen" id="foldopen00107" data-start="{" data-end="}">
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a0db28458a00b93e0fa8ab676a8357449">  107</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#a0db28458a00b93e0fa8ab676a8357449">SceneManager::AddGameObjectToScene</a>(<span class="keyword">const</span> std::string&amp; scene, std::shared_ptr&lt;GameObject&gt; gameObject){</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    m_scenes[scene]-&gt;AddGameObject(gameObject);</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>}</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    mass,</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    friction,</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    bounce,</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    linearDamping,</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    angularDamping,</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    boxHalfExtents,</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    sphereRadius,</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    capsuleRadius,</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    capsuleHeight,</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    cylinderRadius,</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    cylinderHeight</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>);</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="keyword">namespace </span>vex {</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <a class="code hl_define" href="GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a>(<a class="code hl_class" href="classvex_1_1CameraObject.html">CameraObject</a>);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <a class="code hl_define" href="GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a>(<a class="code hl_class" href="classvex_1_1GameObject.html">GameObject</a>);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="foldopen" id="foldopen00126" data-start="{" data-end="}">
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953">  126</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953">SceneManager::loadScene</a>(<span class="keyword">const</span> std::string&amp; path, <a class="code hl_class" href="classvex_1_1Engine.html">Engine</a>&amp; engine) {</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <a class="code hl_function" href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">clearScenes</a>();</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <a class="code hl_function" href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">loadSceneWithoutClearing</a>(path, engine);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>}</div>
 </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="foldopen" id="foldopen00111" data-start="{" data-end="}">
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a96677f0765a558d6c2df25eb84028c6c">  111</a></span>std::shared_ptr&lt;GameObject&gt; <a class="code hl_function" href="classvex_1_1SceneManager.html#a96677f0765a558d6c2df25eb84028c6c">SceneManager::GetGameObjectByName</a>(<span class="keyword">const</span> std::string&amp; scene, <span class="keyword">const</span> std::string&amp; name){</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keywordflow">return</span> m_scenes[scene]-&gt;GetGameObjectByName(name);</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>}</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="foldopen" id="foldopen00131" data-start="{" data-end="}">
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3">  131</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3">SceneManager::unloadScene</a>(<span class="keyword">const</span> std::string&amp; path) {</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    m_scenes.erase(path);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>}</div>
 </div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
-<div class="foldopen" id="foldopen00115" data-start="{" data-end="}">
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a5db8b683373bba12f569be03f3534b70">  115</a></span>std::shared_ptr&lt;GameObject&gt; <a class="code hl_function" href="classvex_1_1SceneManager.html#a5db8b683373bba12f569be03f3534b70">SceneManager::GetGameObjectByEntity</a>(<span class="keyword">const</span> std::string&amp; scene, entt::entity&amp; entity){</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keywordflow">return</span> m_scenes[scene]-&gt;GetGameObjectByEntity(entity);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>}</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="foldopen" id="foldopen00135" data-start="{" data-end="}">
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">  135</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">SceneManager::loadSceneWithoutClearing</a>(<span class="keyword">const</span> std::string&amp; path, <a class="code hl_class" href="classvex_1_1Engine.html">Engine</a>&amp; engine) {</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    lastSceneName = path;</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    m_scenes.emplace(path, std::make_shared&lt;Scene&gt;(path, engine));</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    m_scenes[path]-&gt;sceneBegin();</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>}</div>
 </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>}</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="foldopen" id="foldopen00141" data-start="{" data-end="}">
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">  141</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">SceneManager::clearScenes</a>() {</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    m_scenes.clear();</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>}</div>
+</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="foldopen" id="foldopen00145" data-start="{" data-end="}">
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb">  145</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb">SceneManager::scenesUpdate</a>(<span class="keywordtype">float</span> deltaTime){</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; scene : m_scenes) {</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        scene.second-&gt;sceneUpdate(deltaTime);</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    }</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>}</div>
+</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="foldopen" id="foldopen00151" data-start="{" data-end="}">
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="classvex_1_1SceneManager.html#affd2f3e3df3cc9d260e27097b2311e75">  151</a></span>std::vector&lt;std::string&gt; <a class="code hl_function" href="classvex_1_1SceneManager.html#affd2f3e3df3cc9d260e27097b2311e75">SceneManager::GetAllSceneNames</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    std::vector&lt;std::string&gt; names;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    names.reserve(m_scenes.size());</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [name, scene] : m_scenes) {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        names.push_back(name);</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    }</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keywordflow">return</span> names;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>}</div>
+</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>}</div>
 <div class="ttc" id="aBasicComponents_8hpp_html"><div class="ttname"><a href="BasicComponents_8hpp.html">BasicComponents.hpp</a></div><div class="ttdoc">Contains basic components like transform, camera, name components..</div></div>
 <div class="ttc" id="aCameraObject_8hpp_html"><div class="ttname"><a href="CameraObject_8hpp.html">CameraObject.hpp</a></div><div class="ttdoc">This file defines in engine CameraObject class.</div></div>
 <div class="ttc" id="aComponentFactory_8hpp_html"><div class="ttname"><a href="ComponentFactory_8hpp.html">ComponentFactory.hpp</a></div><div class="ttdoc">Contains ComponentRegistry class used to have register of posible to create components....</div></div>
-<div class="ttc" id="aComponentFactory_8hpp_html_a3c2eb139ecc6bb3b7733d2d2ecc67685"><div class="ttname"><a href="ComponentFactory_8hpp.html#a3c2eb139ecc6bb3b7733d2d2ecc67685">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(ComponentType, LoadFunction)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00067">ComponentFactory.hpp:67</a></div></div>
+<div class="ttc" id="aComponentFactory_8hpp_html_a842f06c29165e3b9ae76b9687ac72ed3"><div class="ttname"><a href="ComponentFactory_8hpp.html#a842f06c29165e3b9ae76b9687ac72ed3">REGISTER_COMPONENT_CUSTOM</a></div><div class="ttdeci">#define REGISTER_COMPONENT_CUSTOM(Type,...)</div><div class="ttdoc">Same macro just skips json registration for more complex components, it requires manual registration.</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00220">ComponentFactory.hpp:220</a></div></div>
+<div class="ttc" id="aComponentFactory_8hpp_html_afa69f763d370fe1d1de1bb8cdf34ddfb"><div class="ttname"><a href="ComponentFactory_8hpp.html#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(Type,...)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00207">ComponentFactory.hpp:207</a></div></div>
 <div class="ttc" id="aGameObjectFactory_8hpp_html"><div class="ttname"><a href="GameObjectFactory_8hpp.html">GameObjectFactory.hpp</a></div><div class="ttdoc">This file defines GameObjectFactory class used to auto register GameObjects.</div></div>
-<div class="ttc" id="aGameObjectFactory_8hpp_html_a2e373409fc28437e3f9cd5f1f6423c88"><div class="ttname"><a href="GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a></div><div class="ttdeci">#define REGISTER_GAME_OBJECT(ClassName)</div><div class="ttdoc">Macro for automatic GameObject registration, you should call it at the bottom of your class implement...</div><div class="ttdef"><b>Definition</b> <a href="GameObjectFactory_8hpp_source.html#l00059">GameObjectFactory.hpp:59</a></div></div>
+<div class="ttc" id="aGameObjectFactory_8hpp_html_a2e373409fc28437e3f9cd5f1f6423c88"><div class="ttname"><a href="GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a></div><div class="ttdeci">#define REGISTER_GAME_OBJECT(ClassName)</div><div class="ttdoc">Macro for automatic GameObject registration, you should call it at the bottom of your class implement...</div><div class="ttdef"><b>Definition</b> <a href="GameObjectFactory_8hpp_source.html#l00079">GameObjectFactory.hpp:79</a></div></div>
 <div class="ttc" id="aModelCreator_8hpp_html"><div class="ttname"><a href="ModelCreator_8hpp.html">ModelCreator.hpp</a></div><div class="ttdoc">This file defines functions for creating model objects and mesh components.</div></div>
-<div class="ttc" id="aModelCreator_8hpp_html_a5dcb905f0645cba8da8ff1145f696231"><div class="ttname"><a href="ModelCreator_8hpp.html#a5dcb905f0645cba8da8ff1145f696231">vex::createMeshFromPath</a></div><div class="ttdeci">MeshComponent createMeshFromPath(const std::string &amp;path, Engine &amp;engine)</div><div class="ttdoc">Just creates meshcomponent from file. Copies meshData and texture paths for later backend specific pr...</div><div class="ttdef"><b>Definition</b> <a href="ModelCreator_8cpp_source.html#l00013">ModelCreator.cpp:13</a></div></div>
+<div class="ttc" id="aPhysicsSystem_8hpp_html"><div class="ttname"><a href="PhysicsSystem_8hpp.html">PhysicsSystem.hpp</a></div><div class="ttdoc">This file defines PhysicsSystem class.</div></div>
 <div class="ttc" id="aSceneManager_8hpp_html"><div class="ttname"><a href="SceneManager_8hpp.html">SceneManager.hpp</a></div><div class="ttdoc">This file defines SceneManager class.</div></div>
 <div class="ttc" id="aVirtualFileSystem_8hpp_html"><div class="ttname"><a href="VirtualFileSystem_8hpp.html">VirtualFileSystem.hpp</a></div><div class="ttdoc">This file defines VirtualFileSystem and VPKStream classes.</div></div>
 <div class="ttc" id="aclassvex_1_1CameraObject_html"><div class="ttname"><a href="classvex_1_1CameraObject.html">vex::CameraObject</a></div><div class="ttdoc">Basic camera object class. it only contains transform and camera components.</div><div class="ttdef"><b>Definition</b> <a href="CameraObject_8hpp_source.html#l00013">CameraObject.hpp:13</a></div></div>
-<div class="ttc" id="aclassvex_1_1Engine_html"><div class="ttname"><a href="classvex_1_1Engine.html">vex::Engine</a></div><div class="ttdoc">Class for interaction with engine systems, your game main class will Inherit from it.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8hpp_source.html#l00032">Engine.hpp:32</a></div></div>
+<div class="ttc" id="aclassvex_1_1Engine_html"><div class="ttname"><a href="classvex_1_1Engine.html">vex::Engine</a></div><div class="ttdoc">Class for interaction with engine systems, your game main class will Inherit from it.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8hpp_source.html#l00040">Engine.hpp:40</a></div></div>
 <div class="ttc" id="aclassvex_1_1GameObject_html"><div class="ttname"><a href="classvex_1_1GameObject.html">vex::GameObject</a></div><div class="ttdoc">Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00031">GameObject.hpp:31</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_a09d5b129d8681a293e2806ab6f0446b3"><div class="ttname"><a href="classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3">vex::SceneManager::unloadScene</a></div><div class="ttdeci">void unloadScene(const std::string &amp;path)</div><div class="ttdoc">Function to unload a scene from memory.</div><div class="ttdef"><b>Definition</b> <a href="#l00088">SceneManager.cpp:88</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_a0db28458a00b93e0fa8ab676a8357449"><div class="ttname"><a href="classvex_1_1SceneManager.html#a0db28458a00b93e0fa8ab676a8357449">vex::SceneManager::AddGameObjectToScene</a></div><div class="ttdeci">void AddGameObjectToScene(const std::string &amp;scene, std::shared_ptr&lt; GameObject &gt; gameObject)</div><div class="ttdoc">Function to add a game object to a scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00107">SceneManager.cpp:107</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_a17bf28d146396ccc922252322ce6b953"><div class="ttname"><a href="classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953">vex::SceneManager::loadScene</a></div><div class="ttdeci">void loadScene(const std::string &amp;path, Engine &amp;engine)</div><div class="ttdoc">Function to load a scene from a file. Simply calls clearScene() and loadSceneWithoutClearing().</div><div class="ttdef"><b>Definition</b> <a href="#l00083">SceneManager.cpp:83</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_a5db8b683373bba12f569be03f3534b70"><div class="ttname"><a href="classvex_1_1SceneManager.html#a5db8b683373bba12f569be03f3534b70">vex::SceneManager::GetGameObjectByEntity</a></div><div class="ttdeci">std::shared_ptr&lt; GameObject &gt; GetGameObjectByEntity(const std::string &amp;scene, entt::entity &amp;entity)</div><div class="ttdoc">Function to get game object by its unique name.</div><div class="ttdef"><b>Definition</b> <a href="#l00115">SceneManager.cpp:115</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_a96677f0765a558d6c2df25eb84028c6c"><div class="ttname"><a href="classvex_1_1SceneManager.html#a96677f0765a558d6c2df25eb84028c6c">vex::SceneManager::GetGameObjectByName</a></div><div class="ttdeci">std::shared_ptr&lt; GameObject &gt; GetGameObjectByName(const std::string &amp;scene, const std::string &amp;name)</div><div class="ttdoc">Function to get game object by its unique name.</div><div class="ttdef"><b>Definition</b> <a href="#l00111">SceneManager.cpp:111</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_a9b9af95362d39787631b323c6f351526"><div class="ttname"><a href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">vex::SceneManager::clearScenes</a></div><div class="ttdeci">void clearScenes()</div><div class="ttdoc">Function to clear the current scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00097">SceneManager.cpp:97</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_ab38b9cd1f2f59c325b5591952a964846"><div class="ttname"><a href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">vex::SceneManager::loadSceneWithoutClearing</a></div><div class="ttdeci">void loadSceneWithoutClearing(const std::string &amp;path, Engine &amp;engine)</div><div class="ttdoc">Function to load a scene from a file without clearing the current scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00092">SceneManager.cpp:92</a></div></div>
-<div class="ttc" id="aclassvex_1_1SceneManager_html_acb010cf8ca366670931c2d4fa7e881fb"><div class="ttname"><a href="classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb">vex::SceneManager::scenesUpdate</a></div><div class="ttdeci">void scenesUpdate(float deltaTime)</div><div class="ttdoc">Function calls update in all objects it holds. This function needs to be called in your projects upda...</div><div class="ttdef"><b>Definition</b> <a href="#l00101">SceneManager.cpp:101</a></div></div>
+<div class="ttc" id="aclassvex_1_1SceneManager_html_a09d5b129d8681a293e2806ab6f0446b3"><div class="ttname"><a href="classvex_1_1SceneManager.html#a09d5b129d8681a293e2806ab6f0446b3">vex::SceneManager::unloadScene</a></div><div class="ttdeci">void unloadScene(const std::string &amp;path)</div><div class="ttdoc">Function to unload a scene from memory.</div><div class="ttdef"><b>Definition</b> <a href="#l00131">SceneManager.cpp:131</a></div></div>
+<div class="ttc" id="aclassvex_1_1SceneManager_html_a17bf28d146396ccc922252322ce6b953"><div class="ttname"><a href="classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953">vex::SceneManager::loadScene</a></div><div class="ttdeci">void loadScene(const std::string &amp;path, Engine &amp;engine)</div><div class="ttdoc">Function to load a scene from a file. Simply calls clearScene() and loadSceneWithoutClearing().</div><div class="ttdef"><b>Definition</b> <a href="#l00126">SceneManager.cpp:126</a></div></div>
+<div class="ttc" id="aclassvex_1_1SceneManager_html_a9b9af95362d39787631b323c6f351526"><div class="ttname"><a href="classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526">vex::SceneManager::clearScenes</a></div><div class="ttdeci">void clearScenes()</div><div class="ttdoc">Function to clear the current scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00141">SceneManager.cpp:141</a></div></div>
+<div class="ttc" id="aclassvex_1_1SceneManager_html_ab38b9cd1f2f59c325b5591952a964846"><div class="ttname"><a href="classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846">vex::SceneManager::loadSceneWithoutClearing</a></div><div class="ttdeci">void loadSceneWithoutClearing(const std::string &amp;path, Engine &amp;engine)</div><div class="ttdoc">Function to load a scene from a file without clearing the current scene.</div><div class="ttdef"><b>Definition</b> <a href="#l00135">SceneManager.cpp:135</a></div></div>
+<div class="ttc" id="aclassvex_1_1SceneManager_html_acb010cf8ca366670931c2d4fa7e881fb"><div class="ttname"><a href="classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb">vex::SceneManager::scenesUpdate</a></div><div class="ttdeci">void scenesUpdate(float deltaTime)</div><div class="ttdoc">Function calls update in all objects it holds. This function needs to be called in your projects upda...</div><div class="ttdef"><b>Definition</b> <a href="#l00145">SceneManager.cpp:145</a></div></div>
+<div class="ttc" id="aclassvex_1_1SceneManager_html_affd2f3e3df3cc9d260e27097b2311e75"><div class="ttname"><a href="classvex_1_1SceneManager.html#affd2f3e3df3cc9d260e27097b2311e75">vex::SceneManager::GetAllSceneNames</a></div><div class="ttdeci">std::vector&lt; std::string &gt; GetAllSceneNames() const</div><div class="ttdoc">Function to get all scene names.</div><div class="ttdef"><b>Definition</b> <a href="#l00151">SceneManager.cpp:151</a></div></div>
 <div class="ttc" id="aenviroment_8hpp_html"><div class="ttname"><a href="enviroment_8hpp.html">enviroment.hpp</a></div><div class="ttdoc">This file defines enviroment struct.</div></div>
-<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00378">BasicComponents.hpp:378</a></div></div>
-<div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00337">BasicComponents.hpp:337</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00026">BasicComponents.hpp:26</a></div></div>
+<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00416">BasicComponents.hpp:416</a></div></div>
+<div class="ttc" id="astructvex_1_1LightComponent_html"><div class="ttname"><a href="structvex_1_1LightComponent.html">vex::LightComponent</a></div><div class="ttdoc">Struct containing light properties.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00404">BasicComponents.hpp:404</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00375">BasicComponents.hpp:375</a></div></div>
+<div class="ttc" id="astructvex_1_1PhysicsComponent_html"><div class="ttname"><a href="structvex_1_1PhysicsComponent.html">vex::PhysicsComponent</a></div><div class="ttdoc">Structure representing a physics component.</div><div class="ttdef"><b>Definition</b> <a href="PhysicsSystem_8hpp_source.html#l00093">PhysicsSystem.hpp:93</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00030">BasicComponents.hpp:30</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

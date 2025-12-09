@@ -1,5 +1,27 @@
 var searchData=
 [
-  ['widget_0',['Widget',['../structvex_1_1Widget.html',1,'vex']]],
-  ['window_1',['Window',['../classvex_1_1Window.html',1,'vex']]]
+  ['range_0',['Range',['../classpzstd_1_1Range.html',1,'pzstd::Range&lt; Iter &gt;'],['../structRange.html',1,'Range']]],
+  ['range_3c_20const_20char_20_2a_20_3e_1',['Range&lt; const char * &gt;',['../classpzstd_1_1Range.html',1,'pzstd']]],
+  ['range_3c_20const_20unsigned_20char_20_2a_20_3e_2',['Range&lt; const unsigned char * &gt;',['../classpzstd_1_1Range.html',1,'pzstd']]],
+  ['range_3c_20unsigned_20char_20_2a_20_3e_3',['Range&lt; unsigned char * &gt;',['../classpzstd_1_1Range.html',1,'pzstd']]],
+  ['ranges_5fentry_4',['ranges_entry',['../structranges__entry.html',1,'']]],
+  ['rankpos_5',['rankPos',['../structrankPos.html',1,'']]],
+  ['rawseq_6',['rawSeq',['../structrawSeq.html',1,'']]],
+  ['rawseqstore_5ft_7',['RawSeqStore_t',['../structRawSeqStore__t.html',1,'']]],
+  ['raycasthit_8',['RaycastHit',['../structvex_1_1RaycastHit.html',1,'vex']]],
+  ['readpoolctx_5ft_9',['ReadPoolCtx_t',['../structReadPoolCtx__t.html',1,'']]],
+  ['renderer_10',['Renderer',['../classvex_1_1Renderer.html',1,'vex']]],
+  ['repcodes_5fs_11',['repcodes_s',['../structrepcodes__s.html',1,'']]],
+  ['reserve_5fdata_5fs_12',['reserve_data_s',['../structreserve__data__s.html',1,'']]],
+  ['reserve_5fsize_5fs_13',['reserve_size_s',['../structreserve__size__s.html',1,'']]],
+  ['resolutionmanager_14',['ResolutionManager',['../classvex_1_1ResolutionManager.html',1,'vex']]],
+  ['resourcepool_15',['ResourcePool',['../classpzstd_1_1ResourcePool.html',1,'pzstd']]],
+  ['resources_16',['resources',['../structresources.html',1,'']]],
+  ['result_5fdata_5ft_17',['result_data_t',['../structresult__data__t.html',1,'']]],
+  ['result_5ft_18',['result_t',['../structresult__t.html',1,'']]],
+  ['roundbuff_5ft_19',['RoundBuff_t',['../structRoundBuff__t.html',1,'']]],
+  ['routines_5fcommand_20',['routines_command',['../structroutines__command.html',1,'']]],
+  ['routines_5fcommand_5f64_21',['routines_command_64',['../structroutines__command__64.html',1,'']]],
+  ['rpath_5fcommand_22',['rpath_command',['../structrpath__command.html',1,'']]],
+  ['rsyncstate_5ft_23',['RSyncState_t',['../structRSyncState__t.html',1,'']]]
 ];

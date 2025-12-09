@@ -1,4 +1,22 @@
 var searchData=
 [
-  ['enableps1effects_0',['enablePS1Effects',['../structvex_1_1SceneUBO.html#aa681b12faa37d28fd25196665c351c1c',1,'vex::SceneUBO']]]
+  ['data_0',['data',['../structvex_1_1VirtualFileSystem_1_1FileData.html#a297d73cd4ee60ea881e0d1c64dc59fd8',1,'vex::VirtualFileSystem::FileData']]],
+  ['data_5foffer_1',['data_offer',['../structzwp__primary__selection__device__v1__listener.html#a8c6d5f9cb3d8ab00512e65bdf96bccbb',1,'zwp_primary_selection_device_v1_listener::data_offer'],['../structwl__data__device__listener.html#a9f737fc4aa7ad06d0a4824e79cc0e63e',1,'wl_data_device_listener::data_offer']]],
+  ['decompressed_2',['decompressed',['../structbuffer__state__t.html#a104d5b8887084226c36aa8d5f1a778dd',1,'buffer_state_t']]],
+  ['delete_5fid_3',['delete_id',['../structwl__display__listener.html#a6b8074092229237386232b88f3ef2b3a',1,'wl_display_listener']]],
+  ['delete_5fsurrounding_5ftext_4',['delete_surrounding_text',['../structzwp__text__input__v3__listener.html#a060ef02d2cf0628562a230aa3187dc60',1,'zwp_text_input_v3_listener']]],
+  ['description_5',['description',['../structwl__output__listener.html#af3131d2ee9ffc32eb6f8ee7d5ff7771d',1,'wl_output_listener::description'],['../structzxdg__output__v1__listener.html#a1f5dd932ea6ff39c24b871b0373273b2',1,'zxdg_output_v1_listener::description']]],
+  ['destroy_6',['destroy',['../structmethod__t.html#a71440bd1989dfa4983b78d45b8be1771',1,'method_t']]],
+  ['destroyed_7',['destroyed',['../structzxdg__imported__v2__listener.html#a3e2fadacd551025b8d643f80813bce04',1,'zxdg_imported_v2_listener']]],
+  ['dictid_8',['dictID',['../structZDICT__params__t.html#ad3cfd3fe5e96eb8b0b589dfefe399991',1,'ZDICT_params_t']]],
+  ['dictionary_9',['dictionary',['../structbuffer__state__t.html#a4acd67599aca397630d831b5cb74da89',1,'buffer_state_t']]],
+  ['digest_10',['digest',['../structXXH32__canonical__t.html#a85a83578344a5dd1c7a6cc0472230f30',1,'XXH32_canonical_t']]],
+  ['distance_11',['distance',['../structzwp__tablet__tool__v2__listener.html#ab965e3a725ed837c787d0a70228d784e',1,'zwp_tablet_tool_v2_listener']]],
+  ['dnd_5fdrop_5fperformed_12',['dnd_drop_performed',['../structwl__data__source__listener.html#a58d0b354a0cc1a9726d770f7a239f174',1,'wl_data_source_listener']]],
+  ['dnd_5ffinished_13',['dnd_finished',['../structwl__data__source__listener.html#ad1f7105a2c18db42dfcbe380e32e4f31',1,'wl_data_source_listener']]],
+  ['done_14',['done',['../structwp__color__manager__v1__listener.html#a912a8faf8b196e7f24d1f563396c4345',1,'wp_color_manager_v1_listener::done'],['../structwp__image__description__info__v1__listener.html#a1f73ae3f11be5780acd1b7aeb4ed3d24',1,'wp_image_description_info_v1_listener::done'],['../structzwp__tablet__tool__v2__listener.html#a8020b222c21a9ddd1bc773466b70f0d6',1,'zwp_tablet_tool_v2_listener::done'],['../structzwp__tablet__v2__listener.html#a856b587f7ecb17e713b66a67596e3127',1,'zwp_tablet_v2_listener::done'],['../structzwp__tablet__pad__group__v2__listener.html#ac1ae72a7caaca3cb6c787e56e8d98b69',1,'zwp_tablet_pad_group_v2_listener::done'],['../structzwp__tablet__pad__v2__listener.html#abfd3565ae5db04a9058c2b5b2f0de9fa',1,'zwp_tablet_pad_v2_listener::done'],['../structzwp__text__input__v3__listener.html#a5e02bb0695cb3b61a47821a57ac20132',1,'zwp_text_input_v3_listener::done'],['../structwl__callback__listener.html#a95a24b033f652f81ec30e7e5efbe68c1',1,'wl_callback_listener::done'],['../structwl__output__listener.html#a367e83a0d84e250fa5d75d4ef299a21b',1,'wl_output_listener::done'],['../structxdg__activation__token__v1__listener.html#ae9d41748cabc08e1bbfdcdfe9404ffa3',1,'xdg_activation_token_v1_listener::done'],['../structzxdg__output__v1__listener.html#a5854441c6cab8a47647dd9db2a2bd069',1,'zxdg_output_v1_listener::done'],['../structxdg__toplevel__icon__manager__v1__listener.html#ad74b8921cf30ac14f48be4c2d76ede4a',1,'xdg_toplevel_icon_manager_v1_listener::done']]],
+  ['down_15',['down',['../structzwp__tablet__tool__v2__listener.html#aa937c5773f9db056abe9f7c7a7191b11',1,'zwp_tablet_tool_v2_listener::down'],['../structwl__touch__listener.html#a8f1e9bc6ceecb849e6df2a2cf473798f',1,'wl_touch_listener::down']]],
+  ['drop_16',['drop',['../structwl__data__device__listener.html#a44cef58824cc9c685214bfa1a9d367f9',1,'wl_data_device_listener']]],
+  ['dst_17',['dst',['../structZSTD__outBuffer__s.html#ae17b7e44abe8ffd1f72f448df86f2a23',1,'ZSTD_outBuffer_s']]],
+  ['dwarf_5fget_5fendian_5fcopy_5ffunction_18',['dwarf_get_endian_copy_function',['../group__miscellaneous.html#ga80cba43615c468754313f63a96dfadca',1,'libdwarf.h']]]
 ];

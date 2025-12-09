@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['transformcomponent_0',['TransformComponent',['../structvex_1_1TransformComponent.html',1,'vex']]],
-  ['transparenttriangle_1',['TransparentTriangle',['../structvex_1_1TransparentTriangle.html',1,'vex']]]
+  ['namecomponent_0',['NameComponent',['../structvex_1_1NameComponent.html',1,'vex']]],
+  ['nodeelt_5fs_1',['nodeElt_s',['../structnodeElt__s.html',1,'']]]
 ];

@@ -169,9 +169,8 @@ Public Attributes</h2></td></tr>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>* input = entity-&gt;addComponent&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
-<div class="line">input-&gt;<a class="code hl_function" href="#ab6b18d5459430bc38abfd71a5ee74650">addBinding</a>(SDL_SCANCODE_SPACE, InputActionState::Pressed, onJump);</div>
+<div class="line">input-&gt;addBinding(SDL_SCANCODE_SPACE, InputActionState::Pressed, onJump);</div>
 <div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00044">InputComponent.hpp:44</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ab6b18d5459430bc38abfd71a5ee74650"><div class="ttname"><a href="#ab6b18d5459430bc38abfd71a5ee74650">vex::InputComponent::addBinding</a></div><div class="ttdeci">void addBinding(SDL_Scancode scancode, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds input binding.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00062">InputComponent.hpp:62</a></div></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00062">62</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
 
@@ -217,9 +216,8 @@ Public Attributes</h2></td></tr>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>* input = player-&gt;addComponent&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
-<div class="line">input-&gt;<a class="code hl_function" href="#ade73e4eef54216ef51d4b4c4c2e7787f">addMouseAxisBinding</a>(MouseAxis::X, onMouseMove);</div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ade73e4eef54216ef51d4b4c4c2e7787f"><div class="ttname"><a href="#ade73e4eef54216ef51d4b4c4c2e7787f">vex::InputComponent::addMouseAxisBinding</a></div><div class="ttdeci">void addMouseAxisBinding(MouseAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds axis binding.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00079">InputComponent.hpp:79</a></div></div>
-<div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00026">BasicComponents.hpp:26</a></div></div>
+<div class="line">input-&gt;addMouseAxisBinding(MouseAxis::X, onMouseMove);</div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00030">BasicComponents.hpp:30</a></div></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="InputComponent_8hpp_source.html#l00079">79</a> of file <a class="el" href="InputComponent_8hpp_source.html">InputComponent.hpp</a>.</p>
 

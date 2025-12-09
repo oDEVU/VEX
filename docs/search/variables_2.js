@@ -1,4 +1,19 @@
 var searchData=
 [
-  ['data_0',['data',['../structvex_1_1VirtualFileSystem_1_1FileData.html#a297d73cd4ee60ea881e0d1c64dc59fd8',1,'vex::VirtualFileSystem::FileData']]]
+  ['cancel_0',['cancel',['../structwl__touch__listener.html#a0be1af9a0331a9af0e52b46f1a530b08',1,'wl_touch_listener']]],
+  ['cancelled_1',['cancelled',['../structzwp__primary__selection__source__v1__listener.html#a37ed7c0e89bac8fb27868dcad38671e1',1,'zwp_primary_selection_source_v1_listener::cancelled'],['../structwl__data__source__listener.html#a64f691449f6d730da34708310799bf6c',1,'wl_data_source_listener::cancelled']]],
+  ['capabilities_2',['capabilities',['../structwl__seat__listener.html#a0ebaf0788130008783c24a3b5c3a5c43',1,'wl_seat_listener']]],
+  ['capability_3',['capability',['../structzwp__tablet__tool__v2__listener.html#abcae19da97757e01f1191486cfe80262',1,'zwp_tablet_tool_v2_listener']]],
+  ['clearcolor_4',['clearColor',['../structvex_1_1enviroment.html#a787ebfd2502aa09f76ced24b3982730f',1,'vex::enviroment']]],
+  ['cli_5fargs_5',['cli_args',['../structconfig__t.html#ad2d691840aea3f08239b2115a53871ac',1,'config_t']]],
+  ['close_6',['close',['../structxdg__toplevel__listener.html#aa827772f8efcac0b5441ec86b7a2bb8f',1,'xdg_toplevel_listener']]],
+  ['color_7',['color',['../structvex_1_1UIVertex.html#aaf0ff94db964d29bc86404125a484444',1,'vex::UIVertex']]],
+  ['commit_5fstring_8',['commit_string',['../structzwp__text__input__v3__listener.html#a32601e9f2ec101d5ffcbe102f6be54d9',1,'zwp_text_input_v3_listener']]],
+  ['compress_9',['compress',['../structmethod__t.html#ae0f352415ba5f80fdbfb6ece03898da6',1,'method_t']]],
+  ['compressed_10',['compressed',['../structbuffer__state__t.html#a2f5fb4464e7be47c4cca30947436a1a5',1,'buffer_state_t']]],
+  ['compressionlevel_11',['compressionLevel',['../structZDICT__params__t.html#a5621800404b8a16edfce4a7f97b8be97',1,'ZDICT_params_t']]],
+  ['configure_12',['configure',['../structwl__shell__surface__listener.html#a3691ad67dbed8af23377493894ba9097',1,'wl_shell_surface_listener::configure'],['../structzxdg__toplevel__decoration__v1__listener.html#a2650737f009315bae0f0a0f99f3f4ad1',1,'zxdg_toplevel_decoration_v1_listener::configure'],['../structxdg__surface__listener.html#a4bc4043937d0c0b8b3f1dc0b96ffd3ca',1,'xdg_surface_listener::configure'],['../structxdg__toplevel__listener.html#a5c4186f520b702904e37f60d5a83fa62',1,'xdg_toplevel_listener::configure'],['../structxdg__popup__listener.html#a78b23026280dfe6f90e2cfeb64184b5f',1,'xdg_popup_listener::configure']]],
+  ['configure_5fbounds_13',['configure_bounds',['../structxdg__toplevel__listener.html#a0976c8852f46345d80a737e15aecc12b',1,'xdg_toplevel_listener']]],
+  ['confined_14',['confined',['../structzwp__confined__pointer__v1__listener.html#a6697a4072f432ed070db86f6cb865024',1,'zwp_confined_pointer_v1_listener']]],
+  ['create_15',['create',['../structmethod__t.html#aaf313cbc1af261197781ed99e306d17b',1,'method_t']]]
 ];
