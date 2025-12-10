@@ -108,7 +108,7 @@ $(function(){initNavTree('Resources_8hpp_source.html','',''); });
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="VirtualFileSystem_8hpp.html">../../VirtualFileSystem.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;flat_map&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;components/types.hpp&gt;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;array&gt;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
@@ -207,12 +207,12 @@ $(function(){initNavTree('Resources_8hpp_source.html','',''); });
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        VkDescriptorPool m_descriptorPool;</div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        std::vector&lt;VkDescriptorSet&gt; m_textureDescriptorSets;</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        std::flat_map&lt;std::string, VkImageView&gt; m_textures;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        vex_map&lt;std::string, VkImageView&gt; m_textures;</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        VkSampler m_textureSampler;</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        std::flat_map&lt;std::string, VkImage&gt; m_textureImages;</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        std::flat_map&lt;std::string, VmaAllocation&gt; m_textureAllocations;</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        std::flat_map&lt;std::string, VkImageView&gt; m_textureViews;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        vex_map&lt;std::string, VkImage&gt; m_textureImages;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        vex_map&lt;std::string, VmaAllocation&gt; m_textureAllocations;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        vex_map&lt;std::string, VkImageView&gt; m_textureViews;</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span></div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanResources.html#ae9489dce1449d26980b44d213d77cddd">createDescriptorResources</a>();</div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanResources.html#a61da06f0128f9c4b97c6512103c90c6f">createTextureSampler</a>();</div>

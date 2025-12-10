@@ -6,6 +6,7 @@ var dir_3da5c18f2e32f0267c3ca22901fd8466 =
     [ "errorUtils.cpp", "errorUtils_8cpp_source.html", null ],
     [ "InputSystem.cpp", "InputSystem_8cpp_source.html", null ],
     [ "Mesh.cpp", "Mesh_8cpp_source.html", null ],
+    [ "pathUtils.cpp", "pathUtils_8cpp_source.html", null ],
     [ "PhysicsSystem.cpp", "PhysicsSystem_8cpp_source.html", null ],
     [ "ResolutionManager.cpp", "ResolutionManager_8cpp_source.html", null ],
     [ "Scene.cpp", "Scene_8cpp_source.html", null ],

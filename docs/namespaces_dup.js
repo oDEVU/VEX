@@ -126,10 +126,13 @@ var namespaces_dup =
       [ "createMeshFromPath", "ModelCreator_8hpp.html#a5dcb905f0645cba8da8ff1145f696231", null ],
       [ "createModelFromComponents", "ModelCreator_8hpp.html#a8d3069775766b45d22978b65d6f85586", null ],
       [ "createModelFromPath", "ModelCreator_8hpp.html#a60c4f3c10a042909f8123a275a80b150", null ],
+      [ "GetAssetPath", "pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2", null ],
+      [ "GetExecutableDir", "pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2", null ],
       [ "handle_critical_exception", "errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48", null ],
       [ "handle_exception", "errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5", null ],
       [ "log", "errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a", null ],
       [ "log", "errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1", null ],
+      [ "SetAssetRoot", "pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99", null ],
       [ "throw_error", "errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f", null ]
     ] ]
 ];

@@ -170,11 +170,11 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a5fa3208adb0858bbb661d2f1236fc6d2" id="r_a5fa3208adb0858bbb661d2f1236fc6d2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fa3208adb0858bbb661d2f1236fc6d2">m_descriptorSets</a></td></tr>
 <tr class="memitem:a74e7791fb3f26262ded38bb60b231895" id="r_a74e7791fb3f26262ded38bb60b231895"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74e7791fb3f26262ded38bb60b231895">m_descriptorPool</a></td></tr>
 <tr class="memitem:a4de384236678197ab868c5dae3e93b46" id="r_a4de384236678197ab868c5dae3e93b46"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4de384236678197ab868c5dae3e93b46">m_textureDescriptorSets</a></td></tr>
-<tr class="memitem:ad9c74e2829bd0b99b7afd766bfb2900b" id="r_ad9c74e2829bd0b99b7afd766bfb2900b"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9c74e2829bd0b99b7afd766bfb2900b">m_textures</a></td></tr>
+<tr class="memitem:a874617ebacd13f24f819278cea9d2caf" id="r_a874617ebacd13f24f819278cea9d2caf"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a874617ebacd13f24f819278cea9d2caf">m_textures</a></td></tr>
 <tr class="memitem:a540cc88fd0041be22666eefca489c655" id="r_a540cc88fd0041be22666eefca489c655"><td class="memItemLeft" align="right" valign="top">VkSampler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a540cc88fd0041be22666eefca489c655">m_textureSampler</a></td></tr>
-<tr class="memitem:a5951dde17c8311a0dad3b5967c9c502d" id="r_a5951dde17c8311a0dad3b5967c9c502d"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VkImage &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5951dde17c8311a0dad3b5967c9c502d">m_textureImages</a></td></tr>
-<tr class="memitem:a61af353b5416b79578cb169f3e1e9885" id="r_a61af353b5416b79578cb169f3e1e9885"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61af353b5416b79578cb169f3e1e9885">m_textureAllocations</a></td></tr>
-<tr class="memitem:a01e496cef44e7da7162e8db1e54b7dde" id="r_a01e496cef44e7da7162e8db1e54b7dde"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01e496cef44e7da7162e8db1e54b7dde">m_textureViews</a></td></tr>
+<tr class="memitem:adc47fc4cb90c9989f3e2f46802c5dfcf" id="r_adc47fc4cb90c9989f3e2f46802c5dfcf"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VkImage &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc47fc4cb90c9989f3e2f46802c5dfcf">m_textureImages</a></td></tr>
+<tr class="memitem:af248be0259b44926ae3a55704666c0cc" id="r_af248be0259b44926ae3a55704666c0cc"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af248be0259b44926ae3a55704666c0cc">m_textureAllocations</a></td></tr>
+<tr class="memitem:af8953a1f6ef99f71c7c54dddf1a7df2b" id="r_af8953a1f6ef99f71c7c54dddf1a7df2b"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8953a1f6ef99f71c7c54dddf1a7df2b">m_textureViews</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class manages resources like textures, descriptor sets, and uniform buffers. </p>
@@ -1118,8 +1118,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a61af353b5416b79578cb169f3e1e9885" name="a61af353b5416b79578cb169f3e1e9885"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61af353b5416b79578cb169f3e1e9885">&#9670;&#160;</a></span>m_textureAllocations</h2>
+<a id="af248be0259b44926ae3a55704666c0cc" name="af248be0259b44926ae3a55704666c0cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af248be0259b44926ae3a55704666c0cc">&#9670;&#160;</a></span>m_textureAllocations</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1128,7 +1128,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::flat_map&lt;std::string, VmaAllocation&gt; vex::VulkanResources::m_textureAllocations</td>
+          <td class="memname">vex_map&lt;std::string, VmaAllocation&gt; vex::VulkanResources::m_textureAllocations</td>
         </tr>
       </table>
   </td>
@@ -1166,8 +1166,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5951dde17c8311a0dad3b5967c9c502d" name="a5951dde17c8311a0dad3b5967c9c502d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5951dde17c8311a0dad3b5967c9c502d">&#9670;&#160;</a></span>m_textureImages</h2>
+<a id="adc47fc4cb90c9989f3e2f46802c5dfcf" name="adc47fc4cb90c9989f3e2f46802c5dfcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc47fc4cb90c9989f3e2f46802c5dfcf">&#9670;&#160;</a></span>m_textureImages</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1176,7 +1176,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::flat_map&lt;std::string, VkImage&gt; vex::VulkanResources::m_textureImages</td>
+          <td class="memname">vex_map&lt;std::string, VkImage&gt; vex::VulkanResources::m_textureImages</td>
         </tr>
       </table>
   </td>
@@ -1190,8 +1190,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad9c74e2829bd0b99b7afd766bfb2900b" name="ad9c74e2829bd0b99b7afd766bfb2900b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad9c74e2829bd0b99b7afd766bfb2900b">&#9670;&#160;</a></span>m_textures</h2>
+<a id="a874617ebacd13f24f819278cea9d2caf" name="a874617ebacd13f24f819278cea9d2caf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a874617ebacd13f24f819278cea9d2caf">&#9670;&#160;</a></span>m_textures</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1200,7 +1200,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::flat_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textures</td>
+          <td class="memname">vex_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textures</td>
         </tr>
       </table>
   </td>
@@ -1238,8 +1238,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a01e496cef44e7da7162e8db1e54b7dde" name="a01e496cef44e7da7162e8db1e54b7dde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01e496cef44e7da7162e8db1e54b7dde">&#9670;&#160;</a></span>m_textureViews</h2>
+<a id="af8953a1f6ef99f71c7c54dddf1a7df2b" name="af8953a1f6ef99f71c7c54dddf1a7df2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8953a1f6ef99f71c7c54dddf1a7df2b">&#9670;&#160;</a></span>m_textureViews</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1248,7 +1248,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::flat_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textureViews</td>
+          <td class="memname">vex_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textureViews</td>
         </tr>
       </table>
   </td>

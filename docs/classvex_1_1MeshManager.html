@@ -116,7 +116,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a3ab25eaf2ac0b387e3e08761b718989c" id="r_a3ab25eaf2ac0b387e3e08761b718989c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Engine.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ab25eaf2ac0b387e3e08761b718989c">m_p_engine</a> = nullptr</td></tr>
 <tr class="memitem:a3502d52fc8445dd959a99f0a5f0a7e4e" id="r_a3502d52fc8445dd959a99f0a5f0a7e4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3502d52fc8445dd959a99f0a5f0a7e4e">m_vfs</a></td></tr>
 <tr class="memitem:abea22d543f1a763405d07f63204e4309" id="r_abea22d543f1a763405d07f63204e4309"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abea22d543f1a763405d07f63204e4309">m_p_resources</a></td></tr>
-<tr class="memitem:af9efd0660077203e9f0f3a749f2a2145" id="r_af9efd0660077203e9f0f3a749f2a2145"><td class="memItemLeft" align="right" valign="top">std::flat_map&lt; std::string, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9efd0660077203e9f0f3a749f2a2145">m_vulkanMeshes</a></td></tr>
+<tr class="memitem:a1365eb8dcae6e89533366cba17dc84dc" id="r_a1365eb8dcae6e89533366cba17dc84dc"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1365eb8dcae6e89533366cba17dc84dc">m_vulkanMeshes</a></td></tr>
 <tr class="memitem:a086e04f1fd732a4cd55066e2d22bad65" id="r_a086e04f1fd732a4cd55066e2d22bad65"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a086e04f1fd732a4cd55066e2d22bad65">m_freeModelIds</a></td></tr>
 <tr class="memitem:afad733e2bd673815e2ceed02ce7818dd" id="r_afad733e2bd673815e2ceed02ce7818dd"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afad733e2bd673815e2ceed02ce7818dd">m_nextModelId</a> = 0</td></tr>
 </table>
@@ -438,8 +438,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af9efd0660077203e9f0f3a749f2a2145" name="af9efd0660077203e9f0f3a749f2a2145"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9efd0660077203e9f0f3a749f2a2145">&#9670;&#160;</a></span>m_vulkanMeshes</h2>
+<a id="a1365eb8dcae6e89533366cba17dc84dc" name="a1365eb8dcae6e89533366cba17dc84dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1365eb8dcae6e89533366cba17dc84dc">&#9670;&#160;</a></span>m_vulkanMeshes</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -448,7 +448,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::flat_map&lt;std::string, std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a>&gt; &gt; vex::MeshManager::m_vulkanMeshes</td>
+          <td class="memname">vex_map&lt;std::string, std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanMesh.html">VulkanMesh</a>&gt; &gt; vex::MeshManager::m_vulkanMeshes</td>
         </tr>
       </table>
   </td>

@@ -113,7 +113,7 @@ $(function(){initNavTree('context_8hpp_source.html','',''); });
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;flat_map&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;components/types.hpp&gt;</span></div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &quot;<a class="code" href="enviroment_8hpp.html">components/enviroment.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
@@ -203,7 +203,7 @@ $(function(){initNavTree('context_8hpp_source.html','',''); });
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        VkDescriptorSetLayout uboDescriptorSetLayout = VK_NULL_HANDLE;</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        VkDescriptorSetLayout textureDescriptorSetLayout = VK_NULL_HANDLE;</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        std::flat_map&lt;std::string, uint32_t&gt; textureIndices;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        vex_map&lt;std::string, uint32_t&gt; textureIndices;</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        uint32_t nextTextureIndex = 0;</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        glm::uvec2 currentRenderResolution;</div>

@@ -1,8 +1,5 @@
 var NAVTREEINDEX12 =
 {
-"md_Core_2bin_2Debug_2__deps_2zstd-src_2contrib_2seekable__format_2zstd__seekable__compression__format.html#autotoc_md47":[4,2],
-"md_Core_2bin_2Debug_2__deps_2zstd-src_2doc_2decompressor__errata.html":[6],
-"md_Core_2bin_2Debug_2__deps_2zstd-src_2doc_2decompressor__errata.html#autotoc_md79":[6,0],
 "md_Core_2bin_2Debug_2__deps_2zstd-src_2doc_2decompressor__errata.html#autotoc_md80":[6,1],
 "md_Core_2bin_2Debug_2__deps_2zstd-src_2doc_2decompressor__errata.html#autotoc_md81":[6,2],
 "md_Core_2bin_2Debug_2__deps_2zstd-src_2doc_2decompressor__errata.html#autotoc_md82":[6,3],
@@ -249,5 +246,8 @@ var NAVTREEINDEX12 =
 "page_iface_wp_viewporter.html#page_iface_wp_viewporter_api":[27,2,1],
 "page_iface_wp_viewporter.html#page_iface_wp_viewporter_desc":[27,2,0],
 "page_iface_xdg_activation_token_v1.html":[29,4],
-"page_iface_xdg_activation_token_v1.html#page_iface_xdg_activation_token_v1_api":[29,4,1]
+"page_iface_xdg_activation_token_v1.html#page_iface_xdg_activation_token_v1_api":[29,4,1],
+"page_iface_xdg_activation_token_v1.html#page_iface_xdg_activation_token_v1_desc":[29,4,0],
+"page_iface_xdg_activation_v1.html":[29,3],
+"page_iface_xdg_activation_v1.html#page_iface_xdg_activation_v1_api":[29,3,1]
 };

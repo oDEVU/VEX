@@ -1,8 +1,5 @@
 var NAVTREEINDEX14 =
 {
-"structBMK__initDCtxArgs.html":[39,0,22],
-"structBMK__runOutcome__t.html":[39,0,23],
-"structBMK__runTime__t.html":[39,0,24],
 "structBMK__timedFnState__s.html":[39,0,25],
 "structBasicEditorWindow.html":[39,0,8],
 "structBenchScenario.html":[39,0,9],
@@ -249,5 +246,8 @@ var NAVTREEINDEX14 =
 "structZSTDv01__Dctx__s.html":[39,0,463],
 "structZSTDv02__Dctx__s.html":[39,0,464],
 "structZSTDv03__Dctx__s.html":[39,0,465],
-"structZSTDv04__Dctx__s.html":[39,0,466]
+"structZSTDv04__Dctx__s.html":[39,0,466],
+"structZSTDv05__DCtx__s.html":[39,0,467],
+"structZSTDv05__parameters.html":[39,0,468],
+"structZSTDv06__DCtx__s.html":[39,0,469]
 };

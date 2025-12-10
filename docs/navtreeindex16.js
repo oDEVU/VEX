@@ -1,8 +1,5 @@
 var NAVTREEINDEX16 =
 {
-"structvex_1_1Light.html":[38,0,2,23],
-"structvex_1_1Light.html":[39,0,4,22],
-"structvex_1_1LightComponent.html":[38,0,2,24],
 "structvex_1_1LightComponent.html":[39,0,4,23],
 "structvex_1_1MeshComponent.html":[38,0,2,25],
 "structvex_1_1MeshComponent.html":[39,0,4,24],
@@ -249,5 +246,8 @@ var NAVTREEINDEX16 =
 "structwl__pointer__listener.html#aea157108efbbc18fbdc794ef9514926c":[37,98,0,2],
 "structwl__registry__listener.html":[37,84,0],
 "structwl__registry__listener.html#a26aa30a6546c64f12b920604c78196f0":[37,84,0,1],
-"structwl__registry__listener.html#ae07ab6fb398e42e717082a1a7e19a832":[37,84,0,0]
+"structwl__registry__listener.html#ae07ab6fb398e42e717082a1a7e19a832":[37,84,0,0],
+"structwl__seat__listener.html":[37,97,0],
+"structwl__seat__listener.html#a0ebaf0788130008783c24a3b5c3a5c43":[37,97,0,0],
+"structwl__seat__listener.html#acf6a0f6693354a5abeaa3ad67e1fdc98":[37,97,0,1]
 };

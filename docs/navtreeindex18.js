@@ -1,7 +1,5 @@
 var NAVTREEINDEX18 =
 {
-"zstd__v04_8h_source.html":[40,0,0,0,0,0,2,4,6,8],
-"zstd__v05_8c_source.html":[40,0,0,0,0,0,2,4,6,9],
 "zstd__v05_8h_source.html":[40,0,0,0,0,0,2,4,6,10],
 "zstd__v06_8c_source.html":[40,0,0,0,0,0,2,4,6,11],
 "zstd__v06_8h_source.html":[40,0,0,0,0,0,2,4,6,12],

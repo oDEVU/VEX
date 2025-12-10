@@ -1,8 +1,5 @@
 var NAVTREEINDEX15 =
 {
-"structZSTDv05__DCtx__s.html":[39,0,467],
-"structZSTDv05__parameters.html":[39,0,468],
-"structZSTDv06__DCtx__s.html":[39,0,469],
 "structZSTDv06__frameParams__s.html":[39,0,470],
 "structZSTDv06__match__t.html":[39,0,471],
 "structZSTDv06__optimal__t.html":[39,0,472],
@@ -249,5 +246,8 @@ var NAVTREEINDEX15 =
 "structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f":[38,0,2,20,1],
 "structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f":[39,0,4,19,1],
 "structvex_1_1InputSystem_1_1KeyState.html":[38,0,2,21,0],
-"structvex_1_1InputSystem_1_1KeyState.html":[39,0,4,20,0]
+"structvex_1_1InputSystem_1_1KeyState.html":[39,0,4,20,0],
+"structvex_1_1Light.html":[38,0,2,23],
+"structvex_1_1Light.html":[39,0,4,22],
+"structvex_1_1LightComponent.html":[38,0,2,24]
 };

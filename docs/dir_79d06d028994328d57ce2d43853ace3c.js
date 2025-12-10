@@ -14,5 +14,6 @@ var dir_79d06d028994328d57ce2d43853ace3c =
     [ "PhysicsSystem.hpp", "PhysicsSystem_8hpp.html", "PhysicsSystem_8hpp" ],
     [ "ResolutionManager.hpp", "ResolutionManager_8hpp.html", "ResolutionManager_8hpp" ],
     [ "Scene.hpp", "Scene_8hpp.html", "Scene_8hpp" ],
-    [ "SceneManager.hpp", "SceneManager_8hpp.html", "SceneManager_8hpp" ]
+    [ "SceneManager.hpp", "SceneManager_8hpp.html", "SceneManager_8hpp" ],
+    [ "types.hpp", "types_8hpp_source.html", null ]
 ];

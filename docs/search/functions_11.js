@@ -6,7 +6,7 @@ var searchData=
   ['scenesupdate_3',['scenesUpdate',['../classvex_1_1SceneManager.html#acb010cf8ca366670931c2d4fa7e881fb',1,'vex::SceneManager']]],
   ['sceneupdate_4',['sceneUpdate',['../classvex_1_1Scene.html#af179bb0d7faab3a4bf2e25b0aa84a51a',1,'vex::Scene']]],
   ['setangularvelocity_5',['SetAngularVelocity',['../classvex_1_1PhysicsSystem.html#a95b9900ed10ab1a6fce037c0fddf3d6b',1,'vex::PhysicsSystem']]],
-  ['setassetroot_6',['SetAssetRoot',['../pathUtils_8hpp.html#a44cad5f9735493ab2276558afdc4f389',1,'pathUtils.hpp']]],
+  ['setassetroot_6',['SetAssetRoot',['../pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99',1,'vex']]],
   ['setbodyactive_7',['SetBodyActive',['../classvex_1_1PhysicsSystem.html#a2ab950196c8daac7fcc56c7d611a77a3',1,'vex::PhysicsSystem']]],
   ['setbounciness_8',['SetBounciness',['../classvex_1_1PhysicsSystem.html#ad4f1da12c3866c9777ffa73a8ba7f505',1,'vex::PhysicsSystem']]],
   ['setcollisionsteps_9',['setCollisionSteps',['../classvex_1_1PhysicsSystem.html#ae68c87217b877ded3de4bf5750903a17',1,'vex::PhysicsSystem']]],
