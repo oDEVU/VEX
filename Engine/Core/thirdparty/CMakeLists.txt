@@ -241,6 +241,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         IMGUI_IMPL_VULKAN_USE_VOLK
     )
 
+    if(WIN32)
+        target_compile_definitions(ImGui PRIVATE "IMGUI_API=__declspec(dllexport)")
+    endif()
+
     #imguizmo
     set(IMGUIZMO_PATH  "ImGuizmo")
     file(GLOB IMGUIZMO_SOURCES
@@ -253,6 +257,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     )
 
     target_link_libraries("ImGuizmo" PRIVATE ImGui)
+
+    if(WIN32)
+        target_compile_definitions(ImGuizmo PRIVATE "IMGUI_API=__declspec(dllexport)")
+    endif()
 
     #imreflect
     set(IMREFLECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ImReflect")

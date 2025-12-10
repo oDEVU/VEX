@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VEX Engine: ZSTD_CCtx_s Struct Reference</title>
+<title>VEX Engine: ZSTD_Cctx_s Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,7 +71,7 @@ $(function() { codefold.init(); });
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('structZSTD__CCtx__s.html','','structZSTD__CCtx__s-members'); });
+$(function(){initNavTree('structZSTD__Cctx__s.html','','structZSTD__Cctx__s-members'); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -97,869 +97,121 @@ $(function(){initNavTree('structZSTD__CCtx__s.html','','structZSTD__CCtx__s-memb
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">ZSTD_CCtx_s Struct Reference</div></div>
+  <div class="headertitle"><div class="title">ZSTD_Cctx_s Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a426fc3134ed09e5eced577ed6e224b3c" id="r_a426fc3134ed09e5eced577ed6e224b3c"><td class="memItemLeft" align="right" valign="top">ZSTD_compressionStage_e&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a426fc3134ed09e5eced577ed6e224b3c">stage</a></td></tr>
-<tr class="memitem:a5dadacda68ac7cc27ea18c3e21db5056" id="r_a5dadacda68ac7cc27ea18c3e21db5056"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dadacda68ac7cc27ea18c3e21db5056">cParamsChanged</a></td></tr>
-<tr class="memitem:a9dfd6ff2d18753ed479e5f6ed05b6b6c" id="r_a9dfd6ff2d18753ed479e5f6ed05b6b6c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9dfd6ff2d18753ed479e5f6ed05b6b6c">bmi2</a></td></tr>
-<tr class="memitem:a44cefdeb3ca0dc59a2015b50f1807c5e" id="r_a44cefdeb3ca0dc59a2015b50f1807c5e"><td class="memItemLeft" align="right" valign="top">ZSTD_CCtx_params&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44cefdeb3ca0dc59a2015b50f1807c5e">requestedParams</a></td></tr>
-<tr class="memitem:a0fba232509db64b82f478fc46d9c5184" id="r_a0fba232509db64b82f478fc46d9c5184"><td class="memItemLeft" align="right" valign="top">ZSTD_CCtx_params&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0fba232509db64b82f478fc46d9c5184">appliedParams</a></td></tr>
-<tr class="memitem:a2833b3efd201a03cc5d995a3a6e8a0e0" id="r_a2833b3efd201a03cc5d995a3a6e8a0e0"><td class="memItemLeft" align="right" valign="top">ZSTD_CCtx_params&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2833b3efd201a03cc5d995a3a6e8a0e0">simpleApiParams</a></td></tr>
-<tr class="memitem:a27a1da93e2b423d3983e7e9a3aee3f09" id="r_a27a1da93e2b423d3983e7e9a3aee3f09"><td class="memItemLeft" align="right" valign="top">U32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27a1da93e2b423d3983e7e9a3aee3f09">dictID</a></td></tr>
-<tr class="memitem:a93977abab5cdaecca99d681fa1a94f6d" id="r_a93977abab5cdaecca99d681fa1a94f6d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93977abab5cdaecca99d681fa1a94f6d">dictContentSize</a></td></tr>
-<tr class="memitem:a6d84cf7d9ac6ea771959476bcb48b076" id="r_a6d84cf7d9ac6ea771959476bcb48b076"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZSTD__cwksp.html">ZSTD_cwksp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d84cf7d9ac6ea771959476bcb48b076">workspace</a></td></tr>
-<tr class="memitem:a7e1800fb82d0c2b6fcedf2599d52bf4e" id="r_a7e1800fb82d0c2b6fcedf2599d52bf4e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e1800fb82d0c2b6fcedf2599d52bf4e">blockSizeMax</a></td></tr>
-<tr class="memitem:a4c58ca67e36d7da7ba5161f07c798fc7" id="r_a4c58ca67e36d7da7ba5161f07c798fc7"><td class="memItemLeft" align="right" valign="top">unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c58ca67e36d7da7ba5161f07c798fc7">pledgedSrcSizePlusOne</a></td></tr>
-<tr class="memitem:aa2e6e62763340700dc2c9421038dfa94" id="r_aa2e6e62763340700dc2c9421038dfa94"><td class="memItemLeft" align="right" valign="top">unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2e6e62763340700dc2c9421038dfa94">consumedSrcSize</a></td></tr>
-<tr class="memitem:aa5705d2146f9288a932ff781ca1e8b9e" id="r_aa5705d2146f9288a932ff781ca1e8b9e"><td class="memItemLeft" align="right" valign="top">unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5705d2146f9288a932ff781ca1e8b9e">producedCSize</a></td></tr>
-<tr class="memitem:a934cb5c012f9d73a7b1c7248abbdf70b" id="r_a934cb5c012f9d73a7b1c7248abbdf70b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__XXH64__family.html#ga0702bdbc80b0cf9e94f2379f7d839b8c">XXH64_state_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a934cb5c012f9d73a7b1c7248abbdf70b">xxhState</a></td></tr>
-<tr class="memitem:a169660870033f4832c37514ffb136dae" id="r_a169660870033f4832c37514ffb136dae"><td class="memItemLeft" align="right" valign="top">ZSTD_customMem&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a169660870033f4832c37514ffb136dae">customMem</a></td></tr>
-<tr class="memitem:a669cb6ff78d290e328fc374ad1f01398" id="r_a669cb6ff78d290e328fc374ad1f01398"><td class="memItemLeft" align="right" valign="top">ZSTD_threadPool *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a669cb6ff78d290e328fc374ad1f01398">pool</a></td></tr>
-<tr class="memitem:a68d77c7ef2a0e794a75725039c5771a6" id="r_a68d77c7ef2a0e794a75725039c5771a6"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68d77c7ef2a0e794a75725039c5771a6">staticSize</a></td></tr>
-<tr class="memitem:a24bb7f6398ec0dc5b57840e0559d1536" id="r_a24bb7f6398ec0dc5b57840e0559d1536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSeqCollector.html">SeqCollector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24bb7f6398ec0dc5b57840e0559d1536">seqCollector</a></td></tr>
-<tr class="memitem:a2663441d31b2e33767a4840f4cd1fbc7" id="r_a2663441d31b2e33767a4840f4cd1fbc7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2663441d31b2e33767a4840f4cd1fbc7">isFirstBlock</a></td></tr>
-<tr class="memitem:ad40752cbb4a4efc47b1b201e54c56c6b" id="r_ad40752cbb4a4efc47b1b201e54c56c6b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad40752cbb4a4efc47b1b201e54c56c6b">initialized</a></td></tr>
-<tr class="memitem:af4c4b6bc553b62303b32604bac9b2cc5" id="r_af4c4b6bc553b62303b32604bac9b2cc5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSeqStore__t.html">SeqStore_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4c4b6bc553b62303b32604bac9b2cc5">seqStore</a></td></tr>
-<tr class="memitem:ac190d67da615116562871704e29627d2" id="r_ac190d67da615116562871704e29627d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structldmState__t.html">ldmState_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac190d67da615116562871704e29627d2">ldmState</a></td></tr>
-<tr class="memitem:adbb333e071c3fc12b35ad57c7797dba7" id="r_adbb333e071c3fc12b35ad57c7797dba7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrawSeq.html">rawSeq</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbb333e071c3fc12b35ad57c7797dba7">ldmSequences</a></td></tr>
-<tr class="memitem:afcdb4f6dd66bd7b46af1393ac94a7e7a" id="r_afcdb4f6dd66bd7b46af1393ac94a7e7a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcdb4f6dd66bd7b46af1393ac94a7e7a">maxNbLdmSequences</a></td></tr>
-<tr class="memitem:a751652db3866cb3c59cb7cb3528b7210" id="r_a751652db3866cb3c59cb7cb3528b7210"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRawSeqStore__t.html">RawSeqStore_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a751652db3866cb3c59cb7cb3528b7210">externSeqStore</a></td></tr>
-<tr class="memitem:a6675604de4ccebaf2b0b407455c06aba" id="r_a6675604de4ccebaf2b0b407455c06aba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZSTD__blockState__t.html">ZSTD_blockState_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6675604de4ccebaf2b0b407455c06aba">blockState</a></td></tr>
-<tr class="memitem:a19cd0cd113cb3c2468ee6a7c0ff4bdc5" id="r_a19cd0cd113cb3c2468ee6a7c0ff4bdc5"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19cd0cd113cb3c2468ee6a7c0ff4bdc5">tmpWorkspace</a></td></tr>
-<tr class="memitem:a6db233e40b69c6dd3d47316abee1a3f6" id="r_a6db233e40b69c6dd3d47316abee1a3f6"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6db233e40b69c6dd3d47316abee1a3f6">tmpWkspSize</a></td></tr>
-<tr class="memitem:a06351de3db11846d2bd049c9d29e63b2" id="r_a06351de3db11846d2bd049c9d29e63b2"><td class="memItemLeft" align="right" valign="top">ZSTD_buffered_policy_e&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06351de3db11846d2bd049c9d29e63b2">bufferedPolicy</a></td></tr>
-<tr class="memitem:a5b799c8416b8bd1ac0590c324bd600fc" id="r_a5b799c8416b8bd1ac0590c324bd600fc"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b799c8416b8bd1ac0590c324bd600fc">inBuff</a></td></tr>
-<tr class="memitem:a3a31e28c384b1cfc499929db0848f9a1" id="r_a3a31e28c384b1cfc499929db0848f9a1"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a31e28c384b1cfc499929db0848f9a1">inBuffSize</a></td></tr>
-<tr class="memitem:a0cf8387221c2ddb68849d452203becae" id="r_a0cf8387221c2ddb68849d452203becae"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cf8387221c2ddb68849d452203becae">inToCompress</a></td></tr>
-<tr class="memitem:a29218c59c42c5ebe3ba46bd2e0bdd833" id="r_a29218c59c42c5ebe3ba46bd2e0bdd833"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29218c59c42c5ebe3ba46bd2e0bdd833">inBuffPos</a></td></tr>
-<tr class="memitem:a37f13227f6aca444b7c39f4be85d655f" id="r_a37f13227f6aca444b7c39f4be85d655f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37f13227f6aca444b7c39f4be85d655f">inBuffTarget</a></td></tr>
-<tr class="memitem:a3f64c52488a7d3bf12f9cebef478223c" id="r_a3f64c52488a7d3bf12f9cebef478223c"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f64c52488a7d3bf12f9cebef478223c">outBuff</a></td></tr>
-<tr class="memitem:ad51c9c87d9d2b1f7de41abb2573c277c" id="r_ad51c9c87d9d2b1f7de41abb2573c277c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad51c9c87d9d2b1f7de41abb2573c277c">outBuffSize</a></td></tr>
-<tr class="memitem:af4640a9e2375a01af54af0f66d509ba3" id="r_af4640a9e2375a01af54af0f66d509ba3"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4640a9e2375a01af54af0f66d509ba3">outBuffContentSize</a></td></tr>
-<tr class="memitem:af079dccef93c8f6dd3242755f852b129" id="r_af079dccef93c8f6dd3242755f852b129"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af079dccef93c8f6dd3242755f852b129">outBuffFlushedSize</a></td></tr>
-<tr class="memitem:a7aa17b30685ac7ef32d8dfdbed3e0c21" id="r_a7aa17b30685ac7ef32d8dfdbed3e0c21"><td class="memItemLeft" align="right" valign="top">ZSTD_cStreamStage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7aa17b30685ac7ef32d8dfdbed3e0c21">streamStage</a></td></tr>
-<tr class="memitem:a7c106df203841401014cab4ad0cd8a4e" id="r_a7c106df203841401014cab4ad0cd8a4e"><td class="memItemLeft" align="right" valign="top">U32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c106df203841401014cab4ad0cd8a4e">frameEnded</a></td></tr>
-<tr class="memitem:acb29f5812cd3f26f85abd9463be57a63" id="r_acb29f5812cd3f26f85abd9463be57a63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZSTD__inBuffer__s.html">ZSTD_inBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb29f5812cd3f26f85abd9463be57a63">expectedInBuffer</a></td></tr>
-<tr class="memitem:aa43d769394656aa6e435098c4511a433" id="r_aa43d769394656aa6e435098c4511a433"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa43d769394656aa6e435098c4511a433">stableIn_notConsumed</a></td></tr>
-<tr class="memitem:a29c3cd097458bbdfb70ea1651be02d42" id="r_a29c3cd097458bbdfb70ea1651be02d42"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29c3cd097458bbdfb70ea1651be02d42">expectedOutBufferSize</a></td></tr>
-<tr class="memitem:aae087c71fea4dd596900f33a82acd031" id="r_aae087c71fea4dd596900f33a82acd031"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZSTD__localDict.html">ZSTD_localDict</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae087c71fea4dd596900f33a82acd031">localDict</a></td></tr>
-<tr class="memitem:a7ccb1570ad6b67a90be0bf21eb01576d" id="r_a7ccb1570ad6b67a90be0bf21eb01576d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structZSTD__CDict__s.html">ZSTD_CDict</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ccb1570ad6b67a90be0bf21eb01576d">cdict</a></td></tr>
-<tr class="memitem:a1c1997065560792b7c99f1b78be1454d" id="r_a1c1997065560792b7c99f1b78be1454d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZSTD__prefixDict__s.html">ZSTD_prefixDict</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c1997065560792b7c99f1b78be1454d">prefixDict</a></td></tr>
-<tr class="memitem:a4ce10a36a9788199eec44a68231ecc8e" id="r_a4ce10a36a9788199eec44a68231ecc8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZSTDMT__CCtx__s.html">ZSTDMT_CCtx</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ce10a36a9788199eec44a68231ecc8e">mtctx</a></td></tr>
-<tr class="memitem:a0e5a2918cf38703f720ad0a57eb93886" id="r_a0e5a2918cf38703f720ad0a57eb93886"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structZSTD__blockSplitCtx.html">ZSTD_blockSplitCtx</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e5a2918cf38703f720ad0a57eb93886">blockSplitCtx</a></td></tr>
-<tr class="memitem:aa4232dc084c6ad3882e5e8e5ddf0f072" id="r_aa4232dc084c6ad3882e5e8e5ddf0f072"><td class="memItemLeft" align="right" valign="top">ZSTD_Sequence *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4232dc084c6ad3882e5e8e5ddf0f072">extSeqBuf</a></td></tr>
-<tr class="memitem:a336ee88c8b2f98b7d83b3766ca4c4391" id="r_a336ee88c8b2f98b7d83b3766ca4c4391"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a336ee88c8b2f98b7d83b3766ca4c4391">extSeqBufCapacity</a></td></tr>
+<tr class="memitem:a46f686c1c481eb6df5972c7589b1e557" id="r_a46f686c1c481eb6df5972c7589b1e557"><td class="memItemLeft" align="right" valign="top">const BYTE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46f686c1c481eb6df5972c7589b1e557">base</a></td></tr>
+<tr class="memitem:a69f91d2570c43b7ac441889be75ab90f" id="r_a69f91d2570c43b7ac441889be75ab90f"><td class="memItemLeft" align="right" valign="top">U32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69f91d2570c43b7ac441889be75ab90f">current</a></td></tr>
+<tr class="memitem:a7a992483d0061d6bcafa7c9972fe35c4" id="r_a7a992483d0061d6bcafa7c9972fe35c4"><td class="memItemLeft" align="right" valign="top">U32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a992483d0061d6bcafa7c9972fe35c4">nextUpdate</a></td></tr>
+<tr class="memitem:a42e7c974acbe36001e9596c32d511d0f" id="r_a42e7c974acbe36001e9596c32d511d0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSeqStore__t.html">SeqStore_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42e7c974acbe36001e9596c32d511d0f">seqStore</a></td></tr>
+<tr class="memitem:a2176ed9c9bfd5c539d9bb67e50ceeca7" id="r_a2176ed9c9bfd5c539d9bb67e50ceeca7"><td class="memItemLeft" align="right" valign="top">U32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2176ed9c9bfd5c539d9bb67e50ceeca7">hashTable</a> [HASH_TABLESIZE]</td></tr>
+<tr class="memitem:a6e7d6bb8ef8970d551eb3295b906d7fe" id="r_a6e7d6bb8ef8970d551eb3295b906d7fe"><td class="memItemLeft" align="right" valign="top">BYTE&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e7d6bb8ef8970d551eb3295b906d7fe">buffer</a> [WORKPLACESIZE]</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00466">466</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zstd__v01_8c_source.html#l01389">1389</a> of file <a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a0fba232509db64b82f478fc46d9c5184" name="a0fba232509db64b82f478fc46d9c5184"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0fba232509db64b82f478fc46d9c5184">&#9670;&#160;</a></span>appliedParams</h2>
+<a id="a46f686c1c481eb6df5972c7589b1e557" name="a46f686c1c481eb6df5972c7589b1e557"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46f686c1c481eb6df5972c7589b1e557">&#9670;&#160;</a></span>base</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ZSTD_CCtx_params ZSTD_CCtx_s::appliedParams</td>
+          <td class="memname">const BYTE* ZSTD_Cctx_s::base</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00471">471</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zstd__v01_8c_source.html#l01391">1391</a> of file <a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a>.</p>
 
 </div>
 </div>
-<a id="a7e1800fb82d0c2b6fcedf2599d52bf4e" name="a7e1800fb82d0c2b6fcedf2599d52bf4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e1800fb82d0c2b6fcedf2599d52bf4e">&#9670;&#160;</a></span>blockSizeMax</h2>
+<a id="a6e7d6bb8ef8970d551eb3295b906d7fe" name="a6e7d6bb8ef8970d551eb3295b906d7fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e7d6bb8ef8970d551eb3295b906d7fe">&#9670;&#160;</a></span>buffer</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::blockSizeMax</td>
+          <td class="memname">BYTE ZSTD_Cctx_s::buffer[WORKPLACESIZE]</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00477">477</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zstd__v01_8c_source.html#l01400">1400</a> of file <a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a>.</p>
 
 </div>
 </div>
-<a id="a0e5a2918cf38703f720ad0a57eb93886" name="a0e5a2918cf38703f720ad0a57eb93886"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e5a2918cf38703f720ad0a57eb93886">&#9670;&#160;</a></span>blockSplitCtx</h2>
+<a id="a69f91d2570c43b7ac441889be75ab90f" name="a69f91d2570c43b7ac441889be75ab90f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69f91d2570c43b7ac441889be75ab90f">&#9670;&#160;</a></span>current</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structZSTD__blockSplitCtx.html">ZSTD_blockSplitCtx</a> ZSTD_CCtx_s::blockSplitCtx</td>
+          <td class="memname">U32 ZSTD_Cctx_s::current</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00535">535</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zstd__v01_8c_source.html#l01392">1392</a> of file <a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a>.</p>
 
 </div>
 </div>
-<a id="a6675604de4ccebaf2b0b407455c06aba" name="a6675604de4ccebaf2b0b407455c06aba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6675604de4ccebaf2b0b407455c06aba">&#9670;&#160;</a></span>blockState</h2>
+<a id="a2176ed9c9bfd5c539d9bb67e50ceeca7" name="a2176ed9c9bfd5c539d9bb67e50ceeca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2176ed9c9bfd5c539d9bb67e50ceeca7">&#9670;&#160;</a></span>hashTable</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structZSTD__blockState__t.html">ZSTD_blockState_t</a> ZSTD_CCtx_s::blockState</td>
+          <td class="memname">U32 ZSTD_Cctx_s::hashTable[HASH_TABLESIZE]</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00494">494</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zstd__v01_8c_source.html#l01398">1398</a> of file <a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a>.</p>
 
 </div>
 </div>
-<a id="a9dfd6ff2d18753ed479e5f6ed05b6b6c" name="a9dfd6ff2d18753ed479e5f6ed05b6b6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9dfd6ff2d18753ed479e5f6ed05b6b6c">&#9670;&#160;</a></span>bmi2</h2>
+<a id="a7a992483d0061d6bcafa7c9972fe35c4" name="a7a992483d0061d6bcafa7c9972fe35c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a992483d0061d6bcafa7c9972fe35c4">&#9670;&#160;</a></span>nextUpdate</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int ZSTD_CCtx_s::bmi2</td>
+          <td class="memname">U32 ZSTD_Cctx_s::nextUpdate</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00469">469</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zstd__v01_8c_source.html#l01393">1393</a> of file <a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a>.</p>
 
 </div>
 </div>
-<a id="a06351de3db11846d2bd049c9d29e63b2" name="a06351de3db11846d2bd049c9d29e63b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06351de3db11846d2bd049c9d29e63b2">&#9670;&#160;</a></span>bufferedPolicy</h2>
+<a id="a42e7c974acbe36001e9596c32d511d0f" name="a42e7c974acbe36001e9596c32d511d0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42e7c974acbe36001e9596c32d511d0f">&#9670;&#160;</a></span>seqStore</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ZSTD_buffered_policy_e ZSTD_CCtx_s::bufferedPolicy</td>
+          <td class="memname"><a class="el" href="structSeqStore__t.html">SeqStore_t</a> ZSTD_Cctx_s::seqStore</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00499">499</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a7ccb1570ad6b67a90be0bf21eb01576d" name="a7ccb1570ad6b67a90be0bf21eb01576d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ccb1570ad6b67a90be0bf21eb01576d">&#9670;&#160;</a></span>cdict</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="structZSTD__CDict__s.html">ZSTD_CDict</a>* ZSTD_CCtx_s::cdict</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00521">521</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="aa2e6e62763340700dc2c9421038dfa94" name="aa2e6e62763340700dc2c9421038dfa94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2e6e62763340700dc2c9421038dfa94">&#9670;&#160;</a></span>consumedSrcSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned long long ZSTD_CCtx_s::consumedSrcSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00479">479</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a5dadacda68ac7cc27ea18c3e21db5056" name="a5dadacda68ac7cc27ea18c3e21db5056"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dadacda68ac7cc27ea18c3e21db5056">&#9670;&#160;</a></span>cParamsChanged</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int ZSTD_CCtx_s::cParamsChanged</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00468">468</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a169660870033f4832c37514ffb136dae" name="a169660870033f4832c37514ffb136dae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a169660870033f4832c37514ffb136dae">&#9670;&#160;</a></span>customMem</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZSTD_customMem ZSTD_CCtx_s::customMem</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00482">482</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a93977abab5cdaecca99d681fa1a94f6d" name="a93977abab5cdaecca99d681fa1a94f6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93977abab5cdaecca99d681fa1a94f6d">&#9670;&#160;</a></span>dictContentSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::dictContentSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00474">474</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a27a1da93e2b423d3983e7e9a3aee3f09" name="a27a1da93e2b423d3983e7e9a3aee3f09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27a1da93e2b423d3983e7e9a3aee3f09">&#9670;&#160;</a></span>dictID</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">U32 ZSTD_CCtx_s::dictID</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00473">473</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="acb29f5812cd3f26f85abd9463be57a63" name="acb29f5812cd3f26f85abd9463be57a63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb29f5812cd3f26f85abd9463be57a63">&#9670;&#160;</a></span>expectedInBuffer</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structZSTD__inBuffer__s.html">ZSTD_inBuffer</a> ZSTD_CCtx_s::expectedInBuffer</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00515">515</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a29c3cd097458bbdfb70ea1651be02d42" name="a29c3cd097458bbdfb70ea1651be02d42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29c3cd097458bbdfb70ea1651be02d42">&#9670;&#160;</a></span>expectedOutBufferSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::expectedOutBufferSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00517">517</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a751652db3866cb3c59cb7cb3528b7210" name="a751652db3866cb3c59cb7cb3528b7210"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a751652db3866cb3c59cb7cb3528b7210">&#9670;&#160;</a></span>externSeqStore</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structRawSeqStore__t.html">RawSeqStore_t</a> ZSTD_CCtx_s::externSeqStore</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00493">493</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="aa4232dc084c6ad3882e5e8e5ddf0f072" name="aa4232dc084c6ad3882e5e8e5ddf0f072"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4232dc084c6ad3882e5e8e5ddf0f072">&#9670;&#160;</a></span>extSeqBuf</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZSTD_Sequence* ZSTD_CCtx_s::extSeqBuf</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00538">538</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a336ee88c8b2f98b7d83b3766ca4c4391" name="a336ee88c8b2f98b7d83b3766ca4c4391"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a336ee88c8b2f98b7d83b3766ca4c4391">&#9670;&#160;</a></span>extSeqBufCapacity</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::extSeqBufCapacity</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00539">539</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a7c106df203841401014cab4ad0cd8a4e" name="a7c106df203841401014cab4ad0cd8a4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c106df203841401014cab4ad0cd8a4e">&#9670;&#160;</a></span>frameEnded</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">U32 ZSTD_CCtx_s::frameEnded</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00512">512</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a5b799c8416b8bd1ac0590c324bd600fc" name="a5b799c8416b8bd1ac0590c324bd600fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b799c8416b8bd1ac0590c324bd600fc">&#9670;&#160;</a></span>inBuff</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* ZSTD_CCtx_s::inBuff</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00502">502</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a29218c59c42c5ebe3ba46bd2e0bdd833" name="a29218c59c42c5ebe3ba46bd2e0bdd833"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29218c59c42c5ebe3ba46bd2e0bdd833">&#9670;&#160;</a></span>inBuffPos</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::inBuffPos</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00505">505</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a3a31e28c384b1cfc499929db0848f9a1" name="a3a31e28c384b1cfc499929db0848f9a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a31e28c384b1cfc499929db0848f9a1">&#9670;&#160;</a></span>inBuffSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::inBuffSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00503">503</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a37f13227f6aca444b7c39f4be85d655f" name="a37f13227f6aca444b7c39f4be85d655f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37f13227f6aca444b7c39f4be85d655f">&#9670;&#160;</a></span>inBuffTarget</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::inBuffTarget</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00506">506</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="ad40752cbb4a4efc47b1b201e54c56c6b" name="ad40752cbb4a4efc47b1b201e54c56c6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad40752cbb4a4efc47b1b201e54c56c6b">&#9670;&#160;</a></span>initialized</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int ZSTD_CCtx_s::initialized</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00487">487</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a0cf8387221c2ddb68849d452203becae" name="a0cf8387221c2ddb68849d452203becae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0cf8387221c2ddb68849d452203becae">&#9670;&#160;</a></span>inToCompress</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::inToCompress</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00504">504</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a2663441d31b2e33767a4840f4cd1fbc7" name="a2663441d31b2e33767a4840f4cd1fbc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2663441d31b2e33767a4840f4cd1fbc7">&#9670;&#160;</a></span>isFirstBlock</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int ZSTD_CCtx_s::isFirstBlock</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00486">486</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="adbb333e071c3fc12b35ad57c7797dba7" name="adbb333e071c3fc12b35ad57c7797dba7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adbb333e071c3fc12b35ad57c7797dba7">&#9670;&#160;</a></span>ldmSequences</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structrawSeq.html">rawSeq</a>* ZSTD_CCtx_s::ldmSequences</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00491">491</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="ac190d67da615116562871704e29627d2" name="ac190d67da615116562871704e29627d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac190d67da615116562871704e29627d2">&#9670;&#160;</a></span>ldmState</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structldmState__t.html">ldmState_t</a> ZSTD_CCtx_s::ldmState</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00490">490</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="aae087c71fea4dd596900f33a82acd031" name="aae087c71fea4dd596900f33a82acd031"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae087c71fea4dd596900f33a82acd031">&#9670;&#160;</a></span>localDict</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structZSTD__localDict.html">ZSTD_localDict</a> ZSTD_CCtx_s::localDict</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00520">520</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="afcdb4f6dd66bd7b46af1393ac94a7e7a" name="afcdb4f6dd66bd7b46af1393ac94a7e7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afcdb4f6dd66bd7b46af1393ac94a7e7a">&#9670;&#160;</a></span>maxNbLdmSequences</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::maxNbLdmSequences</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00492">492</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a4ce10a36a9788199eec44a68231ecc8e" name="a4ce10a36a9788199eec44a68231ecc8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ce10a36a9788199eec44a68231ecc8e">&#9670;&#160;</a></span>mtctx</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structZSTDMT__CCtx__s.html">ZSTDMT_CCtx</a>* ZSTD_CCtx_s::mtctx</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00526">526</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a3f64c52488a7d3bf12f9cebef478223c" name="a3f64c52488a7d3bf12f9cebef478223c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f64c52488a7d3bf12f9cebef478223c">&#9670;&#160;</a></span>outBuff</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* ZSTD_CCtx_s::outBuff</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00507">507</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="af4640a9e2375a01af54af0f66d509ba3" name="af4640a9e2375a01af54af0f66d509ba3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4640a9e2375a01af54af0f66d509ba3">&#9670;&#160;</a></span>outBuffContentSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::outBuffContentSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00509">509</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="af079dccef93c8f6dd3242755f852b129" name="af079dccef93c8f6dd3242755f852b129"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af079dccef93c8f6dd3242755f852b129">&#9670;&#160;</a></span>outBuffFlushedSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::outBuffFlushedSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00510">510</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="ad51c9c87d9d2b1f7de41abb2573c277c" name="ad51c9c87d9d2b1f7de41abb2573c277c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad51c9c87d9d2b1f7de41abb2573c277c">&#9670;&#160;</a></span>outBuffSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::outBuffSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00508">508</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a4c58ca67e36d7da7ba5161f07c798fc7" name="a4c58ca67e36d7da7ba5161f07c798fc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c58ca67e36d7da7ba5161f07c798fc7">&#9670;&#160;</a></span>pledgedSrcSizePlusOne</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned long long ZSTD_CCtx_s::pledgedSrcSizePlusOne</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00478">478</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a669cb6ff78d290e328fc374ad1f01398" name="a669cb6ff78d290e328fc374ad1f01398"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a669cb6ff78d290e328fc374ad1f01398">&#9670;&#160;</a></span>pool</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZSTD_threadPool* ZSTD_CCtx_s::pool</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00483">483</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a1c1997065560792b7c99f1b78be1454d" name="a1c1997065560792b7c99f1b78be1454d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c1997065560792b7c99f1b78be1454d">&#9670;&#160;</a></span>prefixDict</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structZSTD__prefixDict__s.html">ZSTD_prefixDict</a> ZSTD_CCtx_s::prefixDict</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00522">522</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="aa5705d2146f9288a932ff781ca1e8b9e" name="aa5705d2146f9288a932ff781ca1e8b9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5705d2146f9288a932ff781ca1e8b9e">&#9670;&#160;</a></span>producedCSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned long long ZSTD_CCtx_s::producedCSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00480">480</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a44cefdeb3ca0dc59a2015b50f1807c5e" name="a44cefdeb3ca0dc59a2015b50f1807c5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44cefdeb3ca0dc59a2015b50f1807c5e">&#9670;&#160;</a></span>requestedParams</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZSTD_CCtx_params ZSTD_CCtx_s::requestedParams</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00470">470</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a24bb7f6398ec0dc5b57840e0559d1536" name="a24bb7f6398ec0dc5b57840e0559d1536"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24bb7f6398ec0dc5b57840e0559d1536">&#9670;&#160;</a></span>seqCollector</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structSeqCollector.html">SeqCollector</a> ZSTD_CCtx_s::seqCollector</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00485">485</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="af4c4b6bc553b62303b32604bac9b2cc5" name="af4c4b6bc553b62303b32604bac9b2cc5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4c4b6bc553b62303b32604bac9b2cc5">&#9670;&#160;</a></span>seqStore</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structSeqStore__t.html">SeqStore_t</a> ZSTD_CCtx_s::seqStore</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00489">489</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a2833b3efd201a03cc5d995a3a6e8a0e0" name="a2833b3efd201a03cc5d995a3a6e8a0e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2833b3efd201a03cc5d995a3a6e8a0e0">&#9670;&#160;</a></span>simpleApiParams</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZSTD_CCtx_params ZSTD_CCtx_s::simpleApiParams</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00472">472</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="aa43d769394656aa6e435098c4511a433" name="aa43d769394656aa6e435098c4511a433"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa43d769394656aa6e435098c4511a433">&#9670;&#160;</a></span>stableIn_notConsumed</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::stableIn_notConsumed</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00516">516</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a426fc3134ed09e5eced577ed6e224b3c" name="a426fc3134ed09e5eced577ed6e224b3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a426fc3134ed09e5eced577ed6e224b3c">&#9670;&#160;</a></span>stage</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZSTD_compressionStage_e ZSTD_CCtx_s::stage</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00467">467</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a68d77c7ef2a0e794a75725039c5771a6" name="a68d77c7ef2a0e794a75725039c5771a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68d77c7ef2a0e794a75725039c5771a6">&#9670;&#160;</a></span>staticSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::staticSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00484">484</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a7aa17b30685ac7ef32d8dfdbed3e0c21" name="a7aa17b30685ac7ef32d8dfdbed3e0c21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7aa17b30685ac7ef32d8dfdbed3e0c21">&#9670;&#160;</a></span>streamStage</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ZSTD_cStreamStage ZSTD_CCtx_s::streamStage</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00511">511</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a6db233e40b69c6dd3d47316abee1a3f6" name="a6db233e40b69c6dd3d47316abee1a3f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6db233e40b69c6dd3d47316abee1a3f6">&#9670;&#160;</a></span>tmpWkspSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t ZSTD_CCtx_s::tmpWkspSize</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00496">496</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a19cd0cd113cb3c2468ee6a7c0ff4bdc5" name="a19cd0cd113cb3c2468ee6a7c0ff4bdc5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19cd0cd113cb3c2468ee6a7c0ff4bdc5">&#9670;&#160;</a></span>tmpWorkspace</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* ZSTD_CCtx_s::tmpWorkspace</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00495">495</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a6d84cf7d9ac6ea771959476bcb48b076" name="a6d84cf7d9ac6ea771959476bcb48b076"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d84cf7d9ac6ea771959476bcb48b076">&#9670;&#160;</a></span>workspace</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structZSTD__cwksp.html">ZSTD_cwksp</a> ZSTD_CCtx_s::workspace</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00476">476</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
-
-</div>
-</div>
-<a id="a934cb5c012f9d73a7b1c7248abbdf70b" name="a934cb5c012f9d73a7b1c7248abbdf70b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a934cb5c012f9d73a7b1c7248abbdf70b">&#9670;&#160;</a></span>xxhState</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__XXH64__family.html#ga0702bdbc80b0cf9e94f2379f7d839b8c">XXH64_state_t</a> ZSTD_CCtx_s::xxhState</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="zstd__compress__internal_8h_source.html#l00481">481</a> of file <a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="zstd__v01_8c_source.html#l01394">1394</a> of file <a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Core/bin/Debug/_deps/zstd-src/lib/compress/<a class="el" href="zstd__compress__internal_8h_source.html">zstd_compress_internal.h</a></li>
+<li>Core/bin/Debug/_deps/zstd-src/lib/legacy/<a class="el" href="zstd__v01_8c_source.html">zstd_v01.c</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -974,7 +226,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="structZSTD__CCtx__s.html">ZSTD_CCtx_s</a></li>
+    <li class="navelem"><a href="structZSTD__Cctx__s.html">ZSTD_Cctx_s</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

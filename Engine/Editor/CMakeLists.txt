@@ -89,7 +89,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE
-        "-Wl,/subsystem:windows,/ENTRY:mainCRTStartup"
+        "-Wl,/subsystem:console,/ENTRY:mainCRTStartup"
     )
 endif()
 
@@ -126,3 +126,10 @@ add_custom_target(copy_shaders ALL
 )
 
 add_dependencies(${PROJECT_NAME} copy_shaders)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:VEX::VEX>
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    COMMENT "Copying VEX Shared Library to Editor Binary Directory"
+)

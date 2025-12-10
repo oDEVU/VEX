@@ -7,6 +7,17 @@
  #pragma once
  #include <stdexcept>
  #include <string>
+
+ #ifdef _WIN32
+     #define WIN32_LEAN_AND_MEAN
+     #define NOMINMAX
+     #include <windows.h>
+
+     #ifdef ERROR
+         #undef ERROR
+     #endif
+ #endif
+
  #include "VEX/VEX_export.h"
 
  namespace vex {

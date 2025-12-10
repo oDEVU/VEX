@@ -9,7 +9,7 @@
 #include "Engine.hpp"
 
 #include <unordered_map>
-#include <flat_map>
+#include <components/types.hpp>
 #include <vector>
 #include <memory>
 #include <entt/entt.hpp>
@@ -38,7 +38,7 @@ namespace vex {
         Engine* m_p_engine = nullptr;
         VirtualFileSystem* m_vfs;
         std::unique_ptr<VulkanResources>& m_p_resources;
-        std::flat_map<std::string, std::unique_ptr<VulkanMesh>> m_vulkanMeshes;
+        vex_map<std::string, std::unique_ptr<VulkanMesh>> m_vulkanMeshes;
         std::vector<uint32_t> m_freeModelIds;
         uint32_t m_nextModelId = 0;
     };

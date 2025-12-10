@@ -61,6 +61,7 @@ set(public_header_files
     include/components/InputSystem.hpp
     include/components/PhysicsSystem.hpp
     include/components/JoltSafe.hpp
+    include/components/types.hpp
     include/components/UI/VexUI.hpp
     include/components/GameComponents/BasicComponents.hpp
     include/components/GameComponents/UiComponent.hpp
@@ -85,6 +86,7 @@ set(source_files
         src/components/Scene.cpp
         src/components/SceneManager.cpp
         src/components/errorUtils.cpp
+        src/components/pathUtils.cpp
         src/components/Window.cpp
         src/components/Window.hpp
         src/components/VirtualFileSystem.cpp
@@ -252,11 +254,16 @@ target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
 
 if(TARGET ImGui)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        # Tell linker: "Take the whole ImGui archive, don't throw anything away"
         target_link_libraries(${PROJECT_NAME} PRIVATE -Wl,--whole-archive ImGui -Wl,--no-whole-archive)
     elseif(MSVC)
-        # Windows equivalent
         target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:ImGui")
+        target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:SDL3-static")
+    elseif(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:ImGui>")
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:SDL3-static>")
+
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetWindowRelativeMouseMode")
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_LogError")
     endif()
 endif()
 
@@ -334,6 +341,10 @@ endforeach()
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     ${TP_RESOLVED_DEFINITIONS}
 )
+
+if(WIN32)
+    target_compile_definitions(${PROJECT_NAME} INTERFACE "IMGUI_API=__declspec(dllimport)")
+endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES INTERFACE_LINK_LIBRARIES "")
 

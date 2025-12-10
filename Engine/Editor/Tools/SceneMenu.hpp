@@ -6,8 +6,11 @@
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
-#include <cxxabi.h>
 #include <functional>
+
+#ifndef _WIN32
+    #include <cxxabi.h>
+#endif
 
 #include "Engine.hpp"
 #include "components/SceneManager.hpp"
@@ -15,18 +18,28 @@
 #include "components/GameComponents/BasicComponents.hpp"
 
 struct SceneAction {
-    enum Type { NONE, DELETE, DUPLICATE, RENAME_START };
+    enum Type { NONE, DELETE_ACTION, DUPLICATE, RENAME_START };
     Type type = NONE;
     vex::GameObject* target = nullptr;
 };
 
 inline std::string Demangle(const char* name) {
+#ifdef _WIN32
+    std::string s = name;
+    const std::string prefix_class = "class ";
+    const std::string prefix_struct = "struct ";
+
+    if (s.rfind(prefix_class, 0) == 0) return s.substr(prefix_class.length());
+    if (s.rfind(prefix_struct, 0) == 0) return s.substr(prefix_struct.length());
+    return s;
+#else
     int status = -1;
     std::unique_ptr<char, void(*)(void*)> res {
         abi::__cxa_demangle(name, NULL, NULL, &status),
         std::free
     };
     return (status == 0) ? res.get() : name;
+#endif
 }
 
 inline void DrawEntityNode(
@@ -108,7 +121,7 @@ inline void DrawEntityNode(
             }
 
             if (ImGui::MenuItem("Delete")) {
-                outAction.type = SceneAction::DELETE;
+                outAction.type = SceneAction::DELETE_ACTION;
                 outAction.target = obj;
             }
 
@@ -279,7 +292,7 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
                 engine.refreshForObject();
             }
 
-        if (action.type == SceneAction::DELETE && action.target) {
+        if (action.type == SceneAction::DELETE_ACTION && action.target) {
 
                 std::function<void(vex::GameObject*)> recursiveDelete =
                     [&](vex::GameObject* targetObj) {

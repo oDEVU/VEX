@@ -10,7 +10,7 @@
 #include "components/errorUtils.hpp"
 #include "../../VirtualFileSystem.hpp"
 
-#include <flat_map>
+#include <components/types.hpp>
 #include <string>
 #include <array>
 #include <vector>
@@ -158,12 +158,12 @@ namespace vex {
         VkDescriptorPool m_descriptorPool;
         std::vector<VkDescriptorSet> m_textureDescriptorSets;
 
-        std::flat_map<std::string, VkImageView> m_textures;
+        vex_map<std::string, VkImageView> m_textures;
         VkSampler m_textureSampler;
 
-        std::flat_map<std::string, VkImage> m_textureImages;
-        std::flat_map<std::string, VmaAllocation> m_textureAllocations;
-        std::flat_map<std::string, VkImageView> m_textureViews;
+        vex_map<std::string, VkImage> m_textureImages;
+        vex_map<std::string, VmaAllocation> m_textureAllocations;
+        vex_map<std::string, VkImageView> m_textureViews;
 
         /// @brief Internal function to create descriptor resources.
         void createDescriptorResources();

@@ -1,4 +1,3 @@
-#include <X11/X.h>
 #define CR_HOST
 
 #include <cr.h>
