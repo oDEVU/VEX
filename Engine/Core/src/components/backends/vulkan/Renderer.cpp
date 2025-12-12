@@ -498,7 +498,7 @@ namespace vex {
                                  VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                                  0,
                                  VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                                 VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
             VkRenderingAttachmentInfo colorAttachment{};

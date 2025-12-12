@@ -114,6 +114,28 @@ else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
 endif()
 
+add_executable(VexProjectSelector "main_selector.cpp")
+
+set(selector_sources
+    ProjectSelector/ProjectSelector.cpp
+    ProjectSelector/ProjectSelector.hpp
+)
+
+target_sources(VexProjectSelector PRIVATE ${selector_sources})
+
+target_link_libraries(VexProjectSelector PRIVATE VEX::VEX)
+
+target_include_directories(VexProjectSelector PRIVATE
+    "${ENGINE_PATH}/Core/src"
+    "${ENGINE_PATH}/Core/src/components"
+    "${ENGINE_PATH}/Core/src/components/backends/vulkan"
+    "${ENGINE_PATH}/Core/src/components/UI"
+)
+
+if(WIN32)
+    target_link_libraries(VexProjectSelector PRIVATE "-Wl,/subsystem:console")
+endif()
+
 set(SHADERS_SOURCE_DIR "${VEX_BUILD_DIR}/shaders")
 set(SHADERS_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/Engine/shaders")
 
