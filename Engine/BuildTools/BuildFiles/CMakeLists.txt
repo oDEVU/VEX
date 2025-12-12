@@ -29,19 +29,23 @@ if(JSON_ERROR)
     message(FATAL_ERROR "Failed to parse project file: ${JSON_ERROR}")
 endif()
 
-string(JSON ENGINE_PATH ERROR_VARIABLE JSON_ERROR GET "${PROJECT_JSON}" "engine_path")
+project(${PROJECT_NAME})
 
-set(ENGINE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../${ENGINE_PATH})
+set(ENGINE_PATH "${VEX_ENGINE_PATH}" CACHE PATH "Path to Vex Engine Core")
+
+message(STATUS "DEBUG: ENGINE_PATH from Cache is: '${ENGINE_PATH}'")
+
+if(NOT ENGINE_PATH OR ENGINE_PATH STREQUAL "")
+    message(FATAL_ERROR "VEX_ENGINE_PATH is missing! Command line argument was not received.")
+endif()
 
 if(NOT EXISTS "${ENGINE_PATH}")
-    message(FATAL_ERROR "Project file has invalid engine path. Please check the path in the project file. Loaded path: ${ENGINE_PATH}")
+    message(FATAL_ERROR "Provided engine path does not exist: ${ENGINE_PATH}")
 endif()
 
 if(NOT EXISTS "${ENGINE_PATH}/BuildTools/build/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}")
     message(FATAL_ERROR "BuildTools are not present. Make sure VPAK_Packer is built.")
 endif()
-
-project(${PROJECT_NAME})
 
 #add_subdirectory(${ENGINE_PATH}/Core ${CMAKE_BINARY_DIR}/Engine)
 

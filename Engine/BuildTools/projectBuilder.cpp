@@ -59,26 +59,31 @@ inline std::filesystem::path GetExecutableDir() {
     return exePath.parent_path();
 }
 
-std::string GetEngineRelPath(const std::filesystem::path& jsonPath) {
-    std::ifstream file(jsonPath);
-    std::string line;
-    while (std::getline(file, line)) {
-        if (line.find("\"engine_path\"") != std::string::npos) {
-            size_t colon = line.find(":");
-            size_t firstQuote = line.find("\"", colon);
-            size_t secondQuote = line.find("\"", firstQuote + 1);
-            if (firstQuote != std::string::npos && secondQuote != std::string::npos) {
-                return line.substr(firstQuote + 1, secondQuote - firstQuote - 1) + "/Core";
-            }
-        }
-    }
-    return "";
+std::string GetEnginePath() {
+    std::filesystem::path exeDir = GetExecutableDir();
+    std::filesystem::path engineRoot = exeDir.parent_path().parent_path();
+
+    return engineRoot.string();
+}
+
+std::string GetEngineCorePath() {
+    std::filesystem::path exeDir = GetExecutableDir();
+    std::filesystem::path engineRoot = exeDir.parent_path().parent_path();
+    std::filesystem::path engineCorePath = engineRoot / "Core";
+
+    return engineCorePath.string();
+}
+
+std::string ToCMakePath(const std::filesystem::path& path) {
+    std::string p = path.string();
+    std::replace(p.begin(), p.end(), '\\', '/');
+    return p;
 }
 
 bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std::string& buildType, const std::string& parallel) {
     namespace fs = std::filesystem;
 
-    std::string engineRelPath = GetEngineRelPath(projectDir / "VexProject.json");
+    std::string engineRelPath = GetEngineCorePath();
     if (engineRelPath.empty()) {
         std::cerr << "Error: Could not find 'engine_path' in VexProject.json\n";
         return false;
@@ -231,9 +236,13 @@ int main(int argc, char* argv[]) {
         fs::create_directory(output_dir);
     }
 
+    std::string engineArg = " -DVEX_ENGINE_PATH=\"" + ToCMakePath(GetEnginePath()) + "\"";
+
     if (build_type == "-d" || build_type == "-debug") {
         output_dir = project_dir / "Build" / "Debug";
-        int result = std::system("cmake -G Ninja -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++");
+        std::string cmd = "cmake -G Ninja -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++" + engineArg;
+        std::cout << "CMD: " << cmd << std::endl;
+        int result = std::system(cmd.c_str());
         if (result != 0) {
             std::cerr << "CMake configure failed with exit code: " << result << '\n';
             return 1;
@@ -247,7 +256,9 @@ int main(int argc, char* argv[]) {
     } else if (build_type == "-r" || build_type == "-release") {
         output_dir = project_dir / "Build" / "Release";
         build_dir = intermediate_dir / "build/release";
-        int result = std::system("cmake -G Ninja -B build/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++");
+        std::string cmd = "cmake -G Ninja -S . -B build/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++" + engineArg;
+        std::cout << "CMD: " << cmd << std::endl;
+        int result = std::system(cmd.c_str());
         if (result != 0) {
             std::cerr << "CMake configure failed with exit code: " << result << '\n';
             return 1;
@@ -313,7 +324,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::string engine_rel_path = GetEngineRelPath(vex_project_file);
+    std::string engine_rel_path = GetEngineCorePath();
     fs::path engine_root = fs::weakly_canonical(project_dir / engine_rel_path);
 
     std::string config_name = (build_type == "-d" || build_type == "-debug") ? "Debug" : "Release";
