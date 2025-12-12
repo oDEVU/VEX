@@ -67,10 +67,14 @@ namespace vex {
     void PhysicsSystem::shutdown() {
         //if (m_destroyConnection) m_destroyConnection.disconnect();
 
-        auto view = m_registry.view<PhysicsComponent>();
-        for (auto e : view) {
-            auto& pc = view.get<PhysicsComponent>(e);
-            DestroyBodyForEntity(pc);
+        try{
+            auto view = m_registry.view<PhysicsComponent>();
+            for (auto e : view) {
+                auto& pc = view.get<PhysicsComponent>(e);
+                DestroyBodyForEntity(pc);
+            }
+        } catch (const std::exception& e) {
+            handle_exception(e);
         }
 
         JPH::UnregisterTypes();

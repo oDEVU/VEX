@@ -11,6 +11,7 @@
 #include "../../Core/src/components/backends/vulkan/Renderer.hpp"
 #include "../../Core/src/components/backends/vulkan/VulkanImGUIWrapper.hpp"
 
+#include <cstdint>
 #include <vector>
 #include <string>
 
@@ -28,20 +29,22 @@ namespace vex {
         ~ProjectSelector() = default;
 
         void render() override;
+        std::string getSelectedProject() const { return m_selectedProjectPath; }
 
     private:
         void drawSelectorLayout(const SceneRenderData& data);
-
         void loadKnownProjects();
         void saveKnownProjects();
         void scanAndAddProject(const std::string& path);
-        void launchEditor(const std::string& projectPath);
-
-        std::unique_ptr<CameraObject> m_dummyCamera;
+        void selectProject(const std::string& projectPath);
 
         std::vector<ProjectMetadata> m_projects;
         std::string m_configPath = "recent_projects.json";
-
         char m_inputBuffer[256] = "";
+
+        std::string m_selectedProjectPath = "";
+
+        bool shouldClose = false;
+        uint8_t closeDelay = 5;
     };
 }

@@ -5,6 +5,9 @@
 #include <filesystem>
 #include <cstdlib>
 
+#include "components/PhysicsSystem.hpp"
+#include "entt/entity/entity.hpp"
+
 #ifdef _WIN32
     #include <windows.h>
 #else
@@ -18,14 +21,17 @@ namespace vex {
     ProjectSelector::ProjectSelector(const char* title)
         : Engine(title, 800, 600, GameInfo{"Vex Selector", 1, 0, 0})
     {
-        m_dummyCamera = std::make_unique<CameraObject>(*this, "DummySelectorCamera");
-
         loadKnownProjects();
     }
 
     void ProjectSelector::render() {
-        auto cameraEntity = getCamera();
-        if (cameraEntity == entt::null) return;
+        if(shouldClose){
+            if(closeDelay > 0){
+                closeDelay--;
+            }else{
+                m_running = false;
+            }
+        }else{
 
         if(getResolutionMode() != ResolutionMode::NATIVE){
             setResolutionMode(ResolutionMode::NATIVE);
@@ -42,7 +48,6 @@ namespace vex {
             }
 
             renderData.imguiTextureID = m_interface->getRenderer().getImGuiTextureID(*m_imgui);
-            m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
 
             m_imgui->beginFrame();
             m_imgui->executeUIFunctions();
@@ -56,6 +61,7 @@ namespace vex {
 
         } catch (const std::exception& e) {
             log(LogLevel::ERROR, "Selector render failed: %s", e.what());
+        }
         }
     }
 
@@ -88,7 +94,7 @@ namespace vex {
 
                 ImGui::PushID(proj.path.c_str());
                 if (ImGui::Button(proj.name.c_str(), ImVec2(200, 80))) {
-                    launchEditor(proj.path);
+                    selectProject(proj.path);
                 }
 
                 ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "%s", proj.path.c_str());
@@ -102,7 +108,6 @@ namespace vex {
         ImGui::Dummy(ImVec2(0.0f, 20.0f));
         ImGui::Separator();
 
-        // Add Project Manually
         ImGui::Text("Add Existing Project");
         ImGui::SetNextItemWidth(400);
         ImGui::InputTextWithHint("##pathInput", "Paste absolute project folder path...", m_inputBuffer, IM_ARRAYSIZE(m_inputBuffer));
@@ -125,13 +130,7 @@ namespace vex {
             file >> j;
 
             for (const auto& item : j) {
-                if (std::filesystem::exists(item["path"].get<std::string>())) {
-                    m_projects.push_back({
-                        item["name"],
-                        item["path"],
-                        item.value("version", "0.0.0")
-                    });
-                }
+                scanAndAddProject(item["path"].get<std::string>());
             }
         } catch (const std::exception& e) {
             log(LogLevel::ERROR, "Failed to load projects: %s", e.what());
@@ -180,73 +179,9 @@ namespace vex {
         }
     }
 
-    void ProjectSelector::launchEditor(const std::string& projectPath) {
-            log("Launching Editor for: %s", projectPath.c_str());
-
-            std::filesystem::path exeDir = GetExecutableDir();
-
-    #ifdef _WIN32
-            std::string exeName = "VexEditor.exe";
-            std::filesystem::path fullPath = exeDir / exeName;
-
-            STARTUPINFOA si;
-            PROCESS_INFORMATION pi;
-
-            ZeroMemory(&si, sizeof(si));
-            si.cb = sizeof(si);
-            ZeroMemory(&pi, sizeof(pi));
-
-            std::string cmdArgs = "\"" + fullPath.string() + "\" \"" + projectPath + "\"";
-            std::vector<char> cmdArgsMutable(cmdArgs.begin(), cmdArgs.end());
-            cmdArgsMutable.push_back('\0');
-
-            bool success = CreateProcessA(
-                NULL,                           // Application Name (can be null if in cmd line)
-                cmdArgsMutable.data(),          // Command Line
-                NULL,                           // Process Attributes
-                NULL,                           // Thread Attributes
-                FALSE,                          // Inherit Handles (FALSE is important!)
-                DETACHED_PROCESS,               // Creation Flags (Detaches console/group)
-                NULL,                           // Environment
-                exeDir.string().c_str(),        // Current Directory
-                &si,
-                &pi
-            );
-
-            if (success) {
-                CloseHandle(pi.hProcess);
-                CloseHandle(pi.hThread);
-
-                m_running = false;
-            } else {
-                log(LogLevel::ERROR, "Failed to launch editor. Error: %d", GetLastError());
-            }
-
-    #else
-            std::string exeName = "VexEditor";
-            std::filesystem::path fullPath = exeDir / exeName;
-
-            pid_t pid = fork();
-
-            if (pid < 0) {
-                log(LogLevel::ERROR, "Failed to fork process");
-            }
-            else if (pid == 0) {
-                if (setsid() < 0) {
-                    _exit(1);
-                }
-
-                freopen("/dev/null", "r", stdin);
-                freopen("/dev/null", "w", stdout);
-                freopen("/dev/null", "w", stderr);
-
-                execl(fullPath.c_str(), "VexEditor", projectPath.c_str(), (char*)NULL);
-
-                _exit(1);
-            }
-            else {
-                m_running = false;
-            }
-    #endif
-    }
+    void ProjectSelector::selectProject(const std::string& projectPath) {
+            log("Project selected: %s", projectPath.c_str());
+            m_selectedProjectPath = projectPath;
+            shouldClose = true;
+        }
 }

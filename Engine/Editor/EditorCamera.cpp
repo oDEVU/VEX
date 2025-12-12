@@ -52,27 +52,27 @@ void EditorCameraObject::processEvent(const SDL_Event& event, float deltaTime) {
 void EditorCameraObject::Update(float deltaTime) {
     auto& tc = GetComponent<vex::TransformComponent>();
 
-    if (keyStates[SDL_SCANCODE_W]) {
+    if (keyStates[SDL_SCANCODE_W] && (m_viewportHovered || m_isFlying)) {
         tc.setLocalPosition(tc.getLocalPosition()+(tc.getForwardVector()*float(deltaTime*m_movementSpeed)));
     }
 
-    if (keyStates[SDL_SCANCODE_S]) {
+    if (keyStates[SDL_SCANCODE_S] && (m_viewportHovered || m_isFlying)) {
         tc.setLocalPosition(tc.getLocalPosition()+(tc.getForwardVector()*float(deltaTime*-m_movementSpeed)));
     }
 
-    if (keyStates[SDL_SCANCODE_D]) {
+    if (keyStates[SDL_SCANCODE_D] && (m_viewportHovered || m_isFlying)) {
         tc.setLocalPosition(tc.getLocalPosition()+(tc.getRightVector()*float(deltaTime*m_movementSpeed)));
     }
 
-    if (keyStates[SDL_SCANCODE_A]) {
+    if (keyStates[SDL_SCANCODE_A] && (m_viewportHovered || m_isFlying)) {
         tc.setLocalPosition(tc.getLocalPosition()+(tc.getRightVector()*float(deltaTime*-m_movementSpeed)));
     }
 
-    if (keyStates[SDL_SCANCODE_E]) {
+    if (keyStates[SDL_SCANCODE_E] && (m_viewportHovered || m_isFlying)) {
         tc.setLocalPosition(tc.getLocalPosition() + (tc.getUpVector() * (deltaTime * m_movementSpeed)));
     }
 
-    if (keyStates[SDL_SCANCODE_Q]) {
+    if (keyStates[SDL_SCANCODE_Q] && (m_viewportHovered || m_isFlying)) {
         tc.setLocalPosition(tc.getLocalPosition() + (tc.getUpVector() * (deltaTime * -m_movementSpeed)));
     }
 }
