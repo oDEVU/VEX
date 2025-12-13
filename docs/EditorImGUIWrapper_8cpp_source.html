@@ -100,8 +100,8 @@ $(function(){initNavTree('EditorImGUIWrapper_8cpp_source.html','',''); });
   <div class="headertitle"><div class="title">EditorImGUIWrapper.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;EditorImGUIWrapper.hpp&quot;</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;Editor.hpp&quot;</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="EditorImGUIWrapper_8hpp.html">EditorImGUIWrapper.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;<a class="code" href="Editor_8hpp.html">Editor.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;backends/imgui_impl_sdl3.h&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;backends/imgui_impl_vulkan.h&gt;</span></div>
@@ -146,8 +146,10 @@ $(function(){initNavTree('EditorImGUIWrapper_8cpp_source.html','',''); });
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    }</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>}</div>
 </div>
-<div class="ttc" id="aclassEditorImGUIWrapper_html_a1c53be5aeb4c7fb6df1001ac5e0cf227"><div class="ttname"><a href="classEditorImGUIWrapper.html#a1c53be5aeb4c7fb6df1001ac5e0cf227">EditorImGUIWrapper::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event *event) override</div><div class="ttdoc">Its used to process input needed by interaction with ImGui.</div><div class="ttdef"><b>Definition</b> <a href="#l00014">EditorImGUIWrapper.cpp:14</a></div></div>
-<div class="ttc" id="aclassEditorImGUIWrapper_html_a47aa3054bd852a263225a35d112dbc50"><div class="ttname"><a href="classEditorImGUIWrapper.html#a47aa3054bd852a263225a35d112dbc50">EditorImGUIWrapper::beginFrame</a></div><div class="ttdeci">void beginFrame() override</div><div class="ttdoc">Begining of UI rendering called in vex::Renderer::renderFrame.</div><div class="ttdef"><b>Definition</b> <a href="#l00009">EditorImGUIWrapper.cpp:9</a></div></div>
+<div class="ttc" id="aEditorImGUIWrapper_8hpp_html"><div class="ttname"><a href="EditorImGUIWrapper_8hpp.html">EditorImGUIWrapper.hpp</a></div><div class="ttdoc">A specialized ImGUI wrapper for the editor, inheriting from VulkanImGUIWrapper.</div></div>
+<div class="ttc" id="aEditor_8hpp_html"><div class="ttname"><a href="Editor_8hpp.html">Editor.hpp</a></div><div class="ttdoc">The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.</div></div>
+<div class="ttc" id="aclassEditorImGUIWrapper_html_a1c53be5aeb4c7fb6df1001ac5e0cf227"><div class="ttname"><a href="classEditorImGUIWrapper.html#a1c53be5aeb4c7fb6df1001ac5e0cf227">EditorImGUIWrapper::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event *event) override</div><div class="ttdoc">Processes SDL events specifically for ImGUI interaction within the editor.</div><div class="ttdef"><b>Definition</b> <a href="#l00014">EditorImGUIWrapper.cpp:14</a></div></div>
+<div class="ttc" id="aclassEditorImGUIWrapper_html_a47aa3054bd852a263225a35d112dbc50"><div class="ttname"><a href="classEditorImGUIWrapper.html#a47aa3054bd852a263225a35d112dbc50">EditorImGUIWrapper::beginFrame</a></div><div class="ttdeci">void beginFrame() override</div><div class="ttdoc">Overrides the base class function to begin a new ImGUI frame.</div><div class="ttdef"><b>Definition</b> <a href="#l00009">EditorImGUIWrapper.cpp:9</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a5547c7ab8e934f8f936a717e9a277646"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646">vex::VulkanImGUIWrapper::beginFrame</a></div><div class="ttdeci">void beginFrame() override</div><div class="ttdoc">Begining of UI rendering called in vex::Renderer::renderFrame.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00047">VulkanImGUIWrapper.hpp:47</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -100,18 +100,21 @@ $(function(){initNavTree('EditorCamera_8cpp_source.html','',''); });
   <div class="headertitle"><div class="title">EditorCamera.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;EditorCamera.hpp&quot;</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="EditorCamera_8hpp.html">EditorCamera.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;<a class="code" href="BasicComponents_8hpp.html">components/GameComponents/BasicComponents.hpp</a>&gt;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span>EditorCameraObject::EditorCameraObject(<a class="code hl_class" href="classvex_1_1Engine.html">vex::Engine</a>&amp; engine, <span class="keyword">const</span> std::string&amp; name, SDL_Window* window)</div>
+<div class="foldopen" id="foldopen00005" data-start="{" data-end="}">
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno"><a class="line" href="classEditorCameraObject.html#a0102cc625f834afa8709502420387254">    5</a></span><a class="code hl_function" href="classEditorCameraObject.html#a0102cc625f834afa8709502420387254">EditorCameraObject::EditorCameraObject</a>(<a class="code hl_class" href="classvex_1_1Engine.html">vex::Engine</a>&amp; engine, <span class="keyword">const</span> std::string&amp; name, SDL_Window* window)</div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>    : CameraObject(engine, name), m_window(window) {</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>        GetComponent&lt;vex::CameraComponent&gt;().fov = 60;</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>        GetComponent&lt;vex::CameraComponent&gt;().farPlane = 1000;</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>        <a class="code hl_function" href="classvex_1_1GameObject.html#a8ce976deba3bfd5a9ddcec0ec0e0d475">GetComponent&lt;vex::CameraComponent&gt;</a>().fov = 60;</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>        <a class="code hl_function" href="classvex_1_1GameObject.html#a8ce976deba3bfd5a9ddcec0ec0e0d475">GetComponent&lt;vex::CameraComponent&gt;</a>().farPlane = 1000;</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>}</div>
+</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keywordtype">void</span> EditorCameraObject::processEvent(<span class="keyword">const</span> SDL_Event&amp; event, <span class="keywordtype">float</span> deltaTime) {</div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="}">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classEditorCameraObject.html#a80cfb28c03369d0a2b2b51de276476c0">   12</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classEditorCameraObject.html#a80cfb28c03369d0a2b2b51de276476c0">EditorCameraObject::processEvent</a>(<span class="keyword">const</span> SDL_Event&amp; event, <span class="keywordtype">float</span> deltaTime) {</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordflow">if</span> (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP) {</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <span class="keywordtype">bool</span> isPressed = (<span class="keyword">event</span>.type == SDL_EVENT_KEY_DOWN);</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <span class="keyword">const</span> SDL_KeyboardEvent&amp; key_event = <span class="keyword">event</span>.key;</div>
@@ -150,38 +153,42 @@ $(function(){initNavTree('EditorCamera_8cpp_source.html','',''); });
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        tc.addPitch(deltaPitch);</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    }</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>}</div>
+</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
 <div class="foldopen" id="foldopen00052" data-start="{" data-end="}">
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec">   52</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec">EditorCameraObject::Update</a>(<span class="keywordtype">float</span> deltaTime) {</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">auto</span>&amp; tc = <a class="code hl_function" href="classvex_1_1GameObject.html#a8ce976deba3bfd5a9ddcec0ec0e0d475">GetComponent&lt;vex::TransformComponent&gt;</a>();</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_W]) {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_W] &amp;&amp; (m_viewportHovered || m_isFlying)) {</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        tc.setLocalPosition(tc.getLocalPosition()+(tc.getForwardVector()*<span class="keywordtype">float</span>(deltaTime*m_movementSpeed)));</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    }</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_S]) {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_S] &amp;&amp; (m_viewportHovered || m_isFlying)) {</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        tc.setLocalPosition(tc.getLocalPosition()+(tc.getForwardVector()*<span class="keywordtype">float</span>(deltaTime*-m_movementSpeed)));</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    }</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_D]) {</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_D] &amp;&amp; (m_viewportHovered || m_isFlying)) {</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        tc.setLocalPosition(tc.getLocalPosition()+(tc.getRightVector()*<span class="keywordtype">float</span>(deltaTime*m_movementSpeed)));</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    }</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_A]) {</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_A] &amp;&amp; (m_viewportHovered || m_isFlying)) {</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        tc.setLocalPosition(tc.getLocalPosition()+(tc.getRightVector()*<span class="keywordtype">float</span>(deltaTime*-m_movementSpeed)));</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_E]) {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_E] &amp;&amp; (m_viewportHovered || m_isFlying)) {</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        tc.setLocalPosition(tc.getLocalPosition() + (tc.getUpVector() * (deltaTime * m_movementSpeed)));</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    }</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_Q]) {</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordflow">if</span> (keyStates[SDL_SCANCODE_Q] &amp;&amp; (m_viewportHovered || m_isFlying)) {</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        tc.setLocalPosition(tc.getLocalPosition() + (tc.getUpVector() * (deltaTime * -m_movementSpeed)));</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    }</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
 </div>
 <div class="ttc" id="aBasicComponents_8hpp_html"><div class="ttname"><a href="BasicComponents_8hpp.html">BasicComponents.hpp</a></div><div class="ttdoc">Contains basic components like transform, camera, name components..</div></div>
-<div class="ttc" id="aclassEditorCameraObject_html_aae0fa5e4d3b2be378d0838284e993dec"><div class="ttname"><a href="classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec">EditorCameraObject::Update</a></div><div class="ttdeci">void Update(float deltaTime) override</div><div class="ttdoc">virtual void function you override to implement custom behavior when the game updates (eg....</div><div class="ttdef"><b>Definition</b> <a href="#l00052">EditorCamera.cpp:52</a></div></div>
+<div class="ttc" id="aEditorCamera_8hpp_html"><div class="ttname"><a href="EditorCamera_8hpp.html">EditorCamera.hpp</a></div><div class="ttdoc">A specialized camera object for use within the editor, supporting free-fly movement and input process...</div></div>
+<div class="ttc" id="aclassEditorCameraObject_html_a0102cc625f834afa8709502420387254"><div class="ttname"><a href="classEditorCameraObject.html#a0102cc625f834afa8709502420387254">EditorCameraObject::EditorCameraObject</a></div><div class="ttdeci">EditorCameraObject(vex::Engine &amp;engine, const std::string &amp;name, SDL_Window *window)</div><div class="ttdoc">Constructs an EditorCameraObject.</div><div class="ttdef"><b>Definition</b> <a href="#l00005">EditorCamera.cpp:5</a></div></div>
+<div class="ttc" id="aclassEditorCameraObject_html_a80cfb28c03369d0a2b2b51de276476c0"><div class="ttname"><a href="classEditorCameraObject.html#a80cfb28c03369d0a2b2b51de276476c0">EditorCameraObject::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event &amp;event, float deltaTime)</div><div class="ttdoc">Processes SDL events specific to the editor camera (e.g., mouse movement, key presses).</div><div class="ttdef"><b>Definition</b> <a href="#l00012">EditorCamera.cpp:12</a></div></div>
+<div class="ttc" id="aclassEditorCameraObject_html_aae0fa5e4d3b2be378d0838284e993dec"><div class="ttname"><a href="classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec">EditorCameraObject::Update</a></div><div class="ttdeci">void Update(float deltaTime) override</div><div class="ttdoc">Overrides the base GameObject Update for continuous camera movement and logic.</div><div class="ttdef"><b>Definition</b> <a href="#l00052">EditorCamera.cpp:52</a></div></div>
 <div class="ttc" id="aclassvex_1_1Engine_html"><div class="ttname"><a href="classvex_1_1Engine.html">vex::Engine</a></div><div class="ttdoc">Class for interaction with engine systems, your game main class will Inherit from it.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8hpp_source.html#l00040">Engine.hpp:40</a></div></div>
 <div class="ttc" id="aclassvex_1_1GameObject_html_a8ce976deba3bfd5a9ddcec0ec0e0d475"><div class="ttname"><a href="classvex_1_1GameObject.html#a8ce976deba3bfd5a9ddcec0ec0e0d475">vex::GameObject::GetComponent</a></div><div class="ttdeci">T &amp; GetComponent()</div><div class="ttdoc">Function that returns reference to a requested component.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00103">GameObject.hpp:103</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

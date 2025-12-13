@@ -1097,7 +1097,7 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which Doxygen is
 # run.
 
-EXCLUDE                = ./Core/thirdparty ./BuildTools
+EXCLUDE                = ./Core/thirdparty ./BuildTools ./Core/bin ./Editor/bin
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

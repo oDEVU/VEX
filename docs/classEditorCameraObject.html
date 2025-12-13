@@ -100,6 +100,11 @@ $(function(){initNavTree('classEditorCameraObject.html','','classEditorCameraObj
   <div class="headertitle"><div class="title">EditorCameraObject Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A specialized camera object for use within the editor, supporting free-fly movement and input processing.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for EditorCameraObject:</div>
 <div class="dyncontent">
@@ -114,10 +119,13 @@ Inheritance diagram for EditorCameraObject:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0102cc625f834afa8709502420387254" id="r_a0102cc625f834afa8709502420387254"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0102cc625f834afa8709502420387254">EditorCameraObject</a> (<a class="el" href="classvex_1_1Engine.html">vex::Engine</a> &amp;engine, const std::string &amp;name, SDL_Window *window)</td></tr>
+<tr class="memdesc:a0102cc625f834afa8709502420387254"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="classEditorCameraObject.html" title="A specialized camera object for use within the editor, supporting free-fly movement and input process...">EditorCameraObject</a>.  <br /></td></tr>
 <tr class="memitem:a80cfb28c03369d0a2b2b51de276476c0" id="r_a80cfb28c03369d0a2b2b51de276476c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80cfb28c03369d0a2b2b51de276476c0">processEvent</a> (const SDL_Event &amp;event, float deltaTime)</td></tr>
+<tr class="memdesc:a80cfb28c03369d0a2b2b51de276476c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes SDL events specific to the editor camera (e.g., mouse movement, key presses).  <br /></td></tr>
 <tr class="memitem:aae0fa5e4d3b2be378d0838284e993dec" id="r_aae0fa5e4d3b2be378d0838284e993dec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae0fa5e4d3b2be378d0838284e993dec">Update</a> (float deltaTime) override</td></tr>
-<tr class="memdesc:aae0fa5e4d3b2be378d0838284e993dec"><td class="mdescLeft">&#160;</td><td class="mdescRight">virtual void function you override to implement custom behavior when the game updates (eg. every frame).  <br /></td></tr>
+<tr class="memdesc:aae0fa5e4d3b2be378d0838284e993dec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the base GameObject Update for continuous camera movement and logic.  <br /></td></tr>
 <tr class="memitem:a7fc552ca7db61aabc1d095b45091b4e0" id="r_a7fc552ca7db61aabc1d095b45091b4e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fc552ca7db61aabc1d095b45091b4e0">setViewportHovered</a> (bool hovered)</td></tr>
+<tr class="memdesc:a7fc552ca7db61aabc1d095b45091b4e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether the editor's viewport window is currently being hovered by the mouse.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classvex_1_1CameraObject"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classvex_1_1CameraObject')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classvex_1_1CameraObject.html">vex::CameraObject</a></td></tr>
 <tr class="memitem:a6ddbfc4dc12d064ea2d8f24581144932 inherit pub_methods_classvex_1_1CameraObject" id="r_a6ddbfc4dc12d064ea2d8f24581144932"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1CameraObject.html#a6ddbfc4dc12d064ea2d8f24581144932">CameraObject</a> (<a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, const std::string &amp;name)</td></tr>
 <tr class="inherit_header pub_methods_classvex_1_1GameObject"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classvex_1_1GameObject')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a></td></tr>
@@ -174,8 +182,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a76a6c13191a7d806e0ccba8242484c20 inherit pro_attribs_classvex_1_1GameObject" id="r_a76a6c13191a7d806e0ccba8242484c20"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a76a6c13191a7d806e0ccba8242484c20">objectType</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00008">8</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<div class="textblock"><p>A specialized camera object for use within the editor, supporting free-fly movement and input processing. </p>
+
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00016">16</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0102cc625f834afa8709502420387254" name="a0102cc625f834afa8709502420387254"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0102cc625f834afa8709502420387254">&#9670;&#160;</a></span>EditorCameraObject()</h2>
@@ -201,6 +210,16 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructs an <a class="el" href="classEditorCameraObject.html" title="A specialized camera object for use within the editor, supporting free-fly movement and input process...">EditorCameraObject</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vex::Engine&amp;</td><td>engine - Reference to the core engine instance. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the camera object. </td></tr>
+    <tr><td class="paramname">SDL_Window*</td><td>window - The main SDL window pointer, used for input handling. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="EditorCamera_8cpp_source.html#l00005">5</a> of file <a class="el" href="EditorCamera_8cpp_source.html">EditorCamera.cpp</a>.</p>
 
 </div>
@@ -224,6 +243,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Processes SDL events specific to the editor camera (e.g., mouse movement, key presses). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>SDL_Event&amp; event - The SDL event to process. </td></tr>
+    <tr><td class="paramname">float</td><td>deltaTime - Time elapsed since the last frame. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="EditorCamera_8cpp_source.html#l00012">12</a> of file <a class="el" href="EditorCamera_8cpp_source.html">EditorCamera.cpp</a>.</p>
 
@@ -252,7 +280,15 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00015">15</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<p>Sets whether the editor's viewport window is currently being hovered by the mouse. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bool</td><td>hovered - True if the viewport is hovered, false otherwise. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00039">39</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 
 </div>
 </div>
@@ -279,7 +315,13 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>virtual void function you override to implement custom behavior when the game updates (eg. every frame). </p>
+<p>Overrides the base GameObject Update for continuous camera movement and logic. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">float</td><td>deltaTime - Time elapsed since the last frame. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1GameObject.html#aff7761eb14e47fee0d495f2f86597b8a">vex::GameObject</a>.</p>
 
@@ -308,7 +350,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00018">18</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00042">42</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +374,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00021">21</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00045">45</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 
 </div>
 </div>
@@ -356,7 +398,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00022">22</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00046">46</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 
 </div>
 </div>
@@ -380,7 +422,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00023">23</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00047">47</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 
 </div>
 </div>
@@ -404,7 +446,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00020">20</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00044">44</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 
 </div>
 </div>
@@ -428,7 +470,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00017">17</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorCamera_8hpp_source.html#l00041">41</a> of file <a class="el" href="EditorCamera_8hpp_source.html">EditorCamera.hpp</a>.</p>
 
 </div>
 </div>

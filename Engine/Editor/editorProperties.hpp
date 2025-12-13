@@ -1,8 +1,15 @@
+/**
+ * @file   editorProperties.hpp
+ * @brief  Structure to hold all configurable editor settings and properties.
+ * @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 
 #include <ImReflect.hpp>
 #include <nlohmann/json.hpp>
 
+/// @brief Structure to hold all configurable editor settings and properties.
 struct EditorProperties {
     bool showFPS = false;
 

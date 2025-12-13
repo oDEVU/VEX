@@ -1,27 +1,4 @@
 var searchData=
 [
-  ['hs_5fbase_0',['hs_base',['../strucths__base.html',1,'']]],
-  ['huf_5fbuildctable_5fwksp_5ftables_1',['HUF_buildCTable_wksp_tables',['../structHUF__buildCTable__wksp__tables.html',1,'']]],
-  ['huf_5fcelt_5fs_2',['HUF_CElt_s',['../structHUF__CElt__s.html',1,'']]],
-  ['huf_5fcompress_5ftables_5ft_3',['HUF_compress_tables_t',['../structHUF__compress__tables__t.html',1,'']]],
-  ['huf_5fcompressweightswksp_4',['HUF_CompressWeightsWksp',['../structHUF__CompressWeightsWksp.html',1,'']]],
-  ['huf_5fcstream_5ft_5',['HUF_CStream_t',['../structHUF__CStream__t.html',1,'']]],
-  ['huf_5fctableheader_6',['HUF_CTableHeader',['../structHUF__CTableHeader.html',1,'']]],
-  ['huf_5fddescx6_7',['HUF_DDescX6',['../structHUF__DDescX6.html',1,'']]],
-  ['huf_5fdecompressfastargs_8',['HUF_DecompressFastArgs',['../structHUF__DecompressFastArgs.html',1,'']]],
-  ['huf_5fdelt_9',['HUF_DElt',['../structHUF__DElt.html',1,'']]],
-  ['huf_5fdeltx1_10',['HUF_DEltX1',['../structHUF__DEltX1.html',1,'']]],
-  ['huf_5fdeltx2_11',['HUF_DEltX2',['../structHUF__DEltX2.html',1,'']]],
-  ['huf_5fdeltx4_12',['HUF_DEltX4',['../structHUF__DEltX4.html',1,'']]],
-  ['huf_5fdseqx6_13',['HUF_DSeqX6',['../unionHUF__DSeqX6.html',1,'']]],
-  ['huf_5fdtable_14',['HUF_dtable',['../structHUF__dtable.html',1,'']]],
-  ['huf_5freaddtablex1_5fworkspace_15',['HUF_ReadDTableX1_Workspace',['../structHUF__ReadDTableX1__Workspace.html',1,'']]],
-  ['huf_5freaddtablex2_5fworkspace_16',['HUF_ReadDTableX2_Workspace',['../structHUF__ReadDTableX2__Workspace.html',1,'']]],
-  ['huf_5fwritectablewksp_17',['HUF_WriteCTableWksp',['../structHUF__WriteCTableWksp.html',1,'']]],
-  ['hufv05_5fdeltx2_18',['HUFv05_DEltX2',['../structHUFv05__DEltX2.html',1,'']]],
-  ['hufv05_5fdeltx4_19',['HUFv05_DEltX4',['../structHUFv05__DEltX4.html',1,'']]],
-  ['hufv06_5fdeltx2_20',['HUFv06_DEltX2',['../structHUFv06__DEltX2.html',1,'']]],
-  ['hufv06_5fdeltx4_21',['HUFv06_DEltX4',['../structHUFv06__DEltX4.html',1,'']]],
-  ['hufv07_5fdeltx2_22',['HUFv07_DEltX2',['../structHUFv07__DEltX2.html',1,'']]],
-  ['hufv07_5fdeltx4_23',['HUFv07_DEltX4',['../structHUFv07__DEltX4.html',1,'']]]
+  ['keystate_0',['KeyState',['../structvex_1_1InputSystem_1_1KeyState.html',1,'vex::InputSystem']]]
 ];

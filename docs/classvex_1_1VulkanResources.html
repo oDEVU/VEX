@@ -114,9 +114,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a929f9c55cb9204c67b5b8fd7f013a346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple destructor.  <br /></td></tr>
 <tr class="memitem:af6600e8f346f3d771113252bab2739af" id="r_af6600e8f346f3d771113252bab2739af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6600e8f346f3d771113252bab2739af">createUniformBuffers</a> ()</td></tr>
 <tr class="memdesc:af6600e8f346f3d771113252bab2739af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates uniform buffers.  <br /></td></tr>
-<tr class="memitem:a3f19b21b5c08c079e4d930c3e39145bf" id="r_a3f19b21b5c08c079e4d930c3e39145bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f19b21b5c08c079e4d930c3e39145bf">updateSceneUBO</a> (const <a class="el" href="structvex_1_1SceneUBO.html">SceneUBO</a> &amp;<a class="el" href="structdata.html">data</a>)</td></tr>
+<tr class="memitem:a3f19b21b5c08c079e4d930c3e39145bf" id="r_a3f19b21b5c08c079e4d930c3e39145bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f19b21b5c08c079e4d930c3e39145bf">updateSceneUBO</a> (const <a class="el" href="structvex_1_1SceneUBO.html">SceneUBO</a> &amp;data)</td></tr>
 <tr class="memdesc:a3f19b21b5c08c079e4d930c3e39145bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the scene uniform buffer.  <br /></td></tr>
-<tr class="memitem:ab4d964bb1cefadb20140dedf53da9893" id="r_ab4d964bb1cefadb20140dedf53da9893"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4d964bb1cefadb20140dedf53da9893">updateLightUBO</a> (uint32_t frameIndex, uint32_t modelIndex, const <a class="el" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a> &amp;<a class="el" href="structdata.html">data</a>)</td></tr>
+<tr class="memitem:ab4d964bb1cefadb20140dedf53da9893" id="r_ab4d964bb1cefadb20140dedf53da9893"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4d964bb1cefadb20140dedf53da9893">updateLightUBO</a> (uint32_t frameIndex, uint32_t modelIndex, const <a class="el" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a> &amp;data)</td></tr>
 <tr class="memdesc:ab4d964bb1cefadb20140dedf53da9893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the light uniform buffer.  <br /></td></tr>
 <tr class="memitem:abefc56e46967586e0dd33c50c1f815d1" id="r_abefc56e46967586e0dd33c50c1f815d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abefc56e46967586e0dd33c50c1f815d1">createDefaultTexture</a> ()</td></tr>
 <tr class="memdesc:abefc56e46967586e0dd33c50c1f815d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a default texture.  <br /></td></tr>
@@ -225,7 +225,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Simple destructor. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo</a></b></dt><dd>, cleanup this properly </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00020">20</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
@@ -250,7 +249,7 @@ Private Attributes</h2></td></tr>
 <p>Creates a default texture. </p>
 <p>Creates 1x1 white texture used for untextured models. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00397">397</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00395">395</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -279,7 +278,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create descriptor resources. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00243">243</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00241">241</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -308,7 +307,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create per-mesh texture sets. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00478">478</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00476">476</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -353,7 +352,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Creates a texture from raw data and creates a texture view. Currently used for ui font textures. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00062">62</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00060">60</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -382,7 +381,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create texture sampler. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00533">533</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00531">531</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -403,7 +402,7 @@ Private Attributes</h2></td></tr>
 
 <p>Creates uniform buffers. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00216">216</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00214">214</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -568,7 +567,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00522">522</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00520">520</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -662,7 +661,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkImageView - The texture view. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00787">787</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00785">785</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -690,7 +689,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The uniform buffer descriptor set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00354">354</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00352">352</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -729,7 +728,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Loads a texture from a file and creates a texture view. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00552">552</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00550">550</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -793,7 +792,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Unloads a texture and destroys its view. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00756">756</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00754">754</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -831,7 +830,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00383">383</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00381">381</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -858,7 +857,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00376">376</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00374">374</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -897,7 +896,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>Updates the texture descriptor for the given frame index and texture index. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00359">359</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00357">357</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>

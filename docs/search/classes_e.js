@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['namecomponent_0',['NameComponent',['../structvex_1_1NameComponent.html',1,'vex']]],
-  ['nodeelt_5fs_1',['nodeElt_s',['../structnodeElt__s.html',1,'']]]
+  ['raycasthit_0',['RaycastHit',['../structvex_1_1RaycastHit.html',1,'vex']]],
+  ['renderer_1',['Renderer',['../classvex_1_1Renderer.html',1,'vex']]],
+  ['resolutionmanager_2',['ResolutionManager',['../classvex_1_1ResolutionManager.html',1,'vex']]]
 ];

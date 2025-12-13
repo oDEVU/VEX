@@ -100,6 +100,11 @@ $(function(){initNavTree('classvex_1_1Editor.html','','classvex_1_1Editor-member
   <div class="headertitle"><div class="title">vex::Editor Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>The main <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> class, inheriting from <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a> and providing editor-specific functionality and UI.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for vex::Editor:</div>
 <div class="dyncontent">
@@ -113,20 +118,27 @@ Inheritance diagram for vex::Editor:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abf2f5ffc25db406eb6baf79e4a743ab0" id="r_abf2f5ffc25db406eb6baf79e4a743ab0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf2f5ffc25db406eb6baf79e4a743ab0">Editor</a> (const char *title, int width, int height, <a class="el" href="structvex_1_1GameInfo.html">GameInfo</a> gInfo, const std::string &amp;projectBinaryPath)</td></tr>
+<tr class="memdesc:abf2f5ffc25db406eb6baf79e4a743ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a>.  <br /></td></tr>
 <tr class="memitem:a6265c161dfade90ac59a9ad77a97bc2d" id="r_a6265c161dfade90ac59a9ad77a97bc2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6265c161dfade90ac59a9ad77a97bc2d">render</a> () override</td></tr>
-<tr class="memdesc:a6265c161dfade90ac59a9ad77a97bc2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal virtual function calling renderers renderFrame function. It also handles camera matrixes since camera object is handled by engine anyway and theres no reason to mass it to renderer.  <br /></td></tr>
+<tr class="memdesc:a6265c161dfade90ac59a9ad77a97bc2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a>'s render function to inject the <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> UI logic (dockspace, viewport, tools).  <br /></td></tr>
 <tr class="memitem:afc38ec50583bd6c8ed02ccb10867980b" id="r_afc38ec50583bd6c8ed02ccb10867980b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc38ec50583bd6c8ed02ccb10867980b">update</a> (float deltaTime) override</td></tr>
-<tr class="memdesc:afc38ec50583bd6c8ed02ccb10867980b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal virtual function for handling updates, it is called every frame rightbefore rendering.  <br /></td></tr>
+<tr class="memdesc:afc38ec50583bd6c8ed02ccb10867980b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a>'s update function to handle editor-specific logic.  <br /></td></tr>
 <tr class="memitem:a0537d6e39c0c7f4d1b2ba46b9465290a" id="r_a0537d6e39c0c7f4d1b2ba46b9465290a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0537d6e39c0c7f4d1b2ba46b9465290a">processEvent</a> (const SDL_Event &amp;event, float deltaTime) override</td></tr>
-<tr class="memdesc:a0537d6e39c0c7f4d1b2ba46b9465290a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal virtual function for handling window/keyboard events.  <br /></td></tr>
+<tr class="memdesc:a0537d6e39c0c7f4d1b2ba46b9465290a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a>'s processEvent function to handle editor-specific events (e.g., gizmo interaction, camera movement).  <br /></td></tr>
 <tr class="memitem:aeeb45e8bbfc0ffaae4b095e8883c7a44" id="r_aeeb45e8bbfc0ffaae4b095e8883c7a44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeeb45e8bbfc0ffaae4b095e8883c7a44">requestSceneReload</a> (const std::string &amp;scenePath)</td></tr>
+<tr class="memdesc:aeeb45e8bbfc0ffaae4b095e8883c7a44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests a scene reload with a specific path. The reload is typically executed in the main update loop.  <br /></td></tr>
 <tr class="memitem:aab489c844a5f2f25fd43bb69e539cdad" id="r_aab489c844a5f2f25fd43bb69e539cdad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab489c844a5f2f25fd43bb69e539cdad">getProjectBinaryPath</a> () const</td></tr>
+<tr class="memdesc:aab489c844a5f2f25fd43bb69e539cdad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the path to the project's binary directory.  <br /></td></tr>
 <tr class="memitem:a5fe16a734804c1e5cd5ad57a4606e90e" id="r_a5fe16a734804c1e5cd5ad57a4606e90e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1AssetBrowser.html">AssetBrowser</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fe16a734804c1e5cd5ad57a4606e90e">getAssetBrowser</a> () const</td></tr>
+<tr class="memdesc:a5fe16a734804c1e5cd5ad57a4606e90e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the <a class="el" href="classvex_1_1AssetBrowser.html" title="Class responsible for displaying and navigating project assets within an ImGUI window.">AssetBrowser</a> instance.  <br /></td></tr>
 <tr class="memitem:ac2991b2f7f546229090de67c83371f3b" id="r_ac2991b2f7f546229090de67c83371f3b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structvex_1_1BrowserIcons.html">BrowserIcons</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2991b2f7f546229090de67c83371f3b">GetEditorIcons</a> () const</td></tr>
+<tr class="memdesc:ac2991b2f7f546229090de67c83371f3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the collection of icons used within the editor's UI.  <br /></td></tr>
 <tr class="memitem:a5cd1ca2ef9fd064a64911c55476c95b1" id="r_a5cd1ca2ef9fd064a64911c55476c95b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structEditorProperties.html">EditorProperties</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cd1ca2ef9fd064a64911c55476c95b1">getEditorProperties</a> ()</td></tr>
+<tr class="memdesc:a5cd1ca2ef9fd064a64911c55476c95b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the mutable editor properties.  <br /></td></tr>
 <tr class="memitem:a606050564ebf6b2414b2a0da18c0a650" id="r_a606050564ebf6b2414b2a0da18c0a650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a606050564ebf6b2414b2a0da18c0a650">OnHotReload</a> ()</td></tr>
+<tr class="memdesc:a606050564ebf6b2414b2a0da18c0a650"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler for post-hot-reload operations.  <br /></td></tr>
 <tr class="memitem:a50ae38834c2d70ecd18a9433aef19136" id="r_a50ae38834c2d70ecd18a9433aef19136"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50ae38834c2d70ecd18a9433aef19136">refreshForObject</a> () override</td></tr>
-<tr class="memdesc:a50ae38834c2d70ecd18a9433aef19136"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal virtual function for editor.  <br /></td></tr>
+<tr class="memdesc:a50ae38834c2d70ecd18a9433aef19136"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the base <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a> function to trigger a frame and refresh.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classvex_1_1Engine"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classvex_1_1Engine')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classvex_1_1Engine.html">vex::Engine</a></td></tr>
 <tr class="memitem:ab9aa221f6146c728213c148cba72b245 inherit pub_methods_classvex_1_1Engine" id="r_ab9aa221f6146c728213c148cba72b245"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#ab9aa221f6146c728213c148cba72b245">Engine</a> (const char *title, int width, int height, <a class="el" href="structvex_1_1GameInfo.html">GameInfo</a> gInfo)</td></tr>
 <tr class="memdesc:ab9aa221f6146c728213c148cba72b245 inherit pub_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a> class, that will handle initialization of every system with given params.  <br /></td></tr>
@@ -163,14 +175,22 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a5732b989d4fdf06a4abbb607ccac3663" id="r_a5732b989d4fdf06a4abbb607ccac3663"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5732b989d4fdf06a4abbb607ccac3663">drawEditorLayout</a> (const <a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;<a class="el" href="structdata.html">data</a>, glm::uvec2 &amp;outNewResolution)</td></tr>
+<tr class="memitem:a5732b989d4fdf06a4abbb607ccac3663" id="r_a5732b989d4fdf06a4abbb607ccac3663"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5732b989d4fdf06a4abbb607ccac3663">drawEditorLayout</a> (const <a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;data, glm::uvec2 &amp;outNewResolution)</td></tr>
+<tr class="memdesc:a5732b989d4fdf06a4abbb607ccac3663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper to draw the ImGUI dockspace and viewport window for the editor.  <br /></td></tr>
 <tr class="memitem:a5907d48979da261bc6950b281f83fb6c" id="r_a5907d48979da261bc6950b281f83fb6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5907d48979da261bc6950b281f83fb6c">drawGizmo</a> (const glm::vec2 &amp;viewportPos, const glm::vec2 &amp;viewportSize)</td></tr>
+<tr class="memdesc:a5907d48979da261bc6950b281f83fb6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the ImGuizmo for the currently selected object.  <br /></td></tr>
 <tr class="memitem:af37e5e2f6d9dd6e82921086be6abac54" id="r_af37e5e2f6d9dd6e82921086be6abac54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af37e5e2f6d9dd6e82921086be6abac54">loadAssetIcons</a> ()</td></tr>
+<tr class="memdesc:af37e5e2f6d9dd6e82921086be6abac54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the texture icons used for the Asset Browser and other UI elements.  <br /></td></tr>
 <tr class="memitem:a4f90130d799e6a79584a5f318ab26f41" id="r_a4f90130d799e6a79584a5f318ab26f41"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f90130d799e6a79584a5f318ab26f41">raySphereIntersect</a> (const glm::vec3 &amp;rayOrigin, const glm::vec3 &amp;rayDir, const glm::vec3 &amp;sphereCenter, float sphereRadius)</td></tr>
+<tr class="memdesc:a4f90130d799e6a79584a5f318ab26f41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a ray-sphere intersection test.  <br /></td></tr>
 <tr class="memitem:adfb3b49b4eb18dd7c4edfe32cf195516" id="r_adfb3b49b4eb18dd7c4edfe32cf195516"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfb3b49b4eb18dd7c4edfe32cf195516">rayTriangleIntersect</a> (const glm::vec3 &amp;rayOrigin, const glm::vec3 &amp;rayDir, const glm::vec3 &amp;v0, const glm::vec3 &amp;v1, const glm::vec3 &amp;v2)</td></tr>
+<tr class="memdesc:adfb3b49b4eb18dd7c4edfe32cf195516"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a ray-triangle intersection test (using the Möller–Trumbore algorithm).  <br /></td></tr>
 <tr class="memitem:afe115fd399ec933947ec6de3b765678c" id="r_afe115fd399ec933947ec6de3b765678c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe115fd399ec933947ec6de3b765678c">ExtractObjectByEntity</a> (entt::entity entity, std::pair&lt; bool, <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> * &gt; &amp;selectedObject)</td></tr>
-<tr class="memitem:a654160f282249e0d704bb2c4db621014" id="r_a654160f282249e0d704bb2c4db621014"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a654160f282249e0d704bb2c4db621014">SaveConfig</a> (const <a class="el" href="structEditorProperties.html">EditorProperties</a> &amp;<a class="el" href="structdata.html">data</a>, const std::string &amp;filename)</td></tr>
-<tr class="memitem:a0eeaa473de394f5bfb0a91854372efb5" id="r_a0eeaa473de394f5bfb0a91854372efb5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0eeaa473de394f5bfb0a91854372efb5">LoadConfig</a> (<a class="el" href="structEditorProperties.html">EditorProperties</a> &amp;<a class="el" href="structdata.html">data</a>, const std::string &amp;filename)</td></tr>
+<tr class="memdesc:afe115fd399ec933947ec6de3b765678c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> corresponding to a given entity ID and updates the selected object pair.  <br /></td></tr>
+<tr class="memitem:a654160f282249e0d704bb2c4db621014" id="r_a654160f282249e0d704bb2c4db621014"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a654160f282249e0d704bb2c4db621014">SaveConfig</a> (const <a class="el" href="structEditorProperties.html">EditorProperties</a> &amp;data, const std::string &amp;filename)</td></tr>
+<tr class="memdesc:a654160f282249e0d704bb2c4db621014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the current <a class="el" href="structEditorProperties.html" title="Structure to hold all configurable editor settings and properties.">EditorProperties</a> configuration to a JSON file.  <br /></td></tr>
+<tr class="memitem:a0eeaa473de394f5bfb0a91854372efb5" id="r_a0eeaa473de394f5bfb0a91854372efb5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0eeaa473de394f5bfb0a91854372efb5">LoadConfig</a> (<a class="el" href="structEditorProperties.html">EditorProperties</a> &amp;data, const std::string &amp;filename)</td></tr>
+<tr class="memdesc:a0eeaa473de394f5bfb0a91854372efb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the <a class="el" href="structEditorProperties.html" title="Structure to hold all configurable editor settings and properties.">EditorProperties</a> configuration from a JSON file.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -215,8 +235,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a07077beece9972edc9569ec4c681f3e5 inherit pro_attribs_classvex_1_1Engine" id="r_a07077beece9972edc9569ec4c681f3e5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a07077beece9972edc9569ec4c681f3e5">lastLoadedScenes</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00019">19</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<div class="textblock"><p>The main <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> class, inheriting from <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a> and providing editor-specific functionality and UI. </p>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00026">26</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abf2f5ffc25db406eb6baf79e4a743ab0" name="abf2f5ffc25db406eb6baf79e4a743ab0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf2f5ffc25db406eb6baf79e4a743ab0">&#9670;&#160;</a></span>Editor()</h2>
@@ -252,6 +273,18 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructs the <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>char* title - The title of the editor window. </td></tr>
+    <tr><td class="paramname">int</td><td>width - Initial width of the editor window. </td></tr>
+    <tr><td class="paramname">int</td><td>height - Initial height of the editor window. </td></tr>
+    <tr><td class="paramname"><a class="el" href="structvex_1_1GameInfo.html" title="this struct contains information about the game. like project name and version.">GameInfo</a></td><td>gInfo - Game Info class containing version, name etc. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; projectBinaryPath - Path to the project's binary directory. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00028">28</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
@@ -279,7 +312,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00022">22</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00038">38</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -310,6 +343,15 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Helper to draw the ImGUI dockspace and viewport window for the editor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1SceneRenderData.html" title="Data structure to pass state between render stages.">SceneRenderData</a>&amp; data - Data required for scene rendering. </td></tr>
+    <tr><td class="paramname">glm::uvec2&amp;</td><td>outNewResolution - Output parameter for the new viewport resolution if it changed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00352">352</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
@@ -342,6 +384,15 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Draws the ImGuizmo for the currently selected object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>glm::vec2&amp; viewportPos - The position of the viewport window. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec2&amp; viewportSize - The size of the viewport window. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00210">210</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
@@ -373,6 +424,15 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> corresponding to a given entity ID and updates the selected object pair. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entt::entity</td><td>entity - The entity ID to look up. </td></tr>
+    <tr><td class="paramname">std::pair&lt;bool,vex::GameObject*&gt;&amp;</td><td>selectedObject - The pair to update with the selection status and pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00340">340</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
@@ -400,7 +460,10 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00033">33</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p>Gets a pointer to the <a class="el" href="classvex_1_1AssetBrowser.html" title="Class responsible for displaying and navigating project assets within an ImGUI window.">AssetBrowser</a> instance. </p>
+<dl class="section return"><dt>Returns</dt><dd>AssetBrowser* - Pointer to the <a class="el" href="classvex_1_1AssetBrowser.html" title="Class responsible for displaying and navigating project assets within an ImGUI window.">AssetBrowser</a>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00063">63</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -427,7 +490,10 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00034">34</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p>Gets the collection of icons used within the editor's UI. </p>
+<dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="structvex_1_1BrowserIcons.html" title="Structure holding texture IDs for various asset types displayed in the browser.">BrowserIcons</a>&amp; - Reference to the icon collection. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00067">67</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -454,7 +520,10 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00036">36</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p>Gets a pointer to the mutable editor properties. </p>
+<dl class="section return"><dt>Returns</dt><dd>EditorProperties* - Pointer to the editor properties structure. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00071">71</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -481,7 +550,10 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00032">32</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p>Gets the path to the project's binary directory. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The project binary path. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00059">59</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -507,6 +579,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Loads the texture icons used for the Asset Browser and other UI elements. </p>
 
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00163">163</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
@@ -539,7 +613,16 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00065">65</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p>Loads the <a class="el" href="structEditorProperties.html" title="Structure to hold all configurable editor settings and properties.">EditorProperties</a> configuration from a JSON file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">EditorProperties&amp;</td><td>data - The data structure to deserialize into. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; filename - The path/filename of the JSON file. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00145">145</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -557,6 +640,8 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Handler for post-hot-reload operations. </p>
 
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00618">618</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
@@ -589,11 +674,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Internal virtual function for handling window/keyboard events. </p>
+<p>Overrides the <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a>'s processEvent function to handle editor-specific events (e.g., gizmo interaction, camera movement). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">SDL_Event</td><td>- Event to process. </td></tr>
-    <tr><td class="paramname">float</td><td>- Time since last frame. </td></tr>
+    <tr><td class="paramname">const</td><td>SDL_Event&amp; event - Event to process. </td></tr>
+    <tr><td class="paramname">float</td><td>deltaTime - Time since last frame. </td></tr>
   </table>
   </dd>
 </dl>
@@ -641,6 +726,18 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Performs a ray-sphere intersection test. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; rayOrigin - The origin point of the ray. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; rayDir - The direction vector of the ray. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; sphereCenter - The center point of the sphere. </td></tr>
+    <tr><td class="paramname">float</td><td>sphereRadius - The radius of the sphere. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>float - The distance to the intersection point, or infinity if no intersection. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00303">303</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
@@ -687,6 +784,19 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Performs a ray-triangle intersection test (using the Möller–Trumbore algorithm). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; rayOrigin - The origin point of the ray. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; rayDir - The direction vector of the ray. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; v0 - The first vertex of the triangle. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; v1 - The second vertex of the triangle. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; v2 - The third vertex of the triangle. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>float - The distance to the intersection point, or infinity if no intersection. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00314">314</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
@@ -714,11 +824,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Internal virtual function for editor. </p>
+<p>Overrides the base <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a> function to trigger a frame and refresh. </p>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#aaeed76b0ced7dc92bf4a19467c56489a">vex::Engine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00040">40</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00077">77</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -745,14 +855,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Internal virtual function calling renderers renderFrame function. It also handles camera matrixes since camera object is handled by engine anyway and theres no reason to mass it to renderer. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a" title="[Deprecated] Renders a frame using the provided parameters.">vex::Renderer::renderFrame()</a> </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">float</td><td>deltaTime - Time since last frame. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Overrides the <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a>'s render function to inject the <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> UI logic (dockspace, viewport, tools). </p>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#a651671153ff5f6edc58e2d76700c6c77">vex::Engine</a>.</p>
 
@@ -774,6 +877,14 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Requests a scene reload with a specific path. The reload is typically executed in the main update loop. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; scenePath - The path to the scene file to load. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00157">157</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
@@ -806,7 +917,16 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00057">57</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p>Saves the current <a class="el" href="structEditorProperties.html" title="Structure to hold all configurable editor settings and properties.">EditorProperties</a> configuration to a JSON file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td><a class="el" href="structEditorProperties.html" title="Structure to hold all configurable editor settings and properties.">EditorProperties</a>&amp; data - The data structure to serialize and save. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; filename - The path/filename of the JSON file. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00132">132</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -833,7 +953,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Internal virtual function for handling updates, it is called every frame rightbefore rendering. </p>
+<p>Overrides the <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a>'s update function to handle editor-specific logic. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">float</td><td>deltaTime - Time since last frame. </td></tr>
@@ -868,7 +988,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00083">83</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00163">163</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -892,7 +1012,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00080">80</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00160">160</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -916,7 +1036,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00092">92</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00172">172</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -940,7 +1060,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00091">91</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00171">171</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -964,7 +1084,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00081">81</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00161">161</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -988,7 +1108,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00098">98</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00178">178</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1012,7 +1132,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00101">101</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00181">181</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1036,7 +1156,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00084">84</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00164">164</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1060,7 +1180,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00096">96</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00176">176</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1084,7 +1204,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00086">86</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00166">166</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1108,7 +1228,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00089">89</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00169">169</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1132,7 +1252,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00103">103</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00183">183</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1156,7 +1276,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00099">99</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00179">179</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1180,7 +1300,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00082">82</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00162">162</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1204,7 +1324,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00094">94</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00174">174</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1228,7 +1348,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00093">93</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00173">173</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1252,7 +1372,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00079">79</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00159">159</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1276,7 +1396,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00087">87</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00167">167</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mouseaxis_0',['MouseAxis',['../InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236',1,'vex']]]
+  ['textalign_0',['TextAlign',['../VexUI_8hpp.html#aedceec4ae12bb8a228df5719db450886',1,'vex']]]
 ];

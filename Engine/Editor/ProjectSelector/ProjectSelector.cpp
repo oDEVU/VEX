@@ -89,15 +89,23 @@ namespace vex {
         if (columns < 1) columns = 1;
 
         if (ImGui::BeginTable("ProjectsGrid", columns)) {
+            if(m_projects.size() < 1){
+                ImGui::TableNextColumn();
+                ImGui::Text("No projects yet.");
+            }
             for (const auto& proj : m_projects) {
                 ImGui::TableNextColumn();
 
                 ImGui::PushID(proj.path.c_str());
-                if (ImGui::Button(proj.name.c_str(), ImVec2(200, 80))) {
+                if (ImGui::Button(proj.name.c_str(), ImVec2(200, 300))) {
                     selectProject(proj.path);
                 }
 
+                float wrapPosX = ImGui::GetCursorPosX() + (cardWidth - 5.f);
+                ImGui::PushTextWrapPos(wrapPosX);
                 ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "%s", proj.path.c_str());
+                ImGui::PopTextWrapPos();
+
                 ImGui::Text("Ver: %s", proj.version.c_str());
                 ImGui::Dummy(ImVec2(0.0f, 10.0f));
                 ImGui::PopID();

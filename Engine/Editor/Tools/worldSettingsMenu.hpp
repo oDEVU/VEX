@@ -1,3 +1,9 @@
+/**
+ * @file   worldSettingsMenu.hpp
+ * @brief  Utility function for drawing the Environment/World Settings ImGUI menu.
+ * @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 
 #include <imgui.h>
@@ -5,7 +11,10 @@
 #include "components/enviroment.hpp"
 
 namespace vex {
-
+    /**
+         * @brief Draws the world settings menu, allowing modification of environment parameters like shading, lighting, and retro effects.
+         * @param Engine& engine - Reference to the core Engine instance to get and set environment settings.
+         */
     inline void DrawWorldSettings(Engine& engine) {
         auto env = engine.getEnvironmentSettings();
         bool changed = false;

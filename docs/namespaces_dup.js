@@ -1,10 +1,8 @@
 var namespaces_dup =
 [
-    [ "pzstd", "namespacepzstd.html", "namespacepzstd" ],
-    [ "test", "namespacetest.html", null ],
     [ "vex", null, [
       [ "PS1Effects", "namespacevex_1_1PS1Effects.html", null ],
-      [ "AssetBrowser", "classvex_1_1AssetBrowser.html", null ],
+      [ "AssetBrowser", "classvex_1_1AssetBrowser.html", "classvex_1_1AssetBrowser" ],
       [ "BodyIDHasher", "structvex_1_1BodyIDHasher.html", null ],
       [ "BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ],
       [ "BrowserIcons", "structvex_1_1BrowserIcons.html", null ],
@@ -41,6 +39,8 @@ var namespaces_dup =
       [ "PhysicsComponent", "structvex_1_1PhysicsComponent.html", "structvex_1_1PhysicsComponent" ],
       [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html", "classvex_1_1PhysicsSystem" ],
       [ "Plane", "structvex_1_1Plane.html", "structvex_1_1Plane" ],
+      [ "ProjectMetadata", "structvex_1_1ProjectMetadata.html", null ],
+      [ "ProjectSelector", "classvex_1_1ProjectSelector.html", "classvex_1_1ProjectSelector" ],
       [ "PushConstants", "structvex_1_1PushConstants.html", null ],
       [ "RaycastHit", "structvex_1_1RaycastHit.html", null ],
       [ "Renderer", "classvex_1_1Renderer.html", "classvex_1_1Renderer" ],
@@ -126,6 +126,7 @@ var namespaces_dup =
       [ "createMeshFromPath", "ModelCreator_8hpp.html#a5dcb905f0645cba8da8ff1145f696231", null ],
       [ "createModelFromComponents", "ModelCreator_8hpp.html#a8d3069775766b45d22978b65d6f85586", null ],
       [ "createModelFromPath", "ModelCreator_8hpp.html#a60c4f3c10a042909f8123a275a80b150", null ],
+      [ "DrawWorldSettings", "worldSettingsMenu_8hpp.html#a7e48a1d9045a4f9560da9300e251db69", null ],
       [ "GetAssetPath", "pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2", null ],
       [ "GetExecutableDir", "pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2", null ],
       [ "handle_critical_exception", "errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48", null ],

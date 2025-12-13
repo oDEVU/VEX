@@ -121,8 +121,8 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">size_t</span> position_;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    VPKAssimpStream(<span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_struct" href="structdata.html">data</a>, <span class="keywordtype">size_t</span> size)</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        : buffer_(<a class="code hl_struct" href="structdata.html">data</a>, <a class="code hl_struct" href="structdata.html">data</a> + size), position_(0) {}</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    VPKAssimpStream(<span class="keyword">const</span> <span class="keywordtype">char</span>* data, <span class="keywordtype">size_t</span> size)</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        : buffer_(data, data + size), position_(0) {}</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    ~VPKAssimpStream() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
@@ -324,7 +324,7 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to load file from VFS: &quot;</span> + realPath);</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>            }</div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            log(<span class="stringliteral">&quot;Loading from VFS memory buffer, size: %zu&quot;</span>, fileData-&gt;size);</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Loading from VFS memory buffer, size: %zu&quot;</span>, fileData-&gt;size);</div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>            <span class="comment">// Get file extension for format hint</span></div>
 <div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            std::string extension = std::filesystem::path(realPath).extension().string();</div>
@@ -364,12 +364,12 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        submeshes.clear();</div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>        submeshes.resize(scene-&gt;mNumMeshes);</div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> m = 0; m &lt; scene-&gt;mNumMeshes; m++) {</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            log(<span class="stringliteral">&quot;Processing mesh %i...&quot;</span>, m);</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Processing mesh %i...&quot;</span>, m);</div>
 <div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            aiMesh* aiMesh = scene-&gt;mMeshes[m];</div>
 <div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            Submesh&amp; submesh = submeshes[m];</div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>            <span class="comment">// Vertices</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            log(<span class="stringliteral">&quot;Loading verticies...&quot;</span>);</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Loading verticies...&quot;</span>);</div>
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>            submesh.vertices.resize(aiMesh-&gt;mNumVertices);</div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; aiMesh-&gt;mNumVertices; i++) {</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                submesh.vertices[i].position = {</div>
@@ -395,7 +395,7 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>            }</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>            <span class="comment">// Indices</span></div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>            log(<span class="stringliteral">&quot;Loading indices...&quot;</span>);</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Loading indices...&quot;</span>);</div>
 <div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>            submesh.indices.reserve(aiMesh-&gt;mNumFaces * 3);</div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; aiMesh-&gt;mNumFaces; i++) {</div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>                aiFace face = aiMesh-&gt;mFaces[i];</div>
@@ -405,7 +405,7 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            }</div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>            <span class="comment">// Textures</span></div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            log(<span class="stringliteral">&quot;Getting texture path...&quot;</span>);</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Getting texture path...&quot;</span>);</div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>            std::filesystem::path meshPath(realPath);</div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>            meshPath.remove_filename();</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span> </div>
@@ -435,7 +435,6 @@ $(function(){initNavTree('Mesh_8cpp_source.html','',''); });
 <div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00093">errorUtils.cpp:93</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00097">errorUtils.cpp:97</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00110">errorUtils.cpp:110</a></div></div>
-<div class="ttc" id="astructdata_html"><div class="ttname"><a href="structdata.html">data</a></div><div class="ttdef"><b>Definition</b> <a href="poolTests_8c_source.html#l00028">poolTests.c:28</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

@@ -1,3 +1,9 @@
+/**
+ * @file   SceneMenu.hpp
+ * @brief  Utility functions for drawing the Scene Hierarchy and related object manipulation logic.
+ * @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 
 #include <imgui.h>
@@ -17,12 +23,18 @@
 #include "components/GameObjects/GameObject.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 
+/// @brief Structure to define an action to be performed on a scene object outside of the hierarchy drawing loop.
 struct SceneAction {
     enum Type { NONE, DELETE_ACTION, DUPLICATE, RENAME_START };
     Type type = NONE;
     vex::GameObject* target = nullptr;
 };
 
+/**
+ * @brief Demangles a C++ type name into a more readable string.
+ * @param const char* name - The raw type name (e.g., from typeid().name()).
+ * @return std::string - The demangled class/struct name.
+ */
 inline std::string Demangle(const char* name) {
 #ifdef _WIN32
     std::string s = name;
@@ -42,6 +54,15 @@ inline std::string Demangle(const char* name) {
 #endif
 }
 
+/**
+ * @brief Recursively draws a single GameObject node in the ImGUI tree hierarchy.
+ *
+ * @param vex::GameObject* obj - The GameObject to draw.
+ * @param std::pair<bool, vex::GameObject*>& selectedObject - The currently selected object pair (runtime status, object pointer).
+ * @param const std::unordered_map<entt::entity, std::vector<vex::GameObject*>>& childrenMap - Map of parent entity to its children.
+ * @param const std::unordered_set<entt::entity>& runtimeSet - Set of entities created at runtime (won't be saved).
+ * @param SceneAction& outAction - Output parameter to store any pending action triggered by the user (rename, delete, duplicate).
+ */
 inline void DrawEntityNode(
     vex::GameObject* obj,
     std::pair<bool, vex::GameObject*>& selectedObject,
@@ -153,6 +174,12 @@ inline void DrawEntityNode(
     }
 }
 
+/**
+ * @brief Draws the full scene hierarchy tree in an ImGUI window, handling selection, context menus, and object actions.
+ *
+ * @param vex::Engine& engine - Reference to the core Engine instance to access scene and registry data.
+ * @param std::pair<bool, vex::GameObject*>& selectedObject - The currently selected object pair (runtime status, object pointer).
+ */
 inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObject*>& selectedObject) {
     std::string sceneName = engine.getSceneManager()->getLastSceneName();
 

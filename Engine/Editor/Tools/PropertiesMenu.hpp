@@ -1,3 +1,9 @@
+/**
+ * @file   PropertiesMenu.hpp
+ * @brief  Utility function for drawing the component properties inspector for a selected GameObject.
+ * @author Eryk Roszkowski
+ ***********************************************/
+
 #pragma once
 
 #include <imgui.h>
@@ -11,6 +17,12 @@
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObject.hpp"
 
+/**
+ * @brief Draws the properties panel for a given GameObject, including its name and all components.
+ *
+ * @param vex::GameObject* object - The GameObject whose properties are to be displayed.
+ * @param bool temporary - True if the object was created at runtime and is temporary (shows a warning).
+ */
 inline void DrawPropertiesOfAnObject(vex::GameObject* object, bool temporary){
     if(!object) return;
 

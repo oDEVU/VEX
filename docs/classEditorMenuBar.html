@@ -100,20 +100,33 @@ $(function(){initNavTree('classEditorMenuBar.html','','classEditorMenuBar-member
   <div class="headertitle"><div class="title">EditorMenuBar Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>ImGUI component responsible for drawing the main editor menu bar and handling its actions.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afe2b276f31ba767d80fdbd68d9c421b5" id="r_afe2b276f31ba767d80fdbd68d9c421b5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe2b276f31ba767d80fdbd68d9c421b5">EditorMenuBar</a> (<a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a> &amp;imGUIWrapper, <a class="el" href="classvex_1_1Editor.html">vex::Editor</a> &amp;editor)</td></tr>
+<tr class="memdesc:afe2b276f31ba767d80fdbd68d9c421b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the <a class="el" href="classEditorMenuBar.html" title="ImGUI component responsible for drawing the main editor menu bar and handling its actions.">EditorMenuBar</a>.  <br /></td></tr>
 <tr class="memitem:a03a4c974246f5ad0c4494fe09db48f7f" id="r_a03a4c974246f5ad0c4494fe09db48f7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03a4c974246f5ad0c4494fe09db48f7f">DrawBar</a> ()</td></tr>
+<tr class="memdesc:a03a4c974246f5ad0c4494fe09db48f7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the main menu bar and processes user input.  <br /></td></tr>
 <tr class="memitem:aec0bbf8f6b3e80613b3ef99683ebc731" id="r_aec0bbf8f6b3e80613b3ef99683ebc731"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec0bbf8f6b3e80613b3ef99683ebc731">OpenScene</a> ()</td></tr>
+<tr class="memdesc:aec0bbf8f6b3e80613b3ef99683ebc731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles the logic for opening an existing scene file.  <br /></td></tr>
 <tr class="memitem:ab72632bc14f2b142f81be15aa1f7370f" id="r_ab72632bc14f2b142f81be15aa1f7370f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab72632bc14f2b142f81be15aa1f7370f">OpenEditorSettings</a> ()</td></tr>
+<tr class="memdesc:ab72632bc14f2b142f81be15aa1f7370f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens the editor settings window/menu.  <br /></td></tr>
 <tr class="memitem:a61a363023a5076e0ddcf6a9344d7614e" id="r_a61a363023a5076e0ddcf6a9344d7614e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61a363023a5076e0ddcf6a9344d7614e">SaveSceneAs</a> ()</td></tr>
+<tr class="memdesc:a61a363023a5076e0ddcf6a9344d7614e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the current scene to a new file path.  <br /></td></tr>
 <tr class="memitem:a36b236b7d71c7219125ae05dbd33d398" id="r_a36b236b7d71c7219125ae05dbd33d398"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36b236b7d71c7219125ae05dbd33d398">RunBuild</a> (bool isDebug, bool runAfter=false)</td></tr>
+<tr class="memdesc:a36b236b7d71c7219125ae05dbd33d398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the project build process.  <br /></td></tr>
 <tr class="memitem:a97073beab5037c1687eab402650489ac" id="r_a97073beab5037c1687eab402650489ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97073beab5037c1687eab402650489ac">NewScene</a> ()</td></tr>
+<tr class="memdesc:a97073beab5037c1687eab402650489ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies empty scene to assets folders and opens it.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:af1b24adf4180b752e510244a4c9c1394" id="r_af1b24adf4180b752e510244a4c9c1394"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1b24adf4180b752e510244a4c9c1394">GetProjectName</a> ()</td></tr>
+<tr class="memdesc:af1b24adf4180b752e510244a4c9c1394"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of the current project.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -122,8 +135,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a9be05636af295187714ad3aef63e24ec" id="r_a9be05636af295187714ad3aef63e24ec"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="structBasicEditorWindow.html">BasicEditorWindow</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9be05636af295187714ad3aef63e24ec">m_Windows</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00014">14</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<div class="textblock"><p>ImGUI component responsible for drawing the main editor menu bar and handling its actions. </p>
+
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00021">21</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="afe2b276f31ba767d80fdbd68d9c421b5" name="afe2b276f31ba767d80fdbd68d9c421b5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afe2b276f31ba767d80fdbd68d9c421b5">&#9670;&#160;</a></span>EditorMenuBar()</h2>
@@ -152,7 +166,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00016">16</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p>Constructs the <a class="el" href="classEditorMenuBar.html" title="ImGUI component responsible for drawing the main editor menu bar and handling its actions.">EditorMenuBar</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vex::ImGUIWrapper&amp;</td><td>imGUIWrapper - Reference to the ImGUI wrapper for rendering context. </td></tr>
+    <tr><td class="paramname">vex::Editor&amp;</td><td>editor - Reference to the main Editor instance to execute commands. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00028">28</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>
@@ -179,7 +202,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00017">17</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00029">29</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>
@@ -198,6 +221,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Draws the main menu bar and processes user input. </p>
 
 <p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00019">19</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
@@ -226,6 +251,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the name of the current project. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The project name. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00238">238</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
@@ -244,6 +272,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Copies empty scene to assets folders and opens it. </p>
 
 <p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00370">370</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
@@ -264,6 +294,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Opens the editor settings window/menu. </p>
+
 <p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00097">97</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
@@ -282,6 +314,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Handles the logic for opening an existing scene file. </p>
 
 <p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00118">118</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
@@ -306,6 +340,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Executes the project build process. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bool</td><td>isDebug - True for a debug build, false for a release build. </td></tr>
+    <tr><td class="paramname">bool</td><td>runAfter - True to run the built executable immediately after a successful build. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00256">256</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
@@ -324,6 +367,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Saves the current scene to a new file path. </p>
 
 <p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00173">173</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
@@ -350,7 +395,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00027">27</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00057">57</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>
@@ -374,7 +419,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00026">26</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00056">56</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>
@@ -398,7 +443,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00028">28</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00058">58</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>

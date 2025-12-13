@@ -145,7 +145,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html','',''); });
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#if DEBUG</span></div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanImGUIWrapper.html#a2c9291f4691960f3076f10f928aed2ab">VulkanImGUIWrapper::init</a>() {</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            log(<span class="stringliteral">&quot;Initialization of DearImGUI&quot;</span>);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initialization of DearImGUI&quot;</span>);</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="keyword">volatile</span> <span class="keyword">auto</span> forceLink = ImGuizmo::BeginFrame;</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
@@ -153,7 +153,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html','',''); });
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                ImGui::CreateContext();</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;ImGUI Init Failed&quot;</span>);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;ImGUI Init Failed&quot;</span>);</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                <a class="code hl_function" href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">handle_exception</a>(e);</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            }</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            ImGuiIO&amp; io = ImGui::GetIO();</div>
@@ -166,11 +166,11 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html','',''); });
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                ImFont* myFont = io.Fonts-&gt;AddFontFromFileTTF(<span class="stringliteral">&quot;../Assets/Sono-SemiBold.ttf&quot;</span>, 14.0f);</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                <span class="keywordflow">if</span> (myFont == <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                    log(LogLevel::WARNING, <span class="stringliteral">&quot;Failed to load editor font!&quot;</span>);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::WARNING, <span class="stringliteral">&quot;Failed to load editor font!&quot;</span>);</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                    io.Fonts-&gt;AddFontDefault();</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                }</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            }<span class="keywordflow">else</span>{</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                log(LogLevel::WARNING, <span class="stringliteral">&quot;Failed to load editor font!&quot;</span>);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::WARNING, <span class="stringliteral">&quot;Failed to load editor font!&quot;</span>);</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                io.Fonts-&gt;AddFontDefault();</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            }</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
@@ -213,7 +213,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html','',''); });
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            init_info.PipelineInfoMain = pipelineInfoMain;</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            log(<span class="stringliteral">&quot;Initing ImGui Vulkan backend&quot;</span>);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initing ImGui Vulkan backend&quot;</span>);</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            <span class="keywordflow">if</span> (!ImGui_ImplVulkan_Init(&amp;init_info)) {</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to initialize ImGui Vulkan backend&quot;</span>);</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            }</div>
@@ -222,7 +222,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html','',''); });
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            m_initialized = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            log(LogLevel::ERROR, <span class="stringliteral">&quot;ImGUI Init Failed&quot;</span>);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;ImGUI Init Failed&quot;</span>);</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>            <a class="code hl_function" href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">handle_exception</a>(e);</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        }</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    }</div>
@@ -295,7 +295,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html','',''); });
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    }</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordtype">void</span> VulkanImGUIWrapper::createDescriptorPool() {</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        log(<span class="stringliteral">&quot;Creating ImGUI DescriptorPools&quot;</span>);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating ImGUI DescriptorPools&quot;</span>);</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        VkDescriptorPoolSize pool_sizes[] = {</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>            { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },</div>
@@ -438,6 +438,7 @@ $(function(){initNavTree('VulkanImGUIWrapper_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a5547c7ab8e934f8f936a717e9a277646"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646">vex::VulkanImGUIWrapper::beginFrame</a></div><div class="ttdeci">void beginFrame() override</div><div class="ttdoc">Begining of UI rendering called in vex::Renderer::renderFrame.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00047">VulkanImGUIWrapper.hpp:47</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html_a914707e58572f5540062faedcf186351"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html#a914707e58572f5540062faedcf186351">vex::VulkanImGUIWrapper::endFrame</a></div><div class="ttdeci">void endFrame() override</div><div class="ttdoc">Ends UI rendering for frame.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00048">VulkanImGUIWrapper.hpp:48</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00093">errorUtils.cpp:93</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00097">errorUtils.cpp:97</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00110">errorUtils.cpp:110</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00025">context.hpp:25</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

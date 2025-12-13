@@ -1,25 +1,6 @@
 var searchData=
 [
-  ['ial_5fs_0',['ial_s',['../structial__s.html',1,'']]],
-  ['ident_5fcommand_1',['ident_command',['../structident__command.html',1,'']]],
-  ['image_5fdata_5fdirectory_5fdw_2',['IMAGE_DATA_DIRECTORY_dw',['../structIMAGE__DATA__DIRECTORY__dw.html',1,'']]],
-  ['image_5ffile_5fheader_5fdw_3',['IMAGE_FILE_HEADER_dw',['../structIMAGE__FILE__HEADER__dw.html',1,'']]],
-  ['image_5fnt_5fheaders32_5fdw_4',['IMAGE_NT_HEADERS32_dw',['../structIMAGE__NT__HEADERS32__dw.html',1,'']]],
-  ['image_5fnt_5fheaders64_5fdw_5',['IMAGE_NT_HEADERS64_dw',['../structIMAGE__NT__HEADERS64__dw.html',1,'']]],
-  ['image_5foptional_5fheader32_5fdw_6',['IMAGE_OPTIONAL_HEADER32_dw',['../structIMAGE__OPTIONAL__HEADER32__dw.html',1,'']]],
-  ['image_5foptional_5fheader64_5fdw_7',['IMAGE_OPTIONAL_HEADER64_dw',['../structIMAGE__OPTIONAL__HEADER64__dw.html',1,'']]],
-  ['image_5fsection_5fheader_5fdw_8',['IMAGE_SECTION_HEADER_dw',['../structIMAGE__SECTION__HEADER__dw.html',1,'']]],
-  ['imguiwrapper_9',['ImGUIWrapper',['../classvex_1_1ImGUIWrapper.html',1,'vex']]],
-  ['inbuff_5ft_10',['InBuff_t',['../structInBuff__t.html',1,'']]],
-  ['inputbinding_11',['InputBinding',['../structvex_1_1InputBinding.html',1,'vex']]],
-  ['inputcomponent_12',['InputComponent',['../structvex_1_1InputComponent.html',1,'vex']]],
-  ['inputsystem_13',['InputSystem',['../classvex_1_1InputSystem.html',1,'vex']]],
-  ['inputtype_14',['InputType',['../classfuzz_1_1InputType.html',1,'fuzz']]],
-  ['interface_15',['Interface',['../classvex_1_1Interface.html',1,'vex']]],
-  ['iojob_5ft_16',['IOJob_t',['../structIOJob__t.html',1,'']]],
-  ['iopoolctx_5ft_17',['IOPoolCtx_t',['../structIOPoolCtx__t.html',1,'']]],
-  ['ischarpointer_18',['IsCharPointer',['../structpzstd_1_1detail_1_1IsCharPointer.html',1,'pzstd::detail']]],
-  ['ischarpointer_3c_20char_20_2a_20_3e_19',['IsCharPointer&lt; char * &gt;',['../structpzstd_1_1detail_1_1IsCharPointer_3_01char_01_5_01_4.html',1,'pzstd::detail']]],
-  ['ischarpointer_3c_20const_20char_20_2a_20_3e_20',['IsCharPointer&lt; const char * &gt;',['../structpzstd_1_1detail_1_1IsCharPointer_3_01const_01char_01_5_01_4.html',1,'pzstd::detail']]],
-  ['istream_5ft_21',['istream_t',['../structistream__t.html',1,'']]]
+  ['light_0',['Light',['../structvex_1_1Light.html',1,'vex']]],
+  ['lightcomponent_1',['LightComponent',['../structvex_1_1LightComponent.html',1,'vex']]],
+  ['loadedvpk_2',['LoadedVPK',['../structvex_1_1VirtualFileSystem_1_1LoadedVPK.html',1,'vex::VirtualFileSystem']]]
 ];

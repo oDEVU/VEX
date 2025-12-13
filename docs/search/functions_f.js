@@ -1,4 +1,20 @@
 var searchData=
 [
-  ['quit_0',['quit',['../classvex_1_1Engine.html#a2c473d0fcb2ab0090c202b0ec690e549',1,'vex::Engine']]]
+  ['raycast_0',['raycast',['../classvex_1_1PhysicsSystem.html#a59d757e1969612b26616c3664e8ac2dd',1,'vex::PhysicsSystem']]],
+  ['raysphereintersect_1',['raySphereIntersect',['../classvex_1_1Editor.html#a4f90130d799e6a79584a5f318ab26f41',1,'vex::Editor']]],
+  ['raytriangleintersect_2',['rayTriangleIntersect',['../classvex_1_1Editor.html#adfb3b49b4eb18dd7c4edfe32cf195516',1,'vex::Editor']]],
+  ['recreatebodyforentity_3',['RecreateBodyForEntity',['../classvex_1_1PhysicsSystem.html#ad8cf78240326360124c832b53a5be7e7',1,'vex::PhysicsSystem']]],
+  ['recreateswapchain_4',['recreateSwapchain',['../classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245',1,'vex::VulkanSwapchainManager']]],
+  ['refreshforobject_5',['refreshForObject',['../classvex_1_1Engine.html#aaeed76b0ced7dc92bf4a19467c56489a',1,'vex::Engine::refreshForObject()'],['../classvex_1_1Editor.html#a50ae38834c2d70ecd18a9433aef19136',1,'vex::Editor::refreshForObject()']]],
+  ['registergameobject_6',['RegisterGameObject',['../classvex_1_1Scene.html#a3bdeb626c666621adfcbe6a0b5b21d47',1,'vex::Scene']]],
+  ['removeinstance_7',['removeInstance',['../classvex_1_1VulkanMesh.html#a85c4ec5bb63eb855353ac38eb6e0df1a',1,'vex::VulkanMesh']]],
+  ['render_8',['render',['../classvex_1_1VexUI.html#ae2ed2215b0e78bec7e54f83a493ca5ca',1,'vex::VexUI::render()'],['../classvex_1_1Engine.html#a651671153ff5f6edc58e2d76700c6c77',1,'vex::Engine::render()'],['../classvex_1_1DialogWindow.html#acdbac715a5ce35e7778ad2110ce5e51c',1,'vex::DialogWindow::render()'],['../classvex_1_1Editor.html#a6265c161dfade90ac59a9ad77a97bc2d',1,'vex::Editor::render()'],['../classvex_1_1ProjectSelector.html#a335ac1a32fdeebe2b08e976fd56c2365',1,'vex::ProjectSelector::render()']]],
+  ['renderer_9',['Renderer',['../classvex_1_1Renderer.html#a5ccf43388679db64d7e213e3abc322b3',1,'vex::Renderer']]],
+  ['renderframe_10',['renderFrame',['../classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a',1,'vex::Renderer']]],
+  ['renderscene_11',['renderScene',['../classvex_1_1Renderer.html#a5f81b4d2f47385424d8ee6343b5c8c29',1,'vex::Renderer']]],
+  ['requestscenereload_12',['requestSceneReload',['../classvex_1_1Editor.html#aeeb45e8bbfc0ffaae4b095e8883c7a44',1,'vex::Editor']]],
+  ['resolutionmanager_13',['ResolutionManager',['../classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382',1,'vex::ResolutionManager']]],
+  ['resolve_5frelative_5fpath_14',['resolve_relative_path',['../classvex_1_1VirtualFileSystem.html#a6cabffa3f598dde4e3d26340a5b3d0f9',1,'vex::VirtualFileSystem']]],
+  ['run_15',['run',['../classvex_1_1Engine.html#a1079bfa78b4a8a4b99eb778de1c57485',1,'vex::Engine']]],
+  ['runbuild_16',['RunBuild',['../classEditorMenuBar.html#a36b236b7d71c7219125ae05dbd33d398',1,'EditorMenuBar']]]
 ];

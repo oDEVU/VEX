@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['frog_5fcolor_5fmanaged_5fsurface_5fprimaries_0',['frog_color_managed_surface_primaries',['../group__iface__frog__color__managed__surface.html#gadbf1028e4ee3206417fc88b8c6a3a91d',1,'frog_color_managed_surface_primaries:&#160;frog-color-management-v1-client-protocol.h'],['../group__iface__frog__color__managed__surface.html#gadbf1028e4ee3206417fc88b8c6a3a91d',1,'frog_color_managed_surface_primaries:&#160;frog-color-management-v1-client-protocol.h']]],
-  ['frog_5fcolor_5fmanaged_5fsurface_5frender_5fintent_1',['frog_color_managed_surface_render_intent',['../group__iface__frog__color__managed__surface.html#ga3b4f5ccb41d52442a5351e3018dd4745',1,'frog_color_managed_surface_render_intent:&#160;frog-color-management-v1-client-protocol.h'],['../group__iface__frog__color__managed__surface.html#ga3b4f5ccb41d52442a5351e3018dd4745',1,'frog_color_managed_surface_render_intent:&#160;frog-color-management-v1-client-protocol.h']]],
-  ['frog_5fcolor_5fmanaged_5fsurface_5ftransfer_5ffunction_2',['frog_color_managed_surface_transfer_function',['../group__iface__frog__color__managed__surface.html#ga53a8234d02ca42d904eddfb6d3b1a258',1,'frog_color_managed_surface_transfer_function:&#160;frog-color-management-v1-client-protocol.h'],['../group__iface__frog__color__managed__surface.html#ga53a8234d02ca42d904eddfb6d3b1a258',1,'frog_color_managed_surface_transfer_function:&#160;frog-color-management-v1-client-protocol.h']]]
+  ['mouseaxis_0',['MouseAxis',['../InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236',1,'vex']]]
 ];

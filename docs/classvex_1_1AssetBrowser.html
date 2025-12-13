@@ -100,20 +100,33 @@ $(function(){initNavTree('classvex_1_1AssetBrowser.html','','classvex_1_1AssetBr
   <div class="headertitle"><div class="title">vex::AssetBrowser Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class responsible for displaying and navigating project assets within an ImGUI window.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a014e5a20507c167bb53ec15c45f0d52e" id="r_a014e5a20507c167bb53ec15c45f0d52e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a014e5a20507c167bb53ec15c45f0d52e">AssetBrowser</a> (const std::string &amp;rootPath)</td></tr>
+<tr class="memdesc:a014e5a20507c167bb53ec15c45f0d52e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the <a class="el" href="classvex_1_1AssetBrowser.html" title="Class responsible for displaying and navigating project assets within an ImGUI window.">AssetBrowser</a>.  <br /></td></tr>
 <tr class="memitem:a2f923d5050e53e6dc61de482804562c3" id="r_a2f923d5050e53e6dc61de482804562c3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f923d5050e53e6dc61de482804562c3">Draw</a> (const <a class="el" href="structvex_1_1BrowserIcons.html">BrowserIcons</a> &amp;icons)</td></tr>
+<tr class="memdesc:a2f923d5050e53e6dc61de482804562c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the Asset Browser UI and handles interaction.  <br /></td></tr>
 <tr class="memitem:a7422d391e2b5fd33166b14376483218b" id="r_a7422d391e2b5fd33166b14376483218b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7422d391e2b5fd33166b14376483218b">GetJSONAssetType</a> (const std::string path)</td></tr>
+<tr class="memdesc:a7422d391e2b5fd33166b14376483218b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the type of a JSON asset (e.g., scene, material, etc.).  <br /></td></tr>
 <tr class="memitem:ac85463e6fdc9c6f76d7c4ca2dae21a05" id="r_ac85463e6fdc9c6f76d7c4ca2dae21a05"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac85463e6fdc9c6f76d7c4ca2dae21a05">GetExtension</a> (const std::string path)</td></tr>
+<tr class="memdesc:ac85463e6fdc9c6f76d7c4ca2dae21a05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the file extension from a path.  <br /></td></tr>
 <tr class="memitem:a8cb79cd8154882f8996c4d961b2613ea" id="r_a8cb79cd8154882f8996c4d961b2613ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8cb79cd8154882f8996c4d961b2613ea">setThumbnailSize</a> (float size)</td></tr>
+<tr class="memdesc:a8cb79cd8154882f8996c4d961b2613ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the size for asset thumbnails in the browser.  <br /></td></tr>
 <tr class="memitem:a472c71fb26fe595a1200e5ae124e6fb8" id="r_a472c71fb26fe595a1200e5ae124e6fb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a472c71fb26fe595a1200e5ae124e6fb8">setPadding</a> (float padding)</td></tr>
+<tr class="memdesc:a472c71fb26fe595a1200e5ae124e6fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the padding between asset icons in the browser.  <br /></td></tr>
 <tr class="memitem:a8a2280b81f86423e72222d55fc22bc69" id="r_a8a2280b81f86423e72222d55fc22bc69"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a2280b81f86423e72222d55fc22bc69">getCurrentPath</a> () const</td></tr>
+<tr class="memdesc:a8a2280b81f86423e72222d55fc22bc69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the currently viewed directory path.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a8836a330665804a78db9298b69290d97" id="r_a8836a330665804a78db9298b69290d97"><td class="memItemLeft" align="right" valign="top">ImTextureID&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8836a330665804a78db9298b69290d97">GetIcon</a> (const std::filesystem::directory_entry &amp;entry, const <a class="el" href="structvex_1_1BrowserIcons.html">BrowserIcons</a> &amp;icons)</td></tr>
+<tr class="memdesc:a8836a330665804a78db9298b69290d97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the appropriate icon texture ID for a given directory entry.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -123,8 +136,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aab32f6093b44da443e597a9d000cdeb9" id="r_aab32f6093b44da443e597a9d000cdeb9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab32f6093b44da443e597a9d000cdeb9">m_padding</a> = 16.0f</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00020">20</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<div class="textblock"><p>Class responsible for displaying and navigating project assets within an ImGUI window. </p>
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00028">28</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a014e5a20507c167bb53ec15c45f0d52e" name="a014e5a20507c167bb53ec15c45f0d52e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a014e5a20507c167bb53ec15c45f0d52e">&#9670;&#160;</a></span>AssetBrowser()</h2>
@@ -140,6 +154,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructs the <a class="el" href="classvex_1_1AssetBrowser.html" title="Class responsible for displaying and navigating project assets within an ImGUI window.">AssetBrowser</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; rootPath - The root directory of the project assets. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00008">8</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
@@ -160,6 +182,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Draws the Asset Browser UI and handles interaction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1BrowserIcons.html" title="Structure holding texture IDs for various asset types displayed in the browser.">BrowserIcons</a>&amp; icons - The set of icons to use for drawing assets. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The path of the asset that was double-clicked/selected for action, or empty string otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00050">50</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
@@ -188,7 +219,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00031">31</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<p>Gets the currently viewed directory path. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The current path as a string. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00067">67</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>
@@ -206,6 +240,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Extracts the file extension from a path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string path - The file path. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The file extension (e.g., ".png", ".scene"). </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00031">31</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
@@ -238,6 +281,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Gets the appropriate icon texture ID for a given directory entry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::filesystem::directory_entry&amp; entry - The file system entry. </td></tr>
+    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1BrowserIcons.html" title="Structure holding texture IDs for various asset types displayed in the browser.">BrowserIcons</a>&amp; icons - The collection of available icons. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ImTextureID - The texture ID of the selected icon. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00012">12</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
 </div>
@@ -256,6 +309,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Determines the type of a JSON asset (e.g., scene, material, etc.). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string path - The file path to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int - An integer code representing the asset type. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00038">38</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
@@ -284,7 +346,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00029">29</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<p>Sets the padding between asset icons in the browser. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">float</td><td>padding - The new padding value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00063">63</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>
@@ -311,7 +381,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00028">28</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<p>Sets the size for asset thumbnails in the browser. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">float</td><td>size - The new thumbnail size in pixels. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00059">59</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>
@@ -336,7 +414,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00035">35</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00071">71</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>
@@ -360,7 +438,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00038">38</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00074">74</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>
@@ -384,7 +462,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00034">34</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00070">70</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>
@@ -408,7 +486,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00037">37</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00073">73</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>

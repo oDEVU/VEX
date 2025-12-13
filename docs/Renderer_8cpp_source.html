@@ -124,7 +124,7 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
 <div class="foldopen" id="foldopen00023" data-start="{" data-end="}">
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html#a5ccf43388679db64d7e213e3abc322b3">   23</a></span>    <a class="code hl_function" href="classvex_1_1Renderer.html#a5ccf43388679db64d7e213e3abc322b3">Renderer::Renderer</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context,</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>                           std::unique_ptr&lt;VulkanResources&gt;&amp; <a class="code hl_struct" href="structresources.html">resources</a>,</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>                           std::unique_ptr&lt;VulkanResources&gt;&amp; resources,</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                           std::unique_ptr&lt;VulkanPipeline&gt;&amp; pipeline,</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                           std::unique_ptr&lt;VulkanPipeline&gt;&amp; transPipeline,</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                           std::unique_ptr&lt;VulkanPipeline&gt;&amp; uiPipeline,</div>
@@ -132,7 +132,7 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                           std::unique_ptr&lt;VulkanSwapchainManager&gt;&amp; swapchainManager,</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                           std::unique_ptr&lt;MeshManager&gt;&amp; meshManager)</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            : m_r_context(context),</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>              m_p_resources(<a class="code hl_struct" href="structresources.html">resources</a>),</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>              m_p_resources(resources),</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>              m_p_pipeline(pipeline),</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>              m_p_transPipeline(transPipeline),</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>              m_p_uiPipeline(uiPipeline),</div>
@@ -240,8 +240,8 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
 <div class="foldopen" id="foldopen00134" data-start="{" data-end="}">
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html#a5f81b4d2f47385424d8ee6343b5c8c29">  134</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#a5f81b4d2f47385424d8ee6343b5c8c29">Renderer::renderScene</a>(<a class="code hl_struct" href="structvex_1_1SceneRenderData.html">SceneRenderData</a>&amp; <a class="code hl_struct" href="structdata.html">data</a>, <span class="keyword">const</span> entt::entity cameraEntity, entt::registry&amp; registry, <span class="keywordtype">int</span> frame, <span class="keywordtype">bool</span> isEditorMode) {</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            VkCommandBuffer cmd = <a class="code hl_struct" href="structdata.html">data</a>.commandBuffer;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html#a5f81b4d2f47385424d8ee6343b5c8c29">  134</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#a5f81b4d2f47385424d8ee6343b5c8c29">Renderer::renderScene</a>(<a class="code hl_struct" href="structvex_1_1SceneRenderData.html">SceneRenderData</a>&amp; data, <span class="keyword">const</span> entt::entity cameraEntity, entt::registry&amp; registry, <span class="keywordtype">int</span> frame, <span class="keywordtype">bool</span> isEditorMode) {</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            VkCommandBuffer cmd = data.commandBuffer;</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>            <span class="keyword">auto</span> now = std::chrono::high_resolution_clock::now();</div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>            currentTime = std::chrono::duration&lt;float&gt;(now - startTime).count();</div>
@@ -452,7 +452,7 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>                <span class="keywordflow">if</span> (mesh.renderType == RenderType::OPAQUE) {</div>
 <div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>                    <span class="keyword">auto</span>&amp; vulkanMesh = m_p_meshManager-&gt;getVulkanMeshByMesh(mesh);</div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>                    <span class="keywordflow">if</span> (vulkanMesh) {</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>                        vulkanMesh-&gt;draw(cmd, m_p_pipeline-&gt;layout(), *m_p_resources, <a class="code hl_struct" href="structdata.html">data</a>.frameIndex, modelIndex, modelMatrix, mesh.color);</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>                        vulkanMesh-&gt;draw(cmd, m_p_pipeline-&gt;layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);</div>
 <div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>                    }</div>
 <div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>                } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mesh.renderType == RenderType::TRANSPARENT) {</div>
 <div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>                     <span class="keyword">auto</span>&amp; vulkanMesh = m_p_meshManager-&gt;getVulkanMeshByMesh(mesh);</div>
@@ -569,7 +569,7 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span> </div>
 <div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>                <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; uiObject : m_uiObjects) {</div>
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>                    <span class="keywordflow">if</span>(uiObject.visible){</div>
-<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>                        uiObject.m_vexUI-&gt;render(cmd, m_p_uiPipeline-&gt;get(), m_p_uiPipeline-&gt;layout(), <a class="code hl_struct" href="structdata.html">data</a>.frameIndex);</div>
+<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>                        uiObject.m_vexUI-&gt;render(cmd, m_p_uiPipeline-&gt;get(), m_p_uiPipeline-&gt;layout(), data.frameIndex);</div>
 <div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>                    }</div>
 <div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>                }</div>
 <div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>            }</div>
@@ -603,20 +603,20 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span> </div>
 <div class="foldopen" id="foldopen00493" data-start="{" data-end="}">
-<div class="line"><a id="l00493" name="l00493"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html#a3d76ea1772288bca785e7c8f70d128b9">  493</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#a3d76ea1772288bca785e7c8f70d128b9">Renderer::composeFrame</a>(<a class="code hl_struct" href="structvex_1_1SceneRenderData.html">SceneRenderData</a>&amp; <a class="code hl_struct" href="structdata.html">data</a>, <a class="code hl_class" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a>&amp; ui, <span class="keywordtype">bool</span> isEditorMode) {</div>
-<div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>            VkCommandBuffer cmd = <a class="code hl_struct" href="structdata.html">data</a>.commandBuffer;</div>
+<div class="line"><a id="l00493" name="l00493"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html#a3d76ea1772288bca785e7c8f70d128b9">  493</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#a3d76ea1772288bca785e7c8f70d128b9">Renderer::composeFrame</a>(<a class="code hl_struct" href="structvex_1_1SceneRenderData.html">SceneRenderData</a>&amp; data, <a class="code hl_class" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a>&amp; ui, <span class="keywordtype">bool</span> isEditorMode) {</div>
+<div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>            VkCommandBuffer cmd = data.commandBuffer;</div>
 <div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span> </div>
-<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>            <a class="code hl_function" href="classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11">transitionImageLayout</a>(cmd, m_r_context.swapchainImages[<a class="code hl_struct" href="structdata.html">data</a>.imageIndex],</div>
+<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>            <a class="code hl_function" href="classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11">transitionImageLayout</a>(cmd, m_r_context.swapchainImages[data.imageIndex],</div>
 <div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span>                                 VK_IMAGE_LAYOUT_UNDEFINED,</div>
 <div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,</div>
 <div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>                                 0,</div>
 <div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,</div>
-<div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span>                                 VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,</div>
+<div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span>                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,</div>
 <div class="line"><a id="l00502" name="l00502"></a><span class="lineno">  502</span>                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);</div>
 <div class="line"><a id="l00503" name="l00503"></a><span class="lineno">  503</span> </div>
 <div class="line"><a id="l00504" name="l00504"></a><span class="lineno">  504</span>            VkRenderingAttachmentInfo colorAttachment{};</div>
 <div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span>            colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;</div>
-<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>            colorAttachment.imageView = m_r_context.swapchainImageViews[<a class="code hl_struct" href="structdata.html">data</a>.imageIndex];</div>
+<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>            colorAttachment.imageView = m_r_context.swapchainImageViews[data.imageIndex];</div>
 <div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span>            colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;</div>
 <div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;</div>
 <div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span>            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;</div>
@@ -654,13 +654,13 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>                    <span class="keywordflow">if</span> (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {</div>
 <div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span>                        <a class="code hl_function" href="classvex_1_1Renderer.html#a806d1ad715ef403b147fffe4598fa5f1">getImGuiTextureID</a>(ui);</div>
 <div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>                    }</div>
-<div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span>                    <a class="code hl_struct" href="structdata.html">data</a>.imguiTextureID = m_cachedImGuiDescriptor;</div>
+<div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span>                    data.imguiTextureID = m_cachedImGuiDescriptor;</div>
 <div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span> </div>
 <div class="line"><a id="l00546" name="l00546"></a><span class="lineno">  546</span>                    vkUI.draw(cmd);</div>
 <div class="line"><a id="l00547" name="l00547"></a><span class="lineno">  547</span>            } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline-&gt;get());</div>
 <div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span> </div>
-<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span>                VkDescriptorSet sceneSet = m_p_resources-&gt;getUBODescriptorSet(<a class="code hl_struct" href="structdata.html">data</a>.frameIndex);</div>
+<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span>                VkDescriptorSet sceneSet = m_p_resources-&gt;getUBODescriptorSet(data.frameIndex);</div>
 <div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>                uint32_t dynamicOffset = 0;</div>
 <div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span> </div>
 <div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>                vkCmdBindDescriptorSets(</div>
@@ -682,7 +682,7 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span> </div>
 <div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>            vkCmdEndRendering(cmd);</div>
 <div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span> </div>
-<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>            <a class="code hl_function" href="classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11">transitionImageLayout</a>(cmd, m_r_context.swapchainImages[<a class="code hl_struct" href="structdata.html">data</a>.imageIndex],</div>
+<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>            <a class="code hl_function" href="classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11">transitionImageLayout</a>(cmd, m_r_context.swapchainImages[data.imageIndex],</div>
 <div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,</div>
 <div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>                                 VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,</div>
 <div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,</div>
@@ -693,26 +693,26 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span> </div>
 <div class="foldopen" id="foldopen00581" data-start="{" data-end="}">
-<div class="line"><a id="l00581" name="l00581"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1">  581</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1">Renderer::endFrame</a>(<a class="code hl_struct" href="structvex_1_1SceneRenderData.html">SceneRenderData</a>&amp; <a class="code hl_struct" href="structdata.html">data</a>) {</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno"><a class="line" href="classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1">  581</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1">Renderer::endFrame</a>(<a class="code hl_struct" href="structvex_1_1SceneRenderData.html">SceneRenderData</a>&amp; data) {</div>
 <div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>            <span class="comment">//std::cout &lt;&lt; &quot;currentRes x:&quot; &lt;&lt; m_r_context.currentRenderResolution.x &lt;&lt; &quot;, y:&quot; &lt;&lt; m_r_context.currentRenderResolution.y &lt;&lt; std::endl;</span></div>
 <div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span>            <span class="comment">//std::cout &lt;&lt; &quot;swapchainExtent x:&quot; &lt;&lt; m_r_context.swapchainExtent.width &lt;&lt; &quot;, y:&quot; &lt;&lt; m_r_context.swapchainExtent.height &lt;&lt; std::endl;</span></div>
 <div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>            <span class="comment">//std::cout &lt;&lt; &quot;IsValid: &quot; &lt;&lt; data.isSwapchainValid &lt;&lt; std::endl;</span></div>
-<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>            <span class="keywordflow">if</span> (!<a class="code hl_struct" href="structdata.html">data</a>.isSwapchainValid) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>            <span class="keywordflow">if</span> (!data.isSwapchainValid) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span> </div>
-<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>            vkEndCommandBuffer(<a class="code hl_struct" href="structdata.html">data</a>.commandBuffer);</div>
+<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>            vkEndCommandBuffer(data.commandBuffer);</div>
 <div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span> </div>
 <div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>            VkSubmitInfo submitInfo{};</div>
 <div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span>            submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;</div>
 <div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span> </div>
-<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>            VkSemaphore waitSemaphores[] = {m_r_context.imageAvailableSemaphores[<a class="code hl_struct" href="structdata.html">data</a>.frameIndex]};</div>
+<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>            VkSemaphore waitSemaphores[] = {m_r_context.imageAvailableSemaphores[data.frameIndex]};</div>
 <div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>            VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};</div>
 <div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>            submitInfo.waitSemaphoreCount = 1;</div>
 <div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>            submitInfo.pWaitSemaphores = waitSemaphores;</div>
 <div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>            submitInfo.pWaitDstStageMask = waitStages;</div>
 <div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>            submitInfo.commandBufferCount = 1;</div>
-<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>            submitInfo.pCommandBuffers = &amp;<a class="code hl_struct" href="structdata.html">data</a>.commandBuffer;</div>
+<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>            submitInfo.pCommandBuffers = &amp;data.commandBuffer;</div>
 <div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span> </div>
-<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>            VkSemaphore signalSemaphores[] = {m_r_context.renderFinishedSemaphores[<a class="code hl_struct" href="structdata.html">data</a>.frameIndex]};</div>
+<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>            VkSemaphore signalSemaphores[] = {m_r_context.renderFinishedSemaphores[data.frameIndex]};</div>
 <div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>            submitInfo.signalSemaphoreCount = 1;</div>
 <div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>            submitInfo.pSignalSemaphores = signalSemaphores;</div>
 <div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span> </div>
@@ -1229,7 +1229,7 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="line"><a id="l01112" name="l01112"></a><span class="lineno"> 1112</span>                <span class="keywordflow">if</span>(uiView.get&lt;UiComponent&gt;(entity).m_vexUI-&gt;isInitialized()){</div>
 <div class="line"><a id="l01113" name="l01113"></a><span class="lineno"> 1113</span>                    m_uiObjects.emplace_back(uiView.get&lt;UiComponent&gt;(entity));</div>
 <div class="line"><a id="l01114" name="l01114"></a><span class="lineno"> 1114</span>                }<span class="keywordflow">else</span>{</div>
-<div class="line"><a id="l01115" name="l01115"></a><span class="lineno"> 1115</span>                    log(<span class="stringliteral">&quot;UiComponent not initialized&quot;</span>);</div>
+<div class="line"><a id="l01115" name="l01115"></a><span class="lineno"> 1115</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;UiComponent not initialized&quot;</span>);</div>
 <div class="line"><a id="l01116" name="l01116"></a><span class="lineno"> 1116</span>                }</div>
 <div class="line"><a id="l01117" name="l01117"></a><span class="lineno"> 1117</span>            }</div>
 <div class="line"><a id="l01118" name="l01118"></a><span class="lineno"> 1118</span> </div>
@@ -1469,8 +1469,6 @@ $(function(){initNavTree('Renderer_8cpp_source.html','',''); });
 <div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00110">errorUtils.cpp:110</a></div></div>
 <div class="ttc" id="afrustum_8hpp_html"><div class="ttname"><a href="frustum_8hpp.html">frustum.hpp</a></div><div class="ttdoc">This file defines struct holding data needed for camera frustum culling.</div></div>
 <div class="ttc" id="alimits_8hpp_html"><div class="ttname"><a href="limits_8hpp.html">limits.hpp</a></div><div class="ttdoc">This files defines global variables defining vulkan limits.</div></div>
-<div class="ttc" id="astructdata_html"><div class="ttname"><a href="structdata.html">data</a></div><div class="ttdef"><b>Definition</b> <a href="poolTests_8c_source.html#l00028">poolTests.c:28</a></div></div>
-<div class="ttc" id="astructresources_html"><div class="ttname"><a href="structresources.html">resources</a></div><div class="ttdef"><b>Definition</b> <a href="multiple__simple__compression_8c_source.html#l00017">multiple_simple_compression.c:17</a></div></div>
 <div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00416">BasicComponents.hpp:416</a></div></div>
 <div class="ttc" id="astructvex_1_1Frustum_html"><div class="ttname"><a href="structvex_1_1Frustum.html">vex::Frustum</a></div><div class="ttdef"><b>Definition</b> <a href="frustum_8hpp_source.html#l00029">frustum.hpp:29</a></div></div>
 <div class="ttc" id="astructvex_1_1Frustum_html_a57bc89c0b05729745dc55c64ae95d4e5"><div class="ttname"><a href="structvex_1_1Frustum.html#a57bc89c0b05729745dc55c64ae95d4e5">vex::Frustum::update</a></div><div class="ttdeci">void update(const glm::mat4 &amp;viewProj)</div><div class="ttdoc">Extract planes from View-Projection Matrix.</div><div class="ttdef"><b>Definition</b> <a href="frustum_8hpp_source.html#l00034">frustum.hpp:34</a></div></div>

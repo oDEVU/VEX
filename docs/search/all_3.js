@@ -1,4 +1,21 @@
 var searchData=
 [
-  ['4_0',['4',['../group__macinfo.html',1,'Macro Access: DWARF2-4'],['../group__ranges.html',1,'Ranges: code addresses in DWARF3-4']]]
+  ['data_0',['data',['../structvex_1_1VirtualFileSystem_1_1FileData.html#a297d73cd4ee60ea881e0d1c64dc59fd8',1,'vex::VirtualFileSystem::FileData']]],
+  ['demangle_1',['Demangle',['../SceneMenu_8hpp.html#a0ae3e6d17bc7563bc57da4a016aaf41b',1,'SceneMenu.hpp']]],
+  ['destroy_2',['Destroy',['../classvex_1_1GameObject.html#a1ba0e5c35f4bfc561f7b2862667eef1a',1,'vex::GameObject']]],
+  ['destroybodyforentity_3',['DestroyBodyForEntity',['../classvex_1_1PhysicsSystem.html#ad40784cfa9e958d41b8ff8e4558b63da',1,'vex::PhysicsSystem']]],
+  ['destroygameobject_4',['DestroyGameObject',['../classvex_1_1Scene.html#a9e1119af8f263db062ed73d3d0bda269',1,'vex::Scene']]],
+  ['dialogwindow_5',['DialogWindow',['../classvex_1_1DialogWindow.html',1,'vex::DialogWindow'],['../classvex_1_1DialogWindow.html#ade590af6a3ddae3c55da398ba14c894f',1,'vex::DialogWindow::DialogWindow()']]],
+  ['dialogwindow_2ehpp_6',['DialogWindow.hpp',['../DialogWindow_8hpp.html',1,'']]],
+  ['draw_7',['Draw',['../classvex_1_1AssetBrowser.html#a2f923d5050e53e6dc61de482804562c3',1,'vex::AssetBrowser']]],
+  ['draw_8',['draw',['../classvex_1_1VulkanMesh.html#af5624ae4b8abb1a3c453d9b904cad61f',1,'vex::VulkanMesh']]],
+  ['drawbar_9',['DrawBar',['../classEditorMenuBar.html#a03a4c974246f5ad0c4494fe09db48f7f',1,'EditorMenuBar']]],
+  ['drawdialogwindowlayout_10',['drawDialogWindowLayout',['../classvex_1_1DialogWindow.html#a11d572b9e8f98de37e3818cc26166231',1,'vex::DialogWindow']]],
+  ['draweditorlayout_11',['drawEditorLayout',['../classvex_1_1Editor.html#a5732b989d4fdf06a4abbb607ccac3663',1,'vex::Editor']]],
+  ['drawentitynode_12',['DrawEntityNode',['../SceneMenu_8hpp.html#a503df8ab9f67ef8361095f7518eeeef8',1,'SceneMenu.hpp']]],
+  ['drawgizmo_13',['drawGizmo',['../classvex_1_1Editor.html#a5907d48979da261bc6950b281f83fb6c',1,'vex::Editor']]],
+  ['drawpropertiesofanobject_14',['DrawPropertiesOfAnObject',['../PropertiesMenu_8hpp.html#a32cdf4900cd26c78a021944a6e45e050',1,'PropertiesMenu.hpp']]],
+  ['drawscenehierarchy_15',['DrawSceneHierarchy',['../SceneMenu_8hpp.html#a901e4adcdaccb4930222c23d660285ef',1,'SceneMenu.hpp']]],
+  ['drawselectorlayout_16',['drawSelectorLayout',['../classvex_1_1ProjectSelector.html#a28af76a2a88a82b1485c7fa247929401',1,'vex::ProjectSelector']]],
+  ['drawworldsettings_17',['DrawWorldSettings',['../worldSettingsMenu_8hpp.html#a7e48a1d9045a4f9560da9300e251db69',1,'vex']]]
 ];
