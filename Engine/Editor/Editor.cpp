@@ -89,13 +89,20 @@ namespace vex {
 
         m_fps = static_cast<int>(1.0f / deltaTime);
 
-        m_assetBrowser->setThumbnailSize(m_editorProperties.assetBrowserThumbnailSize);
-        m_camera->GetComponent<vex::CameraComponent>().fov = m_editorProperties.editorCameraFov;
-        m_camera->GetComponent<vex::CameraComponent>().farPlane = m_editorProperties.editorCameraRenderDistance;
-
         if(m_SavedEditorProperties != m_editorProperties){
             SaveConfig(m_editorProperties, "editor_config.json");
             m_SavedEditorProperties = m_editorProperties;
+
+            m_assetBrowser->setThumbnailSize(m_editorProperties.assetBrowserThumbnailSize);
+
+            if (m_editorProperties.editorCameraFov < 10.0f) m_editorProperties.editorCameraFov = 10.0f;
+            if (m_editorProperties.editorCameraFov > 170.0f) m_editorProperties.editorCameraFov = 170.0f;
+
+            if (m_editorProperties.editorCameraRenderDistance < 0.1f) m_editorProperties.editorCameraRenderDistance = 0.1f;
+            if (m_editorProperties.editorCameraRenderDistance > 100000.0f) m_editorProperties.editorCameraRenderDistance = 100000.0f;
+
+            m_camera->GetComponent<vex::CameraComponent>().fov = m_editorProperties.editorCameraFov;
+            m_camera->GetComponent<vex::CameraComponent>().farPlane = m_editorProperties.editorCameraRenderDistance;
         }
 
         m_camera->Update(deltaTime);
