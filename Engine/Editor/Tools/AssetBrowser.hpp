@@ -73,6 +73,13 @@ namespace vex {
         float m_thumbnailSize = 64.0f;
         float m_padding = 16.0f;
 
+        std::filesystem::path m_copiedPath;
+        bool m_isCut = false;
+
+        bool m_renaming = false;
+        std::filesystem::path m_renamePath;
+        char m_renameBuffer[256] = "";
+
         /**
                  * @brief Gets the appropriate icon texture ID for a given directory entry.
                  * @param const std::filesystem::directory_entry& entry - The file system entry.

@@ -3,6 +3,8 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 
+#include "components/errorUtils.hpp"
+
 namespace vex {
 
     AssetBrowser::AssetBrowser(const std::string& rootPath)
@@ -49,6 +51,7 @@ namespace vex {
 
     std::string AssetBrowser::Draw(const BrowserIcons& icons) {
         std::string selectedFile = "";
+        std::string actionFile = "";
 
         if (m_currentPath != m_rootPath) {
             if (ImGui::Button(" < Back ")) {
@@ -59,12 +62,39 @@ namespace vex {
         ImGui::Text("Path: %s", m_currentPath.string().c_str());
         ImGui::Separator();
 
+        if (ImGui::BeginPopupContextWindow("AssetBrowserBgContext", ImGuiMouseButton_Right | ImGuiPopupFlags_NoOpenOverItems)) {
+                if (ImGui::MenuItem("Paste", nullptr, false, !m_copiedPath.empty())) {
+                    if (std::filesystem::exists(m_copiedPath)) {
+                        try {
+                            std::filesystem::path dest = m_currentPath / m_copiedPath.filename();
+                            int i = 1;
+                            std::string stem = m_copiedPath.stem().string();
+                            std::string ext = m_copiedPath.extension().string();
+                            while (std::filesystem::exists(dest)) {
+                                dest = m_currentPath / (stem + " (" + std::to_string(i++) + ")" + ext);
+                            }
+
+                            std::filesystem::copy(m_copiedPath, dest, std::filesystem::copy_options::recursive);
+
+                            if (m_isCut) {
+                                std::filesystem::remove_all(m_copiedPath);
+                                m_copiedPath.clear();
+                                m_isCut = false;
+                            }
+                        } catch (const std::filesystem::filesystem_error& e) {
+                            vex::handle_exception(e);
+                        }
+                    }
+                }
+                ImGui::EndPopup();
+            }
+
         float cellSize = m_thumbnailSize + m_padding;
         float panelWidth = ImGui::GetContentRegionAvail().x;
         int columnCount = (int)(panelWidth / cellSize);
         if (columnCount < 1) columnCount = 1;
 
-        if (ImGui::BeginTable("BrowserGrid", columnCount)) {// 1. Collect and Separate Entries
+        if (ImGui::BeginTable("BrowserGrid", columnCount)) {
             std::vector<std::filesystem::directory_entry> folders;
             std::vector<std::filesystem::directory_entry> files;
 
@@ -77,7 +107,7 @@ namespace vex {
                     }
                 }
             } catch (const std::filesystem::filesystem_error& e) {
-                //fuck it, idk what to do
+                vex::handle_exception(e);
             }
 
             auto sortAlpha = [](const std::filesystem::directory_entry& a, const std::filesystem::directory_entry& b) {
@@ -98,31 +128,89 @@ namespace vex {
 
                 ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
-                if (ImGui::ImageButton("##Icon", iconID, { m_thumbnailSize, m_thumbnailSize })) {
-                    if (entry.is_directory()) {
-                        m_currentPath /= entry.path().filename();
-                    }
-                }
+                ImGui::ImageButton("##Icon", iconID, { m_thumbnailSize, m_thumbnailSize });
 
-                if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
-                    if (!entry.is_directory()) {
+                if (ImGui::IsItemHovered()) {
+                    if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                        if (entry.is_directory()) {
+                            m_currentPath /= entry.path().filename();
+                        } else {
+                            actionFile = entry.path().string();
+                        }
+                    } else if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
                         selectedFile = entry.path().string();
                     }
                 }
 
                 ImGui::PopStyleColor();
 
-                float textWidth = ImGui::CalcTextSize(filename.c_str()).x;
+                if (ImGui::BeginPopupContextItem()) {
+                    if (ImGui::MenuItem("Open")) {
+                        if (entry.is_directory()) m_currentPath /= entry.path().filename();
+                        else actionFile = entry.path().string();
+                    }
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Copy")) {
+                        m_copiedPath = entry.path();
+                        m_isCut = false;
+                    }
+                    if (ImGui::MenuItem("Cut")) {
+                         m_copiedPath = entry.path();
+                         m_isCut = true;
+                    }
+                    if (ImGui::MenuItem("Duplicate")) {
+                        try {
+                             std::filesystem::path src = entry.path();
+                             std::filesystem::path dest = src;
+                             int i = 1;
+                             while(std::filesystem::exists(dest)) {
+                                 dest = src.parent_path() / (src.stem().string() + "_Copy" + std::to_string(i++) + src.extension().string());
+                             }
+                             std::filesystem::copy(src, dest, std::filesystem::copy_options::recursive);
+                        } catch(const std::filesystem::filesystem_error& e) {
+                            vex::handle_exception(e);
+                        }
+                    }
+                    if (ImGui::MenuItem("Rename")) {
+                        m_renaming = true;
+                        m_renamePath = entry.path();
+                        strncpy(m_renameBuffer, filename.c_str(), sizeof(m_renameBuffer));
+                    }
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("Delete")) {
+                        try { std::filesystem::remove_all(entry.path()); } catch(...) {}
+                    }
+                    ImGui::EndPopup();
+                }
 
-                if (textWidth < (columnWidth * 1.1f)) {
-                    float textOffset = (columnWidth - textWidth) * 0.5f;
-                    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textOffset);
-                    ImGui::Text("%s", filename.c_str());
+                if (m_renaming && m_renamePath == entry.path()) {
+                    ImGui::SetNextItemWidth(cellSize);
+                    if (ImGui::InputText("##Rename", m_renameBuffer, sizeof(m_renameBuffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll)) {
+                        std::filesystem::path newPath = entry.path().parent_path() / m_renameBuffer;
+                        try {
+                            std::filesystem::rename(entry.path(), newPath);
+                        } catch (const std::filesystem::filesystem_error& e) {
+                            vex::handle_exception(e);
+                        }
+                        m_renaming = false;
+                    }
+                    if (!ImGui::IsItemActive() && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1))) {
+                        m_renaming = false;
+                    }
                 }
                 else {
-                    ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + columnWidth);
-                    ImGui::TextWrapped("%s", filename.c_str());
-                    ImGui::PopTextWrapPos();
+                    float columnWidth = ImGui::GetContentRegionAvail().x;
+                    float textWidth = ImGui::CalcTextSize(filename.c_str()).x;
+
+                    if (textWidth < (columnWidth * 1.1f)) {
+                        float textOffset = (columnWidth - textWidth) * 0.5f;
+                        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + textOffset);
+                        ImGui::Text("%s", filename.c_str());
+                    } else {
+                        ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + columnWidth);
+                        ImGui::TextWrapped("%s", filename.c_str());
+                        ImGui::PopTextWrapPos();
+                    }
                 }
 
                 ImGui::PopID();
@@ -134,6 +222,6 @@ namespace vex {
             ImGui::EndTable();
         }
 
-        return selectedFile;
+        return !actionFile.empty() ? actionFile : selectedFile;
     }
 }
