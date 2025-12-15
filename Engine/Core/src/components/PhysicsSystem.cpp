@@ -67,28 +67,35 @@ namespace vex {
     void PhysicsSystem::shutdown() {
         //if (m_destroyConnection) m_destroyConnection.disconnect();
 
-        try{
-            auto view = m_registry.view<PhysicsComponent>();
-            for (auto e : view) {
-                auto& pc = view.get<PhysicsComponent>(e);
-                DestroyBodyForEntity(pc);
+        try {
+            if (m_physicsSystem) {
+                auto view = m_registry.view<PhysicsComponent>();
+                for (auto e : view) {
+                    auto& pc = view.get<PhysicsComponent>(e);
+                    DestroyBodyForEntity(pc);
+                }
             }
         } catch (const std::exception& e) {
             handle_exception(e);
         }
 
-        JPH::UnregisterTypes();
-
-        if (JPH::Factory::sInstance != nullptr) {
-            delete JPH::Factory::sInstance;
-            JPH::Factory::sInstance = nullptr;
-        }
         if (m_physicsSystem) {
             delete m_physicsSystem;
             m_physicsSystem = nullptr;
         }
-        delete m_jobSystem;
-        delete m_tempAllocator;
+        if (m_jobSystem) {
+            delete m_jobSystem;
+            m_jobSystem = nullptr;
+        }
+        if (m_tempAllocator) {
+            delete m_tempAllocator;
+            m_tempAllocator = nullptr;
+        }
+        JPH::UnregisterTypes();
+        if (JPH::Factory::sInstance != nullptr) {
+            delete JPH::Factory::sInstance;
+            JPH::Factory::sInstance = nullptr;
+        }
     }
 
     JPH::Quat GlmToJph(const glm::quat& q) {

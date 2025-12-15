@@ -1,0 +1,59 @@
+{
+  "environment": {
+    "lighting": {
+      "ambientLight": [0.0, 0.0, 0.0],
+      "ambientLightStrength": 0.0,
+      "clearColor": [0.0, 0.0, 0.0],
+      "sunDirection": [1.0, 1.0, 1.0],
+      "sunLight": [1.0, 1.0, 1.0]
+    },
+    "shading": {
+      "affineTextureWarping": false,
+      "gouraud": false,
+      "ntfsArtifacts": false,
+      "passiveVertexJitter": false,
+      "screenDither": false,
+      "screenQuantization": false,
+      "textureQuantization": false,
+      "vertexSnapping": false
+    }
+  },
+  "objects": [
+    {
+      "components": [
+        {
+          "position": [0.0, 0.0, 0.0],
+          "rotation": [0.0, -0.0, 0.0],
+          "scale": [5.0, 1.0, 5.0],
+          "type": "vex::TransformComponent"
+        },
+        {
+          "color": [1.0, 1.0, 1.0, 1.0],
+          "path": "Assets/meshes/cube.obj",
+          "renderType": 0,
+          "type": "vex::MeshComponent"
+        }
+      ],
+      "name": "SceneFloor",
+      "type": "GameObject"
+    },
+    {
+      "components": [
+        {
+          "position": [-10.0, 5.0, 0.0],
+          "rotation": [-35.0, 270.0, 0.0],
+          "scale": [0.9999997615814209, 0.9999997615814209, 1.0],
+          "type": "vex::TransformComponent"
+        },
+        {
+          "farPlane": 100.0,
+          "fov": 60.0,
+          "nearPlane": 0.10000000149011612,
+          "type": "vex::CameraComponent"
+        }
+      ],
+      "name": "BasicCamera",
+      "type": "BasicCamera"
+    }
+  ]
+}

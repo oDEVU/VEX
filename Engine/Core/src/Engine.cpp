@@ -120,6 +120,10 @@ void Engine::run(std::function<void()> onUpdateLoop) {
 }
 
 Engine::~Engine() {
+    if (m_physicsSystem) {
+        m_physicsSystem->shutdown();
+        m_physicsSystem.reset();
+    }
     m_imgui.reset();
     m_interface.reset();
     m_inputSystem.reset();

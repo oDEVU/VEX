@@ -56,7 +56,7 @@ namespace vex {
         /// @param const SceneRenderData& data - Data required for scene rendering (unused in basic dialog).
         /// @param glm::uvec2& outNewResolution - Output parameter for new resolution (unused in basic dialog).
         void drawDialogWindowLayout(const SceneRenderData& data, glm::uvec2& outNewResolution);
-        std::unique_ptr<CameraObject> dummyCamera;
+        //std::unique_ptr<CameraObject> dummyCamera;
         std::string m_dialogContent = "";
     };
 

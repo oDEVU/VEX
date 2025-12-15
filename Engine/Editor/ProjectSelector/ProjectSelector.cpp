@@ -22,6 +22,14 @@ namespace vex {
         : Engine(title, 800, 600, GameInfo{"Vex Selector", 1, 0, 0})
     {
         loadKnownProjects();
+
+        std::filesystem::path docs = getUserDocumentsDir();
+        std::filesystem::path defaultSave = docs / "VexProjects";
+
+        std::string pathStr = defaultSave.string();
+        if (pathStr.length() < sizeof(m_newProjParentDir)) {
+            strcpy(m_newProjParentDir, pathStr.c_str());
+        }
     }
 
     void ProjectSelector::render() {
@@ -53,6 +61,9 @@ namespace vex {
             m_imgui->executeUIFunctions();
 
             drawSelectorLayout(renderData);
+            drawCreatorModal();
+            drawAddExistingModal();
+            drawMoveProjectModal();
 
             m_imgui->endFrame();
 
@@ -82,7 +93,19 @@ namespace vex {
 
         ImGui::Text("VEX ENGINE - PROJECTS");
         ImGui::Separator();
+
+        if (ImGui::Button("+ Create New Project", ImVec2(200, 30))) {
+            m_showCreatorModal = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("+ Add Existing Project", ImVec2(200, 30))) {
+            m_showAddExistingModal = true;
+            memset(m_addExistingBuffer, 0, sizeof(m_addExistingBuffer));
+        }
+
         ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
         float cardWidth = 220.0f;
         int columns = static_cast<int>(viewport->Size.x / cardWidth);
@@ -93,41 +116,161 @@ namespace vex {
                 ImGui::TableNextColumn();
                 ImGui::Text("No projects yet.");
             }
-            for (const auto& proj : m_projects) {
+            for (int i = 0; i < m_projects.size(); ++i) {
                 ImGui::TableNextColumn();
 
-                ImGui::PushID(proj.path.c_str());
-                if (ImGui::Button(proj.name.c_str(), ImVec2(200, 300))) {
-                    selectProject(proj.path);
+                ImGui::PushID(m_projects[i].path.c_str());
+                if (ImGui::Button(m_projects[i].name.c_str(), ImVec2(200, 300))) {
+                    selectProject(m_projects[i].path);
+                }
+
+                if (ImGui::BeginPopupContextItem()) {
+                    ImGui::TextDisabled("%s", m_projects[i].name.c_str());
+                    ImGui::Separator();
+
+                    if (ImGui::MenuItem("Move Project Folder...")) {
+                        m_contextMenuTargetIndex = i;
+                        m_showMoveModal = true;
+
+                        std::filesystem::path p(m_projects[i].path);
+                        std::string parent = p.parent_path().string();
+                        strcpy(m_moveProjDestBuffer, parent.c_str());
+                    }
+
+                    if (ImGui::MenuItem("Remove from List")) {
+                        removeProject(i);
+                        ImGui::EndPopup();
+                        ImGui::PopID();
+                        ImGui::EndTable();
+                        goto EndGrid;
+                    }
+
+                    ImGui::EndPopup();
                 }
 
                 float wrapPosX = ImGui::GetCursorPosX() + (cardWidth - 5.f);
                 ImGui::PushTextWrapPos(wrapPosX);
-                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "%s", proj.path.c_str());
+                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "%s", m_projects[i].path.c_str());
                 ImGui::PopTextWrapPos();
 
-                ImGui::Text("Ver: %s", proj.version.c_str());
+                ImGui::Text("Ver: %s", m_projects[i].version.c_str());
                 ImGui::Dummy(ImVec2(0.0f, 10.0f));
                 ImGui::PopID();
             }
             ImGui::EndTable();
         }
 
-        ImGui::Dummy(ImVec2(0.0f, 20.0f));
-        ImGui::Separator();
-
-        ImGui::Text("Add Existing Project");
-        ImGui::SetNextItemWidth(400);
-        ImGui::InputTextWithHint("##pathInput", "Paste absolute project folder path...", m_inputBuffer, IM_ARRAYSIZE(m_inputBuffer));
-        ImGui::SameLine();
-        if (ImGui::Button("Add Project")) {
-            scanAndAddProject(m_inputBuffer);
-            memset(m_inputBuffer, 0, 256);
-        }
-
+    EndGrid:
         ImGui::End();
         ImGui::PopStyleVar(2);
     }
+
+    void ProjectSelector::drawAddExistingModal() {
+            if (m_showAddExistingModal) ImGui::OpenPopup("Add Existing Project");
+
+            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+            ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+            if (ImGui::BeginPopupModal("Add Existing Project", &m_showAddExistingModal, ImGuiWindowFlags_AlwaysAutoResize)) {
+                ImGui::Text("Enter absolute path to project folder:");
+                #ifdef _WIN32
+                ImGui::InputTextWithHint("##pathInput", "C:/Projects/MyProject", m_addExistingBuffer, IM_ARRAYSIZE(m_addExistingBuffer));
+                #else
+                ImGui::InputTextWithHint("##pathInput", "/home/user/Projects/MyProject", m_addExistingBuffer, IM_ARRAYSIZE(m_addExistingBuffer));
+                #endif
+
+                ImGui::Dummy(ImVec2(0, 10));
+
+                if (ImGui::Button("Add", ImVec2(100, 0))) {
+                    scanAndAddProject(m_addExistingBuffer);
+                    m_showAddExistingModal = false;
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel", ImVec2(100, 0))) {
+                    m_showAddExistingModal = false;
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::EndPopup();
+            }
+        }
+
+        void ProjectSelector::drawMoveProjectModal() {
+            if (m_showMoveModal) ImGui::OpenPopup("Move Project");
+
+            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+            ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+            if (ImGui::BeginPopupModal("Move Project", &m_showMoveModal, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+                if (m_contextMenuTargetIndex >= 0 && m_contextMenuTargetIndex < m_projects.size()) {
+                    const auto& proj = m_projects[m_contextMenuTargetIndex];
+                    ImGui::Text("Moving project: '%s'", proj.name.c_str());
+                    ImGui::TextDisabled("Current: %s", proj.path.c_str());
+                    ImGui::Separator();
+
+                    ImGui::Text("New Parent Directory:");
+                    ImGui::InputText("##MoveDir", m_moveProjDestBuffer, IM_ARRAYSIZE(m_moveProjDestBuffer));
+
+                    ImGui::Dummy(ImVec2(0, 15));
+
+                    if (ImGui::Button("Move Folder", ImVec2(120, 0))) {
+                        moveProject(m_contextMenuTargetIndex, m_moveProjDestBuffer);
+                        m_showMoveModal = false;
+                        ImGui::CloseCurrentPopup();
+                    }
+                } else {
+                    m_showMoveModal = false;
+                }
+
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                    m_showMoveModal = false;
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::EndPopup();
+            }
+        }
+
+        void ProjectSelector::removeProject(int index) {
+                if (index >= 0 && index < m_projects.size()) {
+                    log("Removing project from list: %s", m_projects[index].name.c_str());
+                    m_projects.erase(m_projects.begin() + index);
+                    saveKnownProjects();
+                }
+            }
+
+            void ProjectSelector::moveProject(int index, const std::string& newParentDir) {
+                if (index < 0 || index >= m_projects.size()) return;
+
+                auto& proj = m_projects[index];
+                std::filesystem::path oldPath(proj.path);
+                std::filesystem::path newParent(newParentDir);
+                std::filesystem::path newPath = newParent / oldPath.filename();
+
+                if (!std::filesystem::exists(oldPath)) {
+                    log(LogLevel::ERROR, "Source path does not exist!");
+                    return;
+                }
+                if (std::filesystem::exists(newPath)) {
+                    log(LogLevel::ERROR, "Destination already exists: %s", newPath.string().c_str());
+                    return;
+                }
+
+                try {
+                    if (!std::filesystem::exists(newParent)) std::filesystem::create_directories(newParent);
+
+                    std::filesystem::rename(oldPath, newPath);
+                    log("Project moved to: %s", newPath.string().c_str());
+
+                    proj.path = newPath.string();
+
+                    saveKnownProjects();
+
+                } catch (const std::exception& e) {
+                    log(LogLevel::ERROR, "Failed to move project: %s", e.what());
+                }
+            }
 
     void ProjectSelector::loadKnownProjects() {
         if (!std::filesystem::exists(m_configPath)) return;
@@ -188,8 +331,114 @@ namespace vex {
     }
 
     void ProjectSelector::selectProject(const std::string& projectPath) {
-            log("Project selected: %s", projectPath.c_str());
-            m_selectedProjectPath = projectPath;
-            shouldClose = true;
+        log("Project selected: %s", projectPath.c_str());
+        m_selectedProjectPath = projectPath;
+        shouldClose = true;
+    }
+
+    void ProjectSelector::drawCreatorModal() {
+            if (m_showCreatorModal) {
+                ImGui::OpenPopup("Create New Project");
+            }
+
+            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+            ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+            if (ImGui::BeginPopupModal("Create New Project", &m_showCreatorModal, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+                ImGui::Text("Project Name:");
+                ImGui::InputText("##NewProjName", m_newProjName, IM_ARRAYSIZE(m_newProjName));
+
+                ImGui::Spacing();
+
+                ImGui::Text("Location:");
+                ImGui::InputText("##NewProjDir", m_newProjParentDir, IM_ARRAYSIZE(m_newProjParentDir));
+                ImGui::SameLine();
+                ImGui::TextDisabled("(?)");
+                if (ImGui::IsItemHovered())
+                    ImGui::SetTooltip("The folder where your project folder will be created.\nDefault is Documents/VexProjects.");
+
+                ImGui::Dummy(ImVec2(0, 15));
+                ImGui::Separator();
+                ImGui::Dummy(ImVec2(0, 5));
+
+                if (ImGui::Button("Create", ImVec2(120, 0))) {
+                    createNewProject();
+                    m_showCreatorModal = false;
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                    m_showCreatorModal = false;
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::EndPopup();
+            }
         }
+
+        void ProjectSelector::createNewProject() {
+            std::string name(m_newProjName);
+            std::string parent(m_newProjParentDir);
+
+            if (name.empty() || parent.empty()) return;
+
+            std::filesystem::path exeDir = GetExecutableDir();
+            std::filesystem::path templatePath = exeDir / ".." / "Assets" / "default" / "NewProject";
+
+            if (!std::filesystem::exists(templatePath)) {
+                log(LogLevel::ERROR, "Missing template: %s", templatePath.string().c_str());
+                return;
+            }
+
+            std::filesystem::path destParent(parent);
+            std::filesystem::path newProjectPath = destParent / name;
+
+            if (std::filesystem::exists(newProjectPath)) {
+                log(LogLevel::ERROR, "Project already exists at: %s", newProjectPath.string().c_str());
+                return;
+            }
+
+            try {
+                if (!std::filesystem::exists(destParent)) {
+                    std::filesystem::create_directories(destParent);
+                }
+
+                std::filesystem::copy(templatePath, newProjectPath, std::filesystem::copy_options::recursive);
+
+                std::filesystem::path jsonPath = newProjectPath / "VexProject.json";
+                if (std::filesystem::exists(jsonPath)) {
+                    std::ifstream i(jsonPath);
+                    nlohmann::json j;
+                    i >> j;
+
+                    j["project_name"] = name;
+
+                    std::ofstream o(jsonPath);
+                    o << j.dump(4);
+                }
+
+                scanAndAddProject(newProjectPath.string());
+                log("Created project: %s", name.c_str());
+
+            } catch (const std::exception& e) {
+                log(LogLevel::ERROR, "Creation failed: %s", e.what());
+            }
+        }
+
+        std::filesystem::path ProjectSelector::getUserDocumentsDir() {
+        #ifdef _WIN32
+                CHAR path[MAX_PATH];
+                HRESULT result = SHGetFolderPathA(NULL, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, path);
+                if (SUCCEEDED(result)) {
+                    return std::filesystem::path(path);
+                }
+        #else
+                const char* homeDir = getenv("HOME");
+                if (homeDir) {
+                    return std::filesystem::path(homeDir) / "Documents";
+                }
+        #endif
+                return std::filesystem::current_path();
+            }
 }

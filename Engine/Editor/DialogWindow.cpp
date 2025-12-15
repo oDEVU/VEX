@@ -16,7 +16,7 @@
 namespace vex {
 
     DialogWindow::DialogWindow(const char* title, GameInfo gInfo) : Engine(title, 800, 600, gInfo) {
-        dummyCamera = std::make_unique<CameraObject>(*this, "DummyCamera");
+        //dummyCamera = std::make_unique<CameraObject>(*this, "DummyCamera");
         //run();
     }
 
@@ -25,12 +25,6 @@ namespace vex {
     }
 
     void DialogWindow::render() {
-        auto cameraEntity = getCamera();
-        if (cameraEntity == entt::null){
-            log("No camera found. Skipping frame.");
-            return;
-        }
-
         if(getResolutionMode() != ResolutionMode::NATIVE){
             setResolutionMode(ResolutionMode::NATIVE);
         }
@@ -46,7 +40,7 @@ namespace vex {
                 return;
             }
             renderData.imguiTextureID = m_interface->getRenderer().getImGuiTextureID(*m_imgui);
-            m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
+            //m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
             m_imgui->beginFrame();
             m_imgui->executeUIFunctions();
 

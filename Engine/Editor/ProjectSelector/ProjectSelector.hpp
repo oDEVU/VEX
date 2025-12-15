@@ -72,6 +72,49 @@ namespace vex {
                  */
         void selectProject(const std::string& projectPath);
 
+        /**
+         * @brief Draws the modal for creating a new project.
+         */
+        void drawCreatorModal();
+
+        /**
+         * @brief Draws the modal for adding an existing project.
+         */
+        void drawAddExistingModal();
+
+        /**
+         * @brief Draws the modal for moving an existing project.
+         */
+        void drawMoveProjectModal();
+
+        /**
+         * @brief Creates a new project with the given name and path.
+         */
+        void createNewProject();
+
+        /**
+         * @brief Removes a project from the list.
+         */
+        void removeProject(int index);
+
+        /**
+         * @brief Moves a project to a new parent directory.
+         */
+        void moveProject(int index, const std::string& newParentDir);
+
+        /**
+         * @brief Gets the path to the user's documents directory.
+         */
+        std::filesystem::path getUserDocumentsDir();
+
+        char m_newProjName[64] = "NewVexProject";
+        char m_newProjParentDir[512] = "";
+
+        char m_addExistingBuffer[512] = "";
+        char m_moveProjDestBuffer[512] = "";
+
+        int m_contextMenuTargetIndex = -1;
+
         std::vector<ProjectMetadata> m_projects;
         std::string m_configPath = "recent_projects.json";
         char m_inputBuffer[256] = "";
@@ -80,5 +123,8 @@ namespace vex {
 
         bool shouldClose = false;
         uint8_t closeDelay = 5;
+        bool m_showCreatorModal = false;
+        bool m_showAddExistingModal = false;
+        bool m_showMoveModal = false;
     };
 }
