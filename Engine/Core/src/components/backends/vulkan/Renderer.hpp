@@ -15,6 +15,7 @@
 #include "VulkanMesh.hpp"
 #include "components/UI/VexUI.hpp"
 #include "MeshManager.hpp"
+#include "PhysicsDebug.hpp"
 #include "entt/entity/fwd.hpp"
 #include <glm/glm.hpp>
 #include <chrono>
@@ -66,6 +67,7 @@ namespace vex {
                          const entt::entity cameraEntity,
                          entt::registry& registry,
                          int frame,
+                         const std::vector<DebugVertex>* debugLines = nullptr,
                          bool isEditorMode = false);
 
         /// @brief Get the ImGui texture ID
@@ -93,6 +95,11 @@ namespace vex {
         /// @param ImGUIWrapper& ui - ImGUI wrapper.
         /// @param uint64_t frame - Frame number.
         void renderFrame(const entt::entity cameraEntity, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& ui, uint64_t frame);
+
+        #if DEBUG
+            void setDebugPipeline(std::unique_ptr<VulkanPipeline>* pipeline) { m_pp_debugPipeline = pipeline; }
+            void renderDebug(VkCommandBuffer cmd, int frameIndex, const std::vector<DebugVertex>& lines);
+        #endif
 
     private:
         /// @brief Helper function for image transition
@@ -141,5 +148,11 @@ namespace vex {
         VkImageView m_lastUsedView = VK_NULL_HANDLE;
         VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;
         VkDescriptorPool m_localPool = VK_NULL_HANDLE;
+
+        #if DEBUG
+            std::vector<VkBuffer> m_debugBuffers;
+            std::vector<VmaAllocation> m_debugAllocations;
+            std::unique_ptr<VulkanPipeline>* m_pp_debugPipeline = nullptr;
+        #endif
     };
 }

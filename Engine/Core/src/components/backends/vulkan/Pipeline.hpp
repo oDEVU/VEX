@@ -71,6 +71,14 @@ namespace vex {
             const std::string& vertPath,
             const std::string& fragPath);
 
+        /// @brief Creates a debug VkPipeline.
+        /// @param std::string& vertPath - Path to the vertex shader.
+        /// @param std::string& fragPath - Path to the fragment shader.
+        /// @details Creates a debug pipeline using the provided shader paths and puts some needed data in the context for later use, like layouts.
+        #if DEBUG
+        void createDebugPipeline(const std::string& vertPath, const std::string& fragPath);
+        #endif
+
         /// @brief Returns the VkPipeline.
         /// @return VkPipeline - The VkPipeline.
         /// @details Used by renderer (and vex UI since it manages its own rendering logic).

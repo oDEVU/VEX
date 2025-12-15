@@ -112,6 +112,7 @@ set(source_files
         src/components/backends/vulkan/Renderer.hpp
         src/components/backends/vulkan/MeshManager.cpp
         src/components/backends/vulkan/MeshManager.hpp
+        src/components/backends/vulkan/PhysicsDebug.hpp
         src/components/GameObjects/Creators/ModelCreator.cpp
         src/components/GameObjects/GameObject.cpp
     )

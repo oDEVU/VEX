@@ -118,6 +118,10 @@ namespace vex {
         std::function<void(entt::entity self, entt::entity other, const CollisionHit& hit)> onCollisionStay;
         std::function<void(entt::entity self, entt::entity other)> onCollisionExit;
 
+        #if DEBUG
+        bool updated = false;
+        #endif
+
         /// --- Constructors ---
         PhysicsComponent() = default;
 
@@ -237,6 +241,12 @@ namespace vex {
         /// @brief Destructor, simply calls shutdown()
         ~PhysicsSystem();
 
+        /// @brief Sets the debug renderer for the physics system.
+        void setDebugRenderer(JPH::DebugRenderer* renderer);
+
+        /// @brief Draws debug information for the physics system.
+        void drawDebug(bool drawConstraints = true, bool drawWireframe = true);
+
         /// @brief Initializes jolts physics system.
         bool init(size_t maxBodies = 1024);
 
@@ -245,6 +255,9 @@ namespace vex {
 
         /// @brief Updates physics, it is technically fixed time but needs delta to track if required time already passed
         void update(float deltaTime);
+
+        /// @brief Scans registry for PhysicsComponents without bodies and creates them.
+        void SyncBodies();
 
         /// @brief Allows for updating gravity.
         void SetGravityVector(const glm::vec3& gravity) {
@@ -338,6 +351,7 @@ namespace vex {
         JPH::TempAllocatorImpl* m_tempAllocator = nullptr;
         JPH::JobSystem* m_jobSystem = nullptr;
         JPH::PhysicsSystem* m_physicsSystem = nullptr;
+        JPH::DebugRenderer* m_debugRenderer = nullptr;
 
         entt::registry& m_registry;
 

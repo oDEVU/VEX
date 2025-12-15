@@ -91,6 +91,7 @@ public:
     SceneManager* getSceneManager();
     std::shared_ptr<VexUI> createVexUI();// { return std::make_unique<VexUI>(m_interface->getContext(), m_vfs.get(), m_interface->getResources()); }
     int GetCurrentFrame() { return m_frame; }
+    void setRenderPhysicsDebug(bool value) { m_renderPhysicsDebug = value; }
 
     std::vector<std::string> getLastLoadedScenes() { return lastLoadedScenes; }
     void prepareScenesForHotReload();// {
@@ -140,6 +141,7 @@ protected:
     bool m_running = true;
     bool m_paused = false;
     bool m_internally_paused = false; // to pause if the window is in the background.
+    bool m_renderPhysicsDebug = false;
     int m_frame = 0;
 
     GameInfo m_gameInfo;

@@ -54,25 +54,28 @@ namespace vex {
                 if (obj.HasComponent<vex::PhysicsComponent>()) {
                     if (ImGui::CollapsingHeader("PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
                         auto& pc = obj.GetComponent<vex::PhysicsComponent>();
+                        bool changed = false;
 
-                        ImReflect::Input("Shape", pc.shape); // Draw Enum
+                        if (ImReflect::Input("Shape", pc.shape).get<vex::ShapeType>().is_changed()) changed = true;
 
                         if (pc.shape == ShapeType::BOX)
-                            ImGui::DragFloat3("Extents", &pc.boxHalfExtents.x);
+                            changed |= ImGui::DragFloat3("Extents", &pc.boxHalfExtents.x);
                         else if (pc.shape == ShapeType::SPHERE)
-                            ImGui::DragFloat("Radius", &pc.sphereRadius);
+                            changed |= ImGui::DragFloat("Radius", &pc.sphereRadius);
                         else if (pc.shape == ShapeType::CAPSULE)
-                            ImGui::DragFloat2("Capsule", &pc.capsuleRadius);
+                            changed |= ImGui::DragFloat2("Capsule", &pc.capsuleRadius);
                         else if (pc.shape == ShapeType::CYLINDER)
-                            ImGui::DragFloat2("Cylinder", &pc.cylinderRadius);
+                            changed |= ImGui::DragFloat2("Cylinder", &pc.cylinderRadius);
 
-                        ImReflect::Input("Mass", pc.mass);
-                        ImReflect::Input("Friction", pc.friction);
-                        ImReflect::Input("Bounciness", pc.bounce);
-                        ImReflect::Input("Linear Damping", pc.linearDamping);
-                        ImReflect::Input("Angular Damping", pc.angularDamping);
-                        ImReflect::Input("Sensor", pc.isSensor);
-                        ImReflect::Input("Allow Sleeping", pc.allowSleeping);
+                        if (ImReflect::Input("Mass", pc.mass).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Friction", pc.friction).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Bounciness", pc.bounce).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Linear Damping", pc.linearDamping).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Angular Damping", pc.angularDamping).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Sensor", pc.isSensor).get<bool>().is_changed()) changed = true;
+                        if (ImReflect::Input("Allow Sleeping", pc.allowSleeping).get<bool>().is_changed()) changed = true;
+
+                        pc.updated = changed;
 
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));
                         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.71f, 0.10f, 0.10f, 1.0f));

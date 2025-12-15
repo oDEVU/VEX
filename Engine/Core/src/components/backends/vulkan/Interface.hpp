@@ -11,6 +11,7 @@
 
 #include "context.hpp"
 #include "SwapchainManager.hpp"
+#include "PhysicsDebug.hpp"
 #include "Resources.hpp"
 #include "Pipeline.hpp"
 #include "MeshManager.hpp"
@@ -76,6 +77,10 @@ namespace vex {
         /// @brief helper function to wait for GPU to finish
         void WaitForGPUToFinish();
 
+        #if DEBUG
+            VulkanPhysicsDebug* getPhysicsDebug() { return m_p_physicsDebug.get(); }
+        #endif
+
     private:
         VulkanContext m_context;
         SDL_Window* m_p_window;
@@ -88,5 +93,10 @@ namespace vex {
         std::unique_ptr<VulkanPipeline> m_p_fullscreenPipeline;
         std::unique_ptr<MeshManager> m_p_meshManager;
         std::unique_ptr<Renderer> m_p_renderer;
+
+        #if DEBUG
+            std::unique_ptr<VulkanPipeline> m_p_debugPipeline;
+            std::unique_ptr<VulkanPhysicsDebug> m_p_physicsDebug;
+        #endif
     };
 }

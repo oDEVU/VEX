@@ -189,7 +189,10 @@ struct TransformComponent {
 
         /// @brief Method to get the world rotation as a quaternion.
         glm::quat getWorldQuaternion() const {
-            return glm::normalize(glm::quat_cast(matrix()));
+            if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+                return m_registry->get<TransformComponent>(parent).getWorldQuaternion() * m_rotationQuat;
+            }
+            return m_rotationQuat;
         }
 
         /// @brief Method to set world rotation using a quaternion (for physics systems).

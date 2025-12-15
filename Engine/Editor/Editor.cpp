@@ -41,6 +41,9 @@ namespace vex {
         m_vfs = std::make_shared<VirtualFileSystem>();
         m_vfs->initialize(projectBinaryPath);
 
+        m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
+        m_physicsSystem->init();
+
         auto renderRes = m_resolutionManager->getRenderResolution();
         log("Initializing Vulkan interface...");
         m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
@@ -50,9 +53,6 @@ namespace vex {
         log("Initializing engine components...");
 
         m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
-        m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
-        m_physicsSystem->init();
-
         m_sceneManager = std::make_unique<SceneManager>();
 
         getInterface()->getMeshManager().init(static_cast<Engine*>(this));
@@ -76,7 +76,7 @@ namespace vex {
         std::filesystem::path projectConfigPath = projectPath / "VexProject.json";
         log("Loading project configuration from: %s", projectConfigPath.string().c_str());
         LoadProjectConfig(m_projectProperties, projectConfigPath.string());
-        m_SavedProjectProperties = m_projectProperties;
+        //m_SavedProjectProperties = m_projectProperties;
 
         log("Editor initialized successfully");
     }
@@ -94,7 +94,7 @@ namespace vex {
 
         m_fps = static_cast<int>(1.0f / deltaTime);
 
-        if(m_SavedEditorProperties != m_editorProperties){
+        if(m_SavedEditorProperties != m_editorProperties || m_frame == 0){
             SaveConfig(m_editorProperties, "editor_config.json");
             m_SavedEditorProperties = m_editorProperties;
 
@@ -118,6 +118,7 @@ namespace vex {
         }
 
         m_camera->Update(deltaTime);
+        m_physicsSystem->SyncBodies();
         render();
         if(!m_refresh){
             m_frame = 1;
@@ -152,7 +153,17 @@ namespace vex {
                 return;
             }
             renderData.imguiTextureID = m_interface->getRenderer().getImGuiTextureID(*m_imgui);
-            m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame, true);
+
+            const std::vector<DebugVertex>* debugLines = nullptr;
+            if(m_editorProperties.showCollisions){
+                auto* dbg = m_interface->getPhysicsDebug();
+                dbg->Clear();
+                m_physicsSystem->setDebugRenderer(dbg);
+                m_physicsSystem->drawDebug();
+                debugLines = &dbg->GetLines();
+            }
+
+            m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame, debugLines, true);
             m_imgui->beginFrame();
             m_imgui->executeUIFunctions();
 

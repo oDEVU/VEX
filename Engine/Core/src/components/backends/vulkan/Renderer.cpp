@@ -70,14 +70,64 @@ namespace vex {
 
                 vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_screenDescriptorSet);
 
+                #if DEBUG
+                    m_debugBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+                    m_debugAllocations.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+
+                    // Allocate decent size buffer (e.g. 1MB) for lines
+                    VkBufferCreateInfo debugBufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+                    debugBufInfo.size = 1024 * 1024;
+                    debugBufInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+
+                    VmaAllocationCreateInfo debugAllocInfo{};
+                    debugAllocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU; // CPU Write, GPU Read
+
+                    for(size_t i=0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+                        vmaCreateBuffer(m_r_context.allocator, &debugBufInfo, &debugAllocInfo, &m_debugBuffers[i], &m_debugAllocations[i], nullptr);
+                    }
+                #endif
+
         log("Renderer initialized successfully");
     }
 
     Renderer::~Renderer() {
         if (m_screenSampler) vkDestroySampler(m_r_context.device, m_screenSampler, nullptr);
         if (m_localPool) vkDestroyDescriptorPool(m_r_context.device, m_localPool, nullptr);
+
+        #if DEBUG
+            for(size_t i=0; i < m_debugBuffers.size(); i++) {
+                if(m_debugBuffers[i]) vmaDestroyBuffer(m_r_context.allocator, m_debugBuffers[i], m_debugAllocations[i]);
+            }
+        #endif
+
         log("Renderer destroyed");
     }
+
+    #if DEBUG
+    void Renderer::renderDebug(VkCommandBuffer cmd, int frameIndex, const std::vector<DebugVertex>& lines) {
+        if(lines.empty() || !m_pp_debugPipeline) return;
+
+        void* mappedData;
+        vmaMapMemory(m_r_context.allocator, m_debugAllocations[frameIndex], &mappedData);
+        size_t dataSize = lines.size() * sizeof(DebugVertex);
+        if(dataSize > 1024 * 1024) dataSize = 1024 * 1024;
+        memcpy(mappedData, lines.data(), dataSize);
+        vmaUnmapMemory(m_r_context.allocator, m_debugAllocations[frameIndex]);
+
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, (*m_pp_debugPipeline)->get());
+
+        VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(frameIndex);
+
+        uint32_t dynamicOffset = 0;
+        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, (*m_pp_debugPipeline)->layout(), 0, 1, &sceneSet, 1, &dynamicOffset);
+
+        VkBuffer vBuffers[] = { m_debugBuffers[frameIndex] };
+        VkDeviceSize offsets[] = { 0 };
+        vkCmdBindVertexBuffers(cmd, 0, 1, vBuffers, offsets);
+
+        vkCmdDraw(cmd, static_cast<uint32_t>(lines.size()), 1, 0, 0);
+    }
+    #endif
 
     bool Renderer::beginFrame(glm::uvec2 renderResolution, SceneRenderData& outData) {
         try {
@@ -131,7 +181,7 @@ namespace vex {
         }
     }
 
-        void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame, bool isEditorMode) {
+        void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame, const std::vector<DebugVertex>* debugLines, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
 
             auto now = std::chrono::high_resolution_clock::now();
@@ -464,6 +514,12 @@ namespace vex {
                     }
                 }
             }
+
+            #if DEBUG
+                if(debugLines && !debugLines->empty()) {
+                    renderDebug(cmd, data.frameIndex, *debugLines);
+                }
+            #endif
 
             vkCmdEndRendering(cmd);
 

@@ -10,6 +10,8 @@
 
 #include "components/backends/vulkan/Interface.hpp"
 #include "components/backends/vulkan/VulkanImGUIWrapper.hpp"
+#include "components/backends/vulkan/PhysicsDebug.hpp"
+
 #include "components/SceneManager.hpp"
 #include "components/backends/vulkan/context.hpp"
 #include "entt/entity/fwd.hpp"
@@ -35,6 +37,9 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_vfs = std::make_shared<VirtualFileSystem>();
     m_vfs->initialize(GetExecutableDir().string());
 
+    m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
+    m_physicsSystem->init();
+
     auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
@@ -44,9 +49,6 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     log("Initializing engine components...");
 
     m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
-    m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
-    m_physicsSystem->init();
-
     m_sceneManager = std::make_unique<SceneManager>();
 
     getInterface()->getMeshManager().init(this);
@@ -217,7 +219,20 @@ void Engine::render() {
             return;
         }
 
-        m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
+        #if DEBUG
+                const std::vector<DebugVertex>* debugLines = nullptr;
+                if(m_renderPhysicsDebug) {
+                     auto* dbg = m_interface->getPhysicsDebug();
+                     dbg->Clear();
+                     m_physicsSystem->setDebugRenderer(dbg);
+                     m_physicsSystem->drawDebug();
+                     debugLines = &dbg->GetLines();
+                }
+                m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame, debugLines);
+        #else
+                m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
+        #endif
+
         m_interface->getRenderer().composeFrame(renderData, *m_imgui, false);
         m_interface->getRenderer().endFrame(renderData);
     } catch (const std::exception& e) {

@@ -98,9 +98,56 @@ namespace vex {
         }
     }
 
+    void PhysicsSystem::setDebugRenderer(JPH::DebugRenderer* renderer) {
+        m_debugRenderer = renderer;
+    }
+
+    void PhysicsSystem::drawDebug(bool drawConstraints, bool drawWireframe) {
+        #ifdef DEBUG
+            if (m_physicsSystem && m_debugRenderer) {
+                JPH::BodyManager::DrawSettings settings;
+                settings.mDrawShape = drawWireframe;
+                settings.mDrawShapeWireframe = drawWireframe;
+                m_physicsSystem->DrawBodies(settings, m_debugRenderer);
+
+                if (drawConstraints) {
+                    m_physicsSystem->DrawConstraints(m_debugRenderer);
+                }
+            }
+            #endif
+    }
+
     JPH::Quat GlmToJph(const glm::quat& q) {
         return JPH::Quat(q.x, q.y, q.z, q.w);
     }
+
+    void PhysicsSystem::SyncBodies() {
+        #if DEBUG
+            if (!m_physicsSystem) return;
+
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+
+            auto view = m_registry.view<PhysicsComponent, TransformComponent>();
+            for (auto e : view) {
+                auto& tc = view.get<TransformComponent>(e);
+                auto& pc = view.get<PhysicsComponent>(e);
+
+                if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) {
+                    CreateBodyForEntity(e, m_registry, pc);
+                    continue;
+                }else if(pc.updated){
+                    RecreateBodyForEntity(e, pc);
+                    continue;
+                }
+
+                JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
+                JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
+                bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
+            }
+            #else
+            log("This method is meant for debug builds only");
+            #endif
+        }
 
     void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;

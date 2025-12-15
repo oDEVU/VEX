@@ -12,6 +12,7 @@
 /// @brief Structure to hold all configurable editor settings and properties.
 struct EditorProperties {
     bool showFPS = false;
+    bool showCollisions = false;
 
     float assetBrowserThumbnailSize = 64.0f;
 
@@ -21,5 +22,5 @@ struct EditorProperties {
     auto operator<=>(const EditorProperties&) const = default;
 };
 
-IMGUI_REFLECT(EditorProperties, showFPS, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(EditorProperties, showFPS, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);
+IMGUI_REFLECT(EditorProperties, showFPS, showCollisions, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(EditorProperties, showFPS, showCollisions, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);

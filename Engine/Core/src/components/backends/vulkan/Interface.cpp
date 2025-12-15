@@ -347,6 +347,14 @@ namespace vex {
             "Engine/shaders/ScreenFrag.spv"
         );
 
+        #if DEBUG
+            log("Initializing Physics Debug...");
+            m_p_physicsDebug = std::make_unique<VulkanPhysicsDebug>();
+
+            m_p_debugPipeline = std::make_unique<VulkanPipeline>(m_context);
+            m_p_debugPipeline->createDebugPipeline("Engine/shaders/DebugVert.spv", "Engine/shaders/DebugFrag.spv");
+        #endif
+
         log("Initializing Renderer...");
         m_p_renderer = std::make_unique<Renderer>(
             m_context,
@@ -358,6 +366,10 @@ namespace vex {
             m_p_swapchainManager,
             m_p_meshManager
         );
+
+        #if DEBUG
+            m_p_renderer->setDebugPipeline(&m_p_debugPipeline);
+        #endif
 
         log("Vulkan interface initialized successfully");
 
@@ -376,6 +388,10 @@ namespace vex {
         m_p_transPipeline.reset();
         m_p_uiPipeline.reset();
         m_p_fullscreenPipeline.reset();
+        #if DEBUG
+        m_p_debugPipeline.reset();
+        m_p_physicsDebug.reset();
+        #endif
         m_p_swapchainManager->cleanupSwapchain();
         m_p_swapchainManager.reset();
 
