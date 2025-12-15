@@ -60,8 +60,8 @@ namespace vex {
 
         log("Initializing editor components...");
 
-        std::filesystem::path assetsPath = projectBinaryPath;
-        assetsPath = assetsPath / "Assets";
+        std::filesystem::path projectPath = projectBinaryPath;
+        std::filesystem::path assetsPath = projectPath / "Assets";
         m_assetBrowser = std::make_unique<AssetBrowser>(assetsPath.string());
         loadAssetIcons();
 
@@ -72,6 +72,11 @@ namespace vex {
 
         LoadConfig(m_editorProperties, "editor_config.json");
         m_SavedEditorProperties = m_editorProperties;
+
+        std::filesystem::path projectConfigPath = projectPath / "VexProject.json";
+        log("Loading project configuration from: %s", projectConfigPath.string().c_str());
+        LoadProjectConfig(m_projectProperties, projectConfigPath.string());
+        m_SavedProjectProperties = m_projectProperties;
 
         log("Editor initialized successfully");
     }
@@ -103,6 +108,13 @@ namespace vex {
 
             m_camera->GetComponent<vex::CameraComponent>().fov = m_editorProperties.editorCameraFov;
             m_camera->GetComponent<vex::CameraComponent>().farPlane = m_editorProperties.editorCameraRenderDistance;
+        }
+
+        if(m_SavedProjectProperties != m_projectProperties){
+            std::filesystem::path projectPath = m_projectBinaryPath;
+            std::filesystem::path projectConfigPath = projectPath / "VexProject.json";
+            SaveProjectConfig(m_projectProperties, projectConfigPath.string());
+            m_SavedProjectProperties = m_projectProperties;
         }
 
         m_camera->Update(deltaTime);

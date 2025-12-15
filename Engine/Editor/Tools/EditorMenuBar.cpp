@@ -4,6 +4,7 @@
 #include "../Editor.hpp"
 #include "../DialogWindow.hpp"
 #include "../editorProperties.hpp"
+#include "../projectProperties.hpp"
 #include "../execute.hpp"
 
 #include "components/GameInfo.hpp"
@@ -55,7 +56,9 @@ void EditorMenuBar::DrawBar(){
             if (ImGui::MenuItem("Editor Settings")) {
                 OpenEditorSettings();
             }
-            if (ImGui::MenuItem("Project Settings")) {}
+            if (ImGui::MenuItem("Project Settings")) {
+                OpenProjectSettings();
+            }
             ImGui::EndMenu();
         }
 
@@ -106,6 +109,27 @@ void EditorMenuBar::OpenEditorSettings(){
 
                 if (ImGui::Begin("Editor Settings", &openSceneWindow->isOpen)) {
                     ImReflect::Input("##data", editorProperties);
+                }
+                ImGui::End();
+            });
+        };
+
+        m_Windows.push_back(openSceneWindow);
+        openSceneWindow->Create(m_ImGUIWrapper);
+}
+
+void EditorMenuBar::OpenProjectSettings(){
+    std::shared_ptr<BasicEditorWindow> openSceneWindow = std::make_shared<BasicEditorWindow>();
+
+    ProjectProperties* projectProperties = m_editor.getProjectProperties();
+
+        openSceneWindow->Create = [this, openSceneWindow, projectProperties](vex::ImGUIWrapper& wrapper){
+            wrapper.addUIFunction([=, this](){
+                if (!openSceneWindow->isOpen) return;
+                ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+
+                if (ImGui::Begin("Project Settings", &openSceneWindow->isOpen)) {
+                    ImReflect::Input("##data", projectProperties);
                 }
                 ImGui::End();
             });

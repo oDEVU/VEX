@@ -22,4 +22,4 @@ struct EditorProperties {
 };
 
 IMGUI_REFLECT(EditorProperties, showFPS, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(EditorProperties, showFPS, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(EditorProperties, showFPS, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);

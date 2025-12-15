@@ -9,6 +9,7 @@
 #include "EditorCamera.hpp"
 
 #include "editorProperties.hpp"
+#include "projectProperties.hpp"
 
 #include "Tools/EditorMenuBar.hpp"
 #include "Tools/AssetBrowser.hpp"
@@ -69,6 +70,10 @@ namespace vex {
         /// @brief Gets a pointer to the mutable editor properties.
         /// @return EditorProperties* - Pointer to the editor properties structure.
         EditorProperties* getEditorProperties() { return &m_editorProperties; }
+
+        /// @brief Gets a pointer to the mutable project properties.
+        /// @return ProjectProperties* - Pointer to the project properties structure.
+        ProjectProperties* getProjectProperties() { return &m_projectProperties; }
 
         /// @brief Handler for post-hot-reload operations.
         void OnHotReload();
@@ -150,7 +155,40 @@ namespace vex {
                     file >> j;
                     data = j;
                 } catch (const std::exception& e) {
-                    std::cerr << "JSON parsing error: " << e.what() << std::endl;
+                    //std::cerr << "JSON parsing error: " << e.what() << std::endl;
+                    vex::handle_exception(e);
+                }
+            }
+        }
+
+        /**
+                 * @brief Saves the current ProjectProperties configuration to a JSON file.
+                 * @param const ProjectProperties& data - The data structure to serialize and save.
+                 * @param const std::string& filename - The path/filename of the JSON file.
+                 */
+        void SaveProjectConfig(const ProjectProperties& data, const std::string& filename) {
+            std::ofstream file(filename);
+            if (file.is_open()) {
+                nlohmann::json j = data;
+                file << j.dump(4);
+            }
+        }
+
+        /**
+                 * @brief Loads the ProjectProperties configuration from a JSON file.
+                 * @param ProjectProperties& data - The data structure to deserialize into.
+                 * @param const std::string& filename - The path/filename of the JSON file.
+                 */
+        void LoadProjectConfig(ProjectProperties& data, const std::string& filename) {
+            std::ifstream file(filename);
+            if (file.is_open()) {
+                try {
+                    nlohmann::json j;
+                    file >> j;
+                    data = j;
+                } catch (const std::exception& e) {
+                    //std::cerr << "JSON parsing error: " << e.what() << std::endl;
+                    vex::handle_exception(e);
                 }
             }
         }
@@ -177,6 +215,9 @@ namespace vex {
 
         EditorProperties m_editorProperties;
         EditorProperties m_SavedEditorProperties;
+
+        ProjectProperties m_projectProperties;
+        ProjectProperties m_SavedProjectProperties;
 
         int m_fps = 0;
 

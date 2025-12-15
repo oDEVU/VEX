@@ -188,24 +188,10 @@ private:
 /// @brief Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.
 /// @details Example usage:
 /// @code
-/// void LoadCameraComponent(GameObject& obj, const nlohmann::json& json) {
-///     CameraComponent comp;
-///     if (json.contains("fov") && !json["fov"].is_array()) {
-///         comp.fov = json["fov"].get<float>();
-///     }
-///     if (json.contains("nearPlane") && !json["nearPlane"].is_array()) {
-///         comp.nearPlane = json["nearPlane"].get<float>();
-///     }
-///     if (json.contains("farPlane") && !json["farPlane"].is_array()) {
-///         comp.farPlane = json["farPlane"].get<float>();
-///     }
-///     obj.AddComponent(comp);
-/// }
-///
-/// REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
+/// REGISTER_COMPONENT(CameraComponent, fov, nearPlane, farPlane);
 /// @endcode
 #define REGISTER_COMPONENT(Type, ...) \
-    namespace vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Type, __VA_ARGS__) } \
+    namespace vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__) } \
     IMGUI_REFLECT(Type, __VA_ARGS__) \
     namespace { \
         struct VEX_UNIQUE_NAME(Registrar_) { \

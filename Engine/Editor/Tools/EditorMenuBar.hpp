@@ -37,6 +37,9 @@ public:
     /// @brief Opens the editor settings window/menu.
     void OpenEditorSettings();
 
+    /// @brief Opens the project settings window/menu.
+    void OpenProjectSettings();
+
     /// @brief Saves the current scene to a new file path.
     void SaveSceneAs();
 
