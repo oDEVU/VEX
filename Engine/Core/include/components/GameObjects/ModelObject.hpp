@@ -20,12 +20,9 @@ namespace vex {
                 AddComponent(TransformComponent{transformComponent});
                 AddComponent(MeshComponent{meshComponent});
             }
-/// @brief Destructor for ModelObject class. Cleans up the mesh data and logs a message.
+            /// @brief Destructor for ModelObject class.
             ~ModelObject() override {
-                cleanup(GetComponent<NameComponent>().name,GetComponent<MeshComponent>());
-                GetComponent<MeshComponent>().meshData.clear();
                 log("Model destructor called");
             }
-            std::function<void(std::string&, MeshComponent)> cleanup;
     };
 }

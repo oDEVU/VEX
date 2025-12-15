@@ -91,7 +91,7 @@ namespace vex {
 
         //entt::entity modelEntity = m_p_engine->getRegistry().create();
         ModelObject* modelObject = new ModelObject(*m_p_engine, tempName, meshComponent, transformComponent);
-        modelObject->cleanup = [this](std::string& tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };
+        //modelObject->cleanup = [this](std::string& tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };
         return modelObject;
     }
 
@@ -136,31 +136,154 @@ namespace vex {
     }
 
     std::unique_ptr<VulkanMesh>& MeshManager::getVulkanMeshByMesh(MeshComponent& meshComponent) {
-        if (!m_vulkanMeshes.count(meshComponent.meshData.meshPath)){
+        std::string& installedPath = m_installedPaths[meshComponent.id];
+        std::string requestedPath = meshComponent.meshData.meshPath;
 
-            static std::unique_ptr<VulkanMesh> nullMesh = nullptr;
+        if (installedPath != requestedPath) {
+            log("Swapping mesh %s -> %s", installedPath.c_str(), requestedPath.c_str());
 
-            #if DEBUG
-            std::string realPath = GetAssetPath(meshComponent.meshData.meshPath);
+            releaseMeshReference(installedPath, meshComponent);
 
-            if (meshComponent.meshData.meshPath == "" || !m_vfs->file_exists(realPath)) {
-                return nullMesh;
+            installedPath = requestedPath;
+
+            bool alreadyExisted = m_vulkanMeshes.count(requestedPath) > 0;
+
+            registerVulkanMesh(meshComponent);
+
+            if (alreadyExisted && m_vulkanMeshes.count(requestedPath)) {
+                m_vulkanMeshes.at(requestedPath)->addInstance();
             }
+        } else {
+            registerVulkanMesh(meshComponent);
+        }
 
-            std::filesystem::path p(realPath);
-            std::string ext = p.extension().string();
-            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+        if (m_vulkanMeshes.count(requestedPath)) {
+            return m_vulkanMeshes.at(requestedPath);
+        }
 
-            bool isValidMesh = (ext == ".fbx" || ext == ".obj" || ext == ".gltf" || ext == ".glb");
+        static std::unique_ptr<VulkanMesh> nullMesh = nullptr;
+        return nullMesh;
+    }
 
-            if (!isValidMesh) {
-                return nullMesh;
+    void MeshManager::registerVulkanMesh(MeshComponent& meshComponent) {
+        const std::string& path = meshComponent.meshData.meshPath;
+        if (m_vulkanMeshes.count(path)) {
+            return;
+        }
+        if (path != "") {
+            #if DEBUG
+            std::string realPath = GetAssetPath(path);
+            if (path.empty() || !m_vfs->file_exists(realPath)) {
+                log(LogLevel::WARNING, "Skipping registration for invalid path: %s", path.c_str());
+                return;
             }
             #endif
-
-            meshComponent = loadMesh(meshComponent.meshData.meshPath);
+            meshComponent = loadMesh(path);
         }
-        return m_vulkanMeshes.at(meshComponent.meshData.meshPath);
+
+        meshComponent.textureNames.clear();
+        std::unordered_set<std::string> uniqueTextures;
+
+        for (const auto& submesh : meshComponent.meshData.submeshes) {
+            if (!submesh.texturePath.empty()) {
+                uniqueTextures.insert(submesh.texturePath);
+                 meshComponent.textureNames.push_back(submesh.texturePath);
+            }
+        }
+
+        log("Lazy-loading %zu submesh textures for %s", uniqueTextures.size(), path.c_str());
+
+        for (const auto& texPath : uniqueTextures) {
+            if (!m_p_resources->textureExists(texPath)) {
+                try {
+                    m_p_resources->loadTexture(texPath, texPath, m_vfs);
+                    log("Loaded texture: %s", texPath.c_str());
+                } catch (const std::exception& e) {
+                    log(LogLevel::ERROR, "Failed to load texture %s", texPath.c_str());
+                }
+            }
+        }
+
+        try {
+            log("Initializing Vulkan mesh for: %s", path.c_str());
+
+            auto newVulkanMesh = std::make_unique<VulkanMesh>(m_r_context);
+            newVulkanMesh->upload(meshComponent.meshData);
+            newVulkanMesh->addInstance();
+
+            m_vulkanMeshes.emplace(path, std::move(newVulkanMesh));
+
+            log("Successfully registered mesh: %s", path.c_str());
+
+        } catch (const std::exception& e) {
+            log(LogLevel::ERROR, "Failed to register VulkanMesh: %s", path.c_str());
+        }
+    }
+
+    void MeshManager::onMeshComponentConstruct(entt::registry& registry, entt::entity entity) {
+        auto& meshComponent = registry.get<MeshComponent>(entity);
+
+        if (!m_freeModelIds.empty()) {
+            meshComponent.id = m_freeModelIds.back();
+            m_freeModelIds.pop_back();
+        } else {
+            meshComponent.id = m_nextModelId++;
+        }
+
+        m_installedPaths[meshComponent.id] = meshComponent.meshData.meshPath;
+        const std::string& path = meshComponent.meshData.meshPath;
+
+        bool alreadyExisted = m_vulkanMeshes.count(path) > 0;
+
+        registerVulkanMesh(meshComponent);
+
+        if (alreadyExisted) {
+            m_vulkanMeshes.at(path)->addInstance();
+        }
+    }
+
+    void MeshManager::onMeshComponentDestroy(entt::registry& registry, entt::entity entity) {
+        auto& meshComponent = registry.get<MeshComponent>(entity);
+
+        m_freeModelIds.push_back(meshComponent.id);
+
+        if (m_vulkanMeshes.count(meshComponent.meshData.meshPath)) {
+            auto& vulkanMesh = m_vulkanMeshes.at(meshComponent.meshData.meshPath);
+            vulkanMesh->removeInstance();
+
+            log("Reference count decreased for: %s (Total: %d)", meshComponent.meshData.meshPath.c_str(), vulkanMesh->getNumOfInstances());
+
+            if (vulkanMesh->getNumOfInstances() <= 0) {
+                log("Cleaning up unused mesh: %s", meshComponent.meshData.meshPath.c_str());
+
+                for (const auto& tex : meshComponent.textureNames) {
+                    m_p_resources->unloadTexture(tex);
+                }
+
+                m_vulkanMeshes.erase(meshComponent.meshData.meshPath);
+            }
+        }
+    }
+
+    void MeshManager::releaseMeshReference(const std::string& path, MeshComponent& ownerComp) {
+        if (path.empty()) return;
+
+        if (m_vulkanMeshes.count(path)) {
+            auto& vulkanMesh = m_vulkanMeshes.at(path);
+            vulkanMesh->removeInstance();
+
+            log("Ref count decreased for: %s (Remaining: %d)", path.c_str(), vulkanMesh->getNumOfInstances());
+
+            if (vulkanMesh->getNumOfInstances() <= 0) {
+                log("Cleaning up unused mesh: %s", path.c_str());
+
+                for (const auto& tex : ownerComp.textureNames) {
+                    m_p_resources->unloadTexture(tex);
+                }
+                ownerComp.textureNames.clear();
+                m_vulkanMeshes.erase(path);
+            }
+        }
     }
 
     void MeshManager::destroyModel(std::string& name, MeshComponent meshComponent) {

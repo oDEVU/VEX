@@ -12,7 +12,7 @@
 
 /// @brief Structure to hold all configurable project settings and properties.
 struct ProjectProperties {
-    std::string project_name = "New Project";
+    std::string project_name = "NewVexProject";
     std::string main_scene = "Assets/scenes/main.json";
     std::string icon_path = "";
     std::string version = "1";
