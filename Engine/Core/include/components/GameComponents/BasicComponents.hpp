@@ -119,7 +119,7 @@ struct TransformComponent {
     #ifdef DEBUG
     void convertRot(){
         setLocalRotation(rotation);
-        rotation = glm::degrees(glm::eulerAngles(m_rotationQuat));
+        //rotation = glm::degrees(glm::eulerAngles(m_rotationQuat));
     }
     #endif
 

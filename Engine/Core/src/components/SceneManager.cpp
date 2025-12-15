@@ -88,6 +88,40 @@ namespace vex {
                 }
             }
             #endif
+
+
+
+                    #if DEBUG
+                    template<>
+                        void vex::GenericComponentInspector<vex::TransformComponent>(GameObject& obj) {
+                            if (obj.HasComponent<vex::TransformComponent>()) {
+                                if (ImGui::CollapsingHeader("TransformComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                                    auto& tc = obj.GetComponent<vex::TransformComponent>();
+
+                                    if(( tc.rotation.x == 0 && tc.rotation.y == 0 && tc.rotation.z == 0 )&& (tc.getLocalRotation().x != 0 || tc.getLocalRotation().y != 0 || tc.getLocalRotation().z != 0)){
+                                        tc.rotation = tc.getLocalRotation();
+                                    }
+
+                                    ImGui::DragFloat3("Position", &tc.position.x);
+                                    ImGui::DragFloat3("Rotation", &tc.rotation.x);
+                                    ImGui::DragFloat3("Scale", &tc.scale.x);
+
+                                    tc.convertRot();
+
+                                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));
+                                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.71f, 0.10f, 0.10f, 1.0f));
+                                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.30f, 0.03f, 0.03f, 1.0f));
+                                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.94f, 0.85f, 0.85f, 1.0f));
+
+                                    if (ImGui::Button("Remove")) {
+                                        obj.GetEngine().getRegistry().remove<vex::PhysicsComponent>(obj.GetEntity());
+                                    }
+
+                                    ImGui::PopStyleColor(4);
+                                }
+                            }
+                        }
+                        #endif
 }
 
 

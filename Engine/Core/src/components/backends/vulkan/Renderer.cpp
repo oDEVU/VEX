@@ -298,7 +298,7 @@ namespace vex {
 
                     #if DEBUG
                     if(isEditorMode && frame > 0){
-                        transform.setLocalRotation(transform.rotation);
+                        transform.convertRot();
                     }else if(isEditorMode){
                         transform.rotation = transform.getLocalRotation();
                     }
