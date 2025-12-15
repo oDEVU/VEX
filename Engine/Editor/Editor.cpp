@@ -312,8 +312,8 @@ namespace vex {
             tc.setLocalPosition(translation);
             tc.setLocalScale(scale);
 
-            glm::vec3 eulerRot = glm::degrees(glm::eulerAngles(rotation));
-            tc.setLocalRotation(eulerRot);
+            tc.rotation = glm::degrees(glm::eulerAngles(rotation));
+            tc.convertRot();
 
             tc.enableLastTransformed();
         }
