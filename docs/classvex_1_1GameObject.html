@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -111,9 +112,10 @@ Inheritance diagram for vex::GameObject:</div>
  <div class="center">
   <img src="classvex_1_1GameObject.png" usemap="#vex_3A_3AGameObject_map" alt=""/>
   <map id="vex_3A_3AGameObject_map" name="vex_3A_3AGameObject_map">
-<area href="classvex_1_1CameraObject.html" title="Basic camera object class. it only contains transform and camera components." alt="vex::CameraObject" shape="rect" coords="0,56,126,80"/>
-<area href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe..." alt="vex::ModelObject" shape="rect" coords="136,56,262,80"/>
-<area href="classEditorCameraObject.html" title="A specialized camera object for use within the editor, supporting free-fly movement and input process..." alt="EditorCameraObject" shape="rect" coords="0,112,126,136"/>
+<area href="classvex_1_1BasicCamera.html" alt="vex::BasicCamera" shape="rect" coords="0,56,126,80"/>
+<area href="classvex_1_1CameraObject.html" title="Basic camera object class. it only contains transform and camera components." alt="vex::CameraObject" shape="rect" coords="136,56,262,80"/>
+<area href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe..." alt="vex::ModelObject" shape="rect" coords="272,56,398,80"/>
+<area href="classEditorCameraObject.html" title="A specialized camera object for use within the editor, supporting free-fly movement and input process..." alt="EditorCameraObject" shape="rect" coords="136,112,262,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -318,6 +320,8 @@ template&lt;typename T&gt; </div>
 
 <p>virtual void function you override to implement custom behavior when the game starts. </p>
 
+<p>Reimplemented in <a class="el" href="classvex_1_1BasicCamera.html#a3d328653828c54705ac3c5572982816d">vex::BasicCamera</a>.</p>
+
 <p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00089">89</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
@@ -401,7 +405,7 @@ template&lt;typename T&gt; </div>
 <p>Function that returns engine reference allowing your custom Object to use engine provided methods. </p>
 <p>Example usage: </p><div class="fragment"><div class="line"><a class="code hl_function" href="#ac604d8d34192936d4c8ab5747310eeb5">GetEngine</a>().<a class="code hl_function" href="classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a">setResolutionMode</a>(<a class="code hl_enumvalue" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485">ResolutionMode::PS1_SHARP</a>)</div>
 <div class="ttc" id="aResolutionManager_8hpp_html_a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485"><div class="ttname"><a href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485">vex::ResolutionMode::PS1_SHARP</a></div><div class="ttdeci">@ PS1_SHARP</div><div class="ttdoc">Integer-scaled resolution closest to PS1.</div><div class="ttdef"><b>Definition</b> <a href="ResolutionManager_8hpp_source.html#l00045">ResolutionManager.hpp:45</a></div></div>
-<div class="ttc" id="aclassvex_1_1Engine_html_a9565d468a161b49467252c66a15e9d4a"><div class="ttname"><a href="classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a">vex::Engine::setResolutionMode</a></div><div class="ttdeci">void setResolutionMode(ResolutionMode mode)</div><div class="ttdoc">Function allowing for changing resolution mode at runtime.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8cpp_source.html#l00134">Engine.cpp:134</a></div></div>
+<div class="ttc" id="aclassvex_1_1Engine_html_a9565d468a161b49467252c66a15e9d4a"><div class="ttname"><a href="classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a">vex::Engine::setResolutionMode</a></div><div class="ttdeci">void setResolutionMode(ResolutionMode mode)</div><div class="ttdoc">Function allowing for changing resolution mode at runtime.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8cpp_source.html#l00140">Engine.cpp:140</a></div></div>
 <div class="ttc" id="aclassvex_1_1GameObject_html_ac604d8d34192936d4c8ab5747310eeb5"><div class="ttname"><a href="#ac604d8d34192936d4c8ab5747310eeb5">vex::GameObject::GetEngine</a></div><div class="ttdeci">Engine &amp; GetEngine()</div><div class="ttdoc">Function that returns engine reference allowing your custom Object to use engine provided methods.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00100">GameObject.hpp:100</a></div></div>
 </div><!-- fragment --><p>You could technically just use m_engine but its highly discarded as it can lead to confusion and potential bugs. </p>
 
@@ -627,7 +631,7 @@ template&lt;typename T&gt; </div>
 
 <p>virtual void function you override to implement custom behavior when the game updates (eg. every frame). </p>
 
-<p>Reimplemented in <a class="el" href="classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec">EditorCameraObject</a>.</p>
+<p>Reimplemented in <a class="el" href="classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec">EditorCameraObject</a>, and <a class="el" href="classvex_1_1BasicCamera.html#a209a4bae13f69db079e601fc0250dd97">vex::BasicCamera</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00091">91</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 

@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -783,7 +784,145 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>        vkDestroyShaderModule(m_r_context.device, fragModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>    }</div>
 </div>
-<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>}</div>
+<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span> </div>
+<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span><span class="preprocessor">    #if DEBUG</span></div>
+<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>        <span class="keywordtype">void</span> VulkanPipeline::createDebugPipeline(<span class="keyword">const</span> std::string&amp; vertShaderPath, <span class="keyword">const</span> std::string&amp; fragShaderPath) {</div>
+<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Debug Pipeline...&quot;</span>);</div>
+<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span> </div>
+<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>            <span class="keyword">auto</span> vertShaderCode = readFile(vertShaderPath);</div>
+<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>            <span class="keyword">auto</span> fragShaderCode = readFile(fragShaderPath);</div>
+<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span> </div>
+<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>            <span class="keyword">auto</span> createShaderModule = [&amp;](<span class="keyword">const</span> std::vector&lt;char&gt;&amp; code) {</div>
+<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>                VkShaderModuleCreateInfo createInfo{};</div>
+<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>                createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;</div>
+<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>                createInfo.codeSize = code.size();</div>
+<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>                createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
+<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>                VkShaderModule shaderModule;</div>
+<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span>                <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>                    throw_error(<span class="stringliteral">&quot;Failed to create debug shader module&quot;</span>);</div>
+<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>                }</div>
+<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>                <span class="keywordflow">return</span> shaderModule;</div>
+<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>            };</div>
+<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span> </div>
+<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>            VkShaderModule vertModule = createShaderModule(vertShaderCode);</div>
+<div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>            VkShaderModule fragModule = createShaderModule(fragShaderCode);</div>
+<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span> </div>
+<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>            VkPipelineShaderStageCreateInfo vertStage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};</div>
+<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>            vertStage.stage = VK_SHADER_STAGE_VERTEX_BIT;</div>
+<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>            vertStage.module = vertModule;</div>
+<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>            vertStage.pName = <span class="stringliteral">&quot;main&quot;</span>;</div>
+<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span> </div>
+<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>            VkPipelineShaderStageCreateInfo fragStage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};</div>
+<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>            fragStage.stage = VK_SHADER_STAGE_FRAGMENT_BIT;</div>
+<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>            fragStage.module = fragModule;</div>
+<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>            fragStage.pName = <span class="stringliteral">&quot;main&quot;</span>;</div>
+<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span> </div>
+<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>            VkPipelineShaderStageCreateInfo shaderStages[] = { vertStage, fragStage };</div>
+<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span> </div>
+<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>            VkVertexInputBindingDescription bindingDesc{};</div>
+<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>            bindingDesc.binding = 0;</div>
+<div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>            bindingDesc.stride = <span class="keyword">sizeof</span>(float) * 7;</div>
+<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>            bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;</div>
+<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span> </div>
+<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>            std::vector&lt;VkVertexInputAttributeDescription&gt; attrDesc(2);</div>
+<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span> </div>
+<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>            attrDesc[0].binding = 0;</div>
+<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span>            attrDesc[0].location = 0;</div>
+<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>            attrDesc[0].format = VK_FORMAT_R32G32B32_SFLOAT;</div>
+<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>            attrDesc[0].offset = 0;</div>
+<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span> </div>
+<div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>            attrDesc[1].binding = 0;</div>
+<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span>            attrDesc[1].location = 1;</div>
+<div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>            attrDesc[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;</div>
+<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>            attrDesc[1].offset = <span class="keyword">sizeof</span>(float) * 3;</div>
+<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span> </div>
+<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>            VkPipelineVertexInputStateCreateInfo vertexInputInfo{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>            vertexInputInfo.vertexBindingDescriptionCount = 1;</div>
+<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>            vertexInputInfo.pVertexBindingDescriptions = &amp;bindingDesc;</div>
+<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>            vertexInputInfo.vertexAttributeDescriptionCount = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(attrDesc.size());</div>
+<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>            vertexInputInfo.pVertexAttributeDescriptions = attrDesc.data();</div>
+<div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span> </div>
+<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>            VkPipelineInputAssemblyStateCreateInfo inputAssembly{VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>            inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;</div>
+<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>            inputAssembly.primitiveRestartEnable = VK_FALSE;</div>
+<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span> </div>
+<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>            VkPipelineViewportStateCreateInfo viewportState{VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>            viewportState.viewportCount = 1;</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>            viewportState.scissorCount = 1;</div>
+<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span> </div>
+<div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span>            VkPipelineRasterizationStateCreateInfo rasterizer{VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>            rasterizer.depthClampEnable = VK_FALSE;</div>
+<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>            rasterizer.rasterizerDiscardEnable = VK_FALSE;</div>
+<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span>            rasterizer.polygonMode = VK_POLYGON_MODE_FILL;</div>
+<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>            rasterizer.lineWidth = 1.0f;</div>
+<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>            rasterizer.cullMode = VK_CULL_MODE_NONE;</div>
+<div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span>            rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;</div>
+<div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span>            rasterizer.depthBiasEnable = VK_FALSE;</div>
+<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span> </div>
+<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span>            VkPipelineMultisampleStateCreateInfo multisampling{VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>            multisampling.sampleShadingEnable = VK_FALSE;</div>
+<div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span>            multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;</div>
+<div class="line"><a id="l00752" name="l00752"></a><span class="lineno">  752</span> </div>
+<div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span>            VkPipelineColorBlendAttachmentState colorBlendAttachment{};</div>
+<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>            colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;</div>
+<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span>            colorBlendAttachment.blendEnable = VK_FALSE;</div>
+<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span> </div>
+<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>            VkPipelineColorBlendStateCreateInfo colorBlending{VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>            colorBlending.logicOpEnable = VK_FALSE;</div>
+<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>            colorBlending.attachmentCount = 1;</div>
+<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>            colorBlending.pAttachments = &amp;colorBlendAttachment;</div>
+<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span> </div>
+<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>            VkPipelineDepthStencilStateCreateInfo depthStencil{VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>            depthStencil.depthTestEnable = VK_TRUE;</div>
+<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>            depthStencil.depthWriteEnable = VK_TRUE;</div>
+<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>            depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;</div>
+<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>            depthStencil.stencilTestEnable = VK_FALSE;</div>
+<div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span> </div>
+<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>            std::vector&lt;VkDynamicState&gt; dynamicStates = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };</div>
+<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>            VkPipelineDynamicStateCreateInfo dynamicState{VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO};</div>
+<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>            dynamicState.dynamicStateCount = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(dynamicStates.size());</div>
+<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>            dynamicState.pDynamicStates = dynamicStates.data();</div>
+<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span> </div>
+<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>            VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};</div>
+<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>            pipelineLayoutInfo.setLayoutCount = 1;</div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>            pipelineLayoutInfo.pSetLayouts = &amp;m_r_context.uboDescriptorSetLayout;</div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span> </div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create debug pipeline layout&quot;</span>);</div>
+<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>            }</div>
+<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span> </div>
+<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>            VkPipelineRenderingCreateInfo renderingCreateInfo{VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO};</div>
+<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>            renderingCreateInfo.colorAttachmentCount = 1;</div>
+<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>            renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
+<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>            renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
+<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span> </div>
+<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>            VkGraphicsPipelineCreateInfo pipelineInfo{VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};</div>
+<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>            pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
+<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>            pipelineInfo.stageCount = 2;</div>
+<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>            pipelineInfo.pStages = shaderStages;</div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>            pipelineInfo.pVertexInputState = &amp;vertexInputInfo;</div>
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>            pipelineInfo.pInputAssemblyState = &amp;inputAssembly;</div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>            pipelineInfo.pViewportState = &amp;viewportState;</div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>            pipelineInfo.pRasterizationState = &amp;rasterizer;</div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>            pipelineInfo.pMultisampleState = &amp;multisampling;</div>
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>            pipelineInfo.pColorBlendState = &amp;colorBlending;</div>
+<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>            pipelineInfo.pDepthStencilState = &amp;depthStencil;</div>
+<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>            pipelineInfo.pDynamicState = &amp;dynamicState;</div>
+<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>            pipelineInfo.layout = m_layout;</div>
+<div class="line"><a id="l00799" name="l00799"></a><span class="lineno">  799</span>            pipelineInfo.subpass = 0;</div>
+<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>            pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span> </div>
+<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>            <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create debug graphics pipeline&quot;</span>);</div>
+<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>            }</div>
+<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span> </div>
+<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span>            vkDestroyShaderModule(m_r_context.device, vertModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span>            vkDestroyShaderModule(m_r_context.device, fragModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00808" name="l00808"></a><span class="lineno">  808</span> </div>
+<div class="line"><a id="l00809" name="l00809"></a><span class="lineno">  809</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Debug Pipeline created successfully.&quot;</span>);</div>
+<div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span>        }</div>
+<div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span><span class="preprocessor">    #endif</span></div>
+<div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>}</div>
 <div class="ttc" id="aPipeline_8hpp_html"><div class="ttname"><a href="Pipeline_8hpp.html">Pipeline.hpp</a></div><div class="ttdoc">This file defines VulkanPipeline Class.</div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a4e6b47a0e253b2f2e6a2f7118adea69d"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d">vex::VulkanPipeline::createUIPipeline</a></div><div class="ttdeci">void createUIPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDesc, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attrDesc)</div><div class="ttdoc">Creates a UI VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00411">Pipeline.cpp:411</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a98622acc241688b8fa46d13af4cd376b"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">vex::VulkanPipeline::VulkanPipeline</a></div><div class="ttdeci">VulkanPipeline(VulkanContext &amp;r_context)</div><div class="ttdoc">Constructor for VulkanPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00008">Pipeline.cpp:8</a></div></div>

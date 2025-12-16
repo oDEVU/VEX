@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -119,7 +120,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aba1457018582186f98cb75739148351f" id="r_aba1457018582186f98cb75739148351f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba1457018582186f98cb75739148351f">createFullscreenPipeline</a> (const std::string &amp;vertPath, const std::string &amp;fragPath)</td></tr>
 <tr class="memdesc:aba1457018582186f98cb75739148351f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a fullscreen VkPipeline.  <br /></td></tr>
 <tr class="memitem:aa2b529bcec43595666b92dca25adbd1a" id="r_aa2b529bcec43595666b92dca25adbd1a"><td class="memItemLeft" align="right" valign="top">VkPipeline&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2b529bcec43595666b92dca25adbd1a">get</a> () const</td></tr>
-<tr class="memdesc:aa2b529bcec43595666b92dca25adbd1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the VkPipeline.  <br /></td></tr>
+<tr class="memdesc:aa2b529bcec43595666b92dca25adbd1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a debug VkPipeline.  <br /></td></tr>
 <tr class="memitem:a3c4ff44fe6570165185103439aaada29" id="r_a3c4ff44fe6570165185103439aaada29"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c4ff44fe6570165185103439aaada29">layout</a> () const</td></tr>
 <tr class="memdesc:a3c4ff44fe6570165185103439aaada29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the VkPipelineLayout.  <br /></td></tr>
 <tr class="memitem:aa4a1d52319fe905983561f4d04473d49" id="r_aa4a1d52319fe905983561f4d04473d49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4a1d52319fe905983561f4d04473d49">updateViewport</a> (glm::uvec2 resolution)</td></tr>
@@ -379,11 +380,19 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns the VkPipeline. </p>
-<dl class="section return"><dt>Returns</dt><dd>VkPipeline - The VkPipeline.</dd></dl>
+<p>Creates a debug VkPipeline. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::string&amp;</td><td>vertPath - Path to the vertex shader. </td></tr>
+    <tr><td class="paramname">std::string&amp;</td><td>fragPath - Path to the fragment shader.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Creates a debug pipeline using the provided shader paths and puts some needed data in the context for later use, like layouts.</p>
+<p>Returns the VkPipeline. </p><dl class="section return"><dt>Returns</dt><dd>VkPipeline - The VkPipeline.</dd></dl>
 <p>Used by renderer (and vex UI since it manages its own rendering logic). </p>
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00077">77</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00085">85</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -414,7 +423,7 @@ Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>VkPipelineLayout - The VkPipelineLayout.</dd></dl>
 <p>Used by renderer (and vex UI since it manages its own rendering logic). </p>
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00082">82</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00090">90</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -494,7 +503,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00094">94</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00102">102</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -518,7 +527,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00092">92</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00100">100</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -542,7 +551,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00091">91</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00099">99</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>
@@ -566,7 +575,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00090">90</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Pipeline_8hpp_source.html#l00098">98</a> of file <a class="el" href="Pipeline_8hpp_source.html">Pipeline.hpp</a>.</p>
 
 </div>
 </div>

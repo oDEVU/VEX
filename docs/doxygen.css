@@ -38,9 +38,9 @@ h1.groupheader {
 h2.groupheader {
 	box-shadow: 12px 0 black,
 		   -12px 0 black,
-		    12px 1px #4D1C13,
-		   -12px 1px #4D1C13;
-	color: #DF8F7F;
+		    12px 1px #303030,
+		   -12px 1px #303030;
+	color: #AFAFAF;
 	font-size: 150%;
 	font-weight: normal;
 	margin-top: 1.75em;
@@ -52,8 +52,8 @@ h2.groupheader {
 td h2.groupheader {
 	box-shadow: 13px 0 black,
 		   -13px 0 black,
-		    13px 1px #4D1C13,
-		   -13px 1px #4D1C13;
+		    13px 1px #303030,
+		   -13px 1px #303030;
 }
 
 h3.groupheader {
@@ -132,7 +132,7 @@ div.navtab {
 	padding-right: 6px;
 	text-align: right;
 	line-height: 110%;
-	background-color: #2C100A;
+	background-color: #1B1B1B;
 }
 
 div.navtab table {
@@ -148,7 +148,7 @@ td.navtabHL {
 	padding-right: 6px;
 	padding-left: 6px;
 	border-radius: 0 6px 6px 0;
-	background-color: #4D1C13;
+	background-color: #303030;
 }
 
 div.qindex{
@@ -156,7 +156,7 @@ div.qindex{
 	width: 100%;
 	line-height: 140%;
 	font-size: 130%;
-	color: #873221;
+	color: #545454;
 }
 
 #main-menu a:focus {
@@ -171,7 +171,7 @@ dt.alphachar{
 }
 
 .alphachar a{
-	color: #EEC4BB;
+	color: #D5D5D5;
 }
 
 .alphachar a:hover, .alphachar a:visited{
@@ -195,7 +195,7 @@ dt.alphachar{
 }
 
 .classindex dl.odd {
-	background-color: #1E0B07;
+	background-color: #131313;
 }
 
 @media(min-width: 1120px) {
@@ -214,13 +214,13 @@ dt.alphachar{
 /* @group Link Styling */
 
 a {
-	color: #DF8F7F;
+	color: #AFAFAF;
 	font-weight: normal;
 	text-decoration: none;
 }
 
 .contents a:visited {
-	color: #DF8F7F;
+	color: #AFAFAF;
 }
 
 span.label a:hover {
@@ -236,11 +236,11 @@ a.elRef {
 }
 
 a.el, a.el:visited, a.code, a.code:visited, a.line, a.line:visited {
-	color: #DF8F7F;
+	color: #AFAFAF;
 }
 
 a.codeRef, a.codeRef:visited, a.lineRef, a.lineRef:visited {
-	color: #E5A395;
+	color: #BDBDBD;
 }
 
 a.code.hl_class { /* style for links to class names in code snippets */ }
@@ -326,7 +326,7 @@ ul.multicol {
 	padding: 10px 10px;
 	border: 1px solid #30363D;
 	border-radius: 4px;
-	background-color: #190906;
+	background-color: #0F0F0F;
 	color: #C9D1D9;
 }
 
@@ -437,7 +437,7 @@ span.foldnone {
 span.fold.plus, span.fold.minus {
 	width: 10px;
 	height: 10px;
-	background-color: #190906;
+	background-color: #0F0F0F;
 	position: relative;
 	border: 1px solid #808080;
 	margin-right: 1px;
@@ -513,9 +513,9 @@ div.classindex span.ai {
 div.groupHeader {
 	box-shadow: 13px 0 black,
 	           -13px 0 black,
-	            13px 1px #4D1C13,
-	           -13px 1px #4D1C13;
-	color: #DF8F7F;
+	            13px 1px #303030,
+	           -13px 1px #303030;
+	color: #AFAFAF;
 	font-size: 110%;
 	font-weight: 500;
 	margin-left: 0px;
@@ -579,7 +579,7 @@ img.footer {
 }
 
 .compoundTemplParams {
-	color: #DA7B68;
+	color: #A1A1A1;
 	font-size: 80%;
 	line-height: 120%;
 }
@@ -635,8 +635,8 @@ span.vhdllogic {
 }
 
 blockquote {
-	background-color: #2C100A;
-	border-left: 2px solid #6B271A;
+	background-color: #1B1B1B;
+	border-left: 2px solid #434343;
 	margin: 0 24px 0 4px;
 	padding: 0 12px 0 16px;
 }
@@ -650,12 +650,12 @@ td.tiny {
 .dirtab {
 	padding: 4px;
 	border-collapse: collapse;
-	border: 1px solid #6B271A;
+	border: 1px solid #434343;
 }
 
 th.dirtab {
-	background-color: #6B271A;
-	color: #EEC4BB;
+	background-color: #434343;
+	color: #D5D5D5;
 	font-weight: bold;
 }
 
@@ -666,8 +666,8 @@ hr {
 	height: 1px;
 	box-shadow: 13px 0 black,
 		   -13px 0 black,
-		    13px 1px #4D1C13,
-		   -13px 1px #4D1C13;
+		    13px 1px #303030,
+		   -13px 1px #303030;
 }
 
 hr.footer {
@@ -707,7 +707,7 @@ table.memberdecls {
 }
 
 .memItemLeft, .memItemRight, .memTemplParams {
-	background-color: #1E0B07;
+	background-color: #131313;
 }
 
 .mdescLeft, .mdescRight {
@@ -720,25 +720,25 @@ tr[class^='memdesc'] {
 }
 
 .mdescLeft {
-	border-left: 1px solid #5D2216;
-	border-bottom: 1px solid #5D2216;
+	border-left: 1px solid #393939;
+	border-bottom: 1px solid #393939;
 }
 
 .mdescRight {
-	border-right: 1px solid #5D2216;
-	border-bottom: 1px solid #5D2216;
+	border-right: 1px solid #393939;
+	border-bottom: 1px solid #393939;
 }
 
 .memTemplParams {
-	color: #DA7B68;
+	color: #A1A1A1;
 	white-space: nowrap;
 	font-size: 80%;
-	border-left: 1px solid #5D2216;
-	border-right: 1px solid #5D2216;
+	border-left: 1px solid #393939;
+	border-right: 1px solid #393939;
 }
 
 td.ititle {
-	border: 1px solid #5D2216;
+	border: 1px solid #393939;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 	padding-left: 10px;
@@ -751,16 +751,16 @@ tr:not(:first-child) > td.ititle {
 
 .memItemLeft {
 	white-space: nowrap;
-	border-left: 1px solid #5D2216;
-	border-bottom: 1px solid #5D2216;
+	border-left: 1px solid #393939;
+	border-bottom: 1px solid #393939;
 	padding-left: 10px;
 	transition: none;
 }
 
 .memItemRight {
 	width: 100%;
-	border-right: 1px solid #5D2216;
-	border-bottom: 1px solid #5D2216;
+	border-right: 1px solid #393939;
+	border-bottom: 1px solid #393939;
 	padding-right: 10px;
 	transition: none;
 }
@@ -768,14 +768,14 @@ tr:not(:first-child) > td.ititle {
 tr.heading        + tr[class^='memitem'] td.memItemLeft,
 tr.groupHeader    + tr[class^='memitem'] td.memItemLeft,
 tr.inherit_header + tr[class^='memitem'] td.memItemLeft {
-        border-top: 1px solid #5D2216;
+        border-top: 1px solid #393939;
 	border-top-left-radius: 4px;
 }
 
 tr.heading        + tr[class^='memitem'] td.memItemRight,
 tr.groupHeader    + tr[class^='memitem'] td.memItemRight,
 tr.inherit_header + tr[class^='memitem'] td.memItemRight {
-        border-top: 1px solid #5D2216;
+        border-top: 1px solid #393939;
 	border-top-right-radius: 4px;
 }
 
@@ -784,7 +784,7 @@ tr.heading        + tr td.ititle,
 tr.groupHeader    + tr[class^='memitem'] td.memTemplParams,
 tr.groupHeader    + tr td.ititle,
 tr.inherit_header + tr[class^='memitem'] td.memTemplParams {
-        border-top: 1px solid #5D2216;
+        border-top: 1px solid #393939;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 }
@@ -821,19 +821,19 @@ tr.template .memItemLeft, tr.template .memItemRight {
 
 .memtitle {
 	padding: 8px;
-	border-top: 1px solid #5D2216;
-	border-left: 1px solid #5D2216;
-	border-right: 1px solid #5D2216;
+	border-top: 1px solid #393939;
+	border-left: 1px solid #393939;
+	border-right: 1px solid #393939;
 	border-top-right-radius: 4px;
 	border-top-left-radius: 4px;
 	margin-bottom: -1px;
-	background-color: #441910;
+	background-color: #2A2A2A;
 	line-height: 1.25;
 	font-family: 'JetBrains Mono',Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace,fixed;
 	font-weight: 500;
 	font-size: 16px;
 	float:left;
-	box-shadow: 0 10px 0 -1px #441910,
+	box-shadow: 0 10px 0 -1px #2A2A2A,
 	            0 2px 8px 0 rgba(0,0,0,.075);
 	position: relative;
 }
@@ -841,7 +841,7 @@ tr.template .memItemLeft, tr.template .memItemRight {
 .memtitle:after {
 	content: '';
 	display: block;
-	background: #441910;
+	background: #2A2A2A;
 	height: 10px;
 	bottom: -10px;
 	left: 0px;
@@ -862,7 +862,7 @@ tr.template .memItemLeft, tr.template .memItemRight {
 
 .memtemplate {
 	font-size: 80%;
-	color: #DA7B68;
+	color: #A1A1A1;
 	font-family: 'JetBrains Mono',Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace,fixed;
 	font-weight: normal;
 	margin-left: 9px;
@@ -898,15 +898,15 @@ tr.template .memItemLeft, tr.template .memItemRight {
 }
 
 .memproto, dl.reflist dt {
-	border-top: 1px solid #5D2216;
-	border-left: 1px solid #5D2216;
-	border-right: 1px solid #5D2216;
+	border-top: 1px solid #393939;
+	border-left: 1px solid #393939;
+	border-right: 1px solid #393939;
 	padding: 6px 0px 6px 0px;
-	color: #E39C8E;
+	color: #B9B9B9;
 	font-weight: bold;
-	background-color: #441910;
+	background-color: #2A2A2A;
 	border-top-right-radius: 4px;
-	border-bottom: 1px solid #5D2216;
+	border-bottom: 1px solid #393939;
 }
 
 .overload {
@@ -915,9 +915,9 @@ tr.template .memItemLeft, tr.template .memItemRight {
 }
 
 .memdoc, dl.reflist dd {
-	border-bottom: 1px solid #5D2216;
-	border-left: 1px solid #5D2216;
-	border-right: 1px solid #5D2216;
+	border-bottom: 1px solid #393939;
+	border-left: 1px solid #393939;
+	border-right: 1px solid #393939;
 	padding: 6px 10px 2px 10px;
 	border-top-width: 0;
 	border-bottom-left-radius: 4px;
@@ -1000,11 +1000,11 @@ span.mlabels {
 }
 
 span.mlabel {
-	background-color: #8E3422;
-	border-top:1px solid #BB452D;
-	border-left:1px solid #BB452D;
-	border-right:1px solid #6B271A;
-	border-bottom:1px solid #6B271A;
+	background-color: #585858;
+	border-top:1px solid #747474;
+	border-left:1px solid #747474;
+	border-right:1px solid #434343;
+	border-bottom:1px solid #434343;
 	text-shadow: none;
 	color: #CCCCCC;
 	margin-right: 4px;
@@ -1060,7 +1060,7 @@ div.directory {
 
 .directory tr.odd {
 	padding-left: 6px;
-	background-color: #1E0B07;
+	background-color: #131313;
 }
 
 .directory tr.even {
@@ -1083,11 +1083,11 @@ div.directory {
 	cursor: pointer;
 	padding-left: 2px;
 	padding-right: 2px;
-	color: #DF8F7F;
+	color: #AFAFAF;
 }
 
 .arrow {
-	color: #2C100A;
+	color: #1B1B1B;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
@@ -1108,8 +1108,8 @@ span.arrowhead {
 	display: inline-block;
 	width: 5px;
 	height: 5px;
-	border-right: 2px solid #BB452D;
-	border-bottom: 2px solid #BB452D;
+	border-right: 2px solid #747474;
+	border-bottom: 2px solid #747474;
 	transform: rotate(-45deg);
 	transition: transform 0.3s ease;
 }
@@ -1119,8 +1119,8 @@ span.arrowhead.opened {
 }
 
 .selected span.arrowhead {
-	border-right: 2px solid #D46751;
-	border-bottom: 2px solid #D46751;
+	border-right: 2px solid #929292;
+	border-bottom: 2px solid #929292;
 }
 
 .icon {
@@ -1131,8 +1131,8 @@ span.arrowhead.opened {
 	height: 14px;
 	width: 16px;
 	display: inline-block;
-	background-color: #873221;
-	color: #EEC4BB;
+	background-color: #545454;
+	color: #D5D5D5;
 	text-align: center;
 	border-radius: 4px;
 	margin-left: 2px;
@@ -1166,8 +1166,8 @@ span.arrowhead.opened {
 .folder-icon {
 	width: 16px;
 	height: 11px;
-	background-color: #CE5239;
-	border: 1px solid #EEC4BB;
+	background-color: #848484;
+	border: 1px solid #D5D5D5;
 	border-radius: 0 2px 2px 2px;
 	position: relative;
 	box-sizing: content-box;
@@ -1180,8 +1180,8 @@ span.arrowhead.opened {
 	left: -1px;
 	width: 16px;
 	height: 7px;
-	background-color: #BB452D;
-	border: 1px solid #EEC4BB;
+	background-color: #747474;
+	border: 1px solid #D5D5D5;
 	border-radius: 7px 7px 2px 2px;
 	transform-origin: top left;
 	opacity: 0;
@@ -1195,10 +1195,10 @@ span.arrowhead.opened {
 	left: -1px;
 	width: 6px;
 	height: 2px;
-	background-color: #CE5239;
-	border-top: 1px solid #EEC4BB;
-	border-left: 1px solid #EEC4BB;
-	border-right: 1px solid #EEC4BB;
+	background-color: #848484;
+	border-top: 1px solid #D5D5D5;
+	border-left: 1px solid #D5D5D5;
+	border-right: 1px solid #D5D5D5;
 	border-radius: 2px 2px 0 0;
 }
 
@@ -1211,7 +1211,7 @@ span.arrowhead.opened {
 	left: 6px;
 	width: 12px;
 	height: 16px;
-	background-color: #EEC4BB;
+	background-color: #D5D5D5;
 	clip-path: polygon(0 0, 66% 0, 100% 25%, 100% 100%, 0 100%);
 	position: relative;
 	display: inline-block;
@@ -1222,7 +1222,7 @@ span.arrowhead.opened {
 	top: 1px;
 	width: 10px;
 	height: 14px;
-	background-color: #D46751;
+	background-color: #929292;
 	clip-path: polygon(0 0, 66% 0, 100% 25%, 100% 100%, 0 100%);
 	position: absolute;
 	box-sizing: border-box;
@@ -1235,7 +1235,7 @@ span.arrowhead.opened {
 	height: 3px;
 	background-color: transparent;
 	position: absolute;
-	border: 1px solid #EEC4BB;
+	border: 1px solid #D5D5D5;
 }
 
 
@@ -1262,7 +1262,7 @@ span.dynarrow {
 
 address {
 	font-style: normal;
-	color: #D05A42;
+	color: #898989;
 }
 
 table.doxtable caption {
@@ -1276,13 +1276,13 @@ table.doxtable {
 }
 
 table.doxtable td, table.doxtable th {
-	border: 1px solid #6B271A;
+	border: 1px solid #434343;
 	padding: 3px 7px 2px;
 }
 
 table.doxtable th {
-	background-color: #6B271A;
-	color: #EEC4BB;
+	background-color: #434343;
+	color: #D5D5D5;
 	font-size: 110%;
 	padding-bottom: 4px;
 	padding-top: 5px;
@@ -1290,7 +1290,7 @@ table.doxtable th {
 
 table.fieldtable {
 	margin-bottom: 10px;
-	border: 1px solid #5D2216;
+	border: 1px solid #393939;
 	border-spacing: 0px;
 	border-radius: 4px;
 	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
@@ -1302,8 +1302,8 @@ table.fieldtable {
 
 .fieldtable td.fieldtype, .fieldtable td.fieldname, .fieldtable td.fieldinit {
 	white-space: nowrap;
-	border-right: 1px solid #5D2216;
-	border-bottom: 1px solid #5D2216;
+	border-right: 1px solid #393939;
+	border-bottom: 1px solid #393939;
 	vertical-align: top;
 }
 
@@ -1318,7 +1318,7 @@ table.fieldtable {
 
 
 .fieldtable td.fielddoc {
-	border-bottom: 1px solid #5D2216;
+	border-bottom: 1px solid #393939;
 }
 
 .fieldtable td.fielddoc p:first-child {
@@ -1334,16 +1334,16 @@ table.fieldtable {
 }
 
 .fieldtable th {
-	background-color: #4A1B12;
+	background-color: #2E2E2E;
 	font-size: 90%;
-	color: #E39C8E;
+	color: #B9B9B9;
 	padding-bottom: 4px;
 	padding-top: 5px;
 	text-align:left;
 	font-weight: 400;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
-	border-bottom: 1px solid #5D2216;
+	border-bottom: 1px solid #393939;
 }
 
 /* ----------- navigation breadcrumb styling ----------- */
@@ -1351,13 +1351,13 @@ table.fieldtable {
 #nav-path ul {
 	height: 30px;
 	line-height: 30px;
-	color: #EAB6AB;
+	color: #CBCBCB;
 	overflow: hidden;
 	margin: 0px;
 	padding-left: 4px;
 	background-image: none;
 	background: black;
-	border-bottom: 1px solid #572015;
+	border-bottom: 1px solid #363636;
 	font-size: 13px;
 	font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
 	position: relative;
@@ -1365,13 +1365,13 @@ table.fieldtable {
 }
 
 #main-nav {
-	border-bottom: 1px solid #572015;
+	border-bottom: 1px solid #363636;
 }
 
 .navpath li {
 	list-style-type:none;
 	float:left;
-	color: #903523;
+	color: #595959;
 }
 
 .navpath li.footer {
@@ -1383,7 +1383,7 @@ table.fieldtable {
 	background-repeat:no-repeat;
 	background-position:right;
 	font-size: 8pt;
-	color: #D05A42;
+	color: #898989;
 }
 
 #nav-path li.navelem {
@@ -1396,7 +1396,7 @@ table.fieldtable {
 .navpath li.navelem a {
 	text-shadow: none;
 	display: inline-block;
-	color: #DF8F7F;
+	color: #AFAFAF;
 	position: relative;
 	top: 0px;
 	height: 30px;
@@ -1414,7 +1414,7 @@ table.fieldtable {
 	transform: scaleX(0.5) scale(0.707) rotate(45deg);
 	z-index: 10;
 	background: black;
-	box-shadow: 2px -2px 0 2px #572015;
+	box-shadow: 2px -2px 0 2px #363636;
 	border-radius: 0 5px 0 50px;
 }
 
@@ -1424,7 +1424,7 @@ table.fieldtable {
 
 #nav-path li.navelem:hover,
 #nav-path li.navelem:hover:after {
-	background-color: #4D1C13;
+	background-color: #303030;
 }
 
 /* ---------------------- */
@@ -1470,8 +1470,8 @@ div.ingroups a
 div.header
 {
 	margin:  0px;
-	background-color: #140704;
-	border-bottom: 1px solid #35130D;
+	background-color: #0C0C0C;
+	border-bottom: 1px solid #212121;
 }
 
 div.headertitle
@@ -1637,8 +1637,8 @@ dl.invariant dt, dl.pre dt, dl.post dt {
 {
 	padding: 0 0 0 5px;
 	margin: 0px;
-	border-bottom: 1px solid #572015;
-	background-color: #190906;
+	border-bottom: 1px solid #363636;
+	background-color: #0F0F0F;
 }
 
 .image
@@ -1676,7 +1676,7 @@ dl.citelist {
 }
 
 dl.citelist dt {
-	color:#DF8F7F;
+	color:#AFAFAF;
 	float:left;
 	font-weight:bold;
 	margin-right:10px;
@@ -1692,8 +1692,8 @@ dl.citelist dd {
 
 div.toc {
 	padding: 14px 25px;
-	background-color: #37140D;
-	border: 1px solid #551F14;
+	background-color: #222222;
+	border: 1px solid #353535;
 	border-radius: 7px 7px 7px 7px;
 	float: right;
 	height: auto;
@@ -1711,7 +1711,7 @@ div.toc li {
 
 div.toc h3 {
 	font: bold 12px/1.2 Verdana,'DejaVu Sans',Geneva,sans-serif;
-	color: #E5A395;
+	color: #BDBDBD;
 	border-bottom: 0 none;
 	margin: 0;
 }
@@ -1975,7 +1975,7 @@ table.markdownTable {
 }
 
 table.markdownTable td, table.markdownTable th {
-	border: 1px solid #6B271A;
+	border: 1px solid #434343;
 	padding: 3px 7px 2px;
 }
 
@@ -1983,8 +1983,8 @@ table.markdownTable tr {
 }
 
 th.markdownTableHeadLeft, th.markdownTableHeadRight, th.markdownTableHeadCenter, th.markdownTableHeadNone {
-	background-color: #6B271A;
-	color: #EEC4BB;
+	background-color: #434343;
+	color: #D5D5D5;
 	font-size: 110%;
 	padding-bottom: 4px;
 	padding-top: 5px;

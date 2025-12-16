@@ -12,6 +12,7 @@ var classvex_1_1PhysicsSystem =
     [ "AddTorque", "classvex_1_1PhysicsSystem.html#a7cd9dc0e143969c4e5fee105226cd390", null ],
     [ "CreateBodyForEntity", "classvex_1_1PhysicsSystem.html#a98485e6ee768d3c2b885d458baa59ee6", null ],
     [ "DestroyBodyForEntity", "classvex_1_1PhysicsSystem.html#ad40784cfa9e958d41b8ff8e4558b63da", null ],
+    [ "drawDebug", "classvex_1_1PhysicsSystem.html#ac2f6f572c8ad730ff72b0ff421ca66b6", null ],
     [ "GetAngularVelocity", "classvex_1_1PhysicsSystem.html#adb4338ca5ac52b1b0cb9e658552aa8b3", null ],
     [ "GetBodyActive", "classvex_1_1PhysicsSystem.html#aeb2001966a3f24cdf57fdaf47dcf1ca1", null ],
     [ "GetBounciness", "classvex_1_1PhysicsSystem.html#aff81e6537bd36ee8097bc5567c5816ef", null ],
@@ -25,10 +26,12 @@ var classvex_1_1PhysicsSystem =
     [ "SetBodyActive", "classvex_1_1PhysicsSystem.html#a2ab950196c8daac7fcc56c7d611a77a3", null ],
     [ "SetBounciness", "classvex_1_1PhysicsSystem.html#ad4f1da12c3866c9777ffa73a8ba7f505", null ],
     [ "setCollisionSteps", "classvex_1_1PhysicsSystem.html#ae68c87217b877ded3de4bf5750903a17", null ],
+    [ "setDebugRenderer", "classvex_1_1PhysicsSystem.html#a5026e988720c3af1ea1cc0727fc3cf03", null ],
     [ "SetFriction", "classvex_1_1PhysicsSystem.html#a432972a37330f75f940efa0e9d47837e", null ],
     [ "SetGravityFactor", "classvex_1_1PhysicsSystem.html#afd23071c0069a59be8c1fefffbb977ae", null ],
     [ "SetGravityVector", "classvex_1_1PhysicsSystem.html#a6632176736787dad393d5400ca24d4f2", null ],
     [ "SetLinearVelocity", "classvex_1_1PhysicsSystem.html#a157a736a4f4b1cde151ee0ff000d65d3", null ],
     [ "shutdown", "classvex_1_1PhysicsSystem.html#a9344768ca2718429a24ca7a3ee94ff87", null ],
+    [ "SyncBodies", "classvex_1_1PhysicsSystem.html#a1c19ad9f75b5c858b93ad64ab0743304", null ],
     [ "update", "classvex_1_1PhysicsSystem.html#a5c0ea3867f54b0011652f99e1c51c93b", null ]
 ];

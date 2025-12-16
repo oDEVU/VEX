@@ -7,6 +7,6 @@ var classvex_1_1Renderer =
     [ "endFrame", "classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1", null ],
     [ "getImGuiTextureID", "classvex_1_1Renderer.html#a806d1ad715ef403b147fffe4598fa5f1", null ],
     [ "renderFrame", "classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a", null ],
-    [ "renderScene", "classvex_1_1Renderer.html#a5f81b4d2f47385424d8ee6343b5c8c29", null ],
+    [ "renderScene", "classvex_1_1Renderer.html#abc86f3773560ddc13a15e79f2b663c5b", null ],
     [ "transitionImageLayout", "classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11", null ]
 ];

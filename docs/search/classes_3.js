@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['dialogwindow_0',['DialogWindow',['../classvex_1_1DialogWindow.html',1,'vex']]]
+  ['debugvertex_0',['DebugVertex',['../structvex_1_1DebugVertex.html',1,'vex']]],
+  ['dialogwindow_1',['DialogWindow',['../classvex_1_1DialogWindow.html',1,'vex']]]
 ];

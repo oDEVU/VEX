@@ -3,6 +3,7 @@ var namespaces_dup =
     [ "vex", null, [
       [ "PS1Effects", "namespacevex_1_1PS1Effects.html", null ],
       [ "AssetBrowser", "classvex_1_1AssetBrowser.html", "classvex_1_1AssetBrowser" ],
+      [ "BasicCamera", "classvex_1_1BasicCamera.html", "classvex_1_1BasicCamera" ],
       [ "BodyIDHasher", "structvex_1_1BodyIDHasher.html", null ],
       [ "BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ],
       [ "BrowserIcons", "structvex_1_1BrowserIcons.html", null ],
@@ -10,6 +11,7 @@ var namespaces_dup =
       [ "CameraObject", "classvex_1_1CameraObject.html", null ],
       [ "CollisionHit", "structvex_1_1CollisionHit.html", null ],
       [ "ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
+      [ "DebugVertex", "structvex_1_1DebugVertex.html", null ],
       [ "DialogWindow", "classvex_1_1DialogWindow.html", "classvex_1_1DialogWindow" ],
       [ "Editor", "classvex_1_1Editor.html", "classvex_1_1Editor" ],
       [ "Engine", "classvex_1_1Engine.html", "classvex_1_1Engine" ],

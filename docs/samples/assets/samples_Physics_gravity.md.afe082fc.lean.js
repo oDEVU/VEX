@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as e,a as t}from"./app.305b70d8.js";const C=JSON.parse('{"title":"Gravity","description":"","frontmatter":{},"headers":[],"relativePath":"samples/Physics/gravity.md"}'),o={name:"samples/Physics/gravity.md"},n=t("",5),p=[n];function l(c,r,y,i,F,D){return e(),a("div",null,p)}const A=s(o,[["render",l]]);export{C as __pageData,A as default};

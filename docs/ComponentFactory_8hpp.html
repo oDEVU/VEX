@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -182,7 +183,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">namespace </span>vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Type, __VA_ARGS__) } \</div>
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">namespace </span>vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__) } \</div>
 <div class="line">    IMGUI_REFLECT(Type, __VA_ARGS__) \</div>
 <div class="line">    <span class="keyword">namespace </span>{ \</div>
 <div class="line">        <span class="keyword">struct </span>VEX_UNIQUE_NAME(Registrar_) { \</div>
@@ -194,24 +195,10 @@ Functions</h2></td></tr>
 <div class="line">    }</div>
 </div><!-- fragment -->
 <p>Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file. </p>
-<p>Example usage: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> LoadCameraComponent(GameObject&amp; obj, <span class="keyword">const</span> nlohmann::json&amp; json) {</div>
-<div class="line">    CameraComponent comp;</div>
-<div class="line">    <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;fov&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;fov&quot;</span>].is_array()) {</div>
-<div class="line">        comp.fov = json[<span class="stringliteral">&quot;fov&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line">    }</div>
-<div class="line">    <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;nearPlane&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;nearPlane&quot;</span>].is_array()) {</div>
-<div class="line">        comp.nearPlane = json[<span class="stringliteral">&quot;nearPlane&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line">    }</div>
-<div class="line">    <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;farPlane&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;farPlane&quot;</span>].is_array()) {</div>
-<div class="line">        comp.farPlane = json[<span class="stringliteral">&quot;farPlane&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line">    }</div>
-<div class="line">    obj.AddComponent(comp);</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><a class="code hl_define" href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(CameraComponent, LoadCameraComponent);</div>
-<div class="ttc" id="aComponentFactory_8hpp_html_afa69f763d370fe1d1de1bb8cdf34ddfb"><div class="ttname"><a href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(Type,...)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00207">ComponentFactory.hpp:207</a></div></div>
+<p>Example usage: </p><div class="fragment"><div class="line"><a class="code hl_define" href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(CameraComponent, fov, nearPlane, farPlane);</div>
+<div class="ttc" id="aComponentFactory_8hpp_html_afa69f763d370fe1d1de1bb8cdf34ddfb"><div class="ttname"><a href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(Type,...)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00193">ComponentFactory.hpp:193</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00207">207</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00193">193</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -245,7 +232,7 @@ Functions</h2></td></tr>
 </div><!-- fragment -->
 <p>Same macro just skips json registration for more complex components, it requires manual registration. </p>
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00220">220</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00206">206</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>

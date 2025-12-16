@@ -8,8 +8,10 @@ var classvex_1_1Editor =
     [ "GetEditorIcons", "classvex_1_1Editor.html#ac2991b2f7f546229090de67c83371f3b", null ],
     [ "getEditorProperties", "classvex_1_1Editor.html#a5cd1ca2ef9fd064a64911c55476c95b1", null ],
     [ "getProjectBinaryPath", "classvex_1_1Editor.html#aab489c844a5f2f25fd43bb69e539cdad", null ],
+    [ "getProjectProperties", "classvex_1_1Editor.html#a5b01f217271ae04eb2c08480465490c5", null ],
     [ "loadAssetIcons", "classvex_1_1Editor.html#af37e5e2f6d9dd6e82921086be6abac54", null ],
     [ "LoadConfig", "classvex_1_1Editor.html#a0eeaa473de394f5bfb0a91854372efb5", null ],
+    [ "LoadProjectConfig", "classvex_1_1Editor.html#a23b00ead29ed6c4630cc0387e34ded5b", null ],
     [ "OnHotReload", "classvex_1_1Editor.html#a606050564ebf6b2414b2a0da18c0a650", null ],
     [ "processEvent", "classvex_1_1Editor.html#a0537d6e39c0c7f4d1b2ba46b9465290a", null ],
     [ "raySphereIntersect", "classvex_1_1Editor.html#a4f90130d799e6a79584a5f318ab26f41", null ],
@@ -18,5 +20,6 @@ var classvex_1_1Editor =
     [ "render", "classvex_1_1Editor.html#a6265c161dfade90ac59a9ad77a97bc2d", null ],
     [ "requestSceneReload", "classvex_1_1Editor.html#aeeb45e8bbfc0ffaae4b095e8883c7a44", null ],
     [ "SaveConfig", "classvex_1_1Editor.html#a654160f282249e0d704bb2c4db621014", null ],
+    [ "SaveProjectConfig", "classvex_1_1Editor.html#a51e716607891a7678c6cd35945e4fbf3", null ],
     [ "update", "classvex_1_1Editor.html#afc38ec50583bd6c8ed02ccb10867980b", null ]
 ];

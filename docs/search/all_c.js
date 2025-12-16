@@ -11,6 +11,7 @@ var searchData=
   ['modelobject_2ehpp_8',['ModelObject.hpp',['../ModelObject_8hpp.html',1,'']]],
   ['mouseaxis_9',['MouseAxis',['../InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236',1,'vex']]],
   ['mouseaxisbinding_10',['MouseAxisBinding',['../structvex_1_1MouseAxisBinding.html',1,'vex']]],
-  ['myactivationlistener_11',['MyActivationListener',['../classvex_1_1MyActivationListener.html',1,'vex']]],
-  ['mycontactlistener_12',['MyContactListener',['../classvex_1_1MyContactListener.html',1,'vex']]]
+  ['moveproject_11',['moveProject',['../classvex_1_1ProjectSelector.html#aca1b6e034e42319b09c02e176c97d74b',1,'vex::ProjectSelector']]],
+  ['myactivationlistener_12',['MyActivationListener',['../classvex_1_1MyActivationListener.html',1,'vex']]],
+  ['mycontactlistener_13',['MyContactListener',['../classvex_1_1MyContactListener.html',1,'vex']]]
 ];

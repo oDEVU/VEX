@@ -1417,7 +1417,7 @@ HTML_STYLESHEET        =
 # documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  = ./DoxyFiles/style.css
+HTML_EXTRA_STYLESHEET  = ./DoxyFiles/style.css, ./DoxyFiles/Sono-SemiBold.ttf
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1451,7 +1451,7 @@ HTML_COLORSTYLE        = DARK
 # Minimum value: 0, maximum value: 359, default value: 220.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_COLORSTYLE_HUE    = 10
+HTML_COLORSTYLE_HUE    = 28
 
 # The HTML_COLORSTYLE_SAT tag controls the purity (or saturation) of the colors
 # in the HTML output. For a value of 0 the output will use gray-scales only. A
@@ -1459,7 +1459,7 @@ HTML_COLORSTYLE_HUE    = 10
 # Minimum value: 0, maximum value: 255, default value: 100.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_COLORSTYLE_SAT    = 155
+HTML_COLORSTYLE_SAT    = 0
 
 # The HTML_COLORSTYLE_GAMMA tag controls the gamma correction applied to the
 # luminance component of the colors in the HTML output. Values below 100

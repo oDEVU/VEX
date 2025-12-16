@@ -16,6 +16,7 @@ var hierarchy =
     [ "JPH::ContactListener", null, [
       [ "vex::MyContactListener", "classvex_1_1MyContactListener.html", null ]
     ] ],
+    [ "vex::DebugVertex", "structvex_1_1DebugVertex.html", null ],
     [ "EditorMenuBar", "classEditorMenuBar.html", null ],
     [ "EditorProperties", "structEditorProperties.html", null ],
     [ "vex::Engine", "classvex_1_1Engine.html", [
@@ -29,6 +30,7 @@ var hierarchy =
     [ "vex::Frustum", "structvex_1_1Frustum.html", null ],
     [ "vex::GameInfo", "structvex_1_1GameInfo.html", null ],
     [ "vex::GameObject", "classvex_1_1GameObject.html", [
+      [ "vex::BasicCamera", "classvex_1_1BasicCamera.html", null ],
       [ "vex::CameraObject", "classvex_1_1CameraObject.html", [
         [ "EditorCameraObject", "classEditorCameraObject.html", null ]
       ] ],
@@ -72,6 +74,7 @@ var hierarchy =
     [ "vex::PhysicsSystem", "classvex_1_1PhysicsSystem.html", null ],
     [ "vex::Plane", "structvex_1_1Plane.html", null ],
     [ "vex::ProjectMetadata", "structvex_1_1ProjectMetadata.html", null ],
+    [ "ProjectProperties", "structProjectProperties.html", null ],
     [ "vex::PushConstants", "structvex_1_1PushConstants.html", null ],
     [ "vex::RaycastHit", "structvex_1_1RaycastHit.html", null ],
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],

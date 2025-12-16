@@ -23,7 +23,7 @@ dark-mode-toggle {
     white-space : nowrap;
     background: black;
     border-radius: 0.65em;
-    border: 1px solid #873221;
+    border: 1px solid #545454;
     z-index: 102;
     margin-right: 4px;
 }
@@ -179,8 +179,8 @@ dark-mode-toggle {
     display: none;
     position: absolute;
     left: 0; top: 0;
-    border: 1px solid #DA7B68;
-    background-color: #2C100A;
+    border: 1px solid #A1A1A1;
+    background-color: #1B1B1B;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     z-index: 10001;
@@ -206,7 +206,7 @@ span.SelectionMark {
 a.SelectItem {
     display: block;
     outline-style: none;
-    color: #DF8F7F;
+    color: #AFAFAF;
     text-decoration: none;
     padding-left:   6px;
     padding-right: 12px;
@@ -214,14 +214,14 @@ a.SelectItem {
 
 a.SelectItem:focus,
 a.SelectItem:active {
-    color: #DF8F7F;
+    color: #AFAFAF;
     outline-style: none;
     text-decoration: none;
 }
 
 a.SelectItem:hover {
-    color: #ECBCB2;
-    background-color: #6B271A;
+    color: #CFCFCF;
+    background-color: #434343;
     outline-style: none;
     text-decoration: none;
     cursor: pointer;
@@ -253,7 +253,7 @@ iframe#MSearchResults {
     left: auto;
     right: 4px;
     top: 0;
-    border: 1px solid #873221;
+    border: 1px solid #545454;
     background-color: black;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -300,7 +300,7 @@ div.SRPage {
 
 .SRSymbol {
     font-weight: bold;
-    color: #DF8F7F;
+    color: #AFAFAF;
     font-family: Arial,Verdana,sans-serif;
     text-decoration: none;
     outline: none;
@@ -308,7 +308,7 @@ div.SRPage {
 
 a.SRScope {
     display: block;
-    color: #DF8F7F;
+    color: #AFAFAF;
     font-family: Arial,Verdana,sans-serif;
     font-size: 8pt;
     text-decoration: none;
@@ -348,9 +348,9 @@ div.searchresults {
 /*---------------- External search page results */
 
 .pages b {
-   color: #903523;
+   color: #595959;
    padding: 5px 5px 3px 5px;
-   background-color: #4D1C13;
+   background-color: #303030;
    border-radius: 4px;
 }
 

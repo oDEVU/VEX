@@ -12,9 +12,11 @@ var searchData=
   ['processevent_9',['processEvent',['../classvex_1_1ImGUIWrapper.html#a992ee0c337a2007cf37d358fa626f663',1,'vex::ImGUIWrapper::processEvent()'],['../classvex_1_1InputSystem.html#aff1e50790e9b3f900ce77d9d6d6cb1fc',1,'vex::InputSystem::processEvent()'],['../classvex_1_1VexUI.html#a91fa6fcfa093d41407c479fbed895041',1,'vex::VexUI::processEvent()'],['../classvex_1_1Engine.html#aeeb81fa77c9f740100285bedda1d9f09',1,'vex::Engine::processEvent()'],['../classvex_1_1VulkanImGUIWrapper.html#a3b3aaa57eadba08ccd0b6ee6d57d97cb',1,'vex::VulkanImGUIWrapper::processEvent()'],['../classvex_1_1Editor.html#a0537d6e39c0c7f4d1b2ba46b9465290a',1,'vex::Editor::processEvent()'],['../classEditorCameraObject.html#a80cfb28c03369d0a2b2b51de276476c0',1,'EditorCameraObject::processEvent()'],['../classEditorImGUIWrapper.html#a1c53be5aeb4c7fb6df1001ac5e0cf227',1,'EditorImGUIWrapper::processEvent()']]],
   ['proj_10',['proj',['../structvex_1_1SceneUBO.html#a3aab80337d4e64fa023ce6f89182ca0d',1,'vex::SceneUBO']]],
   ['projectmetadata_11',['ProjectMetadata',['../structvex_1_1ProjectMetadata.html',1,'vex']]],
-  ['projectselector_12',['ProjectSelector',['../classvex_1_1ProjectSelector.html',1,'vex::ProjectSelector'],['../classvex_1_1ProjectSelector.html#adfb55b8f6cb66f3a9556e894430ee841',1,'vex::ProjectSelector::ProjectSelector()']]],
-  ['projectselector_2ehpp_13',['ProjectSelector.hpp',['../ProjectSelector_8hpp.html',1,'']]],
-  ['propertiesmenu_2ehpp_14',['PropertiesMenu.hpp',['../PropertiesMenu_8hpp.html',1,'']]],
-  ['ps1_5fsharp_15',['PS1_SHARP',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485',1,'vex']]],
-  ['pushconstants_16',['PushConstants',['../structvex_1_1PushConstants.html',1,'vex']]]
+  ['projectproperties_12',['ProjectProperties',['../structProjectProperties.html',1,'']]],
+  ['projectproperties_2ehpp_13',['projectProperties.hpp',['../projectProperties_8hpp.html',1,'']]],
+  ['projectselector_14',['ProjectSelector',['../classvex_1_1ProjectSelector.html',1,'vex::ProjectSelector'],['../classvex_1_1ProjectSelector.html#adfb55b8f6cb66f3a9556e894430ee841',1,'vex::ProjectSelector::ProjectSelector()']]],
+  ['projectselector_2ehpp_15',['ProjectSelector.hpp',['../ProjectSelector_8hpp.html',1,'']]],
+  ['propertiesmenu_2ehpp_16',['PropertiesMenu.hpp',['../PropertiesMenu_8hpp.html',1,'']]],
+  ['ps1_5fsharp_17',['PS1_SHARP',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485',1,'vex']]],
+  ['pushconstants_18',['PushConstants',['../structvex_1_1PushConstants.html',1,'vex']]]
 ];

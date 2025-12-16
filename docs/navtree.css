@@ -21,7 +21,7 @@
 
 #nav-tree .selected {
   position: relative;
-  background-color: #4D1C13;
+  background-color: #303030;
   border-radius: 0 6px 6px 0;
   /*margin-right: 5px;*/
 }
@@ -52,7 +52,7 @@
 
 #nav-tree .selected a {
   text-decoration:none;
-  color:#DF8F7F;
+  color:#AFAFAF;
 }
 
 #nav-tree .children_ul {
@@ -95,7 +95,7 @@
 
 .ui-resizable-e {
   transition: opacity 0.5s ease;
-  background-color: #6B271A;
+  background-color: #434343;
   opacity:0;
   cursor:col-resize;
   height:100%;
@@ -112,8 +112,8 @@
   left: 1px;
   width: 2px;
   height: 15px;
-  border-left: 1px solid #BB452D;
-  border-right: 1px solid #BB452D;
+  border-left: 1px solid #747474;
+  border-right: 1px solid #747474;
   position: absolute;
 }
 
@@ -133,10 +133,10 @@
 }
 
 #nav-tree {
-  background-color: #2C100A;
+  background-color: #1B1B1B;
   -webkit-overflow-scrolling : touch; /* iOS 5+ */
   scrollbar-width: thin;
-  border-right: 1px solid #572015;
+  border-right: 1px solid #363636;
   padding-left: 5px;
 }
 
@@ -159,20 +159,20 @@ div.nav-sync-icon {
 	top: -1px;
 	opacity: 0.7;
 	display: inline-block;
-	background-color: #2C100A;
-	border: 1px solid #572015;
+	background-color: #1B1B1B;
+	border: 1px solid #363636;
 	box-sizing: content-box;
 }
 
 div.nav-sync-icon:hover {
-	background-color: #4D1C13;
+	background-color: #303030;
 	opacity: 1.0;
 }
 
 div.nav-sync-icon.active:after {
 	content: '';
-	background-color: #2C100A;
-	border-top: 2px solid #BB452D;
+	background-color: #1B1B1B;
+	border-top: 2px solid #747474;
 	position: absolute;
 	width: 16px;
 	height: 0px;
@@ -181,7 +181,7 @@ div.nav-sync-icon.active:after {
 }
 
 div.nav-sync-icon.active:hover:after {
-	border-top: 2px solid #CE5239;
+	border-top: 2px solid #848484;
 }
 
 span.sync-icon-left {
@@ -193,8 +193,8 @@ span.sync-icon-left {
 	display: inline-block;
 	width: 8px;
 	height: 8px;
-	border-left: 2px solid #BB452D;
-	border-top: 2px solid #BB452D;
+	border-left: 2px solid #747474;
+	border-top: 2px solid #747474;
 	transform: rotate(-45deg);
 }
 
@@ -207,23 +207,23 @@ span.sync-icon-right {
 	display: inline-block;
 	width: 8px;
 	height: 8px;
-	border-right: 2px solid #BB452D;
-	border-bottom: 2px solid #BB452D;
+	border-right: 2px solid #747474;
+	border-bottom: 2px solid #747474;
 	transform: rotate(-45deg);
 }
 
 div.nav-sync-icon:hover span.sync-icon-left {
-	border-left: 2px solid #CE5239;
-	border-top: 2px solid #CE5239;
+	border-left: 2px solid #848484;
+	border-top: 2px solid #848484;
 }
 
 div.nav-sync-icon:hover span.sync-icon-right {
-	border-right: 2px solid #CE5239;
-	border-bottom: 2px solid #CE5239;
+	border-right: 2px solid #848484;
+	border-bottom: 2px solid #848484;
 }
 
 #nav-path ul {
-  border-top: 1px solid #572015;
+  border-top: 1px solid #363636;
 }
 
 @media print
@@ -240,12 +240,12 @@ div.nav-sync-icon:hover span.sync-icon-right {
 }
 
 #page-nav {
-	background: #2C100A;
+	background: #1B1B1B;
 	display: block;
 	width: 250px;
 	box-sizing: content-box;
         position: relative;
-	border-left: 1px solid #572015;
+	border-left: 1px solid #363636;
 }
 
 #page-nav-tree {
@@ -254,7 +254,7 @@ div.nav-sync-icon:hover span.sync-icon-right {
 
 #page-nav-resize-handle {
   transition: opacity 0.5s ease;
-  background-color: #6B271A;
+  background-color: #434343;
   opacity:0;
   cursor:col-resize;
   height:100%;
@@ -273,8 +273,8 @@ div.nav-sync-icon:hover span.sync-icon-right {
   left: 1px;
   width: 2px;
   height: 15px;
-  border-left: 1px solid #BB452D;
-  border-right: 1px solid #BB452D;
+  border-left: 1px solid #747474;
+  border-right: 1px solid #747474;
   position: absolute;
 }
 
@@ -318,7 +318,7 @@ ul.page-outline li {
 }
 
 ul.page-outline li.vis {
-  background-color: #4D1C13;
+  background-color: #303030;
 }
 
 #container.resizing {

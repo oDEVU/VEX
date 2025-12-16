@@ -1,26 +1,200 @@
-body {
-    background-color: #111;
-    color: #ddd;
-    margin: 0;
+/* 1. LOAD FONT */
+@font-face {
+    font-family: "MyCustomFont";
+    src: url("Sono-SemiBold.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
-div.contents {
-    background-color: 111;
-    border-radius: 15px;
+:root {
+    --vp-font-family-base: "MyCustomFont", sans-serif;
+
+    --vp-c-brand-1: #ff831f;
+    --vp-c-brand-2: #e07018;
+    --vp-c-brand-3: #b54141;
+
+    --editor-bg-base: #232227;
+    --editor-bg-light: #26262a;
+    --editor-bg-dark: #1c1c22;
+
+    --vp-c-text-1: #f7eded;
+    --vp-c-text-2: rgba(247, 237, 237, 0.65);
+
+    --vp-c-border: rgba(181, 65, 65, 0.4);
+
+    --primary-color: var(--vp-c-text-1);
+    --primary-dark-color: var(--vp-c-brand-1);
+    --page-background-color: var(--editor-bg-base);
+    --box-background-color: var(--editor-bg-dark);
+    --sidebar-background-color: var(--editor-bg-dark);
+    --header-background-color: var(--editor-bg-dark);
+    --separator-color: var(--vp-c-border);
+}
+
+body,
+html,
+div.contents,
+.header,
+.footer,
+#top {
+    font-family: var(--vp-font-family-base) !important;
+    background-color: var(--editor-bg-base) !important;
+    color: var(--vp-c-text-1) !important;
+}
+
+#titlearea,
+.memproto,
+.groupheader,
+tr.heading {
+    background-image: none !important;
+    background-color: var(--editor-bg-dark) !important;
+    color: var(--vp-c-text-1) !important;
+    border-bottom: 1px solid var(--vp-c-border);
 }
 
 #titlearea {
-    background-color: #111;
+    border-bottom: 1px solid var(--vp-c-border);
 }
 
-#side-nav {
-    background-color: #111;
+a,
+a:visited {
+    color: var(--vp-c-brand-1) !important;
+    text-decoration: none;
+}
+a:hover {
+    color: var(--vp-c-brand-2) !important;
 }
 
-#nav-tree {
-    background-color: #111;
+#side-nav,
+#nav-tree,
+.ui-resizable-e,
+.navpath {
+    background-color: var(--editor-bg-dark) !important;
+    background-image: none !important;
 }
 
-.footer {
-    background-color: #111;
+.item,
+.label,
+.node {
+    color: var(--vp-c-text-1) !important;
+    background-color: transparent !important;
+}
+
+.item:hover,
+.label:hover,
+.node:hover {
+    color: var(--vp-c-brand-2) !important;
+}
+
+.item.selected,
+.node.selected {
+    color: var(--vp-c-brand-1) !important;
+    background-color: transparent !important;
+    font-weight: bold;
+    text-shadow: none !important;
+}
+
+.memitem {
+    background-color: var(--editor-bg-dark) !important;
+    border: 1px solid var(--vp-c-border);
+    border-radius: 6px;
+    margin-bottom: 25px;
+    box-shadow: none !important;
+}
+
+.memproto {
+    background-color: var(--editor-bg-light) !important;
+    color: var(--vp-c-text-1) !important;
+    text-shadow: none !important;
+    border-radius: 5px 5px 0 0;
+}
+
+.memdoc {
+    background-color: var(--editor-bg-dark) !important;
+    color: var(--vp-c-text-2) !important;
+    padding: 15px;
+    border-radius: 0 0 5px 5px;
+}
+
+div.fragment {
+    background-color: var(--editor-bg-dark) !important;
+    border: 1px solid var(--vp-c-border);
+}
+
+.paramname {
+    color: var(--vp-c-brand-3) !important;
+}
+.memname {
+    color: var(--vp-c-brand-1) !important;
+}
+
+:root {
+    color-scheme: dark;
+    scrollbar-color: var(--vp-c-brand-1) var(--editor-bg-dark);
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background-color: var(--editor-bg-dark);
+}
+
+::-webkit-scrollbar-track {
+    background: var(--editor-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--vp-c-brand-1);
+    border-radius: 9px;
+    border: 3px solid var(--editor-bg-dark);
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: var(--editor-bg-dark);
+}
+
+#side-nav,
+#nav-tree,
+.ui-resizable-e,
+.navpath {
+    background-color: var(--editor-bg-dark) !important;
+    background-image: none !important;
+    color: var(--vp-c-text-1) !important;
+}
+
+#nav-tree .item,
+#nav-tree .label,
+#nav-tree .node,
+#nav-tree a {
+    color: var(--vp-c-text-1) !important;
+    background-color: transparent !important;
+    text-shadow: none !important;
+}
+
+#nav-tree .item:hover,
+#nav-tree .label:hover,
+#nav-tree .node:hover,
+#nav-tree a:hover {
+    color: var(--vp-c-brand-2) !important;
+    background-color: transparent !important;
+}
+
+#nav-tree .item.selected,
+#nav-tree .node.selected,
+#nav-tree .selected > .label,
+#nav-tree .selected > .node {
+    color: var(--vp-c-brand-1) !important;
+    background-color: transparent !important;
+    font-weight: bold;
+}
+
+div.item.selected {
+    background: none !important;
+}
+
+#nav-tree .arrow {
+    color: var(--vp-c-text-1) !important;
+    opacity: 0.7;
 }

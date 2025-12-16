@@ -24,12 +24,13 @@ var searchData=
   ['createmeshfrompath_21',['createMeshFromPath',['../ModelCreator_8hpp.html#a5dcb905f0645cba8da8ff1145f696231',1,'vex']]],
   ['createmodelfromcomponents_22',['createModelFromComponents',['../ModelCreator_8hpp.html#a8d3069775766b45d22978b65d6f85586',1,'vex']]],
   ['createmodelfrompath_23',['createModelFromPath',['../ModelCreator_8hpp.html#a60c4f3c10a042909f8123a275a80b150',1,'vex']]],
-  ['createpermeshtexturesets_24',['createPerMeshTextureSets',['../classvex_1_1VulkanResources.html#a24b57ebdc8cf162323448e45674140c3',1,'vex::VulkanResources']]],
-  ['createswapchain_25',['createSwapchain',['../classvex_1_1VulkanSwapchainManager.html#af81e5812c886c1a3f29daaf4d26b6519',1,'vex::VulkanSwapchainManager']]],
-  ['createsyncobjects_26',['createSyncObjects',['../classvex_1_1VulkanSwapchainManager.html#ac2921277552a732f3123cbf613f36a38',1,'vex::VulkanSwapchainManager']]],
-  ['createtexturefromraw_27',['createTextureFromRaw',['../classvex_1_1VulkanResources.html#ac55a799b0723985d996d95cb51a462a4',1,'vex::VulkanResources']]],
-  ['createtexturesampler_28',['createTextureSampler',['../classvex_1_1VulkanResources.html#a61da06f0128f9c4b97c6512103c90c6f',1,'vex::VulkanResources']]],
-  ['createtransparentpipeline_29',['createTransparentPipeline',['../classvex_1_1VulkanPipeline.html#ac4c66041196d8c8d8f1410125923a34b',1,'vex::VulkanPipeline']]],
-  ['createuipipeline_30',['createUIPipeline',['../classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d',1,'vex::VulkanPipeline']]],
-  ['createuniformbuffers_31',['createUniformBuffers',['../classvex_1_1VulkanResources.html#af6600e8f346f3d771113252bab2739af',1,'vex::VulkanResources']]]
+  ['createnewproject_24',['createNewProject',['../classvex_1_1ProjectSelector.html#a8905e223d154ecb07dbb8b5a1ee80aa2',1,'vex::ProjectSelector']]],
+  ['createpermeshtexturesets_25',['createPerMeshTextureSets',['../classvex_1_1VulkanResources.html#a24b57ebdc8cf162323448e45674140c3',1,'vex::VulkanResources']]],
+  ['createswapchain_26',['createSwapchain',['../classvex_1_1VulkanSwapchainManager.html#af81e5812c886c1a3f29daaf4d26b6519',1,'vex::VulkanSwapchainManager']]],
+  ['createsyncobjects_27',['createSyncObjects',['../classvex_1_1VulkanSwapchainManager.html#ac2921277552a732f3123cbf613f36a38',1,'vex::VulkanSwapchainManager']]],
+  ['createtexturefromraw_28',['createTextureFromRaw',['../classvex_1_1VulkanResources.html#ac55a799b0723985d996d95cb51a462a4',1,'vex::VulkanResources']]],
+  ['createtexturesampler_29',['createTextureSampler',['../classvex_1_1VulkanResources.html#a61da06f0128f9c4b97c6512103c90c6f',1,'vex::VulkanResources']]],
+  ['createtransparentpipeline_30',['createTransparentPipeline',['../classvex_1_1VulkanPipeline.html#ac4c66041196d8c8d8f1410125923a34b',1,'vex::VulkanPipeline']]],
+  ['createuipipeline_31',['createUIPipeline',['../classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d',1,'vex::VulkanPipeline']]],
+  ['createuniformbuffers_32',['createUniformBuffers',['../classvex_1_1VulkanResources.html#af6600e8f346f3d771113252bab2739af',1,'vex::VulkanResources']]]
 ];

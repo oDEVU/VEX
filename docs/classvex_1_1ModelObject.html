@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -120,7 +121,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:addb81bbf88b9a18e17dd61160ea0647d" id="r_addb81bbf88b9a18e17dd61160ea0647d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addb81bbf88b9a18e17dd61160ea0647d">ModelObject</a> (<a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, const std::string &amp;name, <a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> meshComponent, <a class="el" href="structvex_1_1TransformComponent.html">TransformComponent</a> transformComponent)</td></tr>
 <tr class="memdesc:addb81bbf88b9a18e17dd61160ea0647d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe...">ModelObject</a> class. As said earlier, <a class="el" href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe...">ModelObject</a> can only be created by Model Creators methods. So if you are reading this you are doing something wrong.  <br /></td></tr>
 <tr class="memitem:aa3dc237babc57e7044871127bc35e00e" id="r_aa3dc237babc57e7044871127bc35e00e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3dc237babc57e7044871127bc35e00e">~ModelObject</a> () override</td></tr>
-<tr class="memdesc:aa3dc237babc57e7044871127bc35e00e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe...">ModelObject</a> class. Cleans up the mesh data and logs a message.  <br /></td></tr>
+<tr class="memdesc:aa3dc237babc57e7044871127bc35e00e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe...">ModelObject</a> class.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classvex_1_1GameObject"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classvex_1_1GameObject')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a></td></tr>
 <tr class="memitem:aa50421d141741f058e45878417c827d0 inherit pub_methods_classvex_1_1GameObject" id="r_aa50421d141741f058e45878417c827d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#aa50421d141741f058e45878417c827d0">GameObject</a> (<a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, const std::string &amp;name)</td></tr>
 <tr class="memdesc:aa50421d141741f058e45878417c827d0 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. You need to call it from your derived class, it gives your object a unique identifier and registers it with the engine.  <br /></td></tr>
@@ -158,10 +159,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af6e23b5a1aff264edd4bc04e63d55647 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that sets the type of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>.  <br /></td></tr>
 <tr class="memitem:ae98293f38a7f1bf387ea19366ff10d9f inherit pub_methods_classvex_1_1GameObject" id="r_ae98293f38a7f1bf387ea19366ff10d9f"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#ae98293f38a7f1bf387ea19366ff10d9f">getObjectType</a> () const</td></tr>
 <tr class="memdesc:ae98293f38a7f1bf387ea19366ff10d9f inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that returns the type of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>.  <br /></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a7a42a98707c520933012c8f05b10b418" id="r_a7a42a98707c520933012c8f05b10b418"><td class="memItemLeft" align="right" valign="top">std::function&lt; void(std::string &amp;, <a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a>)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a42a98707c520933012c8f05b10b418">cleanup</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -242,26 +239,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Destructor for <a class="el" href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe...">ModelObject</a> class. Cleans up the mesh data and logs a message. </p>
+<p>Destructor for <a class="el" href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe...">ModelObject</a> class. </p>
 
 <p class="definition">Definition at line <a class="el" href="ModelObject_8hpp_source.html#l00024">24</a> of file <a class="el" href="ModelObject_8hpp_source.html">ModelObject.hpp</a>.</p>
-
-</div>
-</div>
-<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a7a42a98707c520933012c8f05b10b418" name="a7a42a98707c520933012c8f05b10b418"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a42a98707c520933012c8f05b10b418">&#9670;&#160;</a></span>cleanup</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::function&lt;void(std::string&amp;, <a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a>)&gt; vex::ModelObject::cleanup</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ModelObject_8hpp_source.html#l00029">29</a> of file <a class="el" href="ModelObject_8hpp_source.html">ModelObject.hpp</a>.</p>
 
 </div>
 </div>

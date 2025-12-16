@@ -2,6 +2,7 @@ var annotated_dup =
 [
     [ "vex", null, [
       [ "AssetBrowser", "classvex_1_1AssetBrowser.html", "classvex_1_1AssetBrowser" ],
+      [ "BasicCamera", "classvex_1_1BasicCamera.html", "classvex_1_1BasicCamera" ],
       [ "BodyIDHasher", "structvex_1_1BodyIDHasher.html", null ],
       [ "BPLayerInterfaceImpl", "classvex_1_1BPLayerInterfaceImpl.html", null ],
       [ "BrowserIcons", "structvex_1_1BrowserIcons.html", null ],
@@ -9,6 +10,7 @@ var annotated_dup =
       [ "CameraObject", "classvex_1_1CameraObject.html", null ],
       [ "CollisionHit", "structvex_1_1CollisionHit.html", null ],
       [ "ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
+      [ "DebugVertex", "structvex_1_1DebugVertex.html", null ],
       [ "DialogWindow", "classvex_1_1DialogWindow.html", "classvex_1_1DialogWindow" ],
       [ "Editor", "classvex_1_1Editor.html", "classvex_1_1Editor" ],
       [ "Engine", "classvex_1_1Engine.html", "classvex_1_1Engine" ],
@@ -77,5 +79,6 @@ var annotated_dup =
     [ "EditorImGUIWrapper", "classEditorImGUIWrapper.html", "classEditorImGUIWrapper" ],
     [ "EditorMenuBar", "classEditorMenuBar.html", "classEditorMenuBar" ],
     [ "EditorProperties", "structEditorProperties.html", null ],
+    [ "ProjectProperties", "structProjectProperties.html", null ],
     [ "SceneAction", "structSceneAction.html", null ]
 ];

@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -150,6 +151,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a43a768746bf14be5e95cc3ed4c459f93 inherit pub_methods_classvex_1_1Engine" id="r_a43a768746bf14be5e95cc3ed4c459f93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1SceneManager.html">SceneManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a> ()</td></tr>
 <tr class="memitem:ad745a460f7ea3921a13f176fce6f152c inherit pub_methods_classvex_1_1Engine" id="r_ad745a460f7ea3921a13f176fce6f152c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1VexUI.html">VexUI</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#ad745a460f7ea3921a13f176fce6f152c">createVexUI</a> ()</td></tr>
 <tr class="memitem:a97bee5a3c7fb37dd9e63c920787175b5 inherit pub_methods_classvex_1_1Engine" id="r_a97bee5a3c7fb37dd9e63c920787175b5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a97bee5a3c7fb37dd9e63c920787175b5">GetCurrentFrame</a> ()</td></tr>
+<tr class="memitem:acbdd6bbfb8a67026c7ded656cb1d9eea inherit pub_methods_classvex_1_1Engine" id="r_acbdd6bbfb8a67026c7ded656cb1d9eea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#acbdd6bbfb8a67026c7ded656cb1d9eea">setRenderPhysicsDebug</a> (bool value)</td></tr>
 <tr class="memitem:a1e2db0c06482c748e020a8c157de4c08 inherit pub_methods_classvex_1_1Engine" id="r_a1e2db0c06482c748e020a8c157de4c08"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a1e2db0c06482c748e020a8c157de4c08">getLastLoadedScenes</a> ()</td></tr>
 <tr class="memitem:a41cf6ba0c4d08f5e25063ef280e8aa9a inherit pub_methods_classvex_1_1Engine" id="r_a41cf6ba0c4d08f5e25063ef280e8aa9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a41cf6ba0c4d08f5e25063ef280e8aa9a">prepareScenesForHotReload</a> ()</td></tr>
 <tr class="memitem:aeeb81fa77c9f740100285bedda1d9f09 inherit pub_methods_classvex_1_1Engine" id="r_aeeb81fa77c9f740100285bedda1d9f09"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#aeeb81fa77c9f740100285bedda1d9f09">processEvent</a> (const SDL_Event &amp;event, float deltaTime)</td></tr>
@@ -175,15 +177,37 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:afe424a57003ebe5fa728f4ba4a9d0517"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scans a directory path for a valid VEX project file and adds it to the list.  <br /></td></tr>
 <tr class="memitem:aceebef03d1b87b280ef35725ce415492" id="r_aceebef03d1b87b280ef35725ce415492"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aceebef03d1b87b280ef35725ce415492">selectProject</a> (const std::string &amp;projectPath)</td></tr>
 <tr class="memdesc:aceebef03d1b87b280ef35725ce415492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the path of the project that the user selected and triggers the closure of the selector.  <br /></td></tr>
+<tr class="memitem:a70bffdd847d8d847c7c43669a002296a" id="r_a70bffdd847d8d847c7c43669a002296a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70bffdd847d8d847c7c43669a002296a">drawCreatorModal</a> ()</td></tr>
+<tr class="memdesc:a70bffdd847d8d847c7c43669a002296a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the modal for creating a new project.  <br /></td></tr>
+<tr class="memitem:a16b68758931371aa3265bd787f06f984" id="r_a16b68758931371aa3265bd787f06f984"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16b68758931371aa3265bd787f06f984">drawAddExistingModal</a> ()</td></tr>
+<tr class="memdesc:a16b68758931371aa3265bd787f06f984"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the modal for adding an existing project.  <br /></td></tr>
+<tr class="memitem:a27cb5511411684e878f37d4c13b3f4f1" id="r_a27cb5511411684e878f37d4c13b3f4f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27cb5511411684e878f37d4c13b3f4f1">drawMoveProjectModal</a> ()</td></tr>
+<tr class="memdesc:a27cb5511411684e878f37d4c13b3f4f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the modal for moving an existing project.  <br /></td></tr>
+<tr class="memitem:a8905e223d154ecb07dbb8b5a1ee80aa2" id="r_a8905e223d154ecb07dbb8b5a1ee80aa2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8905e223d154ecb07dbb8b5a1ee80aa2">createNewProject</a> ()</td></tr>
+<tr class="memdesc:a8905e223d154ecb07dbb8b5a1ee80aa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new project with the given name and path.  <br /></td></tr>
+<tr class="memitem:a5e6e4813654a8f0cdf971a2ecbb948e2" id="r_a5e6e4813654a8f0cdf971a2ecbb948e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e6e4813654a8f0cdf971a2ecbb948e2">removeProject</a> (int index)</td></tr>
+<tr class="memdesc:a5e6e4813654a8f0cdf971a2ecbb948e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a project from the list.  <br /></td></tr>
+<tr class="memitem:aca1b6e034e42319b09c02e176c97d74b" id="r_aca1b6e034e42319b09c02e176c97d74b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca1b6e034e42319b09c02e176c97d74b">moveProject</a> (int index, const std::string &amp;newParentDir)</td></tr>
+<tr class="memdesc:aca1b6e034e42319b09c02e176c97d74b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves a project to a new parent directory.  <br /></td></tr>
+<tr class="memitem:a50e79d18773efdc061d1bce84942e1eb" id="r_a50e79d18773efdc061d1bce84942e1eb"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50e79d18773efdc061d1bce84942e1eb">getUserDocumentsDir</a> ()</td></tr>
+<tr class="memdesc:a50e79d18773efdc061d1bce84942e1eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the path to the user's documents directory.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:acc40619abd8e30ad5d8481783b7e7a70" id="r_acc40619abd8e30ad5d8481783b7e7a70"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc40619abd8e30ad5d8481783b7e7a70">m_newProjName</a> [64] = &quot;NewVexProject&quot;</td></tr>
+<tr class="memitem:a5407eea0c63823e3f9bbf6f80bf1605d" id="r_a5407eea0c63823e3f9bbf6f80bf1605d"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5407eea0c63823e3f9bbf6f80bf1605d">m_newProjParentDir</a> [512] = &quot;&quot;</td></tr>
+<tr class="memitem:a6d30201366288964153115441f454ff4" id="r_a6d30201366288964153115441f454ff4"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d30201366288964153115441f454ff4">m_addExistingBuffer</a> [512] = &quot;&quot;</td></tr>
+<tr class="memitem:af0c9a3f3c3a6aebd4a2f1905b965a71d" id="r_af0c9a3f3c3a6aebd4a2f1905b965a71d"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0c9a3f3c3a6aebd4a2f1905b965a71d">m_moveProjDestBuffer</a> [512] = &quot;&quot;</td></tr>
+<tr class="memitem:a746b010f8fe0476dc1a182d49bff4c3d" id="r_a746b010f8fe0476dc1a182d49bff4c3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a746b010f8fe0476dc1a182d49bff4c3d">m_contextMenuTargetIndex</a> = -1</td></tr>
 <tr class="memitem:a5e825eeda40c8e7588789fc613118b5a" id="r_a5e825eeda40c8e7588789fc613118b5a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structvex_1_1ProjectMetadata.html">ProjectMetadata</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e825eeda40c8e7588789fc613118b5a">m_projects</a></td></tr>
 <tr class="memitem:ae29d82ef67ec28250aba99a62ca2136b" id="r_ae29d82ef67ec28250aba99a62ca2136b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae29d82ef67ec28250aba99a62ca2136b">m_configPath</a> = &quot;recent_projects.json&quot;</td></tr>
 <tr class="memitem:a8a2b2faacd701f33eb74e14a0c07561b" id="r_a8a2b2faacd701f33eb74e14a0c07561b"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a2b2faacd701f33eb74e14a0c07561b">m_inputBuffer</a> [256] = &quot;&quot;</td></tr>
 <tr class="memitem:a0f7a6a1130fc6e30fc8ac98162fd5da9" id="r_a0f7a6a1130fc6e30fc8ac98162fd5da9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f7a6a1130fc6e30fc8ac98162fd5da9">m_selectedProjectPath</a> = &quot;&quot;</td></tr>
 <tr class="memitem:abc1822f1a6dbc3fcd280c0c527e8f5c5" id="r_abc1822f1a6dbc3fcd280c0c527e8f5c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc1822f1a6dbc3fcd280c0c527e8f5c5">shouldClose</a> = false</td></tr>
 <tr class="memitem:a54dbca82c0c4a0b881cbe8a593fe0d90" id="r_a54dbca82c0c4a0b881cbe8a593fe0d90"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54dbca82c0c4a0b881cbe8a593fe0d90">closeDelay</a> = 5</td></tr>
+<tr class="memitem:a4549a51077e5078ad93bb818b2e44422" id="r_a4549a51077e5078ad93bb818b2e44422"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4549a51077e5078ad93bb818b2e44422">m_showCreatorModal</a> = false</td></tr>
+<tr class="memitem:a65ee3e9ed96d17064b8fad8019a25e51" id="r_a65ee3e9ed96d17064b8fad8019a25e51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65ee3e9ed96d17064b8fad8019a25e51">m_showAddExistingModal</a> = false</td></tr>
+<tr class="memitem:a7d453427604668709a73d5909ddc326a" id="r_a7d453427604668709a73d5909ddc326a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d453427604668709a73d5909ddc326a">m_showMoveModal</a> = false</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -202,6 +226,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:aa773ff1a0d1a194516b83089d4cc6c5a inherit pro_attribs_classvex_1_1Engine" id="r_aa773ff1a0d1a194516b83089d4cc6c5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#aa773ff1a0d1a194516b83089d4cc6c5a">m_running</a> = true</td></tr>
 <tr class="memitem:a2204e3d5b49692394dda421ceee579bc inherit pro_attribs_classvex_1_1Engine" id="r_a2204e3d5b49692394dda421ceee579bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a2204e3d5b49692394dda421ceee579bc">m_paused</a> = false</td></tr>
 <tr class="memitem:ab0230b32afcce42f98c113c5e52e2360 inherit pro_attribs_classvex_1_1Engine" id="r_ab0230b32afcce42f98c113c5e52e2360"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#ab0230b32afcce42f98c113c5e52e2360">m_internally_paused</a> = false</td></tr>
+<tr class="memitem:a92bbf8d6d9ddb30e7081a8068b0e1178 inherit pro_attribs_classvex_1_1Engine" id="r_a92bbf8d6d9ddb30e7081a8068b0e1178"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a92bbf8d6d9ddb30e7081a8068b0e1178">m_renderPhysicsDebug</a> = false</td></tr>
 <tr class="memitem:a890d6f7445ec52da18ee1e12321a7a33 inherit pro_attribs_classvex_1_1Engine" id="r_a890d6f7445ec52da18ee1e12321a7a33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a890d6f7445ec52da18ee1e12321a7a33">m_frame</a> = 0</td></tr>
 <tr class="memitem:a1f57f53662476564034df2cc4cb3f6e0 inherit pro_attribs_classvex_1_1Engine" id="r_a1f57f53662476564034df2cc4cb3f6e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1GameInfo.html">GameInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a1f57f53662476564034df2cc4cb3f6e0">m_gameInfo</a></td></tr>
 <tr class="memitem:a07077beece9972edc9569ec4c681f3e5 inherit pro_attribs_classvex_1_1Engine" id="r_a07077beece9972edc9569ec4c681f3e5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a07077beece9972edc9569ec4c681f3e5">lastLoadedScenes</a></td></tr>
@@ -239,6 +264,122 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a8905e223d154ecb07dbb8b5a1ee80aa2" name="a8905e223d154ecb07dbb8b5a1ee80aa2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8905e223d154ecb07dbb8b5a1ee80aa2">&#9670;&#160;</a></span>createNewProject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ProjectSelector::createNewProject </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a new project with the given name and path. </p>
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00380">380</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a16b68758931371aa3265bd787f06f984" name="a16b68758931371aa3265bd787f06f984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16b68758931371aa3265bd787f06f984">&#9670;&#160;</a></span>drawAddExistingModal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ProjectSelector::drawAddExistingModal </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws the modal for adding an existing project. </p>
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00168">168</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a70bffdd847d8d847c7c43669a002296a" name="a70bffdd847d8d847c7c43669a002296a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70bffdd847d8d847c7c43669a002296a">&#9670;&#160;</a></span>drawCreatorModal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ProjectSelector::drawCreatorModal </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws the modal for creating a new project. </p>
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00339">339</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a27cb5511411684e878f37d4c13b3f4f1" name="a27cb5511411684e878f37d4c13b3f4f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27cb5511411684e878f37d4c13b3f4f1">&#9670;&#160;</a></span>drawMoveProjectModal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ProjectSelector::drawMoveProjectModal </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws the modal for moving an existing project. </p>
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00198">198</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a28af76a2a88a82b1485c7fa247929401" name="a28af76a2a88a82b1485c7fa247929401"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a28af76a2a88a82b1485c7fa247929401">&#9670;&#160;</a></span>drawSelectorLayout()</h2>
 
@@ -270,7 +411,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00068">68</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00079">79</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
 
 </div>
 </div>
@@ -304,6 +445,35 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a50e79d18773efdc061d1bce84942e1eb" name="a50e79d18773efdc061d1bce84942e1eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50e79d18773efdc061d1bce84942e1eb">&#9670;&#160;</a></span>getUserDocumentsDir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path vex::ProjectSelector::getUserDocumentsDir </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the path to the user's documents directory. </p>
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00429">429</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+
+</div>
+</div>
 <a id="aba78ce4510b08f34fab7cc194f550bee" name="aba78ce4510b08f34fab7cc194f550bee"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aba78ce4510b08f34fab7cc194f550bee">&#9670;&#160;</a></span>loadKnownProjects()</h2>
 
@@ -329,7 +499,69 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Loads the list of recently known projects from the configuration file. </p>
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00132">132</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00275">275</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aca1b6e034e42319b09c02e176c97d74b" name="aca1b6e034e42319b09c02e176c97d74b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca1b6e034e42319b09c02e176c97d74b">&#9670;&#160;</a></span>moveProject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ProjectSelector::moveProject </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>newParentDir</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves a project to a new parent directory. </p>
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00243">243</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5e6e4813654a8f0cdf971a2ecbb948e2" name="a5e6e4813654a8f0cdf971a2ecbb948e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e6e4813654a8f0cdf971a2ecbb948e2">&#9670;&#160;</a></span>removeProject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::ProjectSelector::removeProject </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes a project from the list. </p>
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00235">235</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
 
 </div>
 </div>
@@ -360,7 +592,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#a651671153ff5f6edc58e2d76700c6c77">vex::Engine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00027">27</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00035">35</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
 
 </div>
 </div>
@@ -389,7 +621,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Saves the current list of known projects to the configuration file. </p>
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00148">148</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00291">291</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
 
 </div>
 </div>
@@ -424,7 +656,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00161">161</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00304">304</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
 
 </div>
 </div>
@@ -459,7 +691,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00190">190</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8cpp_source.html#l00333">333</a> of file <a class="el" href="ProjectSelector_8cpp_source.html">ProjectSelector.cpp</a>.</p>
 
 </div>
 </div>
@@ -484,7 +716,31 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00082">82</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00125">125</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6d30201366288964153115441f454ff4" name="a6d30201366288964153115441f454ff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d30201366288964153115441f454ff4">&#9670;&#160;</a></span>m_addExistingBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char vex::ProjectSelector::m_addExistingBuffer[512] = &quot;&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00113">113</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
 
 </div>
 </div>
@@ -508,7 +764,31 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00076">76</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00119">119</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a746b010f8fe0476dc1a182d49bff4c3d" name="a746b010f8fe0476dc1a182d49bff4c3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a746b010f8fe0476dc1a182d49bff4c3d">&#9670;&#160;</a></span>m_contextMenuTargetIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int vex::ProjectSelector::m_contextMenuTargetIndex = -1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00116">116</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
 
 </div>
 </div>
@@ -532,7 +812,79 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00077">77</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00120">120</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af0c9a3f3c3a6aebd4a2f1905b965a71d" name="af0c9a3f3c3a6aebd4a2f1905b965a71d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0c9a3f3c3a6aebd4a2f1905b965a71d">&#9670;&#160;</a></span>m_moveProjDestBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char vex::ProjectSelector::m_moveProjDestBuffer[512] = &quot;&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00114">114</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acc40619abd8e30ad5d8481783b7e7a70" name="acc40619abd8e30ad5d8481783b7e7a70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc40619abd8e30ad5d8481783b7e7a70">&#9670;&#160;</a></span>m_newProjName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char vex::ProjectSelector::m_newProjName[64] = &quot;NewVexProject&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00110">110</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5407eea0c63823e3f9bbf6f80bf1605d" name="a5407eea0c63823e3f9bbf6f80bf1605d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5407eea0c63823e3f9bbf6f80bf1605d">&#9670;&#160;</a></span>m_newProjParentDir</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char vex::ProjectSelector::m_newProjParentDir[512] = &quot;&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00111">111</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
 
 </div>
 </div>
@@ -556,7 +908,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00075">75</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00118">118</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
 
 </div>
 </div>
@@ -580,7 +932,79 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00079">79</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00122">122</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a65ee3e9ed96d17064b8fad8019a25e51" name="a65ee3e9ed96d17064b8fad8019a25e51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65ee3e9ed96d17064b8fad8019a25e51">&#9670;&#160;</a></span>m_showAddExistingModal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::ProjectSelector::m_showAddExistingModal = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00127">127</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4549a51077e5078ad93bb818b2e44422" name="a4549a51077e5078ad93bb818b2e44422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4549a51077e5078ad93bb818b2e44422">&#9670;&#160;</a></span>m_showCreatorModal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::ProjectSelector::m_showCreatorModal = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00126">126</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7d453427604668709a73d5909ddc326a" name="a7d453427604668709a73d5909ddc326a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d453427604668709a73d5909ddc326a">&#9670;&#160;</a></span>m_showMoveModal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::ProjectSelector::m_showMoveModal = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00128">128</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
 
 </div>
 </div>
@@ -604,7 +1028,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00081">81</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ProjectSelector_8hpp_source.html#l00124">124</a> of file <a class="el" href="ProjectSelector_8hpp_source.html">ProjectSelector.hpp</a>.</p>
 
 </div>
 </div>

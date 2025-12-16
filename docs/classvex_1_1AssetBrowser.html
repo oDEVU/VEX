@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -134,6 +135,11 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ae41d8887da43018bcd18e54336c18caf" id="r_ae41d8887da43018bcd18e54336c18caf"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae41d8887da43018bcd18e54336c18caf">m_currentPath</a></td></tr>
 <tr class="memitem:a58940902e0966988380388923c8434ec" id="r_a58940902e0966988380388923c8434ec"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58940902e0966988380388923c8434ec">m_thumbnailSize</a> = 64.0f</td></tr>
 <tr class="memitem:aab32f6093b44da443e597a9d000cdeb9" id="r_aab32f6093b44da443e597a9d000cdeb9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab32f6093b44da443e597a9d000cdeb9">m_padding</a> = 16.0f</td></tr>
+<tr class="memitem:ab375c9fb6e9dfab1480319920a846278" id="r_ab375c9fb6e9dfab1480319920a846278"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab375c9fb6e9dfab1480319920a846278">m_copiedPath</a></td></tr>
+<tr class="memitem:afa4ab9f2205b30e6d492cfd994124034" id="r_afa4ab9f2205b30e6d492cfd994124034"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa4ab9f2205b30e6d492cfd994124034">m_isCut</a> = false</td></tr>
+<tr class="memitem:aba3cb8e0bfd089a0c63dbc9403fc852d" id="r_aba3cb8e0bfd089a0c63dbc9403fc852d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba3cb8e0bfd089a0c63dbc9403fc852d">m_renaming</a> = false</td></tr>
+<tr class="memitem:a581ac662df5ea7e267c1f3afd90b948c" id="r_a581ac662df5ea7e267c1f3afd90b948c"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a581ac662df5ea7e267c1f3afd90b948c">m_renamePath</a></td></tr>
+<tr class="memitem:a3f0ef165b404203c991a04496298f4b8" id="r_a3f0ef165b404203c991a04496298f4b8"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f0ef165b404203c991a04496298f4b8">m_renameBuffer</a> [256] = &quot;&quot;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class responsible for displaying and navigating project assets within an ImGUI window. </p>
@@ -163,7 +169,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00008">8</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00010">10</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
 </div>
 </div>
@@ -192,7 +198,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string - The path of the asset that was double-clicked/selected for action, or empty string otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00050">50</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00052">52</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
 </div>
 </div>
@@ -250,7 +256,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string - The file extension (e.g., ".png", ".scene"). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00031">31</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00033">33</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
 </div>
 </div>
@@ -291,7 +297,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ImTextureID - The texture ID of the selected icon. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00012">12</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00014">14</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
 </div>
 </div>
@@ -319,7 +325,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int - An integer code representing the asset type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00038">38</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8cpp_source.html#l00040">40</a> of file <a class="el" href="AssetBrowser_8cpp_source.html">AssetBrowser.cpp</a>.</p>
 
 </div>
 </div>
@@ -394,6 +400,30 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ab375c9fb6e9dfab1480319920a846278" name="ab375c9fb6e9dfab1480319920a846278"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab375c9fb6e9dfab1480319920a846278">&#9670;&#160;</a></span>m_copiedPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path vex::AssetBrowser::m_copiedPath</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00076">76</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ae41d8887da43018bcd18e54336c18caf" name="ae41d8887da43018bcd18e54336c18caf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae41d8887da43018bcd18e54336c18caf">&#9670;&#160;</a></span>m_currentPath</h2>
 
@@ -418,6 +448,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="afa4ab9f2205b30e6d492cfd994124034" name="afa4ab9f2205b30e6d492cfd994124034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa4ab9f2205b30e6d492cfd994124034">&#9670;&#160;</a></span>m_isCut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::AssetBrowser::m_isCut = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00077">77</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aab32f6093b44da443e597a9d000cdeb9" name="aab32f6093b44da443e597a9d000cdeb9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aab32f6093b44da443e597a9d000cdeb9">&#9670;&#160;</a></span>m_padding</h2>
 
@@ -439,6 +493,78 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00074">74</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3f0ef165b404203c991a04496298f4b8" name="a3f0ef165b404203c991a04496298f4b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f0ef165b404203c991a04496298f4b8">&#9670;&#160;</a></span>m_renameBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char vex::AssetBrowser::m_renameBuffer[256] = &quot;&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00081">81</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a581ac662df5ea7e267c1f3afd90b948c" name="a581ac662df5ea7e267c1f3afd90b948c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a581ac662df5ea7e267c1f3afd90b948c">&#9670;&#160;</a></span>m_renamePath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path vex::AssetBrowser::m_renamePath</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00080">80</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aba3cb8e0bfd089a0c63dbc9403fc852d" name="aba3cb8e0bfd089a0c63dbc9403fc852d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba3cb8e0bfd089a0c63dbc9403fc852d">&#9670;&#160;</a></span>m_renaming</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::AssetBrowser::m_renaming = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AssetBrowser_8hpp_source.html#l00079">79</a> of file <a class="el" href="AssetBrowser_8hpp_source.html">AssetBrowser.hpp</a>.</p>
 
 </div>
 </div>
