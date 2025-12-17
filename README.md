@@ -4,20 +4,23 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 ![Vex screen_shot_low_res](/RepoStuff/VEX_SS_LOWRES.png)
 
 ## Current Project State:
-### PS1-style graphics with the ability to enable and disable specific features
-![ObjectTest release build 03-10-2025](/RepoStuff/VEX_Release.gif)
-
-### Built-in ImGui, error handling, and debugging tools for debug builds
-![ObjectTest debug build 03-10-2025](/RepoStuff/VEX_Debug.gif)
+### Build in stylistic features for retro graphics
+Effects like texture warping, vertex snapping, crt shader, color quantization, and more.
+![ObjectTest release build 03-10-2025](/RepoStuff/style.png)
+With full control:
+![ObjectTest release build 03-10-2025](/RepoStuff/control.png)
 
 ### Performant Physics system implemented
+Implemented Jolt for its stability and performance.
 ![StraterProjects/PhysicsTest](/RepoStuff/Physics.gif)
 
-### Dynamic Vertex lighting
-![StraterProjects/LightingTest](/RepoStuff/Lighting.gif)
+### Editor
+GUI system implemented for easy asset management and scene editing.
+![StraterProjects/LightingTest](/RepoStuff/editor.png)
 
-### Custom asset packing system with support for auto-registered custom classes
-![ObjectTest debug build and build tools 03-10-2025](/RepoStuff/VEX_features.gif)
+### Different Asset packing system for debug and release builds
+For easier debugging debug builds use raw asset files.
+![StraterProjects/LightingTest](/RepoStuff/assets.png)
 
 ## Engine Systems
 - Custom Input System: Flexible input handling supporting multiple input methods and devices
@@ -31,13 +34,13 @@ A game engine built with Vulkan that aims to replicate the feel of PS1-era games
 ## Other Notes
 - Current builds are early in development. But making a game is possible.
 - Currently mostly tested on Linux with AMD GPUs (both discrete and integrated), Windows builds are now possible but not every merge is tested for windows compatibility.
-- An editor is planned, but requires a working engine core to do so.
+- Editor is in early stages, currently its mostly basic scene editor.
 
 ## Engine documentation
 - Core Documentation: Detailed, doxygen-generated reference for engine modification and development. [https://odevu.github.io/VEX/](https://odevu.github.io/VEX/)
 - Code Samples: Simple, system-by-system examples focused on game creation and engine usage. [https://odevu.github.io/VEX/samples/](https://odevu.github.io/VEX/samples/)
 
-## Building the Project (Curently you build engine with a project)
+## Building the Project
 This guide provides the necessary steps for setting up your environment, compiling the custom build tools, and finally compiling the project itself.
 
 ---
@@ -72,21 +75,23 @@ You must install all the following dependencies for your specific operating syst
 
 ### Build Steps
 
-#### 1. Build the Building Tools
-The engine uses a custom compilation utility called **`ProjectBuilder`** to build game projects. You need to build it with engine and then use it to build you projects.
+#### 1. Build the Engine
+This step will build **`Core Engine`** lib, **`ProjectBuilder`** and **`Editor`**. Later on you can use both Editor, to build in gui, or ProjectBuilder to build from cmd.
 
 1.  Navigate to the **`Engine`** directory in your terminal.
 2.  Run the script for your platform:
     * **Windows:** `build-windows.bat`
     * **Linux:** `./build-linux.sh`
 
-Upon successful completion, the `ProjectBuilder` executable will be placed in the **`Engine/BuildTools/build`** directory.
+Upon successful completion, `VexEditor` and `VexProjectSelector` executable will be placed in the **`Engine/Editor/bin`** and `ProjectBuilder` executable will be placed in the **`Engine/BuildTools/build`** directory.
 
 ---
 
 #### 2. Build Your Project
-Use the compiled `ProjectBuilder` to build your game project.
+Most straight forward way is to use `VexEditor` to build your game project from gui. You can use `VexProjectSelector` to select your project from files and open it in `VexEditor` or provide `VexEditor` with the path to your project's root folder. In editor eaither build desired build type from menu bar, or use RUN button on the right to build and run you project.
 
+#### Alternative:
+Use the compiled `ProjectBuilder` to build your game project from cli.
 You need to provide the tool with the path to your project's root folder and specify the build type.
 
 ##### Usage
@@ -122,10 +127,14 @@ All liblaries are included as git submodules. Their respective licenses may diff
 - [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/)
 - [Volk](https://github.com/zeux/volk/)
 - [glm](https://github.com/g-truc/glm/)
+- [stb](https://github.com/nothings/stb)
 - [assimp](https://github.com/assimp/assimp)
 - [cpptrace](https://github.com/jeremy-rifkin/cpptrace)
+- [cr](https://github.com/fungos/cr)
 - [entt](https://github.com/skypjack/entt)
 - [Dear ImGui](https://github.com/ocornut/imgui)
+- [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)
+- [ImReflect](https://github.com/Sven-vh/ImReflect)
 - [nlohmann/json](https://github.com/nlohmann/json/)
 - [yoga](https://github.com/facebook/yoga)
 - [JoltPhysics](https://github.com/jrouwe/JoltPhysics)
