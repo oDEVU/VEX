@@ -45,13 +45,56 @@ else()
     message(FATAL_ERROR "VEX Engine targets not found at: ${VEX_TARGETS_FILE}\nPlease run the ProjectBuilder to compile the engine first.")
 endif()
 
+set(ICON_SOURCE_PNG "${CMAKE_CURRENT_SOURCE_DIR}/Assets/app_icon.png")
+
+if(NOT EXISTS "${ICON_SOURCE_PNG}")
+    message(FATAL_ERROR "Missing icon at '${ICON_SOURCE_PNG}'. Please add the file or update the path.")
+endif()
+
+if(WIN32)
+    set(ICON_OUT_ICO "${CMAKE_CURRENT_BINARY_DIR}/icon.ico")
+    set(RC_FILE "${CMAKE_CURRENT_BINARY_DIR}/resources.rc")
+
+    find_program(MAGICK_EXE magick)
+
+    if(NOT MAGICK_EXE AND NOT EXISTS "${ICON_OUT_ICO}")
+        message(FATAL_ERROR "ImageMagick not found and no 'icon.ico' exists. Install ImageMagick to auto-convert PNGs.")
+    endif()
+
+    if(MAGICK_EXE)
+        add_custom_command(
+            OUTPUT ${ICON_OUT_ICO}
+            COMMAND ${MAGICK_EXE} convert "${ICON_SOURCE_PNG}" -define icon:auto-resize=256,128,64,48,32,16 "${ICON_OUT_ICO}"
+            DEPENDS ${ICON_SOURCE_PNG}
+            COMMENT "Generating Windows ICO..."
+        )
+    endif()
+
+    file(WRITE "${RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${ICON_OUT_ICO}\"")
+    set(WINDOWS_ICON_RESOURCE ${RC_FILE})
+endif()
+
+if(UNIX AND NOT APPLE)
+    set(DESKTOP_FILE "${CMAKE_CURRENT_BINARY_DIR}/VexEngine.desktop")
+    file(WRITE "${DESKTOP_FILE}"
+"[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Vex Engine
+Comment=Vex Project Selector
+Exec=${CMAKE_CURRENT_BINARY_DIR}/VexProjectSelector
+Icon=${ICON_SOURCE_PNG}
+Terminal=false
+Categories=Development;IDE;
+")
+endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_STANDARD 23)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(${PROJECT_NAME} "main.cpp")
+add_executable(${PROJECT_NAME} "main.cpp" ${WINDOWS_ICON_RESOURCE})
 
 set(source_files
         Editor.cpp
@@ -114,7 +157,7 @@ else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
 endif()
 
-add_executable(VexProjectSelector "main_selector.cpp")
+add_executable(VexProjectSelector "main_selector.cpp" ${WINDOWS_ICON_RESOURCE})
 
 set(selector_sources
     ProjectSelector/ProjectSelector.cpp
