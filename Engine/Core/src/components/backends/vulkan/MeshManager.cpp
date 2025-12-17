@@ -178,7 +178,13 @@ namespace vex {
                 return;
             }
             #endif
-            meshComponent = loadMesh(path);
+            MeshComponent loadedAsset = loadMesh(path);
+
+            meshComponent.meshData = std::move(loadedAsset.meshData);
+            meshComponent.localCenter = loadedAsset.localCenter;
+            meshComponent.localRadius = loadedAsset.localRadius;
+
+            meshComponent.textureNames = std::move(loadedAsset.textureNames);
         }
 
         meshComponent.textureNames.clear();
