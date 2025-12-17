@@ -92,6 +92,12 @@ namespace vex {
             m_waitForGui = false;
         }
 
+        std::filesystem::path projectPath = m_projectBinaryPath;
+        std::filesystem::path assetsPath = projectPath / "Assets";
+        if(!getSceneManager()->getLastSceneName().contains(assetsPath.string())){
+            requestSceneReload(GetAssetPath(getSceneManager()->getLastSceneName()));
+        }
+
         m_fps = static_cast<int>(1.0f / deltaTime);
 
         if(m_SavedEditorProperties != m_editorProperties || m_frame == 0){

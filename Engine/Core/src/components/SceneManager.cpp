@@ -67,6 +67,7 @@ namespace vex {
                         else if (pc.shape == ShapeType::CYLINDER)
                             changed |= ImGui::DragFloat2("Cylinder", &pc.cylinderRadius);
 
+                        if (ImReflect::Input("BodyType", pc.bodyType).get<vex::BodyType>().is_changed()) changed = true;
                         if (ImReflect::Input("Mass", pc.mass).get<float>().is_changed()) changed = true;
                         if (ImReflect::Input("Friction", pc.friction).get<float>().is_changed()) changed = true;
                         if (ImReflect::Input("Bounciness", pc.bounce).get<float>().is_changed()) changed = true;

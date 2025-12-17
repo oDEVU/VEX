@@ -58,6 +58,9 @@ std::string GetAssetPath(const std::string& relativePath) {
 
     const std::string& overridePath = g_AssetRootOverride;
     if (!overridePath.empty()) {
+        if(relativePath.contains(overridePath)){
+            return relativePath;
+        }
         return (std::filesystem::path(overridePath) / relativePath).string();
     }
 

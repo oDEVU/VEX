@@ -61,7 +61,7 @@ PROJECT_BRIEF          = Retro looking game engine made in vulkan mostly because
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = ../RepoStuff/RenderedLogoLowRes.png
+PROJECT_LOGO           = ../RepoStuff/NewLogo/LogoFullMips/LogoTest_lojcst_c_scale,w_256.png
 
 # With the PROJECT_ICON tag one can specify an icon that is included in the tabs
 # when the HTML document is shown. Doxygen will copy the logo to the output

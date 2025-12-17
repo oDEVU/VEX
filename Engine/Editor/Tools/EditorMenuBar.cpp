@@ -31,7 +31,8 @@ void EditorMenuBar::DrawBar(){
                 OpenScene();
             }
             if (ImGui::MenuItem("Save Scene")) {
-                m_editor.getSceneManager()->GetScene(m_editor.getSceneManager()->getLastSceneName())->Save(m_editor.getSceneManager()->getLastSceneName());
+                std::string sceneName = vex::GetAssetPath(m_editor.getSceneManager()->getLastSceneName());
+                m_editor.getSceneManager()->GetScene(sceneName)->Save(sceneName);
             }
             if (ImGui::MenuItem("Save Scene As")) {
                 SaveSceneAs();

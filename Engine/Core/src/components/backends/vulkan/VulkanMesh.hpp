@@ -33,6 +33,7 @@ namespace vex {
             const glm::vec3& cameraPos,
             uint32_t modelIndex,
             uint32_t frameIndex,
+            glm::vec4 color,
             std::vector<TransparentTriangle>& outTriangles
         );
 
@@ -58,7 +59,8 @@ namespace vex {
                 uint32_t submeshIndex,
                 glm::mat4 modelMatrix,
                 bool modelChanged,
-                bool submeshChanged
+                bool submeshChanged,
+                glm::vec4 color = glm::vec4(1.f)
             ) const;
 
         /// @brief Helper function to get number of mesh components using this VulkanMesh instance, needed for mesh manager to know when to unload VulkanMesh.
@@ -100,6 +102,7 @@ struct TransparentTriangle {
         uint32_t firstIndex;
         uint32_t submeshIndex;
         VulkanMesh* mesh;
+        glm::vec4 color;
 
         //glm::mat4 modelMatrix;
     };

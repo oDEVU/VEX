@@ -404,6 +404,7 @@ namespace vex {
                              cameraPos,
                              modelIndex,
                              m_r_context.currentFrame,
+                             mesh.color,
                              m_transparentTriangles
                          );
                          trnasMatrixes[modelIndex] = modelMatrix;
@@ -435,6 +436,8 @@ namespace vex {
                 const auto& [key, value] = *trnasMatrixes.begin();
                 glm::mat4 batchModelMatrix = value;
 
+                glm::vec4 batchColor = glm::vec4(1.0f);
+
                 for (const auto& tri : m_transparentTriangles) {
                     bool stateChange = (tri.mesh != batchMesh ||
                                         tri.submeshIndex != batchSubmeshIndex ||
@@ -450,7 +453,9 @@ namespace vex {
                             batchSubmeshIndex,
                             batchModelMatrix,
                             true,//tri.modelIndex != batchModelIndex, // <- Doesnt work. Why? Needs to be fixed.
-                            tri.submeshIndex != batchSubmeshIndex
+                            tri.submeshIndex != batchSubmeshIndex,
+                            batchColor
+
                         );
 
                         issueMultiDrawIndexed(cmd, m_multiDrawInfos);
@@ -462,6 +467,7 @@ namespace vex {
                         batchSubmeshIndex = tri.submeshIndex;
                         batchModelIndex = tri.modelIndex;
                         batchModelMatrix = trnasMatrixes[tri.modelIndex];
+                        batchColor = tri.color;
                     }
 
                     bool canMerge = !m_multiDrawInfos.empty() && !stateChange;
@@ -490,7 +496,8 @@ namespace vex {
                         batchSubmeshIndex,
                         batchModelMatrix,
                         true,
-                        true
+                        true,
+                        batchColor
                     );
                     issueMultiDrawIndexed(cmd, m_multiDrawInfos);
                 }
@@ -1005,6 +1012,7 @@ namespace vex {
                                     cameraPos,
                                     modelIndex,
                                     m_r_context.currentFrame,
+                                    mesh.color,
                                     m_transparentTriangles
                                 );
 

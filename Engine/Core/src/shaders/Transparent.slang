@@ -103,14 +103,14 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
       discard;
   }
 
-    if (isEnabled(TEXTURE_QUANTIZATION)) {
-      float4 c = isUntextured ? pushColor : texColor;
-      c = applyQuantization(c, pixelCoord, true);
-      if (isUntextured)
-        pushColor = c;
-      else
-        texColor = c;
-    }
+  if (isEnabled(TEXTURE_QUANTIZATION)) {
+    float4 c = isUntextured ? pushColor : texColor;
+    c = applyQuantization(c, pixelCoord, true);
+    if (isUntextured)
+      pushColor = c;
+    else
+      texColor = c;
+  }
 
   texColor.rgb =
       applyNTSC(texColor.rgb, uv, pixelCoord, isEnabled(NTSC_ARTIFACTS));
@@ -128,8 +128,8 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   lighting = saturate(lighting);
 
   float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
-                                     : (texColor * float4(lighting, 1.0));
-  finalColor.a = 1.0;
+                                   : (texColor * float4(lighting, 1.0));
+  // finalColor.a = 1.0;
 
   if (isEnabled(COLOR_QUANTIZATION)) {
     float4 c = finalColor;
@@ -137,11 +137,11 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
     finalColor = c;
   }
 
-    if (isEnabled(SCREEN_DITHER)) {
-      float3 c = finalColor.rgb;
-      c = applyDither(c, pixelCoord);
-      finalColor.rgb = c;
-    }
+  if (isEnabled(SCREEN_DITHER)) {
+    float3 c = finalColor.rgb;
+    c = applyDither(c, pixelCoord);
+    finalColor.rgb = c;
+  }
 
   return finalColor;
 }

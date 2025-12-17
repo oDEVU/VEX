@@ -6,6 +6,7 @@
 #include <SDL3/SDL.h>
 
 // debug
+#include <X11/X.h>
 #include <cstdint>
 #include <cstring>
 #include <iostream>
@@ -88,6 +89,7 @@ namespace vex {
         const glm::vec3& cameraPos,
         uint32_t modelIndex,
         uint32_t frameIndex,
+        glm::vec4 color,
         std::vector<TransparentTriangle>& outTriangles
     ) {
         glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
@@ -110,7 +112,8 @@ namespace vex {
                     frameIndex,
                     i,
                     submeshIndex,
-                    this
+                    this,
+                    color
                 });
             }
         }
@@ -125,7 +128,8 @@ namespace vex {
         uint32_t submeshIndex,
         glm::mat4 modelMatrix,
         bool modelChanged,
-        bool submeshChanged
+        bool submeshChanged,
+        glm::vec4 color
     ) const {
         const auto& buffers = m_submeshBuffers[submeshIndex];
         const auto& textureName = m_submeshTextures[submeshIndex];
@@ -170,7 +174,7 @@ namespace vex {
             if (textureExists) {
                 modelPush.color = glm::vec4(1.0f);
             } else {
-                modelPush.color = glm::vec4(1.0f);
+                modelPush.color = color;
                 if(!textureName.empty()) {
                     log("Missing texture: %s", textureName.c_str());
                 }
