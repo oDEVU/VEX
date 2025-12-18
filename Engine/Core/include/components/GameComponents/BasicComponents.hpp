@@ -398,6 +398,10 @@ struct MeshComponent {
         fresh = false;
     }
 
+    void forceRefresh(){
+        fresh = true;
+    }
+
     private:
     bool fresh = true;
 };

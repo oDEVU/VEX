@@ -343,8 +343,14 @@ namespace vex {
                 }
 
                 if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected() || isEditorMode || mesh.worldRadius <= 0.0f){
+                    float scaleX = glm::length(glm::vec3(modelMatrix[0]));
+                    float scaleY = glm::length(glm::vec3(modelMatrix[1]));
+                    float scaleZ = glm::length(glm::vec3(modelMatrix[2]));
+
+                    float maxScale = std::max({ scaleX, scaleY, scaleZ });
+
+                    mesh.worldRadius = mesh.localRadius * maxScale;
                     mesh.worldCenter = (modelMatrix * glm::vec4(mesh.localCenter, 1.0f));
-                    mesh.worldRadius = mesh.localRadius * glm::max(transform.getWorldScale().x, transform.getWorldScale().y, transform.getWorldScale().z);
 
                     #if DEBUG
                     if(isEditorMode && frame > 0){

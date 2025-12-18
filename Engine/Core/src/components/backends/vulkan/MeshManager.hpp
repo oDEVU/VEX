@@ -48,6 +48,7 @@ namespace vex {
         uint32_t m_nextModelId = 0;
 
         std::unordered_map<uint32_t, std::string> m_installedPaths;
+        std::unordered_map<std::string, std::pair<glm::vec3, float>> m_meshBoundsCache;
 
         void onMeshComponentConstruct(entt::registry& registry, entt::entity entity);
         void onMeshComponentDestroy(entt::registry& registry, entt::entity entity);

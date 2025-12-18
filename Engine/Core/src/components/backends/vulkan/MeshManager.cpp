@@ -168,6 +168,12 @@ namespace vex {
     void MeshManager::registerVulkanMesh(MeshComponent& meshComponent) {
         const std::string& path = meshComponent.meshData.meshPath;
         if (m_vulkanMeshes.count(path)) {
+            if (m_meshBoundsCache.count(path)) {
+                auto& bounds = m_meshBoundsCache[path];
+                meshComponent.localCenter = bounds.first;
+                meshComponent.localRadius = bounds.second;
+                meshComponent.forceRefresh();
+            }
             return;
         }
         if (path != "") {
@@ -183,6 +189,9 @@ namespace vex {
             meshComponent.meshData = std::move(loadedAsset.meshData);
             meshComponent.localCenter = loadedAsset.localCenter;
             meshComponent.localRadius = loadedAsset.localRadius;
+            meshComponent.forceRefresh();
+
+            m_meshBoundsCache[path] = { loadedAsset.localCenter, loadedAsset.localRadius };
 
             meshComponent.textureNames = std::move(loadedAsset.textureNames);
         }
