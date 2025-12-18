@@ -370,6 +370,7 @@ struct TransformComponent {
 enum class RenderType {
     OPAQUE,
     TRANSPARENT,
+    MASKED,
     CUSTOM
 };
 

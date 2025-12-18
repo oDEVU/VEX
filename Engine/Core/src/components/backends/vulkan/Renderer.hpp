@@ -22,6 +22,12 @@
 #include <components/GameComponents/UiComponent.hpp>
 
 namespace vex {
+    /// @brief Struct to hold information about a render item.
+    struct RenderItem {
+        entt::entity entity;
+        uint32_t modelIndex;
+    };
+
     /// @brief Data structure to pass state between render stages
         struct SceneRenderData {
             VkCommandBuffer commandBuffer;
@@ -45,6 +51,7 @@ namespace vex {
                  std::unique_ptr<VulkanResources>& resources,
                  std::unique_ptr<VulkanPipeline>& pipeline,
                  std::unique_ptr<VulkanPipeline>& transPipeline,
+                 std::unique_ptr<VulkanPipeline>& maskPipeline,
                  std::unique_ptr<VulkanPipeline>& uiPipeline,
                  std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
                  std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
@@ -125,6 +132,7 @@ namespace vex {
         std::unique_ptr<VulkanResources>& m_p_resources;
         std::unique_ptr<VulkanPipeline>& m_p_pipeline;
         std::unique_ptr<VulkanPipeline>& m_p_transPipeline;
+        std::unique_ptr<VulkanPipeline>& m_p_maskPipeline;
         std::unique_ptr<VulkanPipeline>& m_p_uiPipeline;
         std::unique_ptr<VulkanPipeline>& m_p_fullscreenPipeline;
         std::unique_ptr<VulkanSwapchainManager>& m_p_swapchainManager;
@@ -148,6 +156,9 @@ namespace vex {
         VkImageView m_lastUsedView = VK_NULL_HANDLE;
         VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;
         VkDescriptorPool m_localPool = VK_NULL_HANDLE;
+
+        std::vector<RenderItem> opaqueQueue;
+        std::vector<RenderItem> maskedQueue;
 
         #if DEBUG
             std::vector<VkBuffer> m_debugBuffers;

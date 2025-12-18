@@ -305,6 +305,16 @@ namespace vex {
             attributes
         );
 
+        log("Initializing Masked Pipeline...");
+        m_p_maskPipeline = std::make_unique<VulkanPipeline>(m_context);
+
+        m_p_maskPipeline->createMaskedPipeline(
+            "Engine/shaders/MaskedVert.spv",
+            "Engine/shaders/MaskedFrag.spv",
+            bindingDesc,
+            attributes
+        );
+
         log("Initializing Transparent Pipeline...");
         m_p_transPipeline = std::make_unique<VulkanPipeline>(m_context);
 
@@ -361,6 +371,7 @@ namespace vex {
             m_p_resources,
             m_p_pipeline,
             m_p_transPipeline,
+            m_p_maskPipeline,
             m_p_uiPipeline,
             m_p_fullscreenPipeline,
             m_p_swapchainManager,
@@ -386,6 +397,7 @@ namespace vex {
         m_p_resources.reset();
         m_p_pipeline.reset();
         m_p_transPipeline.reset();
+        m_p_maskPipeline.reset();
         m_p_uiPipeline.reset();
         m_p_fullscreenPipeline.reset();
         #if DEBUG

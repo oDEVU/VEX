@@ -24,6 +24,7 @@ namespace vex {
                            std::unique_ptr<VulkanResources>& resources,
                            std::unique_ptr<VulkanPipeline>& pipeline,
                            std::unique_ptr<VulkanPipeline>& transPipeline,
+                           std::unique_ptr<VulkanPipeline>& maskPipeline,
                            std::unique_ptr<VulkanPipeline>& uiPipeline,
                            std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
                            std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
@@ -32,6 +33,7 @@ namespace vex {
               m_p_resources(resources),
               m_p_pipeline(pipeline),
               m_p_transPipeline(transPipeline),
+              m_p_maskPipeline(maskPipeline),
               m_p_uiPipeline(uiPipeline),
               m_p_fullscreenPipeline(fullscreenPipeline),
               m_p_swapchainManager(swapchainManager),
@@ -328,9 +330,13 @@ namespace vex {
             glm::vec3 cameraPos = extractCameraPosition(view);
             Frustum camFrustum;
             camFrustum.update(proj * view);
+
             m_transparentTriangles.clear();
             trnasMatrixes.clear();
             uint32_t modelIndex = 0;
+
+            opaqueQueue.clear();
+            maskedQueue.clear();
 
             auto modelView = registry.view<TransformComponent, MeshComponent>();
             for (auto entity : modelView) {
@@ -397,10 +403,17 @@ namespace vex {
                 m_p_resources->updateLightUBO(m_r_context.currentFrame, modelIndex, lightUBO);
 
                 if (mesh.renderType == RenderType::OPAQUE) {
-                    auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
+                    opaqueQueue.push_back({entity, modelIndex});
+                    /* auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
                     if (vulkanMesh) {
                         vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
-                    }
+                    } */
+                } else if (mesh.renderType == RenderType::MASKED) {
+                    maskedQueue.push_back({entity, modelIndex});
+                    /* auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
+                    if (vulkanMesh) {
+                        vulkanMesh->draw(cmd, m_p_maskPipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
+                    } */
                 } else if (mesh.renderType == RenderType::TRANSPARENT) {
                      auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
 
@@ -418,6 +431,30 @@ namespace vex {
                 }
                 modelIndex++;
                 if(mesh.getIsFresh()) mesh.setRendered();
+            }
+
+            for (const auto& item : opaqueQueue) {
+                auto& mesh = registry.get<MeshComponent>(item.entity);
+                auto& transform = registry.get<TransformComponent>(item.entity);
+                auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
+
+                if (vulkanMesh) {
+                    vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(), mesh.color);
+                }
+            }
+
+            if (!maskedQueue.empty()) {
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_maskPipeline->get());
+
+                for (const auto& item : maskedQueue) {
+                    auto& mesh = registry.get<MeshComponent>(item.entity);
+                    auto& transform = registry.get<TransformComponent>(item.entity);
+                    auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
+
+                    if (vulkanMesh) {
+                        vulkanMesh->draw(cmd, m_p_maskPipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(), mesh.color);
+                    }
+                }
             }
 
             if (!m_transparentTriangles.empty()) {
