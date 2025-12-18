@@ -1,5 +1,6 @@
 #include "components/SceneManager.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
+#include "components/GameComponents/CharacterComponent.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
@@ -134,6 +135,8 @@ REGISTER_COMPONENT_CUSTOM(vex::MeshComponent, meshData, renderType, color);
 
 REGISTER_COMPONENT(vex::CameraComponent, fov, nearPlane, farPlane);
 REGISTER_COMPONENT(vex::LightComponent, color, intensity, radius);
+REGISTER_COMPONENT(vex::CharacterComponent, standingHeight, standingRadius, mass, maxSlopeAngle);
+
 //REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
 
 REGISTER_COMPONENT(vex::PhysicsComponent,

@@ -22,6 +22,8 @@
 #include <memory>
 
 #include <components/GameComponents/BasicComponents.hpp>
+#include <components/GameComponents/CharacterComponent.hpp>
+
 #include "components/JoltSafe.hpp"
 
 namespace vex {
@@ -343,6 +345,12 @@ namespace vex {
         /// @param int steps - number of collision steps
         void setCollisionSteps(int steps) { collisionSteps = steps; }
 
+        // @brief Retrieves the physics component associated with a body ID.
+        PhysicsComponent& getPhysicsComponentByBodyId(JPH::BodyID id);
+
+        // @brief Retrieves the entity associated with a body ID.
+        entt::entity getEntityByBodyId(JPH::BodyID id);
+
     private:
         friend class MyContactListener;
 
@@ -378,10 +386,8 @@ namespace vex {
         // @brief Handles physics component destruction.
         void onPhysicsComponentDestroy(entt::registry& reg, entt::entity e);
 
-        // @brief Retrieves the physics component associated with a body ID.
-        PhysicsComponent& getPhysicsComponentByBodyId(JPH::BodyID id);
-        // @brief Retrieves the entity associated with a body ID.
-        entt::entity getEntityByBodyId(JPH::BodyID id);
+        // @brief Initializes a character component.
+        void InitializeCharacter(entt::entity e, CharacterComponent& cc);
     };
 
     class MyContactListener : public JPH::ContactListener {

@@ -149,8 +149,73 @@ namespace vex {
             #endif
         }
 
+        void PhysicsSystem::InitializeCharacter(entt::entity e, CharacterComponent& cc) {
+            if (!m_registry.all_of<TransformComponent>(e)) return;
+            auto& tc = m_registry.get<TransformComponent>(e);
+
+            JPH::Ref<JPH::Shape> shape = new JPH::CapsuleShape(
+                0.5f * (cc.standingHeight - 2.0f * cc.standingRadius),
+                cc.standingRadius
+            );
+
+            JPH::CharacterVirtualSettings settings;
+            settings.mShape = shape;
+            settings.mMaxSlopeAngle = JPH::DegreesToRadians(cc.maxSlopeAngle);
+            settings.mMass = cc.mass;
+
+            JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
+            JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
+
+            cc.character = new JPH::CharacterVirtual(&settings, pos, rot, 0, m_physicsSystem);
+        }
+
     void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;
+
+        auto charView = m_registry.view<CharacterComponent, TransformComponent>();
+            for (auto e : charView) {
+                auto& cc = charView.get<CharacterComponent>(e);
+                auto& tc = charView.get<TransformComponent>(e);
+
+                if (!cc.isInitialized()) {
+                    InitializeCharacter(e, cc);
+                }
+
+                if (tc.transformedLately()) {
+                    cc.character->SetPosition(JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z));
+                }
+
+                JPH::Vec3 currentVelocity = cc.character->GetLinearVelocity();
+
+                float newVerticalVel = currentVelocity.GetY() + m_physicsSystem->GetGravity().GetY() * deltaTime;
+                if (cc.character->IsSupported()) {
+                    newVerticalVel = std::max(0.0f, newVerticalVel);
+                }
+
+                JPH::Vec3 finalVelocity(cc.controlInput.x, ( newVerticalVel + cc.controlInput.y ), cc.controlInput.z);
+
+                cc.character->SetLinearVelocity(finalVelocity);
+
+                JPH::CharacterVirtual::ExtendedUpdateSettings updateSettings;
+                JPH::ObjectLayer charLayer = 0;
+
+                cc.character->ExtendedUpdate(
+                    deltaTime,
+                    m_physicsSystem->GetGravity(),
+                    updateSettings,
+                    m_physicsSystem->GetDefaultBroadPhaseLayerFilter(charLayer),
+                    m_physicsSystem->GetDefaultLayerFilter(charLayer),
+                    {},
+                    {},
+                    *m_tempAllocator
+                );
+
+                JPH::RVec3 newPos = cc.character->GetPosition();
+                tc.setWorldPositionPhys(glm::vec3(newPos.GetX(), newPos.GetY(), newPos.GetZ()));
+
+                tc.updatedPhysicsTransform();
+                cc.controlInput = glm::vec3(0.0f);
+            }
 
         auto& bodyInterface = m_physicsSystem->GetBodyInterface();
         auto view = m_registry.view<PhysicsComponent, TransformComponent>();

@@ -1,4 +1,3 @@
-#pragma once
 #include "BasicCamera.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
