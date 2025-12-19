@@ -390,6 +390,38 @@ namespace vex {
         }
         m_r_context.swapchainImageViews.clear();
 
+        for (auto pool : m_r_context.commandPools) {
+            if (pool != VK_NULL_HANDLE) {
+                vkDestroyCommandPool(m_r_context.device, pool, nullptr);
+            }
+        }
+        m_r_context.commandPools.clear();
+
+        if (m_r_context.singleTimePool != VK_NULL_HANDLE) {
+            vkDestroyCommandPool(m_r_context.device, m_r_context.singleTimePool, nullptr);
+            m_r_context.singleTimePool = VK_NULL_HANDLE;
+        }
+
+        m_r_context.commandBuffers.clear();
+
+        for (size_t i = 0; i < m_r_context.imageAvailableSemaphores.size(); i++) {
+            if (m_r_context.imageAvailableSemaphores[i] != VK_NULL_HANDLE)
+                vkDestroySemaphore(m_r_context.device, m_r_context.imageAvailableSemaphores[i], nullptr);
+        }
+        m_r_context.imageAvailableSemaphores.clear();
+
+        for (size_t i = 0; i < m_r_context.renderFinishedSemaphores.size(); i++) {
+            if (m_r_context.renderFinishedSemaphores[i] != VK_NULL_HANDLE)
+                vkDestroySemaphore(m_r_context.device, m_r_context.renderFinishedSemaphores[i], nullptr);
+        }
+        m_r_context.renderFinishedSemaphores.clear();
+
+        for (size_t i = 0; i < m_r_context.inFlightFences.size(); i++) {
+            if (m_r_context.inFlightFences[i] != VK_NULL_HANDLE)
+                vkDestroyFence(m_r_context.device, m_r_context.inFlightFences[i], nullptr);
+        }
+        m_r_context.inFlightFences.clear();
+
         if (m_r_context.swapchain) {
             vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
             m_r_context.swapchain = VK_NULL_HANDLE;
@@ -429,12 +461,7 @@ namespace vex {
 
         for (const auto& availablePresentMode : availablePresentModes) {
             if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
-                if (SDL_GetCurrentVideoDriver() && strcmp(SDL_GetCurrentVideoDriver(), "wayland") == 0) {
-                    log("Wayland detected, FIFO selected");
-                    return VK_PRESENT_MODE_FIFO_KHR;
-                }else{
-                    return availablePresentMode;
-                }
+                return availablePresentMode;
             }
         }
         return VK_PRESENT_MODE_FIFO_KHR;

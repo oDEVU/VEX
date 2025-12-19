@@ -146,6 +146,7 @@ namespace vex {
         VkSampler m_screenSampler = VK_NULL_HANDLE;
         VkImageView m_lastUsedView = VK_NULL_HANDLE;
         VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;
+        std::vector<std::vector<VkDescriptorSet>> m_garbageDescriptors;
         VkDescriptorPool m_localPool = VK_NULL_HANDLE;
 
         std::vector<RenderItem> opaqueQueue;

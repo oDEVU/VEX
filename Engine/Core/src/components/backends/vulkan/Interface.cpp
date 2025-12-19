@@ -416,47 +416,6 @@ namespace vex {
             m_context.uboDescriptorSetLayout = VK_NULL_HANDLE;
         }
 
-        for (size_t i = 0; i < m_context.MAX_FRAMES_IN_FLIGHT; i++) {
-            if (m_context.imageAvailableSemaphores[i]) {
-                vkDestroySemaphore(m_context.device, m_context.imageAvailableSemaphores[i], nullptr);
-                m_context.imageAvailableSemaphores[i] = VK_NULL_HANDLE;
-            }
-            if (m_context.renderFinishedSemaphores[i]) {
-                vkDestroySemaphore(m_context.device, m_context.renderFinishedSemaphores[i], nullptr);
-                m_context.renderFinishedSemaphores[i] = VK_NULL_HANDLE;
-            }
-            if (m_context.inFlightFences[i]) {
-                vkDestroyFence(m_context.device, m_context.inFlightFences[i], nullptr);
-                m_context.inFlightFences[i] = VK_NULL_HANDLE;
-            }
-        }
-
-        if (!m_context.commandBuffers.empty()) {
-            for (size_t i = 0; i < m_context.commandPools.size(); i++) {
-                vkFreeCommandBuffers(m_context.device, m_context.commandPools[i], 1, &m_context.commandBuffers[i]);
-            }
-        }
-        m_context.commandBuffers.clear();
-
-        for (auto& pool : m_context.commandPools) {
-            if (pool != VK_NULL_HANDLE) {
-                vkDestroyCommandPool(m_context.device, pool, nullptr);
-            }
-        }
-        m_context.commandPools.clear();
-
-        if (m_context.singleTimePool != VK_NULL_HANDLE) {
-            vkDestroyCommandPool(m_context.device, m_context.singleTimePool, nullptr);
-            m_context.singleTimePool = VK_NULL_HANDLE;
-        }
-
-        for (auto& imageView : m_context.swapchainImageViews) {
-            if (imageView) {
-                vkDestroyImageView(m_context.device, imageView, nullptr);
-            }
-        }
-        m_context.swapchainImageViews.clear();
-
         if (m_context.allocator) {
             vmaDestroyAllocator(m_context.allocator);
             m_context.allocator = nullptr;

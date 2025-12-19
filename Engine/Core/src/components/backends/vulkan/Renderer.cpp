@@ -88,6 +88,7 @@ namespace vex {
                         vmaCreateBuffer(m_r_context.allocator, &debugBufInfo, &debugAllocInfo, &m_debugBuffers[i], &m_debugAllocations[i], nullptr);
                     }
                 #endif
+                m_garbageDescriptors.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
         log("Renderer initialized successfully");
     }
@@ -139,7 +140,11 @@ namespace vex {
                 m_p_pipeline->updateViewport(renderResolution);
                 m_p_swapchainManager->recreateSwapchain();
                 m_lastUsedView = VK_NULL_HANDLE;
+                if (m_cachedImGuiDescriptor != VK_NULL_HANDLE) {
+                    m_garbageDescriptors[m_r_context.currentFrame].push_back(m_cachedImGuiDescriptor);
+                }
                 m_cachedImGuiDescriptor = VK_NULL_HANDLE;
+                m_lastUsedView = m_r_context.lowResColorView;
                 updateScreenDescriptor(m_r_context.lowResColorView);
             }
 
@@ -191,6 +196,9 @@ namespace vex {
 
             if (m_lastUsedView != m_r_context.lowResColorView) {
                 updateScreenDescriptor(m_r_context.lowResColorView);
+                if (m_cachedImGuiDescriptor != VK_NULL_HANDLE) {
+                    m_garbageDescriptors[m_r_context.currentFrame].push_back(m_cachedImGuiDescriptor);
+                }
                 m_cachedImGuiDescriptor = VK_NULL_HANDLE;
                 m_lastUsedView = m_r_context.lowResColorView;
             }
@@ -583,8 +591,17 @@ namespace vex {
         }
 
         VkDescriptorSet Renderer::getImGuiTextureID(ImGUIWrapper& ui) {
+            VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
+
+            auto& currentGarbage = m_garbageDescriptors[m_r_context.currentFrame];
+            if (!currentGarbage.empty()) {
+                for (VkDescriptorSet ds : currentGarbage) {
+                    vkUI.removeTexture(ds);
+                }
+                currentGarbage.clear();
+            }
+
             if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
-                VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
                 if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
                     m_cachedImGuiDescriptor = vkUI.addTexture(
                         m_screenSampler,

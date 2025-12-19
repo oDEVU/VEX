@@ -27,8 +27,21 @@ namespace vex {
         /// @param SDL_Window* window - The SDL window to use for ImGUI.
         /// @param VulkanContext& vulkanContext - The Vulkan context containing vulkan resources..
         VulkanImGUIWrapper(SDL_Window* window, VulkanContext& vulkanContext);
+
+        /// @brief Destructor for VulkanImGUIWrapper.
         virtual ~VulkanImGUIWrapper();
+
+        /// @brief Adds a texture to the ImGUI wrapper.
+        /// @param VkSampler sampler - The sampler for the texture.
+        /// @param VkImageView imageView - The image view for the texture.
+        /// @param VkImageLayout layout - The layout for the texture.
+        /// @return VkDescriptorSet - The descriptor set for the texture.
         VkDescriptorSet addTexture(VkSampler sampler, VkImageView imageView, VkImageLayout layout);
+
+        /// @brief Removes a texture from the ImGUI wrapper.
+        /// @param VkDescriptorSet descriptorSet - The descriptor set for the texture.
+        void removeTexture(VkDescriptorSet descriptorSet);
+
 #if DEBUG
         /// @brief Initializes ImGUI for Vulkan backend, called by the engine while initializing.
         void init() override;

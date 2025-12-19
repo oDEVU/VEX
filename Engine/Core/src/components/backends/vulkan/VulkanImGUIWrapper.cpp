@@ -38,6 +38,15 @@ namespace vex {
     #endif
     }
 
+    void VulkanImGUIWrapper::removeTexture(VkDescriptorSet descriptorSet) {
+    #if DEBUG
+        if (descriptorSet != VK_NULL_HANDLE) {
+            ImGui_ImplVulkan_RemoveTexture(descriptorSet);
+            vkFreeDescriptorSets(m_r_context.device, m_imguiPool, 1, &descriptorSet);
+        }
+    #endif
+    }
+
 #if DEBUG
     void VulkanImGUIWrapper::init() {
         try {

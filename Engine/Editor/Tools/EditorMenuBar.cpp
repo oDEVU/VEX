@@ -100,15 +100,16 @@ void EditorMenuBar::DrawBar(){
 
 void EditorMenuBar::OpenEditorSettings(){
     std::shared_ptr<BasicEditorWindow> openSceneWindow = std::make_shared<BasicEditorWindow>();
+    std::weak_ptr<BasicEditorWindow> weakWindow = openSceneWindow;
 
     EditorProperties* editorProperties = m_editor.getEditorProperties();
 
-        openSceneWindow->Create = [this, openSceneWindow, editorProperties](vex::ImGUIWrapper& wrapper){
+        openSceneWindow->Create = [this, weakWindow, editorProperties](vex::ImGUIWrapper& wrapper){
             wrapper.addUIFunction([=, this](){
-                if (!openSceneWindow->isOpen) return;
+                auto window = weakWindow.lock(); if (!window || !window->isOpen) return;
                 ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
 
-                if (ImGui::Begin("Editor Settings", &openSceneWindow->isOpen)) {
+                if (ImGui::Begin("Editor Settings", &window->isOpen)) {
                     ImReflect::Input("##data", editorProperties);
                 }
                 ImGui::End();
@@ -121,15 +122,16 @@ void EditorMenuBar::OpenEditorSettings(){
 
 void EditorMenuBar::OpenProjectSettings(){
     std::shared_ptr<BasicEditorWindow> openSceneWindow = std::make_shared<BasicEditorWindow>();
+    std::weak_ptr<BasicEditorWindow> weakWindow = openSceneWindow;
 
     ProjectProperties* projectProperties = m_editor.getProjectProperties();
 
-        openSceneWindow->Create = [this, openSceneWindow, projectProperties](vex::ImGUIWrapper& wrapper){
+        openSceneWindow->Create = [this, weakWindow, projectProperties](vex::ImGUIWrapper& wrapper){
             wrapper.addUIFunction([=, this](){
-                if (!openSceneWindow->isOpen) return;
+                auto window = weakWindow.lock(); if (!window || !window->isOpen) return;
                 ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
 
-                if (ImGui::Begin("Project Settings", &openSceneWindow->isOpen)) {
+                if (ImGui::Begin("Project Settings", &window->isOpen)) {
                     ImReflect::Input("##data", projectProperties);
                 }
                 ImGui::End();
@@ -142,18 +144,19 @@ void EditorMenuBar::OpenProjectSettings(){
 
 void EditorMenuBar::OpenScene(){
     std::shared_ptr<BasicEditorWindow> openSceneWindow = std::make_shared<BasicEditorWindow>();
+    std::weak_ptr<BasicEditorWindow> weakWindow = openSceneWindow;
     std::string startPath = m_editor.getProjectBinaryPath() + "/Assets";
     auto dialogBrowser = std::make_shared<vex::AssetBrowser>(startPath);
     auto showError = std::make_shared<bool>(false);
 
-    openSceneWindow->Create = [this, openSceneWindow, dialogBrowser, showError](vex::ImGUIWrapper& wrapper){
+    openSceneWindow->Create = [this, weakWindow, dialogBrowser, showError](vex::ImGUIWrapper& wrapper){
         wrapper.addUIFunction([=, this](){
-            if (!openSceneWindow->isOpen) return;
+            auto window = weakWindow.lock(); if (!window || !window->isOpen) return;
             ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
 
-            if (ImGui::Begin("Open Scene File", &openSceneWindow->isOpen)) {
+            if (ImGui::Begin("Open Scene File", &window->isOpen)) {
                 std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
-                if (!selectedFile.empty()) {
+                if (!selectedFile.empty() && !dialogBrowser->GetExtension(selectedFile).empty()) {
 
                     if (dialogBrowser->GetExtension(selectedFile) == ".json") {
 
@@ -161,7 +164,7 @@ void EditorMenuBar::OpenScene(){
                         if (type == 1) {
                             vex::log("Menu Bar requesting load: %s", selectedFile.c_str());
                             m_editor.requestSceneReload(selectedFile);
-                            openSceneWindow->isOpen = false;
+                            window->isOpen = false;
                         } else {
                             *showError = true;
                         }
@@ -197,6 +200,7 @@ void EditorMenuBar::OpenScene(){
 
 void EditorMenuBar::SaveSceneAs() {
     std::shared_ptr<BasicEditorWindow> openSceneWindow = std::make_shared<BasicEditorWindow>();
+    std::weak_ptr<BasicEditorWindow> weakWindow = openSceneWindow;
     std::string startPath = m_editor.getProjectBinaryPath() + "/Assets";
     auto dialogBrowser = std::make_shared<vex::AssetBrowser>(startPath);
     auto showError = std::make_shared<bool>(false);
@@ -206,12 +210,12 @@ void EditorMenuBar::SaveSceneAs() {
 
     auto* scene = m_editor.getSceneManager()->GetScene(m_editor.getSceneManager()->getLastSceneName());
 
-    openSceneWindow->Create = [this, openSceneWindow, dialogBrowser, showError, scene, saveFolder, fileName](vex::ImGUIWrapper& wrapper) {
+    openSceneWindow->Create = [this, weakWindow, dialogBrowser, showError, scene, saveFolder, fileName](vex::ImGUIWrapper& wrapper) {
         wrapper.addUIFunction([=, this]() {
-            if (!openSceneWindow->isOpen) return;
+            auto window = weakWindow.lock(); if (!window || !window->isOpen) return;
             ImGui::SetNextWindowSize(ImVec2(600, 450), ImGuiCond_FirstUseEver);
 
-            if (ImGui::Begin("Save Scene As", &openSceneWindow->isOpen)) {
+            if (ImGui::Begin("Save Scene As", &window->isOpen)) {
 
                 std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
 
@@ -248,7 +252,7 @@ void EditorMenuBar::SaveSceneAs() {
 
                         scene->Save(finalPath.string());
                         vex::log("Saved scene to: %s", finalPath.string().c_str());
-                        openSceneWindow->isOpen = false;
+                        window->isOpen = false;
                     }
                 }
             }
@@ -300,17 +304,18 @@ void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
     vex::log("Starting Build: %s", command.c_str());
 
     std::shared_ptr<BasicEditorWindow> buildWindow = std::make_shared<BasicEditorWindow>();
+    std::weak_ptr<BasicEditorWindow> weakWindow = buildWindow;
 
-    buildWindow->Create = [this, buildWindow, state, isDebug](vex::ImGUIWrapper& wrapper) {
+    buildWindow->Create = [this, weakWindow, state, isDebug](vex::ImGUIWrapper& wrapper) {
         wrapper.addUIFunction([=]() {
-            if (!buildWindow->isOpen) return;
+            auto window = weakWindow.lock(); if (!window || !window->isOpen) return;
 
             ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
 
             std::string title = isDebug ? "Building Debug..." : "Building Release...";
             if (state->isFinished) title += " (Finished)";
 
-            if (ImGui::Begin(title.c_str(), &buildWindow->isOpen)) {
+            if (ImGui::Begin(title.c_str(), &window->isOpen)) {
 
                 if(ImGui::Button("Clear")) {
                     std::lock_guard<std::mutex> lock(state->logMutex);
@@ -394,18 +399,19 @@ void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
 
 void EditorMenuBar::NewScene() {
     std::shared_ptr<BasicEditorWindow> newSceneWindow = std::make_shared<BasicEditorWindow>();
+    std::weak_ptr<BasicEditorWindow> weakWindow = newSceneWindow;
     std::string startPath = m_editor.getProjectBinaryPath() + "/Assets";
     auto dialogBrowser = std::make_shared<vex::AssetBrowser>(startPath);
 
    auto saveFolder = std::make_shared<std::string>(startPath);
     auto fileName   = std::make_shared<std::string>("NewScene.json");
 
-    newSceneWindow->Create = [this, newSceneWindow, dialogBrowser, saveFolder, fileName](vex::ImGUIWrapper& wrapper) {
+    newSceneWindow->Create = [this, weakWindow, dialogBrowser, saveFolder, fileName](vex::ImGUIWrapper& wrapper) {
         wrapper.addUIFunction([=, this]() {
-            if (!newSceneWindow->isOpen) return;
+            auto window = weakWindow.lock(); if (!window || !window->isOpen) return;
             ImGui::SetNextWindowSize(ImVec2(600, 450), ImGuiCond_FirstUseEver);
 
-            if (ImGui::Begin("Create New Scene", &newSceneWindow->isOpen)) {
+            if (ImGui::Begin("Create New Scene", &window->isOpen)) {
 
                 std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
 
@@ -447,7 +453,7 @@ void EditorMenuBar::NewScene() {
                                 vex::log("New scene created: %s", destPath.string().c_str());
 
                                 m_editor.requestSceneReload(destPath.string());
-                                newSceneWindow->isOpen = false;
+                                window->isOpen = false;
                             }
                             else {
                                 vex::log("Error: Could not find default scene template at: %s", sourcePath.string().c_str());

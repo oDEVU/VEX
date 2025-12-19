@@ -57,10 +57,24 @@ namespace vex {
             vkDestroyDescriptorPool(m_r_context.device, m_descriptorPool, nullptr);
             m_descriptorPool = VK_NULL_HANDLE;
         }
+
+        if (m_r_context.uboDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.uboDescriptorSetLayout, nullptr);
+            m_r_context.uboDescriptorSetLayout = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.textureDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.textureDescriptorSetLayout, nullptr);
+            m_r_context.textureDescriptorSetLayout = VK_NULL_HANDLE;
+        }
     }
 
     void VulkanResources::createTextureFromRaw(const std::vector<unsigned char>& rgba, int w, int h, const std::string& name) {
-        // Copy the loadTexture logic, but use rgba instead of stb_image
+        if (m_r_context.textureIndices.contains(name)) {
+            log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
+            return;
+        }
+
         VkBuffer stagingBuffer;
         VmaAllocation stagingAlloc;
 
@@ -174,11 +188,6 @@ namespace vex {
         log("Creating vulkan texture view...");
         if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
             throw_error("Failed to create texture image view!");
-        }
-
-        if (m_r_context.textureIndices.contains(name)) {
-            log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
-            return;
         }
 
         m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
@@ -567,6 +576,11 @@ namespace vex {
         bool VulkanResources::loadTexture(const std::string& path, const std::string& name) {
             std::string fullPath = path;//"Assets/" + std::string(path.c_str());
 
+            if (m_r_context.textureIndices.contains(name)) {
+                log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
+                return true;
+            }
+
             if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
                 log(LogLevel::ERROR, "Maximum texture count (%u) reached!", MAX_TEXTURES);
                 return false;
@@ -732,11 +746,6 @@ namespace vex {
             if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
                 log(LogLevel::ERROR, "Failed to create texture image view!");
                 return false;
-            }
-
-            if (m_r_context.textureIndices.contains(name)) {
-                log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
-                return true;
             }
 
             m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
