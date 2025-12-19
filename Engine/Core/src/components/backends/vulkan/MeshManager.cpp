@@ -166,7 +166,7 @@ namespace vex {
     }
 
     void MeshManager::registerVulkanMesh(MeshComponent& meshComponent) {
-        const std::string& path = meshComponent.meshData.meshPath;
+        const std::string& path = GetAssetPath(meshComponent.meshData.meshPath);
         if (m_vulkanMeshes.count(path)) {
             if (m_meshBoundsCache.count(path)) {
                 auto& bounds = m_meshBoundsCache[path];
@@ -178,8 +178,7 @@ namespace vex {
         }
         if (path != "") {
             #if DEBUG
-            std::string realPath = GetAssetPath(path);
-            if (path.empty() || !m_vfs->file_exists(realPath)) {
+            if (path.empty() || !m_vfs->file_exists(path)) {
                 log(LogLevel::WARNING, "Skipping registration for invalid path: %s", path.c_str());
                 return;
             }
