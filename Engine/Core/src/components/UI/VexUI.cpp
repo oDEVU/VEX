@@ -145,7 +145,7 @@ recurse:
 void VexUI::loadImages(Widget* w) {
     if (!w) return;
     if (!w->image.empty()) {
-        m_res->loadTexture(GetAssetPath(w->image), GetAssetPath(w->image), m_vfs);
+        m_res->loadTexture(GetAssetPath(w->image), GetAssetPath(w->image));
     }
     for (auto* c : w->children) loadImages(c);
 }

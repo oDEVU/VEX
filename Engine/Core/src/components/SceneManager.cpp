@@ -35,6 +35,7 @@ namespace vex {
                 j["path"] = m.meshData.meshPath;
                 j["renderType"] = (int)m.renderType;
                 j["color"] = m.color;
+                j["textureOverrides"] = m.textureOverrides;
             }
 
             void from_json(const nlohmann::json& j, MeshComponent& m) {
@@ -44,6 +45,7 @@ namespace vex {
                 }
                 if (j.contains("renderType")) m.renderType = (RenderType)j["renderType"];
                 if (j.contains("color")) m.color = j["color"];
+                if (j.contains("textureOverrides")) m.textureOverrides = j["textureOverrides"];
             }
 
 
@@ -131,7 +133,7 @@ namespace vex {
 
 
 REGISTER_COMPONENT_CUSTOM(vex::TransformComponent, position, rotation, scale);
-REGISTER_COMPONENT_CUSTOM(vex::MeshComponent, meshData, renderType, color);
+REGISTER_COMPONENT_CUSTOM(vex::MeshComponent, meshData, renderType, color, textureOverrides);
 
 REGISTER_COMPONENT(vex::CameraComponent, fov, nearPlane, farPlane);
 REGISTER_COMPONENT(vex::LightComponent, color, intensity, radius);

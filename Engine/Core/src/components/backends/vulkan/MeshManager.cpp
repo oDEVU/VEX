@@ -59,7 +59,7 @@ namespace vex {
                     log("Processing texture: %s", texPath.c_str());
                     if (!m_p_resources->textureExists(texPath)) {
                         try {
-                            m_p_resources->loadTexture(texPath, texPath, m_vfs);
+                            m_p_resources->loadTexture(texPath, texPath);
                             log("Loaded texture: %s", texPath.c_str());
                         } catch (const std::exception& e) {
                             log(LogLevel::ERROR, "Failed to load texture %s", texPath.c_str());
@@ -211,7 +211,7 @@ namespace vex {
         for (const auto& texPath : uniqueTextures) {
             if (!m_p_resources->textureExists(texPath)) {
                 try {
-                    m_p_resources->loadTexture(texPath, texPath, m_vfs);
+                    m_p_resources->loadTexture(texPath, texPath);
                     log("Loaded texture: %s", texPath.c_str());
                 } catch (const std::exception& e) {
                     log(LogLevel::ERROR, "Failed to load texture %s", texPath.c_str());

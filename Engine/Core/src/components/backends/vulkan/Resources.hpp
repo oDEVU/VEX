@@ -23,7 +23,7 @@ namespace vex {
         /// @brief Simple constructor.
         /// @param VulkanContext& context - The Vulkan context to use.
         /// @details Initializes the VulkanResources object with the provided Vulkan context. Its called by VulkanInterface constructor.
-        VulkanResources(VulkanContext& context);
+        VulkanResources(VulkanContext& context, VirtualFileSystem* vfs);
 
         /// @brief Simple destructor.
         ~VulkanResources();
@@ -66,9 +66,9 @@ namespace vex {
         /// @brief Loads a texture from a file.
         /// @param const std::string& path - The path to the texture file.
         /// @param const std::string& name - The name of the texture.
-        /// @param VirtualFileSystem *vfs - The virtual file system to use.
         /// @details Loads a texture from a file and creates a texture view.
-        void loadTexture(const std::string& path, const std::string& name, VirtualFileSystem *vfs);
+        /// @return bool - True if the texture was loaded successfully or is already loaded, false otherwise.
+        bool loadTexture(const std::string& path, const std::string& name) ;
 
         /// @brief Unloads a texture.
         /// @param const std::string& name - The name of the texture.
@@ -118,7 +118,7 @@ namespace vex {
         /// @param uint32_t frameIndex - The index of the frame.
         /// @param uint32_t textureIndex - The index of the texture.
         /// @return VkDescriptorSet - The descriptor set.
-        VkDescriptorSet getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex);
+        VkDescriptorSet getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) const;
 
         /// @brief Returns a descriptor set layout.
         /// @return VkDescriptorSetLayout - The descriptor set layout.
@@ -134,11 +134,8 @@ namespace vex {
         /// @brief Returns the index of a texture with the given name.
         /// @param const std::string& name - The name of the texture.
         /// @return uint32_t - The index of the texture.
-        uint32_t getTextureIndex(const std::string& name) const {
-            auto it = m_r_context.textureIndices.find(name);
-            if (it != m_r_context.textureIndices.end()) return it->second;
-            return 0;
-        }
+        uint32_t getTextureIndex(const std::string& name);
+
         /// @brief Returns the texture sampler.
         /// @return VkSampler - The texture sampler.
         VkSampler getTextureSampler() const { return m_textureSampler; }
@@ -147,6 +144,7 @@ namespace vex {
         const std::string defaultTextureName = "default";
 
         VulkanContext& m_r_context;
+        VirtualFileSystem* m_vfs;
 
         std::vector<VkBuffer> m_sceneBuffers;
         std::vector<VkBuffer> m_lightBuffers;
@@ -164,6 +162,8 @@ namespace vex {
         vex_map<std::string, VkImage> m_textureImages;
         vex_map<std::string, VmaAllocation> m_textureAllocations;
         vex_map<std::string, VkImageView> m_textureViews;
+
+        std::vector<std::string> m_ignoredTexturePaths;
 
         /// @brief Internal function to create descriptor resources.
         void createDescriptorResources();

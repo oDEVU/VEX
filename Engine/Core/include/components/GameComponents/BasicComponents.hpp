@@ -384,6 +384,8 @@ struct MeshComponent {
     RenderType renderType = RenderType::OPAQUE;
     glm::vec4 color = glm::vec4(1.f);
 
+    std::map<int, std::string> textureOverrides;
+
     // Simple bounding data
     glm::vec3 localCenter = glm::vec3(0.0f);
     float localRadius = 1.0f;

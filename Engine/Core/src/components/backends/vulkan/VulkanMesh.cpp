@@ -1,5 +1,6 @@
 #include "VulkanMesh.hpp"
 #include "components/Mesh.hpp"
+#include "components/pathUtils.hpp"
 #include "glm/common.hpp"
 #include "glm/fwd.hpp"
 
@@ -89,7 +90,7 @@ namespace vex {
         const glm::vec3& cameraPos,
         uint32_t modelIndex,
         uint32_t frameIndex,
-        glm::vec4 color,
+        entt::entity entity,
         std::vector<TransparentTriangle>& outTriangles
     ) {
         glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
@@ -113,7 +114,7 @@ namespace vex {
                     i,
                     submeshIndex,
                     this,
-                    color
+                    entity
                 });
             }
         }
@@ -129,7 +130,7 @@ namespace vex {
         glm::mat4 modelMatrix,
         bool modelChanged,
         bool submeshChanged,
-        glm::vec4 color
+        MeshComponent mc
     ) const {
         const auto& buffers = m_submeshBuffers[submeshIndex];
         const auto& textureName = m_submeshTextures[submeshIndex];
@@ -174,7 +175,7 @@ namespace vex {
             if (textureExists) {
                 modelPush.color = glm::vec4(1.0f);
             } else {
-                modelPush.color = color;
+                modelPush.color = mc.color;
                 if(!textureName.empty()) {
                     log("Missing texture: %s", textureName.c_str());
                 }
@@ -199,7 +200,7 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, glm::vec4 color) const {
+            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, MeshComponent mc) const {
 
         std::string currentTexture = "";
 
@@ -220,8 +221,20 @@ namespace vex {
 
         for (size_t i = 0; i < m_submeshBuffers.size(); i++) {
             const auto& buffers = m_submeshBuffers[i];
-            std::string textureName = m_submeshTextures[i];
-            uint32_t textureIndex = resources.getTextureIndex(textureName);
+            std::string textureName = "";
+            uint32_t textureIndex = 0;
+            if(mc.textureOverrides.contains(i)){
+                textureName = GetAssetPath(mc.textureOverrides[i]);
+                textureIndex = resources.getTextureIndex(textureName);
+
+                if(textureIndex == 0){
+                    textureIndex = resources.getTextureIndex(m_submeshTextures[i]);
+                }
+            }else{
+                textureName = m_submeshTextures[i];
+                textureIndex = resources.getTextureIndex(m_submeshTextures[i]);
+            }
+
             //log("Invalid texture index %u for '%s'", textureIndex, textureName.c_str());
 
             if (textureIndex >= MAX_TEXTURES) {
@@ -259,7 +272,7 @@ namespace vex {
                 }
                 modelPush.color = glm::vec4(1.0f);
             } else {
-                modelPush.color = color;
+                modelPush.color = mc.color;
                 if(!textureName.empty() && textureName != "default") {
                     log("Missing texture: %s", textureName.c_str());
                 }

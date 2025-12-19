@@ -221,7 +221,7 @@ namespace vex {
 
             try {
                 std::filesystem::path correctPath = GetExecutableDir() / path;
-                resources->loadTexture(correctPath.string(), name, vfs);
+                resources->loadTexture(correctPath.string(), name);
 
                 VkDescriptorSet ds = vulkanGUI->addTexture(
                     sampler,

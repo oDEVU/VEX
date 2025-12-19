@@ -280,7 +280,7 @@ namespace vex {
         m_p_swapchainManager->createSwapchain();
 
         log("Initializing Resources...");
-        m_p_resources = std::make_unique<VulkanResources>(m_context);
+        m_p_resources = std::make_unique<VulkanResources>(m_context, m_vfs);
 
         log("Initializing Mesh Manager...");
         m_p_meshManager = std::make_unique<MeshManager>(m_context, m_p_resources, m_vfs);

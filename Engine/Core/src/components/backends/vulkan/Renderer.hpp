@@ -94,15 +94,6 @@ namespace vex {
         /// @param SceneRenderData& data - Data for the frame.
         void endFrame(SceneRenderData& data);
 
-        /// @brief [Deprecated] Renders a frame using the provided parameters.
-        /// @param const glm::mat4& view - View matrix.
-        /// @param const glm::mat4& proj - Projection matrix.
-        /// @param glm::uvec2 renderResolution - Render resolution.
-        /// @param entt::registry& registry - Entity registry.
-        /// @param ImGUIWrapper& ui - ImGUI wrapper.
-        /// @param uint64_t frame - Frame number.
-        void renderFrame(const entt::entity cameraEntity, glm::uvec2 renderResolution, entt::registry& registry, ImGUIWrapper& ui, uint64_t frame);
-
         #if DEBUG
             void setDebugPipeline(std::unique_ptr<VulkanPipeline>* pipeline) { m_pp_debugPipeline = pipeline; }
             void renderDebug(VkCommandBuffer cmd, int frameIndex, const std::vector<DebugVertex>& lines);

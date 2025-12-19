@@ -74,17 +74,17 @@ namespace vex {
         if(auto* cpptr = dynamic_cast<const cpptrace::exception*>(&e)) {
             cpptr->trace().print(std::cerr, cpptrace::isatty(cpptrace::stderr_fileno));
         } else {
-            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());
+            //SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());
+            log(LogLevel::CRITICAL, "%s", e.what());
         }
-
-        log(LogLevel::WARNING, "Exception swallowed in DEBUG. Release build would crash here.");
+        log(LogLevel::ERROR, "Exception swallowed in DEBUG. Release build would crash here.");
     }
 
     void handle_critical_exception(const std::exception& e) {
         if(auto* cpptr = dynamic_cast<const cpptrace::exception*>(&e)) {
             cpptr->trace().print(std::cerr, cpptrace::isatty(cpptrace::stderr_fileno));
         } else {
-            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());
+            log(LogLevel::CRITICAL, "%s", e.what());
         }
         throw;
     }

@@ -9,6 +9,9 @@
 #include "components/Mesh.hpp"
 #include "components/errorUtils.hpp"
 #include "Resources.hpp"
+
+#include "components/GameComponents/BasicComponents.hpp"
+
 #include <sys/types.h>
 
 namespace vex {
@@ -33,7 +36,7 @@ namespace vex {
             const glm::vec3& cameraPos,
             uint32_t modelIndex,
             uint32_t frameIndex,
-            glm::vec4 color,
+            entt::entity entity,
             std::vector<TransparentTriangle>& outTriangles
         );
 
@@ -47,7 +50,7 @@ namespace vex {
         /// @param glm::uvec2 currentRenderResolution - Current render resolution.
         /// @details It is called automatically in Renderer for every mesh component having a VulkanMesh.
         void draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-                VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, glm::vec4 color = glm::vec4(1.f)) const;
+                VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, MeshComponent mc) const;
 
             // @brief This function contains all the setup logic (binding buffers, descriptor sets, and pushing constants) that only needs to be performed when the mesh or submesh (and thus the buffers/texture) changes.
             void bindAndDrawBatched(
@@ -60,7 +63,7 @@ namespace vex {
                 glm::mat4 modelMatrix,
                 bool modelChanged,
                 bool submeshChanged,
-                glm::vec4 color = glm::vec4(1.f)
+                MeshComponent mc
             ) const;
 
         /// @brief Helper function to get number of mesh components using this VulkanMesh instance, needed for mesh manager to know when to unload VulkanMesh.
@@ -102,7 +105,7 @@ struct TransparentTriangle {
         uint32_t firstIndex;
         uint32_t submeshIndex;
         VulkanMesh* mesh;
-        glm::vec4 color;
+        entt::entity entity;
 
         //glm::mat4 modelMatrix;
     };

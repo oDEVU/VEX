@@ -3,14 +3,16 @@
 #include <volk.h>
 #include <vk_mem_alloc.h>
 #include <SDL3/SDL_vulkan.h>
+#include <algorithm>
 #include "components/backends/vulkan/uniforms.hpp"
+#include "components/pathUtils.hpp"
 #include "limits.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../../thirdparty/stb/stb_image.h"
 
 namespace vex {
-    VulkanResources::VulkanResources(VulkanContext& context) : m_r_context(context) {
+    VulkanResources::VulkanResources(VulkanContext& context, VirtualFileSystem* vfs) : m_r_context(context), m_vfs(vfs) {
         createDefaultTexture();
         createTextureSampler();
         createUniformBuffers();
@@ -517,7 +519,7 @@ namespace vex {
     }
 
 
-    VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) {
+    VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) const {
         const uint32_t index = frameIndex * MAX_TEXTURES + textureIndex;
         if (index >= m_textureDescriptorSets.size()) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR,
@@ -547,12 +549,27 @@ namespace vex {
             vkCreateSampler(m_r_context.device, &samplerInfo, nullptr, &m_textureSampler);
         }
 
-        void VulkanResources::loadTexture(const std::string& path, const std::string& name, VirtualFileSystem *vfs) {
+
+        uint32_t VulkanResources::getTextureIndex(const std::string& name) {
+            auto it = m_r_context.textureIndices.find(name);
+            if (it != m_r_context.textureIndices.end()) return it->second;
+            if (!std::ranges::contains(m_ignoredTexturePaths, name)) {
+                if(loadTexture(name, name)){
+                    return getTextureIndex(name);
+                }else{
+                    m_ignoredTexturePaths.push_back(name);
+                    log(LogLevel::WARNING, "Texture '%s' could not be loaded!", name.c_str());
+                }
+            }
+            return 0;
+        }
+
+        bool VulkanResources::loadTexture(const std::string& path, const std::string& name) {
             std::string fullPath = path;//"Assets/" + std::string(path.c_str());
 
             if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
                 log(LogLevel::ERROR, "Maximum texture count (%u) reached!", MAX_TEXTURES);
-                return;
+                return false;
             }
 
             stbi_uc* pixels = nullptr;
@@ -560,19 +577,19 @@ namespace vex {
 
             try {
                 // Use VFS to check if file exists and get data
-                if (!vfs->file_exists(fullPath)) {
+                if (!m_vfs->file_exists(fullPath)) {
                     log(LogLevel::ERROR, "Texture file not found in VFS: %s", fullPath.c_str());
-                    throw_error("Missing texture in VFS: " + fullPath);
+                    return false;
                 }
 
                 log("VFS loading image...");
                 //int texWidth, texHeight, texChannels;
 
                 // Load file data through VFS
-                auto fileData = vfs->load_file(fullPath);  // This returns std::unique_ptr<FileData>
+                auto fileData = m_vfs->load_file(fullPath);  // This returns std::unique_ptr<FileData>
                 if (!fileData) {
                     log(LogLevel::ERROR, "VFS failed to load texture: %s", fullPath.c_str());
-                    throw_error("VFS failed to load texture: " + fullPath);
+                    return false;
                 }
 
                 // Use stbi_load_from_memory instead of stbi_load
@@ -583,12 +600,13 @@ namespace vex {
                 );
 
                 if (!pixels) {
-                    throw_error("STBI failed: " + std::string(stbi_failure_reason()));
+                    log(LogLevel::ERROR, "STBI failed: %s", stbi_failure_reason());
+                    return false;
                 }
             } catch (const std::exception& e) {
                 log(LogLevel::ERROR, "Failed to load image data for %s", fullPath.c_str());
                 if (pixels) stbi_image_free(pixels);
-                throw;
+                return false;
             }
 
             log("Image loaded from VFS: %dx%d, %d channels", texWidth, texHeight, texChannels);
@@ -596,7 +614,8 @@ namespace vex {
             VkDeviceSize imageSize = texWidth * texHeight * 4;
 
             if (!pixels) {
-                throw_error("Failed to load texture: " + fullPath);
+                log(LogLevel::ERROR, "Failed to load texture: %s", fullPath.c_str());
+                return false;
             }
 
             log("Creating staging buffer (%zu bytes)...",
@@ -711,12 +730,13 @@ namespace vex {
             VkImageView textureView;
             log("Creating vulkan texture view...");
             if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
-                throw_error("Failed to create texture image view!");
+                log(LogLevel::ERROR, "Failed to create texture image view!");
+                return false;
             }
 
             if (m_r_context.textureIndices.contains(name)) {
                 log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
-                return;
+                return true;
             }
 
             m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
@@ -728,7 +748,8 @@ namespace vex {
             m_textureViews[name] = textureView;
 
                 if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
-                    throw_error("Exceeded maximum texture count");
+                    log(LogLevel::ERROR, "Exceeded maximum texture count");
+                    return false;
                 }
                 m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
                 log("Assigned texture '%s' to index %d", name.c_str(), m_r_context.textureIndices[name]);
@@ -750,6 +771,7 @@ namespace vex {
                     vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
                 }
                 log("Updated texture descriptors for '%s'", name.c_str());
+                return true;
         }
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;
