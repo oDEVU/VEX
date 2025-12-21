@@ -53,7 +53,7 @@ namespace vex {
 
         } catch (const std::exception& e) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Dialogwindow render failed");
-            handle_exception(e);
+            handle_critical_exception(e);
         }
     }
 

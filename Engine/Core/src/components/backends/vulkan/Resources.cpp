@@ -198,12 +198,6 @@ namespace vex {
         m_textureAllocations[name] = textureAlloc;
         m_textureViews[name] = textureView;
 
-            if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
-                throw_error("Exceeded maximum texture count");
-            }
-            m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
-            log("Assigned texture '%s' to index %d", name.c_str(), m_r_context.textureIndices[name]);
-
         VkDescriptorImageInfo imageDescInfo{};
         imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageDescInfo.sampler = m_textureSampler;
@@ -755,13 +749,6 @@ namespace vex {
             m_textureImages[name] = textureImage;
             m_textureAllocations[name] = textureAlloc;
             m_textureViews[name] = textureView;
-
-                if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
-                    log(LogLevel::ERROR, "Exceeded maximum texture count");
-                    return false;
-                }
-                m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
-                log("Assigned texture '%s' to index %d", name.c_str(), m_r_context.textureIndices[name]);
 
                 VkDescriptorImageInfo imageDescInfo{};
                 imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;

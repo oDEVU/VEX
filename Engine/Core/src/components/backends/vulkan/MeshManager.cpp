@@ -39,37 +39,14 @@ namespace vex {
                 throw_error("Maximum model count exceeded");
             }
         }
-        //std::string realPath = GetAssetPath(path);
         meshComponent.id = newId;
         meshComponent.textureNames.clear();
 
-        //std::filesystem::path meshPath(meshComponent.meshData.meshPath);
-        //meshPath.remove_filename();
-
-                std::unordered_set<std::string> uniqueTextures;
                 for (const auto& submesh : meshComponent.meshData.submeshes) {
                     if (!submesh.texturePath.empty()) {
-                        uniqueTextures.insert(submesh.texturePath);
                         meshComponent.textureNames.push_back(submesh.texturePath);
                     }
                 }
-
-                log("Loading %zu submesh textures", uniqueTextures.size());
-                for (const auto& texPath : uniqueTextures) {
-                    log("Processing texture: %s", texPath.c_str());
-                    if (!m_p_resources->textureExists(texPath)) {
-                        try {
-                            m_p_resources->loadTexture(texPath, texPath);
-                            log("Loaded texture: %s", texPath.c_str());
-                        } catch (const std::exception& e) {
-                            log(LogLevel::ERROR, "Failed to load texture %s", texPath.c_str());
-                            handle_exception(e);
-                        }
-                    } else {
-                        log("Texture already exists: %s", texPath.c_str());
-                    }
-                }
-
         try {
             log("Creating Vulkan mesh for %s", tempName.c_str());
             if(m_vulkanMeshes.find(meshComponent.meshData.meshPath) == m_vulkanMeshes.end()){
@@ -166,7 +143,7 @@ namespace vex {
     }
 
     void MeshManager::registerVulkanMesh(MeshComponent& meshComponent) {
-        const std::string& path = GetAssetPath(meshComponent.meshData.meshPath);
+        const std::string& path = meshComponent.meshData.meshPath;
         if (m_vulkanMeshes.count(path)) {
             if (m_meshBoundsCache.count(path)) {
                 auto& bounds = m_meshBoundsCache[path];
@@ -176,9 +153,9 @@ namespace vex {
             }
             return;
         }
-        if (path != "") {
+        if (!(meshComponent.meshData.meshPath == "" || meshComponent.meshData.meshPath.empty() || path == GetAssetDir())) {
             #if DEBUG
-            if (path.empty() || !m_vfs->file_exists(path)) {
+            if (meshComponent.meshData.meshPath.empty() || path == GetAssetDir() || !m_vfs->file_exists(GetAssetPath(path))) {
                 log(LogLevel::WARNING, "Skipping registration for invalid path: %s", path.c_str());
                 return;
             }
@@ -193,6 +170,8 @@ namespace vex {
             m_meshBoundsCache[path] = { loadedAsset.localCenter, loadedAsset.localRadius };
 
             meshComponent.textureNames = std::move(loadedAsset.textureNames);
+        }else{
+            return;
         }
 
         meshComponent.textureNames.clear();

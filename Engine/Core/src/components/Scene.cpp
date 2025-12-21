@@ -168,7 +168,7 @@ void Scene::load(){
     }
     } catch (const std::exception& e) {
         log(LogLevel::ERROR, "Failed to load scene: %s", m_path.c_str());
-        handle_exception(e);
+        handle_critical_exception(e);
     }
 }
 

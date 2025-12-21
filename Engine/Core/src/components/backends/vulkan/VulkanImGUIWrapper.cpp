@@ -59,7 +59,7 @@ namespace vex {
                 ImGui::CreateContext();
             } catch (const std::exception& e) {
                 log(LogLevel::ERROR, "ImGUI Init Failed");
-                handle_exception(e);
+                handle_critical_exception(e);
             }
             ImGuiIO& io = ImGui::GetIO();
 
@@ -128,7 +128,7 @@ namespace vex {
             m_initialized = true;
         } catch (const std::exception& e) {
             log(LogLevel::ERROR, "ImGUI Init Failed");
-            handle_exception(e);
+            handle_critical_exception(e);
         }
     }
 

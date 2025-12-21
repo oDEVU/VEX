@@ -246,7 +246,7 @@ namespace vex {
 
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
 
-            //log("Texture exists: %s, textureName: %s", textureExists ? "true" : "false", textureName.c_str());
+            //log("Texture exists: %s, textureName: %s, textureIndex: %d", textureExists ? "true" : "false", textureName.c_str(), textureIndex);
 
             if (!textureExists) {
                 textureName = "default";

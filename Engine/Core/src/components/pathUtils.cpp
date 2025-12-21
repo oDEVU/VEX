@@ -18,6 +18,10 @@ void SetAssetRoot(const std::string& projectPath) {
     g_AssetRootOverride = projectPath;
 }
 
+std::string GetAssetDir() {
+    return g_AssetRootOverride;
+}
+
 std::filesystem::path GetExecutableDir() {
     std::filesystem::path exePath;
 

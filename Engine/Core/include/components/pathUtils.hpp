@@ -14,6 +14,8 @@
 namespace vex {
     /// @brief Called by the Editor to force GetAssetPath to look in the Project folder
     void VEX_EXPORT SetAssetRoot(const std::string& projectPath);
+    /// @brief Get the directory of assets
+    std::string VEX_EXPORT GetAssetDir();
     /// @brief Get the directory of the executable.
     std::string VEX_EXPORT GetAssetPath(const std::string& relativePath);
     /// @brief Get the path of an asset. Its different for debug and release builds since VirtualFileSystem implements asset loading differently depending on build type.

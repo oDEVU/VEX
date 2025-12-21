@@ -183,7 +183,7 @@ namespace vex {
             return true;
         } catch (const std::exception& e) {
             log(LogLevel::ERROR, "beginFrame failed");
-            handle_exception(e);
+            handle_critical_exception(e);
             return false;
         }
     }
@@ -249,7 +249,7 @@ namespace vex {
             try {
                 vkCmdBeginRendering(cmd, &renderingInfo);
             } catch (const std::exception& e) {
-                handle_exception(e);
+                handle_critical_exception(e);
                 return;
             }
 
@@ -596,7 +596,9 @@ namespace vex {
             auto& currentGarbage = m_garbageDescriptors[m_r_context.currentFrame];
             if (!currentGarbage.empty()) {
                 for (VkDescriptorSet ds : currentGarbage) {
-                    vkUI.removeTexture(ds);
+                    if(ds != VK_NULL_HANDLE){
+                        vkUI.removeTexture(ds);
+                    }
                 }
                 currentGarbage.clear();
             }
@@ -644,7 +646,7 @@ namespace vex {
             try {
                 vkCmdBeginRendering(cmd, &renderingInfo);
             } catch (const std::exception& e) {
-                handle_exception(e);
+                handle_critical_exception(e);
                 return;
             }
 
@@ -748,7 +750,7 @@ namespace vex {
                 }
             } catch (const std::exception& e) {
                 log(LogLevel::ERROR, "Queue Submit/Present failed");
-                handle_exception(e);
+                handle_critical_exception(e);
             }
 
             m_r_context.currentFrame = (m_r_context.currentFrame + 1) % m_r_context.MAX_FRAMES_IN_FLIGHT;

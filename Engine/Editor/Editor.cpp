@@ -186,7 +186,7 @@ namespace vex {
 
         } catch (const std::exception& e) {
             log(LogLevel::ERROR, "Editor render failed");
-            handle_exception(e);
+            handle_critical_exception(e);
         }
     }
 

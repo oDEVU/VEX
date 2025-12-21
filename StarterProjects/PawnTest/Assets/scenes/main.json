@@ -64,6 +64,7 @@
                     ],
                     "path": "Assets/meshes/cube.obj",
                     "renderType": 0,
+                    "textureOverrides": [],
                     "type": "vex::MeshComponent"
                 },
                 {
@@ -101,8 +102,8 @@
                         1.3179845809936523
                     ],
                     "rotation": [
-                        27.97557258605957,
-                        4.2688682810876344e-07,
+                        27.975570678710938,
+                        -0.0,
                         -16.562923431396484
                     ],
                     "scale": [
@@ -121,6 +122,7 @@
                     ],
                     "path": "Assets/meshes/cube.obj",
                     "renderType": 0,
+                    "textureOverrides": [],
                     "type": "vex::MeshComponent"
                 },
                 {
@@ -178,6 +180,7 @@
                     ],
                     "path": "Assets/meshes/cube.obj",
                     "renderType": 0,
+                    "textureOverrides": [],
                     "type": "vex::MeshComponent"
                 },
                 {

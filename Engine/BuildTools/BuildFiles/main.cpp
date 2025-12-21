@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
                 vex::throw_error("Hot Reload Update Failed");
             }
         } catch (const std::exception& e) {
-            vex::handle_exception(e);
+            vex::handle_critical_exception(e);
         }
     });
 

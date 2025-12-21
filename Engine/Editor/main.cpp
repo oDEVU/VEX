@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
                 engine.OnHotReload();
             }
         } catch (const std::exception& e) {
-            vex::handle_exception(e);
+            vex::handle_critical_exception(e);
         }
     });
 
