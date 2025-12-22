@@ -54,6 +54,10 @@ namespace vex {
         #if DEBUG
         template<>
             void vex::GenericComponentInspector<vex::PhysicsComponent>(GameObject& obj) {
+                std::string name = entt::type_id<vex::PhysicsComponent>().name().data();
+                std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+
+                ImGui::PushID(name.c_str());
                 if (obj.HasComponent<vex::PhysicsComponent>()) {
                     if (ImGui::CollapsingHeader("PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
                         auto& pc = obj.GetComponent<vex::PhysicsComponent>();
@@ -93,6 +97,7 @@ namespace vex {
                         ImGui::PopStyleColor(4);
                     }
                 }
+                ImGui::PopID();
             }
             #endif
 
@@ -101,6 +106,10 @@ namespace vex {
                     #if DEBUG
                     template<>
                         void vex::GenericComponentInspector<vex::TransformComponent>(GameObject& obj) {
+                            std::string name = entt::type_id<vex::TransformComponent>().name().data();
+                            std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+
+                            ImGui::PushID(name.c_str());
                             if (obj.HasComponent<vex::TransformComponent>()) {
                                 if (ImGui::CollapsingHeader("TransformComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
                                     auto& tc = obj.GetComponent<vex::TransformComponent>();
@@ -127,6 +136,7 @@ namespace vex {
                                     ImGui::PopStyleColor(4);
                                 }
                             }
+                            ImGui::PopID();
                         }
                         #endif
 }

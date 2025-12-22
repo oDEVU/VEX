@@ -103,7 +103,7 @@
                     ],
                     "rotation": [
                         27.975570678710938,
-                        -0.0,
+                        -4.2688682810876344e-07,
                         -16.562923431396484
                     ],
                     "scale": [
@@ -142,7 +142,7 @@
                     "friction": 0.5,
                     "isSensor": false,
                     "linearDamping": 0.05000000074505806,
-                    "mass": 10.0,
+                    "mass": 1.0,
                     "shape": 0,
                     "sphereRadius": 0.5,
                     "type": "vex::PhysicsComponent"
@@ -200,7 +200,7 @@
                     "friction": 0.5,
                     "isSensor": false,
                     "linearDamping": 0.05000000074505806,
-                    "mass": 10.0,
+                    "mass": 1.0,
                     "shape": 0,
                     "sphereRadius": 0.5,
                     "type": "vex::PhysicsComponent"

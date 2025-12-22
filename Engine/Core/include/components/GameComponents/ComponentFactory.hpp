@@ -45,8 +45,25 @@
     IMGUI_REFLECT(glm::vec2, x, y);
     IMGUI_REFLECT(glm::vec3, x, y, z);
     IMGUI_REFLECT(glm::vec4, x, y, z, w);
-    IMGUI_REFLECT(glm::quat, x, y, z, w);
     IMGUI_REFLECT(vex::MeshData, meshPath);
+
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, glm::quat& value, ImSettings& settings, ImResponse& response) {
+        glm::vec3 euler = glm::degrees(glm::eulerAngles(value));
+        if (ImGui::DragFloat3(label, &euler.x)) {
+            value = glm::quat(glm::radians(euler));
+        }
+    }
+
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, glm::ivec2& value, ImSettings& settings, ImResponse& response) {
+        ImGui::DragInt2(label, &value.x);
+    }
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, glm::ivec3& value, ImSettings& settings, ImResponse& response) {
+        ImGui::DragInt3(label, &value.x);
+    }
+
+    IMGUI_REFLECT(glm::quat, x, y, z, w);
+    IMGUI_REFLECT(glm::ivec2, x, y);
+    IMGUI_REFLECT(glm::ivec3, x, y, z);
 #else
     #define IMGUI_REFLECT(...);
 #endif

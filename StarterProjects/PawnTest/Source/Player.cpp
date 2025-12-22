@@ -37,7 +37,7 @@ namespace vex {
             glm::vec3 right = GetComponent<TransformComponent>().getRightVector();
             cc.controlInput -= right * movementSpeed;
         });
-        inputComp.addBinding(SDL_SCANCODE_SPACE, InputActionState::Held, [this](float deltaTime) {
+        inputComp.addBinding(SDL_SCANCODE_SPACE, InputActionState::Pressed, [this](float deltaTime) {
             auto& cc = GetComponent<CharacterComponent>();
             if(cc.isSupported()){
                 cc.controlInput += glm::vec3(0.0f, 10.f, 0.0f);
