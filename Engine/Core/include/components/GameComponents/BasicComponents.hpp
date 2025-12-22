@@ -20,6 +20,7 @@
 
 #include "components/Mesh.hpp"
 #include "components/errorUtils.hpp"
+#include "components/colorTypes.hpp"
 #include "entt/entity/fwd.hpp"
 
 #include "components/errorUtils.hpp"
@@ -382,7 +383,7 @@ struct MeshComponent {
     uint32_t id = UINT32_MAX;
     std::vector<std::string> textureNames;
     RenderType renderType = RenderType::OPAQUE;
-    glm::vec4 color = glm::vec4(1.f);
+    vex::rgba color = glm::vec4(1.f);
 
     std::map<int, std::string> textureOverrides;
 

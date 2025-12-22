@@ -8,6 +8,7 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/errorUtils.hpp"
 #include "components/GameObjects/GameObject.hpp"
+#include "components/colorTypes.hpp"
 #include "SerializationUtils.hpp"
 #include <nlohmann/json.hpp>
 #include <functional>
@@ -19,6 +20,28 @@
 #if DEBUG
     #include <ImReflect.hpp>
 
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, glm::vec4& value, ImSettings& settings, ImResponse& response) {
+        ImGui::DragFloat4(label, &value.x);
+    }
+
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, glm::vec3& value, ImSettings& settings, ImResponse& response) {
+        ImGui::DragFloat3(label, &value.x);
+    }
+
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, glm::vec2& value, ImSettings& settings, ImResponse& response) {
+        ImGui::DragFloat2(label, &value.x);
+    }
+
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, vex::rgb& value, ImSettings& settings, ImResponse& response) {
+        ImGui::ColorEdit3(label, &value.x);
+    }
+
+    inline void tag_invoke(ImReflect::ImInput_t, const char* label, vex::rgba& value, ImSettings& settings, ImResponse& response) {
+        ImGui::ColorEdit4(label, &value.x);
+    }
+
+    IMGUI_REFLECT(vex::rgb, x, y, z);
+    IMGUI_REFLECT(vex::rgba, x, y, z, w);
     IMGUI_REFLECT(glm::vec2, x, y);
     IMGUI_REFLECT(glm::vec3, x, y, z);
     IMGUI_REFLECT(glm::vec4, x, y, z, w);
