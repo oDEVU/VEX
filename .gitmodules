@@ -15,6 +15,7 @@
 [submodule "Engine/Core/thirdparty/imgui"]
 	path = Engine/Core/thirdparty/imgui
 	url = https://github.com/ocornut/imgui.git
+	branch = docking
 [submodule "Engine/Core/thirdparty/entt"]
 	path = Engine/Core/thirdparty/entt
 	url = https://github.com/skypjack/entt.git
