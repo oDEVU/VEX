@@ -96,7 +96,7 @@ namespace vex {
 
         uint32_t currentFrame = 0;
         uint32_t currentImageIndex = 0;
-        const uint32_t MAX_FRAMES_IN_FLIGHT = 3;
+        uint32_t MAX_FRAMES_IN_FLIGHT = 3;
 
         std::vector<VkSemaphore> imageAvailableSemaphores;
         std::vector<VkSemaphore> renderFinishedSemaphores;

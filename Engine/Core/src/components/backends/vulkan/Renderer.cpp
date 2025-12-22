@@ -722,7 +722,7 @@ namespace vex {
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &data.commandBuffer;
 
-            VkSemaphore signalSemaphores[] = {m_r_context.renderFinishedSemaphores[data.frameIndex]};
+            VkSemaphore signalSemaphores[] = {m_r_context.renderFinishedSemaphores[data.imageIndex]};
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = signalSemaphores;
 
@@ -784,12 +784,9 @@ namespace vex {
         barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.image = image;
-        //barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ||
                 newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL) {
                 barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-                // Dodaj aspekt Stencil, jeśli używasz formatu z S8_UINT.
-                // W SwapchainManager.cpp masz formaty z S8_UINT, więc jest to bezpieczne.
                 if (m_r_context.depthFormat == VK_FORMAT_D32_SFLOAT_S8_UINT ||
                     m_r_context.depthFormat == VK_FORMAT_D24_UNORM_S8_UINT) {
                     barrier.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;

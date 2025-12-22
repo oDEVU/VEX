@@ -35,6 +35,9 @@ namespace vex {
         /// @brief cleans up swapchain resources.
         void cleanupSwapchain();
 
+        /// @brief cleans up synchronization objects.
+        void cleanupSyncObjects();
+
         /// @brief Simple function to cleanup old swapchain and create new one, used when resizing the window.
         void recreateSwapchain();
 

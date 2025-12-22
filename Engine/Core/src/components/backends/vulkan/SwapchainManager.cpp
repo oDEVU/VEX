@@ -12,7 +12,10 @@ namespace vex {
     VulkanSwapchainManager::VulkanSwapchainManager(VulkanContext& context, SDL_Window* window) : m_r_context(context) {
         m_p_window = window;
     }
-    VulkanSwapchainManager::~VulkanSwapchainManager() {}
+    VulkanSwapchainManager::~VulkanSwapchainManager() {
+        cleanupSwapchain();
+        cleanupSyncObjects();
+    }
 
     void VulkanSwapchainManager::createSwapchain() {
         log("Creating Swapchain");
@@ -55,6 +58,8 @@ namespace vex {
             imageCount = capabilities.maxImageCount;
         }
 
+        m_r_context.MAX_FRAMES_IN_FLIGHT = imageCount;
+
         VkSwapchainCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         createInfo.surface = m_r_context.surface;
@@ -94,6 +99,10 @@ namespace vex {
         m_r_context.swapchainExtent = extent;
 
         createImageViews();
+
+        if (m_r_context.commandPools.empty()) {
+            createCommandPool();
+        }
 
         VkCommandBuffer cmd = m_r_context.beginSingleTimeCommands();
 
@@ -175,8 +184,6 @@ namespace vex {
         }
 
         m_r_context.depthFormat = depthFormat;
-
-        createCommandPool();
     }
 
     void VulkanSwapchainManager::createImageViews() {
@@ -210,6 +217,8 @@ namespace vex {
     void VulkanSwapchainManager::createCommandPool() {
         log("creating command pools");
 
+        if (!m_r_context.commandPools.empty()) return;
+
         m_r_context.commandPools.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
         for (int i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
@@ -232,13 +241,14 @@ namespace vex {
         if (vkCreateCommandPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.singleTimePool) != VK_SUCCESS) {
             throw_error("Failed to create single time command pool");
         }
-        //m_r_context.singleTimePool = createCommandPool(m_r_context.device, m_r_context.graphicsQueueFamily);
 
         createCommandBuffers();
     }
 
     void VulkanSwapchainManager::createCommandBuffers() {
         log("creating command buffers");
+
+        if (!m_r_context.commandBuffers.empty()) return;
 
         m_r_context.commandBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
@@ -258,6 +268,8 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createSyncObjects() {
+        if (!m_r_context.imageAvailableSemaphores.empty()) return;
+
         log("Creating synchronization objects...");
 
         m_r_context.imageAvailableSemaphores.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
@@ -365,15 +377,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {
-        if (m_r_context.lowResColorView) {
-            vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
-            m_r_context.lowResColorView = VK_NULL_HANDLE;
-        }
-        if (m_r_context.lowResColorImage) {
-            vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
-            m_r_context.lowResColorImage = VK_NULL_HANDLE;
-            m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
-        }
+        cleanupLowResResources();
 
         if (m_r_context.depthImageView) {
             vkDestroyImageView(m_r_context.device, m_r_context.depthImageView, nullptr);
@@ -390,10 +394,15 @@ namespace vex {
         }
         m_r_context.swapchainImageViews.clear();
 
+        if (m_r_context.swapchain) {
+            vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
+            m_r_context.swapchain = VK_NULL_HANDLE;
+        }
+    }
+
+    void VulkanSwapchainManager::cleanupSyncObjects() {
         for (auto pool : m_r_context.commandPools) {
-            if (pool != VK_NULL_HANDLE) {
-                vkDestroyCommandPool(m_r_context.device, pool, nullptr);
-            }
+            if (pool != VK_NULL_HANDLE) vkDestroyCommandPool(m_r_context.device, pool, nullptr);
         }
         m_r_context.commandPools.clear();
 
@@ -405,38 +414,25 @@ namespace vex {
         m_r_context.commandBuffers.clear();
 
         for (size_t i = 0; i < m_r_context.imageAvailableSemaphores.size(); i++) {
-            if (m_r_context.imageAvailableSemaphores[i] != VK_NULL_HANDLE)
-                vkDestroySemaphore(m_r_context.device, m_r_context.imageAvailableSemaphores[i], nullptr);
+            if (m_r_context.imageAvailableSemaphores[i]) vkDestroySemaphore(m_r_context.device, m_r_context.imageAvailableSemaphores[i], nullptr);
+            if (m_r_context.renderFinishedSemaphores[i]) vkDestroySemaphore(m_r_context.device, m_r_context.renderFinishedSemaphores[i], nullptr);
+            if (m_r_context.inFlightFences[i]) vkDestroyFence(m_r_context.device, m_r_context.inFlightFences[i], nullptr);
         }
+
         m_r_context.imageAvailableSemaphores.clear();
-
-        for (size_t i = 0; i < m_r_context.renderFinishedSemaphores.size(); i++) {
-            if (m_r_context.renderFinishedSemaphores[i] != VK_NULL_HANDLE)
-                vkDestroySemaphore(m_r_context.device, m_r_context.renderFinishedSemaphores[i], nullptr);
-        }
         m_r_context.renderFinishedSemaphores.clear();
-
-        for (size_t i = 0; i < m_r_context.inFlightFences.size(); i++) {
-            if (m_r_context.inFlightFences[i] != VK_NULL_HANDLE)
-                vkDestroyFence(m_r_context.device, m_r_context.inFlightFences[i], nullptr);
-        }
         m_r_context.inFlightFences.clear();
-
-        if (m_r_context.swapchain) {
-            vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
-            m_r_context.swapchain = VK_NULL_HANDLE;
-        }
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
         log("recreating swapchains");
         vkDeviceWaitIdle(m_r_context.device);
-        log("cleanupLowResResources");
-        cleanupLowResResources();
         log("cleanupSwapchain");
         cleanupSwapchain();
+        cleanupSyncObjects();
 
         createSwapchain();
+        createLowResResources();
         //log("createImageViews");
         //createImageViews();
         //log("createCommandBuffers");

@@ -42,7 +42,7 @@ namespace vex {
     #if DEBUG
         if (descriptorSet != VK_NULL_HANDLE) {
             ImGui_ImplVulkan_RemoveTexture(descriptorSet);
-            vkFreeDescriptorSets(m_r_context.device, m_imguiPool, 1, &descriptorSet);
+            //vkFreeDescriptorSets(m_r_context.device, m_imguiPool, 1, &descriptorSet);
         }
     #endif
     }
