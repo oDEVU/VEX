@@ -1,5 +1,6 @@
 {
-  "project_name": "PhysicsTest",
-  "main_scene": "Assets/scenes/main.json",
-  "version": "1"
+    "icon_path": "",
+    "main_scene": "Assets/scenes/main.json",
+    "project_name": "PhysicsTest",
+    "version": "1"
 }

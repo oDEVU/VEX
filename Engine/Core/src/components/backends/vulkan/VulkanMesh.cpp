@@ -7,7 +7,11 @@
 #include <SDL3/SDL.h>
 
 // debug
+#ifdef _WIN32
+// pass
+#else
 #include <X11/X.h>
+#endif
 #include <cstdint>
 #include <cstring>
 #include <iostream>

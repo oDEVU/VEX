@@ -1,4 +1,5 @@
 @echo off
+cd /d "%~dp0"
 echo  ===  STARTING FULL ENGINE BUILD ===
 
 echo [1/3] Entering Core...
