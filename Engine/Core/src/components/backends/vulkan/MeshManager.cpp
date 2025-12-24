@@ -1,5 +1,6 @@
 #include "MeshManager.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
+#include "components/PhysicsSystem.hpp"
 #include "components/Mesh.hpp"
 #include "components/errorUtils.hpp"
 #include "entt/entity/entity.hpp"
@@ -232,6 +233,15 @@ namespace vex {
 
         if (alreadyExisted) {
             m_vulkanMeshes.at(path)->addInstance();
+        }
+
+        if(registry.any_of<PhysicsComponent>(entity)) {
+            auto& oldPC = registry.get<PhysicsComponent>(entity);
+            if(oldPC.shape == ShapeType::MESH){
+                PhysicsComponent newPC = PhysicsComponent::Mesh(meshComponent, oldPC.bodyType, oldPC.mass, oldPC.friction, oldPC.bounce);
+                registry.replace<PhysicsComponent>(entity, newPC);
+            }
+
         }
     }
 

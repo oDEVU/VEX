@@ -65,14 +65,20 @@ namespace vex {
 
                         if (ImReflect::Input("Shape", pc.shape).get<vex::ShapeType>().is_changed()) changed = true;
 
-                        if (pc.shape == ShapeType::BOX)
+                        if (pc.shape == ShapeType::BOX){
                             changed |= ImGui::DragFloat3("Extents", &pc.boxHalfExtents.x);
-                        else if (pc.shape == ShapeType::SPHERE)
+                        } else if (pc.shape == ShapeType::ROUNDED_BOX){
+                            changed |= ImGui::DragFloat3("Extents", &pc.boxHalfExtents.x);
+                            changed |= ImGui::DragFloat("Radius", &pc.roundedRadius);
+                        } else if (pc.shape == ShapeType::SPHERE) {
                             changed |= ImGui::DragFloat("Radius", &pc.sphereRadius);
-                        else if (pc.shape == ShapeType::CAPSULE)
-                            changed |= ImGui::DragFloat2("Capsule", &pc.capsuleRadius);
-                        else if (pc.shape == ShapeType::CYLINDER)
-                            changed |= ImGui::DragFloat2("Cylinder", &pc.cylinderRadius);
+                        } else if (pc.shape == ShapeType::CAPSULE){
+                            changed |= ImGui::DragFloat2("Radius", &pc.capsuleRadius);
+                            changed |= ImGui::DragFloat2("Height", &pc.capsuleHeight);
+                        } else if (pc.shape == ShapeType::CYLINDER){
+                            changed |= ImGui::DragFloat2("Radius", &pc.cylinderRadius);
+                            changed |= ImGui::DragFloat2("Height", &pc.cylinderHeight);
+                        }
 
                         if (ImReflect::Input("BodyType", pc.bodyType).get<vex::BodyType>().is_changed()) changed = true;
                         if (ImReflect::Input("Mass", pc.mass).get<float>().is_changed()) changed = true;
@@ -164,6 +170,7 @@ REGISTER_COMPONENT(vex::PhysicsComponent,
     angularDamping,
 
     boxHalfExtents,
+    roundedRadius,
     sphereRadius,
     capsuleRadius,
     capsuleHeight,

@@ -376,8 +376,10 @@ namespace vex {
                     #endif
                 }
 
-                if (!camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius)) {
-                    continue;
+                if(!mesh.getIsFresh()){
+                    if (!camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius)) {
+                        continue;
+                    }
                 }
 
                 auto lightView = registry.view<TransformComponent, LightComponent>();

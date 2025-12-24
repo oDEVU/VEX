@@ -68,7 +68,7 @@ namespace vex {
 
     /// @brief Enumeration of available shape types for physics components.
     enum class ShapeType {
-        BOX, SPHERE, CAPSULE, CYLINDER, CONVEX_HULL, MESH
+        BOX, ROUNDED_BOX, SPHERE, CAPSULE, CYLINDER, CONVEX_HULL, MESH
     };
 
     /// @brief Enumeration of available body types for physics components.
@@ -106,6 +106,7 @@ namespace vex {
         bool allowSleeping = true;
 
         glm::vec3 boxHalfExtents = {0.5f, 0.5f, 0.5f};
+        float roundedRadius = 0.05f;
         float sphereRadius = 0.5f;
         float capsuleRadius = 0.5f;
         float capsuleHeight = 1.0f;
@@ -140,6 +141,19 @@ namespace vex {
             pc.bounce = bounce;
             return pc;
         }
+
+        // @brief Creates a rounded box
+            static PhysicsComponent RoundedBox(glm::vec3 halfExtents, float radius = 0.05f, BodyType bodyType = BodyType::DYNAMIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
+                PhysicsComponent pc;
+                pc.shape = ShapeType::ROUNDED_BOX;
+                pc.boxHalfExtents = halfExtents;
+                pc.roundedRadius = radius;
+                pc.mass = mass;
+                pc.bodyType = bodyType;
+                pc.friction = friction;
+                pc.bounce = bounce;
+                return pc;
+            }
 
         // @brief Creates a sphere-shaped physics component.
         static PhysicsComponent Sphere(float radius = 0.5f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
@@ -289,6 +303,9 @@ namespace vex {
         /// @brief Allows for getting linear velocity.
         glm::vec3 GetLinearVelocity(JPH::BodyID bodyId);
 
+        // @brief Gets the velocity of a specific point on the body (in World Space)
+        glm::vec3 GetVelocityAtPosition(JPH::BodyID bodyId, const glm::vec3& point);
+
         /// @brief Allows for adding to linear velocity.
         void AddLinearVelocity(JPH::BodyID bodyId, const glm::vec3& velocity);
 
@@ -388,6 +405,12 @@ namespace vex {
 
         // @brief Initializes a character component.
         void InitializeCharacter(entt::entity e, CharacterComponent& cc);
+
+        #include <map>
+
+        /// @brief Helper to weld vertices based on position ONLY (ignoring UVs/Normals which split render meshes)
+        void WeldVertices(const std::vector<glm::vec3>& inVerts, const std::vector<uint32_t>& inIndices,
+                          JPH::VertexList& outVerts, JPH::IndexedTriangleList& outTris);
     };
 
     class MyContactListener : public JPH::ContactListener {

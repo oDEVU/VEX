@@ -9,6 +9,8 @@
 #include <thread>
 #include <execution>
 
+#include <map>
+
 #include <components/JoltSafe.hpp>
 
 #ifdef _WIN32
@@ -261,6 +263,49 @@ namespace vex {
         }
     }
 
+    void PhysicsSystem::WeldVertices(const std::vector<glm::vec3>& inVerts, const std::vector<uint32_t>& inIndices,
+                      JPH::VertexList& outVerts, JPH::IndexedTriangleList& outTris) {
+
+        struct Vec3Key {
+            glm::vec3 v;
+            bool operator<(const Vec3Key& other) const {
+                if (v.x != other.v.x) return v.x < other.v.x;
+                if (v.y != other.v.y) return v.y < other.v.y;
+                return v.z < other.v.z;
+            }
+        };
+
+        std::map<Vec3Key, uint32_t> uniqueMap;
+        outVerts.clear();
+        outTris.clear();
+        outVerts.reserve(inVerts.size());
+        outTris.reserve(inIndices.size() / 3);
+
+        std::vector<uint32_t> remappedIndices;
+        remappedIndices.resize(inIndices.size());
+
+        for (size_t i = 0; i < inIndices.size(); ++i) {
+            uint32_t originalIdx = inIndices[i];
+            if(originalIdx >= inVerts.size()) continue;
+
+            glm::vec3 pos = inVerts[originalIdx];
+            Vec3Key key{pos};
+
+            if (uniqueMap.find(key) == uniqueMap.end()) {
+                uint32_t newIdx = (uint32_t)outVerts.size();
+                uniqueMap[key] = newIdx;
+                outVerts.emplace_back(pos.x, pos.y, pos.z);
+                remappedIndices[i] = newIdx;
+            } else {
+                remappedIndices[i] = uniqueMap[key];
+            }
+        }
+
+        for (size_t i = 0; i < remappedIndices.size(); i += 3) {
+            outTris.emplace_back(remappedIndices[i], remappedIndices[i+1], remappedIndices[i+2]);
+        }
+    }
+
     std::optional<JPH::BodyID> PhysicsSystem::CreateBodyForEntity(entt::entity e, entt::registry& r, PhysicsComponent& pc) {
         if (!m_physicsSystem || !r.all_of<TransformComponent>(e)) return std::nullopt;
 
@@ -273,6 +318,18 @@ namespace vex {
         switch (pc.shape) {
         case ShapeType::BOX:
             shape = new JPH::BoxShape(JPH::Vec3(pc.boxHalfExtents.x, pc.boxHalfExtents.y, pc.boxHalfExtents.z));
+            break;
+        case ShapeType::ROUNDED_BOX:
+            {
+            JPH::Vec3 halfExtents(
+                std::max(pc.roundedRadius, pc.boxHalfExtents.x) - pc.roundedRadius,
+                std::max(pc.roundedRadius, pc.boxHalfExtents.y) - pc.roundedRadius,
+                std::max(pc.roundedRadius, pc.boxHalfExtents.z) - pc.roundedRadius
+            );
+
+            JPH::BoxShapeSettings settings(halfExtents, pc.roundedRadius);
+            shape = settings.Create().Get();
+            }
             break;
         case ShapeType::SPHERE:
             shape = new JPH::SphereShape(pc.sphereRadius);
@@ -301,34 +358,77 @@ namespace vex {
         case ShapeType::MESH:
             if (pc.meshVertices.empty() || pc.meshIndices.empty()) {
                 log(LogLevel::ERROR, "Mesh shape has no vertices or indices");
-                return std::nullopt;
+
+                if(r.any_of<MeshComponent>(e)){
+                    auto& mc = r.get<MeshComponent>(e);
+
+                    if (!mc.meshData.submeshes.empty()) {
+                        pc.meshVertices.clear();
+                        pc.meshIndices.clear();
+
+                        size_t vertexOffset = 0;
+
+                        for (const auto& sm : mc.meshData.submeshes) {
+                            for (const auto& v : sm.vertices) {
+                                pc.meshVertices.push_back(v.position);
+                            }
+                            for (auto idx : sm.indices) {
+                                pc.meshIndices.push_back(static_cast<uint32_t>(idx + vertexOffset));
+                            }
+                            vertexOffset += sm.vertices.size();
+                        }
+
+                        if (pc.meshVertices.empty() || pc.meshIndices.empty()) {
+                            log(LogLevel::ERROR, "Mesh shape has no vertices or indices. I have no fucking idea why because it just copied those and would error out if there were none :C");
+                            return std::nullopt;
+                        }
+                    }else{
+                        log(LogLevel::ERROR, "MeshComponent has no verticies");
+                        return std::nullopt;
+                    }
+                }else{
+                    log(LogLevel::ERROR, "MeshComponent also not found");
+                    return std::nullopt;
+                }
             }
-            {
+
+            if (pc.bodyType == BodyType::DYNAMIC) {
+                JPH::Array<JPH::Vec3> verts;
+                verts.reserve(pc.meshVertices.size());
+                for (const auto& v : pc.meshVertices) {
+                    verts.emplace_back(JPH::Vec3(v.x, v.y, v.z));
+                }
+                log(LogLevel::WARNING, "Dynamic mesh fallback to convex hull");
+                JPH::ConvexHullShapeSettings settings(verts);
+
+                auto result = settings.Create();
+                if (result.IsValid()) {
+                    shape = result.Get();
+                } else {
+                    log(LogLevel::ERROR, "Failed to create Convex Hull: %s", result.GetError().c_str());
+                    return std::nullopt;
+                }
+            } else {
+                /*JPH::Array<JPH::Float3> verts;
+                verts.reserve(pc.meshVertices.size());
+                for (const auto& v : pc.meshVertices) {
+                    verts.emplace_back(v.x, v.y, v.z);
+                }
                 JPH::IndexedTriangleList tris;
                 tris.reserve(pc.meshIndices.size() / 3);
                 for (size_t i = 0; i < pc.meshIndices.size(); i += 3) {
                     tris.emplace_back(pc.meshIndices[i], pc.meshIndices[i + 1], pc.meshIndices[i + 2]);
-                }
-                if (pc.bodyType == BodyType::DYNAMIC) {
-                    JPH::Array<JPH::Vec3> verts;
-                    verts.reserve(pc.convexPoints.size()/3);
-                    for (const auto& p : pc.convexPoints) {
-                        verts.emplace_back(JPH::Vec3(p.GetX(), p.GetY(), p.GetZ()));
-                    }
-                    log(LogLevel::WARNING, "Dynamic mesh fallback to convex hull");
-                    JPH::ConvexHullShapeSettings settings(verts);
-                    shape = settings.Create().Get();
-                } else {
-                    JPH::Array<JPH::Float3> verts;
-                    verts.reserve(pc.meshVertices.size());
-                    for (const auto& v : pc.meshVertices) {
-                        verts.emplace_back(v.x, v.y, v.z);
-                    }
-                    JPH::MeshShapeSettings settings(verts, tris);
-                    shape = settings.Create().Get();
-                }
+                }*/
+
+                JPH::VertexList verts;
+                JPH::IndexedTriangleList tris;
+                WeldVertices(pc.meshVertices, pc.meshIndices, verts, tris);
+
+                JPH::MeshShapeSettings settings(verts, tris);
+                settings.mActiveEdgeCosThresholdAngle = cos(JPH::DegreesToRadians(25.0f));
+                shape = settings.Create().Get();
             }
-            break;
+        break;
         }
 
         JPH::EMotionType motion = JPH::EMotionType::Static;
@@ -342,7 +442,7 @@ namespace vex {
         settings.mAllowSleeping = pc.allowSleeping;
         settings.mIsSensor = pc.isSensor || pc.bodyType == BodyType::SENSOR;
         if (pc.bodyType == BodyType::DYNAMIC || pc.bodyType == BodyType::KINEMATIC) {
-            settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateMassAndInertia;
+            settings.mOverrideMassProperties = JPH::EOverrideMassProperties::CalculateInertia;
             settings.mMassPropertiesOverride.mMass = pc.mass;
         }
 
@@ -459,6 +559,12 @@ namespace vex {
     glm::vec3 PhysicsSystem::GetLinearVelocity(JPH::BodyID bodyId) {
         auto vel = m_physicsSystem->GetBodyInterface().GetLinearVelocity(bodyId);
         return {vel.GetX(), vel.GetY(), vel.GetZ()};
+    }
+
+    glm::vec3 PhysicsSystem::GetVelocityAtPosition(JPH::BodyID bodyId, const glm::vec3& point) {
+        JPH::RVec3 joltPoint(point.x, point.y, point.z);
+        JPH::Vec3 joltVel = m_physicsSystem->GetBodyInterface().GetPointVelocity(bodyId, joltPoint);
+        return glm::vec3(joltVel.GetX(), joltVel.GetY(), joltVel.GetZ());
     }
 
     void PhysicsSystem::AddLinearVelocity(JPH::BodyID bodyId, const glm::vec3& velocity) {

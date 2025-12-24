@@ -62,11 +62,15 @@ if(WIN32)
     endif()
 
     if(MAGICK_EXE)
+        file(TO_NATIVE_PATH "${ICON_SOURCE_PNG}" NATIVE_ICON_SOURCE)
+        file(TO_NATIVE_PATH "${ICON_OUT_ICO}" NATIVE_ICON_OUT)
+
         add_custom_command(
             OUTPUT ${ICON_OUT_ICO}
-            COMMAND ${MAGICK_EXE} convert "${ICON_SOURCE_PNG}" -define icon:auto-resize=256,128,64,48,32,16 "${ICON_OUT_ICO}"
+            COMMAND ${MAGICK_EXE} "${NATIVE_ICON_SOURCE}" -define icon:auto-resize=256,128,64,48,32,16 "${NATIVE_ICON_OUT}"
             DEPENDS ${ICON_SOURCE_PNG}
             COMMENT "Generating Windows ICO..."
+            VERBATIM
         )
     endif()
 
