@@ -47,6 +47,8 @@ namespace vex {
                             keyState.wasProcessedAsPressed = true;
                         } else if (!isPressed && binding.state == InputActionState::Released) {
                             binding.action(deltaTime);
+                        } else if (!isPressed && binding.state == InputActionState::Held) {
+                            binding.action(0.0f);
                         }
                     }
                 }
