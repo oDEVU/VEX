@@ -200,7 +200,8 @@ struct TransformComponent {
         /// @param targetWorldQuat glm::quat The desired world rotation quaternion.
         void setWorldQuaternion(glm::quat targetWorldQuat) {
             if (parent != entt::null && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
-                glm::quat parentWorldQuat = glm::quat_cast(m_registry->get<TransformComponent>(parent).matrix());
+                glm::quat parentWorldQuat = m_registry->get<TransformComponent>(parent).getWorldQuaternion();
+
                 glm::quat parentInverse = glm::inverse(parentWorldQuat);
                 m_rotationQuat = parentInverse * targetWorldQuat;
             } else {

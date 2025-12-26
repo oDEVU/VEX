@@ -111,6 +111,7 @@ $(function(){initNavTree('structvex_1_1MeshComponent.html','','structvex_1_1Mesh
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6887e038adda3adddb94a7a11a5fe1da" id="r_a6887e038adda3adddb94a7a11a5fe1da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6887e038adda3adddb94a7a11a5fe1da">getIsFresh</a> ()</td></tr>
 <tr class="memitem:a5d36e48131f49217c6c4c6b7976a3b51" id="r_a5d36e48131f49217c6c4c6b7976a3b51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d36e48131f49217c6c4c6b7976a3b51">setRendered</a> ()</td></tr>
+<tr class="memitem:a20da54a1c03dbf8d0d91e95100a5b736" id="r_a20da54a1c03dbf8d0d91e95100a5b736"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20da54a1c03dbf8d0d91e95100a5b736">forceRefresh</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -118,7 +119,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a27398b9146854df4d549216cf92a32a2" id="r_a27398b9146854df4d549216cf92a32a2"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27398b9146854df4d549216cf92a32a2">id</a> = UINT32_MAX</td></tr>
 <tr class="memitem:a53f560d67ee2772bc8094e601b7645ca" id="r_a53f560d67ee2772bc8094e601b7645ca"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53f560d67ee2772bc8094e601b7645ca">textureNames</a></td></tr>
 <tr class="memitem:a31e06acdc0e1d0af9cf1964ce34643ce" id="r_a31e06acdc0e1d0af9cf1964ce34643ce"><td class="memItemLeft" align="right" valign="top">RenderType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31e06acdc0e1d0af9cf1964ce34643ce">renderType</a> = RenderType::OPAQUE</td></tr>
-<tr class="memitem:ade9b46ab0f9956e81657ea5dbd1752a6" id="r_ade9b46ab0f9956e81657ea5dbd1752a6"><td class="memItemLeft" align="right" valign="top">glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade9b46ab0f9956e81657ea5dbd1752a6">color</a> = glm::vec4(1.f)</td></tr>
+<tr class="memitem:aa5c3b03bce1216983ac952bb0a1dfba6" id="r_aa5c3b03bce1216983ac952bb0a1dfba6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1rgba.html">vex::rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5c3b03bce1216983ac952bb0a1dfba6">color</a> = glm::vec4(1.f)</td></tr>
+<tr class="memitem:a7f90da64d71ce0022412f52f8df4cb5e" id="r_a7f90da64d71ce0022412f52f8df4cb5e"><td class="memItemLeft" align="right" valign="top">std::map&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f90da64d71ce0022412f52f8df4cb5e">textureOverrides</a></td></tr>
 <tr class="memitem:a9444ca2c154c22721e86e64b65978612" id="r_a9444ca2c154c22721e86e64b65978612"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9444ca2c154c22721e86e64b65978612">localCenter</a> = glm::vec3(0.0f)</td></tr>
 <tr class="memitem:a5fba002f32285fb49e2caea07a242563" id="r_a5fba002f32285fb49e2caea07a242563"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fba002f32285fb49e2caea07a242563">localRadius</a> = 1.0f</td></tr>
 <tr class="memitem:a74439471a657571941c7003991b37ba0" id="r_a74439471a657571941c7003991b37ba0"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74439471a657571941c7003991b37ba0">worldCenter</a> = glm::vec3(0.0f)</td></tr>
@@ -132,8 +134,35 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>Struct containing raw meshData, mesh id, texture paths and material properties. It just template and data for rendering backend to load/convert this data to its acceptible format. This is made weirdly cause its made in mind for multiple backends. IDK i hate this system but i have no better idea. </p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo</a></b></dt><dd>Make creating this component enough to create mesh, not requiring mesh manager to load mesh data. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00378">378</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00381">381</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a20da54a1c03dbf8d0d91e95100a5b736" name="a20da54a1c03dbf8d0d91e95100a5b736"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20da54a1c03dbf8d0d91e95100a5b736">&#9670;&#160;</a></span>forceRefresh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::MeshComponent::forceRefresh </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00406">406</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a6887e038adda3adddb94a7a11a5fe1da" name="a6887e038adda3adddb94a7a11a5fe1da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6887e038adda3adddb94a7a11a5fe1da">&#9670;&#160;</a></span>getIsFresh()</h2>
 
@@ -157,7 +186,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00393">393</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00398">398</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -184,24 +213,24 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00397">397</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00402">402</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="ade9b46ab0f9956e81657ea5dbd1752a6" name="ade9b46ab0f9956e81657ea5dbd1752a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade9b46ab0f9956e81657ea5dbd1752a6">&#9670;&#160;</a></span>color</h2>
+<a id="aa5c3b03bce1216983ac952bb0a1dfba6" name="aa5c3b03bce1216983ac952bb0a1dfba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5c3b03bce1216983ac952bb0a1dfba6">&#9670;&#160;</a></span>color</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec4 vex::MeshComponent::color = glm::vec4(1.f)</td>
+          <td class="memname"><a class="el" href="structvex_1_1rgba.html">vex::rgba</a> vex::MeshComponent::color = glm::vec4(1.f)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00384">384</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00387">387</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -225,7 +254,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00402">402</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00411">411</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -241,7 +270,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00381">381</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00384">384</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -257,7 +286,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00387">387</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00392">392</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -273,7 +302,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00388">388</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00393">393</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -289,7 +318,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00380">380</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00383">383</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -305,7 +334,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00383">383</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00386">386</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -321,7 +350,23 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00382">382</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00385">385</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7f90da64d71ce0022412f52f8df4cb5e" name="a7f90da64d71ce0022412f52f8df4cb5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f90da64d71ce0022412f52f8df4cb5e">&#9670;&#160;</a></span>textureOverrides</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;int, std::string&gt; vex::MeshComponent::textureOverrides</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00389">389</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -337,7 +382,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00390">390</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00395">395</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -353,7 +398,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00391">391</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00396">396</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>

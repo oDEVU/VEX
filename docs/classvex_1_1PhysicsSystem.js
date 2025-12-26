@@ -33,5 +33,6 @@ var classvex_1_1PhysicsSystem =
     [ "SetLinearVelocity", "classvex_1_1PhysicsSystem.html#a157a736a4f4b1cde151ee0ff000d65d3", null ],
     [ "shutdown", "classvex_1_1PhysicsSystem.html#a9344768ca2718429a24ca7a3ee94ff87", null ],
     [ "SyncBodies", "classvex_1_1PhysicsSystem.html#a1c19ad9f75b5c858b93ad64ab0743304", null ],
-    [ "update", "classvex_1_1PhysicsSystem.html#a5c0ea3867f54b0011652f99e1c51c93b", null ]
+    [ "update", "classvex_1_1PhysicsSystem.html#a5c0ea3867f54b0011652f99e1c51c93b", null ],
+    [ "WeldVertices", "classvex_1_1PhysicsSystem.html#a5b73a3683286815a697cbd5367aa550f", null ]
 ];

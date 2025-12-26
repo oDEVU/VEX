@@ -7,6 +7,6 @@ var searchData=
   ['vulkanimguiwrapper_4',['VulkanImGUIWrapper',['../classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c',1,'vex::VulkanImGUIWrapper']]],
   ['vulkanmesh_5',['VulkanMesh',['../classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89',1,'vex::VulkanMesh']]],
   ['vulkanpipeline_6',['VulkanPipeline',['../classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b',1,'vex::VulkanPipeline']]],
-  ['vulkanresources_7',['VulkanResources',['../classvex_1_1VulkanResources.html#a8ebb059a4b2b6e280056197ce8d488b1',1,'vex::VulkanResources']]],
+  ['vulkanresources_7',['VulkanResources',['../classvex_1_1VulkanResources.html#a706ff851677bcb804326ad8680f80a11',1,'vex::VulkanResources']]],
   ['vulkanswapchainmanager_8',['VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html#a3f8b56ae0e97a0f784a88416c3892cd9',1,'vex::VulkanSwapchainManager']]]
 ];

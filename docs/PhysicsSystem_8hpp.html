@@ -116,7 +116,9 @@ $(function(){initNavTree('PhysicsSystem_8hpp.html','',''); });
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;<a class="el" href="BasicComponents_8hpp_source.html">components/GameComponents/BasicComponents.hpp</a>&gt;</code><br />
+<code>#include &lt;components/GameComponents/CharacterComponent.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="JoltSafe_8hpp_source.html">components/JoltSafe.hpp</a>&quot;</code><br />
+<code>#include &lt;map&gt;</code><br />
 </div>
 <p><a href="PhysicsSystem_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -145,11 +147,12 @@ Macros</h2></td></tr>
 Enumerations</h2></td></tr>
 <tr class="memitem:a6e60c194c597809af12d22fb3962249e" id="r_a6e60c194c597809af12d22fb3962249e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e60c194c597809af12d22fb3962249e">vex::ShapeType</a> { <br />
 &#160;&#160;<b>BOX</b>
+, <b>ROUNDED_BOX</b>
 , <b>SPHERE</b>
 , <b>CAPSULE</b>
-, <b>CYLINDER</b>
 , <br />
-&#160;&#160;<b>CONVEX_HULL</b>
+&#160;&#160;<b>CYLINDER</b>
+, <b>CONVEX_HULL</b>
 , <b>MESH</b>
 <br />
  }</td></tr>
@@ -206,7 +209,7 @@ Enumerations</h2></td></tr>
 
 <p>Enumeration of available body types for physics components. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00073">73</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00075">75</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -232,7 +235,7 @@ Enumerations</h2></td></tr>
 
 <p>Enumeration of available shape types for physics components. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00068">68</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00070">70</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>

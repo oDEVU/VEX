@@ -21,6 +21,6 @@ var searchData=
   ['vulkanmesh_18',['VulkanMesh',['../classvex_1_1VulkanMesh.html',1,'vex::VulkanMesh'],['../classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89',1,'vex::VulkanMesh::VulkanMesh()']]],
   ['vulkanmesh_2ehpp_19',['VulkanMesh.hpp',['../VulkanMesh_8hpp.html',1,'']]],
   ['vulkanpipeline_20',['VulkanPipeline',['../classvex_1_1VulkanPipeline.html',1,'vex::VulkanPipeline'],['../classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b',1,'vex::VulkanPipeline::VulkanPipeline()']]],
-  ['vulkanresources_21',['VulkanResources',['../classvex_1_1VulkanResources.html',1,'vex::VulkanResources'],['../classvex_1_1VulkanResources.html#a8ebb059a4b2b6e280056197ce8d488b1',1,'vex::VulkanResources::VulkanResources()']]],
+  ['vulkanresources_21',['VulkanResources',['../classvex_1_1VulkanResources.html',1,'vex::VulkanResources'],['../classvex_1_1VulkanResources.html#a706ff851677bcb804326ad8680f80a11',1,'vex::VulkanResources::VulkanResources()']]],
   ['vulkanswapchainmanager_22',['VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html',1,'vex::VulkanSwapchainManager'],['../classvex_1_1VulkanSwapchainManager.html#a3f8b56ae0e97a0f784a88416c3892cd9',1,'vex::VulkanSwapchainManager::VulkanSwapchainManager()']]]
 ];

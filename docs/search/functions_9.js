@@ -11,6 +11,6 @@ var searchData=
   ['loadprojectconfig_8',['LoadProjectConfig',['../classvex_1_1Editor.html#a23b00ead29ed6c4630cc0387e34ded5b',1,'vex::Editor']]],
   ['loadscene_9',['loadScene',['../classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953',1,'vex::SceneManager']]],
   ['loadscenewithoutclearing_10',['loadSceneWithoutClearing',['../classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846',1,'vex::SceneManager']]],
-  ['loadtexture_11',['loadTexture',['../classvex_1_1VulkanResources.html#ade1db1d3ff7f3acff6ef95b6c7f193a1',1,'vex::VulkanResources']]],
+  ['loadtexture_11',['loadTexture',['../classvex_1_1VulkanResources.html#a46cf7cb8e3c1921551d473fb62b7c2b0',1,'vex::VulkanResources']]],
   ['log_12',['log',['../errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a',1,'vex::log(const char *fmt,...)'],['../errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1',1,'vex::log(LogLevel level, const char *fmt,...)']]]
 ];

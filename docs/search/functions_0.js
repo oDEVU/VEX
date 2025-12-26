@@ -18,8 +18,9 @@ var searchData=
   ['addmouseaxisbinding_15',['addMouseAxisBinding',['../structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f',1,'vex::InputComponent']]],
   ['addpitch_16',['addPitch',['../structvex_1_1TransformComponent.html#a54d10024f0005d57ac442e9ec4b6f95f',1,'vex::TransformComponent']]],
   ['addroll_17',['addRoll',['../structvex_1_1TransformComponent.html#a32a174429892ac4cc8ba2f6a32ea8ca9',1,'vex::TransformComponent']]],
-  ['addtorque_18',['AddTorque',['../classvex_1_1PhysicsSystem.html#a7cd9dc0e143969c4e5fee105226cd390',1,'vex::PhysicsSystem']]],
-  ['adduifunction_19',['addUIFunction',['../classvex_1_1ImGUIWrapper.html#ab786a3144eeac18f060b69d8b26083d9',1,'vex::ImGUIWrapper']]],
-  ['addyaw_20',['addYaw',['../structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975',1,'vex::TransformComponent']]],
-  ['assetbrowser_21',['AssetBrowser',['../classvex_1_1AssetBrowser.html#a014e5a20507c167bb53ec15c45f0d52e',1,'vex::AssetBrowser']]]
+  ['addtexture_18',['addTexture',['../classvex_1_1VulkanImGUIWrapper.html#adfe4a150cf9215b29ddcf23fddc59ee1',1,'vex::VulkanImGUIWrapper']]],
+  ['addtorque_19',['AddTorque',['../classvex_1_1PhysicsSystem.html#a7cd9dc0e143969c4e5fee105226cd390',1,'vex::PhysicsSystem']]],
+  ['adduifunction_20',['addUIFunction',['../classvex_1_1ImGUIWrapper.html#ab786a3144eeac18f060b69d8b26083d9',1,'vex::ImGUIWrapper']]],
+  ['addyaw_21',['addYaw',['../structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975',1,'vex::TransformComponent']]],
+  ['assetbrowser_22',['AssetBrowser',['../classvex_1_1AssetBrowser.html#a014e5a20507c167bb53ec15c45f0d52e',1,'vex::AssetBrowser']]]
 ];

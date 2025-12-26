@@ -117,6 +117,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af81e5812c886c1a3f29daaf4d26b6519"><td class="mdescLeft">&#160;</td><td class="mdescRight">creates or recreates swapchain.  <br /></td></tr>
 <tr class="memitem:a07ecf116ade867fff92cab29a22aec85" id="r_a07ecf116ade867fff92cab29a22aec85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07ecf116ade867fff92cab29a22aec85">cleanupSwapchain</a> ()</td></tr>
 <tr class="memdesc:a07ecf116ade867fff92cab29a22aec85"><td class="mdescLeft">&#160;</td><td class="mdescRight">cleans up swapchain resources.  <br /></td></tr>
+<tr class="memitem:a3e5b0d7fece497329ba5fd70edeb9f4d" id="r_a3e5b0d7fece497329ba5fd70edeb9f4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e5b0d7fece497329ba5fd70edeb9f4d">cleanupSyncObjects</a> ()</td></tr>
+<tr class="memdesc:a3e5b0d7fece497329ba5fd70edeb9f4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">cleans up synchronization objects.  <br /></td></tr>
 <tr class="memitem:abf0fd1348a8dedd914065a6511097245" id="r_abf0fd1348a8dedd914065a6511097245"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf0fd1348a8dedd914065a6511097245">recreateSwapchain</a> ()</td></tr>
 <tr class="memdesc:abf0fd1348a8dedd914065a6511097245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function to cleanup old swapchain and create new one, used when resizing the window.  <br /></td></tr>
 </table><table class="memberdecls">
@@ -241,7 +243,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkExtent2D. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00443">443</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00466">466</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -277,7 +279,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkPresentModeKHR. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00427">427</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00455">455</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -313,7 +315,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkSurfaceFormatKHR. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00416">416</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00444">444</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -343,7 +345,7 @@ Private Attributes</h2></td></tr>
 <p>Helper function to cleanup low resolution resources, since low res resources can be changed without changing window resiolution. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classvex_1_1ResolutionManager.html" title="Class responsible for managing resolution settings, calculating render resolution based on selected m...">ResolutionManager</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00354">354</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00366">366</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -364,7 +366,28 @@ Private Attributes</h2></td></tr>
 
 <p>cleans up swapchain resources. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00367">367</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00379">379</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3e5b0d7fece497329ba5fd70edeb9f4d" name="a3e5b0d7fece497329ba5fd70edeb9f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e5b0d7fece497329ba5fd70edeb9f4d">&#9670;&#160;</a></span>cleanupSyncObjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VulkanSwapchainManager::cleanupSyncObjects </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>cleans up synchronization objects. </p>
+
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00403">403</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -393,7 +416,7 @@ Private Attributes</h2></td></tr>
 
 <p>Helper function to create command buffers for swapchain creation. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00240">240</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00248">248</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -422,7 +445,7 @@ Private Attributes</h2></td></tr>
 
 <p>Helper function to create command pool for swapchain creation. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00210">210</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00217">217</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -451,7 +474,7 @@ Private Attributes</h2></td></tr>
 
 <p>Helper function to create depth resources for swapchain creation. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00126">126</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00135">135</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -480,7 +503,7 @@ Private Attributes</h2></td></tr>
 
 <p>Helper function to create image views for swapchain images. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00182">182</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00189">189</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -509,7 +532,7 @@ Private Attributes</h2></td></tr>
 
 <p>Helper function to create low resolution resources for low res rendering. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00305">305</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00317">317</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -530,7 +553,7 @@ Private Attributes</h2></td></tr>
 
 <p>creates or recreates swapchain. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00017">17</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00020">20</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -559,7 +582,7 @@ Private Attributes</h2></td></tr>
 
 <p>Helper function to create synchronization objects for swapchain creation. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00260">260</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00270">270</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -589,7 +612,7 @@ Private Attributes</h2></td></tr>
 <p>Helper function to find depth format based on hardware capabilities. </p>
 <dl class="section return"><dt>Returns</dt><dd>VkFormat. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00469">469</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00492">492</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -610,7 +633,7 @@ Private Attributes</h2></td></tr>
 
 <p>Simple function to cleanup old swapchain and create new one, used when resizing the window. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00399">399</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00427">427</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -635,7 +658,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00084">84</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00087">87</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -659,7 +682,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00083">83</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00086">86</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 
 </div>
 </div>

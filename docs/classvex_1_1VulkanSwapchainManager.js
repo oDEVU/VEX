@@ -7,6 +7,7 @@ var classvex_1_1VulkanSwapchainManager =
     [ "chooseSwapSurfaceFormat", "classvex_1_1VulkanSwapchainManager.html#a49111448e1cedb7e600a21548d5ef1e0", null ],
     [ "cleanupLowResResources", "classvex_1_1VulkanSwapchainManager.html#a7143fe67a28c118f034e8587f795c5db", null ],
     [ "cleanupSwapchain", "classvex_1_1VulkanSwapchainManager.html#a07ecf116ade867fff92cab29a22aec85", null ],
+    [ "cleanupSyncObjects", "classvex_1_1VulkanSwapchainManager.html#a3e5b0d7fece497329ba5fd70edeb9f4d", null ],
     [ "createCommandBuffers", "classvex_1_1VulkanSwapchainManager.html#af20b71a100d5995bedd273687eb7ecd6", null ],
     [ "createCommandPool", "classvex_1_1VulkanSwapchainManager.html#ad1ce9d5da142f33cf0c55785d6ab768a", null ],
     [ "createDepthResources", "classvex_1_1VulkanSwapchainManager.html#a13783f2bfc01362258cf9deccfa2ac98", null ],

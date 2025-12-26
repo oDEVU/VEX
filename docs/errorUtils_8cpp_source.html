@@ -177,17 +177,17 @@ $(function(){initNavTree('errorUtils_8cpp_source.html','',''); });
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordflow">if</span>(<span class="keyword">auto</span>* cpptr = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>cpptrace::exception*<span class="keyword">&gt;</span>(&amp;e)) {</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            cpptr-&gt;trace().print(std::cerr, cpptrace::isatty(cpptrace::stderr_fileno));</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        }</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::WARNING, <span class="stringliteral">&quot;Exception swallowed in DEBUG. Release build would crash here.&quot;</span>);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            <span class="comment">//SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, &quot;%s&quot;, e.what());</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::CRITICAL, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        }</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Exception swallowed in DEBUG. Release build would crash here.&quot;</span>);</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">handle_critical_exception</a>(<span class="keyword">const</span> std::exception&amp; e) {</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordflow">if</span>(<span class="keyword">auto</span>* cpptr = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span>cpptrace::exception*<span class="keyword">&gt;</span>(&amp;e)) {</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            cpptr-&gt;trace().print(std::cerr, cpptrace::isatty(cpptrace::stderr_fileno));</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::CRITICAL, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        }</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        <span class="keywordflow">throw</span>;</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    }</div>

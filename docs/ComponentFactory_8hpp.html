@@ -107,6 +107,7 @@ $(function(){initNavTree('ComponentFactory_8hpp.html','',''); });
 <div class="textblock"><code>#include &quot;<a class="el" href="BasicComponents_8hpp_source.html">components/GameComponents/BasicComponents.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="errorUtils_8hpp_source.html">components/errorUtils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="GameObject_8hpp_source.html">components/GameObjects/GameObject.hpp</a>&quot;</code><br />
+<code>#include &quot;components/colorTypes.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="SerializationUtils_8hpp_source.html">SerializationUtils.hpp</a>&quot;</code><br />
 <code>#include &lt;nlohmann/json.hpp&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
@@ -161,7 +162,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">;</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00028">28</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00068">68</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -196,9 +197,9 @@ Functions</h2></td></tr>
 </div><!-- fragment -->
 <p>Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file. </p>
 <p>Example usage: </p><div class="fragment"><div class="line"><a class="code hl_define" href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(CameraComponent, fov, nearPlane, farPlane);</div>
-<div class="ttc" id="aComponentFactory_8hpp_html_afa69f763d370fe1d1de1bb8cdf34ddfb"><div class="ttname"><a href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(Type,...)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00193">ComponentFactory.hpp:193</a></div></div>
+<div class="ttc" id="aComponentFactory_8hpp_html_afa69f763d370fe1d1de1bb8cdf34ddfb"><div class="ttname"><a href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(Type,...)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00235">ComponentFactory.hpp:235</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00193">193</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00235">235</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -232,7 +233,7 @@ Functions</h2></td></tr>
 </div><!-- fragment -->
 <p>Same macro just skips json registration for more complex components, it requires manual registration. </p>
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00206">206</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00248">248</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -255,9 +256,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><a class="code hl_define" href="#ad9f2c6b0bb32254114e7b70a3b42c72a">VEX_CAT_IMPL</a>(a, b)</div>
-<div class="ttc" id="aComponentFactory_8hpp_html_ad9f2c6b0bb32254114e7b70a3b42c72a"><div class="ttname"><a href="#ad9f2c6b0bb32254114e7b70a3b42c72a">VEX_CAT_IMPL</a></div><div class="ttdeci">#define VEX_CAT_IMPL(a, b)</div><div class="ttdoc">Helper macros to generate unique names based on line number.</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00184">ComponentFactory.hpp:184</a></div></div>
+<div class="ttc" id="aComponentFactory_8hpp_html_ad9f2c6b0bb32254114e7b70a3b42c72a"><div class="ttname"><a href="#ad9f2c6b0bb32254114e7b70a3b42c72a">VEX_CAT_IMPL</a></div><div class="ttdeci">#define VEX_CAT_IMPL(a, b)</div><div class="ttdoc">Helper macros to generate unique names based on line number.</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00226">ComponentFactory.hpp:226</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00185">185</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00227">227</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -283,7 +284,7 @@ Functions</h2></td></tr>
 </div><!-- fragment -->
 <p>Helper macros to generate unique names based on line number. </p>
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00184">184</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00226">226</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -303,7 +304,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">VEX_CAT(prefix, __LINE__)</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00186">186</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00228">228</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -325,7 +326,7 @@ template&lt;typename T&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00034">34</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00074">74</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>

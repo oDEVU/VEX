@@ -11,6 +11,7 @@ var hierarchy =
     ] ],
     [ "vex::BrowserIcons", "structvex_1_1BrowserIcons.html", null ],
     [ "vex::CameraComponent", "structvex_1_1CameraComponent.html", null ],
+    [ "vex::CharacterComponent", "structvex_1_1CharacterComponent.html", null ],
     [ "vex::CollisionHit", "structvex_1_1CollisionHit.html", null ],
     [ "vex::ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
     [ "JPH::ContactListener", null, [
@@ -78,6 +79,7 @@ var hierarchy =
     [ "vex::PushConstants", "structvex_1_1PushConstants.html", null ],
     [ "vex::RaycastHit", "structvex_1_1RaycastHit.html", null ],
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],
+    [ "vex::RenderItem", "structvex_1_1RenderItem.html", null ],
     [ "vex::ResolutionManager", "classvex_1_1ResolutionManager.html", null ],
     [ "vex::Scene", "classvex_1_1Scene.html", null ],
     [ "SceneAction", "structSceneAction.html", null ],
@@ -98,6 +100,12 @@ var hierarchy =
     [ "vex::UIQuad", "structvex_1_1UIQuad.html", null ],
     [ "vex::UIStyle", "structvex_1_1UIStyle.html", null ],
     [ "vex::UIVertex", "structvex_1_1UIVertex.html", null ],
+    [ "glm::vec3", null, [
+      [ "vex::rgb", "structvex_1_1rgb.html", null ]
+    ] ],
+    [ "glm::vec4", null, [
+      [ "vex::rgba", "structvex_1_1rgba.html", null ]
+    ] ],
     [ "vex::Vertex", "structvex_1_1Vertex.html", null ],
     [ "vex::VexUI", "classvex_1_1VexUI.html", null ],
     [ "vex::VirtualFileSystem", "classvex_1_1VirtualFileSystem.html", null ],

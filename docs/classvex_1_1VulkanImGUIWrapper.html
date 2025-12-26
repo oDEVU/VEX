@@ -121,11 +121,16 @@ Inheritance diagram for vex::VulkanImGUIWrapper:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3632c617d696b089815ff793cd5ea75c" id="r_a3632c617d696b089815ff793cd5ea75c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3632c617d696b089815ff793cd5ea75c">VulkanImGUIWrapper</a> (SDL_Window *window, <a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;vulkanContext)</td></tr>
 <tr class="memdesc:a3632c617d696b089815ff793cd5ea75c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1VulkanImGUIWrapper.html" title="Class with Imgui for vulkan backend definition, inheriting from ImGUIWrapper.">VulkanImGUIWrapper</a>.  <br /></td></tr>
+<tr class="memitem:a26cf2cde6e20eb6b684d0c60f0349a62" id="r_a26cf2cde6e20eb6b684d0c60f0349a62"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26cf2cde6e20eb6b684d0c60f0349a62">~VulkanImGUIWrapper</a> ()</td></tr>
+<tr class="memdesc:a26cf2cde6e20eb6b684d0c60f0349a62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="classvex_1_1VulkanImGUIWrapper.html" title="Class with Imgui for vulkan backend definition, inheriting from ImGUIWrapper.">VulkanImGUIWrapper</a>.  <br /></td></tr>
 <tr class="memitem:adfe4a150cf9215b29ddcf23fddc59ee1" id="r_adfe4a150cf9215b29ddcf23fddc59ee1"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfe4a150cf9215b29ddcf23fddc59ee1">addTexture</a> (VkSampler sampler, VkImageView imageView, VkImageLayout layout)</td></tr>
+<tr class="memdesc:adfe4a150cf9215b29ddcf23fddc59ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a texture to the ImGUI wrapper.  <br /></td></tr>
+<tr class="memitem:a7c0b22d1f94824f59b9d1c5b043d6461" id="r_a7c0b22d1f94824f59b9d1c5b043d6461"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c0b22d1f94824f59b9d1c5b043d6461">removeTexture</a> (VkDescriptorSet descriptorSet)</td></tr>
+<tr class="memdesc:a7c0b22d1f94824f59b9d1c5b043d6461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a texture from the ImGUI wrapper.  <br /></td></tr>
 <tr class="memitem:a2c9291f4691960f3076f10f928aed2ab" id="r_a2c9291f4691960f3076f10f928aed2ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c9291f4691960f3076f10f928aed2ab">init</a> () override</td></tr>
 <tr class="memdesc:a2c9291f4691960f3076f10f928aed2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization called inside <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems, your game main class will Inherit from it.">Engine</a> class.  <br /></td></tr>
 <tr class="memitem:a5547c7ab8e934f8f936a717e9a277646" id="r_a5547c7ab8e934f8f936a717e9a277646"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5547c7ab8e934f8f936a717e9a277646">beginFrame</a> () override</td></tr>
-<tr class="memdesc:a5547c7ab8e934f8f936a717e9a277646"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begining of UI rendering called in <a class="el" href="classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a" title="[Deprecated] Renders a frame using the provided parameters.">vex::Renderer::renderFrame</a>.  <br /></td></tr>
+<tr class="memdesc:a5547c7ab8e934f8f936a717e9a277646"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begining of UI rendering called in vex::Renderer::renderFrame.  <br /></td></tr>
 <tr class="memitem:a914707e58572f5540062faedcf186351" id="r_a914707e58572f5540062faedcf186351"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a914707e58572f5540062faedcf186351">endFrame</a> () override</td></tr>
 <tr class="memdesc:a914707e58572f5540062faedcf186351"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends UI rendering for frame.  <br /></td></tr>
 <tr class="memitem:a3b3aaa57eadba08ccd0b6ee6d57d97cb" id="r_a3b3aaa57eadba08ccd0b6ee6d57d97cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b3aaa57eadba08ccd0b6ee6d57d97cb">processEvent</a> (const SDL_Event *event) override</td></tr>
@@ -207,6 +212,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Destructor for <a class="el" href="classvex_1_1VulkanImGUIWrapper.html" title="Class with Imgui for vulkan backend definition, inheriting from ImGUIWrapper.">VulkanImGUIWrapper</a>. </p>
+
 <p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8cpp_source.html#l00015">15</a> of file <a class="el" href="VulkanImGUIWrapper_8cpp_source.html">VulkanImGUIWrapper.cpp</a>.</p>
 
 </div>
@@ -236,6 +243,17 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Adds a texture to the ImGUI wrapper. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VkSampler</td><td>sampler - The sampler for the texture. </td></tr>
+    <tr><td class="paramname">VkImageView</td><td>imageView - The image view for the texture. </td></tr>
+    <tr><td class="paramname">VkImageLayout</td><td>layout - The layout for the texture. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set for the texture. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8cpp_source.html#l00033">33</a> of file <a class="el" href="VulkanImGUIWrapper_8cpp_source.html">VulkanImGUIWrapper.cpp</a>.</p>
 
 </div>
@@ -263,11 +281,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Begining of UI rendering called in <a class="el" href="classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a" title="[Deprecated] Renders a frame using the provided parameters.">vex::Renderer::renderFrame</a>. </p>
+<p>Begining of UI rendering called in vex::Renderer::renderFrame. </p>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#adb59498d778f116eb17eec998d8c79c3">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00047">47</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00060">60</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -294,7 +312,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00050">50</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00063">63</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -325,7 +343,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#a48a6bb72a45804ed72704c8f7d2f6c81">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00048">48</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00061">61</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -356,7 +374,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#a3e9e9d074bbd2f8f741dad416e395f84">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00046">46</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00059">59</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -387,7 +405,34 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classvex_1_1ImGUIWrapper.html#a992ee0c337a2007cf37d358fa626f663">vex::ImGUIWrapper</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00049">49</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00062">62</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7c0b22d1f94824f59b9d1c5b043d6461" name="a7c0b22d1f94824f59b9d1c5b043d6461"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c0b22d1f94824f59b9d1c5b043d6461">&#9670;&#160;</a></span>removeTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VulkanImGUIWrapper::removeTexture </td>
+          <td>(</td>
+          <td class="paramtype">VkDescriptorSet</td>          <td class="paramname"><span class="paramname"><em>descriptorSet</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a texture from the ImGUI wrapper. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VkDescriptorSet</td><td>descriptorSet - The descriptor set for the texture. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8cpp_source.html#l00041">41</a> of file <a class="el" href="VulkanImGUIWrapper_8cpp_source.html">VulkanImGUIWrapper.cpp</a>.</p>
 
 </div>
 </div>
@@ -412,7 +457,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00064">64</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00077">77</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>
@@ -436,7 +481,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00065">65</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanImGUIWrapper_8hpp_source.html#l00078">78</a> of file <a class="el" href="VulkanImGUIWrapper_8hpp_source.html">VulkanImGUIWrapper.hpp</a>.</p>
 
 </div>
 </div>

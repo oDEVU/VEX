@@ -128,6 +128,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a086e04f1fd732a4cd55066e2d22bad65" id="r_a086e04f1fd732a4cd55066e2d22bad65"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a086e04f1fd732a4cd55066e2d22bad65">m_freeModelIds</a></td></tr>
 <tr class="memitem:afad733e2bd673815e2ceed02ce7818dd" id="r_afad733e2bd673815e2ceed02ce7818dd"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afad733e2bd673815e2ceed02ce7818dd">m_nextModelId</a> = 0</td></tr>
 <tr class="memitem:a537551a1da3c9a3cf34526dd05887d01" id="r_a537551a1da3c9a3cf34526dd05887d01"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; uint32_t, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a537551a1da3c9a3cf34526dd05887d01">m_installedPaths</a></td></tr>
+<tr class="memitem:a2e08972f0ed88bf056599b85c011c194" id="r_a2e08972f0ed88bf056599b85c011c194"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::pair&lt; glm::vec3, float &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e08972f0ed88bf056599b85c011c194">m_meshBoundsCache</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -157,7 +158,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00017">17</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00018">18</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -176,7 +177,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00022">22</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00023">23</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -210,7 +211,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00027">27</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00028">28</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -233,7 +234,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00289">289</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00292">292</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -252,7 +253,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00138">138</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00116">116</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -298,7 +299,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00098">98</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00076">76</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -329,7 +330,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00223">223</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00217">217</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -360,7 +361,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00245">245</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00248">248</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -379,7 +380,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00168">168</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00146">146</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -410,7 +411,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00268">268</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="MeshManager_8cpp_source.html#l00271">271</a> of file <a class="el" href="MeshManager_8cpp_source.html">MeshManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -460,6 +461,30 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00050">50</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2e08972f0ed88bf056599b85c011c194" name="a2e08972f0ed88bf056599b85c011c194"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e08972f0ed88bf056599b85c011c194">&#9670;&#160;</a></span>m_meshBoundsCache</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, std::pair&lt;glm::vec3, float&gt; &gt; vex::MeshManager::m_meshBoundsCache</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="MeshManager_8hpp_source.html#l00051">51</a> of file <a class="el" href="MeshManager_8hpp_source.html">MeshManager.hpp</a>.</p>
 
 </div>
 </div>
