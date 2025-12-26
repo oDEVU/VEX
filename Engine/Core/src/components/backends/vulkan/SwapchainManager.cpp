@@ -425,6 +425,26 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
+        int width = 0, height = 0;
+        SDL_GetWindowSizeInPixels(m_p_window, &width, &height);
+
+        if (width == 0 || height == 0) {
+            return;
+        }
+
+        if (m_r_context.surface == VK_NULL_HANDLE) {
+            return;
+        }
+
+        VkSurfaceCapabilitiesKHR capabilities;
+        if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_r_context.physicalDevice, m_r_context.surface, &capabilities) != VK_SUCCESS) {
+            return;
+        }
+
+        if (capabilities.currentExtent.width == 0 || capabilities.currentExtent.height == 0) {
+            return;
+        }
+
         log("recreating swapchains");
         vkDeviceWaitIdle(m_r_context.device);
         log("cleanupSwapchain");
