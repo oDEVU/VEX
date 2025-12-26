@@ -90,6 +90,10 @@ void Engine::run(std::function<void()> onUpdateLoop) {
                 }
             }
             switch (event.type) {
+                case SDL_EVENT_GAMEPAD_ADDED:
+                    SDL_OpenGamepad(event.gdevice.which);
+                    log("Gamepad connected and opened.");
+                    break;
                 case SDL_EVENT_QUIT:
                     m_running = false;
                     break;

@@ -64,6 +64,7 @@ private:
     SDL_Window* m_window;
     InputMode m_inputMode;
     std::unordered_map<SDL_Scancode, KeyState> keyStates;
+    std::unordered_map<SDL_GamepadButton, KeyState> gamepadButtonStates;
 };
 
 }
