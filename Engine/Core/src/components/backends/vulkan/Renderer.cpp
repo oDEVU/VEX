@@ -3,6 +3,7 @@
 #include "components/backends/vulkan/uniforms.hpp"
 #include "entt/entity/fwd.hpp"
 #include <cstdint>
+#include <memory>
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
@@ -73,6 +74,8 @@ namespace vex {
                 vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_screenDescriptorSet);
 
                 #if DEBUG
+                    m_editorCameraVulkanMesh = std::make_unique<VulkanMesh>(m_r_context);
+
                     m_debugBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
                     m_debugAllocations.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
@@ -458,6 +461,30 @@ namespace vex {
                 }
             }
 
+            #if DEBUG
+            if(isEditorMode){
+                auto modelView = registry.view<TransformComponent, CameraComponent>();
+                for (auto entity : modelView) {
+                    if(cameraEntity == entity){
+                        break;
+                    }
+                    auto& transform = modelView.get<TransformComponent>(entity);
+                    glm::vec3 worldScale = transform.getWorldScale();
+                    transform.setWorldScale(glm::vec3(1.f));
+                    if(m_editorCameraVulkanMesh->getNumOfInstances() <= 0){
+                        m_editorCameraMesh.loadFromRawFile("../Assets/meshes/editorCamera.obj");
+                        m_editorCameraVulkanMesh->upload(m_editorCameraMesh);
+                        m_editorCameraVulkanMesh->addInstance();
+                    }else{
+                        auto mc = MeshComponent{};
+                        mc.color = glm::vec4(0.3f, 1.0f, 0.5f, 1.0f);
+                        m_editorCameraVulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, 0, transform.matrix(), mc);
+                    }
+                    transform.setWorldScale(worldScale);
+                }
+            }
+            #endif
+
             if (!maskedQueue.empty()) {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_maskPipeline->get());
 
@@ -562,7 +589,6 @@ namespace vex {
 
                 m_multiDrawInfos.clear();
             }
-
 
             if (frame != 0) {
                 m_uiObjects.clear();

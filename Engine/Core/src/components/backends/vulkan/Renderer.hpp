@@ -156,6 +156,8 @@ namespace vex {
             std::vector<VkBuffer> m_debugBuffers;
             std::vector<VmaAllocation> m_debugAllocations;
             std::unique_ptr<VulkanPipeline>* m_pp_debugPipeline = nullptr;
+            std::unique_ptr<VulkanMesh> m_editorCameraVulkanMesh;
+            MeshData m_editorCameraMesh;
         #endif
     };
 }

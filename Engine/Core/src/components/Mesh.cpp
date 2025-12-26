@@ -180,90 +180,19 @@ public:
     }
 };
 
-    void MeshData::loadFromFile(const std::string& path, VirtualFileSystem* vfs) {
-        //static VirtualFileSystem* vfs = nullptr; // set this
-
-        // Temporary debug code
-        log("Using Assimp version: %d.%d.%d",
-               aiGetVersionMajor(),
-               aiGetVersionMinor(),
-               aiGetVersionRevision());
-
-        log("Creating assimp importer...");
-
-        auto importerPtr = std::make_unique<Assimp::Importer>();
-        Assimp::Importer& importer = *importerPtr;
-
-        std::string realPath = path;
-
-        #if NDEBUG
-                // Set up custom IO system if using VFS
-                if (vfs) {
-                    importer.SetIOHandler(new VPKAssimpIOSystem(vfs, realPath));
-                }
-        #endif
-
-        if (!vfs->file_exists(realPath)){
-            handle_exception(std::runtime_error("File: [" + realPath + "] doesnt exist"));
-            return;
-        }
-
-        const aiScene* scene = nullptr;
-
-
-
-#if NDEBUG
-            auto fileData = vfs->load_file(realPath);
-            if (!fileData) {
-                throw_error("Failed to load file from VFS: " + realPath);
-            }
-
-            log("Loading from VFS memory buffer, size: %zu", fileData->size);
-
-            // Get file extension for format hint
-            std::string extension = std::filesystem::path(realPath).extension().string();
-            const char* formatHint = extension.c_str();
-
-            // Use ReadFileFromMemory instead of ReadFile
-            scene = importer.ReadFileFromMemory(
-                fileData->data.data(),
-                fileData->size,
-                aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs,
-                formatHint);
-#else
-        scene = importer.ReadFile(realPath,
-            aiProcess_Triangulate |
-            aiProcess_GenNormals |
-            aiProcess_FlipUVs);
-
-#endif
-        if (!scene) {
-            handle_exception(std::runtime_error("Assimp failed to load file: " + std::string(importer.GetErrorString())));
-            return;
-        }
-
-        if (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {
-            throw_error("Assimp scene incomplete: " + std::string(importer.GetErrorString()));
-        }
-        if (!scene->mRootNode) {
-            throw_error("Assimp scene has no root node");
-        }
-        if (!scene->mMeshes) {
-            throw_error("Assimp scene has invalid mesh array");
-        }
+void MeshData::processScene(const aiScene* scene, const std::string& textureBaseDir) {
         if (scene->mNumMeshes == 0) {
             throw_error("Model contains no meshes");
         }
 
         submeshes.clear();
         submeshes.resize(scene->mNumMeshes);
+
         for (unsigned m = 0; m < scene->mNumMeshes; m++) {
             log("Processing mesh %i...", m);
             aiMesh* aiMesh = scene->mMeshes[m];
             Submesh& submesh = submeshes[m];
 
-            // Vertices
-            log("Loading verticies...");
             submesh.vertices.resize(aiMesh->mNumVertices);
             for (unsigned i = 0; i < aiMesh->mNumVertices; i++) {
                 submesh.vertices[i].position = {
@@ -272,11 +201,13 @@ public:
                     aiMesh->mVertices[i].z
                 };
 
-                submesh.vertices[i].normal = {
-                    aiMesh->mNormals[i].x,
-                    aiMesh->mNormals[i].y,
-                    aiMesh->mNormals[i].z
-                };
+                if(aiMesh->mNormals) {
+                    submesh.vertices[i].normal = {
+                        aiMesh->mNormals[i].x,
+                        aiMesh->mNormals[i].y,
+                        aiMesh->mNormals[i].z
+                    };
+                }
 
                 if (aiMesh->mTextureCoords[0]) {
                     submesh.vertices[i].uv = {
@@ -288,8 +219,6 @@ public:
                 }
             }
 
-            // Indices
-            log("Loading indices...");
             submesh.indices.reserve(aiMesh->mNumFaces * 3);
             for (unsigned i = 0; i < aiMesh->mNumFaces; i++) {
                 aiFace face = aiMesh->mFaces[i];
@@ -298,23 +227,97 @@ public:
                 }
             }
 
-            // Textures
-            log("Getting texture path...");
-            std::filesystem::path meshPath(realPath);
-            meshPath.remove_filename();
-
             if (aiMesh->mMaterialIndex >= 0) {
                 aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
                 aiString texPath;
                 if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS) {
-                    submesh.texturePath = meshPath.string() + texPath.C_Str();
+                    submesh.texturePath = textureBaseDir + texPath.C_Str();
                 }
             }
         }
+    }
 
-        // Clean up custom IO system
-        if (vfs) {
-            importer.SetIOHandler(nullptr);
+    void MeshData::loadFromRawFile(const std::string& relativePath) {
+        std::filesystem::path execDir = GetExecutableDir();
+        std::filesystem::path fullPath = execDir / relativePath;
+        std::string pathStr = fullPath.string();
+
+        log("Loading raw mesh from: %s", pathStr.c_str());
+
+        if (!std::filesystem::exists(fullPath)) {
+            handle_exception(std::runtime_error("Raw file does not exist: " + pathStr));
+            return;
         }
+
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(pathStr,
+            aiProcess_Triangulate |
+            aiProcess_GenNormals |
+            aiProcess_FlipUVs);
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            handle_exception(std::runtime_error("Assimp failed to load raw file: " + std::string(importer.GetErrorString())));
+            return;
+        }
+
+        std::filesystem::path meshFolder = fullPath;
+        meshFolder.remove_filename();
+
+        processScene(scene, meshFolder.string());
+
+        meshPath = pathStr;
+    }
+
+    void MeshData::loadFromFile(const std::string& path, VirtualFileSystem* vfs) {
+        log("Using Assimp version: %d.%d.%d", aiGetVersionMajor(), aiGetVersionMinor(), aiGetVersionRevision());
+        log("Creating assimp importer...");
+
+        auto importerPtr = std::make_unique<Assimp::Importer>();
+        Assimp::Importer& importer = *importerPtr;
+
+        std::string realPath = path;
+
+        #if NDEBUG
+            if (vfs) {
+                importer.SetIOHandler(new VPKAssimpIOSystem(vfs, realPath));
+            }
+        #endif
+
+        if (!vfs->file_exists(realPath)){
+            handle_exception(std::runtime_error("File: [" + realPath + "] doesnt exist"));
+            return;
+        }
+
+        const aiScene* scene = nullptr;
+
+        #if NDEBUG
+            auto fileData = vfs->load_file(realPath);
+            if (!fileData) throw_error("Failed to load file from VFS: " + realPath);
+
+            log("Loading from VFS memory buffer, size: %zu", fileData->size);
+
+            std::string extension = std::filesystem::path(realPath).extension().string();
+            scene = importer.ReadFileFromMemory(
+                fileData->data.data(),
+                fileData->size,
+                aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs,
+                extension.c_str());
+        #else
+            scene = importer.ReadFile(realPath,
+                aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs);
+        #endif
+
+        if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) || !scene->mRootNode) {
+            handle_exception(std::runtime_error("Assimp failed to load file: " + std::string(importer.GetErrorString())));
+            return;
+        }
+
+        std::filesystem::path meshFolderPath(realPath);
+        meshFolderPath.remove_filename();
+
+        processScene(scene, meshFolderPath.string());
+
+        if (vfs) importer.SetIOHandler(nullptr);
+        meshPath = realPath;
     }
 }
