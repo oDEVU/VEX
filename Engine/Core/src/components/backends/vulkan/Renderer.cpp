@@ -134,6 +134,11 @@ namespace vex {
 
     bool Renderer::beginFrame(glm::uvec2 renderResolution, SceneRenderData& outData) {
         try {
+            if (renderResolution.x == 0 || renderResolution.y == 0 ||
+                renderResolution.x > 32768 || renderResolution.y > 32768) {
+                return false;
+            }
+
             if (renderResolution != m_r_context.currentRenderResolution) {
                 log(LogLevel::WARNING, "Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
                 m_r_context.currentRenderResolution = renderResolution;
