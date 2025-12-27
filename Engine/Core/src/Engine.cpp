@@ -156,6 +156,16 @@ enviroment Engine::getEnvironmentSettings() {
     return m_interface->getEnvironment();
 }
 
+void Engine::setFullscreen(bool enabled) {
+    if (m_window) {
+        m_window->setFullscreen(enabled);
+    }
+}
+
+bool Engine::isFullscreen() {
+    return m_window ? m_window->isFullscreen() : false;
+}
+
 void Engine::prepareScenesForHotReload() {
    lastLoadedScenes = getSceneManager()->GetAllSceneNames();
 }

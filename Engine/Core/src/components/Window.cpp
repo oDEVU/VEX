@@ -48,4 +48,14 @@ namespace vex {
     SDL_Window* Window::GetSDLWindow(){
         return window;
     }
+
+    void Window::setFullscreen(bool enabled) {
+        if (!SDL_SetWindowFullscreen(window, enabled)) {
+            log(LogLevel::ERROR, "Failed to set fullscreen: %s", SDL_GetError());
+        }
+    }
+
+    bool Window::isFullscreen() {
+        return SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN;
+    }
 }

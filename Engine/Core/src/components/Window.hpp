@@ -27,5 +27,13 @@ namespace vex {
             /// @brief Getter for SDL_Window pointer.
             /// @return SDL_Window*
             SDL_Window* GetSDLWindow();
+
+            /// @brief Setter for fullscreen mode.
+            /// @param bool enabled - True to enable fullscreen, false to disable.
+            void setFullscreen(bool enabled);
+
+            /// @brief Getter for fullscreen mode.
+            /// @return bool - True if fullscreen is enabled, false otherwise.
+            bool isFullscreen();
     };
 }

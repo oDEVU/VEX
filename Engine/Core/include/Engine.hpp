@@ -93,6 +93,9 @@ public:
     int GetCurrentFrame() { return m_frame; }
     void setRenderPhysicsDebug(bool value) { m_renderPhysicsDebug = value; }
 
+    void setFullscreen(bool enabled);
+    bool isFullscreen();
+
     std::vector<std::string> getLastLoadedScenes() { return lastLoadedScenes; }
     void prepareScenesForHotReload();// {
        // lastLoadedScenes = getSceneManager()->GetAllSceneNames();
