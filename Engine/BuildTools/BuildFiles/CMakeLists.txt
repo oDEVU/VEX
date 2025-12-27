@@ -91,7 +91,54 @@ if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(GameModule PRIVATE JPH_ENABLE_ASSERTS=0)
 endif()
 
-add_executable(${PROJECT_NAME} "main.cpp")
+string(JSON ICON_REL_PATH ERROR_VARIABLE ICON_ERROR GET "${PROJECT_JSON}" "icon_path")
+
+set(PROJECT_ICON_RESOURCE)
+
+if(NOT ICON_ERROR AND NOT ICON_REL_PATH STREQUAL "")
+    set(ICON_SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${ICON_REL_PATH}")
+
+    if(EXISTS "${ICON_SOURCE_PATH}")
+        message(STATUS "Found Project Icon: ${ICON_SOURCE_PATH}")
+
+        if(WIN32)
+            set(ICON_OUT_ICO "${CMAKE_CURRENT_BINARY_DIR}/game_icon.ico")
+            set(RC_FILE "${CMAKE_CURRENT_BINARY_DIR}/resources.rc")
+            get_filename_component(ICON_EXT "${ICON_SOURCE_PATH}" EXT)
+            set(HAVE_VALID_ICO FALSE)
+
+            if(ICON_EXT STREQUAL ".png")
+                find_program(MAGICK_EXE magick)
+                if(MAGICK_EXE)
+                    add_custom_command(
+                        OUTPUT "${ICON_OUT_ICO}"
+                        COMMAND ${MAGICK_EXE} "${ICON_SOURCE_PATH}" -define icon:auto-resize=256,128,64,48,32,16 "${ICON_OUT_ICO}"
+                        DEPENDS "${ICON_SOURCE_PATH}"
+                        COMMENT "Converting Project Icon to ICO..."
+                    )
+                    set(HAVE_VALID_ICO TRUE)
+                endif()
+            elseif(ICON_EXT STREQUAL ".ico")
+                configure_file("${ICON_SOURCE_PATH}" "${ICON_OUT_ICO}" COPYONLY)
+                set(HAVE_VALID_ICO TRUE)
+            endif()
+
+            if(HAVE_VALID_ICO)
+                file(WRITE "${RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${ICON_OUT_ICO}\"")
+
+                set(PROJECT_ICON_RESOURCE "${RC_FILE}" "${ICON_OUT_ICO}")
+
+                set(COPY_ICON_TO_BIN TRUE)
+            endif()
+
+        elseif(UNIX AND NOT APPLE)
+            set(COPY_ICON_TO_BIN TRUE)
+            get_filename_component(ICON_FILENAME "${ICON_SOURCE_PATH}" NAME)
+        endif()
+    endif()
+endif()
+
+add_executable(${PROJECT_NAME} "main.cpp" ${PROJECT_ICON_RESOURCE})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     VEX_PROJECT_TITLE=\"${PROJECT_NAME}\"
@@ -149,6 +196,24 @@ else()
         ${ASSETS_DEST_DIR}/assets.vpk
         COMMENT "Packing assets for release build"
     )
+endif()
+
+if(COPY_ICON_TO_BIN)
+    if(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${ICON_OUT_ICO}"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/icon.ico"
+            COMMENT "Copying icon.ico to binary directory"
+        )
+    elseif(UNIX AND NOT APPLE)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${ICON_SOURCE_PATH}"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/icon.png"
+            COMMENT "Copying icon image to binary directory as icon.png"
+        )
+    endif()
 endif()
 
 add_dependencies(${PROJECT_NAME} copy_Assets)
