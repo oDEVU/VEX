@@ -9,6 +9,7 @@
 
 #include "components/GameInfo.hpp"
 #include "components/errorUtils.hpp"
+#include "components/pathUtils.hpp"
 #include "components/Scene.hpp"
 #include "components/SceneManager.hpp"
 #include "imgui.h"
@@ -16,6 +17,15 @@
 #include <nlohmann/json.hpp>
 #include <filesystem>
 #include <ImReflect.hpp>
+
+#ifdef _WIN32
+    #include <windows.h>
+    #include <shellapi.h>
+#else
+    #include <unistd.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
+#endif
 
 void EditorMenuBar::DrawBar(){
     std::erase_if(m_Windows, [](const std::shared_ptr<BasicEditorWindow>& window) {
@@ -36,6 +46,10 @@ void EditorMenuBar::DrawBar(){
             }
             if (ImGui::MenuItem("Save Scene As")) {
                 SaveSceneAs();
+            }
+            if (ImGui::MenuItem("Quit to Project Selector")) {
+                OpenProjectSelector();
+                m_editor.quit();
             }
             if (ImGui::MenuItem("Quit Project")) {
                 // Implemet saving window if not saved
@@ -96,6 +110,36 @@ void EditorMenuBar::DrawBar(){
         }
         ImGui::EndMenuBar();
     }
+}
+
+void EditorMenuBar::OpenProjectSelector() {
+    std::filesystem::path binDir = vex::GetExecutableDir();
+    std::filesystem::path selectorPath = binDir / "VexProjectSelector";
+
+    #ifdef _WIN32
+        selectorPath += ".exe";
+    #endif
+
+    if (!std::filesystem::exists(selectorPath)) {
+        vex::log("Error: Could not find ProjectSelector at %s", selectorPath.string().c_str());
+        return;
+    }
+
+    std::string pathStr = selectorPath.string();
+
+    #ifdef _WIN32
+        ShellExecuteA(NULL, "open", pathStr.c_str(), NULL, NULL, SW_SHOW);
+    #else
+        pid_t pid = fork();
+
+        if (pid == 0) {
+            if (setsid() < 0) {
+                exit(EXIT_FAILURE);
+            }
+            execl(pathStr.c_str(), pathStr.c_str(), (char*)NULL);
+            exit(EXIT_FAILURE);
+        }
+    #endif
 }
 
 void EditorMenuBar::OpenEditorSettings(){

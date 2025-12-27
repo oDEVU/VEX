@@ -40,6 +40,9 @@ public:
     /// @brief Opens the project settings window/menu.
     void OpenProjectSettings();
 
+    /// @brief Opens the project selector window.
+    void OpenProjectSelector();
+
     /// @brief Saves the current scene to a new file path.
     void SaveSceneAs();
 
