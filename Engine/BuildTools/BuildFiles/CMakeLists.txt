@@ -29,6 +29,13 @@ if(JSON_ERROR)
     message(FATAL_ERROR "Failed to parse project file: ${JSON_ERROR}")
 endif()
 
+string(JSON MAIN_SCENE_PATH ERROR_VARIABLE SCENE_ERROR GET "${PROJECT_JSON}" "main_scene")
+
+if(SCENE_ERROR OR MAIN_SCENE_PATH STREQUAL "")
+    message(WARNING "Could not find 'main_scene' in VexProject.json. Defaulting to 'Assets/scenes/main.json'")
+    set(MAIN_SCENE_PATH "Assets/scenes/main.json")
+endif()
+
 project(${PROJECT_NAME})
 
 set(ENGINE_PATH "${VEX_ENGINE_PATH}" CACHE PATH "Path to Vex Engine Core")
@@ -75,7 +82,10 @@ file(GLOB GAME_SRC CONFIGURE_DEPENDS "Source/*.h" "Source/*.cpp")
 
 add_library(GameModule SHARED ${GAME_SRC})
 target_link_libraries(GameModule PUBLIC VEX::VEX)
-target_compile_definitions(GameModule PRIVATE GAME_MODULE_EXPORTS)
+target_compile_definitions(GameModule PRIVATE
+    GAME_MODULE_EXPORTS
+    VEX_MAIN_SCENE=\"${MAIN_SCENE_PATH}\"
+)
 
 if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(GameModule PRIVATE JPH_ENABLE_ASSERTS=0)

@@ -4,6 +4,10 @@
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 
+#ifndef VEX_MAIN_SCENE
+#define VEX_MAIN_SCENE "Assets/scenes/main.json"
+#endif
+
 #if defined(_WIN32) && defined(_DEBUG)
 #include <Jolt/Jolt.h>
 
@@ -44,7 +48,7 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
                         vex::log(vex::LogLevel::INFO, "[DEBUG] SceneManager pointer valid: %p", (void*)engine->getSceneManager());
 
                         if (ctx->version == 1) {
-                            engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
+                            engine->getSceneManager()->loadScene(VEX_MAIN_SCENE, *engine);
                         } else {
                             if(!engine->getLastLoadedScenes().empty()){
                                 for (const auto& sceneName : engine->getLastLoadedScenes()) {
@@ -53,7 +57,7 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
                                 }
                             } else {
                                 vex::log(vex::LogLevel::INFO, "[DEBUG] Loaded scenes empty, loading default.");
-                                engine->getSceneManager()->loadScene("Assets/scenes/main.json", *engine);
+                                engine->getSceneManager()->loadScene(VEX_MAIN_SCENE, *engine);
                             }
                         }
                     } catch (const std::exception& e) {
