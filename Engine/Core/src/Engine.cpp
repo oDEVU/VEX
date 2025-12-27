@@ -156,9 +156,9 @@ enviroment Engine::getEnvironmentSettings() {
     return m_interface->getEnvironment();
 }
 
-void Engine::setFullscreen(bool enabled) {
+void Engine::setFullscreen(bool enabled, bool exclusive) {
     if (m_window) {
-        m_window->setFullscreen(enabled);
+        m_window->setFullscreen(enabled, exclusive);
     }
 }
 
