@@ -95,6 +95,10 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float4 pushColor = push.color;
   bool isUntextured = HasInValidUV(uv);
 
+  if (!isUntextured) {
+    texColor = texColor * pushColor;
+  }
+
   if (isUntextured) {
     if (pushColor.a < 0.5)
       discard;
