@@ -139,9 +139,7 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
         outputDirName = "Debug";
     } else if (is_dist) {
         cmakeConfig = "Release";
-        #ifdef __linux__
-            outputDirName = "Distribution";
-        #endif
+        outputDirName = "Distribution";
     }
 
     fs::path engineBuildDir = enginePath / "bin" / outputDirName;
@@ -167,11 +165,9 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
     std::string configCmd = "cmake -G Ninja -S \"" + cmakeSource.string() + "\" -B \"" + engineBuildDir.string() +
                             "\" -DCMAKE_BUILD_TYPE=" + cmakeConfig + " -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=" + GetCXXCompiler();
 
-    #ifdef __linux__
     if (is_dist) {
         configCmd += " -DVEX_DIST_BUILD=ON";
     }
-    #endif
 
     if (std::system(configCmd.c_str()) != 0) {
         std::cerr << "Engine Configuration Failed.\n";
@@ -409,11 +405,7 @@ int main(int argc, char* argv[]) {
 
     std::string engine_bin_config = config_name;
     if (is_dist) {
-        #ifdef __linux__
-            engine_bin_config = "Distribution";
-        #else
-            engine_bin_config = "Release";
-        #endif
+        engine_bin_config = "Distribution";
     }
     fs::path engine_bin_dir = engine_root / "bin" / engine_bin_config;
 

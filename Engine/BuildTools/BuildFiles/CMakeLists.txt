@@ -68,7 +68,7 @@ endif()
 
 #add_subdirectory(${ENGINE_PATH}/Core ${CMAKE_BINARY_DIR}/Engine)
 
-if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
+if(VEX_DIST_BUILD)
     set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Distribution")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Debug")
