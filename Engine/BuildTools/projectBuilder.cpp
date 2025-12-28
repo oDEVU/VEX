@@ -120,6 +120,33 @@ void BundleLinuxLibs(const std::filesystem::path& outputDir) {
     #endif
 }
 
+void BundleWindowsDeps(const std::filesystem::path& outputDir) {
+    std::cout << ">> Downloading Windows Dependencies...\n";
+
+    namespace fs = std::filesystem;
+    fs::path depsDir = outputDir / "deps";
+
+    if (!fs::exists(depsDir)) {
+        fs::create_directories(depsDir);
+    }
+
+    std::string redistUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe";
+    fs::path redistPath = depsDir / "vc_redist.x64.exe";
+
+    std::string downloadCmd = "curl -L \"" + redistUrl + "\" -o \"" + redistPath.string() + "\"";
+
+    std::cout << "   [+] Fetching Visual C++ Redistributable...\n";
+    int result = std::system(downloadCmd.c_str());
+
+    if (result == 0 && fs::exists(redistPath)) {
+        std::cout << "   [+] Successfully downloaded to: " << redistPath.string() << "\n";
+    } else {
+        std::cerr << "   [!] Failed to download redistributable. Error code: " << result << "\n";
+        std::string psCmd = "powershell -Command \"Invoke-WebRequest -Uri '" + redistUrl + "' -OutFile '" + redistPath.string() + "'\"";
+        std::system(psCmd.c_str());
+    }
+}
+
 bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std::string& buildType, const std::string& parallel, bool is_dist = false) {
     namespace fs = std::filesystem;
 
@@ -473,7 +500,11 @@ int main(int argc, char* argv[]) {
     }
 
     if (is_dist) {
+        #if defined(__linux__)
         BundleLinuxLibs(output_dir);
+        #elif defined(_WIN32)
+        BundleWindowsDeps(output_dir);
+        #endif
     }
 
     return 0;
