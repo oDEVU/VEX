@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
-#ifdef _WIN32 // I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS, I HATE WINDOWS,
 #include <string>
 #include <array>
 #include <vector>
@@ -23,9 +22,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstdint>
-#else
-#include <bits/stdc++.h>
-#endif
+
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 

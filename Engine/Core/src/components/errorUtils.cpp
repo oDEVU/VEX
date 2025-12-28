@@ -99,21 +99,27 @@ namespace vex {
     }
 
     void log(LogLevel level, const char* fmt, ...) {
+        #ifndef DIST_BUILD
         if (level == LogLevel::INFO || level == LogLevel::WARNING) return;
 
         va_list args;
         va_start(args, fmt);
         log_internal(level, fmt, args);
         va_end(args);
+        #endif
     }
 
     void handle_exception(const std::exception& e) {
+        #ifndef DIST_BUILD
         SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());
+        #endif
         throw;
     }
 
     void handle_critical_exception(const std::exception& e) {
+        #ifndef DIST_BUILD
         SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());
+        #endif
         throw;
     }
 

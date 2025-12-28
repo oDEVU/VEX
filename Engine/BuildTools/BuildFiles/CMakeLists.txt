@@ -38,6 +38,12 @@ endif()
 
 project(${PROJECT_NAME})
 
+option(VEX_DIST_BUILD "Build for distribution (Shipping)" OFF)
+
+if(VEX_DIST_BUILD)
+    add_compile_definitions(DIST_BUILD=1)
+endif()
+
 set(ENGINE_PATH "${VEX_ENGINE_PATH}" CACHE PATH "Path to Vex Engine Core")
 
 message(STATUS "DEBUG: ENGINE_PATH from Cache is: '${ENGINE_PATH}'")
@@ -50,13 +56,21 @@ if(NOT EXISTS "${ENGINE_PATH}")
     message(FATAL_ERROR "Provided engine path does not exist: ${ENGINE_PATH}")
 endif()
 
-if(NOT EXISTS "${ENGINE_PATH}/BuildTools/build/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}")
-    message(FATAL_ERROR "BuildTools are not present. Make sure VPAK_Packer is built.")
+if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
+    set(VEX_TOOLS_DIR "${ENGINE_PATH}/BuildTools/build_dist")
+else()
+    set(VEX_TOOLS_DIR "${ENGINE_PATH}/BuildTools/build")
+endif()
+
+if(NOT EXISTS "${VEX_TOOLS_DIR}/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}")
+    message(FATAL_ERROR "BuildTools are not present. Checked: ${VEX_TOOLS_DIR}")
 endif()
 
 #add_subdirectory(${ENGINE_PATH}/Core ${CMAKE_BINARY_DIR}/Engine)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
+    set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Distribution")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Debug")
 else()
     set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Release")
@@ -82,6 +96,14 @@ file(GLOB GAME_SRC CONFIGURE_DEPENDS "Source/*.h" "Source/*.cpp")
 
 add_library(GameModule SHARED ${GAME_SRC})
 target_link_libraries(GameModule PUBLIC VEX::VEX)
+
+if(UNIX AND NOT APPLE)
+    set_target_properties(GameModule PROPERTIES
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()
+
 target_compile_definitions(GameModule PRIVATE
     GAME_MODULE_EXPORTS
     VEX_MAIN_SCENE=\"${MAIN_SCENE_PATH}\"
@@ -140,10 +162,21 @@ endif()
 
 add_executable(${PROJECT_NAME} "main.cpp" ${PROJECT_ICON_RESOURCE})
 
+if(UNIX AND NOT APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     VEX_PROJECT_TITLE=\"${PROJECT_NAME}\"
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dl)
+endif()
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -173,6 +206,17 @@ else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
 endif()
 
+if(VEX_DIST_BUILD)
+    add_compile_definitions(DIST_BUILD=1)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE GameModule)
+
+    if(UNIX AND NOT APPLE)
+        set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+        set_target_properties(GameModule PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+    endif()
+endif()
+
 #target_sources(${PROJECT_NAME} PRIVATE main.cpp)
 #add_subdirectory(${ENGINE_PATH}/Core  ${CMAKE_BINARY_DIR}/Engine)
 #target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
@@ -191,7 +235,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     make_directory(${ASSETS_DEST_DIR})
     add_custom_target(copy_Assets ALL
-        COMMAND ${ENGINE_PATH}/BuildTools/build/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}
+        COMMAND ${VEX_TOOLS_DIR}/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}
         ${ASSETS_SOURCE_DIR}
         ${ASSETS_DEST_DIR}/assets.vpk
         COMMENT "Packing assets for release build"

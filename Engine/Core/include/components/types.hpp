@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(__linux__) || defined(__cpp_lib_flat_map)
+#if defined(__cpp_lib_flat_map)
     #include <flat_map>
     namespace vex {
         template<class Key, class T, class Compare = std::less<Key>>

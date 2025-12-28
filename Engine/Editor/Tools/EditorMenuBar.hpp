@@ -53,6 +53,9 @@ public:
          */
     void RunBuild(bool isDebug, bool runAfter = false);
 
+    /// @brief Builds the project distribution package.
+    void BuildDist();
+
     /// @brief Copies empty scene to assets folders and opens it.
     void NewScene();
 private:

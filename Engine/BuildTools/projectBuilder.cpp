@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <thread>
+#include <algorithm>
+#include <cstdlib>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -13,6 +15,11 @@
 #else // Linux
 #include <unistd.h>
 #endif
+
+std::string GetCXXCompiler() {
+    const char* env = std::getenv("VEX_CXX_COMPILER");
+    return env ? std::string(env) : "clang++";
+}
 
 // Get directory containing the executable
 inline std::filesystem::path GetExecutableDir() {
@@ -80,20 +87,64 @@ std::string ToCMakePath(const std::filesystem::path& path) {
     return p;
 }
 
-bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std::string& buildType, const std::string& parallel) {
+void BundleLinuxLibs(const std::filesystem::path& outputDir) {
+    #ifdef __linux__
+    std::cout << ">> Bundling Linux System Libraries for Portability...\n";
+
+    std::vector<std::string> libs = {
+        "libc++.so.1",
+        "libc++abi.so.1",
+        "libunwind.so.1"
+    };
+
+    for (const auto& libName : libs) {
+        std::string cmd = "clang++ -print-file-name=" + libName + " > temp_lib_path.txt";
+        if (std::system(cmd.c_str()) == 0) {
+            std::ifstream file("temp_lib_path.txt");
+            std::string pathStr;
+            std::getline(file, pathStr);
+            file.close();
+            std::filesystem::remove("temp_lib_path.txt");
+
+            pathStr.erase(pathStr.find_last_not_of(" \n\r\t") + 1);
+
+            std::filesystem::path srcPath(pathStr);
+            if (std::filesystem::exists(srcPath)) {
+                std::filesystem::copy_file(srcPath, outputDir / libName, std::filesystem::copy_options::overwrite_existing);
+                std::cout << "   [+] Bundled: " << libName << " (from " << srcPath.string() << ")\n";
+            } else {
+                std::cerr << "   [!] Warning: Could not locate " << libName << "\n";
+            }
+        }
+    }
+    #endif
+}
+
+bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std::string& buildType, const std::string& parallel, bool is_dist = false) {
     namespace fs = std::filesystem;
 
     std::string engineRelPath = GetEngineCorePath();
     if (engineRelPath.empty()) {
-        std::cerr << "Error: Could not find 'engine_path' in VexProject.json\n";
+        std::cerr << "Error: Could not find engine path";
         return false;
     }
 
     fs::path enginePath = fs::weakly_canonical(projectDir / engineRelPath);
 
-    std::string config = (buildType == "-d" || buildType == "-debug") ? "Debug" : "Release";
+    std::string cmakeConfig = "Release";
+    std::string outputDirName = "Release";
 
-    fs::path engineBuildDir = enginePath / "bin" / config;
+    if (buildType == "-d" || buildType == "-debug") {
+        cmakeConfig = "Debug";
+        outputDirName = "Debug";
+    } else if (is_dist) {
+        cmakeConfig = "Release";
+        #ifdef __linux__
+            outputDirName = "Distribution";
+        #endif
+    }
+
+    fs::path engineBuildDir = enginePath / "bin" / outputDirName;
     fs::path targetFile = engineBuildDir / "VEXTargets.cmake";
 
     #ifdef __linux__
@@ -106,7 +157,7 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
         return true;
     }
 
-    std::cout << ">> Shared VEX Engine (" << config << ") missing. Building it now...\n";
+    std::cout << ">> Shared VEX Engine (" << outputDirName << ") missing. Building it now...\n";
     std::cout << ">> Engine Path: " << enginePath.string() << "\n";
 
     fs::create_directories(engineBuildDir);
@@ -114,14 +165,20 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
     fs::path cmakeSource = enginePath;
 
     std::string configCmd = "cmake -G Ninja -S \"" + cmakeSource.string() + "\" -B \"" + engineBuildDir.string() +
-                            "\" -DCMAKE_BUILD_TYPE=" + config + " -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++";
+                            "\" -DCMAKE_BUILD_TYPE=" + cmakeConfig + " -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=" + GetCXXCompiler();
+
+    #ifdef __linux__
+    if (is_dist) {
+        configCmd += " -DVEX_DIST_BUILD=ON";
+    }
+    #endif
 
     if (std::system(configCmd.c_str()) != 0) {
         std::cerr << "Engine Configuration Failed.\n";
         return false;
     }
 
-    std::string buildCmd = "cmake --build \"" + engineBuildDir.string() + "\" --config " + config + " " + parallel;
+    std::string buildCmd = "cmake --build \"" + engineBuildDir.string() + "\" --config " + cmakeConfig + " " + parallel;
     if (std::system(buildCmd.c_str()) != 0) {
         std::cerr << "Engine Build Failed.\n";
         return false;
@@ -152,11 +209,17 @@ int main(int argc, char* argv[]) {
 
     fs::path project_dir = argv[1];
     std::string build_type = "-debug";
+    bool is_dist = false;
 
     if (argc >= 3) {
         std::string arg2 = argv[2];
-        if (arg2 == "-debug" || arg2 == "-release" || arg2 == "-d" || arg2 == "-r") {
-            build_type = arg2;
+        if (arg2 == "-debug" || arg2 == "-d") {
+            build_type = "-debug";
+        } else if (arg2 == "-release" || arg2 == "-r") {
+            build_type = "-release";
+        } else if (arg2 == "-dist" || arg2 == "-distribution") {
+            build_type = "-release";
+            is_dist = true;
         } else {
             std::cout << "Invalid build type '" << arg2 << "'. Defaulting to debug.\n";
         }
@@ -168,7 +231,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    if (!EnsureSharedEngineBuilt(project_dir, build_type, parallel)) {
+    if (!EnsureSharedEngineBuilt(project_dir, build_type, parallel, is_dist)) {
             return 1;
         }
 
@@ -238,9 +301,13 @@ int main(int argc, char* argv[]) {
 
     std::string engineArg = " -DVEX_ENGINE_PATH=\"" + ToCMakePath(GetEnginePath()) + "\"";
 
+    if (is_dist) {
+        engineArg += " -DVEX_DIST_BUILD=ON";
+    }
+
     if (build_type == "-d" || build_type == "-debug") {
         output_dir = project_dir / "Build" / "Debug";
-        std::string cmd = "cmake -G Ninja -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++" + engineArg;
+        std::string cmd = "cmake -G Ninja -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=" + GetCXXCompiler() + engineArg;
         std::cout << "CMD: " << cmd << std::endl;
         int result = std::system(cmd.c_str());
         if (result != 0) {
@@ -254,16 +321,27 @@ int main(int argc, char* argv[]) {
             return 1;
         }
     } else if (build_type == "-r" || build_type == "-release") {
-        output_dir = project_dir / "Build" / "Release";
-        build_dir = intermediate_dir / "build/release";
-        std::string cmd = "cmake -G Ninja -S . -B build/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++" + engineArg;
+
+        std::string intermediate_build_dir = "build/release";
+
+        if (is_dist) {
+            output_dir = project_dir / "Build" / "Distribution";
+            intermediate_build_dir = "build/dist";
+            std::cout << ">> Building Distribution (Shipping).\n";
+        } else {
+            output_dir = project_dir / "Build" / "Release";
+        }
+
+        build_dir = intermediate_dir / intermediate_build_dir;
+        std::string cmd = "cmake -G Ninja -S . -B " + intermediate_build_dir + " -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=" + GetCXXCompiler() + engineArg;
+
         std::cout << "CMD: " << cmd << std::endl;
         int result = std::system(cmd.c_str());
         if (result != 0) {
             std::cerr << "CMake configure failed with exit code: " << result << '\n';
             return 1;
         }
-        std::string build_cmd = "cmake --build build/release --config Release " + parallel;
+        std::string build_cmd = "cmake --build " + intermediate_build_dir + " --config Release " + parallel;
         result = std::system(build_cmd.c_str());
         if (result != 0) {
             std::cerr << "CMake build failed with exit code: " << result << '\n';
@@ -329,7 +407,15 @@ int main(int argc, char* argv[]) {
 
     std::string config_name = (build_type == "-d" || build_type == "-debug") ? "Debug" : "Release";
 
-    fs::path engine_bin_dir = engine_root / "bin" / config_name;
+    std::string engine_bin_config = config_name;
+    if (is_dist) {
+        #ifdef __linux__
+            engine_bin_config = "Distribution";
+        #else
+            engine_bin_config = "Release";
+        #endif
+    }
+    fs::path engine_bin_dir = engine_root / "bin" / engine_bin_config;
 
     std::cout << ">> Linking Shared Engine artifacts from: " << engine_bin_dir.string() << "\n";
 
@@ -350,7 +436,8 @@ int main(int argc, char* argv[]) {
                 }
                 else if (fs::is_regular_file(src_path)) {
                     std::string ext = src_path.extension().string();
-                    if (ext == ".so" || ext == ".dll" || ext == ".lib" || ext == ".pdb" || ext == ".dylib") {
+                    if (src_path.string().find(".so") != std::string::npos ||
+                        ext == ".dll" || ext == ".lib" || ext == ".pdb" || ext == ".dylib") {
                         fs::path dest_file = output_dir / src_path.filename();
                         fs::copy_file(src_path, dest_file, fs::copy_options::overwrite_existing);
                         std::cout << "   [+] Copied " << src_path.filename().string() << "\n";
@@ -363,6 +450,23 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
+    /*if (is_dist) {
+        std::cout << ">> Bundling C++ Runtime for Distribution...\n";
+
+        std::vector<std::string> libs = {"libc++.so.1", "libc++abi.so.1"};
+
+        for (const auto& lib : libs) {
+            std::string cmd = "find /usr -name " + lib + " -exec cp {} \"" + output_dir.string() + "\" \\; -quit";
+            std::system(cmd.c_str());
+
+            if (fs::exists(output_dir / lib)) {
+                std::cout << "   [+] Bundled " << lib << "\n";
+            } else {
+                std::cerr << "   [!] WARNING: Could not auto-bundle " << lib << ". Game may crash on other distros.\n";
+            }
+        }
+    }*/
+
     try {
         fs::path build_path = intermediate_dir / "build";
         for (const auto& entry : fs::directory_iterator(intermediate_dir)) {
@@ -374,6 +478,10 @@ int main(int argc, char* argv[]) {
     } catch (const fs::filesystem_error& e) {
         std::cerr << e.what() << '\n';
         return 1;
+    }
+
+    if (is_dist) {
+        BundleLinuxLibs(output_dir);
     }
 
     return 0;

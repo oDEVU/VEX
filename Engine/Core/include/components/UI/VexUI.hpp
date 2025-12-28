@@ -27,9 +27,26 @@
 #include "../../../src/components/backends/vulkan/Resources.hpp"
 #include "../../../src/components/VirtualFileSystem.hpp"
 
+#include "../../../thirdparty/stb/stb_truetype.h"
+
 namespace vex {
 
 class VexUI;
+
+/// @brief Font atlas structure
+struct FontAtlas {
+    stbtt_fontinfo info{};
+    std::vector<stbtt_bakedchar> cdata;
+    VkImage image = VK_NULL_HANDLE;
+    VmaAllocation alloc = VK_NULL_HANDLE;
+    VkImageView view = VK_NULL_HANDLE;
+    uint32_t texIdx = 0;
+    int width = 0, height = 0;
+    float ascent = 0.f;
+    float descent = 0.f;
+    float scale = 0.f;
+    float bakedSize = 0.f;
+};
 
 /// @brief Basic UI styling component
 struct UIStyle {
@@ -241,7 +258,7 @@ private:
     bool loadPending = false;
     std::string loadPath = "";
 
-    std::unordered_map<std::string, struct FontAtlas> m_fontAtlases;
+    std::unordered_map<std::string, FontAtlas> m_fontAtlases;
 
     VkBuffer m_vb = VK_NULL_HANDLE;
     VmaAllocation m_vbAlloc = VK_NULL_HANDLE;

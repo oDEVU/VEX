@@ -556,7 +556,7 @@ namespace vex {
         uint32_t VulkanResources::getTextureIndex(const std::string& name) {
             auto it = m_r_context.textureIndices.find(name);
             if (it != m_r_context.textureIndices.end()) return it->second;
-            if (!std::ranges::contains(m_ignoredTexturePaths, name)) {
+            if (std::find(m_ignoredTexturePaths.begin(), m_ignoredTexturePaths.end(), name) == m_ignoredTexturePaths.end()) {
                 if(loadTexture(name, name)){
                     return getTextureIndex(name);
                 }else{

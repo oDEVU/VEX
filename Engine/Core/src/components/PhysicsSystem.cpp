@@ -7,7 +7,11 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <components/errorUtils.hpp>
 #include <thread>
-#include <execution>
+
+#if defined(__cpp_lib_execution) && defined(__cpp_lib_parallel_algorithm)
+    #include <execution>
+    #define VEX_HAS_PARALLEL_EXECUTION
+#endif
 
 #include <map>
 
@@ -243,16 +247,18 @@ namespace vex {
             m_accumulator -= m_fixedDt;
         }
 
-        //for (auto e : view) {
-        if(view.size_hint() > 64){
-            //log("--- mt ---");
-            std::for_each(std::execution::par_unseq, view.begin(), view.end(), [&](auto e) {
-                auto& pc = view.get<PhysicsComponent>(e);
-                if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
-                    SyncBodyToTransform(e, m_registry, pc.bodyId);
-                }
-            });
-        }else{
+        #ifdef VEX_HAS_PARALLEL_EXECUTION
+            if(view.size_hint() > 64){
+                //log("--- mt ---");
+                std::for_each(std::execution::par_unseq, view.begin(), view.end(), [&](auto e) {
+                    auto& pc = view.get<PhysicsComponent>(e);
+                    if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
+                        SyncBodyToTransform(e, m_registry, pc.bodyId);
+                    }
+                });
+            }else
+        #endif
+        {
             //log("--- st ---");
             for (auto e : view) {
                 auto& pc = view.get<PhysicsComponent>(e);

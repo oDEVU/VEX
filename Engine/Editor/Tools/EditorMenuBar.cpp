@@ -65,6 +65,9 @@ void EditorMenuBar::DrawBar(){
             if (ImGui::MenuItem("Build Release")) {
                 RunBuild(false, false);
             }
+            if (ImGui::MenuItem("Build Distribution (Shipping)")) {
+                BuildDist();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Preferences")) {
@@ -436,6 +439,145 @@ void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
         {
             std::lock_guard<std::mutex> lock(state->logMutex);
             state->logs += "\n=== Build Finished ===\n";
+            state->isFinished = true;
+        }
+    }).detach();
+}
+
+void EditorMenuBar::BuildDist() {
+    struct BuildState {
+        std::string logs = "";
+        bool isFinished = false;
+        std::mutex logMutex;
+        bool autoScroll = true;
+    };
+    auto state = std::make_shared<BuildState>();
+
+    std::string projectPath;
+    std::string enginePath;
+
+    try {
+        projectPath = std::filesystem::canonical(m_editor.getProjectBinaryPath()).string();
+        enginePath = std::filesystem::canonical(vex::GetExecutableDir() / ".." / "..").string();
+    } catch (const std::exception& e) {
+        vex::log("Error resolving paths for Dist Build: %s", e.what());
+        return;
+    }
+
+    std::string command;
+
+    #ifdef _WIN32
+        command = "..\\..\\BuildTools\\build\\ProjectBuilder.exe \"" + projectPath + "\" -dist";
+        vex::log("Starting Windows Distribution Build: %s", command.c_str());
+
+    #else
+        std::string image = "vex-builder:latest";
+        std::string containerEnginePath = "/VexEngine";
+        std::string containerProjectPath = "/VexProject";
+
+        std::string shellCmd =
+                    "export VEX_CXX_COMPILER=clang++-17 && "
+                    "echo '>> Compiling ProjectBuilder (Container)...' && "
+                    "cd " + containerEnginePath + "/BuildTools && "
+                    "chmod +x rebuild-buildtools-linux.sh && "
+                    "./rebuild-buildtools-linux.sh build_dist && "
+                    "echo '>> Starting Project Distribution Build...' && "
+                    "./build_dist/ProjectBuilder " + containerProjectPath + " -dist";
+
+        std::stringstream cmdBuilder;
+
+        bool isPodman = (system("which podman > /dev/null 2>&1") == 0);
+        if (isPodman) cmdBuilder << "podman";
+        else cmdBuilder << "docker";
+
+        std::string mountOpts = ":rw,z";
+
+        cmdBuilder << " run --rm ";
+
+        if (isPodman) {
+            cmdBuilder << "--userns=keep-id ";
+        } else {
+            cmdBuilder << "--user $(id -u):$(id -g) ";
+        }
+
+        cmdBuilder << "-v \"" << enginePath << ":" << containerEnginePath << mountOpts << "\" "
+            << "-v \"" << projectPath << ":" << containerProjectPath << mountOpts << "\" "
+            << "-w " << containerEnginePath << " "
+            << image << " "
+            << "/bin/bash -c \"" << shellCmd << "\"";
+
+        command = cmdBuilder.str() + " 2>&1";
+
+        vex::log("Starting Linux (Sniper) Distribution Build...");
+    #endif
+
+    std::shared_ptr<BasicEditorWindow> buildWindow = std::make_shared<BasicEditorWindow>();
+    std::weak_ptr<BasicEditorWindow> weakWindow = buildWindow;
+
+    buildWindow->Create = [this, weakWindow, state](vex::ImGUIWrapper& wrapper) {
+        wrapper.addUIFunction([=]() {
+            auto window = weakWindow.lock(); if (!window || !window->isOpen) return;
+            ImGui::SetNextWindowSize(ImVec2(800, 500), ImGuiCond_FirstUseEver);
+
+            if (ImGui::Begin("Distribution Build (Shipping)", &window->isOpen)) {
+                if(ImGui::Button("Clear")) {
+                    std::lock_guard<std::mutex> lock(state->logMutex);
+                    state->logs.clear();
+                }
+                ImGui::SameLine();
+                ImGui::Checkbox("Auto-scroll", &state->autoScroll);
+                ImGui::Separator();
+
+                #ifndef _WIN32
+                ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f), "[Linux] Building in Special Container.");
+                #endif
+
+                if (state->isFinished) {
+                    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Status: Finished");
+                } else {
+                    ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "Status: Working...");
+                }
+
+                ImGui::BeginChild("BuildLogRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+                {
+                    std::lock_guard<std::mutex> lock(state->logMutex);
+                    ImGui::TextUnformatted(state->logs.c_str());
+                }
+                if (state->autoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+                    ImGui::SetScrollHereY(1.0f);
+                }
+                ImGui::EndChild();
+            }
+            ImGui::End();
+        });
+    };
+
+    m_Windows.push_back(buildWindow);
+    buildWindow->Create(m_ImGUIWrapper);
+
+    std::thread([command, state]() {
+        try {
+            executeCommandRealTime(command,
+                [state](const std::string& line) {
+                    {
+                        std::lock_guard<std::mutex> lock(state->logMutex);
+                        state->logs += line;
+                    }
+
+                    if (line.length() > 1) {
+                        vex::log("%s", line.c_str());
+                    }
+                }
+            );
+        } catch (const std::exception& e) {
+             std::lock_guard<std::mutex> lock(state->logMutex);
+             state->logs += "\n[CRITICAL ERROR] Execution failed: ";
+             state->logs += e.what();
+        }
+
+        {
+            std::lock_guard<std::mutex> lock(state->logMutex);
+            state->logs += "\n=== Distribution Build Finished ===\n";
             state->isFinished = true;
         }
     }).detach();

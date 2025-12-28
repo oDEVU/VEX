@@ -7,6 +7,12 @@ option(BUILD_SHARED_LIBS "Build the shared library" ON)
 set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+option(VEX_DIST_BUILD "Build for distribution (Shipping)" OFF)
+
+if(VEX_DIST_BUILD)
+    add_compile_definitions(DIST_BUILD=1)
+endif()
+
 if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
@@ -253,6 +259,13 @@ endforeach()
 add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
+
+if(UNIX AND NOT APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()
 
 if(TARGET ImGui)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")

@@ -20,6 +20,22 @@ namespace JPH {
 }
 #endif
 
+extern "C" {
+    #ifdef _WIN32
+    __declspec(dllexport)
+    #else
+    __attribute__((visibility("default")))
+    #endif
+    void VexGame_Init(vex::Engine* engine) {
+        if (!engine) return;
+
+        if (!engine->getSceneManager()) {
+            vex::throw_error("SceneManager is NULL!");
+        }
+
+        engine->getSceneManager()->loadScene(VEX_MAIN_SCENE, *engine);
+    }
+}
 
 #ifdef __linux__
 extern "C" __attribute__((visibility("default"))) int cr_main(struct cr_plugin *ctx, enum cr_op operation) {

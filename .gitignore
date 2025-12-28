@@ -1,5 +1,8 @@
 build
+build_dist
 Build
+Dist
+Distribution
 bin
 Intermediate
 .zed

@@ -1,3 +1,5 @@
+#define STB_TRUETYPE_IMPLEMENTATION
+
 #include "glm/ext/matrix_clip_space.hpp"
 #include <climits>
 #include <components/UI/VexUI.hpp>
@@ -6,9 +8,6 @@
 
 #include <components/errorUtils.hpp>
 #include <components/pathUtils.hpp>
-
-#define STB_TRUETYPE_IMPLEMENTATION
-#include "../../../thirdparty/stb/stb_truetype.h"
 
 namespace vex {
 
@@ -38,20 +37,6 @@ void Widget::applyJson(const nlohmann::json& j) {
         if (s.contains("size")) style.fontSize = s["size"].get<float>();
     }
 }
-
-struct FontAtlas {
-    stbtt_fontinfo info{};
-    std::vector<stbtt_bakedchar> cdata;
-    VkImage image = VK_NULL_HANDLE;
-    VmaAllocation alloc = VK_NULL_HANDLE;
-    VkImageView view = VK_NULL_HANDLE;
-    uint32_t texIdx = 0;
-    int width = 0, height = 0;
-    float ascent = 0.f;
-    float descent = 0.f;
-    float scale = 0.f;
-    float bakedSize = 0.f;
-};
 
 VexUI::VexUI(VulkanContext& ctx, VirtualFileSystem* vfs, VulkanResources* res)
     : m_ctx(ctx), m_vfs(vfs), m_res(res) {}
