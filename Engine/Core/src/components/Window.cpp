@@ -49,13 +49,28 @@ namespace vex {
         return window;
     }
 
-    void Window::setFullscreen(bool enabled) {
-        if (!SDL_SetWindowFullscreen(window, enabled)) {
-            log(LogLevel::ERROR, "Failed to set fullscreen: %s", SDL_GetError());
+    void Window::setFullscreen(bool enabled, bool exclusive) {
+        if (enabled) {
+            if (exclusive) {
+                const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(SDL_GetDisplayForWindow(window));
+                if (mode) {
+                    SDL_SetWindowFullscreenMode(window, mode);
+                }
+            } else {
+                SDL_SetWindowFullscreenMode(window, NULL);
+            }
+
+            if (!SDL_SetWindowFullscreen(window, true)) {
+                log(LogLevel::ERROR, "Failed to enter fullscreen: %s", SDL_GetError());
+            }
+        } else {
+            if (!SDL_SetWindowFullscreen(window, false)) {
+                log(LogLevel::ERROR, "Failed to exit fullscreen: %s", SDL_GetError());
+            }
         }
     }
 
     bool Window::isFullscreen() {
-        return SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN;
+        return (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) != 0;
     }
 }

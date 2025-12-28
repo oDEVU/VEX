@@ -176,10 +176,8 @@ namespace vex {
             PushConstants modelPush{};
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
 
-            if (textureExists) {
-                modelPush.color = glm::vec4(1.0f);
-            } else {
-                modelPush.color = mc.color;
+            modelPush.color = mc.color;
+            if (!textureExists) {
                 if(!textureName.empty()) {
                     log("Missing texture: %s", textureName.c_str());
                 }
@@ -266,6 +264,7 @@ namespace vex {
             }
 
             PushConstants modelPush{};
+            modelPush.color = mc.color;
             if (textureExists) {
                 if (currentTexture != textureName) {
                     VkImageView textureView = resources.getTextureView(textureName);
@@ -274,9 +273,7 @@ namespace vex {
                         currentTexture = textureName;
                     }
                 }
-                modelPush.color = glm::vec4(1.0f);
             } else {
-                modelPush.color = mc.color;
                 if(!textureName.empty() && textureName != "default") {
                     log("Missing texture: %s", textureName.c_str());
                 }

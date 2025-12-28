@@ -30,7 +30,8 @@ namespace vex {
 
             /// @brief Setter for fullscreen mode.
             /// @param bool enabled - True to enable fullscreen, false to disable.
-            void setFullscreen(bool enabled);
+            /// @param bool exclusive - True for exclusive fullscreen, false for borderless (Defaults to false)
+            void setFullscreen(bool enabled, bool exclusive = false);
 
             /// @brief Getter for fullscreen mode.
             /// @return bool - True if fullscreen is enabled, false otherwise.
