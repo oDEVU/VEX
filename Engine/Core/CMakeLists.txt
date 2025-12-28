@@ -260,7 +260,7 @@ add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
 
-if(UNIX AND NOT APPLE)
+if(DIST_BUILD AND UNIX AND NOT APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INSTALL_RPATH "$ORIGIN"
         BUILD_WITH_INSTALL_RPATH TRUE

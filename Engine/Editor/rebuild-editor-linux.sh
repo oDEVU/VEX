@@ -89,10 +89,10 @@ RUN wget -q https://github.com/shader-slang/slang/releases/download/v2024.1.13/s
 ENV CXX=clang++
 ENV CC=clang
 ENV CXXFLAGS="-stdlib=libc++"
-ENV LDFLAGS="-stdlib=libc++ -nostdlib++"
+ENV LDFLAGS="-stdlib=libc++"
 # Reset workdir and ensure user is root
 WORKDIR /
-USER root
+USER 1000:1000
 EOF
 
 echo "Dockerfile generated in ./bin/Dockerfile"

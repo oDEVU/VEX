@@ -97,7 +97,7 @@ file(GLOB GAME_SRC CONFIGURE_DEPENDS "Source/*.h" "Source/*.cpp")
 add_library(GameModule SHARED ${GAME_SRC})
 target_link_libraries(GameModule PUBLIC VEX::VEX)
 
-if(UNIX AND NOT APPLE)
+if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
     set_target_properties(GameModule PROPERTIES
         INSTALL_RPATH "$ORIGIN"
         BUILD_WITH_INSTALL_RPATH TRUE
@@ -162,7 +162,7 @@ endif()
 
 add_executable(${PROJECT_NAME} "main.cpp" ${PROJECT_ICON_RESOURCE})
 
-if(UNIX AND NOT APPLE)
+if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INSTALL_RPATH "$ORIGIN"
         BUILD_WITH_INSTALL_RPATH TRUE
