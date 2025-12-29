@@ -115,52 +115,52 @@ public:
     static ComponentRegistry& getInstance();
 
     // Generic Register Function
-        template<typename T>
-        void registerComponent(const std::string& name) {
-            // 1. Loader: Relies on from_json(json, T) being defined (either Auto or Manual)
-            loaders[name] = [](GameObject& obj, const nlohmann::json& j) {
-                if (!obj.HasComponent<T>()) {
-                     // Try default construction. Note: TransformComponent needs handling if no default ctor.
-                     // Assuming you added a default ctor or logic to handle it.
-                     if constexpr (std::is_default_constructible_v<T>) {
-                         obj.AddComponent<T>(T());
-                     }
+    template<typename T>
+    void registerComponent(const std::string& name, bool isDynamic = false) {
+        loaders[name] = [](GameObject& obj, const nlohmann::json& j) {
+            if (!obj.HasComponent<T>()) {
+                 if constexpr (std::is_default_constructible_v<T>) {
+                     obj.AddComponent<T>(T());
+                 }
+            }
+            if (obj.HasComponent<T>()) {
+                T& comp = obj.GetComponent<T>();
+                j.get_to(comp);
+            }
+        };
+
+        savers[name] = [](GameObject& obj) -> nlohmann::json {
+            if (obj.HasComponent<T>()) {
+                return obj.GetComponent<T>();
+            }
+            return nullptr;
+        };
+
+        inspectors[name] = &GenericComponentInspector<T>;
+
+        checkers[name] = [](const GameObject& obj) {
+            return obj.HasComponent<T>();
+        };
+
+        creators[name] = [](GameObject& obj) {
+            if (!obj.HasComponent<T>()) {
+                if constexpr (std::is_default_constructible_v<T>) {
+                    obj.AddComponent<T>(T());
+                } else {
+                    log("Error: Component '%s' is not default constructible.", typeid(T).name());
                 }
-                if (obj.HasComponent<T>()) {
-                    T& comp = obj.GetComponent<T>();
-                    j.get_to(comp); // Calls global from_json
-                }
-            };
+            }
+        };
 
-            // 2. Saver: Relies on to_json(json, T) being defined
-            savers[name] = [](GameObject& obj) -> nlohmann::json {
-                if (obj.HasComponent<T>()) {
-                    return obj.GetComponent<T>(); // Calls global to_json
-                }
-                return nullptr;
-            };
+        registeredNames.push_back(name);
 
-            // 3. Inspector: Registers the Generic template.
-            // If you specialize this template for a type (like PhysicsComponent),
-            // the compiler will pick your specialization automatically.
-            inspectors[name] = &GenericComponentInspector<T>;
-
-            checkers[name] = [](const GameObject& obj) {
-                return obj.HasComponent<T>();
-            };
-
-            creators[name] = [](GameObject& obj) {
-                if (!obj.HasComponent<T>()) {
-                    if constexpr (std::is_default_constructible_v<T>) {
-                        obj.AddComponent<T>(T());
-                    } else {
-                        log("Error: Component '%s' is not default constructible.", typeid(T).name());
-                    }
-                }
-            };
-
-            registeredNames.push_back(name);
+        if (isDynamic) {
+            dynamicComponents.push_back(name);
         }
+    }
+
+    void unregisterComponent(const std::string& name);
+    void clearDynamicComponents();
 
     bool loadComponent(GameObject& obj, const std::string& type, const nlohmann::json& json);
     nlohmann::json saveComponent(GameObject& obj, const std::string& type);
@@ -173,6 +173,7 @@ public:
 private:
     ComponentRegistry() = default;
     std::vector<std::string> registeredNames;
+    std::vector<std::string> dynamicComponents;
     std::unordered_map<std::string, ComponentLoader> loaders;
     std::unordered_map<std::string, ComponentSaver> savers;
     std::unordered_map<std::string, ComponentInspector> inspectors;
@@ -187,31 +188,69 @@ private:
 #define VEX_CAT(a, b) VEX_CAT_IMPL(a, b)
 #define VEX_UNIQUE_NAME(prefix) VEX_CAT(prefix, __LINE__)
 
-/// @brief Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.
-/// @details Example usage:
-/// @code
-/// REGISTER_COMPONENT(CameraComponent, fov, nearPlane, farPlane);
-/// @endcode
-#define REGISTER_COMPONENT(Type, ...) \
-    namespace vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__) } \
-    IMGUI_REFLECT(Type, __VA_ARGS__) \
-    namespace { \
-        struct VEX_UNIQUE_NAME(Registrar_) { \
-            VEX_UNIQUE_NAME(Registrar_)() { \
-                vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type); \
-            } \
-        }; \
-        static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
-    }
+#ifdef GAME_MODULE_EXPORTS
+    /// @brief Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.
+    /// @details Example usage:
+    /// @code
+    /// REGISTER_COMPONENT(CameraComponent, fov, nearPlane, farPlane);
+    /// @endcode
+    #define REGISTER_COMPONENT(Type, ...) \
+        namespace vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__) } \
+        IMGUI_REFLECT(Type, __VA_ARGS__) \
+        namespace { \
+            struct VEX_UNIQUE_NAME(Registrar_) { \
+                VEX_UNIQUE_NAME(Registrar_)() { \
+                    vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type, true); \
+                } \
+            }; \
+            static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
+        }
 
-/// @brief Same macro just skips json registration for more complex components, it requires manual registration.
-#define REGISTER_COMPONENT_CUSTOM(Type, ...) \
-    IMGUI_REFLECT(Type, __VA_ARGS__) \
-    namespace { \
-        struct VEX_UNIQUE_NAME(Registrar_) { \
-            VEX_UNIQUE_NAME(Registrar_)() { \
-                vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type); \
-            } \
-        }; \
-        static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
-    }
+    /// @brief Same macro just skips json registration for more complex components, it requires manual registration.
+    #define REGISTER_COMPONENT_CUSTOM(Type, ...) \
+        IMGUI_REFLECT(Type, __VA_ARGS__) \
+        namespace { \
+            struct VEX_UNIQUE_NAME(Registrar_) { \
+                VEX_UNIQUE_NAME(Registrar_)() { \
+                    vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type, true); \
+                } \
+            }; \
+            static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
+        }
+
+#else
+    /// @brief Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.
+    /// @details Example usage:
+    /// @code
+    /// REGISTER_COMPONENT(CameraComponent, fov, nearPlane, farPlane);
+    /// @endcode
+    #define REGISTER_COMPONENT(Type, ...) \
+        namespace vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__) } \
+        IMGUI_REFLECT(Type, __VA_ARGS__) \
+        namespace { \
+            struct VEX_UNIQUE_NAME(Registrar_) { \
+                VEX_UNIQUE_NAME(Registrar_)() { \
+                    vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type, false); \
+                } \
+                ~VEX_UNIQUE_NAME(Registrar_)() { \
+                    vex::ComponentRegistry::getInstance().unregisterComponent(#Type); \
+                } \
+            }; \
+            static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
+        }
+
+    /// @brief Same macro just skips json registration for more complex components, it requires manual registration.
+    #define REGISTER_COMPONENT_CUSTOM(Type, ...) \
+        IMGUI_REFLECT(Type, __VA_ARGS__) \
+        namespace { \
+            struct VEX_UNIQUE_NAME(Registrar_) { \
+                VEX_UNIQUE_NAME(Registrar_)() { \
+                    vex::ComponentRegistry::getInstance().registerComponent<Type>(#Type, false); \
+                } \
+                ~VEX_UNIQUE_NAME(Registrar_)() { \
+                    vex::ComponentRegistry::getInstance().unregisterComponent(#Type); \
+                } \
+            }; \
+            static VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \
+        }
+#endif

@@ -3,6 +3,7 @@
 #include "components/errorUtils.hpp"
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
+#include "components/GameComponents/ComponentFactory.hpp"
 
 #ifndef VEX_MAIN_SCENE
 #define VEX_MAIN_SCENE "Assets/scenes/main.json"
@@ -137,8 +138,10 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
             try {
                 vex::log(vex::LogLevel::INFO, "[DEBUG] Unloading...");
                 fflush(stdout);
+                engine->WaitForGpu();
                 engine->prepareScenesForHotReload();
                 engine->getSceneManager()->clearScenes();
+                vex::ComponentRegistry::getInstance().clearDynamicComponents();
             } catch (const std::exception& e) {
                 vex::log(vex::LogLevel::ERROR, "Exception during CR_UNLOAD");
                 vex::handle_exception(e);

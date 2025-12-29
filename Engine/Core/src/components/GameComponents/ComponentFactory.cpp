@@ -1,4 +1,5 @@
 #include "components/GameComponents/ComponentFactory.hpp"
+#include "components/errorUtils.hpp"
 
 namespace vex {
 
@@ -6,6 +7,43 @@ namespace vex {
         static ComponentRegistry instance;
         return instance;
     }
+
+    void ComponentRegistry::unregisterComponent(const std::string& name) {
+            loaders.erase(name);
+            savers.erase(name);
+            inspectors.erase(name);
+            checkers.erase(name);
+            creators.erase(name);
+
+            auto it = std::remove(registeredNames.begin(), registeredNames.end(), name);
+            if (it != registeredNames.end()) {
+                registeredNames.erase(it, registeredNames.end());
+            }
+
+            log("Component '%s' unregistered", name.c_str());
+        }
+
+        void ComponentRegistry::clearDynamicComponents() {
+                if (dynamicComponents.empty()) return;
+
+                log("Hot Reload: Clearing %zu game components...", dynamicComponents.size());
+
+                for (const auto& name : dynamicComponents) {
+                    // Manual unregister logic (copy of unregisterComponent but internal)
+                    loaders.erase(name);
+                    savers.erase(name);
+                    inspectors.erase(name);
+                    checkers.erase(name);
+                    creators.erase(name);
+
+                    auto it = std::remove(registeredNames.begin(), registeredNames.end(), name);
+                    if (it != registeredNames.end()) {
+                        registeredNames.erase(it, registeredNames.end());
+                    }
+                }
+
+                dynamicComponents.clear();
+            }
 
     bool ComponentRegistry::loadComponent(GameObject& obj, const std::string& type, const nlohmann::json& json) {
         auto it = loaders.find(type);

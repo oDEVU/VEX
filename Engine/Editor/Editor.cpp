@@ -145,6 +145,7 @@ namespace vex {
 
         m_camera->Update(deltaTime);
         m_physicsSystem->SyncBodies();
+
         render();
         if(!m_refresh){
             m_frame = 1;
