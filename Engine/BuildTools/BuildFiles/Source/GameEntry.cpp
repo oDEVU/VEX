@@ -90,6 +90,8 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
         return -1;
     }
 
+    static int frameLimit = -1;
+
     switch (operation) {
         case CR_LOAD:
                     try {
@@ -124,6 +126,10 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
                                 engine->getSceneManager()->loadScene(VEX_MAIN_SCENE, *engine);
                             }
                         }
+
+                        if (frameLimit != -1) {
+                            engine->setFrameLimit(frameLimit);
+                        }
                     } catch (const std::exception& e) {
                         vex::log(vex::LogLevel::ERROR, "Exception during CR_LOAD");
                         vex::handle_exception(e);
@@ -137,12 +143,16 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
         case CR_UNLOAD:
             try {
                 vex::log(vex::LogLevel::INFO, "[DEBUG] Unloading...");
+                frameLimit = engine->getFrameLimit();
+                engine->setFrameLimit(1);
                 fflush(stdout);
                 engine->WaitForGpu();
                 engine->prepareScenesForHotReload();
                 engine->getSceneManager()->clearScenes();
                 vex::ComponentRegistry::getInstance().clearDynamicComponents();
                 vex::GameObjectFactory::getInstance().clearDynamicGameObjects();
+                vex::log(vex::LogLevel::INFO, "[HotReload] Unload Cleanup Finished.");
+                fflush(stdout);
             } catch (const std::exception& e) {
                 vex::log(vex::LogLevel::ERROR, "Exception during CR_UNLOAD");
                 vex::handle_exception(e);
