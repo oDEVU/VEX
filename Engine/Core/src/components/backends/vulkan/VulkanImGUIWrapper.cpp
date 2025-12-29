@@ -333,6 +333,8 @@ namespace vex {
             colors[ImGuiCol_TextSelectedBg]         = ImVec4(1.00f, 0.23f, 0.01f, 0.35f);
             colors[ImGuiCol_DragDropTarget]         = col_orange_base;
             colors[ImGuiCol_NavHighlight]           = col_orange_base;
+
+            colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.5f);
         }
 #endif
 }
