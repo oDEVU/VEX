@@ -36,6 +36,21 @@ if(SCENE_ERROR OR MAIN_SCENE_PATH STREQUAL "")
     set(MAIN_SCENE_PATH "Assets/scenes/main.json")
 endif()
 
+string(JSON WIN_TYPE ERROR_VARIABLE WIN_TYPE_ERROR GET "${PROJECT_JSON}" "window_type")
+if(WIN_TYPE_ERROR)
+    set(WIN_TYPE 0)
+endif()
+
+string(JSON RES_MODE ERROR_VARIABLE RES_MODE_ERROR GET "${PROJECT_JSON}" "resolution_mode")
+if(RES_MODE_ERROR)
+    set(RES_MODE 0)
+endif()
+
+string(JSON VSYNC_BOOL ERROR_VARIABLE VSYNC_ERROR GET "${PROJECT_JSON}" "vsync")
+if(VSYNC_ERROR)
+    set(VSYNC_BOOL true)
+endif()
+
 project(${PROJECT_NAME})
 
 option(VEX_DIST_BUILD "Build for distribution (Shipping)" OFF)
@@ -107,6 +122,9 @@ endif()
 target_compile_definitions(GameModule PRIVATE
     GAME_MODULE_EXPORTS
     VEX_MAIN_SCENE=\"${MAIN_SCENE_PATH}\"
+    VEX_WINDOW_MODE=${WIN_TYPE}
+    VEX_RESOLUTION_MODE=${RES_MODE}
+    VEX_VSYNC=${VSYNC_BOOL}
 )
 
 if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")

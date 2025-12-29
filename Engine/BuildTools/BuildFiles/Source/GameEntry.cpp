@@ -7,6 +7,18 @@
 #ifndef VEX_MAIN_SCENE
 #define VEX_MAIN_SCENE "Assets/scenes/main.json"
 #endif
+#ifndef VEX_WINDOW_MODE
+#define VEX_WINDOW_MODE 0
+#endif
+#ifndef VEX_RESOLUTION_MODE
+#define VEX_RESOLUTION_MODE 0
+#endif
+#ifndef VEX_VSYNC
+#define VEX_VSYNC true
+#endif
+#if VEX_VSYNC == ON
+#define VEX_VSYNC true
+#endif
 
 #if defined(_WIN32) && defined(_DEBUG)
 #include <Jolt/Jolt.h>
@@ -32,6 +44,15 @@ extern "C" {
         if (!engine->getSceneManager()) {
             vex::throw_error("SceneManager is NULL!");
         }
+
+        int winMode = VEX_WINDOW_MODE;
+        if (winMode == 1) engine->setFullscreen(true, false);
+        else if (winMode == 2) engine->setFullscreen(true, true);
+        else engine->setFullscreen(false);
+
+        engine->setResolutionMode(static_cast<vex::ResolutionMode>(VEX_RESOLUTION_MODE));
+
+        engine->setVSync(VEX_VSYNC);
 
         engine->getSceneManager()->loadScene(VEX_MAIN_SCENE, *engine);
     }
@@ -64,6 +85,15 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
                         vex::log(vex::LogLevel::INFO, "[DEBUG] SceneManager pointer valid: %p", (void*)engine->getSceneManager());
 
                         if (ctx->version == 1) {
+                            int winMode = VEX_WINDOW_MODE;
+                            if (winMode == 1) engine->setFullscreen(true, false);
+                            else if (winMode == 2) engine->setFullscreen(true, true);
+                            else engine->setFullscreen(false);
+
+                            engine->setResolutionMode(static_cast<vex::ResolutionMode>(VEX_RESOLUTION_MODE));
+
+                            engine->setVSync(VEX_VSYNC);
+
                             engine->getSceneManager()->loadScene(VEX_MAIN_SCENE, *engine);
                         } else {
                             if(!engine->getLastLoadedScenes().empty()){
