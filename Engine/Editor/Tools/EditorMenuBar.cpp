@@ -32,7 +32,7 @@ void EditorMenuBar::DrawBar(){
         return !window->isOpen;
     });
 
-    static enum { ACTION_NONE, ACTION_QUIT, ACTION_TO_SELECTOR } pendingQuitAction = ACTION_NONE;
+    static enum { ACTION_NONE, ACTION_QUIT, ACTION_TO_SELECTOR, ACTION_RUN_DEBUG, ACTION_RUN_RELEASE } pendingQuitAction = ACTION_NONE;
     bool openSavePopup = false;
 
     if (ImGui::BeginMenuBar()) {
@@ -106,10 +106,12 @@ void EditorMenuBar::DrawBar(){
 
         if (ImGui::BeginPopup("RunPopup")) {
             if (ImGui::MenuItem("Debug")) {
-                RunBuild(true, true);
+                pendingQuitAction = ACTION_RUN_DEBUG;
+                openSavePopup = true;
             }
             if (ImGui::MenuItem("Release")) {
-                RunBuild(false, true);
+                pendingQuitAction = ACTION_RUN_RELEASE;
+                openSavePopup = true;
             }
             ImGui::EndPopup();
         }
@@ -138,6 +140,10 @@ void EditorMenuBar::DrawBar(){
                 m_editor.quit();
             } else if (pendingQuitAction == ACTION_QUIT) {
                 m_editor.quit();
+            }else if (pendingQuitAction == ACTION_RUN_DEBUG) {
+                RunBuild(true, true);
+            }else if (pendingQuitAction == ACTION_RUN_RELEASE) {
+                RunBuild(false, true);
             }
             pendingQuitAction = ACTION_NONE;
         }
@@ -152,6 +158,10 @@ void EditorMenuBar::DrawBar(){
                 m_editor.quit();
             } else if (pendingQuitAction == ACTION_QUIT) {
                 m_editor.quit();
+            }else if (pendingQuitAction == ACTION_RUN_DEBUG) {
+                RunBuild(true, true);
+            }else if (pendingQuitAction == ACTION_RUN_RELEASE) {
+                RunBuild(false, true);
             }
             pendingQuitAction = ACTION_NONE;
         }
