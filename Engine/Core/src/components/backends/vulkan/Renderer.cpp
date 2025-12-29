@@ -121,6 +121,16 @@ namespace vex {
             }
         #endif
 
+        if (!m_indirectBuffers.empty()) {
+            for(size_t i=0; i < m_indirectBuffers.size(); i++) {
+                if(m_indirectBuffers[i] != VK_NULL_HANDLE) {
+                    vmaDestroyBuffer(m_r_context.allocator, m_indirectBuffers[i], m_indirectAllocations[i]);
+                }
+            }
+            m_indirectBuffers.clear();
+            m_indirectAllocations.clear();
+        }
+
         log("Renderer destroyed");
     }
 

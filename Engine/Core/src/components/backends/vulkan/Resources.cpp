@@ -53,6 +53,16 @@ namespace vex {
         m_textureViews.clear();
         m_textures.clear();
 
+        if (m_r_context.bindlessDescriptorPool != VK_NULL_HANDLE) {
+            vkDestroyDescriptorPool(m_r_context.device, m_r_context.bindlessDescriptorPool, nullptr);
+            m_r_context.bindlessDescriptorPool = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.bindlessDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.bindlessDescriptorSetLayout, nullptr);
+            m_r_context.bindlessDescriptorSetLayout = VK_NULL_HANDLE;
+        }
+
         if (m_descriptorPool != VK_NULL_HANDLE) {
             vkDestroyDescriptorPool(m_r_context.device, m_descriptorPool, nullptr);
             m_descriptorPool = VK_NULL_HANDLE;
