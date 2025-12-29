@@ -32,6 +32,9 @@ void EditorMenuBar::DrawBar(){
         return !window->isOpen;
     });
 
+    static enum { ACTION_NONE, ACTION_QUIT, ACTION_TO_SELECTOR } pendingQuitAction = ACTION_NONE;
+    bool openSavePopup = false;
+
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("New Scene")) {
@@ -48,13 +51,12 @@ void EditorMenuBar::DrawBar(){
                 SaveSceneAs();
             }
             if (ImGui::MenuItem("Quit to Project Selector")) {
-                OpenProjectSelector();
-                m_editor.quit();
+                pendingQuitAction = ACTION_TO_SELECTOR;
+                openSavePopup = true;
             }
             if (ImGui::MenuItem("Quit Project")) {
-                // Implemet saving window if not saved
-                // std::quick_exit(0);
-                m_editor.quit();
+                pendingQuitAction = ACTION_QUIT;
+                openSavePopup = true;
             }
             ImGui::EndMenu();
         }
@@ -112,6 +114,56 @@ void EditorMenuBar::DrawBar(){
             ImGui::EndPopup();
         }
         ImGui::EndMenuBar();
+    }
+
+    if (openSavePopup) {
+        ImGui::OpenPopup("Save Changes?");
+    }
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Save Changes?", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Do you want to save changes to the current scene before quitting?");
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        if (ImGui::Button("Save", ImVec2(120, 0))) {
+            std::string sceneName = vex::GetAssetPath(m_editor.getSceneManager()->getLastSceneName());
+            m_editor.getSceneManager()->GetScene(sceneName)->Save(sceneName);
+            ImGui::CloseCurrentPopup();
+
+            if (pendingQuitAction == ACTION_TO_SELECTOR) {
+                OpenProjectSelector();
+                m_editor.quit();
+            } else if (pendingQuitAction == ACTION_QUIT) {
+                m_editor.quit();
+            }
+            pendingQuitAction = ACTION_NONE;
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Don't Save", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+
+            if (pendingQuitAction == ACTION_TO_SELECTOR) {
+                OpenProjectSelector();
+                m_editor.quit();
+            } else if (pendingQuitAction == ACTION_QUIT) {
+                m_editor.quit();
+            }
+            pendingQuitAction = ACTION_NONE;
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+            pendingQuitAction = ACTION_NONE;
+        }
+
+        ImGui::EndPopup();
     }
 }
 

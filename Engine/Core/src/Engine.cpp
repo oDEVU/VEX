@@ -114,6 +114,8 @@ void Engine::run(std::function<void()> onUpdateLoop) {
             }
         }
 
+        if (!m_running) break;
+
         auto transformView = m_registry.view<TransformComponent>();
         for (auto entity : transformView) {
             if(!transformView.get<TransformComponent>(entity).isReady()){
@@ -122,6 +124,11 @@ void Engine::run(std::function<void()> onUpdateLoop) {
         }
 
         update(deltaTime);
+    }
+
+    if (m_interface) {
+        log("Engine shutdown requested. Waiting for GPU to finish...");
+        m_interface->WaitForGPUToFinish();
     }
 }
 
