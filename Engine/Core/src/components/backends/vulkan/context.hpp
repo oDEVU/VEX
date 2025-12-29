@@ -114,5 +114,6 @@ namespace vex {
         enviroment m_enviroment;
 
         bool supportsMultiDraw = false;
+        bool requestSwapchainRecreation = false;
     };
 }

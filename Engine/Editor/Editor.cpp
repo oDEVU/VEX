@@ -39,6 +39,14 @@ namespace vex {
         m_window = std::make_shared<Window>(title, width, height);
         m_resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
 
+        #ifdef __linux__
+        const char* driver = SDL_GetCurrentVideoDriver();
+        if (driver && std::string(driver) == "wayland") {
+            m_isWayland = true;
+            log("Wayland detected: Enforcing Software VSync strategy.");
+        }
+        #endif
+
         log("Initializing virtual file system..\nSwitching vfs path to: %s", projectBinaryPath.c_str());
         m_vfs = std::make_shared<VirtualFileSystem>();
         m_vfs->initialize(projectBinaryPath);
@@ -74,6 +82,9 @@ namespace vex {
 
         LoadConfig(m_editorProperties, "editor_config.json");
         m_SavedEditorProperties = m_editorProperties;
+
+        setFrameLimit(m_editorProperties.frameLimit);
+        setVSync(m_editorProperties.vsync);
 
         std::filesystem::path projectConfigPath = projectPath / "VexProject.json";
         log("Loading project configuration from: %s", projectConfigPath.string().c_str());
@@ -116,6 +127,9 @@ namespace vex {
 
             m_camera->GetComponent<vex::CameraComponent>().fov = m_editorProperties.editorCameraFov;
             m_camera->GetComponent<vex::CameraComponent>().farPlane = m_editorProperties.editorCameraRenderDistance;
+
+            setFrameLimit(m_editorProperties.frameLimit);
+            setVSync(m_editorProperties.vsync);
         }
 
         if(m_SavedProjectProperties != m_projectProperties){

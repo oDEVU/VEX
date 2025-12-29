@@ -459,6 +459,8 @@ namespace vex {
         //createCommandPool();
         //log("createLowResResources");
         //createLowResResources();
+        //
+        m_r_context.requestSwapchainRecreation = false;
     }
 
     VkSurfaceFormatKHR VulkanSwapchainManager::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
@@ -472,12 +474,21 @@ namespace vex {
         return availableFormats[0];
     }
 
+    void VulkanSwapchainManager::setVSync(bool enabled) {
+        m_vsyncEnabled = enabled;
+    }
+
     VkPresentModeKHR VulkanSwapchainManager::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
         log("choosing swap present mode");
 
-        for (const auto& availablePresentMode : availablePresentModes) {
-            if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
-                return availablePresentMode;
+        if (!m_vsyncEnabled) {
+            for (const auto& availablePresentMode : availablePresentModes) {
+                if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+                    return availablePresentMode;
+                }
+                if (availablePresentMode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
+                    return availablePresentMode;
+                }
             }
         }
         return VK_PRESENT_MODE_FIFO_KHR;

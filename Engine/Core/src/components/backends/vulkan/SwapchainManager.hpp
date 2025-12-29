@@ -41,6 +41,9 @@ namespace vex {
         /// @brief Simple function to cleanup old swapchain and create new one, used when resizing the window.
         void recreateSwapchain();
 
+        /// @brief Sets the vsync enabled state.
+        void setVSync(bool enabled);
+
     private:
         /// @brief Helper function to create image views for swapchain images.
         void createImageViews();
@@ -85,5 +88,6 @@ namespace vex {
 
         VulkanContext& m_r_context;
         SDL_Window *m_p_window;
+        bool m_vsyncEnabled = false;
     };
 }

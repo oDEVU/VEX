@@ -19,8 +19,11 @@ struct EditorProperties {
     float editorCameraFov = 90.0f;
     float editorCameraRenderDistance = 1000.0f;
 
+    int frameLimit = 0;
+    bool vsync = false;
+
     auto operator<=>(const EditorProperties&) const = default;
 };
 
-IMGUI_REFLECT(EditorProperties, showFPS, showCollisions, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(EditorProperties, showFPS, showCollisions, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance);
+IMGUI_REFLECT(EditorProperties, showFPS, showCollisions, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance, frameLimit, vsync);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(EditorProperties, showFPS, showCollisions, assetBrowserThumbnailSize, editorCameraFov, editorCameraRenderDistance, frameLimit, vsync);

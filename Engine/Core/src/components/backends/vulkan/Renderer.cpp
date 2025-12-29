@@ -142,8 +142,8 @@ namespace vex {
                 return false;
             }
 
-            if (renderResolution != m_r_context.currentRenderResolution) {
-                log(LogLevel::WARNING, "Renderer doesnt match swapchain %d x %d =/= %d x %d", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
+            if (renderResolution != m_r_context.currentRenderResolution || m_r_context.requestSwapchainRecreation) {
+                log(LogLevel::INFO, "Recreating Swapchain", m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y, renderResolution.x, renderResolution.y);
                 m_r_context.currentRenderResolution = renderResolution;
                 m_p_pipeline->updateViewport(renderResolution);
                 m_p_swapchainManager->recreateSwapchain();

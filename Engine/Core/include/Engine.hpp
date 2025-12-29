@@ -129,6 +129,16 @@ public:
     /// @brief Waits for the GPU to finish all operations. Essential before destroying resources.
     void WaitForGpu();
 
+    /// @brief Sets the target frame rate. Pass 0 for unlimited.
+    void setFrameLimit(int fps);
+    int getFrameLimit() const { return m_targetFps; }
+
+    /// @brief Toggles VSync (Vertical Synchronization).
+    void setVSync(bool enabled);
+    bool getVSync() const;
+
+    /// @brief Returns the time since last frame.
+    float getDeltaTime() const { return m_deltaTime; }
 protected:
     Engine(SkipInit);
 
@@ -149,6 +159,15 @@ protected:
     bool m_internally_paused = false; // to pause if the window is in the background.
     bool m_renderPhysicsDebug = false;
     int m_frame = 0;
+
+    int m_targetFps = 0;
+    bool m_vsyncEnabled = false;
+
+    float m_deltaTime = 0.016f;
+
+    #ifdef __linux__
+        bool m_isWayland = false;
+    #endif
 
     GameInfo m_gameInfo;
     std::vector<std::string> lastLoadedScenes;

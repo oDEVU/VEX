@@ -73,4 +73,19 @@ namespace vex {
     bool Window::isFullscreen() {
         return (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) != 0;
     }
+
+    float Window::getRefreshRate() {
+        SDL_DisplayID displayID = SDL_GetDisplayForWindow(window);
+        if (displayID == 0) {
+            log(LogLevel::ERROR,  "Could not get display for window: %s", SDL_GetError());
+            return 60.0f;
+        }
+
+        const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
+        if (mode) {
+            return mode->refresh_rate > 0.0f ? mode->refresh_rate : 60.0f;
+        }
+
+        return 60.0f;
+    }
 }

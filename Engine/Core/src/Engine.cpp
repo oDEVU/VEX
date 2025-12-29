@@ -33,6 +33,14 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_window = std::make_shared<Window>(title, width, height);
     m_resolutionManager = std::make_unique<ResolutionManager>(m_window->GetSDLWindow());
 
+    #ifdef __linux__
+    const char* driver = SDL_GetCurrentVideoDriver();
+    if (driver && std::string(driver) == "wayland") {
+        m_isWayland = true;
+        log("Wayland detected: Enforcing Software VSync strategy.");
+    }
+    #endif
+
     log("Initializing virtual file system..");
     m_vfs = std::make_shared<VirtualFileSystem>();
     m_vfs->initialize(GetExecutableDir().string());
@@ -72,15 +80,12 @@ void Engine::run(std::function<void()> onUpdateLoop) {
     Uint64 lastTime = SDL_GetPerformanceCounter();
 
     while (m_running) {
+        Uint64 frameStart = SDL_GetPerformanceCounter();
         if (onUpdateLoop) onUpdateLoop();
-
-        Uint64 now = SDL_GetPerformanceCounter();
-        float deltaTime = (float)((now - lastTime) / (float)SDL_GetPerformanceFrequency());
-        lastTime = now;
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            processEvent(event, deltaTime);
+            processEvent(event, m_deltaTime);
             m_imgui->processEvent(&event);
             auto uiView = m_registry.view<UiComponent>();
             std::vector<UiComponent> uiObjects;
@@ -123,7 +128,30 @@ void Engine::run(std::function<void()> onUpdateLoop) {
             }
         }
 
-        update(deltaTime);
+        update(m_deltaTime);
+
+        float targetFps = (float)m_targetFps;
+
+        #ifdef __linux__
+            if (m_vsyncEnabled && m_isWayland) {
+                targetFps = m_window->getRefreshRate();
+            }
+        #endif
+
+        if (targetFps > 0) {
+            float targetFrameTime = 1000.0f / targetFps;
+
+            Uint64 frameEnd = SDL_GetPerformanceCounter();
+            float elapsedMS = (frameEnd - frameStart) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+
+            if (elapsedMS < targetFrameTime) {
+                SDL_Delay(static_cast<Uint32>(targetFrameTime - elapsedMS));
+            }
+        }
+
+        Uint64 now = SDL_GetPerformanceCounter();
+        m_deltaTime = (float)((now - lastTime) / (float)SDL_GetPerformanceFrequency());
+        lastTime = now;
     }
 
     if (m_interface) {
@@ -136,6 +164,23 @@ void Engine::WaitForGpu() {
     if (m_interface) {
         m_interface->WaitForGPUToFinish();
     }
+}
+
+void Engine::setFrameLimit(int fps) {
+    m_targetFps = fps;
+}
+
+void Engine::setVSync(bool enabled) {
+    if (m_vsyncEnabled == enabled) return;
+    m_vsyncEnabled = enabled;
+
+    if (m_interface) {
+        m_interface->setVSync(enabled);
+    }
+}
+
+bool Engine::getVSync() const {
+    return m_vsyncEnabled;
 }
 
 Engine::~Engine() {

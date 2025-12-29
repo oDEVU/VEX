@@ -36,5 +36,9 @@ namespace vex {
             /// @brief Getter for fullscreen mode.
             /// @return bool - True if fullscreen is enabled, false otherwise.
             bool isFullscreen();
+
+            /// @brief Gets the refresh rate of the display the window is currently on.
+            /// @return float - Refresh rate in Hz (e.g., 60.0, 144.0). Returns 60.0 on failure.
+            float getRefreshRate();
     };
 }

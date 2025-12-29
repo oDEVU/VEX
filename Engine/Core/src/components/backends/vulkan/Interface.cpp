@@ -447,6 +447,13 @@ namespace vex {
         vkDeviceWaitIdle(m_context.device);
     }
 
+    void Interface::setVSync(bool enabled) {
+        m_p_swapchainManager->setVSync(enabled);
+        vkDeviceWaitIdle(m_context.device);
+        m_context.requestSwapchainRecreation = true;
+        //m_p_swapchainManager->recreateSwapchain();
+    }
+
     void Interface::bindWindow(SDL_Window *m_p_window) {
         log("Binding window...");
         if (m_context.surface) return;

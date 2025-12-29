@@ -77,6 +77,9 @@ namespace vex {
         /// @brief helper function to wait for GPU to finish
         void WaitForGPUToFinish();
 
+        /// @brief sets VSync (Vertical Synchronization)
+        void setVSync(bool enabled);
+
         #if DEBUG
             VulkanPhysicsDebug* getPhysicsDebug() { return m_p_physicsDebug.get(); }
         #endif
