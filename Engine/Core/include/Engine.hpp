@@ -93,7 +93,7 @@ public:
     int GetCurrentFrame() { return m_frame; }
     void setRenderPhysicsDebug(bool value) { m_renderPhysicsDebug = value; }
 
-    void setFullscreen(bool enabled, bool exclusive = false);
+    virtual void setFullscreen(bool enabled, bool exclusive = false);
     bool isFullscreen();
 
     std::vector<std::string> getLastLoadedScenes() { return lastLoadedScenes; }

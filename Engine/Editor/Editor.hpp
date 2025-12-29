@@ -51,6 +51,9 @@ namespace vex {
         /// @param float deltaTime - Time since last frame.
         void processEvent(const SDL_Event& event, float deltaTime) override;
 
+        /// @brief Overrides the Engine's setFullscreen function to disable auto fullscreen by gameModule
+        void setFullscreen(bool enabled, bool exclusive = false) override { /*pass*/ };
+
         /// @brief Requests a scene reload with a specific path. The reload is typically executed in the main update loop.
         /// @param const std::string& scenePath - The path to the scene file to load.
         void requestSceneReload(const std::string& scenePath);
