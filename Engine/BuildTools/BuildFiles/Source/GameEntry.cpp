@@ -142,6 +142,7 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
                 engine->prepareScenesForHotReload();
                 engine->getSceneManager()->clearScenes();
                 vex::ComponentRegistry::getInstance().clearDynamicComponents();
+                vex::GameObjectFactory::getInstance().clearDynamicGameObjects();
             } catch (const std::exception& e) {
                 vex::log(vex::LogLevel::ERROR, "Exception during CR_UNLOAD");
                 vex::handle_exception(e);

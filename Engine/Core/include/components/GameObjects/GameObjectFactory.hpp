@@ -1,9 +1,8 @@
 /**
- *  @file   GameObjectFactory.hpp
- *  @brief  This file defines GameObjectFactory class used to auto register GameObjects.
- *  @author Eryk Roszkowski
+ * @file   GameObjectFactory.hpp
+ * @brief  This file defines GameObjectFactory class used to auto register GameObjects.
+ * @author Eryk Roszkowski
  ***********************************************/
-
 
 #pragma once
 #include "Engine.hpp"
@@ -16,54 +15,46 @@
 #include <functional>
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 namespace vex {
+
 ///@brief Class responsible for registering and then creating GameObjects eg. Player, CameraObject. It is needed to load GameObjects from scene files but not all GameObjects can be registered. It requires your GameObject to not change constructor parameters.
 class VEX_EXPORT GameObjectFactory {
 public:
+    using ObjectConstructor = GameObject* (*)(Engine&, const std::string&);
+
     using Creator = std::function<GameObject*(Engine&, const std::string&)>;
 
-    static GameObjectFactory& getInstance() {
-        static GameObjectFactory instance;
-        return instance;
+    static GameObjectFactory& getInstance();
+
+    template<typename T>
+    static GameObject* constructObject(Engine& engine, const std::string& name) {
+        return new T(engine, name);
     }
 
     template<typename T>
-    void registerClass(const std::string& name) {
+    void registerClass(const std::string& name, bool isDynamic = false) {
         static_assert(std::is_base_of_v<GameObject, T>, "T must derive from GameObject");
-        creators[name] = [name](Engine& e, const std::string& n) {
-            //return new T(e, n);
-            T* newObject = new T(e, n);
-            newObject->setObjectType(name);
-            return newObject;
-        };
+
+        registerCreator(name, &constructObject<T>, isDynamic);
     }
 
-    GameObject* create(const std::string& type, Engine& engine, const std::string& name) {
-        auto it = creators.find(type);
-        if (it != creators.end()) {
-            return it->second(engine, name);
-        }
-        log("Error: Type '%S' not registered", type.c_str());
-        return nullptr;
-    }
+    GameObject* create(const std::string& type, Engine& engine, const std::string& name);
 
-    std::vector<std::string> GetRegisteredObjectTypes() {
-        std::vector<std::string> types;
-        types.reserve(creators.size());
-        for(const auto& [name, creator] : creators) {
-            types.push_back(name);
-        }
-        return types;
-    }
+    std::vector<std::string> GetRegisteredObjectTypes();
 
-    void UnregisterGameObjects(){
-        //creators.clear();
-    }
+    void clearDynamicGameObjects();
+
+    void UnregisterGameObjects();
 
 private:
     GameObjectFactory() = default;
+
+    void registerCreator(const std::string& name, ObjectConstructor ctor, bool isDynamic);
+
     std::unordered_map<std::string, Creator> creators;
+    std::vector<std::string> dynamicTypes;
 };
 
 /// @brief Macro for automatic GameObject registration, you should call it at the bottom of your class implementation.
@@ -76,13 +67,26 @@ private:
 ///
 /// REGISTER_GAME_OBJECT(MyGameObject);
 /// @endcode
-#define REGISTER_GAME_OBJECT(ClassName) \
-    namespace { \
-        struct ClassName##Registrar { \
-            ClassName##Registrar() { \
-                GameObjectFactory::getInstance().registerClass<ClassName>(#ClassName); \
-            } \
-        }; \
-        static ClassName##Registrar ClassName##registrar; \
-    }
+#ifdef GAME_MODULE_EXPORTS
+    #define REGISTER_GAME_OBJECT(ClassName) \
+        namespace { \
+            struct ClassName##Registrar { \
+                ClassName##Registrar() { \
+                    GameObjectFactory::getInstance().registerClass<ClassName>(#ClassName, true); \
+                } \
+            }; \
+            static ClassName##Registrar ClassName##registrar; \
+        }
+#else
+    #define REGISTER_GAME_OBJECT(ClassName) \
+        namespace { \
+            struct ClassName##Registrar { \
+                ClassName##Registrar() { \
+                    GameObjectFactory::getInstance().registerClass<ClassName>(#ClassName, false); \
+                } \
+            }; \
+            static ClassName##Registrar ClassName##registrar; \
+        }
+#endif
+
 }

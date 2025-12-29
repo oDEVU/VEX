@@ -121,6 +121,7 @@ set(source_files
         src/components/backends/vulkan/PhysicsDebug.hpp
         src/components/GameObjects/Creators/ModelCreator.cpp
         src/components/GameObjects/GameObject.cpp
+        src/components/GameObjects/GameObjectFactory.cpp
         src/components/GameComponents/ComponentFactory.cpp
     )
 
