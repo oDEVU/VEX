@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "components/errorUtils.hpp"
+#include "components/pathUtils.hpp"
 
 namespace vex {
 
@@ -77,7 +78,11 @@ namespace vex {
             }
             ImGui::SameLine();
         }
-        ImGui::Text("Path: %s", m_currentPath.string().c_str());
+
+        std::filesystem::path assetDir = GetAssetDir();
+        std::filesystem::path relative = m_currentPath.lexically_relative(assetDir);
+
+        ImGui::Text("Path: %s", relative.string().c_str());
         ImGui::Separator();
 
         if (ImGui::BeginPopupContextWindow("AssetBrowserBgContext", ImGuiMouseButton_Right | ImGuiPopupFlags_NoOpenOverItems)) {
