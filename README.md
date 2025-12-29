@@ -145,3 +145,5 @@ All libraries are included as git submodules. Their respective licenses may diff
 - [nlohmann/json](https://github.com/nlohmann/json/)
 - [yoga](https://github.com/facebook/yoga)
 - [JoltPhysics](https://github.com/jrouwe/JoltPhysics)
+
+![Funny meme, really](/RepoStuff/meme.png)
