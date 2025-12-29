@@ -108,8 +108,8 @@ Argument | Description
 `-dist` | Distribution mode (stripped binaries without hot reloading).
 
 ## Documentation
-- API Documentation: Detailed, doxygen-generated reference for engine modification and development. [https://odevu.github.io/VEX/](https://odevu.github.io/VEX/)
-- Code Samples: Simple, system-by-system examples focused on game creation and engine usage. [https://odevu.github.io/VEX/samples/](https://odevu.github.io/VEX/samples/)
+- **API Documentation:** Detailed, doxygen-generated reference for engine modification and development. [https://odevu.github.io/VEX/](https://odevu.github.io/VEX/)
+- **Code Samples:** Simple, system-by-system examples focused on game creation and engine usage. [https://odevu.github.io/VEX/samples/](https://odevu.github.io/VEX/samples/)
 
 ## Roadmap & Notes
 - **Status:** Early development. Making a full game is possible but expect API changes.
