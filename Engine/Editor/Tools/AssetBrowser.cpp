@@ -273,6 +273,6 @@ namespace vex {
             ImGui::EndTable();
         }
 
-        return !actionFile.empty() ? actionFile : selectedFile;
+        return actionFile;
     }
 }
