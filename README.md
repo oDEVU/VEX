@@ -127,8 +127,8 @@ Argument | Description
 - offscreen rendering (to a texture for example, with support for multiple render targets)
 - Better shader pipeline
 
-## Liblaries use by engine:
-All liblaries are included as git submodules. Their respective licenses may differ from engine license but all of them are on some sort of opensource license.
+## Libraries used by engine:
+All libraries are included as git submodules. Their respective licenses may differ from engine license but all of them are on some sort of opensource license.
 
 - [SDL3](https://github.com/libsdl-org/SDL/)
 - [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/)
