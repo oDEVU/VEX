@@ -152,6 +152,9 @@ namespace vex {
         std::vector<RenderItem> opaqueQueue;
         std::vector<RenderItem> maskedQueue;
 
+        std::vector<VkBuffer> m_indirectBuffers;
+        std::vector<VmaAllocation> m_indirectAllocations;
+
         #if DEBUG
             std::vector<VkBuffer> m_debugBuffers;
             std::vector<VmaAllocation> m_debugAllocations;

@@ -144,99 +144,121 @@ namespace vex {
             , VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
 #endif
         };
-                VkPhysicalDeviceExtendedDynamicState2FeaturesEXT supportedDynState2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT };
-                VkPhysicalDeviceMultiDrawFeaturesEXT supportedMultiDraw = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT };
-                VkPhysicalDeviceDynamicRenderingFeatures supportedDynRender = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES };
-                VkPhysicalDeviceVulkan11Features supported11 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES };
 
-                supportedDynState2.pNext = &supportedMultiDraw;
-                supportedMultiDraw.pNext = &supportedDynRender;
-                supportedDynRender.pNext = &supported11;
+        VkPhysicalDeviceFeatures2 deviceFeatures2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 };
+        VkPhysicalDeviceVulkan11Features features11 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES };
+        VkPhysicalDeviceVulkan12Features features12 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES };
+        VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES };
+        VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT };
+        VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT };
 
-                VkPhysicalDeviceFeatures2 queryFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 };
-                queryFeatures.pNext = &supportedDynState2;
-                vkGetPhysicalDeviceFeatures2(m_context.physicalDevice, &queryFeatures);
-
-                void* pNextChain = nullptr;
-                m_context.supportsMultiDraw = false;
-
-                VkPhysicalDeviceVulkan11Features vulkan11Features = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES };
-                if (supported11.shaderDrawParameters) vulkan11Features.shaderDrawParameters = VK_TRUE;
-                vulkan11Features.pNext = pNextChain;
-                pNextChain = &vulkan11Features;
-
-                VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeature = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES };
-                if (supportedDynRender.dynamicRendering) dynamicRenderingFeature.dynamicRendering = VK_TRUE;
-                dynamicRenderingFeature.pNext = pNextChain;
-                pNextChain = &dynamicRenderingFeature;
-
-                VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT };
-                if (supportedMultiDraw.multiDraw) {
-                    multiDrawFeatures.multiDraw = VK_TRUE;
-                    deviceExtensions.push_back(VK_EXT_MULTI_DRAW_EXTENSION_NAME);
-                    m_context.supportsMultiDraw = true;
-
-                    multiDrawFeatures.pNext = pNextChain;
-                    pNextChain = &multiDrawFeatures;
-                }
-
-                VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT };
-                if (supportedDynState2.extendedDynamicState2) extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
-
-                if (supportedDynState2.extendedDynamicState2LogicOp) extendedDynamicState2Features.extendedDynamicState2LogicOp = VK_TRUE;
-                if (supportedDynState2.extendedDynamicState2PatchControlPoints) extendedDynamicState2Features.extendedDynamicState2PatchControlPoints = VK_TRUE;
-
-                extendedDynamicState2Features.pNext = pNextChain;
-                pNextChain = &extendedDynamicState2Features;
-
-                VkPhysicalDeviceFeatures deviceFeatures = {};
-                if (queryFeatures.features.samplerAnisotropy) deviceFeatures.samplerAnisotropy = VK_TRUE;
-
-                VkDeviceCreateInfo deviceCreateInfo = { VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO };
-                deviceCreateInfo.pNext = pNextChain;
-                deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
-                deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
-                deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
-                deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
-                deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
-
-        /*VkPhysicalDeviceFeatures deviceFeatures = {};
-        deviceFeatures.samplerAnisotropy = VK_TRUE;
-
-        VkPhysicalDeviceVulkan11Features vulkan11Features{};
-        vulkan11Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;
-        vulkan11Features.shaderDrawParameters = VK_TRUE;
-
-        VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features{};
-        extendedDynamicState2Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
-        extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
-        extendedDynamicState2Features.extendedDynamicState2LogicOp = VK_TRUE;
-        extendedDynamicState2Features.extendedDynamicState2PatchControlPoints = VK_TRUE;
-
-        VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeature{};
-        dynamicRenderingFeature.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
-        dynamicRenderingFeature.dynamicRendering = VK_TRUE;
-
-        VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures{};
-        multiDrawFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT;
-        multiDrawFeatures.multiDraw = VK_TRUE;
-
+        deviceFeatures2.pNext = &features11;
+        features11.pNext = &features12;
+        features12.pNext = &dynamicRenderingFeatures;
+        dynamicRenderingFeatures.pNext = &multiDrawFeatures;
         multiDrawFeatures.pNext = &extendedDynamicState2Features;
-        dynamicRenderingFeature.pNext = &multiDrawFeatures;
-        vulkan11Features.pNext = &dynamicRenderingFeature;
+        extendedDynamicState2Features.pNext = nullptr;
 
-        VkDeviceCreateInfo deviceCreateInfo{};
-        deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        deviceCreateInfo.pNext = &vulkan11Features;
+        vkGetPhysicalDeviceFeatures2(m_context.physicalDevice, &deviceFeatures2);
+
+        if (deviceFeatures2.features.samplerAnisotropy) {
+            deviceFeatures2.features.samplerAnisotropy = VK_TRUE;
+        } else {
+            log(LogLevel::WARNING, "Sampler Anisotropy not supported.");
+        }
+
+        if (deviceFeatures2.features.multiDrawIndirect) {
+            m_context.supportsIndirectDraw = true;
+            VkPhysicalDeviceProperties properties;
+            vkGetPhysicalDeviceProperties(m_context.physicalDevice, &properties);
+            m_context.maxDrawIndirectCount = properties.limits.maxDrawIndirectCount;
+        } else {
+            m_context.supportsIndirectDraw = false;
+            deviceFeatures2.features.multiDrawIndirect = VK_FALSE;
+        }
+
+        if (features11.shaderDrawParameters) {
+            features11.shaderDrawParameters = VK_TRUE;
+            m_context.supportsShaderDrawParameters = true;
+        } else {
+            features11.shaderDrawParameters = VK_FALSE;
+            m_context.supportsShaderDrawParameters = false;
+        }
+
+        if (features12.descriptorBindingPartiallyBound &&
+            features12.runtimeDescriptorArray &&
+            features12.shaderSampledImageArrayNonUniformIndexing &&
+            features12.descriptorBindingSampledImageUpdateAfterBind) {
+
+            m_context.supportsBindlessTextures = true;
+
+            features12.descriptorBindingPartiallyBound = VK_TRUE;
+            features12.runtimeDescriptorArray = VK_TRUE;
+            features12.shaderSampledImageArrayNonUniformIndexing = VK_TRUE;
+            features12.descriptorBindingSampledImageUpdateAfterBind = VK_TRUE;
+        } else {
+            m_context.supportsBindlessTextures = false;
+
+            features12.descriptorBindingPartiallyBound = VK_FALSE;
+            features12.runtimeDescriptorArray = VK_FALSE;
+            features12.shaderSampledImageArrayNonUniformIndexing = VK_FALSE;
+            log(LogLevel::WARNING, "Bindless textures not supported.");
+        }
+
+        if (dynamicRenderingFeatures.dynamicRendering) {
+            dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
+        } else {
+            throw_error("Dynamic Rendering not supported by GPU!");
+        }
+
+        if (multiDrawFeatures.multiDraw) {
+            m_context.supportsMultiDraw = true;
+            multiDrawFeatures.multiDraw = VK_TRUE;
+            deviceExtensions.push_back(VK_EXT_MULTI_DRAW_EXTENSION_NAME);
+
+            VkPhysicalDeviceMultiDrawPropertiesEXT multiDrawProps{};
+            multiDrawProps.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_PROPERTIES_EXT;
+
+            VkPhysicalDeviceProperties2 props2{};
+            props2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+            props2.pNext = &multiDrawProps;
+
+            vkGetPhysicalDeviceProperties2(m_context.physicalDevice, &props2);
+            m_context.maxMultiDrawCount = multiDrawProps.maxMultiDrawCount;
+        } else {
+            m_context.supportsMultiDraw = false;
+            multiDrawFeatures.multiDraw = VK_FALSE;
+        }
+
+        if (extendedDynamicState2Features.extendedDynamicState2) {
+            extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
+        } else {
+            extendedDynamicState2Features.extendedDynamicState2 = VK_FALSE;
+        }
+        extendedDynamicState2Features.extendedDynamicState2LogicOp =
+            extendedDynamicState2Features.extendedDynamicState2LogicOp ? VK_TRUE : VK_FALSE;
+        extendedDynamicState2Features.extendedDynamicState2PatchControlPoints =
+            extendedDynamicState2Features.extendedDynamicState2PatchControlPoints ? VK_TRUE : VK_FALSE;
+
+        VkDeviceCreateInfo deviceCreateInfo = { VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO };
+        deviceCreateInfo.pNext = &deviceFeatures2;
+        deviceCreateInfo.pEnabledFeatures = nullptr;
+
         deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
         deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
-        deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
         deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
-        deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();*/
+        deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
         if (vkCreateDevice(m_context.physicalDevice, &deviceCreateInfo, nullptr, &m_context.device) != VK_SUCCESS) {
             throw_error("Failed to create logical device");
         }
+
+        log("\n ======= Supported Features =======");
+        log("supportsMultiDraw: %s", m_context.supportsMultiDraw ? "true" : "false");
+        log("supportsIndirectDraw: %s", m_context.supportsIndirectDraw ? "true" : "false");
+        log("supportsBindlessTextures: %s", m_context.supportsBindlessTextures ? "true" : "false");
+        log("supportsShaderDrawParameters: %s", m_context.supportsShaderDrawParameters ? "true" : "false");
+        log(" ==================================\n");
 
         volkLoadDevice(m_context.device);
 
@@ -298,9 +320,13 @@ namespace vex {
         attributes[1] = {1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)};
         attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)};
 
+        std::string opaqueFrag = m_context.supportsBindlessTextures
+                                 ? "Engine/shaders/OpaqueFragBindless.spv"
+                                 : "Engine/shaders/OpaqueFrag.spv";
+
         m_p_pipeline->createGraphicsPipeline(
             "Engine/shaders/OpaqueVert.spv",
-            "Engine/shaders/OpaqueFrag.spv",
+            opaqueFrag,
             bindingDesc,
             attributes
         );
@@ -308,9 +334,13 @@ namespace vex {
         log("Initializing Masked Pipeline...");
         m_p_maskPipeline = std::make_unique<VulkanPipeline>(m_context);
 
+        std::string maskedFrag = m_context.supportsBindlessTextures
+                                 ? "Engine/shaders/MaskedFragBindless.spv"
+                                 : "Engine/shaders/MaskedFrag.spv";
+
         m_p_maskPipeline->createMaskedPipeline(
             "Engine/shaders/MaskedVert.spv",
-            "Engine/shaders/MaskedFrag.spv",
+            maskedFrag,
             bindingDesc,
             attributes
         );
@@ -318,9 +348,13 @@ namespace vex {
         log("Initializing Transparent Pipeline...");
         m_p_transPipeline = std::make_unique<VulkanPipeline>(m_context);
 
+        std::string transFrag = m_context.supportsBindlessTextures
+                                ? "Engine/shaders/TransparentFragBindless.spv"
+                                : "Engine/shaders/TransparentFrag.spv";
+
         m_p_transPipeline->createTransparentPipeline(
             "Engine/shaders/TransparentVert.spv",
-            "Engine/shaders/TransparentFrag.spv",
+            transFrag,
             bindingDesc,
             attributes
         );

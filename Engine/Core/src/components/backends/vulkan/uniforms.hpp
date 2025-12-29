@@ -49,6 +49,7 @@ namespace vex {
     struct PushConstants {
         alignas(16) glm::vec4 color;
         alignas(16) glm::mat4 model;
+        alignas(4)  int textureID = 0;
     };
 
     /// @brief PS1Effects namespace for easier setting of them in push constant.

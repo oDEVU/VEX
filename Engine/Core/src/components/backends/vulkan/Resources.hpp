@@ -140,6 +140,11 @@ namespace vex {
         /// @return VkSampler - The texture sampler.
         VkSampler getTextureSampler() const { return m_textureSampler; }
 
+        /// @brief Returns the bindless descriptor set.
+        /// @return VkDescriptorSet - The bindless descriptor set.
+        VkDescriptorSet getBindlessDescriptorSet() const { return m_r_context.bindlessDescriptorSet; }
+        VkDescriptorSetLayout getBindlessLayout() const { return m_r_context.bindlessDescriptorSetLayout; }
+
     private:
         const std::string defaultTextureName = "default";
 

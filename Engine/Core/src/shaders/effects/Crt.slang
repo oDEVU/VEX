@@ -1,6 +1,5 @@
 module Crt;
 import depends.uniforms;
-import depends.texsampler;
 
 // --- CONFIGURATION ---
 static const float SCANLINE_OPACITY = 0.4;

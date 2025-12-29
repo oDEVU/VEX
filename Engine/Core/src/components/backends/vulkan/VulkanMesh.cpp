@@ -156,34 +156,37 @@ namespace vex {
             );
         }
 
-        if(submeshChanged || modelChanged){
-            uint32_t textureIndex = resources.getTextureIndex(textureName);
-
-            if (textureIndex >= MAX_TEXTURES) {
-                SDL_LogError(SDL_LOG_CATEGORY_RENDER,
-                           "Invalid texture index %u for '%s' (Max: %u)",
-                           textureIndex, textureName.c_str(), MAX_TEXTURES);
-                textureIndex = 0;
-            }
-
-            VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
-            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                      pipelineLayout, 1, 1, &texSet,
-                                      0, nullptr);
+        uint32_t textureIndex = resources.getTextureIndex(textureName);
+        if (textureIndex >= MAX_TEXTURES) {
+            textureIndex = 0;
         }
 
-        if(modelChanged){
-            PushConstants modelPush{};
-            const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
+        if (m_r_context.supportsBindlessTextures) {
 
-            modelPush.color = mc.color;
-            if (!textureExists) {
-                if(!textureName.empty()) {
-                    log("Missing texture: %s", textureName.c_str());
-                }
+        }
+        else {
+            if(submeshChanged || modelChanged){
+                VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                        pipelineLayout, 1, 1, &texSet,
+                                        0, nullptr);
             }
+        }
 
+        bool needPush = modelChanged;
+        if (m_r_context.supportsBindlessTextures && submeshChanged) {
+            needPush = true;
+        }
+
+        if(needPush){
+            PushConstants modelPush{};
             modelPush.model = modelMatrix;
+            modelPush.color = mc.color;
+            modelPush.textureID = textureIndex;
+
+            if (!resources.textureExists(textureName) && !textureName.empty()) {
+                log(LogLevel::WARNING, "Missing texture...");
+            }
 
             vkCmdPushConstants(
                 cmd,
@@ -254,41 +257,36 @@ namespace vex {
                 textureName = "default";
             }
 
-            if (currentTexture != textureName) {
-                VkImageView textureView = resources.getTextureView(textureName);
-                VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
-                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                          pipelineLayout, 1, 1, &texSet,
-                                          0, nullptr);
-                currentTexture = textureName;
-            }
-
             PushConstants modelPush{};
-            modelPush.color = mc.color;
-            if (textureExists) {
-                if (currentTexture != textureName) {
-                    VkImageView textureView = resources.getTextureView(textureName);
-                    if(textureView != VK_NULL_HANDLE) {
-                        resources.updateTextureDescriptor(frameIndex, textureView, i);
-                        currentTexture = textureName;
+
+            if (m_r_context.supportsBindlessTextures) {
+                    PushConstants modelPush{};
+                    modelPush.color = mc.color;
+                    modelPush.model = modelMatrix;
+                    modelPush.textureID = textureIndex;
+
+                    vkCmdPushConstants(
+                        cmd,
+                        pipelineLayout,
+                        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                        0,
+                        sizeof(PushConstants),
+                        &modelPush
+                    );
+                }
+                else {
+                    if (currentTexture != textureName) {
+                         VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
+                         vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &texSet, 0, nullptr);
+                         currentTexture = textureName;
                     }
-                }
-            } else {
-                if(!textureName.empty() && textureName != "default") {
-                    log("Missing texture: %s", textureName.c_str());
-                }
-            }
 
-            modelPush.model = modelMatrix;
+                    PushConstants modelPush{};
+                    modelPush.color = mc.color;
+                    modelPush.model = modelMatrix;
 
-            vkCmdPushConstants(
-                cmd,
-                pipelineLayout,
-                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                0,
-                sizeof(PushConstants),
-                &modelPush
-            );
+                    vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &modelPush);
+                }
 
             VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
             VkDeviceSize offsets[] = {0};

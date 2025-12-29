@@ -40,6 +40,7 @@ public[[vk::push_constant]]
 cbuffer PushConstants {
   public float4 color;
   public float4x4 model;
+  public int textureID;
 }
 push;
 

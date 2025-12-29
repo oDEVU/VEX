@@ -79,19 +79,34 @@ namespace vex {
                     m_debugBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
                     m_debugAllocations.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
-                    // Allocate decent size buffer (e.g. 1MB) for lines
                     VkBufferCreateInfo debugBufInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
                     debugBufInfo.size = 1024 * 1024;
                     debugBufInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 
                     VmaAllocationCreateInfo debugAllocInfo{};
-                    debugAllocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU; // CPU Write, GPU Read
+                    debugAllocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
 
                     for(size_t i=0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
                         vmaCreateBuffer(m_r_context.allocator, &debugBufInfo, &debugAllocInfo, &m_debugBuffers[i], &m_debugAllocations[i], nullptr);
                     }
                 #endif
                 m_garbageDescriptors.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+
+                if (m_r_context.supportsIndirectDraw) {
+                        m_indirectBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+                        m_indirectAllocations.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+
+                        VkBufferCreateInfo bufferInfo = { VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+                        bufferInfo.size = 10000 * sizeof(VkDrawIndexedIndirectCommand);
+                        bufferInfo.usage = VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+
+                        VmaAllocationCreateInfo allocInfo = {};
+                        allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+
+                        for(size_t i=0; i<m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+                            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo, &m_indirectBuffers[i], &m_indirectAllocations[i], nullptr);
+                        }
+                    }
 
         log("Renderer initialized successfully");
     }
@@ -201,6 +216,12 @@ namespace vex {
 
             auto now = std::chrono::high_resolution_clock::now();
             currentTime = std::chrono::duration<float>(now - startTime).count();
+
+            if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorSet globalSet = m_p_resources->getBindlessDescriptorSet();
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_pipeline->layout(),
+                                            1, 1, &globalSet, 0, nullptr);
+                }
 
             if (m_lastUsedView != m_r_context.lowResColorView) {
                 updateScreenDescriptor(m_r_context.lowResColorView);
@@ -537,7 +558,7 @@ namespace vex {
                             batchModelIndex,
                             batchSubmeshIndex,
                             batchModelMatrix,
-                            true,//tri.modelIndex != batchModelIndex, // <- Doesnt work. Why? Needs to be fixed.
+                            true,
                             tri.submeshIndex != batchSubmeshIndex,
                             registry.get<MeshComponent>(batchEntity)
 
@@ -848,31 +869,37 @@ namespace vex {
     void Renderer::issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands) {
         if (commands.empty()) return;
 
-                if (m_r_context.supportsMultiDraw) {
-                    vkCmdDrawMultiIndexedEXT(
-                        cmd,
-                        static_cast<uint32_t>(commands.size()),
-                        commands.data(),
-                        1,
-                        0,
-                        static_cast<uint32_t>(sizeof(VkMultiDrawIndexedInfoEXT)),
-                        nullptr
-                    );
-                } else {
-                    if(basicDiag){
-                        log("MultiDraw unsuported using fallback");
-                        basicDiag = false;
-                    }
-                    for (const auto& draw : commands) {
-                        vkCmdDrawIndexed(
-                            cmd,
-                            draw.indexCount,
-                            1,
-                            draw.firstIndex,
-                            draw.vertexOffset,
-                            0
-                        );
-                    }
-                }
+        if (m_r_context.supportsMultiDraw && m_r_context.maxMultiDrawCount > 0) {
+            const uint32_t limit = m_r_context.maxMultiDrawCount;
+            size_t remaining = commands.size();
+            size_t offset = 0;
+
+            while (remaining > 0) {
+                uint32_t count = static_cast<uint32_t>(std::min(static_cast<size_t>(limit), remaining));
+
+                vkCmdDrawMultiIndexedEXT(
+                    cmd,
+                    count,
+                    commands.data() + offset,
+                    1,
+                    0,
+                    static_cast<uint32_t>(sizeof(VkMultiDrawIndexedInfoEXT)),
+                    nullptr
+                );
+
+                remaining -= count;
+                offset += count;
+            }
+            return;
+        }
+
+        if(basicDiag){
+            log(LogLevel::WARNING, "MultiDraw fallback active. Count: %zu", commands.size());
+            basicDiag = false;
+        }
+
+        for (const auto& draw : commands) {
+            vkCmdDrawIndexed(cmd, draw.indexCount, 1, draw.firstIndex, draw.vertexOffset, 0);
+        }
     }
 }

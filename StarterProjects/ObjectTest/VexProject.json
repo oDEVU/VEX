@@ -2,5 +2,8 @@
     "icon_path": "",
     "main_scene": "Assets/scenes/main.json",
     "project_name": "ObjectTest",
-    "version": "1"
+    "resolution_mode": 0,
+    "version": "1",
+    "vsync": true,
+    "window_type": 0
 }

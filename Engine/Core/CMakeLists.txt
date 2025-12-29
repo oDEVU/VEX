@@ -179,6 +179,12 @@ file(GLOB SLANG_DEPENDENCIES
     ${SHADER_SOURCE_DIR}/effects/*.slang
 )
 
+set(BINDLESS_ELIGIBLE_SHADERS
+    "Opaque"
+    "Masked"
+    "Transparent"
+)
+
 set(SPV_SHADERS "")
 
 add_custom_command(
@@ -253,6 +259,17 @@ foreach(source IN LISTS SLANG_SHADERS)
         )
 
         list(APPEND SPV_SHADERS ${VERT_OUTPUT} ${FRAG_OUTPUT})
+
+        if(FILENAME IN_LIST BINDLESS_ELIGIBLE_SHADERS)
+            set(FRAG_BINDLESS_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}FragBindless.spv)
+            add_custom_command(
+                OUTPUT ${FRAG_BINDLESS_OUTPUT}
+                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_6_0 -entry fragMain -o ${FRAG_BINDLESS_OUTPUT} ${source}
+                DEPENDS ${source} ${SLANG_DEPENDENCIES}
+                COMMENT "Compiling ${FILENAME} (Fragment Bindless)"
+            )
+            list(APPEND SPV_SHADERS ${FRAG_BINDLESS_OUTPUT})
+        endif()
     endif()
 endforeach()
 

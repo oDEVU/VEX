@@ -231,12 +231,10 @@ namespace vex {
         allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
 
         for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
-            // scene UBO
             bufferInfo.size = sizeof(SceneUBO);
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                           &m_sceneBuffers[i], &m_sceneAllocs[i], nullptr);
 
-            // Light UBO (dynamic)
             bufferInfo.size = sizeof(SceneLightsUBO) * MAX_MODELS;
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                             &m_lightBuffers[i], &m_lightAllocs[i], nullptr);
@@ -281,6 +279,55 @@ namespace vex {
         if (vkCreateDescriptorSetLayout(m_r_context.device, &texLayoutInfo, nullptr, &m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {
             throw_error("Failed to create descriptor set layout");
         }
+
+        if (m_r_context.supportsBindlessTextures) {
+                log("Creating Bindless Descriptor Layout...");
+
+                VkDescriptorBindingFlags bindlessFlags =
+                    VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT |
+                    VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
+
+                VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo{};
+                bindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
+                bindingFlagsInfo.bindingCount = 1;
+                bindingFlagsInfo.pBindingFlags = &bindlessFlags;
+
+                VkDescriptorSetLayoutBinding bindlessBinding{};
+                bindlessBinding.binding = 0;
+                bindlessBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                bindlessBinding.descriptorCount = MAX_TEXTURES;
+                bindlessBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+                bindlessBinding.pImmutableSamplers = nullptr;
+
+                VkDescriptorSetLayoutCreateInfo bindlessLayoutInfo{};
+                bindlessLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+                bindlessLayoutInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT;
+                bindlessLayoutInfo.bindingCount = 1;
+                bindlessLayoutInfo.pBindings = &bindlessBinding;
+                bindlessLayoutInfo.pNext = &bindingFlagsInfo;
+
+                if (vkCreateDescriptorSetLayout(m_r_context.device, &bindlessLayoutInfo, nullptr, &m_r_context.bindlessDescriptorSetLayout) != VK_SUCCESS) {
+                    throw_error("Failed to create bindless layout");
+                }
+
+                VkDescriptorPoolSize poolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES };
+                VkDescriptorPoolCreateInfo poolInfo{};
+                poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+                poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT;
+                poolInfo.maxSets = 1;
+                poolInfo.poolSizeCount = 1;
+                poolInfo.pPoolSizes = &poolSize;
+
+                vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.bindlessDescriptorPool);
+
+                VkDescriptorSetAllocateInfo allocInfo{};
+                allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+                allocInfo.descriptorPool = m_r_context.bindlessDescriptorPool;
+                allocInfo.descriptorSetCount = 1;
+                allocInfo.pSetLayouts = &m_r_context.bindlessDescriptorSetLayout;
+
+                vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_r_context.bindlessDescriptorSet);
+            }
 
         m_r_context.descriptorSetLayout = m_descriptorSetLayout;
 
@@ -364,6 +411,19 @@ namespace vex {
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageInfo.imageView = textureView;
         imageInfo.sampler = m_textureSampler;
+
+        if (m_r_context.supportsBindlessTextures) {
+            VkWriteDescriptorSet bindlessWrite{};
+            bindlessWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            bindlessWrite.dstSet = m_r_context.bindlessDescriptorSet;
+            bindlessWrite.dstBinding = 0;
+            bindlessWrite.dstArrayElement = textureIndex;
+            bindlessWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            bindlessWrite.descriptorCount = 1;
+            bindlessWrite.pImageInfo = &imageInfo;
+
+            vkUpdateDescriptorSets(m_r_context.device, 1, &bindlessWrite, 0, nullptr);
+        }
 
         VkWriteDescriptorSet write{};
         write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -749,6 +809,24 @@ namespace vex {
             m_textureImages[name] = textureImage;
             m_textureAllocations[name] = textureAlloc;
             m_textureViews[name] = textureView;
+
+            if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorImageInfo imageInfo{};
+                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                    imageInfo.imageView = textureView;
+                    imageInfo.sampler = m_textureSampler;
+
+                    VkWriteDescriptorSet write{};
+                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet = m_r_context.bindlessDescriptorSet;
+                    write.dstBinding = 0;
+                    write.dstArrayElement = m_r_context.textureIndices[name]; // Write to specific array index
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                    write.descriptorCount = 1;
+                    write.pImageInfo = &imageInfo;
+
+                    vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+                }
 
                 VkDescriptorImageInfo imageDescInfo{};
                 imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;

@@ -13,11 +13,28 @@
 #ifndef VEX_RESOLUTION_MODE
 #define VEX_RESOLUTION_MODE 0
 #endif
-#ifndef VEX_VSYNC
-#define VEX_VSYNC true
+#ifdef VEX_VSYNC
+    #define ON 1
+    #define OFF 0
+    #define true 1
+    #define false 0
+
+    #if VEX_VSYNC
+        #undef VEX_VSYNC
+        #define VEX_VSYNC true
+    #else
+        #undef VEX_VSYNC
+        #define VEX_VSYNC false
+    #endif
+
+    #undef ON
+    #undef OFF
+    #undef true
+    #undef false
 #endif
-#if VEX_VSYNC == ON
-#define VEX_VSYNC true
+
+#ifndef VEX_VSYNC
+    #define VEX_VSYNC true
 #endif
 
 #if defined(_WIN32) && defined(_DEBUG)

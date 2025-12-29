@@ -114,6 +114,16 @@ namespace vex {
         enviroment m_enviroment;
 
         bool supportsMultiDraw = false;
+        bool supportsIndirectDraw = false;
+        bool supportsBindlessTextures = false;
+        bool supportsShaderDrawParameters = false;
+
+        VkDescriptorSetLayout bindlessDescriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorPool bindlessDescriptorPool = VK_NULL_HANDLE;
+        VkDescriptorSet bindlessDescriptorSet = VK_NULL_HANDLE;
+
+        uint32_t maxDrawIndirectCount = 1;
+        uint32_t maxMultiDrawCount = 1;
         bool requestSwapchainRecreation = false;
     };
 }
