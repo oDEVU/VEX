@@ -126,6 +126,9 @@ public:
     /// @brief Simply sets m_running to false, Effectivelly soft shuting down the engine.
     void quit(){ m_running = false; }
 
+    /// @brief Waits for the GPU to finish all operations. Essential before destroying resources.
+    void WaitForGpu();
+
 protected:
     Engine(SkipInit);
 

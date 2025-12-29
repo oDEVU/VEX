@@ -125,6 +125,10 @@ namespace vex {
             m_SavedProjectProperties = m_projectProperties;
         }
 
+        if (auto* scene = getSceneManager()->GetScene(getSceneManager()->getLastSceneName())) {
+            scene->FlushDestructionQueue();
+        }
+
         m_camera->Update(deltaTime);
         m_physicsSystem->SyncBodies();
         render();

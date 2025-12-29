@@ -88,6 +88,9 @@ std::string GetScenePath(){
     return m_path;
 }
 
+/// @brief Processes the queue of objects marked for destruction.
+void FlushDestructionQueue();
+
 private:
 
 /// @brief Function to load the scene from a file path saved in the constructor.
@@ -95,6 +98,7 @@ void load();
 
 std::vector<std::shared_ptr<GameObject>> m_objects;
 std::vector<std::shared_ptr<GameObject>> m_addedObjects;
+std::vector<GameObject*> m_pendingDestruction;
 std::string m_path;
 Engine* m_engine;
 bool m_creatingFromScene = false;

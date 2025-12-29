@@ -208,6 +208,8 @@ void Scene::sceneBegin(){
 }
 
 void Scene::sceneUpdate(float deltaTime){
+    FlushDestructionQueue();
+
     uint32_t size = m_objects.size();
     size += m_addedObjects.size();
 
@@ -255,19 +257,36 @@ void Scene::RegisterGameObject(GameObject* obj) {
 void Scene::DestroyGameObject(GameObject* obj) {
     if (!obj) return;
 
-    for(auto it = m_objects.begin(); it != m_objects.end(); ++it) {
-        if(it->get()->GetEntity() == obj->GetEntity()) {
-            m_objects.erase(it);
-            break;
-        }
+    if (std::find(m_pendingDestruction.begin(), m_pendingDestruction.end(), obj) == m_pendingDestruction.end()) {
+        m_pendingDestruction.push_back(obj);
+    }
+}
+
+void Scene::FlushDestructionQueue() {
+    if (m_pendingDestruction.empty()) return;
+
+    if (m_engine) {
+        m_engine->WaitForGpu();
     }
 
-    for(auto it = m_addedObjects.begin(); it != m_addedObjects.end(); ++it) {
-        if(it->get()->GetEntity() == obj->GetEntity()) {
-            m_addedObjects.erase(it);
-            break;
+    for (GameObject* obj : m_pendingDestruction) {
+        if (!obj) continue;
+
+        auto it = std::find_if(m_objects.begin(), m_objects.end(),
+            [obj](const std::shared_ptr<GameObject>& ptr) { return ptr.get() == obj; });
+
+        if (it != m_objects.end()) {
+            m_objects.erase(it);
+        } else {
+            auto itAdded = std::find_if(m_addedObjects.begin(), m_addedObjects.end(),
+                [obj](const std::shared_ptr<GameObject>& ptr) { return ptr.get() == obj; });
+
+            if (itAdded != m_addedObjects.end()) {
+                m_addedObjects.erase(itAdded);
+            }
         }
     }
+    m_pendingDestruction.clear();
 }
 
 std::vector<GameObject*> Scene::GetAllGameObjectsByName(const std::string& name){

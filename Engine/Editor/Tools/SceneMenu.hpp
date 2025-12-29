@@ -373,6 +373,8 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
 
         if (action.type == SceneAction::DELETE_ACTION && action.target) {
 
+            engine.WaitForGpu();
+
                 std::function<void(vex::GameObject*)> recursiveDelete =
                     [&](vex::GameObject* targetObj) {
 

@@ -132,6 +132,12 @@ void Engine::run(std::function<void()> onUpdateLoop) {
     }
 }
 
+void Engine::WaitForGpu() {
+    if (m_interface) {
+        m_interface->WaitForGPUToFinish();
+    }
+}
+
 Engine::~Engine() {
     if (m_physicsSystem) {
         m_physicsSystem->shutdown();
