@@ -69,7 +69,7 @@ namespace vex {
 
         //entt::entity modelEntity = m_p_engine->getRegistry().create();
         ModelObject* modelObject = new ModelObject(*m_p_engine, tempName, meshComponent, transformComponent);
-        //modelObject->cleanup = [this](std::string& tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };
+        //modelObject->cleanup = [this](std::string& tempName, const MeshComponent& meshComponent) { destroyModel(tempName, meshComponent); };
         return modelObject;
     }
 

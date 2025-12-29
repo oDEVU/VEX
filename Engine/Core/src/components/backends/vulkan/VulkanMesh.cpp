@@ -134,7 +134,7 @@ namespace vex {
         glm::mat4 modelMatrix,
         bool modelChanged,
         bool submeshChanged,
-        MeshComponent mc
+        const MeshComponent& mc
     ) const {
         const auto& buffers = m_submeshBuffers[submeshIndex];
         const auto& textureName = m_submeshTextures[submeshIndex];
@@ -205,7 +205,7 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, MeshComponent mc) const {
+            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, const MeshComponent& mc) const {
 
         std::string currentTexture = "";
 
@@ -229,7 +229,7 @@ namespace vex {
             std::string textureName = "";
             uint32_t textureIndex = 0;
             if(mc.textureOverrides.contains(i)){
-                textureName = GetAssetPath(mc.textureOverrides[i]);
+                textureName = GetAssetPath(mc.textureOverrides.at(1));
                 textureIndex = resources.getTextureIndex(textureName);
 
                 if(textureIndex == 0){
