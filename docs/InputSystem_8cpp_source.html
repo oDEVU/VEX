@@ -153,44 +153,82 @@ $(function(){initNavTree('InputSystem_8cpp_source.html','',''); });
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                            keyState.wasProcessedAsPressed = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (!isPressed &amp;&amp; binding.state == InputActionState::Released) {</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                            binding.action(deltaTime);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                        }</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                    }</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                }</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            }</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event.type == SDL_EVENT_MOUSE_MOTION &amp;&amp; m_inputMode != InputMode::UI) {</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            <span class="keyword">auto</span> view = m_registry.view&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                <span class="keyword">auto</span>&amp; inputComp = view.get&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;(entity);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; binding : inputComp.mouseAxisBindings) {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                    <span class="keywordtype">float</span> delta = (binding.axis == MouseAxis::X) ? event.motion.xrel : <span class="keyword">event</span>.motion.yrel;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                    binding.action(delta);</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                }</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            }</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        }</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    }</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (!isPressed &amp;&amp; binding.state == InputActionState::Held) {</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                            binding.action(0.0f);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                        }</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                    }</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                }</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            }</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event.type == SDL_EVENT_MOUSE_MOTION &amp;&amp; m_inputMode != InputMode::UI) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <span class="keyword">auto</span> view = m_registry.view&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                <span class="keyword">auto</span>&amp; inputComp = view.get&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;(entity);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; binding : inputComp.mouseAxisBindings) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                    <span class="keywordtype">float</span> delta = (binding.axis == MouseAxis::X) ? event.motion.xrel : <span class="keyword">event</span>.motion.yrel;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                    binding.action(delta);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                }</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN || event.type == SDL_EVENT_GAMEPAD_BUTTON_UP) {</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            <span class="keywordtype">bool</span> isPressed = (<span class="keyword">event</span>.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            SDL_GamepadButton button = (SDL_GamepadButton)event.gbutton.button;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            gamepadButtonStates[button].isPressed = isPressed;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            <span class="keyword">auto</span> view = m_registry.view&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                <span class="keyword">auto</span>&amp; inputComp = view.get&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;(entity);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; binding : inputComp.gamepadButtonBindings) {</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                    <span class="keywordflow">if</span> (binding.button == button) {</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                        <span class="keywordflow">if</span> (isPressed &amp;&amp; binding.state == InputActionState::Pressed) {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                            binding.action(deltaTime);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (!isPressed &amp;&amp; binding.state == InputActionState::Released) {</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                            binding.action(deltaTime);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                        }</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                    }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                }</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            }</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (event.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            <span class="keywordtype">float</span> normalizedValue = <span class="keyword">event</span>.gaxis.value / 32767.0f;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            <span class="keyword">auto</span> view = m_registry.view&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>            <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>                <span class="keyword">auto</span>&amp; inputComp = view.get&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;(entity);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; binding : inputComp.gamepadAxisBindings) {</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>                    <span class="keywordflow">if</span> (binding.axis == (SDL_GamepadAxis)event.gaxis.axis) {</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>                        binding.action(normalizedValue);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>                    }</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>                }</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            }</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        }</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    }</div>
 </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="foldopen" id="foldopen00066" data-start="{" data-end="}">
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">   66</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">InputSystem::update</a>(<span class="keywordtype">float</span> deltaTime) {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keyword">auto</span> view = m_registry.view&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            <span class="keyword">auto</span>&amp; inputComp = view.get&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;(entity);</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; binding : inputComp.bindings) {</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                <span class="keywordflow">if</span> (binding.state == InputActionState::Held &amp;&amp; keyStates[binding.scancode].isPressed) {</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                    binding.action(deltaTime);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                }</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            }</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        }</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    }</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="foldopen" id="foldopen00099" data-start="{" data-end="}">
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">   99</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">InputSystem::update</a>(<span class="keywordtype">float</span> deltaTime) {</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keyword">auto</span> view = m_registry.view&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;();</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> entity : view) {</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            <span class="keyword">auto</span>&amp; inputComp = view.get&lt;<a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a>&gt;(entity);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; binding : inputComp.bindings) {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>                <span class="keywordflow">if</span> (binding.state == InputActionState::Held &amp;&amp; keyStates[binding.scancode].isPressed) {</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>                    binding.action(deltaTime);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>                }</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            }</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; binding : inputComp.gamepadButtonBindings) {</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                <span class="keywordflow">if</span> (binding.state == InputActionState::Held &amp;&amp; gamepadButtonStates[binding.button].isPressed) {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>                    binding.action(deltaTime);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>                }</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            }</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        }</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
 </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>}</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>}</div>
 <div class="ttc" id="aInputComponent_8hpp_html"><div class="ttname"><a href="InputComponent_8hpp.html">InputComponent.hpp</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div></div>
 <div class="ttc" id="aInputSystem_8hpp_html"><div class="ttname"><a href="InputSystem_8hpp.html">InputSystem.hpp</a></div><div class="ttdoc">This file defines InputSystem class.</div></div>
 <div class="ttc" id="aInputSystem_8hpp_html_a814f1fff090d613f1d99c10566d4afc4"><div class="ttname"><a href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">vex::InputMode</a></div><div class="ttdeci">InputMode</div><div class="ttdoc">Enum representing different input modes.</div><div class="ttdef"><b>Definition</b> <a href="InputSystem_8hpp_source.html#l00022">InputSystem.hpp:22</a></div></div>
 <div class="ttc" id="aclassvex_1_1InputSystem_html_a1c8042ce42b253872a991153fdc88a15"><div class="ttname"><a href="classvex_1_1InputSystem.html#a1c8042ce42b253872a991153fdc88a15">vex::InputSystem::setInputMode</a></div><div class="ttdeci">void setInputMode(InputMode mode)</div><div class="ttdoc">Sets the input mode.</div><div class="ttdef"><b>Definition</b> <a href="#l00011">InputSystem.cpp:11</a></div></div>
-<div class="ttc" id="aclassvex_1_1InputSystem_html_a6953ed189c854f01ff1a5fe2dfea310f"><div class="ttname"><a href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">vex::InputSystem::update</a></div><div class="ttdeci">void update(float deltaTime)</div><div class="ttdoc">Updates the input system.</div><div class="ttdef"><b>Definition</b> <a href="#l00066">InputSystem.cpp:66</a></div></div>
+<div class="ttc" id="aclassvex_1_1InputSystem_html_a6953ed189c854f01ff1a5fe2dfea310f"><div class="ttname"><a href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">vex::InputSystem::update</a></div><div class="ttdeci">void update(float deltaTime)</div><div class="ttdoc">Updates the input system.</div><div class="ttdef"><b>Definition</b> <a href="#l00099">InputSystem.cpp:99</a></div></div>
 <div class="ttc" id="aclassvex_1_1InputSystem_html_aff1e50790e9b3f900ce77d9d6d6cb1fc"><div class="ttname"><a href="classvex_1_1InputSystem.html#aff1e50790e9b3f900ce77d9d6d6cb1fc">vex::InputSystem::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event &amp;event, float deltaTime)</div><div class="ttdoc">Processes an SDL event.</div><div class="ttdef"><b>Definition</b> <a href="#l00023">InputSystem.cpp:23</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00044">InputComponent.hpp:44</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="InputComponent_8hpp_source.html#l00058">InputComponent.hpp:58</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

@@ -38,6 +38,8 @@ var hierarchy =
       [ "vex::ModelObject", "classvex_1_1ModelObject.html", null ]
     ] ],
     [ "vex::GameObjectFactory", "classvex_1_1GameObjectFactory.html", null ],
+    [ "vex::GamepadAxisBinding", "structvex_1_1GamepadAxisBinding.html", null ],
+    [ "vex::GamepadButtonBinding", "structvex_1_1GamepadButtonBinding.html", null ],
     [ "vex::ImGUIWrapper", "classvex_1_1ImGUIWrapper.html", [
       [ "vex::VulkanImGUIWrapper", "classvex_1_1VulkanImGUIWrapper.html", [
         [ "EditorImGUIWrapper", "classEditorImGUIWrapper.html", null ]

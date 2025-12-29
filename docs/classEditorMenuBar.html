@@ -119,10 +119,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ab72632bc14f2b142f81be15aa1f7370f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens the editor settings window/menu.  <br /></td></tr>
 <tr class="memitem:a4bf9162577f3af8101358bfef0b05844" id="r_a4bf9162577f3af8101358bfef0b05844"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bf9162577f3af8101358bfef0b05844">OpenProjectSettings</a> ()</td></tr>
 <tr class="memdesc:a4bf9162577f3af8101358bfef0b05844"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens the project settings window/menu.  <br /></td></tr>
+<tr class="memitem:a55887801be4151ce10b179d2553d6d79" id="r_a55887801be4151ce10b179d2553d6d79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55887801be4151ce10b179d2553d6d79">OpenProjectSelector</a> ()</td></tr>
+<tr class="memdesc:a55887801be4151ce10b179d2553d6d79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens the project selector window.  <br /></td></tr>
 <tr class="memitem:a61a363023a5076e0ddcf6a9344d7614e" id="r_a61a363023a5076e0ddcf6a9344d7614e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61a363023a5076e0ddcf6a9344d7614e">SaveSceneAs</a> ()</td></tr>
 <tr class="memdesc:a61a363023a5076e0ddcf6a9344d7614e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the current scene to a new file path.  <br /></td></tr>
 <tr class="memitem:a36b236b7d71c7219125ae05dbd33d398" id="r_a36b236b7d71c7219125ae05dbd33d398"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36b236b7d71c7219125ae05dbd33d398">RunBuild</a> (bool isDebug, bool runAfter=false)</td></tr>
 <tr class="memdesc:a36b236b7d71c7219125ae05dbd33d398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the project build process.  <br /></td></tr>
+<tr class="memitem:ae15bcd914c5ce1871f08c031be192f43" id="r_ae15bcd914c5ce1871f08c031be192f43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae15bcd914c5ce1871f08c031be192f43">BuildDist</a> ()</td></tr>
+<tr class="memdesc:ae15bcd914c5ce1871f08c031be192f43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds the project distribution package.  <br /></td></tr>
 <tr class="memitem:a97073beab5037c1687eab402650489ac" id="r_a97073beab5037c1687eab402650489ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97073beab5037c1687eab402650489ac">NewScene</a> ()</td></tr>
 <tr class="memdesc:a97073beab5037c1687eab402650489ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies empty scene to assets folders and opens it.  <br /></td></tr>
 </table><table class="memberdecls">
@@ -210,6 +214,27 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="ae15bcd914c5ce1871f08c031be192f43" name="ae15bcd914c5ce1871f08c031be192f43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae15bcd914c5ce1871f08c031be192f43">&#9670;&#160;</a></span>BuildDist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EditorMenuBar::BuildDist </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Builds the project distribution package. </p>
+
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00447">447</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a03a4c974246f5ad0c4494fe09db48f7f" name="a03a4c974246f5ad0c4494fe09db48f7f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a03a4c974246f5ad0c4494fe09db48f7f">&#9670;&#160;</a></span>DrawBar()</h2>
 
@@ -227,7 +252,7 @@ Private Attributes</h2></td></tr>
 
 <p>Draws the main menu bar and processes user input. </p>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00020">20</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00030">30</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -257,7 +282,7 @@ Private Attributes</h2></td></tr>
 <p>Retrieves the name of the current project. </p>
 <dl class="section return"><dt>Returns</dt><dd>std::string - The project name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00267">267</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00314">314</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -278,7 +303,7 @@ Private Attributes</h2></td></tr>
 
 <p>Copies empty scene to assets folders and opens it. </p>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00400">400</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00586">586</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -299,7 +324,28 @@ Private Attributes</h2></td></tr>
 
 <p>Opens the editor settings window/menu. </p>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00101">101</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00148">148</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a55887801be4151ce10b179d2553d6d79" name="a55887801be4151ce10b179d2553d6d79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55887801be4151ce10b179d2553d6d79">&#9670;&#160;</a></span>OpenProjectSelector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EditorMenuBar::OpenProjectSelector </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Opens the project selector window. </p>
+
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00118">118</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -320,7 +366,7 @@ Private Attributes</h2></td></tr>
 
 <p>Opens the project settings window/menu. </p>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00123">123</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00170">170</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -341,7 +387,7 @@ Private Attributes</h2></td></tr>
 
 <p>Handles the logic for opening an existing scene file. </p>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00145">145</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00192">192</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -373,7 +419,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00285">285</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00332">332</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -394,7 +440,7 @@ Private Attributes</h2></td></tr>
 
 <p>Saves the current scene to a new file path. </p>
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00201">201</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8cpp_source.html#l00248">248</a> of file <a class="el" href="EditorMenuBar_8cpp_source.html">EditorMenuBar.cpp</a>.</p>
 
 </div>
 </div>
@@ -419,7 +465,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00060">60</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00066">66</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>
@@ -443,7 +489,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00059">59</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00065">65</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>
@@ -467,7 +513,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00061">61</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="EditorMenuBar_8hpp_source.html#l00067">67</a> of file <a class="el" href="EditorMenuBar_8hpp_source.html">EditorMenuBar.hpp</a>.</p>
 
 </div>
 </div>

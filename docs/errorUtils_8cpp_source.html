@@ -207,37 +207,43 @@ $(function(){initNavTree('errorUtils_8cpp_source.html','',''); });
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
 <div class="foldopen" id="foldopen00101" data-start="{" data-end="}">
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1">  101</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<a class="code hl_enumeration" href="errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43e">LogLevel</a> level, <span class="keyword">const</span> <span class="keywordtype">char</span>* fmt, ...) {</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <span class="keywordflow">if</span> (level == LogLevel::INFO || level == LogLevel::WARNING) <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        va_list args;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        va_start(args, fmt);</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        log_internal(level, fmt, args);</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        va_end(args);</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    }</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="preprocessor">        #ifndef DIST_BUILD</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keywordflow">if</span> (level == LogLevel::INFO || level == LogLevel::WARNING) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        va_list args;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        va_start(args, fmt);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        log_internal(level, fmt, args);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        va_end(args);</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="preprocessor">        #endif</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    }</div>
 </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="foldopen" id="foldopen00110" data-start="{" data-end="}">
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">  110</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">handle_exception</a>(<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="keywordflow">throw</span>;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    }</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="foldopen" id="foldopen00112" data-start="{" data-end="}">
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">  112</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">handle_exception</a>(<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="preprocessor">        #ifndef DIST_BUILD</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="preprocessor">        #endif</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordflow">throw</span>;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    }</div>
 </div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
-<div class="foldopen" id="foldopen00115" data-start="{" data-end="}">
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">  115</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">handle_critical_exception</a>(<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        <span class="keywordflow">throw</span>;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    }</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="foldopen" id="foldopen00119" data-start="{" data-end="}">
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">  119</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">handle_critical_exception</a>(<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="preprocessor">        #ifndef DIST_BUILD</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;%s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="preprocessor">        #endif</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">throw</span>;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    }</div>
 </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>} <span class="comment">// namespace vex</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>} <span class="comment">// namespace vex</span></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="#l00093">errorUtils.cpp:93</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="#l00097">errorUtils.cpp:97</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a98df6c0f2c25bb67d5d5852ff2744d48"><div class="ttname"><a href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">vex::handle_critical_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_critical_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in all builds.</div><div class="ttdef"><b>Definition</b> <a href="#l00115">errorUtils.cpp:115</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="#l00110">errorUtils.cpp:110</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a98df6c0f2c25bb67d5d5852ff2744d48"><div class="ttname"><a href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">vex::handle_critical_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_critical_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in all builds.</div><div class="ttdef"><b>Definition</b> <a href="#l00119">errorUtils.cpp:119</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="#l00112">errorUtils.cpp:112</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html_ae8216a00c20d22c391938395ef94f43e"><div class="ttname"><a href="errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43e">vex::LogLevel</a></div><div class="ttdeci">LogLevel</div><div class="ttdoc">Enum class for log levels.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8hpp_source.html#l00026">errorUtils.hpp:26</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

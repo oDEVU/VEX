@@ -283,138 +283,135 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            PushConstants modelPush{};</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> textureExists = !textureName.empty() &amp;&amp; resources.textureExists(textureName);</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            <span class="keywordflow">if</span> (textureExists) {</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                modelPush.color = glm::vec4(1.0f);</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                modelPush.color = mc.color;</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                <span class="keywordflow">if</span>(!textureName.empty()) {</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Missing texture: %s&quot;</span>, textureName.c_str());</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>                }</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>            }</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            modelPush.color = mc.color;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            <span class="keywordflow">if</span> (!textureExists) {</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                <span class="keywordflow">if</span>(!textureName.empty()) {</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Missing texture: %s&quot;</span>, textureName.c_str());</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                }</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            }</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>            modelPush.model = modelMatrix;</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>            modelPush.model = modelMatrix;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>            vkCmdPushConstants(</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                cmd,</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                pipelineLayout,</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                0,</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>                <span class="keyword">sizeof</span>(PushConstants),</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>                &amp;modelPush</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>            );</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        }</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        VkBuffer vertexBuffers[] = {buffers.vertexBuffer};</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        VkDeviceSize offsets[] = {0};</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    }</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="foldopen" id="foldopen00206" data-start="{" data-end="}">
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanMesh.html#ac0f01ab39fe5ad9ec06ff3851e669d9c">  206</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanMesh.html#ac0f01ab39fe5ad9ec06ff3851e669d9c">VulkanMesh::draw</a>(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>            <a class="code hl_class" href="classvex_1_1VulkanResources.html">VulkanResources</a>&amp; resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> mc)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>            vkCmdPushConstants(</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>                cmd,</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>                pipelineLayout,</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                0,</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                <span class="keyword">sizeof</span>(PushConstants),</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                &amp;modelPush</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>            );</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        }</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        VkBuffer vertexBuffers[] = {buffers.vertexBuffer};</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        VkDeviceSize offsets[] = {0};</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    }</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
+<div class="foldopen" id="foldopen00204" data-start="{" data-end="}">
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanMesh.html#ac0f01ab39fe5ad9ec06ff3851e669d9c">  204</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanMesh.html#ac0f01ab39fe5ad9ec06ff3851e669d9c">VulkanMesh::draw</a>(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>            <a class="code hl_class" href="classvex_1_1VulkanResources.html">VulkanResources</a>&amp; resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> mc)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        std::string currentTexture = <span class="stringliteral">&quot;&quot;</span>;</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        std::string currentTexture = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>            uint32_t lightsDynamicOffset = modelIndex * <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(<span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a>));</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            uint32_t dynamicOffsets[1] = { lightsDynamicOffset };</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>            VkDescriptorSet globalSet = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#ac14d5b2f5f8102b54bcaa5328470dd22">getDescriptorSet</a>(frameIndex);</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>            vkCmdBindDescriptorSets(</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>                cmd,</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>                VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>                pipelineLayout,</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>                0,</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>            uint32_t lightsDynamicOffset = modelIndex * <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(<span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a>));</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>            uint32_t dynamicOffsets[1] = { lightsDynamicOffset };</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            VkDescriptorSet globalSet = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#ac14d5b2f5f8102b54bcaa5328470dd22">getDescriptorSet</a>(frameIndex);</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            vkCmdBindDescriptorSets(</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>                cmd,</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>                VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>                pipelineLayout,</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>                0,</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>                1,</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>                &amp;globalSet,</div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>                1,</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>                &amp;globalSet,</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>                1,</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>                dynamicOffsets</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            );</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; m_submeshBuffers.size(); i++) {</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; buffers = m_submeshBuffers[i];</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            std::string textureName = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>            uint32_t textureIndex = 0;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>            <span class="keywordflow">if</span>(mc.textureOverrides.contains(i)){</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>                textureName = <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(mc.textureOverrides[i]);</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>                textureIndex = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(textureName);</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>                <span class="keywordflow">if</span>(textureIndex == 0){</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>                    textureIndex = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(m_submeshTextures[i]);</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>                }</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            }<span class="keywordflow">else</span>{</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>                textureName = m_submeshTextures[i];</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>                textureIndex = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(m_submeshTextures[i]);</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            }</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>                dynamicOffsets</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>            );</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; m_submeshBuffers.size(); i++) {</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; buffers = m_submeshBuffers[i];</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            std::string textureName = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>            uint32_t textureIndex = 0;</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            <span class="keywordflow">if</span>(mc.textureOverrides.contains(i)){</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>                textureName = <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(mc.textureOverrides[i]);</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>                textureIndex = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(textureName);</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>                <span class="keywordflow">if</span>(textureIndex == 0){</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>                    textureIndex = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(m_submeshTextures[i]);</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>                }</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            }<span class="keywordflow">else</span>{</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>                textureName = m_submeshTextures[i];</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>                textureIndex = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(m_submeshTextures[i]);</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            }</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            <span class="comment">//log(&quot;Invalid texture index %u for &#39;%s&#39;&quot;, textureIndex, textureName.c_str());</span></div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="comment">//log(&quot;Invalid texture index %u for &#39;%s&#39;&quot;, textureIndex, textureName.c_str());</span></div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>            <span class="keywordflow">if</span> (textureIndex &gt;= <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>) {</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                SDL_LogError(SDL_LOG_CATEGORY_RENDER,</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                           <span class="stringliteral">&quot;Invalid texture index %u for &#39;%s&#39; (Max: %u)&quot;</span>,</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                           textureIndex, textureName.c_str(), <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>                textureIndex = 0;</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            }</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="keywordflow">if</span> (textureIndex &gt;= <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>) {</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                SDL_LogError(SDL_LOG_CATEGORY_RENDER,</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                           <span class="stringliteral">&quot;Invalid texture index %u for &#39;%s&#39; (Max: %u)&quot;</span>,</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                           textureIndex, textureName.c_str(), <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                textureIndex = 0;</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>            }</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> textureExists = !textureName.empty() &amp;&amp; resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef">textureExists</a>(textureName);</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>            <span class="keyword">const</span> <span class="keywordtype">bool</span> textureExists = !textureName.empty() &amp;&amp; resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef">textureExists</a>(textureName);</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>            <span class="comment">//log(&quot;Texture exists: %s, textureName: %s, textureIndex: %d&quot;, textureExists ? &quot;true&quot; : &quot;false&quot;, textureName.c_str(), textureIndex);</span></div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            <span class="comment">//log(&quot;Texture exists: %s, textureName: %s, textureIndex: %d&quot;, textureExists ? &quot;true&quot; : &quot;false&quot;, textureName.c_str(), textureIndex);</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>            <span class="keywordflow">if</span> (!textureExists) {</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>                textureName = <span class="stringliteral">&quot;default&quot;</span>;</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>            }</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>            <span class="keywordflow">if</span> (currentTexture != textureName) {</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>                VkImageView textureView = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#afc98d19439dc53425270d0a302e30466">getTextureView</a>(textureName);</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>                VkDescriptorSet texSet = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#ab7c1816ff613680e55a277249a653168">getTextureDescriptorSet</a>(frameIndex, textureIndex);</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>                                          pipelineLayout, 1, 1, &amp;texSet,</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>                                          0, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                currentTexture = textureName;</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            }</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            <a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a> modelPush{};</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>            <span class="keywordflow">if</span> (textureExists) {</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                <span class="keywordflow">if</span> (currentTexture != textureName) {</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                    VkImageView textureView = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#afc98d19439dc53425270d0a302e30466">getTextureView</a>(textureName);</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                    <span class="keywordflow">if</span>(textureView != VK_NULL_HANDLE) {</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                        resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a77672c461906ef7e0994078d8994d27d">updateTextureDescriptor</a>(frameIndex, textureView, i);</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                        currentTexture = textureName;</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                    }</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                }</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>                modelPush.color = glm::vec4(1.0f);</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                modelPush.color = mc.color;</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>                <span class="keywordflow">if</span>(!textureName.empty() &amp;&amp; textureName != <span class="stringliteral">&quot;default&quot;</span>) {</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Missing texture: %s&quot;</span>, textureName.c_str());</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>                }</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>            }</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>            modelPush.model = modelMatrix;</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>            vkCmdPushConstants(</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>                cmd,</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>                pipelineLayout,</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>                0,</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>                <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a>),</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>                &amp;modelPush</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>            );</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>            VkBuffer vertexBuffers[] = {buffers.vertexBuffer};</div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>            VkDeviceSize offsets[] = {0};</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>            vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>            vkCmdDrawIndexed(cmd, buffers.indexCount, 1, 0, 0, 0);</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>        }</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    }</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            <span class="keywordflow">if</span> (!textureExists) {</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>                textureName = <span class="stringliteral">&quot;default&quot;</span>;</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>            }</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>            <span class="keywordflow">if</span> (currentTexture != textureName) {</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>                VkImageView textureView = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#afc98d19439dc53425270d0a302e30466">getTextureView</a>(textureName);</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>                VkDescriptorSet texSet = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#ab7c1816ff613680e55a277249a653168">getTextureDescriptorSet</a>(frameIndex, textureIndex);</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>                                          pipelineLayout, 1, 1, &amp;texSet,</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                                          0, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>                currentTexture = textureName;</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            }</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            <a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a> modelPush{};</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>            modelPush.color = mc.color;</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            <span class="keywordflow">if</span> (textureExists) {</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                <span class="keywordflow">if</span> (currentTexture != textureName) {</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                    VkImageView textureView = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#afc98d19439dc53425270d0a302e30466">getTextureView</a>(textureName);</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                    <span class="keywordflow">if</span>(textureView != VK_NULL_HANDLE) {</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                        resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a77672c461906ef7e0994078d8994d27d">updateTextureDescriptor</a>(frameIndex, textureView, i);</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                        currentTexture = textureName;</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                    }</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                }</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>                <span class="keywordflow">if</span>(!textureName.empty() &amp;&amp; textureName != <span class="stringliteral">&quot;default&quot;</span>) {</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Missing texture: %s&quot;</span>, textureName.c_str());</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                }</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>            }</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>            modelPush.model = modelMatrix;</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>            vkCmdPushConstants(</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>                cmd,</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>                pipelineLayout,</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>                0,</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>                <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a>),</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>                &amp;modelPush</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>            );</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span> </div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>            VkBuffer vertexBuffers[] = {buffers.vertexBuffer};</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>            VkDeviceSize offsets[] = {0};</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>            vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>            vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>            vkCmdDrawIndexed(cmd, buffers.indexCount, 1, 0, 0, 0);</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>        }</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    }</div>
 </div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>}</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>}</div>
 <div class="ttc" id="aMesh_8hpp_html"><div class="ttname"><a href="Mesh_8hpp.html">Mesh.hpp</a></div><div class="ttdoc">This file defines MeshData struct and all other structs needed for it.</div></div>
 <div class="ttc" id="aVulkanMesh_8hpp_html"><div class="ttname"><a href="VulkanMesh_8hpp.html">VulkanMesh.hpp</a></div><div class="ttdoc">This file defines VulkanMesh class.</div></div>
 <div class="ttc" id="aclassvex_1_1VulkanMesh_html_a8f93f0aa79903bad35a77ae1dfd1ba89"><div class="ttname"><a href="classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89">vex::VulkanMesh::VulkanMesh</a></div><div class="ttdeci">VulkanMesh(VulkanContext &amp;context)</div><div class="ttdoc">Constructor for VulkanMesh class.</div><div class="ttdef"><b>Definition</b> <a href="#l00020">VulkanMesh.cpp:20</a></div></div>
-<div class="ttc" id="aclassvex_1_1VulkanMesh_html_ac0f01ab39fe5ad9ec06ff3851e669d9c"><div class="ttname"><a href="classvex_1_1VulkanMesh.html#ac0f01ab39fe5ad9ec06ff3851e669d9c">vex::VulkanMesh::draw</a></div><div class="ttdeci">void draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout, VulkanResources &amp;resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, MeshComponent mc) const</div><div class="ttdoc">Draws the mesh to the screen.</div><div class="ttdef"><b>Definition</b> <a href="#l00206">VulkanMesh.cpp:206</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanMesh_html_ac0f01ab39fe5ad9ec06ff3851e669d9c"><div class="ttname"><a href="classvex_1_1VulkanMesh.html#ac0f01ab39fe5ad9ec06ff3851e669d9c">vex::VulkanMesh::draw</a></div><div class="ttdeci">void draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout, VulkanResources &amp;resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, MeshComponent mc) const</div><div class="ttdoc">Draws the mesh to the screen.</div><div class="ttdef"><b>Definition</b> <a href="#l00204">VulkanMesh.cpp:204</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanMesh_html_ac8f9fc0c2c186c80b5085afd662ebd3f"><div class="ttname"><a href="classvex_1_1VulkanMesh.html#ac8f9fc0c2c186c80b5085afd662ebd3f">vex::VulkanMesh::upload</a></div><div class="ttdeci">void upload(const MeshData &amp;meshData)</div><div class="ttdoc">Uploads mesh data to the GPU.</div><div class="ttdef"><b>Definition</b> <a href="#l00040">VulkanMesh.cpp:40</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanResources_html"><div class="ttname"><a href="classvex_1_1VulkanResources.html">vex::VulkanResources</a></div><div class="ttdoc">This class manages resources like textures, descriptor sets, and uniform buffers.</div><div class="ttdef"><b>Definition</b> <a href="Resources_8hpp_source.html#l00021">Resources.hpp:21</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanResources_html_a6882b8e45bb261744a6cd8fd03f5719a"><div class="ttname"><a href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">vex::VulkanResources::getTextureIndex</a></div><div class="ttdeci">uint32_t getTextureIndex(const std::string &amp;name)</div><div class="ttdoc">Returns the index of a texture with the given name.</div><div class="ttdef"><b>Definition</b> <a href="Resources_8cpp_source.html#l00556">Resources.cpp:556</a></div></div>
@@ -431,7 +428,7 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="ttc" id="astructvex_1_1MeshData_html"><div class="ttname"><a href="structvex_1_1MeshData.html">vex::MeshData</a></div><div class="ttdoc">Mesh data structure for loading and managing mesh data.</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8hpp_source.html#l00040">Mesh.hpp:40</a></div></div>
 <div class="ttc" id="astructvex_1_1PushConstants_html"><div class="ttname"><a href="structvex_1_1PushConstants.html">vex::PushConstants</a></div><div class="ttdoc">Push constants, holds model information.</div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00049">uniforms.hpp:49</a></div></div>
 <div class="ttc" id="astructvex_1_1SceneLightsUBO_html"><div class="ttname"><a href="structvex_1_1SceneLightsUBO.html">vex::SceneLightsUBO</a></div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00043">uniforms.hpp:43</a></div></div>
-<div class="ttc" id="astructvex_1_1Vertex_html"><div class="ttname"><a href="structvex_1_1Vertex.html">vex::Vertex</a></div><div class="ttdoc">Vertex structure for mesh data.</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8hpp_source.html#l00022">Mesh.hpp:22</a></div></div>
+<div class="ttc" id="astructvex_1_1Vertex_html"><div class="ttname"><a href="structvex_1_1Vertex.html">vex::Vertex</a></div><div class="ttdoc">Vertex structure for mesh data.</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8hpp_source.html#l00024">Mesh.hpp:24</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00025">context.hpp:25</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanMesh_1_1SubmeshBuffers_html"><div class="ttname"><a href="structvex_1_1VulkanMesh_1_1SubmeshBuffers.html">vex::VulkanMesh::SubmeshBuffers</a></div><div class="ttdoc">struct used to hold buffers and allocations for each submesh in single object.</div><div class="ttdef"><b>Definition</b> <a href="VulkanMesh_8hpp_source.html#l00081">VulkanMesh.hpp:81</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

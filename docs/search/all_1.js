@@ -12,5 +12,6 @@ var searchData=
   ['bodyidhasher_9',['BodyIDHasher',['../structvex_1_1BodyIDHasher.html',1,'vex']]],
   ['bodytype_10',['BodyType',['../PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a',1,'vex']]],
   ['bplayerinterfaceimpl_11',['BPLayerInterfaceImpl',['../classvex_1_1BPLayerInterfaceImpl.html',1,'vex']]],
-  ['browsericons_12',['BrowserIcons',['../structvex_1_1BrowserIcons.html',1,'vex']]]
+  ['browsericons_12',['BrowserIcons',['../structvex_1_1BrowserIcons.html',1,'vex']]],
+  ['builddist_13',['BuildDist',['../classEditorMenuBar.html#ae15bcd914c5ce1871f08c031be192f43',1,'EditorMenuBar']]]
 ];
