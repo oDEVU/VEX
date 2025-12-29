@@ -10,8 +10,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <volk.h>
+#include <filesystem>
 
 #include "components/GameComponents/BasicComponents.hpp"
+#include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "ImReflect.hpp"
 
 #include "../Core/include/components/SceneManager.hpp"
@@ -385,6 +387,38 @@ namespace vex {
         }
     }
 
+    void Editor::HandleMeshDrop(const std::string& filepath, entt::entity parent) {
+        std::filesystem::path path(filepath);
+        std::string filename = path.stem().string();
+
+        vex::GameObject* newObj = vex::GameObjectFactory::getInstance().create("GameObject", *this, filename);
+        if (!newObj) return;
+
+        newObj->AddComponent(TransformComponent{});
+
+        if (parent != entt::null) {
+            newObj->GetComponent<vex::TransformComponent>().setParent(parent);
+        }
+
+        std::filesystem::path absPath = filepath;
+        std::filesystem::path assetDir = GetAssetDir();
+
+        std::filesystem::path relative = absPath.lexically_relative(assetDir);
+
+        std::string relativePath = relative.generic_string();
+
+        vex::MeshComponent meshComp = vex::createMeshFromPath(relativePath, *this);
+
+        newObj->AddComponent(meshComp);
+
+        getSceneManager()->GetScene(getSceneManager()->getLastSceneName())->AddEditorGameObject(newObj);
+
+        newObj->BeginPlay();
+        refreshForObject();
+
+        vex::log("Instantiated mesh from: %s", filepath.c_str());
+    }
+
     void Editor::drawEditorLayout(const SceneRenderData& data, glm::uvec2& outNewResolution) {
         ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->Pos);
@@ -473,6 +507,19 @@ namespace vex {
                 auto* drawList = ImGui::GetWindowDrawList();
                 drawList->AddText(ImVec2(textPos.x + 1.0f, textPos.y + 1.0f), IM_COL32(0, 0, 0, 255), fpsText);
                 drawList->AddText(textPos, fpsColor, fpsText);
+            }
+
+            if (ImGui::BeginDragDropTarget()) {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
+                    std::string filepath = (const char*)payload->Data;
+                    std::filesystem::path path(filepath);
+                    std::string ext = path.extension().string();
+
+                    if (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb") {
+                        HandleMeshDrop(filepath, entt::null);
+                    }
+                }
+                ImGui::EndDragDropTarget();
             }
 
             drawGizmo(glm::vec2(cursorScreenPos.x, cursorScreenPos.y),

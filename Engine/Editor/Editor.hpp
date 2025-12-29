@@ -75,6 +75,11 @@ namespace vex {
         /// @return ProjectProperties* - Pointer to the project properties structure.
         ProjectProperties* getProjectProperties() { return &m_projectProperties; }
 
+        /// @brief Handles the dropping of a mesh asset.
+        /// @param const std::string& filepath - Path to the dropped mesh asset.
+        /// @param entt::entity parent - Optional parent entity for the instantiated mesh.
+        void HandleMeshDrop(const std::string& filepath, entt::entity parent = entt::null);
+
         /// @brief Handler for post-hot-reload operations.
         void OnHotReload();
 

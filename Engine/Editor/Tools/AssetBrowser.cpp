@@ -57,6 +57,24 @@ namespace vex {
             if (ImGui::Button(" < Back ")) {
                 m_currentPath = m_currentPath.parent_path();
             }
+
+            if (ImGui::BeginDragDropTarget()) {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
+                    std::string sourcePathStr = (const char*)payload->Data;
+                    std::filesystem::path sourcePath(sourcePathStr);
+                    std::filesystem::path parentDir = m_currentPath.parent_path();
+                    std::filesystem::path destPath = parentDir / sourcePath.filename();
+
+                    try {
+                        if (sourcePath != destPath) {
+                            std::filesystem::rename(sourcePath, destPath);
+                        }
+                    } catch (const std::filesystem::filesystem_error& e) {
+                        vex::log("Error moving file up: %s", e.what());
+                    }
+                }
+                ImGui::EndDragDropTarget();
+            }
             ImGui::SameLine();
         }
         ImGui::Text("Path: %s", m_currentPath.string().c_str());
@@ -129,6 +147,39 @@ namespace vex {
                 ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
                 ImGui::ImageButton("##Icon", iconID, { m_thumbnailSize, m_thumbnailSize });
+
+                if (ImGui::BeginDragDropSource()) {
+                    std::string fullPath = entry.path().string();
+
+                    ImGui::SetDragDropPayload("ASSET_ITEM", fullPath.c_str(), fullPath.size() + 1);
+
+                    ImGui::Text("Move %s", entry.path().filename().string().c_str());
+                    ImGui::Image(iconID, { m_thumbnailSize/2, m_thumbnailSize/2 });
+
+                    ImGui::EndDragDropSource();
+                }
+
+                if (entry.is_directory()) {
+                    if (ImGui::BeginDragDropTarget()) {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
+                            std::string sourcePathStr = (const char*)payload->Data;
+                            std::filesystem::path sourcePath(sourcePathStr);
+                            std::filesystem::path targetFolder = entry.path();
+                            std::filesystem::path destPath = targetFolder / sourcePath.filename();
+
+                            try {
+                                bool isSubFolder = (targetFolder.string().find(sourcePath.string()) == 0);
+
+                                if (sourcePath != destPath && !isSubFolder) {
+                                    std::filesystem::rename(sourcePath, destPath);
+                                }
+                            } catch (const std::filesystem::filesystem_error& e) {
+                                vex::log("Error moving file: %s", e.what());
+                            }
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+                }
 
                 if (ImGui::IsItemHovered()) {
                     if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
