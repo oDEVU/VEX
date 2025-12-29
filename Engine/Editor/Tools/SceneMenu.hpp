@@ -25,9 +25,10 @@
 
 /// @brief Structure to define an action to be performed on a scene object outside of the hierarchy drawing loop.
 struct SceneAction {
-    enum Type { NONE, DELETE_ACTION, DUPLICATE, RENAME_START };
+    enum Type { NONE, DELETE_ACTION, DUPLICATE, RENAME_START, REPARENT };
     Type type = NONE;
     vex::GameObject* target = nullptr;
+    vex::GameObject* newParent = nullptr;
 };
 
 /**
@@ -52,6 +53,39 @@ inline std::string Demangle(const char* name) {
     };
     return (status == 0) ? res.get() : name;
 #endif
+}
+
+/// @brief Reparents a GameObject to another GameObject.
+/// @param vex::GameObject* child - The child GameObject to reparent.
+/// @param vex::GameObject* parent - The parent GameObject to reparent to.
+inline void ReparentObject(vex::GameObject* child, vex::GameObject* parent) {
+    if (!child || !parent || child == parent) return;
+
+    auto& childTc = child->GetComponent<vex::TransformComponent>();
+
+    entt::entity parentCheck = parent->GetEntity();
+    auto* registry = &child->GetEngine().getRegistry();
+
+    while(parentCheck != entt::null && registry->valid(parentCheck)) {
+        if(parentCheck == child->GetEntity()) {
+            return;
+        }
+        if(registry->all_of<vex::TransformComponent>(parentCheck)) {
+            parentCheck = registry->get<vex::TransformComponent>(parentCheck).getParent();
+        } else {
+            break;
+        }
+    }
+
+    glm::vec3 oldWorldPos = childTc.getWorldPosition();
+    glm::quat oldWorldRot = childTc.getWorldQuaternion();
+    glm::vec3 oldWorldScale = childTc.getWorldScale();
+
+    childTc.setParent(parent->GetEntity());
+
+    childTc.setWorldPosition(oldWorldPos);
+    childTc.setWorldQuaternion(oldWorldRot);
+    childTc.setWorldScale(oldWorldScale);
 }
 
 /**
@@ -106,6 +140,24 @@ inline void DrawEntityNode(
     }
 
     bool isOpen = ImGui::TreeNodeEx((void*)(uint64_t)entityID, flags, "%s", name.c_str());
+
+    if (ImGui::BeginDragDropSource()) {
+        ImGui::SetDragDropPayload("SCENE_HIERARCHY_NODE", &obj, sizeof(vex::GameObject*));
+
+        ImGui::Text("Moving %s", name.c_str());
+        ImGui::EndDragDropSource();
+    }
+
+    if (ImGui::BeginDragDropTarget()) {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_HIERARCHY_NODE")) {
+            vex::GameObject* droppedObject = *(vex::GameObject**)payload->Data;
+
+            outAction.type = SceneAction::REPARENT;
+            outAction.target = droppedObject;
+            outAction.newParent = obj;
+        }
+        ImGui::EndDragDropTarget();
+    }
 
     if (isRuntime) {
         ImGui::PopStyleColor();
@@ -344,4 +396,8 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
 
                 recursiveDelete(action.target);
             }
+
+        if (action.type == SceneAction::REPARENT && action.target && action.newParent) {
+            ReparentObject(action.target, action.newParent);
+        }
 }
