@@ -92,6 +92,8 @@ int main(int argc, char* argv[]) {
     vex::Editor engine("VEX Editor", 1280, 720, gInfo, projectPath.string());
     ctx.userdata = &engine;
 
+    vex::InitCrashHandler();
+
     vex::log("Starting Engine Loop with Hot Reload...");
 
     engine.run([&]() {

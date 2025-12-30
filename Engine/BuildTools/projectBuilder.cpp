@@ -458,6 +458,9 @@ int main(int argc, char* argv[]) {
                     if (src_path.string().find(".so") != std::string::npos ||
                         ext == ".dll" || ext == ".lib" || ext == ".pdb" || ext == ".dylib") {
                         fs::path dest_file = output_dir / src_path.filename();
+                        if (is_dist && (ext == ".pdb" || ext == ".debug" || ext == ".ilk" || ext == ".exp")) {
+                            continue;
+                        }
                         fs::copy_file(src_path, dest_file, fs::copy_options::overwrite_existing);
                         std::cout << "   [+] Copied " << src_path.filename().string() << "\n";
                     }

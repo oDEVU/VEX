@@ -18,6 +18,7 @@
      #endif
  #endif
 
+#include <vector>
  #include "VEX/VEX_export.h"
 
  namespace vex {
@@ -29,6 +30,9 @@
         ERROR,
         CRITICAL
     };
+
+    /// @brief Initializes the crash handler.
+    void VEX_EXPORT InitCrashHandler();
 
 /// @brief Throws an error with the given message and triggers cpptrace for debug builds.
 /// @details Example usage:

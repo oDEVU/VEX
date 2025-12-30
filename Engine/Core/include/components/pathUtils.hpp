@@ -20,4 +20,6 @@ namespace vex {
     std::string VEX_EXPORT GetAssetPath(const std::string& relativePath);
     /// @brief Get the path of an asset. Its different for debug and release builds since VirtualFileSystem implements asset loading differently depending on build type.
     std::filesystem::path VEX_EXPORT GetExecutableDir();
+    /// @brief Get the directory where logs and crash dumps should be stored.
+    std::filesystem::path VEX_EXPORT GetLogDir();
 }

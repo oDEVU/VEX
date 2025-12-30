@@ -385,3 +385,29 @@ export(TARGETS VEX
     FILE "${CMAKE_BINARY_DIR}/VEXTargets.cmake"
     NAMESPACE VEX::
 )
+
+if(CMAKE_BUILD_TYPE MATCHES "Release|RelWithDebInfo|MinSizeRel")
+    if(MSVC)
+        target_compile_options(${PROJECT_NAME} PRIVATE /Zi)
+        target_link_options(${PROJECT_NAME} PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+    else()
+        target_compile_options(${PROJECT_NAME} PRIVATE -g)
+        target_link_options(${PROJECT_NAME} PRIVATE -g)
+    endif()
+
+    if(UNIX AND NOT APPLE)
+        set(ENGINE_LIB "$<TARGET_FILE:${PROJECT_NAME}>")
+        set(ENGINE_DEBUG_FILE "${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so.debug")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND objcopy --only-keep-debug ${ENGINE_LIB} ${ENGINE_DEBUG_FILE}
+            COMMAND strip --strip-debug --strip-unneeded ${ENGINE_LIB}
+            COMMAND objcopy --add-gnu-debuglink=${ENGINE_DEBUG_FILE} ${ENGINE_LIB}
+            COMMENT "Generating debug symbols for VEX Engine: ${ENGINE_DEBUG_FILE}"
+        )
+    elseif(MSVC)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo ">> Engine PDB Generated: $<TARGET_PDB_FILE:${PROJECT_NAME}>"
+        )
+    endif()
+endif()

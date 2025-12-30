@@ -1,0 +1,100 @@
+I understand. The Markdown formatting inside the code block was clashing with the UI renderer.
+
+Here is the plain text for the tutorial file. You can save this content directly into a file named **`Debugging_Tutorial.md`**.
+
+# VEX Engine: Production Debugging Guide
+
+When a user experiences a crash in a **Distribution** or **Release** build, we do not ship debug symbols with the binary to keep the size small and protect IP. Instead, we use "Post-Mortem Debugging" by matching the user's **Crash Log** with the **Debug Symbols** stored on our build server.
+
+---
+
+## 1. Required Artifacts
+
+To solve a crash, you need two things:
+
+### A. The Crash Log (from the User)
+
+**Location:** `Engine/logs/game_session.log` on the user's machine.
+Look at the very end of the file for the header: `========== CRASH OCCURRED ==========`.
+
+### B. The Debug Symbols (from our Build Server)
+
+**Location:** * **Distribution Builds:** `Build/Symbols/Distribution/<Timestamp>/`
+
+* **Local Release Builds:** `Build/Symbols/Release/Latest/`
+
+**Files to look for:**
+
+* **Linux:** `libGameModule.so.debug` or `libVEX.so.debug`
+* **Windows:** `GameModule.pdb` or `VEX.pdb`
+
+---
+
+## 2. Reading the Log
+
+Open the user's `game_session.log`. You need to find the **Crash Address** and the **Base Address** for the specific module that crashed (e.g., `libGameModule.so`).
+
+```text
+========== CRASH OCCURRED ==========
+Reason: SIGSEGV
+Absolute Crash Address: 0x7f75d73bc7f0   <--- [1] CRASH ADDRESS
+
+... (CPU Registers) ...
+
+--- MEMORY MAP ---
+7f75d7200000-7f75d7400000 r-xp ... libGameModule.so  <--- [2] BASE ADDRESS
+...
+
+```
+
+1. **Crash Address:** The memory location where the failure occurred.
+2. **Base Address:** The starting address where the OS loaded that specific library. Use the **first** address on the line containing the module name.
+
+---
+
+## 3. Calculating the Offset
+
+Operating systems use ASLR (Address Space Layout Randomization). To find the source code line, we must calculate the **Relative Offset**.
+
+**Formula:** `Offset = Crash Address - Base Address`
+
+**Example:**
+
+* **Crash:** `0x7f75d73bc7f0`
+* **Base:** `0x7f75d7200000`
+* **Offset:** `0x1bc7f0`
+
+*(Tip: In a Linux terminal, you can calculate this with: `printf "0x%x\n" $((0x7f75d73bc7f0 - 0x7f75d7200000))`)*
+
+---
+
+## 4. Locating the Source Line
+
+Once you have the **Offset**, use our symbol files to find the code.
+
+### On Linux (addr2line)
+
+Run this in your terminal:
+`addr2line -e <PathToDebugFile> <Offset>`
+
+**Example:**
+`addr2line -e Build/Symbols/Distribution/2025-12-30_03-00/libGameModule.so.debug 0x1bc7f0`
+**Result:** `Source/Vehicle.cpp:88`
+
+### On Windows (llvm-symbolizer)
+
+If you have LLVM/Clang tools installed:
+`llvm-symbolizer --obj=<PathToPDB> <Offset>`
+
+**Example:**
+`llvm-symbolizer --obj="Build\Symbols\Distribution\2025-12-30_03-00\GameModule.pdb" 0x1bc7f0`
+**Result:** `D:\VEX\Source\Vehicle.cpp:88:12`
+
+---
+
+## Summary Checklist for Developers
+
+1. [ ] Get `game_session.log` from user.
+2. [ ] Find the matching symbols in `Build/Symbols/Distribution/`.
+3. [ ] Subtract **Base Address** from **Absolute Crash Address**.
+4. [ ] Run `addr2line` or `llvm-symbolizer` with the resulting **Offset**.

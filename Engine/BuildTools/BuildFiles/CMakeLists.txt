@@ -235,6 +235,86 @@ if(VEX_DIST_BUILD)
     endif()
 endif()
 
+if(CMAKE_BUILD_TYPE MATCHES "Release|RelWithDebInfo|MinSizeRel")
+
+    if(MSVC)
+        target_compile_options(${PROJECT_NAME} PRIVATE /Zi)
+        target_link_options(${PROJECT_NAME} PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+        target_compile_options(GameModule PRIVATE /Zi)
+        target_link_options(GameModule PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+    else()
+        target_compile_options(${PROJECT_NAME} PRIVATE -g)
+        target_compile_options(GameModule PRIVATE -g)
+        target_link_options(${PROJECT_NAME} PRIVATE -g)
+        target_link_options(GameModule PRIVATE -g)
+    endif()
+
+    get_filename_component(CURRENT_DIR_NAME "${CMAKE_CURRENT_SOURCE_DIR}" NAME)
+    if(CURRENT_DIR_NAME STREQUAL "Intermediate")
+        get_filename_component(REAL_PROJECT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    else()
+        set(REAL_PROJECT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
+    endif()
+
+    if(VEX_DIST_BUILD)
+        string(TIMESTAMP BUILD_ID "%Y-%m-%d_%H-%M-%S")
+        set(SYM_DIR "${REAL_PROJECT_ROOT}/Build/Symbols/Distribution/${BUILD_ID}")
+
+        add_compile_definitions(DIST_BUILD=1)
+        target_link_libraries(${PROJECT_NAME} PRIVATE GameModule)
+        if(UNIX AND NOT APPLE)
+            set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+            set_target_properties(GameModule PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+        endif()
+    else()
+        set(SYM_DIR "${REAL_PROJECT_ROOT}/Build/Symbols/Release/Latest")
+    endif()
+
+    file(MAKE_DIRECTORY ${SYM_DIR})
+
+    if(UNIX AND NOT APPLE)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${VEX_BUILD_DIR}/libVEX.so.debug" "${SYM_DIR}/"
+            COMMENT "Archiving Engine Debug Symbols to ${SYM_DIR}"
+        )
+    elseif(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${VEX_BUILD_DIR}/VEX.pdb" "${SYM_DIR}/"
+            COMMENT "Archiving Engine PDB to ${SYM_DIR}"
+        )
+    endif()
+
+    if(UNIX AND NOT APPLE)
+        set(GAME_DEBUG_FILE "${SYM_DIR}/${PROJECT_NAME}.debug")
+        set(LIB_DEBUG_FILE "${SYM_DIR}/libGameModule.so.debug")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}> ${GAME_DEBUG_FILE}
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:${PROJECT_NAME}>
+            COMMAND objcopy --add-gnu-debuglink=${GAME_DEBUG_FILE} $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Archiving Game Symbols to: ${SYM_DIR}"
+        )
+
+        add_custom_command(TARGET GameModule POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:GameModule> ${LIB_DEBUG_FILE}
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:GameModule>
+            COMMAND objcopy --add-gnu-debuglink=${LIB_DEBUG_FILE} $<TARGET_FILE:GameModule>
+        )
+
+    elseif(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:${PROJECT_NAME}> ${SYM_DIR}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>
+            COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_PDB_FILE:${PROJECT_NAME}>
+            COMMENT "Moving Game PDBs to: ${SYM_DIR}"
+        )
+
+        add_custom_command(TARGET GameModule POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:GameModule> ${SYM_DIR}/$<TARGET_PDB_FILE_NAME:GameModule>
+            COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_PDB_FILE:GameModule>
+        )
+    endif()
+endif()
+
 #target_sources(${PROJECT_NAME} PRIVATE main.cpp)
 #add_subdirectory(${ENGINE_PATH}/Core  ${CMAKE_BINARY_DIR}/Engine)
 #target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)

@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
     vex::Engine engine(VEX_PROJECT_TITLE, 1280, 720, gInfo);
 
     #ifdef DIST_BUILD
+        vex::InitCrashHandler();
         VexGame_Init(&engine);
         engine.run(nullptr);
     #else
@@ -35,6 +36,8 @@ int main(int argc, char* argv[]) {
     }
 
     ctx.userdata = &engine;
+
+    vex::InitCrashHandler();
 
     vex::log("Starting Engine Loop with Hot Reload...");
 

@@ -76,4 +76,17 @@ std::string GetAssetPath(const std::string& relativePath) {
     #endif
 }
 
+std::filesystem::path GetLogDir() {
+    std::filesystem::path logDir;
+    try {
+        logDir = GetExecutableDir() / "Engine" / "logs";
+        if (!std::filesystem::exists(logDir)) {
+            std::filesystem::create_directories(logDir);
+        }
+        return logDir;
+    } catch (...) {
+        return std::filesystem::current_path();
+    }
+}
+
 } // namespace vex
