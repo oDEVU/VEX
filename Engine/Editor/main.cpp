@@ -92,7 +92,11 @@ std::string GetModuleHash(const std::string& libPath) {
     std::filesystem::path exe = GetSelfPath();
     if (exe.empty()) return "0";
 
-    std::string cmd = "\"" + exe.string() + "\" --check-hash \"" + libPath + "\"";
+    #ifdef _WIN32
+        std::string cmd = "\"\"" + exe.string() + "\" --check-hash \"" + libPath + "\"\"";
+    #else
+        std::string cmd = "\"" + exe.string() + "\" --check-hash \"" + libPath + "\"";
+    #endif
     std::string result = "0";
 
 #ifdef _WIN32
