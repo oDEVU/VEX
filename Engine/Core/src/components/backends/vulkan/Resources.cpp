@@ -689,6 +689,22 @@ namespace vex {
 
             log("Image loaded from VFS: %dx%d, %d channels", texWidth, texHeight, texChannels);
 
+            uint32_t assignedIndex = 0;
+
+            if (!m_r_context.recycledTextureIndices.empty()) {
+                assignedIndex = m_r_context.recycledTextureIndices.front();
+                m_r_context.recycledTextureIndices.pop();
+                log("Recycling texture index: %u for '%s'", assignedIndex, name.c_str());
+            } else {
+                if (m_r_context.nextTextureIndex >= MAX_TEXTURES) {
+                    log(LogLevel::ERROR, "Maximum texture count (%u) reached!", MAX_TEXTURES);
+                    if (pixels) stbi_image_free(pixels);
+                    return false;
+                }
+                assignedIndex = m_r_context.nextTextureIndex++;
+                log("Assigning new texture index: %u for '%s'", assignedIndex, name.c_str());
+            }
+
             VkDeviceSize imageSize = texWidth * texHeight * 4;
 
             if (!pixels) {
@@ -812,7 +828,7 @@ namespace vex {
                 return false;
             }
 
-            m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
+            m_r_context.textureIndices[name] = assignedIndex;
             log("Assigned texture '%s' to index %u", name.c_str(), m_r_context.textureIndices[name]);
 
             m_textures[name] = textureView;
@@ -830,7 +846,7 @@ namespace vex {
                     write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
                     write.dstSet = m_r_context.bindlessDescriptorSet;
                     write.dstBinding = 0;
-                    write.dstArrayElement = m_r_context.textureIndices[name]; // Write to specific array index
+                    write.dstArrayElement = assignedIndex;
                     write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                     write.descriptorCount = 1;
                     write.pImageInfo = &imageInfo;
@@ -866,6 +882,8 @@ namespace vex {
                 return;
             }
 
+            uint32_t textureIndex = m_r_context.textureIndices[name];
+
             vkDeviceWaitIdle(m_r_context.device);
 
             if (m_textureViews[name] != VK_NULL_HANDLE) {
@@ -878,12 +896,45 @@ namespace vex {
                 m_textureImages[name] = VK_NULL_HANDLE;
             }
 
+            VkImageView defaultView = getTextureView("default");
+
+            VkDescriptorImageInfo imageInfo{};
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            imageInfo.imageView = defaultView;
+            imageInfo.sampler = m_textureSampler;
+
+            if (m_r_context.supportsBindlessTextures) {
+                VkWriteDescriptorSet bindlessWrite{};
+                bindlessWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                bindlessWrite.dstSet = m_r_context.bindlessDescriptorSet;
+                bindlessWrite.dstBinding = 0;
+                bindlessWrite.dstArrayElement = textureIndex;
+                bindlessWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                bindlessWrite.descriptorCount = 1;
+                bindlessWrite.pImageInfo = &imageInfo;
+
+                vkUpdateDescriptorSets(m_r_context.device, 1, &bindlessWrite, 0, nullptr);
+            }
+
+            for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
+                VkWriteDescriptorSet write{};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = getTextureDescriptorSet(frame, textureIndex);
+                write.dstBinding = 0;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                write.descriptorCount = 1;
+                write.pImageInfo = &imageInfo;
+
+                vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+            }
+
             m_textures.erase(name);
             m_textureImages.erase(name);
             m_textureAllocations.erase(name);
             m_textureViews.erase(name);
 
             m_r_context.textureIndices.erase(name);
+            m_r_context.recycledTextureIndices.push(textureIndex);
 
             log("Texture %s unloaded", name.c_str());
         }

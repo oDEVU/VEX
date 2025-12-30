@@ -17,6 +17,7 @@
 #include <unordered_map>
 #include <components/types.hpp>
 #include <string>
+#include <queue>
 #include "components/enviroment.hpp"
 
 namespace vex {
@@ -108,6 +109,8 @@ namespace vex {
 
         vex_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;
+
+        std::queue<uint32_t> recycledTextureIndices;
 
         glm::uvec2 currentRenderResolution;
 
