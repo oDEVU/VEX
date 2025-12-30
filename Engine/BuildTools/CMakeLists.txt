@@ -14,6 +14,21 @@ add_executable(ProjectBuilder
     projectBuilder.cpp
 )
 
+add_executable(VexCrashDecoder
+    VexCrashDecoder/main.cpp
+    VexCrashDecoder/CrashDecoder.cpp
+    VexCrashDecoder/CrashDecoder.hpp
+)
+
+if(WIN32)
+    target_link_libraries(VexCrashDecoder PRIVATE dbghelp)
+endif()
+
+target_include_directories(VexCrashDecoder PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/VexCrashDecoder
+)
+
 set(BUILD_FILES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/BuildFiles")
 set(BUILD_FILES_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/BuildFiles")
 
