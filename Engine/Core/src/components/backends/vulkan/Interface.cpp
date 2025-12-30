@@ -253,12 +253,12 @@ namespace vex {
             throw_error("Failed to create logical device");
         }
 
-        log("\n ======= Supported Features =======");
+        log(" ======= Supported Features =======");
         log("supportsMultiDraw: %s", m_context.supportsMultiDraw ? "true" : "false");
         log("supportsIndirectDraw: %s", m_context.supportsIndirectDraw ? "true" : "false");
         log("supportsBindlessTextures: %s", m_context.supportsBindlessTextures ? "true" : "false");
         log("supportsShaderDrawParameters: %s", m_context.supportsShaderDrawParameters ? "true" : "false");
-        log(" ==================================\n");
+        log(" ==================================");
 
         volkLoadDevice(m_context.device);
 

@@ -244,7 +244,9 @@ namespace vex {
     LONG WINAPI WindowsCrashHandler(EXCEPTION_POINTERS* p) {
         WriteCrashReport("Exception (Windows)", p);
         #if DEBUG
-            cpptrace::generate_trace().print();
+            std::string trace_str = cpptrace::generate_trace().to_string();
+            log(LogLevel::CRITICAL, "\n--- VEX ENGINE STACKTRACE ---\n%s\n",
+            trace_str.c_str());
         #endif
         return EXCEPTION_EXECUTE_HANDLER;
     }
