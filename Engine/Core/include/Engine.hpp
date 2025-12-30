@@ -39,6 +39,9 @@ struct SkipInit {};
 /// @brief Class for interaction with engine systems, your game main class will Inherit from it.
 class VEX_EXPORT Engine {
 public:
+    /// @brief returns engine hash generated during build process.
+    static const char* GetBuildHash();
+
     /// @brief Constructor for Engine class, that will handle initialization of every system with given params.
     /// @param char* title       - Title of the game window.
     /// @param int width  - Initial width of the game window.

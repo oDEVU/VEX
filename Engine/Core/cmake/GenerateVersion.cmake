@@ -1,0 +1,10 @@
+string(TIMESTAMP BUILD_TIMESTAMP "%Y%m%d%H%M%S")
+string(RANDOM LENGTH 8 ALPHABET "0123456789abcdef" BUILD_HASH)
+
+set(VEX_BUILD_ID "${BUILD_TIMESTAMP}_${BUILD_HASH}")
+
+configure_file(
+    "${SRC_FILE}"
+    "${DST_FILE}"
+    @ONLY
+)

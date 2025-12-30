@@ -11,3 +11,4 @@ Intermediate
 compile_commands.json
 perf.data
 perf.data.old
+Engine/Core/include/VexBuildVersion.hpp

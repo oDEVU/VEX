@@ -4,6 +4,7 @@
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"
+#include <VexBuildVersion.hpp>
 
 #ifndef VEX_MAIN_SCENE
 #define VEX_MAIN_SCENE "Assets/scenes/main.json"
@@ -49,6 +50,17 @@ namespace JPH {
     AssertFailedFunction AssertFailed = DummyAssertFailed;
 }
 #endif
+
+extern "C" {
+    #ifdef _WIN32
+    __declspec(dllexport)
+    #else
+    __attribute__((visibility("default")))
+    #endif
+    const char* VexModule_GetExpectedHash() {
+        return VEX_ENGINE_BUILD_ID;
+    }
+}
 
 extern "C" {
     #ifdef _WIN32

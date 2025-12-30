@@ -3,6 +3,25 @@ cmake_minimum_required(VERSION 3.20)
 project(VEX)
 set(NAMESPACE_NAME "VEX")
 
+set(SRC_FILE "${CMAKE_CURRENT_SOURCE_DIR}/include/VexBuildVersion.hpp.in")
+set(DST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/include/VexBuildVersion.hpp")
+
+if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (NOT EXISTS "${DST_FILE}"))
+
+    message(STATUS ">> [BuildID] Generating new VEX Build ID (Config: ${CMAKE_BUILD_TYPE})...")
+
+    include(cmake/GenerateVersion.cmake OPTIONAL RESULT_VARIABLE VERSION_GEN_RESULT)
+    if(NOT VERSION_GEN_RESULT)
+        string(TIMESTAMP VEX_BUILD_ID "%Y%m%d%H%M%S")
+        configure_file(${SRC_FILE} ${DST_FILE} @ONLY)
+    endif()
+
+else()
+    message(STATUS ">> [BuildID] Skipping generation for ${CMAKE_BUILD_TYPE} (Using existing header).")
+endif()
+
+list(APPEND public_header_files include/VexBuildVersion.hpp)
+
 option(BUILD_SHARED_LIBS "Build the shared library" ON)
 set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -56,6 +75,7 @@ generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(public_header_files
+    include/VexBuildVersion.hpp
     include/Engine.hpp
     include/components/Mesh.hpp
     include/components/ResolutionManager.hpp

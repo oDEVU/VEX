@@ -6,6 +6,12 @@
 #include <thread>
 #include <atomic>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
 #include "Engine.hpp"
 #include "Editor.hpp"
 #include "DialogWindow.hpp"
@@ -14,6 +20,102 @@
 
 #include "components/errorUtils.hpp"
 #include "components/GameInfo.hpp"
+
+std::string GetModuleHash(const std::string& path) {
+    std::string hash = "0";
+#ifdef _WIN32
+    HMODULE lib = LoadLibraryExA(path.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+    if (lib) {
+        typedef const char* (*FuncType)();
+        FuncType func = (FuncType)GetProcAddress(lib, "VexModule_GetExpectedHash");
+        if (func) {
+            hash = func();
+        } else {
+            std::cerr << ">> [Warning] GameModule is missing hash export (VexModule_GetExpectedHash).\n"
+                      << "             This usually means it was built with an older Engine version.\n";
+        }
+        FreeLibrary(lib);
+    }
+#else
+    void* lib = dlopen(path.c_str(), RTLD_LAZY | RTLD_LOCAL);
+    if (lib) {
+        typedef const char* (*FuncType)();
+        FuncType func = (FuncType)dlsym(lib, "VexModule_GetExpectedHash");
+        if (func) {
+            hash = func();
+        } else {
+            std::cerr << ">> [Warning] GameModule is missing hash export (VexModule_GetExpectedHash).\n"
+                      << "             This usually means it was built with an older Engine version.\n";
+        }
+        dlclose(lib);
+    }
+#endif
+    return hash;
+}
+
+void RestartApplication(int argc, char* argv[]) {
+    vex::log(">> Restarting Application...");
+#ifdef _WIN32
+    char exePath[MAX_PATH];
+    if (GetModuleFileNameA(NULL, exePath, MAX_PATH) == 0) {
+        vex::log("Fatal: Could not get executable path.");
+        exit(1);
+    }
+
+    std::string params = "";
+    for (int i = 1; i < argc; i++) {
+        params += "\"" + std::string(argv[i]) + "\" ";
+    }
+
+    ShellExecuteA(NULL, "open", exePath, params.c_str(), NULL, SW_SHOWDEFAULT);
+    exit(0);
+
+#else
+    char exePath[PATH_MAX];
+    ssize_t len = readlink("/proc/self/exe", exePath, sizeof(exePath) - 1);
+
+    if (len == -1) {
+        perror("readlink failed");
+        exit(1);
+    }
+    exePath[len] = '\0';
+
+    execv(exePath, argv);
+    perror("execv failed");
+    exit(1);
+#endif
+}
+
+void RebuildProject(const fs::path& projectPath, vex::GameInfo& info, bool clean) {
+    vex::DialogWindow dialogWindow(clean ? "Engine Updated - Clean Rebuilding..." : "Building Project...", info);
+
+    std::atomic<bool> ui_ready{false};
+    std::thread ui_thread([&]() {
+        ui_ready.store(true);
+        dialogWindow.run();
+    });
+
+    while (!ui_ready.load()) std::this_thread::yield();
+
+    std::string command;
+    std::string cleanFlag = clean ? " -clean" : "";
+
+    #ifdef _WIN32
+        command = "..\\..\\BuildTools\\build\\ProjectBuilder.exe \"" + projectPath.string() + "\" -d" + cleanFlag;
+    #else
+        command = "../../BuildTools/build/ProjectBuilder \"" + projectPath.string() + "\" -d" + cleanFlag;
+    #endif
+
+    std::string outputLog;
+    executeCommandRealTime(command, [&](const std::string& line) {
+        outputLog += line;
+        std::cout << line;
+        dialogWindow.setDialogContent(outputLog);
+    });
+
+    dialogWindow.stop();
+    ui_thread.join();
+}
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -24,8 +126,8 @@ int main(int argc, char* argv[]) {
 
     vex::GameInfo dialogGameInfo("Dialog Window", 1, 0, 0);
 
-    fs::path projectPath = argv[1];
-    fs::path modulePath = projectPath / "Build" / "Debug";
+    std::filesystem::path projectPath = argv[1];
+    std::filesystem::path modulePath = projectPath / "Build" / "Debug";
 
     #ifdef __linux__
         std::string libPath = modulePath.string() + "/libGameModule.so";
@@ -33,48 +135,28 @@ int main(int argc, char* argv[]) {
         std::string libPath = modulePath.string() + "\\GameModule.dll";
     #endif
 
-    if (!fs::exists(projectPath / "VexProject.json")) {
+    if (!std::filesystem::exists(projectPath / "VexProject.json")) {
         createBasicDialog("Error", "No valid vex project file in path:\n" + projectPath.string(), dialogGameInfo);
         std::cerr << "Error: No valid vex project file in path: " << projectPath.string() << "\n";
         return 1;
     }
 
-    if (!fs::exists(fs::path(libPath))) {
-        vex::log("Info: Could not find game module: %s\nRebuilding...", libPath.c_str());
+    if (!fs::exists(libPath)) {
+        vex::log("Game Module missing. Building...");
+        RebuildProject(projectPath, dialogGameInfo, false);
+    }
 
-        vex::DialogWindow dialogWindow("Building Project...", dialogGameInfo);
+    std::string engineHash = vex::Engine::GetBuildHash();
+    std::string moduleHash = GetModuleHash(libPath);
 
-        std::atomic<bool> ui_ready{false};
-        std::thread ui_thread([&]() {
-                ui_ready.store(true);
-                dialogWindow.run();
-                vex::log("Info: Dialog window UI thread finished.");
-            });
+    if (moduleHash.empty() || moduleHash != engineHash) {
+        vex::log(">> ABI Mismatch Detected!");
+        vex::log("   Engine Hash: %s", engineHash.c_str());
+        vex::log("   Module Hash: %s", moduleHash.empty() ? "Unknown/Missing" : moduleHash.c_str());
 
-            while (!ui_ready.load()) {
-                std::this_thread::yield();
-            }
-
-        std::string command;
-        std::string outputLog;
-
-        #ifdef _WIN32
-            command = "..\\..\\BuildTools\\build\\ProjectBuilder.exe \"" + projectPath.string() + "\" -d";
-        #else
-            command = "../../BuildTools/build/ProjectBuilder \"" + projectPath.string() + "\" -d";
-        #endif
-
-        vex::log("Executing command: %s", command.c_str());
-
-        executeCommandRealTime(command,
-            [&](const std::string& line) {
-                outputLog += line;
-                std::cout << line;
-                dialogWindow.setDialogContent(outputLog);
-            }
-        );
-        dialogWindow.stop();
-        ui_thread.join();
+        RebuildProject(projectPath, dialogGameInfo, true);
+        RestartApplication(argc, argv);
+        return 0;
     }
 
     cr_plugin ctx = {};

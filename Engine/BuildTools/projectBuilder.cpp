@@ -123,22 +123,22 @@ void BundleLinuxLibs(const std::filesystem::path& outputDir) {
 void BundleWindowsDeps(const std::filesystem::path& outputDir) {
     std::cout << ">> Downloading Windows Dependencies...\n";
 
-    namespace fs = std::filesystem;
-    fs::path depsDir = outputDir / "deps";
 
-    if (!fs::exists(depsDir)) {
-        fs::create_directories(depsDir);
+    std::filesystem::path depsDir = outputDir / "deps";
+
+    if (!std::filesystem::exists(depsDir)) {
+        std::filesystem::create_directories(depsDir);
     }
 
     std::string redistUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe";
-    fs::path redistPath = depsDir / "vc_redist.x64.exe";
+    std::filesystem::path redistPath = depsDir / "vc_redist.x64.exe";
 
     std::string downloadCmd = "curl -L \"" + redistUrl + "\" -o \"" + redistPath.string() + "\"";
 
     std::cout << "   [+] Fetching Visual C++ Redistributable...\n";
     int result = std::system(downloadCmd.c_str());
 
-    if (result == 0 && fs::exists(redistPath)) {
+    if (result == 0 && std::filesystem::exists(redistPath)) {
         std::cout << "   [+] Successfully downloaded to: " << redistPath.string() << "\n";
     } else {
         std::cerr << "   [!] Failed to download redistributable. Error code: " << result << "\n";
@@ -147,8 +147,34 @@ void BundleWindowsDeps(const std::filesystem::path& outputDir) {
     }
 }
 
+void PerformSafeClean(const std::filesystem::path& projectDir) {
+    std::cout << ">> [Clean] Cleaning Project Artifacts...\n";
+
+    std::filesystem::path intermediate = projectDir / "Intermediate";
+    if (std::filesystem::exists(intermediate)) {
+        std::filesystem::remove_all(intermediate);
+        std::cout << "   [+] Removed Intermediate\n";
+    }
+
+    std::filesystem::path buildDir = projectDir / "Build";
+    if (std::filesystem::exists(buildDir)) {
+        for (const auto& entry : std::filesystem::directory_iterator(buildDir)) {
+            if (entry.is_directory()) {
+                std::string folderName = entry.path().filename().string();
+
+                if (folderName != "Symbols") {
+                    std::filesystem::remove_all(entry.path());
+                    std::cout << "   [+] Removed Build/" << folderName << "\n";
+                } else {
+                    std::cout << "   [=] Preserved Build/Symbols\n";
+                }
+            }
+        }
+    }
+}
+
 bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std::string& buildType, const std::string& parallel, bool is_dist = false) {
-    namespace fs = std::filesystem;
+
 
     std::string engineRelPath = GetEngineCorePath();
     if (engineRelPath.empty()) {
@@ -156,7 +182,7 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
         return false;
     }
 
-    fs::path enginePath = fs::weakly_canonical(projectDir / engineRelPath);
+    std::filesystem::path enginePath = std::filesystem::weakly_canonical(projectDir / engineRelPath);
 
     std::string cmakeConfig = "Release";
     std::string outputDirName = "Release";
@@ -169,25 +195,25 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
         outputDirName = "Distribution";
     }
 
-    fs::path engineBuildDir = enginePath / "bin" / outputDirName;
-    fs::path targetFile = engineBuildDir / "VEXTargets.cmake";
+    std::filesystem::path engineBuildDir = enginePath / "bin" / outputDirName;
+    std::filesystem::path targetFile = engineBuildDir / "VEXTargets.cmake";
 
     #ifdef __linux__
-        fs::path libFile = engineBuildDir / "libVEX.so";
+        std::filesystem::path libFile = engineBuildDir / "libVEX.so";
     #else
-        fs::path libFile = engineBuildDir / "VEX.dll";
+        std::filesystem::path libFile = engineBuildDir / "VEX.dll";
     #endif
 
-    if (fs::exists(targetFile) && fs::exists(libFile)) {
+    if (std::filesystem::exists(targetFile) && std::filesystem::exists(libFile)) {
         return true;
     }
 
     std::cout << ">> Shared VEX Engine (" << outputDirName << ") missing. Building it now...\n";
     std::cout << ">> Engine Path: " << enginePath.string() << "\n";
 
-    fs::create_directories(engineBuildDir);
+    std::filesystem::create_directories(engineBuildDir);
 
-    fs::path cmakeSource = enginePath;
+    std::filesystem::path cmakeSource = enginePath;
 
     std::string configCmd = "cmake -G Ninja -S \"" + cmakeSource.string() + "\" -B \"" + engineBuildDir.string() +
                             "\" -DCMAKE_BUILD_TYPE=" + cmakeConfig + " -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=" + GetCXXCompiler();
@@ -212,12 +238,12 @@ bool EnsureSharedEngineBuilt(const std::filesystem::path& projectDir, const std:
 }
 
 int main(int argc, char* argv[]) {
-    namespace fs = std::filesystem;
+
 
     // Set working directory to parent of executable
     try {
-        fs::current_path(GetExecutableDir() / "..");
-    } catch (const fs::filesystem_error& e) {
+        std::filesystem::current_path(GetExecutableDir() / "..");
+    } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << "Failed to set working directory: " << e.what() << '\n';
         return 1;
     }
@@ -230,26 +256,24 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    fs::path project_dir = argv[1];
+    std::filesystem::path project_dir = argv[1];
     std::string build_type = "-debug";
     bool is_dist = false;
+    bool clean_build = false;
 
-    if (argc >= 3) {
-        std::string arg2 = argv[2];
-        if (arg2 == "-debug" || arg2 == "-d") {
-            build_type = "-debug";
-        } else if (arg2 == "-release" || arg2 == "-r") {
-            build_type = "-release";
-        } else if (arg2 == "-dist" || arg2 == "-distribution") {
+    for (int i = 2; i < argc; i++) {
+        std::string arg = argv[i];
+        if (arg == "-debug" || arg == "-d") build_type = "-debug";
+        else if (arg == "-release" || arg == "-r") build_type = "-release";
+        else if (arg == "-dist" || arg == "-distribution") {
             build_type = "-release";
             is_dist = true;
-        } else {
-            std::cout << "Invalid build type '" << arg2 << "'. Defaulting to debug.\n";
         }
+        else if (arg == "-clean" || arg == "--clean") clean_build = true;
     }
 
-    fs::path vex_project_file = project_dir / "VexProject.json";
-    if (!fs::exists(project_dir) || !fs::is_directory(project_dir) || !fs::exists(vex_project_file)) {
+    std::filesystem::path vex_project_file = project_dir / "VexProject.json";
+    if (!std::filesystem::exists(project_dir) || !std::filesystem::is_directory(project_dir) || !std::filesystem::exists(vex_project_file)) {
         std::cerr << "Project directory does not exist: \"" << project_dir.string() << "\" or does not contain VexProject.json\n";
         return 1;
     }
@@ -258,68 +282,72 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
-    fs::path intermediate_dir = project_dir / "Intermediate";
-    if (!fs::exists(intermediate_dir) || !fs::is_directory(intermediate_dir)) {
-        fs::create_directory(intermediate_dir);
+    if (clean_build) {
+        PerformSafeClean(project_dir);
+    }
+
+    std::filesystem::path intermediate_dir = project_dir / "Intermediate";
+    if (!std::filesystem::exists(intermediate_dir) || !std::filesystem::is_directory(intermediate_dir)) {
+        std::filesystem::create_directory(intermediate_dir);
     }
 
     try {
-        fs::path build_path = project_dir / "build";
-        fs::path Build_path = project_dir / "Build"; // Handle case sensitivity
-        for (const auto& entry : fs::directory_iterator(project_dir)) {
-            auto path = fs::weakly_canonical(entry.path());
+        std::filesystem::path build_path = project_dir / "build";
+        std::filesystem::path Build_path = project_dir / "Build"; // Handle case sensitivity
+        for (const auto& entry : std::filesystem::directory_iterator(project_dir)) {
+            auto path = std::filesystem::weakly_canonical(entry.path());
             auto filename = path.filename().string();
             std::cout << intermediate_dir.string() << '\n';
-            if (path != fs::weakly_canonical(build_path) &&
-                path != fs::weakly_canonical(Build_path) &&
-                path != fs::weakly_canonical(intermediate_dir)) {
-                fs::path dest_path = intermediate_dir / filename;
-                if (fs::exists(dest_path)) {
-                    fs::remove_all(dest_path);
+            if (path != std::filesystem::weakly_canonical(build_path) &&
+                path != std::filesystem::weakly_canonical(Build_path) &&
+                path != std::filesystem::weakly_canonical(intermediate_dir)) {
+                std::filesystem::path dest_path = intermediate_dir / filename;
+                if (std::filesystem::exists(dest_path)) {
+                    std::filesystem::remove_all(dest_path);
                 }
-                fs::copy(entry.path(), dest_path, fs::copy_options::recursive);
+                std::filesystem::copy(entry.path(), dest_path, std::filesystem::copy_options::recursive);
             }
         }
-    } catch (const fs::filesystem_error& e) {
+    } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << e.what() << '\n';
         return 1;
     }
 
-    fs::path cmakelists_src = "BuildFiles/CMakeLists.txt";
-    fs::path cmakelists_dest = intermediate_dir / "CMakeLists.txt";
-    if (fs::exists(cmakelists_dest)) {
-        fs::remove_all(cmakelists_dest);
+    std::filesystem::path cmakelists_src = "BuildFiles/CMakeLists.txt";
+    std::filesystem::path cmakelists_dest = intermediate_dir / "CMakeLists.txt";
+    if (std::filesystem::exists(cmakelists_dest)) {
+        std::filesystem::remove_all(cmakelists_dest);
     }
-    fs::copy(cmakelists_src, cmakelists_dest);
+    std::filesystem::copy(cmakelists_src, cmakelists_dest);
 
-    fs::path main_src = "BuildFiles/main.cpp";
-    fs::path main_dest = intermediate_dir / "main.cpp";
-    if (fs::exists(main_dest)) {
-        fs::remove_all(main_dest);
+    std::filesystem::path main_src = "BuildFiles/main.cpp";
+    std::filesystem::path main_dest = intermediate_dir / "main.cpp";
+    if (std::filesystem::exists(main_dest)) {
+        std::filesystem::remove_all(main_dest);
     }
-    fs::copy(main_src, main_dest);
+    std::filesystem::copy(main_src, main_dest);
 
-    fs::path module_src = "BuildFiles/Source/GameEntry.cpp";
-    fs::path module_dest = intermediate_dir / "Source" / "GameEntry.cpp";
-    if (fs::exists(module_dest)) {
-        fs::remove_all(module_dest);
+    std::filesystem::path module_src = "BuildFiles/Source/GameEntry.cpp";
+    std::filesystem::path module_dest = intermediate_dir / "Source" / "GameEntry.cpp";
+    if (std::filesystem::exists(module_dest)) {
+        std::filesystem::remove_all(module_dest);
     }
-    fs::copy(module_src, module_dest);
+    std::filesystem::copy(module_src, module_dest);
 
     // Change working directory to Intermediate
     try {
-        fs::current_path(intermediate_dir);
-    } catch (const fs::filesystem_error& e) {
+        std::filesystem::current_path(intermediate_dir);
+    } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << "Failed to change directory: " << e.what() << '\n';
         return 1;
     }
 
     // Execute CMake configure
-    fs::path build_dir = intermediate_dir / "build/debug";
-    fs::path output_dir = project_dir / "Build";
+    std::filesystem::path build_dir = intermediate_dir / "build/debug";
+    std::filesystem::path output_dir = project_dir / "Build";
 
-    if (!fs::exists(output_dir)) {
-        fs::create_directory(output_dir);
+    if (!std::filesystem::exists(output_dir)) {
+        std::filesystem::create_directory(output_dir);
     }
 
     std::string engineArg = " -DVEX_ENGINE_PATH=\"" + ToCMakePath(GetEnginePath()) + "\"";
@@ -372,61 +400,61 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    if (!fs::exists(output_dir)) {
-        fs::create_directory(output_dir);
+    if (!std::filesystem::exists(output_dir)) {
+        std::filesystem::create_directory(output_dir);
     } else {
-        fs::remove_all(output_dir);
-        fs::create_directory(output_dir);
+        std::filesystem::remove_all(output_dir);
+        std::filesystem::create_directory(output_dir);
     }
 
     try {
-        fs::path cpack_source = build_dir / "CPackSourceConfig.cmake";
-        fs::path cpack_config = build_dir / "CPackConfig.cmake";
-        fs::path deps = build_dir / "_deps";
-        fs::path cmake_files = build_dir / "CMakeFiles";
-        fs::path cmake_cache = build_dir / "CMakeCache.txt";
-        fs::path cmake_cache_dir = build_dir / ".cache";
-        fs::path cmake_install = build_dir / "cmake_install.cmake";
-        fs::path compile_commands = build_dir / "compile_commands.json";
-        fs::path ninja_deps = build_dir / ".ninja_deps";
-        fs::path ninja_log = build_dir / ".ninja_log";
-        fs::path build_ninja = build_dir / "build.ninja";
-        fs::path yoga_bin = build_dir / "bin";
-        fs::path yoga_lib = build_dir / "lib";
-        fs::path yoga_tests = build_dir / "yogatests";
+        std::filesystem::path cpack_source = build_dir / "CPackSourceConfig.cmake";
+        std::filesystem::path cpack_config = build_dir / "CPackConfig.cmake";
+        std::filesystem::path deps = build_dir / "_deps";
+        std::filesystem::path cmake_files = build_dir / "CMakeFiles";
+        std::filesystem::path cmake_cache = build_dir / "CMakeCache.txt";
+        std::filesystem::path cmake_cache_dir = build_dir / ".cache";
+        std::filesystem::path cmake_install = build_dir / "cmake_install.cmake";
+        std::filesystem::path compile_commands = build_dir / "compile_commands.json";
+        std::filesystem::path ninja_deps = build_dir / ".ninja_deps";
+        std::filesystem::path ninja_log = build_dir / ".ninja_log";
+        std::filesystem::path build_ninja = build_dir / "build.ninja";
+        std::filesystem::path yoga_bin = build_dir / "bin";
+        std::filesystem::path yoga_lib = build_dir / "lib";
+        std::filesystem::path yoga_tests = build_dir / "yogatests";
 
-        for (const auto& entry : fs::directory_iterator(build_dir)) {
-            auto path = fs::weakly_canonical(entry.path());
+        for (const auto& entry : std::filesystem::directory_iterator(build_dir)) {
+            auto path = std::filesystem::weakly_canonical(entry.path());
             auto filename = path.filename().string();
-            if (path != fs::weakly_canonical(cpack_source) &&
-                path != fs::weakly_canonical(cpack_config) &&
-                path != fs::weakly_canonical(deps) &&
-                path != fs::weakly_canonical(cmake_files) &&
-                path != fs::weakly_canonical(cmake_cache) &&
-                path != fs::weakly_canonical(cmake_cache_dir) &&
-                path != fs::weakly_canonical(cmake_install) &&
-                path != fs::weakly_canonical(compile_commands) &&
-                path != fs::weakly_canonical(ninja_deps) &&
-                path != fs::weakly_canonical(ninja_log) &&
-                path != fs::weakly_canonical(build_ninja) &&
-                path != fs::weakly_canonical(yoga_bin) &&
-                path != fs::weakly_canonical(yoga_lib) &&
-                path != fs::weakly_canonical(yoga_tests) &&
+            if (path != std::filesystem::weakly_canonical(cpack_source) &&
+                path != std::filesystem::weakly_canonical(cpack_config) &&
+                path != std::filesystem::weakly_canonical(deps) &&
+                path != std::filesystem::weakly_canonical(cmake_files) &&
+                path != std::filesystem::weakly_canonical(cmake_cache) &&
+                path != std::filesystem::weakly_canonical(cmake_cache_dir) &&
+                path != std::filesystem::weakly_canonical(cmake_install) &&
+                path != std::filesystem::weakly_canonical(compile_commands) &&
+                path != std::filesystem::weakly_canonical(ninja_deps) &&
+                path != std::filesystem::weakly_canonical(ninja_log) &&
+                path != std::filesystem::weakly_canonical(build_ninja) &&
+                path != std::filesystem::weakly_canonical(yoga_bin) &&
+                path != std::filesystem::weakly_canonical(yoga_lib) &&
+                path != std::filesystem::weakly_canonical(yoga_tests) &&
                 filename.find("cmake") == std::string::npos) {
-                fs::path dest_path = output_dir / filename;
-                if (fs::exists(dest_path)) {
-                    fs::remove_all(dest_path);
+                std::filesystem::path dest_path = output_dir / filename;
+                if (std::filesystem::exists(dest_path)) {
+                    std::filesystem::remove_all(dest_path);
                 }
-                fs::copy(entry.path(), dest_path, fs::copy_options::recursive);
+                std::filesystem::copy(entry.path(), dest_path, std::filesystem::copy_options::recursive);
             }
         }
-    } catch (const fs::filesystem_error& e) {
+    } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << e.what() << '\n';
         return 1;
     }
 
     std::string engine_rel_path = GetEngineCorePath();
-    fs::path engine_root = fs::weakly_canonical(project_dir / engine_rel_path);
+    std::filesystem::path engine_root = std::filesystem::weakly_canonical(project_dir / engine_rel_path);
 
     std::string config_name = (build_type == "-d" || build_type == "-debug") ? "Debug" : "Release";
 
@@ -434,34 +462,34 @@ int main(int argc, char* argv[]) {
     if (is_dist) {
         engine_bin_config = "Distribution";
     }
-    fs::path engine_bin_dir = engine_root / "bin" / engine_bin_config;
+    std::filesystem::path engine_bin_dir = engine_root / "bin" / engine_bin_config;
 
     std::cout << ">> Linking Shared Engine artifacts from: " << engine_bin_dir.string() << "\n";
 
-    if (fs::exists(engine_bin_dir)) {
-        for (const auto& entry : fs::directory_iterator(engine_bin_dir)) {
+    if (std::filesystem::exists(engine_bin_dir)) {
+        for (const auto& entry : std::filesystem::directory_iterator(engine_bin_dir)) {
             const auto& src_path = entry.path();
 
-                if (fs::is_directory(src_path) && src_path.filename() == "shaders") {
-                    fs::path dest_shaders = output_dir / "Engine/shaders";
+                if (std::filesystem::is_directory(src_path) && src_path.filename() == "shaders") {
+                    std::filesystem::path dest_shaders = output_dir / "Engine/shaders";
 
-                    if (fs::exists(dest_shaders)) {
-                        fs::remove_all(dest_shaders);
+                    if (std::filesystem::exists(dest_shaders)) {
+                        std::filesystem::remove_all(dest_shaders);
                     }
-                    fs::create_directories(dest_shaders);
+                    std::filesystem::create_directories(dest_shaders);
 
-                    fs::copy(src_path, dest_shaders, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+                    std::filesystem::copy(src_path, dest_shaders, std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
                     std::cout << "   [+] Copied Shaders\n";
                 }
-                else if (fs::is_regular_file(src_path)) {
+                else if (std::filesystem::is_regular_file(src_path)) {
                     std::string ext = src_path.extension().string();
                     if (src_path.string().find(".so") != std::string::npos ||
                         ext == ".dll" || ext == ".lib" || ext == ".pdb" || ext == ".dylib") {
-                        fs::path dest_file = output_dir / src_path.filename();
+                        std::filesystem::path dest_file = output_dir / src_path.filename();
                         if (is_dist && (ext == ".pdb" || ext == ".debug" || ext == ".ilk" || ext == ".exp")) {
                             continue;
                         }
-                        fs::copy_file(src_path, dest_file, fs::copy_options::overwrite_existing);
+                        std::filesystem::copy_file(src_path, dest_file, std::filesystem::copy_options::overwrite_existing);
                         std::cout << "   [+] Copied " << src_path.filename().string() << "\n";
                     }
                 }
@@ -472,32 +500,15 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
-    /*if (is_dist) {
-        std::cout << ">> Bundling C++ Runtime for Distribution...\n";
-
-        std::vector<std::string> libs = {"libc++.so.1", "libc++abi.so.1"};
-
-        for (const auto& lib : libs) {
-            std::string cmd = "find /usr -name " + lib + " -exec cp {} \"" + output_dir.string() + "\" \\; -quit";
-            std::system(cmd.c_str());
-
-            if (fs::exists(output_dir / lib)) {
-                std::cout << "   [+] Bundled " << lib << "\n";
-            } else {
-                std::cerr << "   [!] WARNING: Could not auto-bundle " << lib << ". Game may crash on other distros.\n";
-            }
-        }
-    }*/
-
     try {
-        fs::path build_path = intermediate_dir / "build";
-        for (const auto& entry : fs::directory_iterator(intermediate_dir)) {
-            auto path = fs::weakly_canonical(entry.path());
-            if (path != fs::weakly_canonical(build_path)) {
-                fs::remove_all(entry.path());
+        std::filesystem::path build_path = intermediate_dir / "build";
+        for (const auto& entry : std::filesystem::directory_iterator(intermediate_dir)) {
+            auto path = std::filesystem::weakly_canonical(entry.path());
+            if (path != std::filesystem::weakly_canonical(build_path)) {
+                std::filesystem::remove_all(entry.path());
             }
         }
-    } catch (const fs::filesystem_error& e) {
+    } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << e.what() << '\n';
         return 1;
     }

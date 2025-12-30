@@ -20,6 +20,8 @@
 #include <filesystem>
 #include <memory>
 
+#include "VexBuildVersion.hpp"
+
 namespace vex {
 
 Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
@@ -63,6 +65,9 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     log("Engine initialized successfully");
 }
 
+const char* Engine::GetBuildHash() {
+        return VEX_ENGINE_BUILD_ID;
+    }
 
 SceneManager* Engine::getSceneManager() {
     return m_sceneManager.get();

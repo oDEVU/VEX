@@ -1,5 +1,18 @@
 @echo off
 cd /d "%~dp0"
+
+if exist "Core\bin\Distribution" (
+    echo [Setup] Cleaning old Distribution binaries...
+    rmdir /s /q "Core\bin\Distribution"
+)
+
+if "%1"=="-clean" (
+    echo [Clean] Removing ALL Engine Binaries...
+    if exist "Core\bin" rmdir /s /q "Core\bin"
+    if exist "BuildTools\build" rmdir /s /q "BuildTools\build"
+    if exist "Editor\bin" rmdir /s /q "Editor\bin"
+)
+
 echo  ===  STARTING FULL ENGINE BUILD ===
 
 echo [1/3] Entering Core...

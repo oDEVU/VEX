@@ -1,0 +1,2 @@
+#pragma once
+#define VEX_ENGINE_BUILD_ID "@VEX_BUILD_ID@"
