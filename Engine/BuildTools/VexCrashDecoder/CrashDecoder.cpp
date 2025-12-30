@@ -178,7 +178,7 @@ bool CrashDecoder::loadSymbolsFromFolder(const std::string& folder) {
             std::string moduleName = (dot != std::string::npos) ? filename.substr(0, dot) : filename;
 
 #ifdef __linux__
-            if (moduleName.starts_with("lib")) {
+            if (starts_with(moduleName, "lib")) {
                 moduleName = moduleName.substr(3);
             }
 #endif
