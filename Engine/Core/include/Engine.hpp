@@ -66,6 +66,7 @@ public:
     /// @brief Internal function for handling pausing and resuming the game.
     /// @param bool paused - Whether the game should be paused or resumed.
     void setPaused(bool paused) { m_paused = paused; }
+    bool isPaused() const { return m_paused; }
 
     /// @brief Returns the current resolution mode.
     /// @return ResolutionMode - Current resolution mode.

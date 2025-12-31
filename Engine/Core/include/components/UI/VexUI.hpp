@@ -77,6 +77,7 @@ struct Widget {
     std::string text;
     std::string image;
     glm::vec2 size{0,0};
+    float rotation = 0.f;
     UIStyle style;
     YGNodeRef yoga = nullptr;
     std::vector<Widget*> children;
@@ -188,6 +189,31 @@ public:
         }
     }
 
+    /// @brief Set rotation of a widget in degrees.
+    void setRotation(const std::string& id, float degrees);
+
+    /// @brief Move a widget (sets Left/Top yoga properties).
+    /// Works best with position: absolute, or relative offsets.
+    void setPosition(const std::string& id, float x, float y);
+
+    /// @brief Resize a widget.
+    void setSize(const std::string& id, float w, float h);
+
+    /// @brief Change the image of an image widget.
+    void setImage(const std::string& id, const std::string& path);
+
+    /// @brief Change font properties.
+    void setFont(const std::string& id, const std::string& fontPath, float fontSize);
+
+    /// @brief Set text/tint color.
+    void setColor(const std::string& id, glm::vec4 color);
+
+    /// @brief Set background color.
+    void setBackgroundColor(const std::string& id, glm::vec4 color);
+
+    /// @brief Set border properties.
+    void setBorder(const std::string& id, float width, glm::vec4 color);
+
     /// @brief Check if the UI system is initialized.
     /// @return bool - True if initialized, false otherwise.
     /// @details Example usage:
@@ -268,13 +294,15 @@ private:
     void loadFonts(Widget* w);
     void loadImages(Widget* w);
     void layout(glm::uvec2 res);
-    void batch(Widget* w, std::vector<float>& verts, Widget* parent = nullptr);
+    void batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset = {0.f, 0.f});
     void uploadVerts(const std::vector<float>& verts);
     Widget* parseNode(const nlohmann::json& j);
     void freeTree(Widget* w);
-    Widget* findWidgetAt(Widget* w, glm::vec2 pos);
+    Widget* findWidgetAt(Widget* w, glm::vec2 pos, glm::vec2 parentOffset = {0.f, 0.f});
     Widget* findById(Widget* w, const std::string& id);
     YGSize calculateTextSize(Widget* w, float maxWidth = FLT_MAX);
     static YGSize measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
+    void safeUpdate(const std::string& id, std::function<void(Widget*)> action);
+
 };
 }

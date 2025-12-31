@@ -69,6 +69,22 @@ bool VexUI::init() {
     return true;
 }
 
+void VexUI::safeUpdate(const std::string& id, std::function<void(Widget*)> action) {
+    if (initialized) {
+        if (Widget* w = findById(m_root, id)) {
+            action(w);
+        } else {
+            log("Widget not found: %s", id.c_str());
+        }
+    } else {
+        pendingSetters.push_back([this, id, action]() {
+            if (Widget* w = findById(m_root, id)) {
+                action(w);
+            }
+        });
+    }
+}
+
 void VexUI::loadFonts(Widget* w) {
     if (!w) return;
 
@@ -186,6 +202,10 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
     if (j.contains("size")) {
             YGNodeStyleSetWidth(w->yoga, w->size.x);
             YGNodeStyleSetHeight(w->yoga, w->size.y);
+        }
+
+    if (j.contains("rotation")) {
+            w->rotation = j["rotation"].get<float>();
         }
 
     if (j.contains("margin")) {
@@ -320,19 +340,37 @@ void VexUI::layout(glm::uvec2 res) {
     if (m_root) YGNodeCalculateLayout(m_root->yoga, res.x, res.y, YGDirectionLTR);
 }
 
-Widget* VexUI::findWidgetAt(Widget* w, glm::vec2 pos) {
+Widget* VexUI::findWidgetAt(Widget* w, glm::vec2 pos, glm::vec2 parentOffset) {
     if (!w) return nullptr;
-    float x = YGNodeLayoutGetLeft(w->yoga);
-    float y = YGNodeLayoutGetTop(w->yoga);
+
+    float absX = parentOffset.x + YGNodeLayoutGetLeft(w->yoga);
+    float absY = parentOffset.y + YGNodeLayoutGetTop(w->yoga);
     float width  = YGNodeLayoutGetWidth(w->yoga);
     float height = YGNodeLayoutGetHeight(w->yoga);
-    if (pos.x >= x && pos.x <= x+width && pos.y >= y && pos.y <= y+height) {
-        for (auto it = w->children.rbegin(); it != w->children.rend(); ++it) {
-            if (auto* hit = findWidgetAt(*it, pos)) return hit;
-        }
-        return w;
+
+    glm::vec2 pivot = { absX + width * 0.5f, absY + height * 0.5f };
+
+    glm::vec2 checkPos = pos;
+    if (w->rotation != 0.f) {
+        float rads = glm::radians(-w->rotation);
+        float c = cos(rads);
+        float s = sin(rads);
+
+        glm::vec2 d = pos - pivot;
+        checkPos.x = pivot.x + (d.x * c - d.y * s);
+        checkPos.y = pivot.y + (d.x * s + d.y * c);
     }
-    return nullptr;
+
+    bool isInside = (checkPos.x >= absX && checkPos.x <= absX + width &&
+                     checkPos.y >= absY && checkPos.y <= absY + height);
+
+    for (auto it = w->children.rbegin(); it != w->children.rend(); ++it) {
+        if (Widget* hit = findWidgetAt(*it, pos, {absX, absY})) {
+            return hit;
+        }
+    }
+
+    return isInside ? w : nullptr;
 }
 
 Widget* VexUI::findById(Widget* w, const std::string& id) {
@@ -372,7 +410,7 @@ void VexUI::processEvent(const SDL_Event& ev) {
     if (ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         log("Mouse button down. pos: (%f, %f)", ev.button.x / sx, ev.button.y / sy);
         glm::vec2 mouse(ev.button.x / sx, ev.button.y / sy);
-        if (Widget* w = findWidgetAt(m_root, mouse); w && w->type == WidgetType::Button && w->onClick)
+        if (Widget* w = findWidgetAt(m_root, mouse, {0, 0}); w && w->type == WidgetType::Button && w->onClick)
             w->onClick();
     }
 }
@@ -451,30 +489,45 @@ YGSize VexUI::measureTextNode(const YGNode* node, float width, YGMeasureMode wid
     return measuredSize;
 }
 
-void VexUI::batch(Widget* w, std::vector<float>& verts, Widget* parent) {
+void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) {
     if (!w) return;
-    float x = YGNodeLayoutGetLeft(w->yoga);
-    float y = YGNodeLayoutGetTop(w->yoga);
-    if (parent && YGNodeStyleGetPositionType(w->yoga) != YGPositionTypeAbsolute) {
-        x += YGNodeLayoutGetLeft(parent->yoga);// - YGNodeLayoutGetPadding(parent->yoga, YGEdgeLeft);
-        y += YGNodeLayoutGetTop(parent->yoga);// - YGNodeLayoutGetPadding(parent->yoga, YGEdgeTop);
-    }
+
+    float x = parentOffset.x + YGNodeLayoutGetLeft(w->yoga);
+    float y = parentOffset.y + YGNodeLayoutGetTop(w->yoga);
+
     float width  = YGNodeLayoutGetWidth(w->yoga);
     float height = YGNodeLayoutGetHeight(w->yoga);
+
+    glm::vec2 pivot = { x + width * 0.5f, y + height * 0.5f };
+        float rads = glm::radians(w->rotation);
+        float cosA = cos(rads);
+        float sinA = sin(rads);
+
+    auto rotate = [&](float px, float py) -> glm::vec2 {
+            if (w->rotation == 0.f) return {px, py};
+            float dx = px - pivot.x;
+            float dy = py - pivot.y;
+            return {
+                pivot.x + (dx * cosA - dy * sinA),
+                pivot.y + (dx * sinA + dy * cosA)
+            };
+        };
 
     auto pushQuad = [&](float x0, float y0, float u0, float v0,
                         float x1, float y1, float u1, float v1,
                         const glm::vec4& col, float texIdx) {
-        // Two triangles to make a quad (6 vertices)
-        // Triangle 1
-        verts.insert(verts.end(), {x0, y0, u0, v0, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {x1, y0, u1, v0, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {x0, y1, u0, v1, col.r, col.g, col.b, col.a, texIdx});
+        glm::vec2 p0 = rotate(x0, y0);
+        glm::vec2 p1 = rotate(x1, y0);
+        glm::vec2 p2 = rotate(x0, y1);
+        glm::vec2 p3 = rotate(x1, y1);
 
-        // Triangle 2
-        verts.insert(verts.end(), {x1, y0, u1, v0, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {x1, y1, u1, v1, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {x0, y1, u0, v1, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {p0.x, p0.y, u0, v0, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {p1.x, p1.y, u1, v0, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {p2.x, p2.y, u0, v1, col.r, col.g, col.b, col.a, texIdx});
+
+        verts.insert(verts.end(), {p1.x, p1.y, u1, v0, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {p3.x, p3.y, u1, v1, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {p2.x, p2.y, u0, v1, col.r, col.g, col.b, col.a, texIdx});
     };
 
     if (w->style.bgColor.a > 0.f) {
@@ -570,7 +623,9 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, Widget* parent) {
         }
     }
 
-    for (auto* c : w->children) batch(c, verts, w);
+    for (auto* c : w->children) {
+        batch(c, verts, {x, y});
+    }
 }
 
 void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pipelineLayout, int currentFrame) {
@@ -678,4 +733,71 @@ void VexUI::freeTree(Widget* w) {
     for (auto* c : w->children) freeTree(c);
     delete w;
 }
+
+void VexUI::setRotation(const std::string& id, float degrees) {
+    safeUpdate(id, [degrees](Widget* w) {
+        w->rotation = degrees;
+    });
+}
+
+void VexUI::setPosition(const std::string& id, float x, float y) {
+    safeUpdate(id, [x, y](Widget* w) {
+        YGNodeStyleSetPosition(w->yoga, YGEdgeLeft, x);
+        YGNodeStyleSetPosition(w->yoga, YGEdgeTop, y);
+    });
+}
+
+void VexUI::setSize(const std::string& id, float width, float height) {
+    safeUpdate(id, [width, height](Widget* w) {
+        w->size = {width, height};
+        YGNodeStyleSetWidth(w->yoga, width);
+        YGNodeStyleSetHeight(w->yoga, height);
+    });
+}
+
+void VexUI::setImage(const std::string& id, const std::string& path) {
+    if (initialized) {
+        if (Widget* w = findById(m_root, id)) {
+            w->image = path;
+            m_res->loadTexture(GetAssetPath(path), GetAssetPath(path));
+        }
+    } else {
+        pendingSetters.push_back([this, id, path]() {
+            if (Widget* w = findById(m_root, id)) {
+                w->image = path;
+                m_res->loadTexture(GetAssetPath(path), GetAssetPath(path));
+            }
+        });
+    }
+}
+
+void VexUI::setFont(const std::string& id, const std::string& fontPath, float fontSize) {
+    auto action = [this, fontPath, fontSize](Widget* w) {
+        w->style.font = fontPath;
+        w->style.fontSize = fontSize;
+        this->loadFonts(w);
+    };
+    safeUpdate(id, action);
+}
+
+void VexUI::setColor(const std::string& id, glm::vec4 color) {
+    safeUpdate(id, [color](Widget* w) {
+        w->style.color = color;
+    });
+}
+
+void VexUI::setBackgroundColor(const std::string& id, glm::vec4 color) {
+    safeUpdate(id, [color](Widget* w) {
+        w->style.bgColor = color;
+    });
+}
+
+void VexUI::setBorder(const std::string& id, float width, glm::vec4 color) {
+    safeUpdate(id, [width, color](Widget* w) {
+        w->style.borderWidth = width;
+        w->style.borderColor = color;
+        YGNodeStyleSetBorder(w->yoga, YGEdgeAll, width);
+    });
+}
+
 }
