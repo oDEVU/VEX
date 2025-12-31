@@ -644,12 +644,45 @@ namespace vex {
         ImGui::PopStyleVar();
 
         ImGui::Begin("Game Objects", nullptr, childFlags);
-                std::vector<std::string> objectTypes = GameObjectFactory::getInstance().GetRegisteredObjectTypes();
+                std::vector<std::string> engineTypes = GameObjectFactory::getInstance().GetNonDynamicRegisteredObjectTypes();
 
-                ImGui::Text("Available Objects:");
+                ImGui::Dummy(ImVec2(5.0f, 5.0f));
+                ImGui::Text("Engine Objects:");
                 ImGui::Separator();
 
-                for (const auto& type : objectTypes) {
+                for (const auto& type : engineTypes) {
+                    if (ImGui::Button(type.c_str(), ImVec2(-1, 0))) {
+                        std::string currentScene = getSceneManager()->getLastSceneName();
+                        if (!currentScene.empty()) {
+
+                            std::string newName = "New " + type;
+                            GameObject* newObj = GameObjectFactory::getInstance().create(type, *this, newName);
+
+                            if(m_selectedObject.second){
+                                newObj->AddComponent(TransformComponent{});
+                                newObj->ParentTo(m_selectedObject.second->GetEntity());
+                            }
+
+                            m_frame = 0;
+                            m_refresh = true;
+                            newObj->BeginPlay();
+
+                            if (newObj) {
+                                getSceneManager()->GetScene(currentScene)->AddEditorGameObject(newObj);
+                            }
+                        } else {
+                            log(LogLevel::ERROR, "No scene loaded. Cannot create object.");
+                        }
+                    }
+                }
+
+                std::vector<std::string> dynamicTypes = GameObjectFactory::getInstance().GetDynamicRegisteredObjectTypes();
+
+                ImGui::Dummy(ImVec2(10.0f, 10.0f));
+                ImGui::Text("Game Objects:");
+                ImGui::Separator();
+
+                for (const auto& type : dynamicTypes) {
                     if (ImGui::Button(type.c_str(), ImVec2(-1, 0))) {
                         std::string currentScene = getSceneManager()->getLastSceneName();
                         if (!currentScene.empty()) {

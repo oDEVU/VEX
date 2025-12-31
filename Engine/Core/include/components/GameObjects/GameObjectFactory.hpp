@@ -42,7 +42,9 @@ public:
 
     GameObject* create(const std::string& type, Engine& engine, const std::string& name);
 
-    std::vector<std::string> GetRegisteredObjectTypes();
+    std::vector<std::string> GetAllRegisteredObjectTypes();
+    std::vector<std::string> GetNonDynamicRegisteredObjectTypes();
+    std::vector<std::string> GetDynamicRegisteredObjectTypes();
 
     void clearDynamicGameObjects();
 
@@ -55,6 +57,8 @@ private:
 
     std::unordered_map<std::string, Creator> creators;
     std::vector<std::string> dynamicTypes;
+    std::vector<std::string> nonDynamicTypes;
+    std::vector<std::string> allTypes;
 };
 
 /// @brief Macro for automatic GameObject registration, you should call it at the bottom of your class implementation.

@@ -1,4 +1,5 @@
 #include "components/GameObjects/GameObjectFactory.hpp"
+#include <algorithm>
 
 namespace vex {
 
@@ -14,8 +15,12 @@ namespace vex {
             return obj;
         };
 
+        allTypes.push_back(name);
+
         if (isDynamic) {
             dynamicTypes.push_back(name);
+        } else {
+            nonDynamicTypes.push_back(name);
         }
     }
 
@@ -28,13 +33,16 @@ namespace vex {
         return nullptr;
     }
 
-    std::vector<std::string> GameObjectFactory::GetRegisteredObjectTypes() {
-        std::vector<std::string> types;
-        types.reserve(creators.size());
-        for(const auto& [name, creator] : creators) {
-            types.push_back(name);
-        }
-        return types;
+    std::vector<std::string> GameObjectFactory::GetAllRegisteredObjectTypes() {
+        return allTypes;
+    }
+
+    std::vector<std::string> GameObjectFactory::GetNonDynamicRegisteredObjectTypes() {
+        return nonDynamicTypes;
+    }
+
+    std::vector<std::string> GameObjectFactory::GetDynamicRegisteredObjectTypes() {
+        return dynamicTypes;
     }
 
     void GameObjectFactory::clearDynamicGameObjects() {
@@ -45,9 +53,13 @@ namespace vex {
             creators.erase(name);
         }
         dynamicTypes.clear();
+        allTypes = nonDynamicTypes;
     }
 
     void GameObjectFactory::UnregisterGameObjects(){
-        // creators.clear();
+        creators.clear();
+        dynamicTypes.clear();
+        nonDynamicTypes.clear();
+        allTypes.clear();
     }
 }
