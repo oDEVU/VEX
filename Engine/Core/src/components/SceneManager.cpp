@@ -4,6 +4,8 @@
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
+#include "components/GameObjects/LightObject.hpp"
+#include "components/GameObjects/FogObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/PhysicsSystem.hpp"
 #include "components/enviroment.hpp"
@@ -153,6 +155,7 @@ REGISTER_COMPONENT_CUSTOM(vex::MeshComponent, meshData, renderType, color, textu
 
 REGISTER_COMPONENT(vex::CameraComponent, fov, nearPlane, farPlane);
 REGISTER_COMPONENT(vex::LightComponent, color, intensity, radius);
+REGISTER_COMPONENT(vex::FogComponent, color, density, start, end);
 REGISTER_COMPONENT(vex::CharacterComponent, standingHeight, standingRadius, mass, maxSlopeAngle);
 
 //REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
@@ -182,6 +185,9 @@ namespace vex {
 
     REGISTER_GAME_OBJECT(CameraObject);
     REGISTER_GAME_OBJECT(GameObject);
+    REGISTER_GAME_OBJECT(LightObject);
+    REGISTER_GAME_OBJECT(FogObject);
+    REGISTER_GAME_OBJECT(ModelObject);
 
 void SceneManager::loadScene(const std::string& path, Engine& engine) {
     clearScenes();

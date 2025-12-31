@@ -96,6 +96,7 @@ set(public_header_files
     include/components/GameObjects/GameObject.hpp
     include/components/GameObjects/ModelObject.hpp
     include/components/GameObjects/CameraObject.hpp
+    include/components/GameObjects/LightObject.hpp
     include/components/GameObjects/Creators/ModelCreator.hpp
     include/components/GameObjects/GameObjectFactory.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h

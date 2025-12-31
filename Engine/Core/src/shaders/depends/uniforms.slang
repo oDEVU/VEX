@@ -19,6 +19,9 @@ cbuffer SceneUBO {
   public int frame;
   public float upscaleRatio;
   public float ambientLightStrength;
+
+  public float4 fogColorAndIntensity = float4(0.0f, 0.0f, 0.0f, 0.0f);
+  public float2 fogDistances = float2(0.0f, 0.0f);
 }
 scene;
 

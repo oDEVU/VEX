@@ -32,6 +32,9 @@ namespace vex {
         alignas(4) int frame;
         alignas(4) float upscaleRatio;
         alignas(4) float ambientLightStrength;
+
+        alignas(16) glm::vec4 fogColor = glm::vec4(0.0f);
+        alignas(16) glm::vec2 fogDistances;
     };
 
     /// @brief Light struct for shader

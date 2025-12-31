@@ -412,11 +412,18 @@ struct MeshComponent {
 };
 
 /// @brief Struct containing light properties.
-/// @todo Allow to load from scene file.
 struct LightComponent {
-    glm::vec3 color;
-    float intensity;
-    float radius;
+    vex::rgb color = glm::vec3(1.f);
+    float intensity = 1.f;
+    float radius = 5.f;
+};
+
+/// @brief Struct containing fog properties.
+struct FogComponent {
+    vex::rgb color = glm::vec3(1.f);
+    float density = 0.5f;
+    float start = 0.0f;
+    float end = 100.0f;
 };
 
 /// @brief Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.

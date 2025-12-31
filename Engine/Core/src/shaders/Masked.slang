@@ -134,6 +134,24 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
                                    : (texColor * float4(lighting, 1.0));
 
+
+  float fogIntensity = scene.fogColorAndIntensity.w;
+
+  if (fogIntensity > 0.0) {
+    float distance = abs(input.fragDepth);
+    float fogStart = scene.fogDistances.x;
+    float fogEnd = scene.fogDistances.y;
+    float3 fogColor = scene.fogColorAndIntensity.rgb;
+
+    float fogFactor = (fogEnd - distance) / (fogEnd - fogStart);
+
+    fogFactor = saturate(fogFactor);
+
+    fogFactor = lerp(1.0, fogFactor, fogIntensity);
+
+    finalColor.rgb = lerp(fogColor, finalColor.rgb, fogFactor);
+  }
+
   if (isEnabled(COLOR_QUANTIZATION)) {
     float4 c = finalColor;
     c = applyQuantization(c, pixelCoord, true);

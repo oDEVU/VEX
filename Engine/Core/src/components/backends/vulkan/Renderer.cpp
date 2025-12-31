@@ -242,6 +242,20 @@ namespace vex {
                 m_lastUsedView = m_r_context.lowResColorView;
             }
 
+            glm::vec3 finalClearColor = m_r_context.m_enviroment.clearColor;
+            auto fogView = registry.view<FogComponent>();
+
+            for (auto entity : fogView) {
+                auto& fc = fogView.get<FogComponent>(entity);
+                m_sceneUBO.fogColor = glm::vec4(fc.color, fc.density);
+                m_sceneUBO.fogDistances = glm::vec2(fc.start, fc.end);
+
+                float skyMixFactor = glm::clamp(fc.density, 0.0f, 1.0f);
+                finalClearColor = glm::mix(finalClearColor, fc.color, skyMixFactor);
+
+                break;
+            }
+
             transitionImageLayout(cmd,
                                 m_r_context.lowResColorImage,
                                 VK_IMAGE_LAYOUT_UNDEFINED,
@@ -266,7 +280,7 @@ namespace vex {
             colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            colorAttachment.clearValue.color = {{m_r_context.m_enviroment.clearColor.x, m_r_context.m_enviroment.clearColor.y, m_r_context.m_enviroment.clearColor.z, 1.0f}};
+            colorAttachment.clearValue.color = {{finalClearColor.x, finalClearColor.y, finalClearColor.z, 1.0f}};
 
             VkRenderingAttachmentInfo depthAttachment{};
             depthAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
