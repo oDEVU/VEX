@@ -107,6 +107,7 @@ void VexUI::loadFonts(Widget* w) {
         std::vector<unsigned char> rgba(W * H * 4);
         for (int i = 0; i < W * H; ++i) {
             unsigned char v = bitmap[i];
+            v = (v > 127) ? 255 : 0;
             rgba[i*4 + 0] = 255;
             rgba[i*4 + 1] = 255;
             rgba[i*4 + 2] = 255;
