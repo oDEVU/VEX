@@ -486,7 +486,7 @@ int main(int argc, char* argv[]) {
                     if (src_path.string().find(".so") != std::string::npos ||
                         ext == ".dll" || ext == ".lib" || ext == ".pdb" || ext == ".dylib") {
                         std::filesystem::path dest_file = output_dir / src_path.filename();
-                        if (is_dist && (ext == ".pdb" || ext == ".debug" || ext == ".ilk" || ext == ".exp")) {
+                        if ((is_dist || config_name == "Release") && (ext == ".pdb" || ext == ".debug" || ext == ".ilk" || ext == ".exp")) {
                             continue;
                         }
                         std::filesystem::copy_file(src_path, dest_file, std::filesystem::copy_options::overwrite_existing);

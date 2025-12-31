@@ -127,10 +127,6 @@ target_compile_definitions(GameModule PRIVATE
     VEX_VSYNC=${VSYNC_BOOL}
 )
 
-if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(GameModule PRIVATE JPH_ENABLE_ASSERTS=0)
-endif()
-
 string(JSON ICON_REL_PATH ERROR_VARIABLE ICON_ERROR GET "${PROJECT_JSON}" "icon_path")
 
 set(PROJECT_ICON_RESOURCE)
@@ -179,6 +175,26 @@ if(NOT ICON_ERROR AND NOT ICON_REL_PATH STREQUAL "")
 endif()
 
 add_executable(${PROJECT_NAME} "main.cpp" ${PROJECT_ICON_RESOURCE})
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(WIN32)
+        target_compile_definitions(GameModule PRIVATE JPH_ENABLE_ASSERTS=0)
+    elseif(UNIX AND NOT APPLE)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}> $<TARGET_FILE:${PROJECT_NAME}>.debug
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:${PROJECT_NAME}>
+            COMMAND objcopy --add-gnu-debuglink=$<TARGET_FILE:${PROJECT_NAME}>.debug $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Splitting debug symbols for ${PROJECT_NAME}"
+        )
+
+        add_custom_command(TARGET GameModule POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:GameModule> $<TARGET_FILE:GameModule>.debug
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:GameModule>
+            COMMAND objcopy --add-gnu-debuglink=$<TARGET_FILE:GameModule>.debug $<TARGET_FILE:GameModule>
+            COMMENT "Splitting debug symbols for GameModule"
+        )
+    endif()
+endif()
 
 if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
