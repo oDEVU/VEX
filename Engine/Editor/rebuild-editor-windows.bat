@@ -49,9 +49,14 @@ exit /b 0
 
 :PATH_LOGIC
 echo Adding bin directory to User PATH...
+
+:: Get the current directory and normalize it (remove trailing backslash)
 set "ADD_PATH=%cd%\bin"
-powershell -Command "$oldPath = [Environment]::GetEnvironmentVariable('Path', 'User'); if ($oldPath -notlike '*%ADD_PATH%*') { [Environment]::SetEnvironmentVariable('Path', $oldPath + ';%ADD_PATH%', 'User'); Write-Host '[+] Added to PATH.' } else { Write-Host '[-] Already in PATH.' }"
-echo (Note: You may need to restart your terminal for PATH changes to take effect)
+if "%ADD_PATH:~-1%"=="\" set "ADD_PATH=%ADD_PATH:~0,-1%"
+
+:: Call PowerShell safely to append to user PATH
+powershell -NoProfile -Command "$addPath='%ADD_PATH%'; $oldPath=[Environment]::GetEnvironmentVariable('Path','User'); if([string]::IsNullOrEmpty($oldPath)) { $newPath=$addPath } elseif(-not ($oldPath.Split(';') -contains $addPath)) { $newPath=$oldPath + ';' + $addPath } else { Write-Host '[-] Already in PATH.'; exit }; [Environment]::SetEnvironmentVariable('Path', $newPath,'User'); Write-Host '[+] Added to PATH safely.'; Write-Host '(Note: Restart terminal for PATH changes to take effect)'"
+
 exit /b 0
 
 :END
