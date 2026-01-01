@@ -1,6 +1,8 @@
 @echo off
 cd /d "%~dp0"
 
+call check-deps-windows.bat || exit /b 1
+
 if exist "Core\bin\Distribution" (
     echo [Setup] Cleaning old Distribution binaries...
     rmdir /s /q "Core\bin\Distribution"

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e  # Exit immediately if a command exits with a non-zero status
 
+./check-deps-linux.sh || exit 1
+
 if [ -d "Core/bin/Distribution" ]; then
     echo "[Setup] Cleaning old Distribution binaries..."
     rm -rf "Core/bin/Distribution"

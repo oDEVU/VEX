@@ -238,9 +238,15 @@ std::string CrashDecoder::resolveWindows(const std::string& pdbFile, uintptr_t o
 #ifdef _WIN32
     HANDLE hProcess = GetCurrentProcess();
 
-    SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
+    SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME | SYMOPT_DEBUG);
 
-    if (!SymInitialize(hProcess, nullptr, FALSE)) {
+    std::string searchPath;
+    size_t lastSlash = pdbFile.find_last_of("/\\");
+    if (lastSlash != std::string::npos) {
+        searchPath = pdbFile.substr(0, lastSlash);
+    }
+
+    if (!SymInitialize(hProcess, searchPath.c_str(), FALSE)) {
         return "?? (SymInitialize failed)";
     }
 
@@ -257,20 +263,20 @@ std::string CrashDecoder::resolveWindows(const std::string& pdbFile, uintptr_t o
     }
 
     DWORD64 moduleBase = 0;
+
     if (!binaryPath.empty()) {
         moduleBase = SymLoadModuleEx(hProcess, nullptr, binaryPath.c_str(), nullptr, 0, 0, nullptr, 0);
+
         if (moduleBase == 0) {
             SymCleanup(hProcess);
             return "?? (Failed to load binary)";
         }
-
-        // Load PDB at the same base
-        SymLoadModuleEx(hProcess, nullptr, pdbFile.c_str(), nullptr, moduleBase, 0, nullptr, 0);
     } else {
         moduleBase = SymLoadModuleEx(hProcess, nullptr, pdbFile.c_str(), nullptr, 0, 0, nullptr, 0);
+
         if (moduleBase == 0) {
             SymCleanup(hProcess);
-            return "?? (No binary - limited resolution)";
+            return "?? (No binary - failed to load PDB)";
         }
     }
 
@@ -294,6 +300,9 @@ std::string CrashDecoder::resolveWindows(const std::string& pdbFile, uintptr_t o
         if (SymGetLineFromAddr64(hProcess, addrToLookup, &lineDisp, &line)) {
             result += " @ " + std::string(line.FileName) + ":" + std::to_string(line.LineNumber);
         }
+    } else {
+        DWORD error = GetLastError();
+        result = "?? (SymFromAddr failed: " + std::to_string(error) + ")";
     }
 
     SymUnloadModule64(hProcess, moduleBase);
