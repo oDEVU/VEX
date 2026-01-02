@@ -128,6 +128,8 @@ Classes</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a0ae3e6d17bc7563bc57da4a016aaf41b" id="r_a0ae3e6d17bc7563bc57da4a016aaf41b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ae3e6d17bc7563bc57da4a016aaf41b">Demangle</a> (const char *name)</td></tr>
 <tr class="memdesc:a0ae3e6d17bc7563bc57da4a016aaf41b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Demangles a C++ type name into a more readable string.  <br /></td></tr>
+<tr class="memitem:ae9d6f0cf5e98d11073c55b1d95b8b18a" id="r_ae9d6f0cf5e98d11073c55b1d95b8b18a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9d6f0cf5e98d11073c55b1d95b8b18a">ReparentObject</a> (<a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> *child, <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> *parent)</td></tr>
+<tr class="memdesc:ae9d6f0cf5e98d11073c55b1d95b8b18a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reparents a GameObject to another GameObject.  <br /></td></tr>
 <tr class="memitem:a503df8ab9f67ef8361095f7518eeeef8" id="r_a503df8ab9f67ef8361095f7518eeeef8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a503df8ab9f67ef8361095f7518eeeef8">DrawEntityNode</a> (<a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> *obj, std::pair&lt; bool, <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> * &gt; &amp;selectedObject, const std::unordered_map&lt; entt::entity, std::vector&lt; <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> * &gt; &gt; &amp;childrenMap, const std::unordered_set&lt; entt::entity &gt; &amp;runtimeSet, <a class="el" href="structSceneAction.html">SceneAction</a> &amp;outAction)</td></tr>
 <tr class="memdesc:a503df8ab9f67ef8361095f7518eeeef8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively draws a single GameObject node in the ImGUI tree hierarchy.  <br /></td></tr>
 <tr class="memitem:a901e4adcdaccb4930222c23d660285ef" id="r_a901e4adcdaccb4930222c23d660285ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a901e4adcdaccb4930222c23d660285ef">DrawSceneHierarchy</a> (<a class="el" href="classvex_1_1Engine.html">vex::Engine</a> &amp;engine, std::pair&lt; bool, <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> * &gt; &amp;selectedObject)</td></tr>
@@ -171,7 +173,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string - The demangled class/struct name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00038">38</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00039">39</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
 
 </div>
 </div>
@@ -229,7 +231,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00066">66</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00100">100</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
 
 </div>
 </div>
@@ -269,7 +271,47 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00183">183</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00235">235</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae9d6f0cf5e98d11073c55b1d95b8b18a" name="ae9d6f0cf5e98d11073c55b1d95b8b18a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9d6f0cf5e98d11073c55b1d95b8b18a">&#9670;&#160;</a></span>ReparentObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ReparentObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> *</td>          <td class="paramname"><span class="paramname"><em>child</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> *</td>          <td class="paramname"><span class="paramname"><em>parent</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reparents a GameObject to another GameObject. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vex::GameObject*</td><td>child - The child GameObject to reparent. </td></tr>
+    <tr><td class="paramname">vex::GameObject*</td><td>parent - The parent GameObject to reparent to. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00061">61</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
 
 </div>
 </div>

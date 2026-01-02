@@ -43,6 +43,7 @@ namespace vex {
         glm::vec4 color = glm::vec4(0.0f);    // w = intensity
     };
 
+    /// @brief Scene lights uniform buffer object.
     struct SceneLightsUBO {
         alignas(4) uint32_t lightCount;
         alignas(16) Light lights[MAX_DYNAMIC_LIGHTS]; // Light is already glm::vec4 position + glm::vec4 color

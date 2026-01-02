@@ -16,5 +16,6 @@ var classvex_1_1VulkanSwapchainManager =
     [ "createSwapchain", "classvex_1_1VulkanSwapchainManager.html#af81e5812c886c1a3f29daaf4d26b6519", null ],
     [ "createSyncObjects", "classvex_1_1VulkanSwapchainManager.html#ac2921277552a732f3123cbf613f36a38", null ],
     [ "findDepthFormat", "classvex_1_1VulkanSwapchainManager.html#aecfa5eecf53f371760dff05f46697043", null ],
-    [ "recreateSwapchain", "classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245", null ]
+    [ "recreateSwapchain", "classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245", null ],
+    [ "setVSync", "classvex_1_1VulkanSwapchainManager.html#a245b76f339388f784612a3f1a98c5c7a", null ]
 ];

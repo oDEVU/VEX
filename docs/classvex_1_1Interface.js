@@ -10,6 +10,7 @@ var classvex_1_1Interface =
     [ "getRenderer", "classvex_1_1Interface.html#a5717d102b53e3e0c15cf709e4844548b", null ],
     [ "getResources", "classvex_1_1Interface.html#af112614a8a57c58059728a365a1603d4", null ],
     [ "setEnvironment", "classvex_1_1Interface.html#a3674fb03e32008769344df029cf7a736", null ],
+    [ "setVSync", "classvex_1_1Interface.html#a9e708122c74f32160992d202317f1e0b", null ],
     [ "unbindWindow", "classvex_1_1Interface.html#a4f3a488cea4154de1827da61958073f1", null ],
     [ "WaitForGPUToFinish", "classvex_1_1Interface.html#a8ad9ebe6a21cfc9076327f9dee5e2e0a", null ]
 ];

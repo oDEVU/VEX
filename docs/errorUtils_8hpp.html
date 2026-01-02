@@ -106,6 +106,7 @@ $(function(){initNavTree('errorUtils_8hpp.html','',''); });
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;VEX/VEX_export.h&quot;</code><br />
 </div>
 <p><a href="errorUtils_8hpp_source.html">Go to the source code of this file.</a></p>
@@ -121,6 +122,8 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a3e538975c87c06bcaab5919e616677b0" id="r_a3e538975c87c06bcaab5919e616677b0"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e538975c87c06bcaab5919e616677b0">vex::InitCrashHandler</a> ()</td></tr>
+<tr class="memdesc:a3e538975c87c06bcaab5919e616677b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the crash handler.  <br /></td></tr>
 <tr class="memitem:a83677754024309fc36c4dd9cfc848a7f" id="r_a83677754024309fc36c4dd9cfc848a7f"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a> (const std::string &amp;msg)</td></tr>
 <tr class="memdesc:a83677754024309fc36c4dd9cfc848a7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Throws an error with the given message and triggers cpptrace for debug builds.  <br /></td></tr>
 <tr class="memitem:a96b5f80aadf7f282e8238912cbc9675a" id="r_a96b5f80aadf7f282e8238912cbc9675a"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a> (const char *fmt,...)</td></tr>
@@ -160,7 +163,7 @@ Functions</h2></td></tr>
 
 <p>Enum class for log levels. </p>
 
-<p class="definition">Definition at line <a class="el" href="errorUtils_8hpp_source.html#l00026">26</a> of file <a class="el" href="errorUtils_8hpp_source.html">errorUtils.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="errorUtils_8hpp_source.html#l00027">27</a> of file <a class="el" href="errorUtils_8hpp_source.html">errorUtils.hpp</a>.</p>
 
 </div>
 </div>
@@ -187,7 +190,7 @@ Functions</h2></td></tr>
 <div class="line">    handle_critical_exception(e);</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00119">119</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00395">395</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
 </div>
@@ -213,7 +216,28 @@ Functions</h2></td></tr>
 <div class="line">    handle_exception(e);</div>
 <div class="line">}</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00112">112</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00389">389</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3e538975c87c06bcaab5919e616677b0" name="a3e538975c87c06bcaab5919e616677b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e538975c87c06bcaab5919e616677b0">&#9670;&#160;</a></span>InitCrashHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::InitCrashHandler </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the crash handler. </p>
+
+<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00281">281</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
 </div>
@@ -239,7 +263,7 @@ Functions</h2></td></tr>
 <p>Logs a message with the given format and arguments to the console, or does absolutely nothing for release builds. </p>
 <p>Example usage: </p><div class="fragment"><div class="line">log(<span class="stringliteral">&quot;value a is %d&quot;</span>, a);</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00097">97</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00381">381</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
 </div>
@@ -270,7 +294,7 @@ Functions</h2></td></tr>
 <p>Overload of an log function that adds log level. </p>
 <p>Example usage: </p><div class="fragment"><div class="line">log(LogLevel::ERROR, <span class="stringliteral">&quot;value a is %d&quot;</span>, a);</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00101">101</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00385">385</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
 </div>
@@ -292,7 +316,7 @@ Functions</h2></td></tr>
 <p>Throws an error with the given message and triggers cpptrace for debug builds. </p>
 <p>Example usage: </p><div class="fragment"><div class="line">throw_error(<span class="stringliteral">&quot;An error occurred&quot;</span>);</div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00093">93</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00376">376</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
 </div>

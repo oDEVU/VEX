@@ -52,8 +52,11 @@ public:
     ~Engine();
 
     /// @brief Function starting and running main game loop.
+    /// @param std::function<void()> onUpdateLoop - Optional callback function for hot reload logic.
     void run(std::function<void()> onUpdateLoop = nullptr);
 
+    /// @brief Function returning the entity of the camera.
+    /// @return entt::entity - Entity of the camera.
     entt::entity getCamera() {
         auto view = m_registry.view<CameraComponent>();
         return view.empty() ? entt::null : view.front();
@@ -66,6 +69,9 @@ public:
     /// @brief Internal function for handling pausing and resuming the game.
     /// @param bool paused - Whether the game should be paused or resumed.
     void setPaused(bool paused) { m_paused = paused; }
+
+    /// @brief Function returning the current state of the game.
+    /// @return bool - Whether the game is paused or not.
     bool isPaused() const { return m_paused; }
 
     /// @brief Returns the current resolution mode.
@@ -88,22 +94,44 @@ public:
     /// @return enviroment - Current environment settings.
     enviroment getEnvironmentSettings();
 
-    Interface* getInterface();// { return m_interface; }
+    /// @brief Returns Interface, used internally.
+    Interface* getInterface();
+
+    /// @brief Returns  std::shared_ptr of VirtualFileSystem.
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
+
+    /// @brief Returns a reference to entt::registry.
     entt::registry& getRegistry() { return m_registry; }
+
+    /// @brief Returns pointer to PhysicsSystem.
     PhysicsSystem* getPhysicsSystem() { return m_physicsSystem.get(); }
+
+    /// @brief Returns pointer to SceneManager.
     SceneManager* getSceneManager();
-    std::shared_ptr<VexUI> createVexUI();// { return std::make_unique<VexUI>(m_interface->getContext(), m_vfs.get(), m_interface->getResources()); }
+
+    /// @brief Creates and returns a std::shared_ptr of VexUI.
+    std::shared_ptr<VexUI> createVexUI();
+
+    /// @brief Returns current frame number.
     int GetCurrentFrame() { return m_frame; }
+
+    /// @brief Function to enable/disable rendering collision shapes.
+    /// @param bool value - True to enable, false to disable.
     void setRenderPhysicsDebug(bool value) { m_renderPhysicsDebug = value; }
 
+    /// @brief Function to enable/disable fullscreen mode. with optional exclusive parameter.
+    /// @param bool enabled - True to enable, false to disable.
+    /// @param bool exclusive - True to enable exclusive fullscreen mode, false to disable.
     virtual void setFullscreen(bool enabled, bool exclusive = false);
+
+    /// @brief Function to check if fullscreen mode is enabled.
     bool isFullscreen();
 
+    /// @brief Function to get the last loaded scenes.
     std::vector<std::string> getLastLoadedScenes() { return lastLoadedScenes; }
-    void prepareScenesForHotReload();// {
-       // lastLoadedScenes = getSceneManager()->GetAllSceneNames();
-       //}
+
+    /// @brief Function to prepare scenes for hot reload.
+    void prepareScenesForHotReload();
 
     /// @brief Internal virtual function for handling window/keyboard events.
     /// @param SDL_Event - Event to process.
@@ -139,11 +167,15 @@ public:
 
     /// @brief Toggles VSync (Vertical Synchronization).
     void setVSync(bool enabled);
+
+    /// @brief Returns the current state of VSync.
     bool getVSync() const;
 
     /// @brief Returns the time since last frame.
     float getDeltaTime() const { return m_deltaTime; }
 protected:
+
+    /// @brief Alternative constructor for editor to skip default init code.
     Engine(SkipInit);
 
     std::shared_ptr<Window> m_window;

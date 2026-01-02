@@ -369,6 +369,7 @@ struct TransformComponent {
     #undef TRANSPARENT
 #endif
 
+/// @brief Enum class for different types of rendering. It internally switches used pipeline.
 enum class RenderType {
     OPAQUE,
     TRANSPARENT,
@@ -377,7 +378,6 @@ enum class RenderType {
 };
 
 /// @brief Struct containing raw meshData, mesh id, texture paths and material properties. It just template and data for rendering backend to load/convert this data to its acceptible format. This is made weirdly cause its made in mind for multiple backends. IDK i hate this system but i have no better idea.
-/// @todo Make creating this component enough to create mesh, not requiring mesh manager to load mesh data.
 struct MeshComponent {
     // Render Data
     MeshData meshData;
@@ -395,14 +395,17 @@ struct MeshComponent {
     glm::vec3 worldCenter = glm::vec3(0.0f);
     float worldRadius = 1.0f;
 
+    /// @brief (used internally by the engine, DO NOT CALL) returns true if the component is fresh.
     bool getIsFresh(){
         return fresh;
     }
 
+    /// @brief (used internally by the engine, DO NOT CALL) sets the component as rendered.
     void setRendered(){
         fresh = false;
     }
 
+    /// @brief (used internally by the engine, DO NOT CALL) forces the component to be refreshed.
     void forceRefresh(){
         fresh = true;
     }

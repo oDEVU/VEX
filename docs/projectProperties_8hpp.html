@@ -107,6 +107,7 @@ $(function(){initNavTree('projectProperties_8hpp.html','',''); });
 <div class="textblock"><code>#include &lt;ImReflect.hpp&gt;</code><br />
 <code>#include &lt;nlohmann/json.hpp&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &quot;<a class="el" href="ResolutionManager_8hpp_source.html">components/ResolutionManager.hpp</a>&quot;</code><br />
 </div>
 <p><a href="projectProperties_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -115,19 +116,54 @@ Classes</h2></td></tr>
 <tr class="memitem:ProjectProperties" id="r_ProjectProperties"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structProjectProperties.html">ProjectProperties</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to hold all configurable project settings and properties.  <a href="structProjectProperties.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a476342970f954b62d70552bcbb5ee509" id="r_a476342970f954b62d70552bcbb5ee509"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a476342970f954b62d70552bcbb5ee509">WindowType</a> { <b>Windowed</b> = 0
+, <b>Borderless</b> = 1
+, <b>ExclusiveFullscreen</b> = 2
+ }</td></tr>
+<tr class="memdesc:a476342970f954b62d70552bcbb5ee509"><td class="mdescLeft">&#160;</td><td class="mdescRight">Window Mode Enum.  <a href="#a476342970f954b62d70552bcbb5ee509">More...</a><br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:accc0a71242a9933b8c9f5bd13dd7ffdd" id="r_accc0a71242a9933b8c9f5bd13dd7ffdd"><td class="memItemLeft" align="right" valign="top"><a id="accc0a71242a9933b8c9f5bd13dd7ffdd" name="accc0a71242a9933b8c9f5bd13dd7ffdd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>IMGUI_REFLECT</b> (<a class="el" href="structProjectProperties.html">ProjectProperties</a>, project_name, main_scene, icon_path, version)</td></tr>
-<tr class="memitem:a69d39b99153509954e92344fb26a4bcc" id="r_a69d39b99153509954e92344fb26a4bcc"><td class="memItemLeft" align="right" valign="top"><a id="a69d39b99153509954e92344fb26a4bcc" name="a69d39b99153509954e92344fb26a4bcc"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT</b> (<a class="el" href="structProjectProperties.html">ProjectProperties</a>, project_name, main_scene, icon_path, version)</td></tr>
+<tr class="memitem:ad1946433fd3da17a5e0c17073130f4b9" id="r_ad1946433fd3da17a5e0c17073130f4b9"><td class="memItemLeft" align="right" valign="top"><a id="ad1946433fd3da17a5e0c17073130f4b9" name="ad1946433fd3da17a5e0c17073130f4b9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>IMGUI_REFLECT</b> (<a class="el" href="structProjectProperties.html">ProjectProperties</a>, project_name, main_scene, icon_path, version, window_type, resolution_mode, vsync)</td></tr>
+<tr class="memitem:ad1cbd26d67b6eacc9c714b2ff95db25c" id="r_ad1cbd26d67b6eacc9c714b2ff95db25c"><td class="memItemLeft" align="right" valign="top"><a id="ad1cbd26d67b6eacc9c714b2ff95db25c" name="ad1cbd26d67b6eacc9c714b2ff95db25c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT</b> (<a class="el" href="structProjectProperties.html">ProjectProperties</a>, project_name, main_scene, icon_path, version, window_type, resolution_mode, vsync)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure to hold all configurable projects settings and properties. </p>
 <dl class="section author"><dt>Author</dt><dd>Eryk Roszkowski </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="projectProperties_8hpp_source.html">projectProperties.hpp</a>.</p>
-</div></div><!-- contents -->
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="a476342970f954b62d70552bcbb5ee509" name="a476342970f954b62d70552bcbb5ee509"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a476342970f954b62d70552bcbb5ee509">&#9670;&#160;</a></span>WindowType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a476342970f954b62d70552bcbb5ee509">WindowType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Window Mode Enum. </p>
+
+<p class="definition">Definition at line <a class="el" href="projectProperties_8hpp_source.html#l00016">16</a> of file <a class="el" href="projectProperties_8hpp_source.html">projectProperties.hpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
 <div id="page-nav-resize-handle"></div>

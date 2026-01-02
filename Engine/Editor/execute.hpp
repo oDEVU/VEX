@@ -13,6 +13,9 @@
     #include <unistd.h>
 #endif
 
+/// @brief Executes a command in real-time and calls a callback function for each line of output.
+/// @param const std::string& cmd - Command to execute.
+/// @param std::function<void(const std::string&)> lineCallback - Callback function to call for each line of output.
 inline void executeCommandRealTime(const std::string& cmd, std::function<void(const std::string&)> lineCallback) {
     FILE* pipe = POPEN_FUNC(cmd.c_str(), "r");
 

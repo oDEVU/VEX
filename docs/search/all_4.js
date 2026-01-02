@@ -14,7 +14,7 @@ var searchData=
   ['enableps1effects_11',['enablePS1Effects',['../structvex_1_1SceneUBO.html#aa681b12faa37d28fd25196665c351c1c',1,'vex::SceneUBO']]],
   ['endframe_12',['endFrame',['../classvex_1_1ImGUIWrapper.html#a48a6bb72a45804ed72704c8f7d2f6c81',1,'vex::ImGUIWrapper::endFrame()'],['../classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1',1,'vex::Renderer::endFrame()'],['../classvex_1_1VulkanImGUIWrapper.html#a914707e58572f5540062faedcf186351',1,'vex::VulkanImGUIWrapper::endFrame()']]],
   ['endsingletimecommands_13',['endSingleTimeCommands',['../structvex_1_1VulkanContext.html#abb884624fe4e0b8765ed87c5cca04a11',1,'vex::VulkanContext']]],
-  ['engine_14',['Engine',['../classvex_1_1Engine.html',1,'vex::Engine'],['../classvex_1_1Engine.html#ab9aa221f6146c728213c148cba72b245',1,'vex::Engine::Engine()']]],
+  ['engine_14',['Engine',['../classvex_1_1Engine.html',1,'vex::Engine'],['../classvex_1_1Engine.html#ab9aa221f6146c728213c148cba72b245',1,'vex::Engine::Engine(const char *title, int width, int height, GameInfo gInfo)'],['../classvex_1_1Engine.html#a73324310e3b2705b7a6a0f411b0083bd',1,'vex::Engine::Engine(SkipInit)']]],
   ['engine_2ehpp_15',['Engine.hpp',['../Engine_8hpp.html',1,'']]],
   ['enviroment_16',['enviroment',['../structvex_1_1enviroment.html',1,'vex']]],
   ['enviroment_2ehpp_17',['enviroment.hpp',['../enviroment_8hpp.html',1,'']]],

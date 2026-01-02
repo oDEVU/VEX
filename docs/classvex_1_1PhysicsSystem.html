@@ -127,8 +127,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a1c19ad9f75b5c858b93ad64ab0743304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scans registry for PhysicsComponents without bodies and creates them.  <br /></td></tr>
 <tr class="memitem:a6632176736787dad393d5400ca24d4f2" id="r_a6632176736787dad393d5400ca24d4f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6632176736787dad393d5400ca24d4f2">SetGravityVector</a> (const glm::vec3 &amp;gravity)</td></tr>
 <tr class="memdesc:a6632176736787dad393d5400ca24d4f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows for updating gravity.  <br /></td></tr>
-<tr class="memitem:afd23071c0069a59be8c1fefffbb977ae" id="r_afd23071c0069a59be8c1fefffbb977ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd23071c0069a59be8c1fefffbb977ae">SetGravityFactor</a> (const JPH::BodyID &amp;inBodyID, float inGravityFactor)</td></tr>
-<tr class="memdesc:afd23071c0069a59be8c1fefffbb977ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows for updating gravity factor per object.  <br /></td></tr>
+<tr class="memitem:af3dea3d17b9e1df8f7792fd8cf3a364c" id="r_af3dea3d17b9e1df8f7792fd8cf3a364c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3dea3d17b9e1df8f7792fd8cf3a364c">SetGravityFactor</a> (JPH::BodyID bodyId, float gravityFactor)</td></tr>
+<tr class="memdesc:af3dea3d17b9e1df8f7792fd8cf3a364c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows for updating gravity factor per object.  <br /></td></tr>
 <tr class="memitem:a432972a37330f75f940efa0e9d47837e" id="r_a432972a37330f75f940efa0e9d47837e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a432972a37330f75f940efa0e9d47837e">SetFriction</a> (JPH::BodyID bodyId, float friction)</td></tr>
 <tr class="memdesc:a432972a37330f75f940efa0e9d47837e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows for updating friction.  <br /></td></tr>
 <tr class="memitem:a475dd9a786ea2720a01ecb299cbd0825" id="r_a475dd9a786ea2720a01ecb299cbd0825"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a475dd9a786ea2720a01ecb299cbd0825">GetFriction</a> (JPH::BodyID bodyId)</td></tr>
@@ -142,6 +142,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa2ef3bac869e66618b366c34a4b49d95" id="r_aa2ef3bac869e66618b366c34a4b49d95"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2ef3bac869e66618b366c34a4b49d95">GetLinearVelocity</a> (JPH::BodyID bodyId)</td></tr>
 <tr class="memdesc:aa2ef3bac869e66618b366c34a4b49d95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows for getting linear velocity.  <br /></td></tr>
 <tr class="memitem:aed7dc72997f969a1a95c26fdbdd8e0f6" id="r_aed7dc72997f969a1a95c26fdbdd8e0f6"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed7dc72997f969a1a95c26fdbdd8e0f6">GetVelocityAtPosition</a> (JPH::BodyID bodyId, const glm::vec3 &amp;point)</td></tr>
+<tr class="memdesc:aed7dc72997f969a1a95c26fdbdd8e0f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the velocity of a specific point on the body (in World Space)  <br /></td></tr>
 <tr class="memitem:a48af0298212c041d3578f70069839bfe" id="r_a48af0298212c041d3578f70069839bfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48af0298212c041d3578f70069839bfe">AddLinearVelocity</a> (JPH::BodyID bodyId, const glm::vec3 &amp;velocity)</td></tr>
 <tr class="memdesc:a48af0298212c041d3578f70069839bfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows for adding to linear velocity.  <br /></td></tr>
 <tr class="memitem:a95b9900ed10ab1a6fce037c0fddf3d6b" id="r_a95b9900ed10ab1a6fce037c0fddf3d6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95b9900ed10ab1a6fce037c0fddf3d6b">SetAngularVelocity</a> (JPH::BodyID bodyId, const glm::vec3 &amp;velocity)</td></tr>
@@ -219,7 +220,7 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing a physics system. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00252">252</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00298">298</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9328d456cb41c2082006ba2d660b2dd5" name="a9328d456cb41c2082006ba2d660b2dd5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9328d456cb41c2082006ba2d660b2dd5">&#9670;&#160;</a></span>PhysicsSystem()</h2>
@@ -245,8 +246,14 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Constructor, initializes physics system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entt::registry&amp;</td><td>registry The registry to use for entity-component system. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00255">255</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00302">302</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -292,6 +299,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Applies angular impulse at the mass center of the body, it is reset next physics tick. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; impulse The impulse to apply. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00617">617</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -317,6 +331,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for adding to angular velocity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; velocity The velocity to add. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00591">591</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -342,6 +363,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Applies force at the mass center of the body, it is reset next physics tick. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; force The force to apply. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00601">601</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -372,6 +400,14 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Applies force at the given position of the body, it is reset next physics tick. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; force The force to apply. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; position The position to apply the force at. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00605">605</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -397,6 +433,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Applies impulse at the mass center of the body, it is reset next physics tick. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; impulse The impulse to apply. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00609">609</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -427,6 +470,14 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Applies impulse at the given position of the body, it is reset next physics tick. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; impulse The impulse to apply. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; position The position to apply the impulse at. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00613">613</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -452,6 +503,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for adding to linear velocity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; velocity The velocity to add. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00576">576</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -477,6 +535,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Applies torque to the body, it is reset next physics tick. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; torque The torque to apply. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00597">597</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -507,6 +572,15 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows to recreate physics body at runtime. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entt::entity</td><td>e The entity to create the body for. </td></tr>
+    <tr><td class="paramname">entt::registry&amp;</td><td>r The registry to get the entity data from. </td></tr>
+    <tr><td class="paramname">PhysicsComponent&amp;</td><td>pc The physics component to update. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;JPH::BodyID&gt; The ID of the created body. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00315">315</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -528,6 +602,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destroys a physics body. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">PhysicsComponent&amp;</td><td>pc The physics component to update. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00473">473</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -553,6 +633,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Draws debug information for the physics system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bool</td><td>drawConstraints Whether to draw constraints. </td></tr>
+    <tr><td class="paramname">bool</td><td>drawWireframe Whether to draw wireframe. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00111">111</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -601,6 +688,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for getting angular velocity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to get. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00586">586</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -622,6 +715,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for getting body active state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool The active state of the body. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00626">626</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -643,6 +743,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for getting bounciness. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to get. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00557">557</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -674,7 +780,7 @@ Friends</h2></td></tr>
 <p>Allows for getting collision steps (collision accuracy). </p>
 <dl class="section return"><dt>Returns</dt><dd>int - number of collision steps </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00359">359</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00463">463</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -713,6 +819,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for getting friction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to get. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00547">547</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -734,6 +846,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for getting linear velocity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to get. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00565">565</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -777,6 +895,15 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Gets the velocity of a specific point on the body (in World Space) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to get. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; point The point on the body to get the velocity at. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00570">570</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
 </div>
@@ -797,7 +924,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initializes jolts physics system. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo</a></b></dt><dd>make it use max models from context </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size_t</td><td>maxBodies The maximum number of bodies to support. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo</a></b></dt><dd>make it use max models from context </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00027">27</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -922,6 +1055,16 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Performs a raycast in the physics world. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; origin The origin of the ray. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; direction The direction of the ray. </td></tr>
+    <tr><td class="paramname">float</td><td>maxDistance The maximum distance to check. </td></tr>
+    <tr><td class="paramname">RaycastHit&amp;</td><td>hit The hit information. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool - true if a hit occurred, false otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00524">524</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -947,6 +1090,14 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows to recreate physics body at runtime. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entt::entity</td><td>e The entity to create the body for. </td></tr>
+    <tr><td class="paramname">PhysicsComponent&amp;</td><td>pc The physics component to update. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;JPH::BodyID&gt; The ID of the created body. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00468">468</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -972,6 +1123,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for setting angular velocity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; velocity The velocity to set. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00582">582</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -997,6 +1155,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for setting body active state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">bool</td><td>active The active state to set. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00621">621</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -1022,6 +1187,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for updating bounciness. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">float</td><td>bounciness The new bounciness value. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00551">551</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -1058,7 +1230,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00363">363</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00467">467</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1078,6 +1250,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the debug renderer for the physics system. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::DebugRenderer*</td><td>renderer The debug renderer to use. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00107">107</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -1103,13 +1281,20 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for updating friction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The new friction value. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00541">541</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
 </div>
 </div>
-<a id="afd23071c0069a59be8c1fefffbb977ae" name="afd23071c0069a59be8c1fefffbb977ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd23071c0069a59be8c1fefffbb977ae">&#9670;&#160;</a></span>SetGravityFactor()</h2>
+<a id="af3dea3d17b9e1df8f7792fd8cf3a364c" name="af3dea3d17b9e1df8f7792fd8cf3a364c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3dea3d17b9e1df8f7792fd8cf3a364c">&#9670;&#160;</a></span>SetGravityFactor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1120,12 +1305,12 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">void vex::PhysicsSystem::SetGravityFactor </td>
           <td>(</td>
-          <td class="paramtype">const JPH::BodyID &amp;</td>          <td class="paramname"><span class="paramname"><em>inBodyID</em></span>, </td>
+          <td class="paramtype">JPH::BodyID</td>          <td class="paramname"><span class="paramname"><em>bodyId</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>inGravityFactor</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>gravityFactor</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -1136,8 +1321,15 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for updating gravity factor per object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">float</td><td>gravityFactor The new gravity factor. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00284">284</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00339">339</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1165,8 +1357,14 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for updating gravity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; gravity The new gravity vector. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00279">279</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00332">332</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1190,6 +1388,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Allows for updating linear velocity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">JPH::BodyID</td><td>bodyId The ID of the body to update. </td></tr>
+    <tr><td class="paramname">const</td><td>glm::vec3&amp; velocity The new linear velocity. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00561">561</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -1289,6 +1494,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Updates physics, it is technically fixed time but needs delta to track if required time already passed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">float</td><td>deltaTime The time elapsed since the last update. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00178">178</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -1332,6 +1543,15 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Helper to weld vertices based on position ONLY (ignoring UVs/Normals which split render meshes) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::vector&lt;glm::vec3&gt;&amp; inVerts - the input vertices </td></tr>
+    <tr><td class="paramname">const</td><td>std::vector&lt;uint32_t&gt;&amp; inIndices - the input indices </td></tr>
+    <tr><td class="paramname">JPH::VertexList&amp;</td><td>outVerts - the output vertices </td></tr>
+    <tr><td class="paramname">JPH::IndexedTriangleList&amp;</td><td>outTris - the output triangles </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8cpp_source.html#l00272">272</a> of file <a class="el" href="PhysicsSystem_8cpp_source.html">PhysicsSystem.cpp</a>.</p>
 
@@ -1358,7 +1578,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00372">372</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00480">480</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1383,7 +1603,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00374">374</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00482">482</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1407,7 +1627,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00394">394</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00502">502</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1431,7 +1651,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00386">386</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00494">494</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1455,7 +1675,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00389">389</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00497">497</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1479,7 +1699,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00383">383</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00491">491</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1503,7 +1723,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00387">387</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00495">495</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1527,7 +1747,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00379">379</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00487">487</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1551,7 +1771,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00391">391</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00499">499</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1575,7 +1795,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00393">393</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00501">501</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1599,7 +1819,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00377">377</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00485">485</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1623,7 +1843,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00385">385</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00493">493</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1647,7 +1867,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00384">384</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00492">492</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1671,7 +1891,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00378">378</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00486">486</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1695,7 +1915,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00381">381</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00489">489</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -1719,7 +1939,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00376">376</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00484">484</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>

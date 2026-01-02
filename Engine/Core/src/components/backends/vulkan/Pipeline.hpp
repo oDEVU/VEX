@@ -114,6 +114,9 @@ namespace vex {
 
         glm::uvec2 m_currentRenderResolution;
 
+        /// @brief Reads a file and returns its contents as a vector of characters.
+        /// @param const std::string& filename - The path to the file to read.
+        /// @return std::vector<char> - The contents of the file.
         std::vector<char> readFile(const std::string& filename);
     };
 }

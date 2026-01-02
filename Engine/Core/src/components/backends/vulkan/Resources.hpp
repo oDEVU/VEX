@@ -143,6 +143,9 @@ namespace vex {
         /// @brief Returns the bindless descriptor set.
         /// @return VkDescriptorSet - The bindless descriptor set.
         VkDescriptorSet getBindlessDescriptorSet() const { return m_r_context.bindlessDescriptorSet; }
+
+        /// @brief Returns the bindless descriptor set layout.
+        /// @return VkDescriptorSetLayout - The bindless descriptor set layout.
         VkDescriptorSetLayout getBindlessLayout() const { return m_r_context.bindlessDescriptorSetLayout; }
 
     private:

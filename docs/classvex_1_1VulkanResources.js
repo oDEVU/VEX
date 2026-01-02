@@ -8,6 +8,8 @@ var classvex_1_1VulkanResources =
     [ "createTextureFromRaw", "classvex_1_1VulkanResources.html#ac55a799b0723985d996d95cb51a462a4", null ],
     [ "createTextureSampler", "classvex_1_1VulkanResources.html#a61da06f0128f9c4b97c6512103c90c6f", null ],
     [ "createUniformBuffers", "classvex_1_1VulkanResources.html#af6600e8f346f3d771113252bab2739af", null ],
+    [ "getBindlessDescriptorSet", "classvex_1_1VulkanResources.html#a9afbacb471d6378c21af4b9abdc3cff4", null ],
+    [ "getBindlessLayout", "classvex_1_1VulkanResources.html#a2ca108ca72bb7c4950e6ebdbe54b9d3a", null ],
     [ "getDefaultTextureName", "classvex_1_1VulkanResources.html#a2782052723de88e57d06d9d0cf83dd42", null ],
     [ "getDescriptorLayout", "classvex_1_1VulkanResources.html#a87fdb7dcfec813238457dabf3c582e91", null ],
     [ "getDescriptorSet", "classvex_1_1VulkanResources.html#ac14d5b2f5f8102b54bcaa5328470dd22", null ],

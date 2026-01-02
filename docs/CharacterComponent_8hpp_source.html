@@ -106,27 +106,27 @@ $(function(){initNavTree('CharacterComponent_8hpp_source.html','',''); });
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="foldopen" id="foldopen00007" data-start="{" data-end="};">
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno"><a class="line" href="structvex_1_1CharacterComponent.html">    7</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CharacterComponent.html">CharacterComponent</a> {</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    JPH::Ref&lt;JPH::CharacterVirtual&gt; character = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <span class="keywordtype">float</span> standingHeight = 1.35f;</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="keywordtype">float</span> standingRadius = 0.3f;</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keywordtype">float</span> mass = 70.0f;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordtype">float</span> maxSlopeAngle = 45.0f;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    glm::vec3 controlInput = glm::vec3(0.0f);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">float</span> verticalVelocity = 0.0f;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">bool</span> isInitialized()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> character != <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">bool</span> isSupported()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> character-&gt;IsSupported(); }</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>};</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span></div>
+<div class="foldopen" id="foldopen00008" data-start="{" data-end="};">
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="structvex_1_1CharacterComponent.html">    8</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CharacterComponent.html">CharacterComponent</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>    JPH::Ref&lt;JPH::CharacterVirtual&gt; character = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="keywordtype">float</span> standingHeight = 1.35f;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keywordtype">float</span> standingRadius = 0.3f;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordtype">float</span> mass = 70.0f;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordtype">float</span> maxSlopeAngle = 45.0f;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    glm::vec3 controlInput = glm::vec3(0.0f);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">float</span> verticalVelocity = 0.0f;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">bool</span> isInitialized()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> character != <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">bool</span> isSupported()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> character-&gt;IsSupported(); }</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>};</div>
 </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>}</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>}</div>
 <div class="ttc" id="aJoltSafe_8hpp_html"><div class="ttname"><a href="JoltSafe_8hpp.html">JoltSafe.hpp</a></div><div class="ttdoc">This file exist only because of coliding macros.</div></div>
-<div class="ttc" id="astructvex_1_1CharacterComponent_html"><div class="ttname"><a href="structvex_1_1CharacterComponent.html">vex::CharacterComponent</a></div><div class="ttdef"><b>Definition</b> <a href="#l00007">CharacterComponent.hpp:7</a></div></div>
+<div class="ttc" id="astructvex_1_1CharacterComponent_html"><div class="ttname"><a href="structvex_1_1CharacterComponent.html">vex::CharacterComponent</a></div><div class="ttdoc">Character component for player or NPC characters.</div><div class="ttdef"><b>Definition</b> <a href="#l00008">CharacterComponent.hpp:8</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

@@ -45,6 +45,7 @@ var NAVTREE =
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
         [ "Variables", "globals_vars.html", null ],
+        [ "Enumerations", "globals_enum.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -54,10 +55,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AssetBrowser_8cpp_source.html",
-"classvex_1_1ComponentRegistry.html",
-"classvex_1_1PhysicsSystem.html#ad40784cfa9e958d41b8ff8e4558b63da",
-"classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49",
-"structvex_1_1GamepadButtonBinding.html"
+"classvex_1_1AssetBrowser.html#a8a2280b81f86423e72222d55fc22bc69",
+"classvex_1_1Interface.html",
+"classvex_1_1SceneManager.html#a445b1cfaed3cc4ad8b47fac01c4749a7",
+"classvex_1_1VulkanSwapchainManager.html#abbc631a3ed838cf0918b843e9845a358",
+"structvex_1_1SceneUBO.html#a3aab80337d4e64fa023ce6f89182ca0d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

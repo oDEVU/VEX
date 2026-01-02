@@ -31,59 +31,24 @@
   class GameObject {
   public:
     /// @brief Default constructor for GameObject. You need to call it from your derived class, it gives your object a unique identifier and registers it with the engine.
-    GameObject(Engine& engine, const std::string& name);/*
-        : m_engine(engine), m_entity(m_engine.getRegistry().create()), m_isValid(true)  {
+    /// @param Engine& engine Reference to the engine instance.
+    /// @param std::string name Unique name for the game object.
+    GameObject(Engine& engine, const std::string& name);
 
-        std::string tempName = name;
+    /// @brief Destroys the GameObject and removes it from the engine's registry.
+    void Destroy();
 
-        auto view = engine.getRegistry().view<NameComponent>();
-        for (auto entity : view) {
-            auto meshComponent = view.get<NameComponent>(entity);
-            if(meshComponent.name == tempName){
-                log("Warning: Object with name: '%s already exists! All objects should have unique names.", tempName.c_str());
-                tp::UUID uuidGenerator;
-                tempName = tempName + uuidGenerator.generate_uuid();
-                log("Info: Object created with name: '%s', it is still recommended to not rely on this name for identification. It is different every app run.", tempName.c_str());
-            }
-        }
-        m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
-        }*/
+    /// @brief Destruktor woła Destroy
+    virtual ~GameObject();
 
-      /// @brief Destroys the GameObject and removes it from the engine's registry.
-      void Destroy();/* {
-          if (!m_isValid) return;
+    GameObject(const GameObject&) = delete;
+    GameObject& operator=(const GameObject&) = delete;
 
-              log("[GameObject] Destroying entity ID: %d", (int)m_entity);
-
-              if (m_engine.getRegistry().valid(m_entity)) {
-                   auto view = m_engine.getRegistry().view<TransformComponent>();
-                   for (auto entity : view) {
-                       auto& transform = view.get<TransformComponent>(entity);
-                       if (transform.getParent() == m_entity) {
-                           transform.setParent(entt::null);
-                       }
-                   }
-                   m_engine.getRegistry().destroy(m_entity);
-              }
-
-              m_entity = entt::null;
-              m_isValid = false;
-          }*/
-
-          /// @brief Destruktor woła Destroy
-          virtual ~GameObject();/* {
-              Destroy();
-              };*/
-
-          GameObject(const GameObject&) = delete;
-          GameObject& operator=(const GameObject&) = delete;
-
-          /// @brief Pozwolenie na przenoszenie
-          GameObject(GameObject&& other) noexcept
-              : m_engine(other.m_engine), m_entity(other.m_entity), m_isValid(other.m_isValid) {
-              other.m_entity = entt::null;
-              other.m_isValid = false;
-          }
+    GameObject(GameObject&& other) noexcept
+        : m_engine(other.m_engine), m_entity(other.m_entity), m_isValid(other.m_isValid) {
+        other.m_entity = entt::null;
+        other.m_isValid = false;
+    }
 
       /// @brief virtual void function you override to implement custom behavior when the game starts.
       virtual void BeginPlay() {}

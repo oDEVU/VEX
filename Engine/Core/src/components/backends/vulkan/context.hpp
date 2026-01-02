@@ -49,7 +49,6 @@ namespace vex {
         VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;
 
         VkPipelineLayout pipelineLayout;
-        //VkCommandPool commandPool;
 
         std::vector<VkCommandPool> commandPools;
         std::vector<VkCommandBuffer> commandBuffers;

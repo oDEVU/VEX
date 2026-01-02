@@ -5,6 +5,7 @@ var classvex_1_1Scene =
     [ "AddEditorGameObject", "classvex_1_1Scene.html#a2a6c9df0947f18b5ce1421ecd586529d", null ],
     [ "AddGameObject", "classvex_1_1Scene.html#aa214ee0178ac64b792ff6d93999c2f36", null ],
     [ "DestroyGameObject", "classvex_1_1Scene.html#a9e1119af8f263db062ed73d3d0bda269", null ],
+    [ "FlushDestructionQueue", "classvex_1_1Scene.html#a573c9cd828fa5def2785ca23c54249c2", null ],
     [ "GetAllAddedObjects", "classvex_1_1Scene.html#a9ea3e898550cab946424f5f40949e2d2", null ],
     [ "GetAllGameObjectsByClassName", "classvex_1_1Scene.html#a434fc5bac20a90e6913bccbebf4fcfaa", null ],
     [ "GetAllGameObjectsByName", "classvex_1_1Scene.html#aa5988260d27459478a9b53c0c69663da", null ],

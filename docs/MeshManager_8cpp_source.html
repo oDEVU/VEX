@@ -118,17 +118,20 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    MeshManager::MeshManager(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context, std::unique_ptr&lt;VulkanResources&gt;&amp; resources, <a class="code hl_class" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a>* vfs)</div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#adb1d1d0795b739398753412347074995">   18</a></span>    <a class="code hl_function" href="classvex_1_1MeshManager.html#adb1d1d0795b739398753412347074995">MeshManager::MeshManager</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context, std::unique_ptr&lt;VulkanResources&gt;&amp; resources, <a class="code hl_class" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a>* vfs)</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        : m_r_context(context), m_p_resources(resources), m_vfs(vfs) {</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;MeshManager initialized&quot;</span>);</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    }</div>
+</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    MeshManager::~MeshManager() {</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        m_vulkanMeshes.clear();</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;MeshManager destroyed&quot;</span>);</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    }</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    ModelObject* MeshManager::createModel(<span class="keyword">const</span> std::string&amp; name, MeshComponent meshComponent, TransformComponent transformComponent, entt::entity parent = entt::null){</div>
+<div class="foldopen" id="foldopen00028" data-start="{" data-end="}">
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#acc3ac1e3e9a4392c9d9887404e1503f5">   28</a></span>    <a class="code hl_class" href="classvex_1_1ModelObject.html">ModelObject</a>* <a class="code hl_function" href="classvex_1_1MeshManager.html#acc3ac1e3e9a4392c9d9887404e1503f5">MeshManager::createModel</a>(<span class="keyword">const</span> std::string&amp; name, <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> meshComponent, <a class="code hl_struct" href="structvex_1_1TransformComponent.html">TransformComponent</a> transformComponent, entt::entity parent = entt::null){</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Constructing model: %s...&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        std::string tempName = name;</div>
@@ -171,14 +174,16 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        }</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="comment">//entt::entity modelEntity = m_p_engine-&gt;getRegistry().create();</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        ModelObject* modelObject = <span class="keyword">new</span> ModelObject(*m_p_engine, tempName, meshComponent, transformComponent);</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="comment">//modelObject-&gt;cleanup = [this](std::string&amp; tempName, MeshComponent meshComponent) { destroyModel(tempName, meshComponent); };</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <a class="code hl_class" href="classvex_1_1ModelObject.html">ModelObject</a>* modelObject = <span class="keyword">new</span> <a class="code hl_class" href="classvex_1_1ModelObject.html">ModelObject</a>(*m_p_engine, tempName, meshComponent, transformComponent);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="comment">//modelObject-&gt;cleanup = [this](std::string&amp; tempName, const MeshComponent&amp; meshComponent) { destroyModel(tempName, meshComponent); };</span></div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keywordflow">return</span> modelObject;</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    }</div>
+</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    MeshComponent MeshManager::loadMesh(<span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        MeshData meshData;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        MeshComponent meshComponent;</div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="}">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#a150a60fb93783cd6d7913f140c8fbcbf">   76</a></span>    <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> <a class="code hl_function" href="classvex_1_1MeshManager.html#a150a60fb93783cd6d7913f140c8fbcbf">MeshManager::loadMesh</a>(<span class="keyword">const</span> std::string&amp; path) {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <a class="code hl_struct" href="structvex_1_1MeshData.html">MeshData</a> meshData;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> meshComponent;</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        std::string realPath = <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path);</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keywordflow">try</span> {</div>
@@ -188,7 +193,7 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;File not found: &quot;</span> + realPath);</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            }</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>            meshData.loadFromFile(realPath, m_vfs);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>            meshData.<a class="code hl_function" href="structvex_1_1MeshData.html#a5bf5b7daa3cea00ae8a53e32ea39ddd5">loadFromFile</a>(realPath, m_vfs);</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            meshData.meshPath = path;</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Mesh load failed: %s&quot;</span>, path.c_str());</div>
@@ -215,27 +220,29 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keywordflow">return</span> meshComponent;</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
+</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    std::unique_ptr&lt;VulkanMesh&gt;&amp; MeshManager::getVulkanMeshByMesh(MeshComponent&amp; meshComponent) {</div>
+<div class="foldopen" id="foldopen00116" data-start="{" data-end="}">
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#a560b66e26c31dcef094e55278d7fafe1">  116</a></span>    std::unique_ptr&lt;VulkanMesh&gt;&amp; <a class="code hl_function" href="classvex_1_1MeshManager.html#a560b66e26c31dcef094e55278d7fafe1">MeshManager::getVulkanMeshByMesh</a>(<a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>&amp; meshComponent) {</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        std::string&amp; installedPath = m_installedPaths[meshComponent.id];</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        std::string requestedPath = meshComponent.meshData.meshPath;</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordflow">if</span> (installedPath != requestedPath) {</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Swapping mesh %s -&gt; %s&quot;</span>, installedPath.c_str(), requestedPath.c_str());</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            releaseMeshReference(installedPath, meshComponent);</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            <a class="code hl_function" href="classvex_1_1MeshManager.html#afb06016e68fd4761ba46e54f67cdfc29">releaseMeshReference</a>(installedPath, meshComponent);</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            installedPath = requestedPath;</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            <span class="keywordtype">bool</span> alreadyExisted = m_vulkanMeshes.count(requestedPath) &gt; 0;</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>            registerVulkanMesh(meshComponent);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>            <a class="code hl_function" href="classvex_1_1MeshManager.html#a437af2d85555ae3f45799ea0b9e70130">registerVulkanMesh</a>(meshComponent);</div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            <span class="keywordflow">if</span> (alreadyExisted &amp;&amp; m_vulkanMeshes.count(requestedPath)) {</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>                m_vulkanMeshes.at(requestedPath)-&gt;addInstance();</div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>            }</div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            registerVulkanMesh(meshComponent);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            <a class="code hl_function" href="classvex_1_1MeshManager.html#a437af2d85555ae3f45799ea0b9e70130">registerVulkanMesh</a>(meshComponent);</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        }</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        <span class="keywordflow">if</span> (m_vulkanMeshes.count(requestedPath)) {</div>
@@ -245,15 +252,17 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="keyword">static</span> std::unique_ptr&lt;VulkanMesh&gt; nullMesh = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <span class="keywordflow">return</span> nullMesh;</div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    }</div>
+</div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keywordtype">void</span> MeshManager::registerVulkanMesh(MeshComponent&amp; meshComponent) {</div>
+<div class="foldopen" id="foldopen00146" data-start="{" data-end="}">
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#a437af2d85555ae3f45799ea0b9e70130">  146</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1MeshManager.html#a437af2d85555ae3f45799ea0b9e70130">MeshManager::registerVulkanMesh</a>(<a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>&amp; meshComponent) {</div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        <span class="keyword">const</span> std::string&amp; path = meshComponent.meshData.meshPath;</div>
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keywordflow">if</span> (m_vulkanMeshes.count(path)) {</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>            <span class="keywordflow">if</span> (m_meshBoundsCache.count(path)) {</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                <span class="keyword">auto</span>&amp; bounds = m_meshBoundsCache[path];</div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                meshComponent.localCenter = bounds.first;</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                meshComponent.localRadius = bounds.second;</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                meshComponent.forceRefresh();</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                meshComponent.<a class="code hl_function" href="structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736">forceRefresh</a>();</div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            }</div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        }</div>
@@ -264,12 +273,12 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            }</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="preprocessor">            #endif</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>            MeshComponent loadedAsset = loadMesh(path);</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>            <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> loadedAsset = <a class="code hl_function" href="classvex_1_1MeshManager.html#a150a60fb93783cd6d7913f140c8fbcbf">loadMesh</a>(path);</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>            meshComponent.meshData = std::move(loadedAsset.meshData);</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>            meshComponent.localCenter = loadedAsset.localCenter;</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            meshComponent.localRadius = loadedAsset.localRadius;</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            meshComponent.forceRefresh();</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            meshComponent.<a class="code hl_function" href="structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736">forceRefresh</a>();</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            m_meshBoundsCache[path] = { loadedAsset.localCenter, loadedAsset.localRadius };</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
@@ -316,9 +325,11 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to register VulkanMesh: %s&quot;</span>, path.c_str());</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        }</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    }</div>
+</div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    <span class="keywordtype">void</span> MeshManager::onMeshComponentConstruct(entt::registry&amp; registry, entt::entity entity) {</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        <span class="keyword">auto</span>&amp; meshComponent = registry.get&lt;MeshComponent&gt;(entity);</div>
+<div class="foldopen" id="foldopen00217" data-start="{" data-end="}">
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#a31eba605df9802fa46a60eb5fdd64a20">  217</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1MeshManager.html#a31eba605df9802fa46a60eb5fdd64a20">MeshManager::onMeshComponentConstruct</a>(entt::registry&amp; registry, entt::entity entity) {</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        <span class="keyword">auto</span>&amp; meshComponent = registry.get&lt;<a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>&gt;(entity);</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <span class="keywordflow">if</span> (!m_freeModelIds.empty()) {</div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            meshComponent.id = m_freeModelIds.back();</div>
@@ -332,24 +343,26 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <span class="keywordtype">bool</span> alreadyExisted = m_vulkanMeshes.count(path) &gt; 0;</div>
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        registerVulkanMesh(meshComponent);</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        <a class="code hl_function" href="classvex_1_1MeshManager.html#a437af2d85555ae3f45799ea0b9e70130">registerVulkanMesh</a>(meshComponent);</div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
 <div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        <span class="keywordflow">if</span> (alreadyExisted) {</div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            m_vulkanMeshes.at(path)-&gt;addInstance();</div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        }</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        <span class="keywordflow">if</span>(registry.any_of&lt;PhysicsComponent&gt;(entity)) {</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            <span class="keyword">auto</span>&amp; oldPC = registry.get&lt;PhysicsComponent&gt;(entity);</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        <span class="keywordflow">if</span>(registry.any_of&lt;<a class="code hl_struct" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&gt;(entity)) {</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            <span class="keyword">auto</span>&amp; oldPC = registry.get&lt;<a class="code hl_struct" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&gt;(entity);</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            <span class="keywordflow">if</span>(oldPC.shape == ShapeType::MESH){</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                PhysicsComponent newPC = PhysicsComponent::Mesh(meshComponent, oldPC.bodyType, oldPC.mass, oldPC.friction, oldPC.bounce);</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                registry.replace&lt;PhysicsComponent&gt;(entity, newPC);</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                <a class="code hl_struct" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a> newPC = PhysicsComponent::Mesh(meshComponent, oldPC.bodyType, oldPC.mass, oldPC.friction, oldPC.bounce);</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                registry.replace&lt;<a class="code hl_struct" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&gt;(entity, newPC);</div>
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>            }</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        }</div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    }</div>
+</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span> </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <span class="keywordtype">void</span> MeshManager::onMeshComponentDestroy(entt::registry&amp; registry, entt::entity entity) {</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <span class="keyword">auto</span>&amp; meshComponent = registry.get&lt;MeshComponent&gt;(entity);</div>
+<div class="foldopen" id="foldopen00248" data-start="{" data-end="}">
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#a7673ddbce360380cd27529a529942f26">  248</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1MeshManager.html#a7673ddbce360380cd27529a529942f26">MeshManager::onMeshComponentDestroy</a>(entt::registry&amp; registry, entt::entity entity) {</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <span class="keyword">auto</span>&amp; meshComponent = registry.get&lt;<a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>&gt;(entity);</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        m_freeModelIds.push_back(meshComponent.id);</div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
@@ -370,8 +383,10 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>            }</div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        }</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    }</div>
+</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    <span class="keywordtype">void</span> MeshManager::releaseMeshReference(<span class="keyword">const</span> std::string&amp; path, MeshComponent&amp; ownerComp) {</div>
+<div class="foldopen" id="foldopen00271" data-start="{" data-end="}">
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#afb06016e68fd4761ba46e54f67cdfc29">  271</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1MeshManager.html#afb06016e68fd4761ba46e54f67cdfc29">MeshManager::releaseMeshReference</a>(<span class="keyword">const</span> std::string&amp; path, <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a>&amp; ownerComp) {</div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        <span class="keywordflow">if</span> (path.empty()) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        <span class="keywordflow">if</span> (m_vulkanMeshes.count(path)) {</div>
@@ -391,12 +406,14 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>            }</div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        }</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    }</div>
+</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="keywordtype">void</span> MeshManager::destroyModel(std::string&amp; name, MeshComponent meshComponent) {</div>
+<div class="foldopen" id="foldopen00292" data-start="{" data-end="}">
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno"><a class="line" href="classvex_1_1MeshManager.html#a651df97b135ae5108396d3e55a564b57">  292</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1MeshManager.html#a651df97b135ae5108396d3e55a564b57">MeshManager::destroyModel</a>(std::string&amp; name, <a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> meshComponent) {</div>
 <div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Freed model id&quot;</span>);</div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        m_freeModelIds.push_back(meshComponent.id);</div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>        <span class="keywordflow">if</span>(getVulkanMeshByMesh(meshComponent)-&gt;getNumOfInstances() &lt;= 1){</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>        <span class="keywordflow">if</span>(<a class="code hl_function" href="classvex_1_1MeshManager.html#a560b66e26c31dcef094e55278d7fafe1">getVulkanMeshByMesh</a>(meshComponent)-&gt;getNumOfInstances() &lt;= 1){</div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Erased VulkanMesh data&quot;</span>);</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>            m_vulkanMeshes.erase(meshComponent.meshData.meshPath);</div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i = 0; i &lt; meshComponent.textureNames.size(); i++){</div>
@@ -404,22 +421,39 @@ $(function(){initNavTree('MeshManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>            }</div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Unloaded textures&quot;</span>);</div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>        }<span class="keywordflow">else</span>{</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>            getVulkanMeshByMesh(meshComponent)-&gt;removeInstance();</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>            <a class="code hl_function" href="classvex_1_1MeshManager.html#a560b66e26c31dcef094e55278d7fafe1">getVulkanMeshByMesh</a>(meshComponent)-&gt;removeInstance();</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>        }</div>
 <div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    }</div>
+</div>
 <div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>}</div>
 <div class="ttc" id="aBasicComponents_8hpp_html"><div class="ttname"><a href="BasicComponents_8hpp.html">BasicComponents.hpp</a></div><div class="ttdoc">Contains basic components like transform, camera, name components..</div></div>
 <div class="ttc" id="aMesh_8hpp_html"><div class="ttname"><a href="Mesh_8hpp.html">Mesh.hpp</a></div><div class="ttdoc">This file defines MeshData struct and all other structs needed for it.</div></div>
 <div class="ttc" id="aPhysicsSystem_8hpp_html"><div class="ttname"><a href="PhysicsSystem_8hpp.html">PhysicsSystem.hpp</a></div><div class="ttdoc">This file defines PhysicsSystem class.</div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_a150a60fb93783cd6d7913f140c8fbcbf"><div class="ttname"><a href="classvex_1_1MeshManager.html#a150a60fb93783cd6d7913f140c8fbcbf">vex::MeshManager::loadMesh</a></div><div class="ttdeci">MeshComponent loadMesh(const std::string &amp;path)</div><div class="ttdoc">Loads mesh from a file, creates vulkan mesh and returns a MeshComponent.</div><div class="ttdef"><b>Definition</b> <a href="#l00076">MeshManager.cpp:76</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_a31eba605df9802fa46a60eb5fdd64a20"><div class="ttname"><a href="classvex_1_1MeshManager.html#a31eba605df9802fa46a60eb5fdd64a20">vex::MeshManager::onMeshComponentConstruct</a></div><div class="ttdeci">void onMeshComponentConstruct(entt::registry &amp;registry, entt::entity entity)</div><div class="ttdoc">Internally handles the construction of a mesh component called by entt callbacks.</div><div class="ttdef"><b>Definition</b> <a href="#l00217">MeshManager.cpp:217</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_a437af2d85555ae3f45799ea0b9e70130"><div class="ttname"><a href="classvex_1_1MeshManager.html#a437af2d85555ae3f45799ea0b9e70130">vex::MeshManager::registerVulkanMesh</a></div><div class="ttdeci">void registerVulkanMesh(MeshComponent &amp;meshComponent)</div><div class="ttdoc">Registers a Vulkan mesh component.</div><div class="ttdef"><b>Definition</b> <a href="#l00146">MeshManager.cpp:146</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_a560b66e26c31dcef094e55278d7fafe1"><div class="ttname"><a href="classvex_1_1MeshManager.html#a560b66e26c31dcef094e55278d7fafe1">vex::MeshManager::getVulkanMeshByMesh</a></div><div class="ttdeci">std::unique_ptr&lt; VulkanMesh &gt; &amp; getVulkanMeshByMesh(MeshComponent &amp;meshComponent)</div><div class="ttdoc">Retrieves a Vulkan mesh by mesh component.</div><div class="ttdef"><b>Definition</b> <a href="#l00116">MeshManager.cpp:116</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_a651df97b135ae5108396d3e55a564b57"><div class="ttname"><a href="classvex_1_1MeshManager.html#a651df97b135ae5108396d3e55a564b57">vex::MeshManager::destroyModel</a></div><div class="ttdeci">void destroyModel(std::string &amp;name, MeshComponent meshComponent)</div><div class="ttdoc">Destroys a model object by name and mesh component.</div><div class="ttdef"><b>Definition</b> <a href="#l00292">MeshManager.cpp:292</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_a7673ddbce360380cd27529a529942f26"><div class="ttname"><a href="classvex_1_1MeshManager.html#a7673ddbce360380cd27529a529942f26">vex::MeshManager::onMeshComponentDestroy</a></div><div class="ttdeci">void onMeshComponentDestroy(entt::registry &amp;registry, entt::entity entity)</div><div class="ttdoc">Internally handles the destruction of a mesh component called by entt callbacks.</div><div class="ttdef"><b>Definition</b> <a href="#l00248">MeshManager.cpp:248</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_acc3ac1e3e9a4392c9d9887404e1503f5"><div class="ttname"><a href="classvex_1_1MeshManager.html#acc3ac1e3e9a4392c9d9887404e1503f5">vex::MeshManager::createModel</a></div><div class="ttdeci">ModelObject * createModel(const std::string &amp;name, MeshComponent meshComponent, TransformComponent transformComponent, entt::entity parent)</div><div class="ttdoc">Creates a model object from a mesh component, transform component, and parent entity.</div><div class="ttdef"><b>Definition</b> <a href="#l00028">MeshManager.cpp:28</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_adb1d1d0795b739398753412347074995"><div class="ttname"><a href="classvex_1_1MeshManager.html#adb1d1d0795b739398753412347074995">vex::MeshManager::MeshManager</a></div><div class="ttdeci">MeshManager(VulkanContext &amp;context, std::unique_ptr&lt; VulkanResources &gt; &amp;resources, VirtualFileSystem *vfs)</div><div class="ttdoc">Constructor for MeshManager.</div><div class="ttdef"><b>Definition</b> <a href="#l00018">MeshManager.cpp:18</a></div></div>
+<div class="ttc" id="aclassvex_1_1MeshManager_html_afb06016e68fd4761ba46e54f67cdfc29"><div class="ttname"><a href="classvex_1_1MeshManager.html#afb06016e68fd4761ba46e54f67cdfc29">vex::MeshManager::releaseMeshReference</a></div><div class="ttdeci">void releaseMeshReference(const std::string &amp;path, MeshComponent &amp;ownerComp)</div><div class="ttdoc">Internally handles the release of a mesh reference called by entt callbacks.</div><div class="ttdef"><b>Definition</b> <a href="#l00271">MeshManager.cpp:271</a></div></div>
+<div class="ttc" id="aclassvex_1_1ModelObject_html"><div class="ttname"><a href="classvex_1_1ModelObject.html">vex::ModelObject</a></div><div class="ttdoc">ModelObject class represents a model object in the engine. Thanks to engine separation from the backe...</div><div class="ttdef"><b>Definition</b> <a href="ModelObject_8hpp_source.html#l00015">ModelObject.hpp:15</a></div></div>
 <div class="ttc" id="aclassvex_1_1VirtualFileSystem_html"><div class="ttname"><a href="classvex_1_1VirtualFileSystem.html">vex::VirtualFileSystem</a></div><div class="ttdoc">This class provides abstraction of file system needed for loading packed and unpacked assets.</div><div class="ttdef"><b>Definition</b> <a href="VirtualFileSystem_8hpp_source.html#l00024">VirtualFileSystem.hpp:24</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00093">errorUtils.cpp:93</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00097">errorUtils.cpp:97</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00112">errorUtils.cpp:112</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00376">errorUtils.cpp:376</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00381">errorUtils.cpp:381</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_aa5548f25f6136e0f883252cfd09dd4b5"><div class="ttname"><a href="errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles an exception by logging it and rethrows it in release builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00389">errorUtils.cpp:389</a></div></div>
 <div class="ttc" id="alimits_8hpp_html"><div class="ttname"><a href="limits_8hpp.html">limits.hpp</a></div><div class="ttdoc">This files defines global variables defining vulkan limits.</div></div>
 <div class="ttc" id="apathUtils_8hpp_html_a0f7f70a0c306a3e9c987e4e32bc5fa8f"><div class="ttname"><a href="pathUtils_8hpp.html#a0f7f70a0c306a3e9c987e4e32bc5fa8f">vex::GetAssetDir</a></div><div class="ttdeci">std::string VEX_EXPORT GetAssetDir()</div><div class="ttdoc">Get the directory of assets.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00021">pathUtils.cpp:21</a></div></div>
 <div class="ttc" id="apathUtils_8hpp_html_aa19dc36f35689a3623a28fb816af93d2"><div class="ttname"><a href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">vex::GetAssetPath</a></div><div class="ttdeci">std::string VEX_EXPORT GetAssetPath(const std::string &amp;relativePath)</div><div class="ttdoc">Get the directory of the executable.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00061">pathUtils.cpp:61</a></div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00025">context.hpp:25</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00381">BasicComponents.hpp:381</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshComponent_html_a20da54a1c03dbf8d0d91e95100a5b736"><div class="ttname"><a href="structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736">vex::MeshComponent::forceRefresh</a></div><div class="ttdeci">void forceRefresh()</div><div class="ttdoc">(used internally by the engine, DO NOT CALL) forces the component to be refreshed.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00409">BasicComponents.hpp:409</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshData_html"><div class="ttname"><a href="structvex_1_1MeshData.html">vex::MeshData</a></div><div class="ttdoc">Mesh data structure for loading and managing mesh data.</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8hpp_source.html#l00040">Mesh.hpp:40</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshData_html_a5bf5b7daa3cea00ae8a53e32ea39ddd5"><div class="ttname"><a href="structvex_1_1MeshData.html#a5bf5b7daa3cea00ae8a53e32ea39ddd5">vex::MeshData::loadFromFile</a></div><div class="ttdeci">void loadFromFile(const std::string &amp;path, VirtualFileSystem *vfs)</div><div class="ttdoc">Loads mesh using VirtualFileSystem (supports compressed VPKs)</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8cpp_source.html#l00271">Mesh.cpp:271</a></div></div>
+<div class="ttc" id="astructvex_1_1PhysicsComponent_html"><div class="ttname"><a href="structvex_1_1PhysicsComponent.html">vex::PhysicsComponent</a></div><div class="ttdoc">Structure representing a physics component.</div><div class="ttdef"><b>Definition</b> <a href="PhysicsSystem_8hpp_source.html#l00100">PhysicsSystem.hpp:100</a></div></div>
+<div class="ttc" id="astructvex_1_1TransformComponent_html"><div class="ttname"><a href="structvex_1_1TransformComponent.html">vex::TransformComponent</a></div><div class="ttdoc">Struct containing transform data and methods.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00031">BasicComponents.hpp:31</a></div></div>
+<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00026">context.hpp:26</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

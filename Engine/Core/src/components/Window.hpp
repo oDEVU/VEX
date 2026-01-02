@@ -21,6 +21,9 @@ namespace vex {
             bool done = false;
         public:
             /// @brief Constructor for Window class. Creates a new SDL_Window with the given title and resolution.
+            /// @param std::string title - Title of the window.
+            /// @param int resx - Width of the window in pixels (default: 480).
+            /// @param int resy - Height of the window in pixels (default: 640).
             Window(std::string title, int resx = 480, int resy = 640);
             ~Window();
 

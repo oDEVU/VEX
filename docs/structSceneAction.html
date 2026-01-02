@@ -109,16 +109,21 @@ $(function(){initNavTree('structSceneAction.html','','structSceneAction-members'
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:aef5ce09c6fe10575a0eb5e39096fc5ae" id="r_aef5ce09c6fe10575a0eb5e39096fc5ae"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>Type</b> { <b>NONE</b>
+<tr class="memitem:aef5ce09c6fe10575a0eb5e39096fc5ae" id="r_aef5ce09c6fe10575a0eb5e39096fc5ae"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>Type</b> { <br />
+&#160;&#160;<b>NONE</b>
 , <b>DELETE_ACTION</b>
 , <b>DUPLICATE</b>
 , <b>RENAME_START</b>
+, <br />
+&#160;&#160;<b>REPARENT</b>
+<br />
  }</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a136cba54c87e7da7d7438022f02b6192" id="r_a136cba54c87e7da7d7438022f02b6192"><td class="memItemLeft" align="right" valign="top">Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a136cba54c87e7da7d7438022f02b6192">type</a> = NONE</td></tr>
 <tr class="memitem:a17bbe8eb7563198d0af7f105453e9040" id="r_a17bbe8eb7563198d0af7f105453e9040"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17bbe8eb7563198d0af7f105453e9040">target</a> = nullptr</td></tr>
+<tr class="memitem:a39b5abb06e8e4915646519c5f72325c3" id="r_a39b5abb06e8e4915646519c5f72325c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39b5abb06e8e4915646519c5f72325c3">newParent</a> = nullptr</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure to define an action to be performed on a scene object outside of the hierarchy drawing loop. </p>
@@ -142,6 +147,22 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a39b5abb06e8e4915646519c5f72325c3" name="a39b5abb06e8e4915646519c5f72325c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39b5abb06e8e4915646519c5f72325c3">&#9670;&#160;</a></span>newParent</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a>* SceneAction::newParent = nullptr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SceneMenu_8hpp_source.html#l00031">31</a> of file <a class="el" href="SceneMenu_8hpp_source.html">SceneMenu.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a17bbe8eb7563198d0af7f105453e9040" name="a17bbe8eb7563198d0af7f105453e9040"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a17bbe8eb7563198d0af7f105453e9040">&#9670;&#160;</a></span>target</h2>
 

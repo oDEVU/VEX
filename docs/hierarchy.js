@@ -27,6 +27,7 @@ var hierarchy =
     ] ],
     [ "vex::enviroment", "structvex_1_1enviroment.html", null ],
     [ "vex::VirtualFileSystem::FileData", "structvex_1_1VirtualFileSystem_1_1FileData.html", null ],
+    [ "vex::FogComponent", "structvex_1_1FogComponent.html", null ],
     [ "vex::FontAtlas", "structvex_1_1FontAtlas.html", null ],
     [ "vex::Frustum", "structvex_1_1Frustum.html", null ],
     [ "vex::GameInfo", "structvex_1_1GameInfo.html", null ],
@@ -35,6 +36,8 @@ var hierarchy =
       [ "vex::CameraObject", "classvex_1_1CameraObject.html", [
         [ "EditorCameraObject", "classEditorCameraObject.html", null ]
       ] ],
+      [ "vex::FogObject", "classvex_1_1FogObject.html", null ],
+      [ "vex::LightObject", "classvex_1_1LightObject.html", null ],
       [ "vex::ModelObject", "classvex_1_1ModelObject.html", null ]
     ] ],
     [ "vex::GameObjectFactory", "classvex_1_1GameObjectFactory.html", null ],
@@ -62,6 +65,7 @@ var hierarchy =
     [ "vex::Light", "structvex_1_1Light.html", null ],
     [ "vex::LightComponent", "structvex_1_1LightComponent.html", null ],
     [ "vex::VirtualFileSystem::LoadedVPK", "structvex_1_1VirtualFileSystem_1_1LoadedVPK.html", null ],
+    [ "vex::LogEntry", "structvex_1_1LogEntry.html", null ],
     [ "vex::MeshComponent", "structvex_1_1MeshComponent.html", null ],
     [ "vex::MeshData", "structvex_1_1MeshData.html", null ],
     [ "vex::MeshManager", "classvex_1_1MeshManager.html", null ],

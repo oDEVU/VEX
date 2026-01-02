@@ -146,6 +146,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2a6c9df0947f18b5ce1421ecd586529d" id="r_a2a6c9df0947f18b5ce1421ecd586529d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a6c9df0947f18b5ce1421ecd586529d">AddEditorGameObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> *gameObject)</td></tr>
 <tr class="memdesc:a2a6c9df0947f18b5ce1421ecd586529d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to add a game object specifically for <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> usage (saved to file).  <br /></td></tr>
 <tr class="memitem:af68b4aeb6f710c3d93775392b0478378" id="r_af68b4aeb6f710c3d93775392b0478378"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af68b4aeb6f710c3d93775392b0478378">GetScenePath</a> ()</td></tr>
+<tr class="memitem:a573c9cd828fa5def2785ca23c54249c2" id="r_a573c9cd828fa5def2785ca23c54249c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a573c9cd828fa5def2785ca23c54249c2">FlushDestructionQueue</a> ()</td></tr>
+<tr class="memdesc:a573c9cd828fa5def2785ca23c54249c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the queue of objects marked for destruction.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -156,6 +158,7 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a47c6cee7ba0cd735b7d9e9fe5161ec33" id="r_a47c6cee7ba0cd735b7d9e9fe5161ec33"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47c6cee7ba0cd735b7d9e9fe5161ec33">m_objects</a></td></tr>
 <tr class="memitem:aafc1fccbc015f565fe29f00dfb115d45" id="r_aafc1fccbc015f565fe29f00dfb115d45"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafc1fccbc015f565fe29f00dfb115d45">m_addedObjects</a></td></tr>
+<tr class="memitem:a2896f2201f4e38aa98374561281f821a" id="r_a2896f2201f4e38aa98374561281f821a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2896f2201f4e38aa98374561281f821a">m_pendingDestruction</a></td></tr>
 <tr class="memitem:a287b88999c976e1a4f2dc760324808b3" id="r_a287b88999c976e1a4f2dc760324808b3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a287b88999c976e1a4f2dc760324808b3">m_path</a></td></tr>
 <tr class="memitem:a2da003cbdfb10606f8a22167228c6fbf" id="r_a2da003cbdfb10606f8a22167228c6fbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Engine.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2da003cbdfb10606f8a22167228c6fbf">m_engine</a></td></tr>
 <tr class="memitem:add5050534bc707412e94cef5e2e65482" id="r_add5050534bc707412e94cef5e2e65482"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add5050534bc707412e94cef5e2e65482">m_creatingFromScene</a> = false</td></tr>
@@ -242,7 +245,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00427">427</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00446">446</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -269,7 +272,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00238">238</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00240">240</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -296,7 +299,28 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00255">255</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00257">257</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a573c9cd828fa5def2785ca23c54249c2" name="a573c9cd828fa5def2785ca23c54249c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a573c9cd828fa5def2785ca23c54249c2">&#9670;&#160;</a></span>FlushDestructionQueue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Scene::FlushDestructionQueue </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Processes the queue of objects marked for destruction. </p>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00265">265</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -354,7 +378,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::vector&lt;GameObject*&gt; - vector of pointers to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00288">288</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00307">307</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -382,7 +406,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::vector&lt;GameObject*&gt; - vector of pointers to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00273">273</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00292">292</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -440,7 +464,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>GameObject* - pointer to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00303">303</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00322">322</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -523,7 +547,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00244">244</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00246">246</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -550,7 +574,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00317">317</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00336">336</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -623,7 +647,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00097">97</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00100">100</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 
 </div>
 </div>
@@ -647,7 +671,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00100">100</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00104">104</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 
 </div>
 </div>
@@ -671,7 +695,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00099">99</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00103">103</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 
 </div>
 </div>
@@ -695,7 +719,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00096">96</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00099">99</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 
 </div>
 </div>
@@ -719,7 +743,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00098">98</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00102">102</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2896f2201f4e38aa98374561281f821a" name="a2896f2201f4e38aa98374561281f821a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2896f2201f4e38aa98374561281f821a">&#9670;&#160;</a></span>m_pendingDestruction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classvex_1_1GameObject.html">GameObject</a>*&gt; vex::Scene::m_pendingDestruction</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00101">101</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 
 </div>
 </div>

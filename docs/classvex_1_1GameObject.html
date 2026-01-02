@@ -114,7 +114,9 @@ Inheritance diagram for vex::GameObject:</div>
   <map id="vex_3A_3AGameObject_map" name="vex_3A_3AGameObject_map">
 <area href="classvex_1_1BasicCamera.html" alt="vex::BasicCamera" shape="rect" coords="0,56,126,80"/>
 <area href="classvex_1_1CameraObject.html" title="Basic camera object class. it only contains transform and camera components." alt="vex::CameraObject" shape="rect" coords="136,56,262,80"/>
-<area href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe..." alt="vex::ModelObject" shape="rect" coords="272,56,398,80"/>
+<area href="classvex_1_1FogObject.html" title="premade FogObject class." alt="vex::FogObject" shape="rect" coords="272,56,398,80"/>
+<area href="classvex_1_1LightObject.html" title="premade LightObject class." alt="vex::LightObject" shape="rect" coords="408,56,534,80"/>
+<area href="classvex_1_1ModelObject.html" title="ModelObject class represents a model object in the engine. Thanks to engine separation from the backe..." alt="vex::ModelObject" shape="rect" coords="544,56,670,80"/>
 <area href="classEditorCameraObject.html" title="A specialized camera object for use within the editor, supporting free-fly movement and input process..." alt="EditorCameraObject" shape="rect" coords="136,112,262,136"/>
   </map>
 </div></div>
@@ -132,7 +134,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab9552a3ae5e83fa62c37c8c3c0514db5" id="r_ab9552a3ae5e83fa62c37c8c3c0514db5"><td class="memItemLeft" align="right" valign="top"><a id="ab9552a3ae5e83fa62c37c8c3c0514db5" name="ab9552a3ae5e83fa62c37c8c3c0514db5"></a>
 <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;)=delete</td></tr>
 <tr class="memitem:adbb8944575c4494fccfca216a37aefe9" id="r_adbb8944575c4494fccfca216a37aefe9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbb8944575c4494fccfca216a37aefe9">GameObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;&amp;other) noexcept</td></tr>
-<tr class="memdesc:adbb8944575c4494fccfca216a37aefe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pozwolenie na przenoszenie.  <br /></td></tr>
 <tr class="memitem:a4f7114d7490d411204d8508e338aa1b8" id="r_a4f7114d7490d411204d8508e338aa1b8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f7114d7490d411204d8508e338aa1b8">BeginPlay</a> ()</td></tr>
 <tr class="memdesc:a4f7114d7490d411204d8508e338aa1b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">virtual void function you override to implement custom behavior when the game starts.  <br /></td></tr>
 <tr class="memitem:aff7761eb14e47fee0d495f2f86597b8a" id="r_aff7761eb14e47fee0d495f2f86597b8a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff7761eb14e47fee0d495f2f86597b8a">Update</a> (float deltaTime)</td></tr>
@@ -200,6 +201,13 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Default constructor for <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. You need to call it from your derived class, it gives your object a unique identifier and registers it with the engine. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Engine&amp;</td><td>engine Reference to the engine instance. </td></tr>
+    <tr><td class="paramname">std::string</td><td>name Unique name for the game object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="GameObject_8cpp_source.html#l00010">10</a> of file <a class="el" href="GameObject_8cpp_source.html">GameObject.cpp</a>.</p>
 
@@ -257,9 +265,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pozwolenie na przenoszenie. </p>
-
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00082">82</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00047">47</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -291,7 +297,7 @@ template&lt;typename T&gt; </div>
 
 <p>Function that adds a component to the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00105">105</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00070">70</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -322,7 +328,7 @@ template&lt;typename T&gt; </div>
 
 <p>Reimplemented in <a class="el" href="classvex_1_1BasicCamera.html#a3d328653828c54705ac3c5572982816d">vex::BasicCamera</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00089">89</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00054">54</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -375,7 +381,7 @@ template&lt;typename T&gt; </div>
 <p>Function that returns reference to a requested component. </p>
 <dl class="section return"><dt>Returns</dt><dd>Requested component reference eg. <a class="el" href="structvex_1_1InputComponent.html" title="Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.">InputComponent</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00103">103</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00068">68</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -405,11 +411,11 @@ template&lt;typename T&gt; </div>
 <p>Function that returns engine reference allowing your custom Object to use engine provided methods. </p>
 <p>Example usage: </p><div class="fragment"><div class="line"><a class="code hl_function" href="#ac604d8d34192936d4c8ab5747310eeb5">GetEngine</a>().<a class="code hl_function" href="classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a">setResolutionMode</a>(<a class="code hl_enumvalue" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485">ResolutionMode::PS1_SHARP</a>)</div>
 <div class="ttc" id="aResolutionManager_8hpp_html_a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485"><div class="ttname"><a href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485">vex::ResolutionMode::PS1_SHARP</a></div><div class="ttdeci">@ PS1_SHARP</div><div class="ttdoc">Integer-scaled resolution closest to PS1.</div><div class="ttdef"><b>Definition</b> <a href="ResolutionManager_8hpp_source.html#l00042">ResolutionManager.hpp:42</a></div></div>
-<div class="ttc" id="aclassvex_1_1Engine_html_a9565d468a161b49467252c66a15e9d4a"><div class="ttname"><a href="classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a">vex::Engine::setResolutionMode</a></div><div class="ttdeci">void setResolutionMode(ResolutionMode mode)</div><div class="ttdoc">Function allowing for changing resolution mode at runtime.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8cpp_source.html#l00144">Engine.cpp:144</a></div></div>
-<div class="ttc" id="aclassvex_1_1GameObject_html_ac604d8d34192936d4c8ab5747310eeb5"><div class="ttname"><a href="#ac604d8d34192936d4c8ab5747310eeb5">vex::GameObject::GetEngine</a></div><div class="ttdeci">Engine &amp; GetEngine()</div><div class="ttdoc">Function that returns engine reference allowing your custom Object to use engine provided methods.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00100">GameObject.hpp:100</a></div></div>
+<div class="ttc" id="aclassvex_1_1Engine_html_a9565d468a161b49467252c66a15e9d4a"><div class="ttname"><a href="classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a">vex::Engine::setResolutionMode</a></div><div class="ttdeci">void setResolutionMode(ResolutionMode mode)</div><div class="ttdoc">Function allowing for changing resolution mode at runtime.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8cpp_source.html#l00207">Engine.cpp:207</a></div></div>
+<div class="ttc" id="aclassvex_1_1GameObject_html_ac604d8d34192936d4c8ab5747310eeb5"><div class="ttname"><a href="#ac604d8d34192936d4c8ab5747310eeb5">vex::GameObject::GetEngine</a></div><div class="ttdeci">Engine &amp; GetEngine()</div><div class="ttdoc">Function that returns engine reference allowing your custom Object to use engine provided methods.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00065">GameObject.hpp:65</a></div></div>
 </div><!-- fragment --><p>You could technically just use m_engine but its highly discarded as it can lead to confusion and potential bugs. </p>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00100">100</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00065">65</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -438,7 +444,7 @@ template&lt;typename T&gt; </div>
 
 <p>Function that returns entity object, which is the entity associated with this <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. Its mostly needed for parenting and other engine internal usage. </p>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00093">93</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00058">58</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -468,7 +474,7 @@ template&lt;typename T&gt; </div>
 <p>Function that returns the type of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Type of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00130">130</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00095">95</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -500,7 +506,7 @@ template&lt;typename T&gt; </div>
 <p>Function that checks if the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> has a component. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> has the component, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00108">108</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00073">73</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -527,7 +533,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00109">109</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00074">74</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -564,10 +570,10 @@ template&lt;typename T&gt; </div>
 <p>Example usage: </p><div class="fragment"><div class="line"><a class="code hl_function" href="#aa50421d141741f058e45878417c827d0">GameObject</a>* parent = <span class="keyword">new</span> <a class="code hl_function" href="#aa50421d141741f058e45878417c827d0">GameObject</a>();</div>
 <div class="line"><a class="code hl_function" href="#aa50421d141741f058e45878417c827d0">GameObject</a>* child = <span class="keyword">new</span> <a class="code hl_function" href="#aa50421d141741f058e45878417c827d0">GameObject</a>();</div>
 <div class="line">child-&gt;<a class="code hl_function" href="#ae052595f20ae7ff9ff9dbed11eaf6355">ParentTo</a>(parent-&gt;<a class="code hl_function" href="#afa8c46e24def6d113e9f158bd9a3cdec">GetEntity</a>());</div>
-<div class="ttc" id="aclassvex_1_1GameObject_html_ae052595f20ae7ff9ff9dbed11eaf6355"><div class="ttname"><a href="#ae052595f20ae7ff9ff9dbed11eaf6355">vex::GameObject::ParentTo</a></div><div class="ttdeci">void ParentTo(entt::entity entity)</div><div class="ttdoc">Function that parent this Object to another GameObject. You need to pass another GameObject&#39;s entity.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00118">GameObject.hpp:118</a></div></div>
-<div class="ttc" id="aclassvex_1_1GameObject_html_afa8c46e24def6d113e9f158bd9a3cdec"><div class="ttname"><a href="#afa8c46e24def6d113e9f158bd9a3cdec">vex::GameObject::GetEntity</a></div><div class="ttdeci">entt::entity GetEntity() const</div><div class="ttdoc">Function that returns entity object, which is the entity associated with this GameObject....</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00093">GameObject.hpp:93</a></div></div>
+<div class="ttc" id="aclassvex_1_1GameObject_html_ae052595f20ae7ff9ff9dbed11eaf6355"><div class="ttname"><a href="#ae052595f20ae7ff9ff9dbed11eaf6355">vex::GameObject::ParentTo</a></div><div class="ttdeci">void ParentTo(entt::entity entity)</div><div class="ttdoc">Function that parent this Object to another GameObject. You need to pass another GameObject&#39;s entity.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00083">GameObject.hpp:83</a></div></div>
+<div class="ttc" id="aclassvex_1_1GameObject_html_afa8c46e24def6d113e9f158bd9a3cdec"><div class="ttname"><a href="#afa8c46e24def6d113e9f158bd9a3cdec">vex::GameObject::GetEntity</a></div><div class="ttdeci">entt::entity GetEntity() const</div><div class="ttdoc">Function that returns entity object, which is the entity associated with this GameObject....</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00058">GameObject.hpp:58</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00118">118</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00083">83</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -602,7 +608,7 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00124">124</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00089">89</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -633,7 +639,7 @@ template&lt;typename T&gt; </div>
 
 <p>Reimplemented in <a class="el" href="classEditorCameraObject.html#aae0fa5e4d3b2be378d0838284e993dec">EditorCameraObject</a>, and <a class="el" href="classvex_1_1BasicCamera.html#a209a4bae13f69db079e601fc0250dd97">vex::BasicCamera</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00091">91</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00056">56</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -658,7 +664,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00133">133</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00098">98</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -682,7 +688,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00134">134</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00099">99</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -706,7 +712,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00135">135</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00100">100</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>
@@ -730,7 +736,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00136">136</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObject_8hpp_source.html#l00101">101</a> of file <a class="el" href="GameObject_8hpp_source.html">GameObject.hpp</a>.</p>
 
 </div>
 </div>

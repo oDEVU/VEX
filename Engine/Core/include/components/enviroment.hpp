@@ -21,7 +21,7 @@ namespace vex {
       bool affineWarping = true;
       /// @brief Enables whole screen color quantization. (PS1 style color compresion artifacts)
       bool screenQuantization = true;
-      /// @brief Enables NTFS artifacts. (PS1 style NTFS artifacts)
+      /// @brief Enables CRT TVs artifacts.
       bool ntfsArtifacts = true;
       /// @brief Enables texture quantization. (PS1 style texture quantization)
       bool textureQuantization = true;

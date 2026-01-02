@@ -90,7 +90,6 @@ struct Widget {
 };
 
 /// @brief Class defining VexUI, it initializes the UI system, loads, renders, converts ui data, essentially managing ui from file to reneering.
-/// @todo make it into a UI_Component, so it renders like meshes and there can be multiple instances of ui. Also add z-index for sorting. Thank you later me.
 class VexUI {
 public:
     /// @brief Constructor for VexUI.
@@ -190,28 +189,47 @@ public:
     }
 
     /// @brief Set rotation of a widget in degrees.
+    /// @param const std::string& id The id of the widget to rotate.
+    /// @param float degrees The rotation angle in degrees.
     void setRotation(const std::string& id, float degrees);
 
-    /// @brief Move a widget (sets Left/Top yoga properties).
-    /// Works best with position: absolute, or relative offsets.
+    /// @brief Move a widget (sets Left/Top yoga properties). Works best with position: absolute, or relative offsets.
+    /// @param const std::string& id The id of widget to Move
+    /// @param float x The x-coordinate of the widget's new position.
+    /// @param float y The y-coordinate of the widget's new position.
     void setPosition(const std::string& id, float x, float y);
 
     /// @brief Resize a widget.
+    /// @param const std::string& id The id of the widget to resize.
+    /// @param float w The new width of the widget.
+    /// @param float h The new height of the widget.
     void setSize(const std::string& id, float w, float h);
 
     /// @brief Change the image of an image widget.
+    /// @param const std::string& id The id of the widget to change the image of.
+    /// @param const std::string& path The path to the new image.
     void setImage(const std::string& id, const std::string& path);
 
     /// @brief Change font properties.
+    /// @param const std::string& id The id of the widget to change the font of.
+    /// @param const std::string& fontPath The path to the new font.
+    /// @param float fontSize The new font size.
     void setFont(const std::string& id, const std::string& fontPath, float fontSize);
 
     /// @brief Set text/tint color.
+    /// @param const std::string& id The id of the widget to change the color of.
+    /// @param glm::vec4 color The new color.
     void setColor(const std::string& id, glm::vec4 color);
 
     /// @brief Set background color.
+    /// @param const std::string& id The id of the widget to change the background color of.
+    /// @param glm::vec4 color The new background color.
     void setBackgroundColor(const std::string& id, glm::vec4 color);
 
     /// @brief Set border properties.
+    /// @param const std::string& id The id of the widget to change the border of.
+    /// @param float width The new border width.
+    /// @param glm::vec4 color The new border color.
     void setBorder(const std::string& id, float width, glm::vec4 color);
 
     /// @brief Check if the UI system is initialized.
@@ -291,17 +309,68 @@ private:
     size_t m_vbSize = 0;
     VkSampler m_uiSampler = VK_NULL_HANDLE;
 
+    /// @brief Loads fonts for the UI.
+    /// @param Widget* w The widget to load fonts for.
     void loadFonts(Widget* w);
+
+    /// @brief Loads images for the UI.
+    /// @param Widget* w The widget to load images for.
     void loadImages(Widget* w);
+
+    /// @brief Layouts the UI using yoga.
+    /// @param glm::uvec2 res The resolution of the UI.
     void layout(glm::uvec2 res);
+
+    /// @brief Batches the UI for rendering.
+    /// @param Widget* w The widget to batch.
+    /// @param std::vector<float>& verts The vertex buffer to batch into.
+    /// @param glm::vec2 parentOffset The offset of the parent widget.
     void batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset = {0.f, 0.f});
+
+    /// @brief Uploads the vertex buffer to the GPU.
+    /// @param const std::vector<float>& verts The vertex buffer to upload.
     void uploadVerts(const std::vector<float>& verts);
+
+    /// @brief Parses a node from json to widgets.
+    /// @param const nlohmann::json& j The json node to parse.
+    /// @return The parsed widget.
     Widget* parseNode(const nlohmann::json& j);
+
+    /// @brief Frees the widget tree.
+    /// @param Widget* w The widget to free.
     void freeTree(Widget* w);
+
+    /// @brief Finds a widget at a position.
+    /// @param Widget* w The widget to search.
+    /// @param glm::vec2 pos The position to search at.
+    /// @param glm::vec2 parentOffset The offset of the parent widget.
+    /// @return The widget at the position.
     Widget* findWidgetAt(Widget* w, glm::vec2 pos, glm::vec2 parentOffset = {0.f, 0.f});
+
+    /// @brief Finds a widget by its id.
+    /// @param Widget* w The widget to search.
+    /// @param const std::string& id The id to search for.
+    /// @return The widget with the id.
     Widget* findById(Widget* w, const std::string& id);
+
+    /// @brief Calculates the size of the text.
+    /// @param Widget* w The widget to calculate the size of.
+    /// @param float maxWidth The maximum width of the text.
+    /// @return The size of the text.
     YGSize calculateTextSize(Widget* w, float maxWidth = FLT_MAX);
+
+    /// @brief Measures a text node.
+    /// @param const YGNode* node The node to measure.
+    /// @param float width The width of the node.
+    /// @param YGMeasureMode widthMode The width mode of the node.
+    /// @param float height The height of the node.
+    /// @param YGMeasureMode heightMode The height mode of the node.
+    /// @return The size of the text.
     static YGSize measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
+
+    /// @brief Updates a widget safely.
+    /// @param const std::string& id The id of the widget to update.
+    /// @param std::function<void(Widget*)> action The action to perform on the widget.
     void safeUpdate(const std::string& id, std::function<void(Widget*)> action);
 
 };

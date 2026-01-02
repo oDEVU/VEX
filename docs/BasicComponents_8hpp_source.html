@@ -488,21 +488,23 @@ $(function(){initNavTree('BasicComponents_8hpp_source.html','',''); });
 <div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="preprocessor">#if defined(TRANSPARENT)</span></div>
 <div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="preprocessor">    #undef TRANSPARENT</span></div>
 <div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span> </div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span><span class="keyword">enum class</span> RenderType {</div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    OPAQUE,</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>    TRANSPARENT,</div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    MASKED,</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    CUSTOM</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>};</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span></div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span></div>
+<div class="foldopen" id="foldopen00373" data-start="{" data-end="};">
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno"><a class="line" href="BasicComponents_8hpp.html#a1f2928caa4b8f39e73a328a01965ff66">  373</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="BasicComponents_8hpp.html#a1f2928caa4b8f39e73a328a01965ff66">RenderType</a> {</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>    OPAQUE,</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    TRANSPARENT,</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    MASKED,</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    CUSTOM</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>};</div>
+</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span></div>
 <div class="foldopen" id="foldopen00381" data-start="{" data-end="};">
 <div class="line"><a id="l00381" name="l00381"></a><span class="lineno"><a class="line" href="structvex_1_1MeshComponent.html">  381</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1MeshComponent.html">MeshComponent</a> {</div>
 <div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>    <span class="comment">// Render Data</span></div>
 <div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>    <a class="code hl_struct" href="structvex_1_1MeshData.html">MeshData</a> meshData;</div>
 <div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>    uint32_t <span class="keywordtype">id</span> = UINT32_MAX;</div>
 <div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    std::vector&lt;std::string&gt; textureNames;</div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    RenderType renderType = RenderType::OPAQUE;</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    <a class="code hl_enumeration" href="BasicComponents_8hpp.html#a1f2928caa4b8f39e73a328a01965ff66">RenderType</a> renderType = RenderType::OPAQUE;</div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    <a class="code hl_struct" href="structvex_1_1rgba.html">vex::rgba</a> color = glm::vec4(1.f);</div>
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span> </div>
 <div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    std::map&lt;int, std::string&gt; textureOverrides;</div>
@@ -513,55 +515,75 @@ $(function(){initNavTree('BasicComponents_8hpp_source.html','',''); });
 <div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span> </div>
 <div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    glm::vec3 worldCenter = glm::vec3(0.0f);</div>
 <div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    <span class="keywordtype">float</span> worldRadius = 1.0f;</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span> </div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>    <span class="keywordtype">bool</span> getIsFresh(){</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>        <span class="keywordflow">return</span> fresh;</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    }</div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>    <span class="keywordtype">void</span> setRendered(){</div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>        fresh = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    }</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    <span class="keywordtype">void</span> forceRefresh(){</div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>        fresh = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>    }</div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span> </div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>    <span class="keywordtype">bool</span> fresh = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>};</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span></div>
+<div class="foldopen" id="foldopen00399" data-start="{" data-end="}">
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno"><a class="line" href="structvex_1_1MeshComponent.html#a6887e038adda3adddb94a7a11a5fe1da">  399</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="structvex_1_1MeshComponent.html#a6887e038adda3adddb94a7a11a5fe1da">getIsFresh</a>(){</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>        <span class="keywordflow">return</span> fresh;</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>    }</div>
 </div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span></div>
-<div class="foldopen" id="foldopen00416" data-start="{" data-end="};">
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno"><a class="line" href="structvex_1_1LightComponent.html">  416</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1LightComponent.html">LightComponent</a> {</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    glm::vec3 color;</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>    <span class="keywordtype">float</span> intensity;</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    <span class="keywordtype">float</span> radius;</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>};</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span></div>
+<div class="foldopen" id="foldopen00404" data-start="{" data-end="}">
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno"><a class="line" href="structvex_1_1MeshComponent.html#a5d36e48131f49217c6c4c6b7976a3b51">  404</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1MeshComponent.html#a5d36e48131f49217c6c4c6b7976a3b51">setRendered</a>(){</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        fresh = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    }</div>
 </div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span></div>
-<div class="foldopen" id="foldopen00423" data-start="{" data-end="};">
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno"><a class="line" href="structvex_1_1NameComponent.html">  423</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1NameComponent.html">NameComponent</a> {</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>    std::string name;</div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>};</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span></div>
+<div class="foldopen" id="foldopen00409" data-start="{" data-end="}">
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno"><a class="line" href="structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736">  409</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736">forceRefresh</a>(){</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>        fresh = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>    }</div>
 </div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span></div>
-<div class="foldopen" id="foldopen00428" data-start="{" data-end="};">
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno"><a class="line" href="structvex_1_1CameraComponent.html">  428</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CameraComponent.html">CameraComponent</a> {</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>    <span class="keywordtype">float</span> fov = 45.0f;</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>    <span class="keywordtype">float</span> nearPlane = 0.1f;</div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>    <span class="keywordtype">float</span> farPlane = 100.0f;</div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>    uint32_t <span class="keywordtype">id</span> = UINT32_MAX; <span class="comment">// For editor use</span></div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>};</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span> </div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>    <span class="keywordtype">bool</span> fresh = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>};</div>
 </div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>}</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span></div>
+<div class="foldopen" id="foldopen00418" data-start="{" data-end="};">
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno"><a class="line" href="structvex_1_1LightComponent.html">  418</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1LightComponent.html">LightComponent</a> {</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    <a class="code hl_struct" href="structvex_1_1rgb.html">vex::rgb</a> color = glm::vec3(1.f);</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    <span class="keywordtype">float</span> intensity = 1.f;</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>    <span class="keywordtype">float</span> radius = 5.f;</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>};</div>
+</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span></div>
+<div class="foldopen" id="foldopen00425" data-start="{" data-end="};">
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno"><a class="line" href="structvex_1_1FogComponent.html">  425</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1FogComponent.html">FogComponent</a> {</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>    <a class="code hl_struct" href="structvex_1_1rgb.html">vex::rgb</a> color = glm::vec3(1.f);</div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>    <span class="keywordtype">float</span> density = 0.5f;</div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>    <span class="keywordtype">float</span> start = 0.0f;</div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>    <span class="keywordtype">float</span> end = 100.0f;</div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>};</div>
+</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span></div>
+<div class="foldopen" id="foldopen00433" data-start="{" data-end="};">
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno"><a class="line" href="structvex_1_1NameComponent.html">  433</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1NameComponent.html">NameComponent</a> {</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>    std::string name;</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>};</div>
+</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span></div>
+<div class="foldopen" id="foldopen00438" data-start="{" data-end="};">
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno"><a class="line" href="structvex_1_1CameraComponent.html">  438</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1CameraComponent.html">CameraComponent</a> {</div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>    <span class="keywordtype">float</span> fov = 45.0f;</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>    <span class="keywordtype">float</span> nearPlane = 0.1f;</div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>    <span class="keywordtype">float</span> farPlane = 100.0f;</div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>    uint32_t <span class="keywordtype">id</span> = UINT32_MAX; <span class="comment">// For editor use</span></div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>};</div>
+</div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>}</div>
+<div class="ttc" id="aBasicComponents_8hpp_html_a1f2928caa4b8f39e73a328a01965ff66"><div class="ttname"><a href="BasicComponents_8hpp.html#a1f2928caa4b8f39e73a328a01965ff66">vex::RenderType</a></div><div class="ttdeci">RenderType</div><div class="ttdoc">Enum class for different types of rendering. It internally switches used pipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00373">BasicComponents.hpp:373</a></div></div>
 <div class="ttc" id="aMesh_8hpp_html"><div class="ttname"><a href="Mesh_8hpp.html">Mesh.hpp</a></div><div class="ttdoc">This file defines MeshData struct and all other structs needed for it.</div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00097">errorUtils.cpp:97</a></div></div>
-<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="#l00428">BasicComponents.hpp:428</a></div></div>
-<div class="ttc" id="astructvex_1_1LightComponent_html"><div class="ttname"><a href="structvex_1_1LightComponent.html">vex::LightComponent</a></div><div class="ttdoc">Struct containing light properties.</div><div class="ttdef"><b>Definition</b> <a href="#l00416">BasicComponents.hpp:416</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00381">errorUtils.cpp:381</a></div></div>
+<div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="#l00438">BasicComponents.hpp:438</a></div></div>
+<div class="ttc" id="astructvex_1_1FogComponent_html"><div class="ttname"><a href="structvex_1_1FogComponent.html">vex::FogComponent</a></div><div class="ttdoc">Struct containing fog properties.</div><div class="ttdef"><b>Definition</b> <a href="#l00425">BasicComponents.hpp:425</a></div></div>
+<div class="ttc" id="astructvex_1_1LightComponent_html"><div class="ttname"><a href="structvex_1_1LightComponent.html">vex::LightComponent</a></div><div class="ttdoc">Struct containing light properties.</div><div class="ttdef"><b>Definition</b> <a href="#l00418">BasicComponents.hpp:418</a></div></div>
 <div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="#l00381">BasicComponents.hpp:381</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshComponent_html_a20da54a1c03dbf8d0d91e95100a5b736"><div class="ttname"><a href="structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736">vex::MeshComponent::forceRefresh</a></div><div class="ttdeci">void forceRefresh()</div><div class="ttdoc">(used internally by the engine, DO NOT CALL) forces the component to be refreshed.</div><div class="ttdef"><b>Definition</b> <a href="#l00409">BasicComponents.hpp:409</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshComponent_html_a5d36e48131f49217c6c4c6b7976a3b51"><div class="ttname"><a href="structvex_1_1MeshComponent.html#a5d36e48131f49217c6c4c6b7976a3b51">vex::MeshComponent::setRendered</a></div><div class="ttdeci">void setRendered()</div><div class="ttdoc">(used internally by the engine, DO NOT CALL) sets the component as rendered.</div><div class="ttdef"><b>Definition</b> <a href="#l00404">BasicComponents.hpp:404</a></div></div>
+<div class="ttc" id="astructvex_1_1MeshComponent_html_a6887e038adda3adddb94a7a11a5fe1da"><div class="ttname"><a href="structvex_1_1MeshComponent.html#a6887e038adda3adddb94a7a11a5fe1da">vex::MeshComponent::getIsFresh</a></div><div class="ttdeci">bool getIsFresh()</div><div class="ttdoc">(used internally by the engine, DO NOT CALL) returns true if the component is fresh.</div><div class="ttdef"><b>Definition</b> <a href="#l00399">BasicComponents.hpp:399</a></div></div>
 <div class="ttc" id="astructvex_1_1MeshData_html"><div class="ttname"><a href="structvex_1_1MeshData.html">vex::MeshData</a></div><div class="ttdoc">Mesh data structure for loading and managing mesh data.</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8hpp_source.html#l00040">Mesh.hpp:40</a></div></div>
-<div class="ttc" id="astructvex_1_1NameComponent_html"><div class="ttname"><a href="structvex_1_1NameComponent.html">vex::NameComponent</a></div><div class="ttdoc">Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.</div><div class="ttdef"><b>Definition</b> <a href="#l00423">BasicComponents.hpp:423</a></div></div>
+<div class="ttc" id="astructvex_1_1NameComponent_html"><div class="ttname"><a href="structvex_1_1NameComponent.html">vex::NameComponent</a></div><div class="ttdoc">Struct that simply contains name of the entity. It is used to identify entity and needs to be unique.</div><div class="ttdef"><b>Definition</b> <a href="#l00433">BasicComponents.hpp:433</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_a003f2d383fa0f4e450498274dce097fc"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a003f2d383fa0f4e450498274dce097fc">vex::TransformComponent::matrix</a></div><div class="ttdeci">glm::mat4 matrix() const</div><div class="ttdoc">Method used by renderer to calculate the transformation matrix.</div><div class="ttdef"><b>Definition</b> <a href="#l00216">BasicComponents.hpp:216</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_a2537f55c8fae546db89fa078ef5268a0"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a2537f55c8fae546db89fa078ef5268a0">vex::TransformComponent::addLocalRotation</a></div><div class="ttdeci">void addLocalRotation(glm::vec3 newRotation)</div><div class="ttdoc">Method to add local rotation (Euler angles in degrees).</div><div class="ttdef"><b>Definition</b> <a href="#l00307">BasicComponents.hpp:307</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_a27dafee59fd73df4757b560c9aad25ab"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab">vex::TransformComponent::setWorldRotation</a></div><div class="ttdeci">void setWorldRotation(glm::vec3 newRotation)</div><div class="ttdoc">Method to set world rotation, needed when object is parented as rotation parameter stores local rotat...</div><div class="ttdef"><b>Definition</b> <a href="#l00281">BasicComponents.hpp:281</a></div></div>
@@ -600,7 +622,8 @@ $(function(){initNavTree('BasicComponents_8hpp_source.html','',''); });
 <div class="ttc" id="astructvex_1_1TransformComponent_html_af2ed6bb049ad3b9b1298976f1dfd436c"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af2ed6bb049ad3b9b1298976f1dfd436c">vex::TransformComponent::addLocalPosition</a></div><div class="ttdeci">void addLocalPosition(glm::vec3 newPosition)</div><div class="ttdoc">Method to add local position.</div><div class="ttdef"><b>Definition</b> <a href="#l00300">BasicComponents.hpp:300</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_af2f159c65bd306e3a2f46ac84325367f"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af2f159c65bd306e3a2f46ac84325367f">vex::TransformComponent::getUpVector</a></div><div class="ttdeci">glm::vec3 getUpVector() const</div><div class="ttdoc">Method to get normalized up vector.</div><div class="ttdef"><b>Definition</b> <a href="#l00360">BasicComponents.hpp:360</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_af48e50f85921fb3464ff3ce2d4909086"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">vex::TransformComponent::setWorldPosition</a></div><div class="ttdeci">void setWorldPosition(glm::vec3 newPosition)</div><div class="ttdoc">Method to set world position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="#l00254">BasicComponents.hpp:254</a></div></div>
-<div class="ttc" id="astructvex_1_1rgba_html"><div class="ttname"><a href="structvex_1_1rgba.html">vex::rgba</a></div><div class="ttdef"><b>Definition</b> <a href="colorTypes_8hpp_source.html#l00013">colorTypes.hpp:13</a></div></div>
+<div class="ttc" id="astructvex_1_1rgb_html"><div class="ttname"><a href="structvex_1_1rgb.html">vex::rgb</a></div><div class="ttdoc">Represents an RGB color value. Used mainly for fancy rendering in editor.</div><div class="ttdef"><b>Definition</b> <a href="colorTypes_8hpp_source.html#l00007">colorTypes.hpp:7</a></div></div>
+<div class="ttc" id="astructvex_1_1rgba_html"><div class="ttname"><a href="structvex_1_1rgba.html">vex::rgba</a></div><div class="ttdoc">Represents an RGBA color value. Used mainly for fancy rendering in editor.</div><div class="ttdef"><b>Definition</b> <a href="colorTypes_8hpp_source.html#l00015">colorTypes.hpp:15</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

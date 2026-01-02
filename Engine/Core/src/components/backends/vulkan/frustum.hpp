@@ -10,6 +10,7 @@
 
 namespace vex {
 
+/// @brief Represents a plane in 3D space.
 struct Plane {
     glm::vec3 normal;
     float distance;
@@ -26,6 +27,7 @@ struct Plane {
     }
 };
 
+/// @brief Represents a frustum in 3D space.
 struct Frustum {
     std::array<Plane, 6> planes;
 

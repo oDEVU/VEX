@@ -16,6 +16,8 @@
 
 namespace vex {
     struct TransparentTriangle;
+
+    /// @brief Info needed for drawing indexed indirect commands.
     struct DrawIndexedIndirectCommand;
 
     /// @brief Class defining mesh object with vulkan specific data and methods.
@@ -31,6 +33,12 @@ namespace vex {
         void upload(const MeshData& meshData);
 
         // @brief Function to extract transparent triangles
+        // @param const glm::mat4& modelMatrix - Model matrix for the mesh.
+        // @param const glm::vec3& cameraPos - Position of the camera.
+        // @param uint32_t modelIndex - Index of the current model.
+        // @param uint32_t frameIndex - Index of the current frame.
+        // @param entt::entity entity - Entity associated with the mesh.
+        // @param std::vector<TransparentTriangle>& outTriangles - Vector to store extracted transparent triangles.
         void extractTransparentTriangles(
             const glm::mat4& modelMatrix,
             const glm::vec3& cameraPos,
@@ -53,6 +61,12 @@ namespace vex {
                 VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, const MeshComponent& mc) const;
 
             // @brief This function contains all the setup logic (binding buffers, descriptor sets, and pushing constants) that only needs to be performed when the mesh or submesh (and thus the buffers/texture) changes.
+            // @param const glm::mat4& modelMatrix - Model matrix for the mesh.
+            // @param const glm::vec3& cameraPos - Position of the camera.
+            // @param uint32_t modelIndex - Index of the current model.
+            // @param uint32_t frameIndex - Index of the current frame.
+            // @param entt::entity entity - Entity associated with the mesh.
+            // @param std::vector<TransparentTriangle>& outTriangles - Vector to store extracted transparent triangles.
             void bindAndDrawBatched(
                 VkCommandBuffer cmd,
                 VkPipelineLayout pipelineLayout,

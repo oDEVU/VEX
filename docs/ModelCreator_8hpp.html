@@ -145,6 +145,14 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Just creates meshcomponent from file. Copies meshData and texture paths for later backend specific processing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; path Path to the mesh file. </td></tr>
+    <tr><td class="paramname">Engine&amp;</td><td>engine Reference to the engine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>MeshComponent created from the file. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ModelCreator_8cpp_source.html#l00013">13</a> of file <a class="el" href="ModelCreator_8cpp_source.html">ModelCreator.cpp</a>.</p>
 
@@ -185,7 +193,17 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates model object From mesh and tranform components. </p>
-<p>Important: MeshComponent cannot be just created by user you need to use createMeshFromPath function to copy meshData from file to Component. </p>
+<p>Important: MeshComponent can be created normally by just creating meshComponent object and setting meshData.path, but using this function ensures mesh is loaded from file when called and not when rendered, ensuring no stutters at runtime. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; name Name of the model object. </td></tr>
+    <tr><td class="paramname">MeshComponent</td><td>meshComponent Mesh component of the model object. </td></tr>
+    <tr><td class="paramname">TransformComponent</td><td>transformComponent Transform component of the model object. </td></tr>
+    <tr><td class="paramname">Engine&amp;</td><td>engine Reference to the engine. </td></tr>
+    <tr><td class="paramname">entt::entity</td><td>parent Parent entity of the model object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the created model object. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ModelCreator_8cpp_source.html#l00010">10</a> of file <a class="el" href="ModelCreator_8cpp_source.html">ModelCreator.cpp</a>.</p>
 
@@ -221,6 +239,16 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates model object from file. Esentially just runs two other functions just with empty transform component. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; path Path to the mesh file. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; name Name of the model object. </td></tr>
+    <tr><td class="paramname">Engine&amp;</td><td>engine Reference to the engine. </td></tr>
+    <tr><td class="paramname">entt::entity</td><td>parent Parent entity of the model object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the created model object. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ModelCreator_8cpp_source.html#l00016">16</a> of file <a class="el" href="ModelCreator_8cpp_source.html">ModelCreator.cpp</a>.</p>
 

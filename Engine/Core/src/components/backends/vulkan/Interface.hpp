@@ -81,7 +81,9 @@ namespace vex {
         void setVSync(bool enabled);
 
         #if DEBUG
-            VulkanPhysicsDebug* getPhysicsDebug() { return m_p_physicsDebug.get(); }
+        /// @brief Getter for Physics Debug Renderer.
+        /// @return VulkanPhysicsDebug*
+        VulkanPhysicsDebug* getPhysicsDebug() { return m_p_physicsDebug.get(); }
         #endif
 
     private:

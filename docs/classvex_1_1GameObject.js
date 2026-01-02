@@ -2,7 +2,6 @@ var classvex_1_1GameObject =
 [
     [ "GameObject", "classvex_1_1GameObject.html#aa50421d141741f058e45878417c827d0", null ],
     [ "~GameObject", "classvex_1_1GameObject.html#abfea140d1bfb9526fa95b580156150b8", null ],
-    [ "GameObject", "classvex_1_1GameObject.html#adbb8944575c4494fccfca216a37aefe9", null ],
     [ "AddComponent", "classvex_1_1GameObject.html#ae05e908cd65937565e7e34a19c6cee1c", null ],
     [ "BeginPlay", "classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8", null ],
     [ "Destroy", "classvex_1_1GameObject.html#a1ba0e5c35f4bfc561f7b2862667eef1a", null ],

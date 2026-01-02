@@ -110,15 +110,18 @@ $(function(){initNavTree('structvex_1_1MeshComponent.html','','structvex_1_1Mesh
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6887e038adda3adddb94a7a11a5fe1da" id="r_a6887e038adda3adddb94a7a11a5fe1da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6887e038adda3adddb94a7a11a5fe1da">getIsFresh</a> ()</td></tr>
+<tr class="memdesc:a6887e038adda3adddb94a7a11a5fe1da"><td class="mdescLeft">&#160;</td><td class="mdescRight">(used internally by the engine, DO NOT CALL) returns true if the component is fresh.  <br /></td></tr>
 <tr class="memitem:a5d36e48131f49217c6c4c6b7976a3b51" id="r_a5d36e48131f49217c6c4c6b7976a3b51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d36e48131f49217c6c4c6b7976a3b51">setRendered</a> ()</td></tr>
+<tr class="memdesc:a5d36e48131f49217c6c4c6b7976a3b51"><td class="mdescLeft">&#160;</td><td class="mdescRight">(used internally by the engine, DO NOT CALL) sets the component as rendered.  <br /></td></tr>
 <tr class="memitem:a20da54a1c03dbf8d0d91e95100a5b736" id="r_a20da54a1c03dbf8d0d91e95100a5b736"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20da54a1c03dbf8d0d91e95100a5b736">forceRefresh</a> ()</td></tr>
+<tr class="memdesc:a20da54a1c03dbf8d0d91e95100a5b736"><td class="mdescLeft">&#160;</td><td class="mdescRight">(used internally by the engine, DO NOT CALL) forces the component to be refreshed.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:adc94ee067907f2b1a209ba55034877da" id="r_adc94ee067907f2b1a209ba55034877da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1MeshData.html">MeshData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc94ee067907f2b1a209ba55034877da">meshData</a></td></tr>
 <tr class="memitem:a27398b9146854df4d549216cf92a32a2" id="r_a27398b9146854df4d549216cf92a32a2"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27398b9146854df4d549216cf92a32a2">id</a> = UINT32_MAX</td></tr>
 <tr class="memitem:a53f560d67ee2772bc8094e601b7645ca" id="r_a53f560d67ee2772bc8094e601b7645ca"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53f560d67ee2772bc8094e601b7645ca">textureNames</a></td></tr>
-<tr class="memitem:a31e06acdc0e1d0af9cf1964ce34643ce" id="r_a31e06acdc0e1d0af9cf1964ce34643ce"><td class="memItemLeft" align="right" valign="top">RenderType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31e06acdc0e1d0af9cf1964ce34643ce">renderType</a> = RenderType::OPAQUE</td></tr>
+<tr class="memitem:a31e06acdc0e1d0af9cf1964ce34643ce" id="r_a31e06acdc0e1d0af9cf1964ce34643ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="BasicComponents_8hpp.html#a1f2928caa4b8f39e73a328a01965ff66">RenderType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31e06acdc0e1d0af9cf1964ce34643ce">renderType</a> = RenderType::OPAQUE</td></tr>
 <tr class="memitem:aa5c3b03bce1216983ac952bb0a1dfba6" id="r_aa5c3b03bce1216983ac952bb0a1dfba6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1rgba.html">vex::rgba</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5c3b03bce1216983ac952bb0a1dfba6">color</a> = glm::vec4(1.f)</td></tr>
 <tr class="memitem:a7f90da64d71ce0022412f52f8df4cb5e" id="r_a7f90da64d71ce0022412f52f8df4cb5e"><td class="memItemLeft" align="right" valign="top">std::map&lt; int, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f90da64d71ce0022412f52f8df4cb5e">textureOverrides</a></td></tr>
 <tr class="memitem:a9444ca2c154c22721e86e64b65978612" id="r_a9444ca2c154c22721e86e64b65978612"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9444ca2c154c22721e86e64b65978612">localCenter</a> = glm::vec3(0.0f)</td></tr>
@@ -132,7 +135,6 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Struct containing raw meshData, mesh id, texture paths and material properties. It just template and data for rendering backend to load/convert this data to its acceptible format. This is made weirdly cause its made in mind for multiple backends. IDK i hate this system but i have no better idea. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo</a></b></dt><dd>Make creating this component enough to create mesh, not requiring mesh manager to load mesh data. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00381">381</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
@@ -159,7 +161,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00406">406</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p>(used internally by the engine, DO NOT CALL) forces the component to be refreshed. </p>
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00409">409</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -186,7 +190,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00398">398</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p>(used internally by the engine, DO NOT CALL) returns true if the component is fresh. </p>
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00399">399</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -213,7 +219,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00402">402</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p>(used internally by the engine, DO NOT CALL) sets the component as rendered. </p>
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00404">404</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -254,7 +262,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00411">411</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00414">414</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -329,7 +337,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RenderType vex::MeshComponent::renderType = RenderType::OPAQUE</td>
+          <td class="memname"><a class="el" href="BasicComponents_8hpp.html#a1f2928caa4b8f39e73a328a01965ff66">RenderType</a> vex::MeshComponent::renderType = RenderType::OPAQUE</td>
         </tr>
       </table>
 </div><div class="memdoc">

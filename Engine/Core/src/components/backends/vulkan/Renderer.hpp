@@ -43,7 +43,10 @@ namespace vex {
         /// @brief Constructor for Renderer class.
         /// @param std::shared_ptr<VulkanResources>& resources - Vulkan resources needed for textures std::map.
         /// @param std::unique_ptr<VulkanPipeline>& pipeline - VulkanPipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& transPipeline - VulkanPipeline for transparent objects.
+        /// @param std::unique_ptr<VulkanPipeline>& maskPipeline - VulkanPipeline for masked objects.
         /// @param std::unique_ptr<VulkanPipeline>& uiPipeline - VulkanPipeline for UI rendering.
+        /// @param std::unique_ptr<VulkanPipeline>& fullscreenPipeline - VulkanPipeline for fullscreen effects.
         /// @param std::unique_ptr<VulkanSwapchainManager>& swapchainManager - VulkanSwapchainManager.
         /// @param std::unique_ptr<MeshManager>& meshManager - MeshManager.
         /// @details Its created and handled by VulkanInteface constructor.
@@ -115,8 +118,13 @@ namespace vex {
                                    VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask,
                                    VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage);
 
+        /// @brief Issues a multi-draw indexed command used by transparent meshes since they are drawn triangle by triangle.
+        /// @param VkCommandBuffer cmd - Command buffer.
+        /// @param const std::vector<VkMultiDrawIndexedInfoEXT>& commands - Vector of multi-draw indexed commands.
         void issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands);
 
+        /// @brief Updates the screen descriptor.
+        /// @param VkImageView view - Image view.
         void updateScreenDescriptor(VkImageView view);
 
         VulkanContext& m_r_context;

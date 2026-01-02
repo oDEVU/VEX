@@ -13,7 +13,6 @@
 #include <vector>
 #include <memory>
 
-//VEX components
 #include "context.hpp"
 #include "components/errorUtils.hpp"
 

@@ -153,15 +153,25 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a907d9539df256d57508db8d2af28af09" id="r_a907d9539df256d57508db8d2af28af09"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a907d9539df256d57508db8d2af28af09">textureDescriptorSetLayout</a> = VK_NULL_HANDLE</td></tr>
 <tr class="memitem:a32935493e6a961955502c3e102cb8d69" id="r_a32935493e6a961955502c3e102cb8d69"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32935493e6a961955502c3e102cb8d69">textureIndices</a></td></tr>
 <tr class="memitem:a0854f523e666dc302faa3563fd879ffa" id="r_a0854f523e666dc302faa3563fd879ffa"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0854f523e666dc302faa3563fd879ffa">nextTextureIndex</a> = 0</td></tr>
+<tr class="memitem:ade6d7d7d3147526590f50be6c1e054cb" id="r_ade6d7d7d3147526590f50be6c1e054cb"><td class="memItemLeft" align="right" valign="top">std::queue&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade6d7d7d3147526590f50be6c1e054cb">recycledTextureIndices</a></td></tr>
 <tr class="memitem:a02bb8429637f247c7193e5b7fb4d9be2" id="r_a02bb8429637f247c7193e5b7fb4d9be2"><td class="memItemLeft" align="right" valign="top">glm::uvec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02bb8429637f247c7193e5b7fb4d9be2">currentRenderResolution</a></td></tr>
 <tr class="memitem:a5b59406b37143e0f4399cafaa526c907" id="r_a5b59406b37143e0f4399cafaa526c907"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1enviroment.html">enviroment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b59406b37143e0f4399cafaa526c907">m_enviroment</a></td></tr>
 <tr class="memitem:abd08b121d79a2bd92250bcc1c287f602" id="r_abd08b121d79a2bd92250bcc1c287f602"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd08b121d79a2bd92250bcc1c287f602">supportsMultiDraw</a> = false</td></tr>
+<tr class="memitem:aa17e8722c79c3915fd30fa9f98c4071e" id="r_aa17e8722c79c3915fd30fa9f98c4071e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa17e8722c79c3915fd30fa9f98c4071e">supportsIndirectDraw</a> = false</td></tr>
+<tr class="memitem:a3f1a8e51e40f4477ed04f7f9a4cc6d8c" id="r_a3f1a8e51e40f4477ed04f7f9a4cc6d8c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f1a8e51e40f4477ed04f7f9a4cc6d8c">supportsBindlessTextures</a> = false</td></tr>
+<tr class="memitem:af4dde6df8c4d74bc453d856a6a77bffd" id="r_af4dde6df8c4d74bc453d856a6a77bffd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4dde6df8c4d74bc453d856a6a77bffd">supportsShaderDrawParameters</a> = false</td></tr>
+<tr class="memitem:a231ba3c6e5c88632716e15dc3af5c837" id="r_a231ba3c6e5c88632716e15dc3af5c837"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a231ba3c6e5c88632716e15dc3af5c837">bindlessDescriptorSetLayout</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:adf016b78753b11362df8fcf508114b38" id="r_adf016b78753b11362df8fcf508114b38"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf016b78753b11362df8fcf508114b38">bindlessDescriptorPool</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:a00c25c904a7a8efe62cce76285f434fe" id="r_a00c25c904a7a8efe62cce76285f434fe"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00c25c904a7a8efe62cce76285f434fe">bindlessDescriptorSet</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:a180b474e6c842ee0321cfb50d272db86" id="r_a180b474e6c842ee0321cfb50d272db86"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a180b474e6c842ee0321cfb50d272db86">maxDrawIndirectCount</a> = 1</td></tr>
+<tr class="memitem:a4bb03448c986d15ba2cf7d978f2331f0" id="r_a4bb03448c986d15ba2cf7d978f2331f0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bb03448c986d15ba2cf7d978f2331f0">maxMultiDrawCount</a> = 1</td></tr>
+<tr class="memitem:ab4c29e3d92858fd284a1e9d7cd5928de" id="r_ab4c29e3d92858fd284a1e9d7cd5928de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4c29e3d92858fd284a1e9d7cd5928de">requestSwapchainRecreation</a> = false</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Struct holding all vulkan data, like device, surface, swapchain, images, views, and more. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo</a></b></dt><dd>cleanup </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo</a></b></dt><dd>cleanup </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00025">25</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00026">26</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="a146427df3fc36f89efe374be84e960b8" name="a146427df3fc36f89efe374be84e960b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a146427df3fc36f89efe374be84e960b8">&#9670;&#160;</a></span>beginSingleTimeCommands()</h2>
@@ -241,7 +251,55 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00031">31</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00032">32</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="adf016b78753b11362df8fcf508114b38" name="adf016b78753b11362df8fcf508114b38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf016b78753b11362df8fcf508114b38">&#9670;&#160;</a></span>bindlessDescriptorPool</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorPool vex::VulkanContext::bindlessDescriptorPool = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00124">124</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a00c25c904a7a8efe62cce76285f434fe" name="a00c25c904a7a8efe62cce76285f434fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00c25c904a7a8efe62cce76285f434fe">&#9670;&#160;</a></span>bindlessDescriptorSet</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet vex::VulkanContext::bindlessDescriptorSet = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00125">125</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a231ba3c6e5c88632716e15dc3af5c837" name="a231ba3c6e5c88632716e15dc3af5c837"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a231ba3c6e5c88632716e15dc3af5c837">&#9670;&#160;</a></span>bindlessDescriptorSetLayout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSetLayout vex::VulkanContext::bindlessDescriptorSetLayout = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00123">123</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -321,7 +379,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00112">112</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00114">114</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -337,7 +395,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00041">41</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00042">42</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -353,7 +411,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00043">43</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00044">44</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -369,7 +427,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00040">40</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00041">41</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -385,7 +443,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00042">42</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00043">43</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -417,7 +475,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00028">28</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00029">29</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -433,7 +491,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00029">29</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00030">30</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -497,7 +555,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00026">26</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00027">27</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -513,7 +571,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00046">46</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00047">47</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -529,7 +587,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00048">48</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00049">49</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -545,7 +603,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00045">45</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00046">46</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -561,7 +619,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00047">47</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00048">48</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -577,7 +635,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00114">114</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00116">116</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -594,6 +652,38 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00099">99</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a180b474e6c842ee0321cfb50d272db86" name="a180b474e6c842ee0321cfb50d272db86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a180b474e6c842ee0321cfb50d272db86">&#9670;&#160;</a></span>maxDrawIndirectCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t vex::VulkanContext::maxDrawIndirectCount = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00127">127</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4bb03448c986d15ba2cf7d978f2331f0" name="a4bb03448c986d15ba2cf7d978f2331f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bb03448c986d15ba2cf7d978f2331f0">&#9670;&#160;</a></span>maxMultiDrawCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t vex::VulkanContext::maxMultiDrawCount = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00128">128</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -625,7 +715,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00027">27</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00028">28</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -641,7 +731,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00050">50</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00051">51</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -657,7 +747,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00030">30</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00031">31</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -677,6 +767,22 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ade6d7d7d3147526590f50be6c1e054cb" name="ade6d7d7d3147526590f50be6c1e054cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade6d7d7d3147526590f50be6c1e054cb">&#9670;&#160;</a></span>recycledTextureIndices</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::queue&lt;uint32_t&gt; vex::VulkanContext::recycledTextureIndices</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00112">112</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aedb20928ee4b4d773368aa8a7bb87ce2" name="aedb20928ee4b4d773368aa8a7bb87ce2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aedb20928ee4b4d773368aa8a7bb87ce2">&#9670;&#160;</a></span>renderFinishedSemaphores</h2>
 
@@ -690,6 +796,22 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00102">102</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab4c29e3d92858fd284a1e9d7cd5928de" name="ab4c29e3d92858fd284a1e9d7cd5928de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4c29e3d92858fd284a1e9d7cd5928de">&#9670;&#160;</a></span>requestSwapchainRecreation</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VulkanContext::requestSwapchainRecreation = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00129">129</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -709,6 +831,38 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3f1a8e51e40f4477ed04f7f9a4cc6d8c" name="a3f1a8e51e40f4477ed04f7f9a4cc6d8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f1a8e51e40f4477ed04f7f9a4cc6d8c">&#9670;&#160;</a></span>supportsBindlessTextures</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VulkanContext::supportsBindlessTextures = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00120">120</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa17e8722c79c3915fd30fa9f98c4071e" name="aa17e8722c79c3915fd30fa9f98c4071e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa17e8722c79c3915fd30fa9f98c4071e">&#9670;&#160;</a></span>supportsIndirectDraw</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VulkanContext::supportsIndirectDraw = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00119">119</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
 <a id="abd08b121d79a2bd92250bcc1c287f602" name="abd08b121d79a2bd92250bcc1c287f602"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd08b121d79a2bd92250bcc1c287f602">&#9670;&#160;</a></span>supportsMultiDraw</h2>
 
@@ -721,7 +875,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00116">116</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00118">118</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af4dde6df8c4d74bc453d856a6a77bffd" name="af4dde6df8c4d74bc453d856a6a77bffd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4dde6df8c4d74bc453d856a6a77bffd">&#9670;&#160;</a></span>supportsShaderDrawParameters</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VulkanContext::supportsShaderDrawParameters = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00121">121</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -737,7 +907,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00032">32</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00033">33</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -753,7 +923,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00034">34</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00035">35</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -769,7 +939,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00037">37</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00038">38</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -785,7 +955,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00036">36</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00037">37</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -801,7 +971,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00035">35</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00036">36</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>
@@ -817,7 +987,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00038">38</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="context_8hpp_source.html#l00039">39</a> of file <a class="el" href="context_8hpp_source.html">context.hpp</a>.</p>
 
 </div>
 </div>

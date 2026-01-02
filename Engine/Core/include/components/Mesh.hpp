@@ -15,7 +15,7 @@
 #include <SDL3/SDL.h>
 #include <iostream>
 
-struct aiScene; // Forward declaration for Assimp scene
+struct aiScene;
 
 namespace vex {
     class VirtualFileSystem;
@@ -24,8 +24,8 @@ namespace vex {
     struct Vertex {
         glm::vec3 position;
         glm::vec3 normal;
-        /// @brief UV coordinates for texture mapping but initialized to (-1, -1) for shader use. If loaded model doesnt update it engine knows it is not textured
-        glm::vec2 uv = glm::vec2(-1.0f);
+        /// @brief UV coordinates for texture mapping but initialized to (-100000, -100000) for shader use. If loaded model doesnt update it engine knows it is not textured
+        glm::vec2 uv = glm::vec2(-100000.0f);
     };
 
     /// @brief Submesh structure for mesh data, its made like this cause some file formats hold multiple meshes in one file, but engine supports only one mesh per file

@@ -8,6 +8,7 @@ var errorUtils_8hpp =
     ] ],
     [ "vex::handle_critical_exception", "errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48", null ],
     [ "vex::handle_exception", "errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5", null ],
+    [ "vex::InitCrashHandler", "errorUtils_8hpp.html#a3e538975c87c06bcaab5919e616677b0", null ],
     [ "vex::log", "errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a", null ],
     [ "vex::log", "errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1", null ],
     [ "vex::throw_error", "errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f", null ]

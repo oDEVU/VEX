@@ -121,6 +121,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3e5b0d7fece497329ba5fd70edeb9f4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">cleans up synchronization objects.  <br /></td></tr>
 <tr class="memitem:abf0fd1348a8dedd914065a6511097245" id="r_abf0fd1348a8dedd914065a6511097245"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf0fd1348a8dedd914065a6511097245">recreateSwapchain</a> ()</td></tr>
 <tr class="memdesc:abf0fd1348a8dedd914065a6511097245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple function to cleanup old swapchain and create new one, used when resizing the window.  <br /></td></tr>
+<tr class="memitem:a245b76f339388f784612a3f1a98c5c7a" id="r_a245b76f339388f784612a3f1a98c5c7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a245b76f339388f784612a3f1a98c5c7a">setVSync</a> (bool enabled)</td></tr>
+<tr class="memdesc:a245b76f339388f784612a3f1a98c5c7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the vsync enabled state.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -151,11 +153,12 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a11e4cecff368433f2cb7e897e0d65fa2" id="r_a11e4cecff368433f2cb7e897e0d65fa2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11e4cecff368433f2cb7e897e0d65fa2">m_r_context</a></td></tr>
 <tr class="memitem:a7462d5d0b3a139d9b371581516a238da" id="r_a7462d5d0b3a139d9b371581516a238da"><td class="memItemLeft" align="right" valign="top">SDL_Window *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7462d5d0b3a139d9b371581516a238da">m_p_window</a></td></tr>
+<tr class="memitem:a83796b0daaa1308263b18f8b7cb653b6" id="r_a83796b0daaa1308263b18f8b7cb653b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83796b0daaa1308263b18f8b7cb653b6">m_vsyncEnabled</a> = false</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Manages Vulkan swapchain resources. </p>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00022">22</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00021">21</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3f8b56ae0e97a0f784a88416c3892cd9" name="a3f8b56ae0e97a0f784a88416c3892cd9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f8b56ae0e97a0f784a88416c3892cd9">&#9670;&#160;</a></span>VulkanSwapchainManager()</h2>
@@ -243,7 +246,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkExtent2D. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00486">486</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00497">497</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -279,7 +282,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkPresentModeKHR. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00475">475</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00481">481</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -315,7 +318,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkSurfaceFormatKHR. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00464">464</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00466">466</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -612,7 +615,7 @@ Private Attributes</h2></td></tr>
 <p>Helper function to find depth format based on hardware capabilities. </p>
 <dl class="section return"><dt>Returns</dt><dd>VkFormat. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00512">512</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00523">523</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
 
 </div>
 </div>
@@ -637,6 +640,27 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a245b76f339388f784612a3f1a98c5c7a" name="a245b76f339388f784612a3f1a98c5c7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a245b76f339388f784612a3f1a98c5c7a">&#9670;&#160;</a></span>setVSync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VulkanSwapchainManager::setVSync </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>enabled</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the vsync enabled state. </p>
+
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8cpp_source.html#l00477">477</a> of file <a class="el" href="SwapchainManager_8cpp_source.html">SwapchainManager.cpp</a>.</p>
+
+</div>
+</div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a7462d5d0b3a139d9b371581516a238da" name="a7462d5d0b3a139d9b371581516a238da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7462d5d0b3a139d9b371581516a238da">&#9670;&#160;</a></span>m_p_window</h2>
@@ -658,7 +682,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00087">87</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00089">89</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -682,7 +706,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00086">86</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00088">88</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a83796b0daaa1308263b18f8b7cb653b6" name="a83796b0daaa1308263b18f8b7cb653b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83796b0daaa1308263b18f8b7cb653b6">&#9670;&#160;</a></span>m_vsyncEnabled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VulkanSwapchainManager::m_vsyncEnabled = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SwapchainManager_8hpp_source.html#l00090">90</a> of file <a class="el" href="SwapchainManager_8hpp_source.html">SwapchainManager.hpp</a>.</p>
 
 </div>
 </div>

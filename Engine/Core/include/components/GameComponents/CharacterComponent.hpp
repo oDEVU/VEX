@@ -4,6 +4,7 @@
 
 namespace vex {
 
+/// @brief Character component for player or NPC characters.
 struct CharacterComponent {
     JPH::Ref<JPH::CharacterVirtual> character = nullptr;
 

@@ -7,16 +7,19 @@
 
 namespace vex {
 
+/// @brief Represents a vertex used for debugging purposes.
 struct DebugVertex {
     glm::vec3 position;
     glm::vec4 color;
 };
 
 #if DEBUG
+/// @brief Jolt Debug renderer implementation. IT DOES NOT IMPLEMENT EVERYTHING, JUST BASIC WIREFRAME RENDERING
 class VulkanPhysicsDebug : public JPH::DebugRenderer {
 public:
     VulkanPhysicsDebug() { Initialize(); }
 
+    /// @brief Draws a line between two points with a specified color.
     virtual void DrawLine(JPH::RVec3Arg inFrom, JPH::RVec3Arg inTo, JPH::ColorArg inColor) override {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -34,12 +37,14 @@ public:
         m_lines.push_back({ p2, col });
     }
 
+    /// @brief Draws a triangle between three points with a specified color.
     virtual void DrawTriangle(JPH::RVec3Arg inV1, JPH::RVec3Arg inV2, JPH::RVec3Arg inV3, JPH::ColorArg inColor, ECastShadow inCastShadow) override {
         DrawLine(inV1, inV2, inColor);
         DrawLine(inV2, inV3, inColor);
         DrawLine(inV3, inV1, inColor);
     }
 
+    /// @brief Empty implementation of draw text since jolt requires it.
     virtual void DrawText3D(JPH::RVec3Arg inPos, const std::string_view &inString, JPH::ColorArg inColor, float inHeight) override {}
 
     class BatchImpl : public JPH::RefTargetVirtual {

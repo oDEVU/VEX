@@ -109,28 +109,51 @@ $(function(){initNavTree('classvex_1_1GameObjectFactory.html','','classvex_1_1Ga
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a73a0378bc3b97c1fc914096cfe9228c9" id="r_a73a0378bc3b97c1fc914096cfe9228c9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73a0378bc3b97c1fc914096cfe9228c9">ObjectConstructor</a> = <a class="el" href="classvex_1_1GameObject.html">GameObject</a>* (*)(<a class="el" href="classvex_1_1Engine.html">Engine</a>&amp;, const std::string&amp;)</td></tr>
 <tr class="memitem:a757a6eae20d84d82dd8cf17eec63b6c0" id="r_a757a6eae20d84d82dd8cf17eec63b6c0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a757a6eae20d84d82dd8cf17eec63b6c0">Creator</a> = std::function&lt;<a class="el" href="classvex_1_1GameObject.html">GameObject</a>*(<a class="el" href="classvex_1_1Engine.html">Engine</a>&amp;, const std::string&amp;)&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3f699646cbf85e18ad055ca7dcb7d76b" id="r_a3f699646cbf85e18ad055ca7dcb7d76b"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
-<tr class="memitem:a3f699646cbf85e18ad055ca7dcb7d76b template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f699646cbf85e18ad055ca7dcb7d76b">registerClass</a> (const std::string &amp;name)</td></tr>
+<tr class="memitem:a40afc9180ffe0afb91a761f2365ea976" id="r_a40afc9180ffe0afb91a761f2365ea976"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a40afc9180ffe0afb91a761f2365ea976 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40afc9180ffe0afb91a761f2365ea976">registerClass</a> (const std::string &amp;name, bool isDynamic=false)</td></tr>
+<tr class="memdesc:a40afc9180ffe0afb91a761f2365ea976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> class with the factory.  <br /></td></tr>
 <tr class="memitem:a2ec32d8f8dc9e8d418a343a561f19ed4" id="r_a2ec32d8f8dc9e8d418a343a561f19ed4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ec32d8f8dc9e8d418a343a561f19ed4">create</a> (const std::string &amp;type, <a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, const std::string &amp;name)</td></tr>
-<tr class="memitem:aa0486de58c64f45cf3341371566c780a" id="r_aa0486de58c64f45cf3341371566c780a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0486de58c64f45cf3341371566c780a">GetRegisteredObjectTypes</a> ()</td></tr>
+<tr class="memdesc:a2ec32d8f8dc9e8d418a343a561f19ed4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> of the specified type.  <br /></td></tr>
+<tr class="memitem:af5cf5855390185a1e2850e6ddfb1c1a0" id="r_af5cf5855390185a1e2850e6ddfb1c1a0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5cf5855390185a1e2850e6ddfb1c1a0">GetAllRegisteredObjectTypes</a> ()</td></tr>
+<tr class="memdesc:af5cf5855390185a1e2850e6ddfb1c1a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all registered object types.  <br /></td></tr>
+<tr class="memitem:a47f952cba04cae5ff4456db099b5a8e8" id="r_a47f952cba04cae5ff4456db099b5a8e8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47f952cba04cae5ff4456db099b5a8e8">GetNonDynamicRegisteredObjectTypes</a> ()</td></tr>
+<tr class="memdesc:a47f952cba04cae5ff4456db099b5a8e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all non-dynamic registered object types.  <br /></td></tr>
+<tr class="memitem:a3cadfd7d8cc04138b021be5b1d9095c6" id="r_a3cadfd7d8cc04138b021be5b1d9095c6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cadfd7d8cc04138b021be5b1d9095c6">GetDynamicRegisteredObjectTypes</a> ()</td></tr>
+<tr class="memdesc:a3cadfd7d8cc04138b021be5b1d9095c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all dynamic registered object types.  <br /></td></tr>
+<tr class="memitem:adbe9ab803514b898698a0585ea83fa86" id="r_adbe9ab803514b898698a0585ea83fa86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbe9ab803514b898698a0585ea83fa86">clearDynamicGameObjects</a> ()</td></tr>
+<tr class="memdesc:adbe9ab803514b898698a0585ea83fa86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all dynamic GameObjects.  <br /></td></tr>
 <tr class="memitem:a8c7f0d1a5782b26431406174cf8bb9e2" id="r_a8c7f0d1a5782b26431406174cf8bb9e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c7f0d1a5782b26431406174cf8bb9e2">UnregisterGameObjects</a> ()</td></tr>
+<tr class="memdesc:a8c7f0d1a5782b26431406174cf8bb9e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister all GameObjects.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:accb0611ee9e0c3aca267095a1af0bc9b" id="r_accb0611ee9e0c3aca267095a1af0bc9b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classvex_1_1GameObjectFactory.html">GameObjectFactory</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#accb0611ee9e0c3aca267095a1af0bc9b">getInstance</a> ()</td></tr>
+<tr class="memitem:a3a3f2e22c5ffeed72af15561789a5efd" id="r_a3a3f2e22c5ffeed72af15561789a5efd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classvex_1_1GameObjectFactory.html">GameObjectFactory</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a3f2e22c5ffeed72af15561789a5efd">getInstance</a> ()</td></tr>
+<tr class="memdesc:a3a3f2e22c5ffeed72af15561789a5efd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the singleton instance of the <a class="el" href="classvex_1_1GameObjectFactory.html" title="Class responsible for registering and then creating GameObjects eg. Player, CameraObject....">GameObjectFactory</a>.  <br /></td></tr>
+<tr class="memitem:a1a5e4a31e6d5ddd2998a93f5179a2faf" id="r_a1a5e4a31e6d5ddd2998a93f5179a2faf"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a1a5e4a31e6d5ddd2998a93f5179a2faf template"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classvex_1_1GameObject.html">GameObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a5e4a31e6d5ddd2998a93f5179a2faf">constructObject</a> (<a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a1a5e4a31e6d5ddd2998a93f5179a2faf"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructs registered objects, used internally in scene loading.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a0c2380b42727982d00eb10542b7526d6" id="r_a0c2380b42727982d00eb10542b7526d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c2380b42727982d00eb10542b7526d6">registerCreator</a> (const std::string &amp;name, ObjectConstructor ctor, bool isDynamic)</td></tr>
+<tr class="memdesc:a0c2380b42727982d00eb10542b7526d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> creator for a given name.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab963a2f66f800ad367d3519d6aafeef2" id="r_ab963a2f66f800ad367d3519d6aafeef2"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, Creator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab963a2f66f800ad367d3519d6aafeef2">creators</a></td></tr>
+<tr class="memitem:a4abc5fb546b160e123182d45a4353141" id="r_a4abc5fb546b160e123182d45a4353141"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4abc5fb546b160e123182d45a4353141">dynamicTypes</a></td></tr>
+<tr class="memitem:a0dc761d21e4c2665400e98aae8ce8ce2" id="r_a0dc761d21e4c2665400e98aae8ce8ce2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0dc761d21e4c2665400e98aae8ce8ce2">nonDynamicTypes</a></td></tr>
+<tr class="memitem:a1e227e142c203e17526ea686d9784edc" id="r_a1e227e142c203e17526ea686d9784edc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e227e142c203e17526ea686d9784edc">allTypes</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class responsible for registering and then creating GameObjects eg. Player, <a class="el" href="classvex_1_1CameraObject.html" title="Basic camera object class. it only contains transform and camera components.">CameraObject</a>. It is needed to load GameObjects from scene files but not all GameObjects can be registered. It requires your <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> to not change constructor parameters. </p>
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00022">22</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00023">23</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
 <a id="a757a6eae20d84d82dd8cf17eec63b6c0" name="a757a6eae20d84d82dd8cf17eec63b6c0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a757a6eae20d84d82dd8cf17eec63b6c0">&#9670;&#160;</a></span>Creator</h2>
@@ -144,19 +167,88 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00024">24</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00027">27</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a73a0378bc3b97c1fc914096cfe9228c9" name="a73a0378bc3b97c1fc914096cfe9228c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73a0378bc3b97c1fc914096cfe9228c9">&#9670;&#160;</a></span>ObjectConstructor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using vex::GameObjectFactory::ObjectConstructor = <a class="el" href="classvex_1_1GameObject.html">GameObject</a>* (*)(<a class="el" href="classvex_1_1Engine.html">Engine</a>&amp;, const std::string&amp;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00025">25</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="adbe9ab803514b898698a0585ea83fa86" name="adbe9ab803514b898698a0585ea83fa86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbe9ab803514b898698a0585ea83fa86">&#9670;&#160;</a></span>clearDynamicGameObjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::GameObjectFactory::clearDynamicGameObjects </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clear all dynamic GameObjects. </p>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00048">48</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a1a5e4a31e6d5ddd2998a93f5179a2faf" name="a1a5e4a31e6d5ddd2998a93f5179a2faf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a5e4a31e6d5ddd2998a93f5179a2faf">&#9670;&#160;</a></span>constructObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> * vex::GameObjectFactory::constructObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>engine</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>constructs registered objects, used internally in scene loading. </p>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00034">34</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a2ec32d8f8dc9e8d418a343a561f19ed4" name="a2ec32d8f8dc9e8d418a343a561f19ed4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2ec32d8f8dc9e8d418a343a561f19ed4">&#9670;&#160;</a></span>create()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> * vex::GameObjectFactory::create </td>
@@ -174,19 +266,69 @@ Private Attributes</h2></td></tr>
           <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00042">42</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p>Create a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> of the specified type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::string&amp;</td><td>type The type of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> to create. </td></tr>
+    <tr><td class="paramname">Engine&amp;</td><td>engine The engine instance. </td></tr>
+    <tr><td class="paramname">std::string&amp;</td><td>name The name of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>GameObject* The created <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00027">27</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
 
 </div>
 </div>
-<a id="accb0611ee9e0c3aca267095a1af0bc9b" name="accb0611ee9e0c3aca267095a1af0bc9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accb0611ee9e0c3aca267095a1af0bc9b">&#9670;&#160;</a></span>getInstance()</h2>
+<a id="af5cf5855390185a1e2850e6ddfb1c1a0" name="af5cf5855390185a1e2850e6ddfb1c1a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5cf5855390185a1e2850e6ddfb1c1a0">&#9670;&#160;</a></span>GetAllRegisteredObjectTypes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; vex::GameObjectFactory::GetAllRegisteredObjectTypes </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get all registered object types. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; The registered object types. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00036">36</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3cadfd7d8cc04138b021be5b1d9095c6" name="a3cadfd7d8cc04138b021be5b1d9095c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cadfd7d8cc04138b021be5b1d9095c6">&#9670;&#160;</a></span>GetDynamicRegisteredObjectTypes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; vex::GameObjectFactory::GetDynamicRegisteredObjectTypes </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get all dynamic registered object types. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; The dynamic registered object types. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00044">44</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3a3f2e22c5ffeed72af15561789a5efd" name="a3a3f2e22c5ffeed72af15561789a5efd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a3f2e22c5ffeed72af15561789a5efd">&#9670;&#160;</a></span>getInstance()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -203,44 +345,41 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00026">26</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p>Get the singleton instance of the <a class="el" href="classvex_1_1GameObjectFactory.html" title="Class responsible for registering and then creating GameObjects eg. Player, CameraObject....">GameObjectFactory</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00006">6</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
 
 </div>
 </div>
-<a id="aa0486de58c64f45cf3341371566c780a" name="aa0486de58c64f45cf3341371566c780a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0486de58c64f45cf3341371566c780a">&#9670;&#160;</a></span>GetRegisteredObjectTypes()</h2>
+<a id="a47f952cba04cae5ff4456db099b5a8e8" name="a47f952cba04cae5ff4456db099b5a8e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47f952cba04cae5ff4456db099b5a8e8">&#9670;&#160;</a></span>GetNonDynamicRegisteredObjectTypes()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; std::string &gt; vex::GameObjectFactory::GetRegisteredObjectTypes </td>
+          <td class="memname">std::vector&lt; std::string &gt; vex::GameObjectFactory::GetNonDynamicRegisteredObjectTypes </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00051">51</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p>Get all non-dynamic registered object types. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; The non-dynamic registered object types. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00040">40</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a3f699646cbf85e18ad055ca7dcb7d76b" name="a3f699646cbf85e18ad055ca7dcb7d76b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f699646cbf85e18ad055ca7dcb7d76b">&#9670;&#160;</a></span>registerClass()</h2>
+<a id="a40afc9180ffe0afb91a761f2365ea976" name="a40afc9180ffe0afb91a761f2365ea976"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40afc9180ffe0afb91a761f2365ea976">&#9670;&#160;</a></span>registerClass()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -253,8 +392,12 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="memname">void vex::GameObjectFactory::registerClass </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isDynamic</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -264,12 +407,21 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00032">32</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p>Register a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> class with the factory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::string&amp;</td><td>name The name of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> class. </td></tr>
+    <tr><td class="paramname">bool</td><td>isDynamic Whether the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> class is dynamic. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00042">42</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a8c7f0d1a5782b26431406174cf8bb9e2" name="a8c7f0d1a5782b26431406174cf8bb9e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c7f0d1a5782b26431406174cf8bb9e2">&#9670;&#160;</a></span>UnregisterGameObjects()</h2>
+<a id="a0c2380b42727982d00eb10542b7526d6" name="a0c2380b42727982d00eb10542b7526d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c2380b42727982d00eb10542b7526d6">&#9670;&#160;</a></span>registerCreator()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -278,24 +430,80 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
+          <td class="memname">void vex::GameObjectFactory::registerCreator </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ObjectConstructor</td>          <td class="paramname"><span class="paramname"><em>ctor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isDynamic</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Register a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> creator for a given name. </p>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00011">11</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a8c7f0d1a5782b26431406174cf8bb9e2" name="a8c7f0d1a5782b26431406174cf8bb9e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7f0d1a5782b26431406174cf8bb9e2">&#9670;&#160;</a></span>UnregisterGameObjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
           <td class="memname">void vex::GameObjectFactory::UnregisterGameObjects </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00060">60</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p>Unregister all GameObjects. </p>
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8cpp_source.html#l00059">59</a> of file <a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a1e227e142c203e17526ea686d9784edc" name="a1e227e142c203e17526ea686d9784edc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e227e142c203e17526ea686d9784edc">&#9670;&#160;</a></span>allTypes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; vex::GameObjectFactory::allTypes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00082">82</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ab963a2f66f800ad367d3519d6aafeef2" name="ab963a2f66f800ad367d3519d6aafeef2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab963a2f66f800ad367d3519d6aafeef2">&#9670;&#160;</a></span>creators</h2>
 
@@ -316,12 +524,61 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00066">66</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00079">79</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a id="a4abc5fb546b160e123182d45a4353141" name="a4abc5fb546b160e123182d45a4353141"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4abc5fb546b160e123182d45a4353141">&#9670;&#160;</a></span>dynamicTypes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; vex::GameObjectFactory::dynamicTypes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00080">80</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0dc761d21e4c2665400e98aae8ce8ce2" name="a0dc761d21e4c2665400e98aae8ce8ce2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dc761d21e4c2665400e98aae8ce8ce2">&#9670;&#160;</a></span>nonDynamicTypes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; vex::GameObjectFactory::nonDynamicTypes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00081">81</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>Core/include/components/GameObjects/<a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a></li>
+<li>Core/src/components/GameObjects/<a class="el" href="GameObjectFactory_8cpp_source.html">GameObjectFactory.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

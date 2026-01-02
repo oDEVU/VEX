@@ -115,25 +115,25 @@ $(function(){initNavTree('execute_8hpp_source.html','',''); });
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">    #define PCLOSE_FUNC pclose</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">    #include &lt;unistd.h&gt;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">inline</span> <span class="keywordtype">void</span> executeCommandRealTime(<span class="keyword">const</span> std::string&amp; cmd, std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> std::string&amp;)&gt; lineCallback) {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    FILE* pipe = POPEN_FUNC(cmd.c_str(), <span class="stringliteral">&quot;r&quot;</span>);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordflow">if</span> (!pipe) {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        lineCallback(<span class="stringliteral">&quot;ERROR: Could not run command: &quot;</span> + cmd);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    }</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    setbuf(pipe, NULL);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">char</span> buffer[512];</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordflow">while</span> (fgets(buffer, <span class="keyword">sizeof</span>(buffer), pipe) != <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        std::string line = buffer;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        lineCallback(line);</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        std::fflush(stdout);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    }</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    PCLOSE_FUNC(pipe);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>}</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">inline</span> <span class="keywordtype">void</span> executeCommandRealTime(<span class="keyword">const</span> std::string&amp; cmd, std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> std::string&amp;)&gt; lineCallback) {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    FILE* pipe = POPEN_FUNC(cmd.c_str(), <span class="stringliteral">&quot;r&quot;</span>);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordflow">if</span> (!pipe) {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        lineCallback(<span class="stringliteral">&quot;ERROR: Could not run command: &quot;</span> + cmd);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    }</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    setbuf(pipe, NULL);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">char</span> buffer[512];</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordflow">while</span> (fgets(buffer, <span class="keyword">sizeof</span>(buffer), pipe) != <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        std::string line = buffer;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        lineCallback(line);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        std::fflush(stdout);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    }</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    PCLOSE_FUNC(pipe);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

@@ -114,7 +114,7 @@ public:
 
     static ComponentRegistry& getInstance();
 
-    // Generic Register Function
+    /// @brief Generic Register Function, Used by macros defined later in this file.
     template<typename T>
     void registerComponent(const std::string& name, bool isDynamic = false) {
         loaders[name] = [](GameObject& obj, const nlohmann::json& j) {
@@ -159,15 +159,31 @@ public:
         }
     }
 
+    /// @brief Unregister a component type.
     void unregisterComponent(const std::string& name);
+
+    /// @brief Clear all dynamic components.
     void clearDynamicComponents();
 
+    /// @brief Load a component from JSON data.
     bool loadComponent(GameObject& obj, const std::string& type, const nlohmann::json& json);
+
+    /// @brief Svaes component to disk in json format
     nlohmann::json saveComponent(GameObject& obj, const std::string& type);
+
+    /// @brief Draws editor inspector for a component.
     void drawInspectorForObject(GameObject& obj);
+
+    /// @brief Get missing components for a game object.
     std::vector<std::string> getMissingComponents(const GameObject& obj);
+
+    /// @brief Create a component for a game object.
     void createComponent(GameObject& obj, const std::string& name);
+
+    /// @brief Get component inspectors.
     const std::unordered_map<std::string, ComponentInspector>& getInspectors() const;
+
+    /// @brief Get registered component names.
     const std::vector<std::string>& getRegisteredNames() const;
 
 private:

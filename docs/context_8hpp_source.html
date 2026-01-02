@@ -116,37 +116,37 @@ $(function(){initNavTree('context_8hpp_source.html','',''); });
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;components/types.hpp&gt;</span></div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &quot;<a class="code" href="enviroment_8hpp.html">components/enviroment.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">namespace </span>vex {</div>
-<div class="foldopen" id="foldopen00025" data-start="{" data-end="};">
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structvex_1_1VulkanContext.html">   25</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a> {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        VkInstance instance;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        VkPhysicalDevice physicalDevice;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        VkDevice device;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        VkQueue graphicsQueue;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        VkQueue presentQueue;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        VmaAllocator allocator;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        VkSurfaceKHR surface;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        VkSwapchainKHR swapchain= VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        std::vector&lt;VkImage&gt; swapchainImages;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        VkFormat swapchainImageFormat;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        VkExtent2D swapchainExtent;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        std::vector&lt;VkImageView&gt; swapchainImageViews;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        VkImage depthImage = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        VmaAllocation depthAllocation = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        VkImageView depthImageView = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        VkFormat depthFormat;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        VkImage lowResColorImage = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        VmaAllocation lowResColorAlloc = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        VkImageView lowResColorView = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        VkPipelineLayout pipelineLayout;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="comment">//VkCommandPool commandPool;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;queue&gt;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &quot;<a class="code" href="enviroment_8hpp.html">components/enviroment.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">namespace </span>vex {</div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structvex_1_1VulkanContext.html">   26</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a> {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        VkInstance instance;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        VkPhysicalDevice physicalDevice;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        VkDevice device;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        VkQueue graphicsQueue;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        VkQueue presentQueue;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        VmaAllocator allocator;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        VkSurfaceKHR surface;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        VkSwapchainKHR swapchain= VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        std::vector&lt;VkImage&gt; swapchainImages;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        VkFormat swapchainImageFormat;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        VkExtent2D swapchainExtent;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        std::vector&lt;VkImageView&gt; swapchainImageViews;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        VkImage depthImage = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        VmaAllocation depthAllocation = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        VkImageView depthImageView = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        VkFormat depthFormat;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        VkImage lowResColorImage = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        VmaAllocation lowResColorAlloc = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        VkImageView lowResColorView = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        VkPipelineLayout pipelineLayout;</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        std::vector&lt;VkCommandPool&gt; commandPools;</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        std::vector&lt;VkCommandBuffer&gt; commandBuffers;</div>
@@ -207,16 +207,29 @@ $(function(){initNavTree('context_8hpp_source.html','',''); });
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        vex_map&lt;std::string, uint32_t&gt; textureIndices;</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        uint32_t nextTextureIndex = 0;</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        glm::uvec2 currentRenderResolution;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        std::queue&lt;uint32_t&gt; recycledTextureIndices;</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <a class="code hl_struct" href="structvex_1_1enviroment.html">enviroment</a> m_enviroment;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        glm::uvec2 currentRenderResolution;</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordtype">bool</span> supportsMultiDraw = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    };</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <a class="code hl_struct" href="structvex_1_1enviroment.html">enviroment</a> m_enviroment;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        <span class="keywordtype">bool</span> supportsMultiDraw = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        <span class="keywordtype">bool</span> supportsIndirectDraw = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordtype">bool</span> supportsBindlessTextures = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keywordtype">bool</span> supportsShaderDrawParameters = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        VkDescriptorSetLayout bindlessDescriptorSetLayout = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        VkDescriptorPool bindlessDescriptorPool = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        VkDescriptorSet bindlessDescriptorSet = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        uint32_t maxDrawIndirectCount = 1;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        uint32_t maxMultiDrawCount = 1;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        <span class="keywordtype">bool</span> requestSwapchainRecreation = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    };</div>
 </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>}</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>}</div>
 <div class="ttc" id="aenviroment_8hpp_html"><div class="ttname"><a href="enviroment_8hpp.html">enviroment.hpp</a></div><div class="ttdoc">This file defines enviroment struct.</div></div>
-<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="#l00025">context.hpp:25</a></div></div>
+<div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="#l00026">context.hpp:26</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html_a146427df3fc36f89efe374be84e960b8"><div class="ttname"><a href="structvex_1_1VulkanContext.html#a146427df3fc36f89efe374be84e960b8">vex::VulkanContext::beginSingleTimeCommands</a></div><div class="ttdeci">VkCommandBuffer beginSingleTimeCommands()</div><div class="ttdoc">Function to begin single time command, used for stuff like creating vulkan image when loading texture...</div><div class="ttdef"><b>Definition</b> <a href="#l00060">context.hpp:60</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html_abb884624fe4e0b8765ed87c5cca04a11"><div class="ttname"><a href="structvex_1_1VulkanContext.html#abb884624fe4e0b8765ed87c5cca04a11">vex::VulkanContext::endSingleTimeCommands</a></div><div class="ttdeci">void endSingleTimeCommands(VkCommandBuffer commandBuffer)</div><div class="ttdoc">Function to end single time command.</div><div class="ttdef"><b>Definition</b> <a href="#l00080">context.hpp:80</a></div></div>
 <div class="ttc" id="astructvex_1_1enviroment_html"><div class="ttname"><a href="structvex_1_1enviroment.html">vex::enviroment</a></div><div class="ttdoc">This struct is used to hold all enviroment settings. eg. shading details or lighting setup.</div><div class="ttdef"><b>Definition</b> <a href="enviroment_8hpp_source.html#l00013">enviroment.hpp:13</a></div></div>

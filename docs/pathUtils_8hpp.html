@@ -120,6 +120,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:aa19dc36f35689a3623a28fb816af93d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the directory of the executable.  <br /></td></tr>
 <tr class="memitem:a6012eb60cd3da12ce61a5175a7471ba2" id="r_a6012eb60cd3da12ce61a5175a7471ba2"><td class="memItemLeft" align="right" valign="top">std::filesystem::path VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6012eb60cd3da12ce61a5175a7471ba2">vex::GetExecutableDir</a> ()</td></tr>
 <tr class="memdesc:a6012eb60cd3da12ce61a5175a7471ba2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the path of an asset. Its different for debug and release builds since <a class="el" href="classvex_1_1VirtualFileSystem.html" title="This class provides abstraction of file system needed for loading packed and unpacked assets.">VirtualFileSystem</a> implements asset loading differently depending on build type.  <br /></td></tr>
+<tr class="memitem:a82f8ac87aba16056ea7e7313c795f25f" id="r_a82f8ac87aba16056ea7e7313c795f25f"><td class="memItemLeft" align="right" valign="top">std::filesystem::path VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82f8ac87aba16056ea7e7313c795f25f">vex::GetLogDir</a> ()</td></tr>
+<tr class="memdesc:a82f8ac87aba16056ea7e7313c795f25f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the directory where logs and crash dumps should be stored.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file implements path-related utilities. </p>
@@ -187,6 +189,27 @@ Functions</h2></td></tr>
 <p>Get the path of an asset. Its different for debug and release builds since VirtualFileSystem implements asset loading differently depending on build type. </p>
 
 <p class="definition">Definition at line <a class="el" href="pathUtils_8cpp_source.html#l00025">25</a> of file <a class="el" href="pathUtils_8cpp_source.html">pathUtils.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a82f8ac87aba16056ea7e7313c795f25f" name="a82f8ac87aba16056ea7e7313c795f25f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82f8ac87aba16056ea7e7313c795f25f">&#9670;&#160;</a></span>GetLogDir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::filesystem::path vex::GetLogDir </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the directory where logs and crash dumps should be stored. </p>
+
+<p class="definition">Definition at line <a class="el" href="pathUtils_8cpp_source.html#l00079">79</a> of file <a class="el" href="pathUtils_8cpp_source.html">pathUtils.cpp</a>.</p>
 
 </div>
 </div>
