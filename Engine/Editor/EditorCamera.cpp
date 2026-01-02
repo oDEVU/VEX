@@ -51,6 +51,11 @@ void EditorCameraObject::processEvent(const SDL_Event& event, float deltaTime) {
 
 void EditorCameraObject::Update(float deltaTime) {
     auto& tc = GetComponent<vex::TransformComponent>();
+    bool isShiftHeld = keyStates[SDL_SCANCODE_LSHIFT] || keyStates[SDL_SCANCODE_RSHIFT];
+
+    if(isShiftHeld){
+        return;
+    }
 
     if (keyStates[SDL_SCANCODE_W] && (m_viewportHovered || m_isFlying)) {
         tc.setLocalPosition(tc.getLocalPosition()+(tc.getForwardVector()*float(deltaTime*m_movementSpeed)));

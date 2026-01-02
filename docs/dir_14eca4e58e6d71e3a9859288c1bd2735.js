@@ -10,6 +10,7 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "Editor.hpp", "Editor_8hpp.html", "Editor_8hpp" ],
     [ "EditorCamera.cpp", "EditorCamera_8cpp_source.html", null ],
     [ "EditorCamera.hpp", "EditorCamera_8hpp.html", "EditorCamera_8hpp" ],
+    [ "EditorCommands.hpp", "EditorCommands_8hpp.html", "EditorCommands_8hpp" ],
     [ "EditorImGUIWrapper.cpp", "EditorImGUIWrapper_8cpp_source.html", null ],
     [ "EditorImGUIWrapper.hpp", "EditorImGUIWrapper_8hpp.html", "EditorImGUIWrapper_8hpp" ],
     [ "editorProperties.hpp", "editorProperties_8hpp.html", "editorProperties_8hpp" ],

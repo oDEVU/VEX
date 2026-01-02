@@ -7,6 +7,7 @@
 #pragma once
 #include "Engine.hpp"
 #include "EditorCamera.hpp"
+#include "EditorCommands.hpp"
 
 #include "editorProperties.hpp"
 #include "projectProperties.hpp"
@@ -18,6 +19,8 @@
 #include <nlohmann/json.hpp>
 
 #include <memory>
+#include <deque>
+#include <stack>
 
 namespace vex {
 
@@ -91,6 +94,27 @@ namespace vex {
             m_frame = 0;
             m_refresh = true;
         }
+
+        /// @brief Processes editor shortcuts.
+        void ProcessEditorShortcuts();
+
+        /// @brief Copies the selected object to the clipboard.
+        void CopySelectedObject();
+
+        /// @brief Pastes the object from the clipboard to the scene.
+        void PasteObjectToScene();
+
+        /// @brief Duplicates the selected object in the scene.
+        void DuplicateSelectedObject();
+
+        /// @brief Deletes the selected object from the scene.
+        void DeleteSelectedObject();
+
+        /// @brief Undoes the last action performed in the editor.
+        void Undo();
+
+        /// @brief Redoes the last undone action in the editor.
+        void Redo();
     private:
         /**
         * @brief Helper to draw the ImGUI dockspace and viewport window for the editor.
@@ -201,7 +225,31 @@ namespace vex {
             }
         }
 
-        // State to track if the viewport size changed
+        std::deque<std::unique_ptr<ICommand>> m_undoStack;
+        std::deque<std::unique_ptr<ICommand>> m_redoStack;
+        const size_t MAX_UNDO_STEPS = 50;
+
+        /// @brief Pushes a command onto the undo stack and clears the redo stack.
+        void PushCommand(ICommand* cmd) {
+            m_undoStack.push_back(std::unique_ptr<ICommand>(cmd));
+            if (m_undoStack.size() > MAX_UNDO_STEPS) m_undoStack.pop_front();
+            m_redoStack.clear();
+        }
+
+        struct CopiedObjectData {
+            std::string name;
+            std::string type;
+            std::unordered_map<std::string, nlohmann::json> components;
+            bool hasData = false;
+        } m_clipboard;
+
+        bool m_gizmoWasUsing = false;
+        glm::vec3 m_gizmoStartPos;
+        glm::vec3 m_gizmoStartRot;
+        glm::vec3 m_gizmoStartScale;
+
+        bool m_isAssetBrowserFocused = false;
+
         glm::uvec2 m_viewportSize = {1280, 720};
         std::unique_ptr<EditorCameraObject> m_camera;
         std::unique_ptr<EditorMenuBar> m_editorMenuBar;

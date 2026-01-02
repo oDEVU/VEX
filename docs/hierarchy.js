@@ -17,6 +17,7 @@ var hierarchy =
     [ "JPH::ContactListener", null, [
       [ "vex::MyContactListener", "classvex_1_1MyContactListener.html", null ]
     ] ],
+    [ "vex::Editor::CopiedObjectData", "structvex_1_1Editor_1_1CopiedObjectData.html", null ],
     [ "vex::DebugVertex", "structvex_1_1DebugVertex.html", null ],
     [ "EditorMenuBar", "classEditorMenuBar.html", null ],
     [ "EditorProperties", "structEditorProperties.html", null ],
@@ -43,6 +44,10 @@ var hierarchy =
     [ "vex::GameObjectFactory", "classvex_1_1GameObjectFactory.html", null ],
     [ "vex::GamepadAxisBinding", "structvex_1_1GamepadAxisBinding.html", null ],
     [ "vex::GamepadButtonBinding", "structvex_1_1GamepadButtonBinding.html", null ],
+    [ "vex::ICommand", "structvex_1_1ICommand.html", [
+      [ "vex::DeleteCommand", "classvex_1_1DeleteCommand.html", null ],
+      [ "vex::TransformCommand", "classvex_1_1TransformCommand.html", null ]
+    ] ],
     [ "vex::ImGUIWrapper", "classvex_1_1ImGUIWrapper.html", [
       [ "vex::VulkanImGUIWrapper", "classvex_1_1VulkanImGUIWrapper.html", [
         [ "EditorImGUIWrapper", "classEditorImGUIWrapper.html", null ]
@@ -93,6 +98,7 @@ var hierarchy =
     [ "vex::SceneManager", "classvex_1_1SceneManager.html", null ],
     [ "vex::SceneRenderData", "structvex_1_1SceneRenderData.html", null ],
     [ "vex::SceneUBO", "structvex_1_1SceneUBO.html", null ],
+    [ "vex::SerializedObject", "structvex_1_1SerializedObject.html", null ],
     [ "vex::SkipInit", "structvex_1_1SkipInit.html", null ],
     [ "std::streambuf", null, [
       [ "vex::VirtualFileSystem::VPKStream::VPKStreamBuf", "classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html", null ]

@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <volk.h>
 #include <filesystem>
+#include <limits>
 
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
@@ -94,6 +95,105 @@ namespace vex {
         log("Editor initialized successfully");
     }
 
+    void Editor::ProcessEditorShortcuts() {
+            auto& io = ImGui::GetIO();
+            bool ctrl = io.KeyCtrl;
+            bool shift = io.KeyShift;
+
+            if (ctrl && ImGui::IsKeyPressed(ImGuiKey_Z)) Undo();
+            if (ctrl && ImGui::IsKeyPressed(ImGuiKey_Y)) Redo();
+
+            if (ctrl && ImGui::IsKeyPressed(ImGuiKey_S)) {
+                if (shift) m_editorMenuBar->SaveSceneAs();
+                else {
+                    std::string sceneName = vex::GetAssetPath(getSceneManager()->getLastSceneName());
+                    getSceneManager()->GetScene(sceneName)->Save(sceneName);
+                    log("Quick Saved Scene.");
+                }
+            }
+
+            if (ctrl && ImGui::IsKeyPressed(ImGuiKey_N)) m_editorMenuBar->NewScene();
+            if (ctrl && ImGui::IsKeyPressed(ImGuiKey_O)) m_editorMenuBar->OpenScene();
+
+            if (shift && ImGui::IsKeyPressed(ImGuiKey_Q)) m_currentGizmoOperation = (ImGuizmo::OPERATION)0;
+            if (shift && ImGui::IsKeyPressed(ImGuiKey_W)) m_currentGizmoOperation = ImGuizmo::TRANSLATE;
+            if (shift && ImGui::IsKeyPressed(ImGuiKey_E)) m_currentGizmoOperation = ImGuizmo::ROTATE;
+            if (shift && ImGui::IsKeyPressed(ImGuiKey_R)) m_currentGizmoOperation = ImGuizmo::SCALE;
+
+            if (shift && ImGui::IsKeyPressed(ImGuiKey_F)) {
+                if (m_selectedObject.second && m_camera) {
+                    auto& targetTC = m_selectedObject.second->GetComponent<TransformComponent>();
+                    auto& camTC = m_camera->GetComponent<TransformComponent>();
+                    glm::vec3 targetPos = targetTC.getWorldPosition();
+                    glm::vec3 offset = camTC.getForwardVector() * -5.0f;
+                    camTC.setWorldPosition(targetPos + offset);
+                }
+            }
+        }
+
+        void Editor::Undo() {
+            if (m_undoStack.empty()) return;
+            m_undoStack.back()->Undo();
+            m_redoStack.push_back(std::move(m_undoStack.back()));
+            m_undoStack.pop_back();
+        }
+
+        void Editor::Redo() {
+            if (m_redoStack.empty()) return;
+            m_redoStack.back()->Execute();
+            m_undoStack.push_back(std::move(m_redoStack.back()));
+            m_redoStack.pop_back();
+        }
+
+        void Editor::CopySelectedObject() {
+            if (!m_selectedObject.second) return;
+            m_clipboard.hasData = true;
+            m_clipboard.name = m_selectedObject.second->GetComponent<NameComponent>().name;
+            m_clipboard.type = m_selectedObject.second->getObjectType();
+            m_clipboard.components.clear();
+
+            const auto& regNames = ComponentRegistry::getInstance().getRegisteredNames();
+            for (const auto& compName : regNames) {
+                nlohmann::json data = ComponentRegistry::getInstance().saveComponent(*m_selectedObject.second, compName);
+                if (!data.is_null()) m_clipboard.components[compName] = data;
+            }
+        }
+
+        void Editor::PasteObjectToScene() {
+            if (!m_clipboard.hasData) return;
+            std::string newName = m_clipboard.name + " (Paste)";
+            GameObject* newObj = GameObjectFactory::getInstance().create(m_clipboard.type, *this, newName);
+            if (!newObj) return;
+
+            for (const auto& [name, data] : m_clipboard.components) {
+                ComponentRegistry::getInstance().loadComponent(*newObj, name, data);
+            }
+
+            getSceneManager()->GetScene(getSceneManager()->getLastSceneName())->AddEditorGameObject(newObj);
+
+            m_selectedObject.second = newObj;
+            m_selectedObject.first = true;
+            refreshForObject();
+        }
+
+        void Editor::DuplicateSelectedObject() {
+            CopySelectedObject();
+            PasteObjectToScene();
+        }
+
+        void Editor::DeleteSelectedObject() {
+            if (!m_selectedObject.second) return;
+
+            std::vector<GameObject*> toDelete = { m_selectedObject.second };
+            PushCommand(new DeleteCommand(*this, toDelete));
+
+            getSceneManager()->GetScene(getSceneManager()->getLastSceneName())->DestroyGameObject(m_selectedObject.second);
+
+            m_selectedObject.second = nullptr;
+            m_selectedObject.first = false;
+            refreshForObject();
+        }
+
     void Editor::update(float deltaTime) {
         if (!m_pendingSceneToLoad.empty() && !m_waitForGui) {
             m_interface->WaitForGPUToFinish();
@@ -101,6 +201,8 @@ namespace vex {
             m_pendingSceneToLoad.clear();
             m_waitForGui = true;
             m_frame = 0;
+            m_undoStack.clear();
+            m_redoStack.clear();
         }else if(!m_pendingSceneToLoad.empty() && m_waitForGui){
             m_waitForGui = false;
         }
@@ -192,6 +294,7 @@ namespace vex {
 
             m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame, debugLines, true);
             m_imgui->beginFrame();
+            ProcessEditorShortcuts();
             m_imgui->executeUIFunctions();
 
             glm::uvec2 newRes = viewportRes;
@@ -332,6 +435,28 @@ namespace vex {
             nullptr,
             m_useSnap ? snap : nullptr
         );
+
+        bool isUsing = ImGuizmo::IsUsing();
+
+                if (isUsing && !m_gizmoWasUsing) {
+                    m_gizmoStartPos = tc.getLocalPosition();
+                    m_gizmoStartRot = tc.rotation;
+                    m_gizmoStartScale = tc.getLocalScale();
+                }
+
+                if (!isUsing && m_gizmoWasUsing) {
+                    if (tc.getLocalPosition() != m_gizmoStartPos ||
+                        tc.rotation != m_gizmoStartRot ||
+                        tc.getLocalScale() != m_gizmoStartScale)
+                    {
+                        PushCommand(new TransformCommand(
+                            m_selectedObject.second,
+                            m_gizmoStartPos, m_gizmoStartRot, m_gizmoStartScale,
+                            tc.getLocalPosition(), tc.rotation, tc.getLocalScale()
+                        ));
+                    }
+                }
+                m_gizmoWasUsing = isUsing;
 
         if (manipulated) {
             glm::mat4 localMatrix = transformMatrix;
@@ -624,8 +749,6 @@ namespace vex {
                     }
                 }
                 if (hitEntity != entt::null) {
-                    //m_selectedObject.first = false;
-
                     ExtractObjectByEntity(hitEntity, m_selectedObject);
 
                     log("Selected Entity ID: %d", (uint32_t)hitEntity);
@@ -710,6 +833,8 @@ namespace vex {
                 ImGui::End();
 
         ImGui::Begin("Assets", nullptr, childFlags);
+
+        m_isAssetBrowserFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
         if (m_assetBrowser) {
                 std::string openedFile = m_assetBrowser->Draw(m_icons);
