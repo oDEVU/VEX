@@ -323,10 +323,11 @@ namespace vex {
             auto& transform = registry.get<TransformComponent>(cameraEntity);
             auto& camera = registry.get<CameraComponent>(cameraEntity);
 
-
             if(!transform.isReady()){
                 transform.setRegistry(registry);
             }
+
+            transform.recalculateMatrix();
 
             view = glm::lookAt(transform.getWorldPosition(), transform.getWorldPosition() + transform.getForwardVector(), transform.getUpVector());
             proj = glm::perspective(glm::radians(camera.fov), (float)m_r_context.currentRenderResolution.x / (float)m_r_context.currentRenderResolution.y, camera.nearPlane, camera.farPlane);
