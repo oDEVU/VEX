@@ -19,10 +19,14 @@ namespace vex {
       bool vertexSnapping = true;
       /// @brief Enables affine texxture warping. (PS1 style texture warping in extreme camera angles)
       bool affineWarping = true;
-      /// @brief Enables color quantization. (PS1 style color compresion artifacts)
-      bool colorQuantization = true;
-      /// @brief Enables NTFS artifacts. (PS1 style NTFS artifacts)
+      /// @brief Enables whole screen color quantization. (PS1 style color compresion artifacts)
+      bool screenQuantization = true;
+      /// @brief Enables CRT TVs artifacts.
       bool ntfsArtifacts = true;
+      /// @brief Enables texture quantization. (PS1 style texture quantization)
+      bool textureQuantization = true;
+      /// @brief Enables screen dithering. (PS1 style dithering)
+      bool screenDither = true;
       /// @brief Ambient light color
       glm::vec3 ambientLight = glm::vec3(1.0f);
       /// @brief Ambient light strength

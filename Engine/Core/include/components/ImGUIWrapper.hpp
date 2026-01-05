@@ -13,6 +13,7 @@
 
 #if DEBUG
 #include <imgui.h>
+#include <ImGuizmo.h>
 #endif
 
 namespace vex {

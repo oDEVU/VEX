@@ -1,0 +1,4 @@
+var dir_f3b293f1ba109283846e603069441f22 =
+[
+    [ "assimp", "dir_8745c9c7569ae56d8ce2f998605b5f32.html", "dir_8745c9c7569ae56d8ce2f998605b5f32" ]
+];

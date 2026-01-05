@@ -2,6 +2,8 @@ var InputComponent_8hpp =
 [
     [ "vex::InputBinding", "structvex_1_1InputBinding.html", null ],
     [ "vex::MouseAxisBinding", "structvex_1_1MouseAxisBinding.html", null ],
+    [ "vex::GamepadButtonBinding", "structvex_1_1GamepadButtonBinding.html", null ],
+    [ "vex::GamepadAxisBinding", "structvex_1_1GamepadAxisBinding.html", null ],
     [ "vex::InputComponent", "structvex_1_1InputComponent.html", "structvex_1_1InputComponent" ],
     [ "vex::InputActionState", "InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee", [
       [ "Pressed", "InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baeead78a68f6a85421ae121c2cb5b73a1040", null ],

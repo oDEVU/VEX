@@ -4,24 +4,18 @@ namespace vex {
     Window::Window(std::string title, int resx, int resy){
         log("Initializing SDL...");
 
-        // WHY THE FUCK WAYLAND IS SO BLURRY NO MATTER WHAT I DO?!?!?
         #ifdef __linux__
-            SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "1");
-            SDL_SetHint("SDL_HINT_RENDER_SCALE_QUALITY", "nearest");
-            SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
-            SDL_SetHint("SDL_RENDER_DRIVER", "vulkan");
-            SDL_SetHint("SDL_VIDEO_FORCE_PIXEL_SIZE", "1");
-            SDL_SetHint("SDL_VIDEO_WAYLAND_SCALE_TO_DISPLAY", "0");
-            SDL_SetHint("SDL_VIDEO_WAYLAND_MODE_EMULATION", "1");
-            SDL_SetHintWithPriority(SDL_HINT_VIDEO_DRIVER, "x11,wayland", SDL_HINT_OVERRIDE);
-            setenv("SDL_VIDEODRIVER", "x11,wayland", 1);
+            SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland,x11");
         #endif
 
-        if (!SDL_Init(SDL_INIT_VIDEO)) {
+        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
             const char* error = SDL_GetError();
             log("SDL_Init failed: %s", error);
             throw_error(error);
         }
+
+        const char* driver = SDL_GetCurrentVideoDriver();
+        log("Active Video Driver: %s", driver ? driver : "Unknown");
 
         log("Creating window with resolution: %i X %i", resx, resy);
 
@@ -53,5 +47,45 @@ namespace vex {
 
     SDL_Window* Window::GetSDLWindow(){
         return window;
+    }
+
+    void Window::setFullscreen(bool enabled, bool exclusive) {
+        if (enabled) {
+            if (exclusive) {
+                const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(SDL_GetDisplayForWindow(window));
+                if (mode) {
+                    SDL_SetWindowFullscreenMode(window, mode);
+                }
+            } else {
+                SDL_SetWindowFullscreenMode(window, NULL);
+            }
+
+            if (!SDL_SetWindowFullscreen(window, true)) {
+                log(LogLevel::ERROR, "Failed to enter fullscreen: %s", SDL_GetError());
+            }
+        } else {
+            if (!SDL_SetWindowFullscreen(window, false)) {
+                log(LogLevel::ERROR, "Failed to exit fullscreen: %s", SDL_GetError());
+            }
+        }
+    }
+
+    bool Window::isFullscreen() {
+        return (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) != 0;
+    }
+
+    float Window::getRefreshRate() {
+        SDL_DisplayID displayID = SDL_GetDisplayForWindow(window);
+        if (displayID == 0) {
+            log(LogLevel::ERROR,  "Could not get display for window: %s", SDL_GetError());
+            return 60.0f;
+        }
+
+        const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
+        if (mode) {
+            return mode->refresh_rate > 0.0f ? mode->refresh_rate : 60.0f;
+        }
+
+        return 60.0f;
     }
 }

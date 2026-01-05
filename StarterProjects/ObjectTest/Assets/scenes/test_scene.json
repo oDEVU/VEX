@@ -1,0 +1,99 @@
+{
+    "environment": {
+        "lighting": {
+            "ambientLight": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "ambientLightStrength": 0.0,
+            "clearColor": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "sunDirection": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "sunLight": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "shading": {
+            "affineTextureWarping": false,
+            "gouraud": false,
+            "ntfsArtifacts": false,
+            "passiveVertexJitter": false,
+            "screenDither": false,
+            "screenQuantization": false,
+            "textureQuantization": false,
+            "vertexSnapping": false
+        }
+    },
+    "objects": [
+        {
+            "components": [],
+            "name": "New Map",
+            "type": "Map"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        4.217442512512207,
+                        7.415435791015625
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                }
+            ],
+            "name": "New Player",
+            "type": "Player"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "farPlane": 100.0,
+                    "fov": 65.0,
+                    "nearPlane": 0.10000000149011612,
+                    "type": "vex::CameraComponent"
+                }
+            ],
+            "name": "New CameraObject",
+            "parent": "New Player",
+            "type": "CameraObject"
+        }
+    ]
+}

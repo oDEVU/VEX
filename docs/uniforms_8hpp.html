@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -115,6 +116,7 @@ Classes</h2></td></tr>
 <tr class="memitem:vex_3A_3ALight" id="r_vex_3A_3ALight"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1Light.html">vex::Light</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structvex_1_1Light.html" title="Light struct for shader.">Light</a> struct for shader.  <a href="structvex_1_1Light.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3ASceneLightsUBO" id="r_vex_3A_3ASceneLightsUBO"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1SceneLightsUBO.html">vex::SceneLightsUBO</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a> lights uniform buffer object.  <a href="structvex_1_1SceneLightsUBO.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3APushConstants" id="r_vex_3A_3APushConstants"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1PushConstants.html">vex::PushConstants</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push constants, holds model information.  <a href="structvex_1_1PushConstants.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
@@ -127,10 +129,12 @@ Namespaces</h2></td></tr>
 Variables</h2></td></tr>
 <tr class="memitem:a7905480da362a0227b156c9e208e6236" id="r_a7905480da362a0227b156c9e208e6236"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#a7905480da362a0227b156c9e208e6236">vex::PS1Effects::VERTEX_SNAPPING</a> = 0x1</td></tr>
 <tr class="memitem:a3e224b4838d68fb6a9d59a23c174cd6b" id="r_a3e224b4838d68fb6a9d59a23c174cd6b"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#a3e224b4838d68fb6a9d59a23c174cd6b">vex::PS1Effects::AFFINE_WARPING</a> = 0x2</td></tr>
-<tr class="memitem:a80c7aeeeb84b7b7e81805e4eb9550a13" id="r_a80c7aeeeb84b7b7e81805e4eb9550a13"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#a80c7aeeeb84b7b7e81805e4eb9550a13">vex::PS1Effects::COLOR_QUANTIZATION</a> = 0x4</td></tr>
+<tr class="memitem:a1fb1c4228cd0ee0f058f18522369ef4c" id="r_a1fb1c4228cd0ee0f058f18522369ef4c"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#a1fb1c4228cd0ee0f058f18522369ef4c">vex::PS1Effects::SCREEN_QUANTIZATION</a> = 0x4</td></tr>
 <tr class="memitem:a788afa7056df2726641a9258d1647621" id="r_a788afa7056df2726641a9258d1647621"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#a788afa7056df2726641a9258d1647621">vex::PS1Effects::VERTEX_JITTER</a> = 0x8</td></tr>
 <tr class="memitem:aef4d8cf584814d30a1668f7db4f05564" id="r_aef4d8cf584814d30a1668f7db4f05564"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#aef4d8cf584814d30a1668f7db4f05564">vex::PS1Effects::NTSC_ARTIFACTS</a> = 0x10</td></tr>
 <tr class="memitem:ae6a919c77fea9129e7761f75249828bc" id="r_ae6a919c77fea9129e7761f75249828bc"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#ae6a919c77fea9129e7761f75249828bc">vex::PS1Effects::GOURAUD_SHADING</a> = 0x20</td></tr>
+<tr class="memitem:acfb032849c36c4a4317643332833f68e" id="r_acfb032849c36c4a4317643332833f68e"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#acfb032849c36c4a4317643332833f68e">vex::PS1Effects::TEXTURE_QUANTIZATION</a> = 0x40</td></tr>
+<tr class="memitem:a2d56a9d7dd6002454117dbf5110f3d5f" id="r_a2d56a9d7dd6002454117dbf5110f3d5f"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacevex_1_1PS1Effects.html#a2d56a9d7dd6002454117dbf5110f3d5f">vex::PS1Effects::SCREEN_DITHER</a> = 0x80</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file defines uniforms and pushconstant for rendering meshes. </p>

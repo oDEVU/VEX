@@ -1,3 +1,0 @@
-compile and use projectBuilder under "Engine/BuildTools/", pass to it the path to the project directory. It will create "Build" directory inside the project directory. The "Build" directory will contain the compiled output of the project.
-
-CURRENTLY ONLY WORKS FOR LINUX, WINDOWS IS UNTESTED BUT MOST PROBABLY projectBuilder WILL DELETE VEX.dll AS IT ONLY CHECKS FOR libVEX.a

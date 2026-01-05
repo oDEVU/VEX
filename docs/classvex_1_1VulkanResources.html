@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -108,8 +109,8 @@ $(function(){initNavTree('classvex_1_1VulkanResources.html','','classvex_1_1Vulk
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8ebb059a4b2b6e280056197ce8d488b1" id="r_a8ebb059a4b2b6e280056197ce8d488b1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ebb059a4b2b6e280056197ce8d488b1">VulkanResources</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context)</td></tr>
-<tr class="memdesc:a8ebb059a4b2b6e280056197ce8d488b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple constructor.  <br /></td></tr>
+<tr class="memitem:a706ff851677bcb804326ad8680f80a11" id="r_a706ff851677bcb804326ad8680f80a11"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a706ff851677bcb804326ad8680f80a11">VulkanResources</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *vfs)</td></tr>
+<tr class="memdesc:a706ff851677bcb804326ad8680f80a11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple constructor.  <br /></td></tr>
 <tr class="memitem:a929f9c55cb9204c67b5b8fd7f013a346" id="r_a929f9c55cb9204c67b5b8fd7f013a346"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a929f9c55cb9204c67b5b8fd7f013a346">~VulkanResources</a> ()</td></tr>
 <tr class="memdesc:a929f9c55cb9204c67b5b8fd7f013a346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple destructor.  <br /></td></tr>
 <tr class="memitem:af6600e8f346f3d771113252bab2739af" id="r_af6600e8f346f3d771113252bab2739af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6600e8f346f3d771113252bab2739af">createUniformBuffers</a> ()</td></tr>
@@ -117,33 +118,41 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3f19b21b5c08c079e4d930c3e39145bf" id="r_a3f19b21b5c08c079e4d930c3e39145bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f19b21b5c08c079e4d930c3e39145bf">updateSceneUBO</a> (const <a class="el" href="structvex_1_1SceneUBO.html">SceneUBO</a> &amp;data)</td></tr>
 <tr class="memdesc:a3f19b21b5c08c079e4d930c3e39145bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the scene uniform buffer.  <br /></td></tr>
 <tr class="memitem:ab4d964bb1cefadb20140dedf53da9893" id="r_ab4d964bb1cefadb20140dedf53da9893"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4d964bb1cefadb20140dedf53da9893">updateLightUBO</a> (uint32_t frameIndex, uint32_t modelIndex, const <a class="el" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a> &amp;data)</td></tr>
-<tr class="memdesc:ab4d964bb1cefadb20140dedf53da9893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the light uniform buffer.  <br /></td></tr>
+<tr class="memdesc:ab4d964bb1cefadb20140dedf53da9893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the light uniform buffer for a specific model.  <br /></td></tr>
 <tr class="memitem:abefc56e46967586e0dd33c50c1f815d1" id="r_abefc56e46967586e0dd33c50c1f815d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abefc56e46967586e0dd33c50c1f815d1">createDefaultTexture</a> ()</td></tr>
 <tr class="memdesc:abefc56e46967586e0dd33c50c1f815d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a default texture.  <br /></td></tr>
 <tr class="memitem:a77672c461906ef7e0994078d8994d27d" id="r_a77672c461906ef7e0994078d8994d27d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77672c461906ef7e0994078d8994d27d">updateTextureDescriptor</a> (uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex)</td></tr>
 <tr class="memdesc:a77672c461906ef7e0994078d8994d27d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the texture descriptor.  <br /></td></tr>
 <tr class="memitem:a2782052723de88e57d06d9d0cf83dd42" id="r_a2782052723de88e57d06d9d0cf83dd42"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2782052723de88e57d06d9d0cf83dd42">getDefaultTextureName</a> () const</td></tr>
 <tr class="memdesc:a2782052723de88e57d06d9d0cf83dd42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the default texture name.  <br /></td></tr>
-<tr class="memitem:ade1db1d3ff7f3acff6ef95b6c7f193a1" id="r_ade1db1d3ff7f3acff6ef95b6c7f193a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade1db1d3ff7f3acff6ef95b6c7f193a1">loadTexture</a> (const std::string &amp;path, const std::string &amp;name, <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *vfs)</td></tr>
-<tr class="memdesc:ade1db1d3ff7f3acff6ef95b6c7f193a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a texture from a file.  <br /></td></tr>
+<tr class="memitem:a234ce352ae63fd822c06cd7a3e00c2e4" id="r_a234ce352ae63fd822c06cd7a3e00c2e4"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a234ce352ae63fd822c06cd7a3e00c2e4">getUBODescriptorSet</a> (uint32_t frameIndex) const</td></tr>
+<tr class="memdesc:a234ce352ae63fd822c06cd7a3e00c2e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the uniform buffer descriptor set for the given frame index.  <br /></td></tr>
+<tr class="memitem:a46cf7cb8e3c1921551d473fb62b7c2b0" id="r_a46cf7cb8e3c1921551d473fb62b7c2b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46cf7cb8e3c1921551d473fb62b7c2b0">loadTexture</a> (const std::string &amp;path, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a46cf7cb8e3c1921551d473fb62b7c2b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a texture from a file.  <br /></td></tr>
 <tr class="memitem:a777c49742fa6e898a46d8a6c97d75b0c" id="r_a777c49742fa6e898a46d8a6c97d75b0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a777c49742fa6e898a46d8a6c97d75b0c">unloadTexture</a> (const std::string &amp;name)</td></tr>
 <tr class="memdesc:a777c49742fa6e898a46d8a6c97d75b0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads a texture.  <br /></td></tr>
 <tr class="memitem:afc98d19439dc53425270d0a302e30466" id="r_afc98d19439dc53425270d0a302e30466"><td class="memItemLeft" align="right" valign="top">VkImageView&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc98d19439dc53425270d0a302e30466">getTextureView</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:afc98d19439dc53425270d0a302e30466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the texture view for the given texture name.  <br /></td></tr>
-<tr class="memitem:ac55a799b0723985d996d95cb51a462a4" id="r_ac55a799b0723985d996d95cb51a462a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac55a799b0723985d996d95cb51a462a4">createTextureFromRaw</a> (const std::vector&lt; unsigned char &gt; &amp;rgba, int w, int h, const std::string &amp;name)</td></tr>
+<tr class="memitem:ac55a799b0723985d996d95cb51a462a4" id="r_ac55a799b0723985d996d95cb51a462a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac55a799b0723985d996d95cb51a462a4">createTextureFromRaw</a> (const std::vector&lt; unsigned char &gt; &amp;<a class="el" href="structvex_1_1rgba.html">rgba</a>, int w, int h, const std::string &amp;name)</td></tr>
 <tr class="memdesc:ac55a799b0723985d996d95cb51a462a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a texture from raw data.  <br /></td></tr>
 <tr class="memitem:ac14d5b2f5f8102b54bcaa5328470dd22" id="r_ac14d5b2f5f8102b54bcaa5328470dd22"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac14d5b2f5f8102b54bcaa5328470dd22">getDescriptorSet</a> (uint32_t frameIndex) const</td></tr>
 <tr class="memdesc:ac14d5b2f5f8102b54bcaa5328470dd22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the descriptor set for the given frame index.  <br /></td></tr>
 <tr class="memitem:ad90195b6917ca02195cb0307d99ffa70" id="r_ad90195b6917ca02195cb0307d99ffa70"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad90195b6917ca02195cb0307d99ffa70">getDescriptorSetPtr</a> (uint32_t frameIndex)</td></tr>
 <tr class="memdesc:ad90195b6917ca02195cb0307d99ffa70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the descriptor set for the given frame index.  <br /></td></tr>
-<tr class="memitem:a89a4f8d1b452fe35455851f3fde49a17" id="r_a89a4f8d1b452fe35455851f3fde49a17"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89a4f8d1b452fe35455851f3fde49a17">getTextureDescriptorSet</a> (uint32_t frameIndex, uint32_t textureIndex)</td></tr>
-<tr class="memdesc:a89a4f8d1b452fe35455851f3fde49a17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a descriptor set for the given frame index and texture index.  <br /></td></tr>
+<tr class="memitem:ab7c1816ff613680e55a277249a653168" id="r_ab7c1816ff613680e55a277249a653168"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7c1816ff613680e55a277249a653168">getTextureDescriptorSet</a> (uint32_t frameIndex, uint32_t textureIndex) const</td></tr>
+<tr class="memdesc:ab7c1816ff613680e55a277249a653168"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a descriptor set for the given frame index and texture index.  <br /></td></tr>
 <tr class="memitem:a87fdb7dcfec813238457dabf3c582e91" id="r_a87fdb7dcfec813238457dabf3c582e91"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87fdb7dcfec813238457dabf3c582e91">getDescriptorLayout</a> () const</td></tr>
 <tr class="memdesc:a87fdb7dcfec813238457dabf3c582e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a descriptor set layout.  <br /></td></tr>
 <tr class="memitem:aa0af5335969351df329557105c0a96ef" id="r_aa0af5335969351df329557105c0a96ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0af5335969351df329557105c0a96ef">textureExists</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:aa0af5335969351df329557105c0a96ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if a texture with the given name exists.  <br /></td></tr>
-<tr class="memitem:af2bd23bc42b01eb8fc369c3d6230a612" id="r_af2bd23bc42b01eb8fc369c3d6230a612"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2bd23bc42b01eb8fc369c3d6230a612">getTextureIndex</a> (const std::string &amp;name) const</td></tr>
-<tr class="memdesc:af2bd23bc42b01eb8fc369c3d6230a612"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of a texture with the given name.  <br /></td></tr>
+<tr class="memitem:a6882b8e45bb261744a6cd8fd03f5719a" id="r_a6882b8e45bb261744a6cd8fd03f5719a"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a6882b8e45bb261744a6cd8fd03f5719a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of a texture with the given name.  <br /></td></tr>
+<tr class="memitem:ae14433bc6241762f5c9950a0fc4acfdc" id="r_ae14433bc6241762f5c9950a0fc4acfdc"><td class="memItemLeft" align="right" valign="top">VkSampler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae14433bc6241762f5c9950a0fc4acfdc">getTextureSampler</a> () const</td></tr>
+<tr class="memdesc:ae14433bc6241762f5c9950a0fc4acfdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the texture sampler.  <br /></td></tr>
+<tr class="memitem:a9afbacb471d6378c21af4b9abdc3cff4" id="r_a9afbacb471d6378c21af4b9abdc3cff4"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9afbacb471d6378c21af4b9abdc3cff4">getBindlessDescriptorSet</a> () const</td></tr>
+<tr class="memdesc:a9afbacb471d6378c21af4b9abdc3cff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the bindless descriptor set.  <br /></td></tr>
+<tr class="memitem:a2ca108ca72bb7c4950e6ebdbe54b9d3a" id="r_a2ca108ca72bb7c4950e6ebdbe54b9d3a"><td class="memItemLeft" align="right" valign="top">VkDescriptorSetLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ca108ca72bb7c4950e6ebdbe54b9d3a">getBindlessLayout</a> () const</td></tr>
+<tr class="memdesc:a2ca108ca72bb7c4950e6ebdbe54b9d3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the bindless descriptor set layout.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -158,6 +167,7 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ac3e2dd167a1a48fc2d128b1937d81c35" id="r_ac3e2dd167a1a48fc2d128b1937d81c35"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3e2dd167a1a48fc2d128b1937d81c35">defaultTextureName</a> = &quot;default&quot;</td></tr>
 <tr class="memitem:a54557fa073d75bfdf73136ba7ef0037e" id="r_a54557fa073d75bfdf73136ba7ef0037e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54557fa073d75bfdf73136ba7ef0037e">m_r_context</a></td></tr>
+<tr class="memitem:a01a4dc143921ff6815d1f7eb2ae9aeaa" id="r_a01a4dc143921ff6815d1f7eb2ae9aeaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01a4dc143921ff6815d1f7eb2ae9aeaa">m_vfs</a></td></tr>
 <tr class="memitem:ae896cc4982a3403411c4f618c1db1299" id="r_ae896cc4982a3403411c4f618c1db1299"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae896cc4982a3403411c4f618c1db1299">m_sceneBuffers</a></td></tr>
 <tr class="memitem:a8184cfb27a3b63a918b87daddfb8dabf" id="r_a8184cfb27a3b63a918b87daddfb8dabf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8184cfb27a3b63a918b87daddfb8dabf">m_lightBuffers</a></td></tr>
 <tr class="memitem:a5146879fdd20726a441316925f635d8d" id="r_a5146879fdd20726a441316925f635d8d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5146879fdd20726a441316925f635d8d">m_sceneAllocs</a></td></tr>
@@ -166,19 +176,20 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a5fa3208adb0858bbb661d2f1236fc6d2" id="r_a5fa3208adb0858bbb661d2f1236fc6d2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fa3208adb0858bbb661d2f1236fc6d2">m_descriptorSets</a></td></tr>
 <tr class="memitem:a74e7791fb3f26262ded38bb60b231895" id="r_a74e7791fb3f26262ded38bb60b231895"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74e7791fb3f26262ded38bb60b231895">m_descriptorPool</a></td></tr>
 <tr class="memitem:a4de384236678197ab868c5dae3e93b46" id="r_a4de384236678197ab868c5dae3e93b46"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkDescriptorSet &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4de384236678197ab868c5dae3e93b46">m_textureDescriptorSets</a></td></tr>
-<tr class="memitem:adb8656e380b1adc2ce2be7a9f9b090f5" id="r_adb8656e380b1adc2ce2be7a9f9b090f5"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb8656e380b1adc2ce2be7a9f9b090f5">m_textures</a></td></tr>
+<tr class="memitem:a874617ebacd13f24f819278cea9d2caf" id="r_a874617ebacd13f24f819278cea9d2caf"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a874617ebacd13f24f819278cea9d2caf">m_textures</a></td></tr>
 <tr class="memitem:a540cc88fd0041be22666eefca489c655" id="r_a540cc88fd0041be22666eefca489c655"><td class="memItemLeft" align="right" valign="top">VkSampler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a540cc88fd0041be22666eefca489c655">m_textureSampler</a></td></tr>
-<tr class="memitem:a3a01c79bc451b6d97a615b7afa1fe33c" id="r_a3a01c79bc451b6d97a615b7afa1fe33c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VkImage &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a01c79bc451b6d97a615b7afa1fe33c">m_textureImages</a></td></tr>
-<tr class="memitem:ae95624255b4924b490167fd6ed610b18" id="r_ae95624255b4924b490167fd6ed610b18"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae95624255b4924b490167fd6ed610b18">m_textureAllocations</a></td></tr>
-<tr class="memitem:aaaae5b074fc2196698b92b214757b86c" id="r_aaaae5b074fc2196698b92b214757b86c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaaae5b074fc2196698b92b214757b86c">m_textureViews</a></td></tr>
+<tr class="memitem:adc47fc4cb90c9989f3e2f46802c5dfcf" id="r_adc47fc4cb90c9989f3e2f46802c5dfcf"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VkImage &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc47fc4cb90c9989f3e2f46802c5dfcf">m_textureImages</a></td></tr>
+<tr class="memitem:af248be0259b44926ae3a55704666c0cc" id="r_af248be0259b44926ae3a55704666c0cc"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af248be0259b44926ae3a55704666c0cc">m_textureAllocations</a></td></tr>
+<tr class="memitem:af8953a1f6ef99f71c7c54dddf1a7df2b" id="r_af8953a1f6ef99f71c7c54dddf1a7df2b"><td class="memItemLeft" align="right" valign="top">vex_map&lt; std::string, VkImageView &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8953a1f6ef99f71c7c54dddf1a7df2b">m_textureViews</a></td></tr>
+<tr class="memitem:ad4c8bd4c20914aa20f071913746e6071" id="r_ad4c8bd4c20914aa20f071913746e6071"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4c8bd4c20914aa20f071913746e6071">m_ignoredTexturePaths</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class manages resources like textures, descriptor sets, and uniform buffers. </p>
 
 <p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00021">21</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8ebb059a4b2b6e280056197ce8d488b1" name="a8ebb059a4b2b6e280056197ce8d488b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ebb059a4b2b6e280056197ce8d488b1">&#9670;&#160;</a></span>VulkanResources()</h2>
+<a id="a706ff851677bcb804326ad8680f80a11" name="a706ff851677bcb804326ad8680f80a11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a706ff851677bcb804326ad8680f80a11">&#9670;&#160;</a></span>VulkanResources()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -186,22 +197,26 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">vex::VulkanResources::VulkanResources </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>context</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>context</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *</td>          <td class="paramname"><span class="paramname"><em>vfs</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Simple constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Initializes the resource manager: creates default textures, samplers, UBOs, and descriptor pools. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">VulkanContext&amp;</td><td>context - The Vulkan context to use.</td></tr>
+    <tr><td class="paramname">VulkanContext&amp;</td><td>context - The Vulkan context to use. </td></tr>
+    <tr><td class="paramname">VirtualFileSystem*</td><td>vfs - VFS for loading texture files. </td></tr>
   </table>
   </dd>
 </dl>
-<p>Initializes the <a class="el" href="classvex_1_1VulkanResources.html" title="This class manages resources like textures, descriptor sets, and uniform buffers.">VulkanResources</a> object with the provided Vulkan context. Its called by VulkanInterface constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00013">13</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00015">15</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -221,8 +236,9 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Simple destructor. </p>
+<p>Destroys all textures, buffers, samplers, and descriptor pools. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00020">20</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00022">22</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -243,9 +259,9 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a default texture. </p>
-<p>Creates 1x1 white texture used for untextured models. </p>
+<p>Generates a 1x1 white pixel texture, transitions it to <span class="tt">SHADER_READ_ONLY</span>, and assigns it to the "default" key. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00386">386</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00470">470</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -274,7 +290,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create descriptor resources. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00237">237</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00254">254</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -303,7 +319,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create per-mesh texture sets. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00467">467</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00551">551</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -337,18 +353,17 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a texture from raw data. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Creates a GPU texture from a vector of bytes (RGBA). Useful for generated content like UI fonts. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::vector&lt;unsigned char&gt;&amp; rgba - The raw data. </td></tr>
-    <tr><td class="paramname">int</td><td>w - The width of the texture. </td></tr>
-    <tr><td class="paramname">int</td><td>h - The height of the texture. </td></tr>
-    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the texture.</td></tr>
+    <tr><td class="paramname">const</td><td>std::vector&lt;unsigned char&gt;&amp; rgba - Raw pixel data. </td></tr>
+    <tr><td class="paramname">int</td><td>w - Width. </td></tr>
+    <tr><td class="paramname">int</td><td>h - Height. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; name - Identifier. </td></tr>
   </table>
   </dd>
 </dl>
-<p>Creates a texture from raw data and creates a texture view. Currently used for ui font textures. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00056">56</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00082">82</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -377,7 +392,7 @@ Private Attributes</h2></td></tr>
 
 <p>Internal function to create texture sampler. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00522">522</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00606">606</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -397,8 +412,69 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates uniform buffers. </p>
+<p>Allocates <a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a> and <a class="el" href="structvex_1_1Light.html" title="Light struct for shader.">Light</a> UBOs for each frame in flight using VMA. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00210">210</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00229">229</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9afbacb471d6378c21af4b9abdc3cff4" name="a9afbacb471d6378c21af4b9abdc3cff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9afbacb471d6378c21af4b9abdc3cff4">&#9670;&#160;</a></span>getBindlessDescriptorSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet vex::VulkanResources::getBindlessDescriptorSet </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the bindless descriptor set. </p>
+<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The bindless descriptor set. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00151">151</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2ca108ca72bb7c4950e6ebdbe54b9d3a" name="a2ca108ca72bb7c4950e6ebdbe54b9d3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ca108ca72bb7c4950e6ebdbe54b9d3a">&#9670;&#160;</a></span>getBindlessLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSetLayout vex::VulkanResources::getBindlessLayout </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the bindless descriptor set layout. </p>
+<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSetLayout - The bindless descriptor set layout. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00155">155</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -428,7 +504,7 @@ Private Attributes</h2></td></tr>
 <p>Returns the default texture name. </p>
 <dl class="section return"><dt>Returns</dt><dd>std::string&amp; </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00057">57</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00062">62</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -458,7 +534,7 @@ Private Attributes</h2></td></tr>
 <p>Returns a descriptor set layout. </p>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSetLayout - The descriptor set layout. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00120">120</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00130">130</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -494,7 +570,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00089">89</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00099">99</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -530,12 +606,12 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet* - The pointer to the descriptor set. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00102">102</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00112">112</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a89a4f8d1b452fe35455851f3fde49a17" name="a89a4f8d1b452fe35455851f3fde49a17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89a4f8d1b452fe35455851f3fde49a17">&#9670;&#160;</a></span>getTextureDescriptorSet()</h2>
+<a id="ab7c1816ff613680e55a277249a653168" name="ab7c1816ff613680e55a277249a653168"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7c1816ff613680e55a277249a653168">&#9670;&#160;</a></span>getTextureDescriptorSet()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -548,7 +624,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>textureIndex</em></span>&#160;)</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>textureIndex</em></span>&#160;) const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -556,19 +632,47 @@ Private Attributes</h2></td></tr>
 <p>Returns a descriptor set for the given frame index and texture index. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">uint32_t</td><td>frameIndex - The index of the frame. </td></tr>
-    <tr><td class="paramname">uint32_t</td><td>textureIndex - The index of the texture. </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>frameIndex - Frame index. </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>textureIndex - Texture slot index. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The specific descriptor set for this texture/frame combo (used in non-bindless mode). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00511">511</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00595">595</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
-<a id="af2bd23bc42b01eb8fc369c3d6230a612" name="af2bd23bc42b01eb8fc369c3d6230a612"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2bd23bc42b01eb8fc369c3d6230a612">&#9670;&#160;</a></span>getTextureIndex()</h2>
+<a id="a6882b8e45bb261744a6cd8fd03f5719a" name="a6882b8e45bb261744a6cd8fd03f5719a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6882b8e45bb261744a6cd8fd03f5719a">&#9670;&#160;</a></span>getTextureIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t vex::VulkanResources::getTextureIndex </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the index of a texture with the given name. </p>
+<p>If the texture isn't loaded, attempts to load it from disk using the name as the path. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; name - Texture path/name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>uint32_t - The texture index, or 0 (default) if loading fails. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00626">626</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae14433bc6241762f5c9950a0fc4acfdc" name="ae14433bc6241762f5c9950a0fc4acfdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae14433bc6241762f5c9950a0fc4acfdc">&#9670;&#160;</a></span>getTextureSampler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -577,9 +681,9 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t vex::VulkanResources::getTextureIndex </td>
+          <td class="memname">VkSampler vex::VulkanResources::getTextureSampler </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -590,16 +694,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns the index of a texture with the given name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the texture. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>uint32_t - The index of the texture. </dd></dl>
+<p>Returns the texture sampler. </p>
+<dl class="section return"><dt>Returns</dt><dd>VkSampler - The texture sampler. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00132">132</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00147">147</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -621,52 +719,74 @@ Private Attributes</h2></td></tr>
 <p>Returns the texture view for the given texture name. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the texture. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; name - The texture identifier. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>VkImageView - The texture view. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>VkImageView - The view, or the default texture view if not found. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00767">767</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00942">942</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
-<a id="ade1db1d3ff7f3acff6ef95b6c7f193a1" name="ade1db1d3ff7f3acff6ef95b6c7f193a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade1db1d3ff7f3acff6ef95b6c7f193a1">&#9670;&#160;</a></span>loadTexture()</h2>
+<a id="a234ce352ae63fd822c06cd7a3e00c2e4" name="a234ce352ae63fd822c06cd7a3e00c2e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a234ce352ae63fd822c06cd7a3e00c2e4">&#9670;&#160;</a></span>getUBODescriptorSet()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void vex::VulkanResources::loadTexture </td>
+          <td class="memname">VkDescriptorSet vex::VulkanResources::getUBODescriptorSet </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t</td>          <td class="paramname"><span class="paramname"><em>frameIndex</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the uniform buffer descriptor set for the given frame index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">uint32_t</td><td>frameIndex - The frame index. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set binding UBOs. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00414">414</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a46cf7cb8e3c1921551d473fb62b7c2b0" name="a46cf7cb8e3c1921551d473fb62b7c2b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46cf7cb8e3c1921551d473fb62b7c2b0">&#9670;&#160;</a></span>loadTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::VulkanResources::loadTexture </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>path</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *</td>          <td class="paramname"><span class="paramname"><em>vfs</em></span>&#160;)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Loads a texture from a file. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Uses <span class="tt">stbi_load_from_memory</span> via VFS. Creates Vulkan Image, View, and uploads data via staging buffer. Recycles texture indices if available. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; path - The path to the texture file. </td></tr>
-    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the texture. </td></tr>
-    <tr><td class="paramname"><a class="el" href="classvex_1_1VirtualFileSystem.html" title="This class provides abstraction of file system needed for loading packed and unpacked assets.">VirtualFileSystem</a></td><td>*vfs - The virtual file system to use.</td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; path - File path. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; name - Unique identifier key. </td></tr>
   </table>
   </dd>
 </dl>
-<p>Loads a texture from a file and creates a texture view. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool - True if loaded successfully or already exists. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00541">541</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00640">640</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -702,7 +822,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool - True if the texture exists, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00125">125</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00135">135</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -722,15 +842,14 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Unloads a texture. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Destroys the image/view and pushes the index to the recycled queue. Resets descriptors to the default texture. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the texture.</td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; name - Identifier of the texture to unload. </td></tr>
   </table>
   </dd>
 </dl>
-<p>Unloads a texture and destroys its view. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00739">739</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00876">876</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -758,17 +877,17 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Updates the light uniform buffer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Updates the light uniform buffer for a specific model. </p>
+<p>Updates the dynamic UBO section corresponding to a specific model index. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">uint32_t</td><td>frameIndex - The frame index to update. </td></tr>
-    <tr><td class="paramname">uint32_t</td><td>modelIndex - The model index to update. </td></tr>
-    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a>&amp; data - The data to update the light uniform buffer with. </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>frameIndex - Current frame. </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>modelIndex - Index of the model to update lights for. </td></tr>
+    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1SceneLightsUBO.html" title="Scene lights uniform buffer object.">SceneLightsUBO</a>&amp; data - <a class="el" href="structvex_1_1Light.html" title="Light struct for shader.">Light</a> data. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00372">372</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00456">456</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -788,14 +907,14 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Updates the scene uniform buffer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Maps memory and copies the <span class="tt"><a class="el" href="structvex_1_1SceneUBO.html" title="Scene uniform buffer object. Holds data that is bind once per scene.">SceneUBO</a></span> struct (camera, lighting, time data) to the GPU. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1SceneUBO.html" title="Scene uniform buffer object. Holds data that is bind once per scene.">SceneUBO</a>&amp; data - The data to update the scene uniform buffer with. </td></tr>
+    <tr><td class="paramname">const</td><td><a class="el" href="structvex_1_1SceneUBO.html" title="Scene uniform buffer object. Holds data that is bind once per scene.">SceneUBO</a>&amp; data - The data to update. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00365">365</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00449">449</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -824,17 +943,16 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Updates the texture descriptor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Updates the global descriptor set (or Bindless set) to point to the new texture view. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">uint32_t</td><td>frameIndex - The frame index to update. </td></tr>
-    <tr><td class="paramname">VkImageView</td><td>textureView - The texture view to update. </td></tr>
-    <tr><td class="paramname">uint32_t</td><td>textureIndex - The texture index to update.</td></tr>
+    <tr><td class="paramname">uint32_t</td><td>frameIndex - Frame index. </td></tr>
+    <tr><td class="paramname">VkImageView</td><td>textureView - The new view. </td></tr>
+    <tr><td class="paramname">uint32_t</td><td>textureIndex - The slot index to update. </td></tr>
   </table>
   </dd>
 </dl>
-<p>Updates the texture descriptor for the given frame index and texture index. </p>
 
-<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00348">348</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8cpp_source.html#l00419">419</a> of file <a class="el" href="Resources_8cpp_source.html">Resources.cpp</a>.</p>
 
 </div>
 </div>
@@ -859,7 +977,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00139">139</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00158">158</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -883,7 +1001,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00150">150</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00170">170</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -907,7 +1025,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00148">148</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00168">168</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -931,7 +1049,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00149">149</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00169">169</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad4c8bd4c20914aa20f071913746e6071" name="ad4c8bd4c20914aa20f071913746e6071"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4c8bd4c20914aa20f071913746e6071">&#9670;&#160;</a></span>m_ignoredTexturePaths</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; vex::VulkanResources::m_ignoredTexturePaths</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00180">180</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -955,7 +1097,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00146">146</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00166">166</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -979,7 +1121,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00144">144</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00164">164</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1003,7 +1145,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00141">141</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00160">160</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1027,7 +1169,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00145">145</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00165">165</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1051,12 +1193,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00143">143</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00163">163</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae95624255b4924b490167fd6ed610b18" name="ae95624255b4924b490167fd6ed610b18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae95624255b4924b490167fd6ed610b18">&#9670;&#160;</a></span>m_textureAllocations</h2>
+<a id="af248be0259b44926ae3a55704666c0cc" name="af248be0259b44926ae3a55704666c0cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af248be0259b44926ae3a55704666c0cc">&#9670;&#160;</a></span>m_textureAllocations</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1065,7 +1207,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VmaAllocation&gt; vex::VulkanResources::m_textureAllocations</td>
+          <td class="memname">vex_map&lt;std::string, VmaAllocation&gt; vex::VulkanResources::m_textureAllocations</td>
         </tr>
       </table>
   </td>
@@ -1075,7 +1217,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00157">157</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00177">177</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1099,12 +1241,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00151">151</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00171">171</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3a01c79bc451b6d97a615b7afa1fe33c" name="a3a01c79bc451b6d97a615b7afa1fe33c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a01c79bc451b6d97a615b7afa1fe33c">&#9670;&#160;</a></span>m_textureImages</h2>
+<a id="adc47fc4cb90c9989f3e2f46802c5dfcf" name="adc47fc4cb90c9989f3e2f46802c5dfcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc47fc4cb90c9989f3e2f46802c5dfcf">&#9670;&#160;</a></span>m_textureImages</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1113,7 +1255,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VkImage&gt; vex::VulkanResources::m_textureImages</td>
+          <td class="memname">vex_map&lt;std::string, VkImage&gt; vex::VulkanResources::m_textureImages</td>
         </tr>
       </table>
   </td>
@@ -1123,12 +1265,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00156">156</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00176">176</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="adb8656e380b1adc2ce2be7a9f9b090f5" name="adb8656e380b1adc2ce2be7a9f9b090f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb8656e380b1adc2ce2be7a9f9b090f5">&#9670;&#160;</a></span>m_textures</h2>
+<a id="a874617ebacd13f24f819278cea9d2caf" name="a874617ebacd13f24f819278cea9d2caf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a874617ebacd13f24f819278cea9d2caf">&#9670;&#160;</a></span>m_textures</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1137,7 +1279,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textures</td>
+          <td class="memname">vex_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textures</td>
         </tr>
       </table>
   </td>
@@ -1147,7 +1289,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00153">153</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00173">173</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
@@ -1171,12 +1313,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00154">154</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00174">174</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aaaae5b074fc2196698b92b214757b86c" name="aaaae5b074fc2196698b92b214757b86c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaaae5b074fc2196698b92b214757b86c">&#9670;&#160;</a></span>m_textureViews</h2>
+<a id="af8953a1f6ef99f71c7c54dddf1a7df2b" name="af8953a1f6ef99f71c7c54dddf1a7df2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8953a1f6ef99f71c7c54dddf1a7df2b">&#9670;&#160;</a></span>m_textureViews</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1185,7 +1327,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textureViews</td>
+          <td class="memname">vex_map&lt;std::string, VkImageView&gt; vex::VulkanResources::m_textureViews</td>
         </tr>
       </table>
   </td>
@@ -1195,7 +1337,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00158">158</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00178">178</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a01a4dc143921ff6815d1f7eb2ae9aeaa" name="a01a4dc143921ff6815d1f7eb2ae9aeaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01a4dc143921ff6815d1f7eb2ae9aeaa">&#9670;&#160;</a></span>m_vfs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a>* vex::VulkanResources::m_vfs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Resources_8hpp_source.html#l00161">161</a> of file <a class="el" href="Resources_8hpp_source.html">Resources.hpp</a>.</p>
 
 </div>
 </div>

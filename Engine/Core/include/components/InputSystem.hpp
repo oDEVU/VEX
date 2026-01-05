@@ -36,21 +36,29 @@ public:
         setInputMode(InputMode::Game);
     }
 
-    /// @brief Sets the input mode.
-    /// @param InputMode mode The input mode to set.
+    /// @brief Sets the input processing mode.
+    /// @details
+    /// - **Game**: Captures the mouse (Relative Mode) and hides the cursor via `SDL_SetWindowRelativeMouseMode`.
+    /// - **UI**: Releases the mouse and shows the cursor.
+    /// @param InputMode mode - The desired InputMode.
     void setInputMode(InputMode mode);
 
     /// @brief Gets the current input mode.
     /// @return InputMode The current input mode.
     InputMode getInputMode() const { return m_inputMode; }
 
-    /// @brief Processes an SDL event.
-    /// @param const SDL_Event& event The SDL event to process.
-    /// @param float deltaTime The time elapsed since the last update.
+    /// @brief Processes raw SDL events and maps them to Game Component actions.
+    /// @details Handles:
+    /// - **Keyboard**: Updates internal `keyStates` and triggers `InputComponent` bindings (Pressed/Released/Held).
+    /// - **Mouse**: Accumulates relative motion deltas for axis bindings.
+    /// - **Gamepad**: Handles button presses and axis motion (normalized to 0.0-1.0).
+    /// @param const SDL_Event& event - The raw SDL_Event to parse.
+    /// @param float deltaTime - Time elapsed, passed to action callbacks.
     void processEvent(const SDL_Event& event, float deltaTime);
 
-    /// @brief Updates the input system.
-    /// @param float deltaTime The time elapsed since the last update.
+    /// @brief Per-frame update for continuous input states.
+    /// @details Specifically checks for and triggers actions bound to `InputActionState::Held` for both Keyboard and Gamepad buttons.
+    /// @param float deltaTime - Time elapsed since last frame.
     void update(float deltaTime);
 
 private:
@@ -64,6 +72,7 @@ private:
     SDL_Window* m_window;
     InputMode m_inputMode;
     std::unordered_map<SDL_Scancode, KeyState> keyStates;
+    std::unordered_map<SDL_GamepadButton, KeyState> gamepadButtonStates;
 };
 
 }

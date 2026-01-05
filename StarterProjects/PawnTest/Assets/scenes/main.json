@@ -1,0 +1,244 @@
+{
+    "environment": {
+        "lighting": {
+            "ambientLight": [
+                0.0,
+                0.40926647186279297,
+                1.0
+            ],
+            "ambientLightStrength": 0.30000001192092896,
+            "clearColor": [
+                0.32046329975128174,
+                0.5513482093811035,
+                1.0
+            ],
+            "sunDirection": [
+                0.8999999761581421,
+                0.800000011920929,
+                0.5
+            ],
+            "sunLight": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "shading": {
+            "affineTextureWarping": false,
+            "gouraud": false,
+            "ntfsArtifacts": false,
+            "passiveVertexJitter": false,
+            "screenDither": false,
+            "screenQuantization": false,
+            "textureQuantization": false,
+            "vertexSnapping": false
+        }
+    },
+    "objects": [
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        25.0,
+                        1.0,
+                        25.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "color": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "path": "Assets/meshes/cube.obj",
+                    "renderType": 0,
+                    "textureOverrides": [],
+                    "type": "vex::MeshComponent"
+                },
+                {
+                    "allowSleeping": true,
+                    "angularDamping": 0.05000000074505806,
+                    "bodyType": 0,
+                    "bounce": 0.10000000149011612,
+                    "boxHalfExtents": [
+                        25.0,
+                        1.0,
+                        25.0
+                    ],
+                    "capsuleHeight": 1.0,
+                    "capsuleRadius": 0.5,
+                    "cylinderHeight": 1.0,
+                    "cylinderRadius": 0.5,
+                    "friction": 0.5,
+                    "isSensor": false,
+                    "linearDamping": 0.05000000074505806,
+                    "mass": 1.0,
+                    "shape": 0,
+                    "sphereRadius": 0.5,
+                    "type": "vex::PhysicsComponent"
+                }
+            ],
+            "name": "SceneFloor",
+            "type": "GameObject"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        -2.591993570327759,
+                        2.6459801197052,
+                        1.3179845809936523
+                    ],
+                    "rotation": [
+                        27.975570678710938,
+                        -4.2688682810876344e-07,
+                        -16.562923431396484
+                    ],
+                    "scale": [
+                        1.0,
+                        0.9999996423721313,
+                        0.9999997019767761
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.0,
+                        1.0
+                    ],
+                    "path": "Assets/meshes/cube.obj",
+                    "renderType": 0,
+                    "textureOverrides": [],
+                    "type": "vex::MeshComponent"
+                },
+                {
+                    "allowSleeping": true,
+                    "angularDamping": 0.05000000074505806,
+                    "bodyType": 1,
+                    "bounce": 0.10000000149011612,
+                    "boxHalfExtents": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "capsuleHeight": 1.0,
+                    "capsuleRadius": 0.5,
+                    "cylinderHeight": 1.0,
+                    "cylinderRadius": 0.5,
+                    "friction": 0.5,
+                    "isSensor": false,
+                    "linearDamping": 0.05000000074505806,
+                    "mass": 1.0,
+                    "shape": 0,
+                    "sphereRadius": 0.5,
+                    "type": "vex::PhysicsComponent"
+                }
+            ],
+            "name": "SceneBox",
+            "type": "GameObject"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        3.0871050357818604,
+                        2.6459784507751465,
+                        -2.7707486152648926
+                    ],
+                    "rotation": [
+                        -23.455625534057617,
+                        -7.425687789916992,
+                        -16.586885452270508
+                    ],
+                    "scale": [
+                        0.9999995231628418,
+                        0.9999996423721313,
+                        0.9999997615814209
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "color": [
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.0
+                    ],
+                    "path": "Assets/meshes/cube.obj",
+                    "renderType": 0,
+                    "textureOverrides": [],
+                    "type": "vex::MeshComponent"
+                },
+                {
+                    "allowSleeping": true,
+                    "angularDamping": 0.05000000074505806,
+                    "bodyType": 1,
+                    "bounce": 0.10000000149011612,
+                    "boxHalfExtents": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "capsuleHeight": 1.0,
+                    "capsuleRadius": 0.5,
+                    "cylinderHeight": 1.0,
+                    "cylinderRadius": 0.5,
+                    "friction": 0.5,
+                    "isSensor": false,
+                    "linearDamping": 0.05000000074505806,
+                    "mass": 1.0,
+                    "shape": 0,
+                    "sphereRadius": 0.5,
+                    "type": "vex::PhysicsComponent"
+                }
+            ],
+            "name": "SceneBox",
+            "type": "GameObject"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        5.599555015563965,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "mass": 70.0,
+                    "maxSlopeAngle": 45.0,
+                    "standingHeight": 1.350000023841858,
+                    "standingRadius": 0.30000001192092896,
+                    "type": "vex::CharacterComponent"
+                }
+            ],
+            "name": "Player",
+            "type": "Player"
+        }
+    ]
+}

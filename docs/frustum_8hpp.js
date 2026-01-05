@@ -1,5 +1,5 @@
 var frustum_8hpp =
 [
-    [ "Plane", "structPlane.html", "structPlane" ],
-    [ "Frustum", "structFrustum.html", "structFrustum" ]
+    [ "vex::Plane", "structvex_1_1Plane.html", "structvex_1_1Plane" ],
+    [ "vex::Frustum", "structvex_1_1Frustum.html", "structvex_1_1Frustum" ]
 ];

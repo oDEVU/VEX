@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -115,17 +116,24 @@ $(function(){initNavTree('PhysicsSystem_8hpp.html','',''); });
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;<a class="el" href="BasicComponents_8hpp_source.html">components/GameComponents/BasicComponents.hpp</a>&gt;</code><br />
+<code>#include &lt;components/GameComponents/CharacterComponent.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="JoltSafe_8hpp_source.html">components/JoltSafe.hpp</a>&quot;</code><br />
+<code>#include &lt;map&gt;</code><br />
 </div>
 <p><a href="PhysicsSystem_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:vex_3A_3ABodyIDHasher" id="r_vex_3A_3ABodyIDHasher"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1BodyIDHasher.html">vex::BodyIDHasher</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hasher for JPH::BodyID.  <a href="structvex_1_1BodyIDHasher.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3ABPLayerInterfaceImpl" id="r_vex_3A_3ABPLayerInterfaceImpl"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1BPLayerInterfaceImpl.html">vex::BPLayerInterfaceImpl</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of JPH::BroadPhaseLayerInterface for the default layer.  <a href="classvex_1_1BPLayerInterfaceImpl.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3AObjectVsBroadPhaseLayerFilterImpl" id="r_vex_3A_3AObjectVsBroadPhaseLayerFilterImpl"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html">vex::ObjectVsBroadPhaseLayerFilterImpl</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of JPH::ObjectVsBroadPhaseLayerFilter for the default layer.  <a href="classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3AObjectLayerPairFilterImpl" id="r_vex_3A_3AObjectLayerPairFilterImpl"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1ObjectLayerPairFilterImpl.html">vex::ObjectLayerPairFilterImpl</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of JPH::ObjectLayerPairFilter for the default layer.  <a href="classvex_1_1ObjectLayerPairFilterImpl.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3AMyActivationListener" id="r_vex_3A_3AMyActivationListener"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1MyActivationListener.html">vex::MyActivationListener</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of JPH::BodyActivationListener for the default layer.  <a href="classvex_1_1MyActivationListener.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3ACollisionHit" id="r_vex_3A_3ACollisionHit"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1CollisionHit.html">vex::CollisionHit</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a collision hit.  <a href="structvex_1_1CollisionHit.html#details">More...</a><br /></td></tr>
 <tr class="memitem:vex_3A_3ARaycastHit" id="r_vex_3A_3ARaycastHit"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structvex_1_1RaycastHit.html">vex::RaycastHit</a></td></tr>
@@ -144,11 +152,12 @@ Macros</h2></td></tr>
 Enumerations</h2></td></tr>
 <tr class="memitem:a6e60c194c597809af12d22fb3962249e" id="r_a6e60c194c597809af12d22fb3962249e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e60c194c597809af12d22fb3962249e">vex::ShapeType</a> { <br />
 &#160;&#160;<b>BOX</b>
+, <b>ROUNDED_BOX</b>
 , <b>SPHERE</b>
 , <b>CAPSULE</b>
-, <b>CYLINDER</b>
 , <br />
-&#160;&#160;<b>CONVEX_HULL</b>
+&#160;&#160;<b>CYLINDER</b>
+, <b>CONVEX_HULL</b>
 , <b>MESH</b>
 <br />
  }</td></tr>
@@ -178,7 +187,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00009">9</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00010">10</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -205,7 +214,7 @@ Enumerations</h2></td></tr>
 
 <p>Enumeration of available body types for physics components. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00071">71</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00080">80</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -231,7 +240,7 @@ Enumerations</h2></td></tr>
 
 <p>Enumeration of available shape types for physics components. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00066">66</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00075">75</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>

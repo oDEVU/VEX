@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -111,7 +112,8 @@ Inheritance diagram for vex::CameraObject:</div>
  <div class="center">
   <img src="classvex_1_1CameraObject.png" usemap="#vex_3A_3ACameraObject_map" alt=""/>
   <map id="vex_3A_3ACameraObject_map" name="vex_3A_3ACameraObject_map">
-<area href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it." alt="vex::GameObject" shape="rect" coords="0,0,119,24"/>
+<area href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it." alt="vex::GameObject" shape="rect" coords="0,0,126,24"/>
+<area href="classEditorCameraObject.html" title="A specialized camera object for use within the editor, supporting free-fly movement and input process..." alt="EditorCameraObject" shape="rect" coords="0,112,126,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -120,9 +122,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6ddbfc4dc12d064ea2d8f24581144932" id="r_a6ddbfc4dc12d064ea2d8f24581144932"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ddbfc4dc12d064ea2d8f24581144932">CameraObject</a> (<a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, const std::string &amp;name)</td></tr>
 <tr class="inherit_header pub_methods_classvex_1_1GameObject"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classvex_1_1GameObject')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classvex_1_1GameObject.html">vex::GameObject</a></td></tr>
 <tr class="memitem:aa50421d141741f058e45878417c827d0 inherit pub_methods_classvex_1_1GameObject" id="r_aa50421d141741f058e45878417c827d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#aa50421d141741f058e45878417c827d0">GameObject</a> (<a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine, const std::string &amp;name)</td></tr>
-<tr class="memdesc:aa50421d141741f058e45878417c827d0 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. You need to call it from your derived class, it gives your object a unique identifier and registers it with the engine.  <br /></td></tr>
-<tr class="memitem:a50adafe3621e33b5cb1a778c419f363a inherit pub_methods_classvex_1_1GameObject" id="r_a50adafe3621e33b5cb1a778c419f363a"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a50adafe3621e33b5cb1a778c419f363a">~GameObject</a> ()</td></tr>
-<tr class="memdesc:a50adafe3621e33b5cb1a778c419f363a inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor for <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. It removes the object from the engine's registry, and removes its reference from any child objects.  <br /></td></tr>
+<tr class="memdesc:aa50421d141741f058e45878417c827d0 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>.  <br /></td></tr>
+<tr class="memitem:a1ba0e5c35f4bfc561f7b2862667eef1a inherit pub_methods_classvex_1_1GameObject" id="r_a1ba0e5c35f4bfc561f7b2862667eef1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a1ba0e5c35f4bfc561f7b2862667eef1a">Destroy</a> ()</td></tr>
+<tr class="memdesc:a1ba0e5c35f4bfc561f7b2862667eef1a inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> and removes it from the engine's registry.  <br /></td></tr>
+<tr class="memitem:abfea140d1bfb9526fa95b580156150b8 inherit pub_methods_classvex_1_1GameObject" id="r_abfea140d1bfb9526fa95b580156150b8"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#abfea140d1bfb9526fa95b580156150b8">~GameObject</a> ()</td></tr>
+<tr class="memdesc:abfea140d1bfb9526fa95b580156150b8 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <br /></td></tr>
+<tr class="memitem:a53b5a1fa1a0c817b6319d2a4ac44dd12 inherit pub_methods_classvex_1_1GameObject" id="r_a53b5a1fa1a0c817b6319d2a4ac44dd12"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>GameObject</b> (const <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;)=delete</td></tr>
+<tr class="memitem:ab9552a3ae5e83fa62c37c8c3c0514db5 inherit pub_methods_classvex_1_1GameObject" id="r_ab9552a3ae5e83fa62c37c8c3c0514db5"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;)=delete</td></tr>
+<tr class="memitem:adbb8944575c4494fccfca216a37aefe9 inherit pub_methods_classvex_1_1GameObject" id="r_adbb8944575c4494fccfca216a37aefe9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#adbb8944575c4494fccfca216a37aefe9">GameObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;&amp;other) noexcept</td></tr>
 <tr class="memitem:a4f7114d7490d411204d8508e338aa1b8 inherit pub_methods_classvex_1_1GameObject" id="r_a4f7114d7490d411204d8508e338aa1b8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8">BeginPlay</a> ()</td></tr>
 <tr class="memdesc:a4f7114d7490d411204d8508e338aa1b8 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">virtual void function you override to implement custom behavior when the game starts.  <br /></td></tr>
 <tr class="memitem:aff7761eb14e47fee0d495f2f86597b8a inherit pub_methods_classvex_1_1GameObject" id="r_aff7761eb14e47fee0d495f2f86597b8a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#aff7761eb14e47fee0d495f2f86597b8a">Update</a> (float deltaTime)</td></tr>
@@ -143,6 +152,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afa354f67ac1dc4f792baf68250f6175a inherit pub_methods_classvex_1_1GameObject" id="r_afa354f67ac1dc4f792baf68250f6175a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#afa354f67ac1dc4f792baf68250f6175a">isValid</a> () const</td></tr>
 <tr class="memitem:ae052595f20ae7ff9ff9dbed11eaf6355 inherit pub_methods_classvex_1_1GameObject" id="r_ae052595f20ae7ff9ff9dbed11eaf6355"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#ae052595f20ae7ff9ff9dbed11eaf6355">ParentTo</a> (entt::entity entity)</td></tr>
 <tr class="memdesc:ae052595f20ae7ff9ff9dbed11eaf6355 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that parent this Object to another <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>. You need to pass another <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>'s entity.  <br /></td></tr>
+<tr class="memitem:af6e23b5a1aff264edd4bc04e63d55647 inherit pub_methods_classvex_1_1GameObject" id="r_af6e23b5a1aff264edd4bc04e63d55647"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#af6e23b5a1aff264edd4bc04e63d55647">setObjectType</a> (const std::string &amp;type)</td></tr>
+<tr class="memdesc:af6e23b5a1aff264edd4bc04e63d55647 inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that sets the type of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>.  <br /></td></tr>
+<tr class="memitem:ae98293f38a7f1bf387ea19366ff10d9f inherit pub_methods_classvex_1_1GameObject" id="r_ae98293f38a7f1bf387ea19366ff10d9f"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#ae98293f38a7f1bf387ea19366ff10d9f">getObjectType</a> () const</td></tr>
+<tr class="memdesc:ae98293f38a7f1bf387ea19366ff10d9f inherit pub_methods_classvex_1_1GameObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that returns the type of the <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a>.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -150,6 +163,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a0b246209e3325a1138d8398d3ac5d773 inherit pro_attribs_classvex_1_1GameObject" id="r_a0b246209e3325a1138d8398d3ac5d773"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a0b246209e3325a1138d8398d3ac5d773">m_engine</a></td></tr>
 <tr class="memitem:a730a0120bd86a2b010975a7c9348d13e inherit pro_attribs_classvex_1_1GameObject" id="r_a730a0120bd86a2b010975a7c9348d13e"><td class="memItemLeft" align="right" valign="top">entt::entity&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a730a0120bd86a2b010975a7c9348d13e">m_entity</a></td></tr>
 <tr class="memitem:a9c0d7a77360bf962c4bc4ebf4ca12010 inherit pro_attribs_classvex_1_1GameObject" id="r_a9c0d7a77360bf962c4bc4ebf4ca12010"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a9c0d7a77360bf962c4bc4ebf4ca12010">m_isValid</a></td></tr>
+<tr class="memitem:a76a6c13191a7d806e0ccba8242484c20 inherit pro_attribs_classvex_1_1GameObject" id="r_a76a6c13191a7d806e0ccba8242484c20"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1GameObject.html#a76a6c13191a7d806e0ccba8242484c20">objectType</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Basic camera object class. it only contains transform and camera components. </p>

@@ -1,7 +1,19 @@
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
 if(WIN32)
     string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS" CACHE STRING "Modified CXX flags for thirdparty on Windows" FORCE)
+endif()
+
+if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        message(STATUS ">> FORCING DEBUG RUNTIME (msvcrtd) FOR ALL THIRDPARTY LIBS")
+        add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd" CACHE STRING "Force Debug Runtime" FORCE)
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd" CACHE STRING "Force Debug Runtime" FORCE)
+        add_link_options("-Wl,/nodefaultlib:msvcrt" "-Wl,/defaultlib:msvcrtd")
+    endif()
 endif()
 
 # i hate google tests
@@ -63,6 +75,9 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 add_subdirectory(volk SYSTEM)
 
+# cr
+add_subdirectory(cr SYSTEM)
+
 #yoga
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_compile_options(-Wno-array-bounds)
@@ -117,6 +132,7 @@ set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "" FORCE)
 set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 set(ASSIMP_NO_TEST_IMPORT OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "Force Assimp to use internal zlib" FORCE)
 set(BUILD_GTEST OFF CACHE BOOL "Disable GoogleTest build" FORCE)
 set(BUILD_GMOCK OFF CACHE BOOL "Disable GoogleMock build" FORCE)
 set(INSTALL_GTEST OFF CACHE BOOL "Disable GoogleTest install" FORCE)
@@ -145,16 +161,25 @@ check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNI
 #entt
 add_subdirectory(entt SYSTEM)
 
+target_compile_definitions(EnTT INTERFACE
+        ENTT_NOEXCEPTION
+    )
+
 #jolt
 # set(JPH_SHARED_LIBRARY ON "")
 set(DOUBLE_PRECISION OFF)
 set(INTERPROCEDURAL_OPTIMIZATION OFF)
 set(JPH_NO_X11_MACROS ON)
+set(CPP_RTTI_ENABLED ON CACHE BOOL "Enable RTTI" FORCE)
 add_compile_definitions(JPH_NO_X11_MACROS)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(GENERATE_DEBUG_SYMBOLS ON)
-    set(JPH_ENABLE_ASSERTS ON)
+    if(WIN32)
+        set(JPH_ENABLE_ASSERTS OFF)
+    else()
+        set(JPH_ENABLE_ASSERTS ON)
+    endif()
     set(JPH_DEBUG_RENDERER ON)
 endif()
 
@@ -202,12 +227,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(IMGUI_PATH  "imgui")
     file(GLOB IMGUI_SOURCES
         ${IMGUI_PATH}/*.cpp
+        ${IMGUI_PATH}/misc/cpp/*.cpp
         ${IMGUI_PATH}/backends/imgui_impl_vulkan.cpp
         ${IMGUI_PATH}/backends/imgui_impl_sdl3.cpp
     )
     add_library("ImGui" STATIC ${IMGUI_SOURCES})
     target_include_directories("ImGui" PUBLIC
         ${IMGUI_PATH}
+        ${IMGUI_PATH}/misc/cpp/
         ${CMAKE_CURRENT_SOURCE_DIR}/SDL/include
     )
 
@@ -215,6 +242,34 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(ImGui PRIVATE
         IMGUI_IMPL_VULKAN_USE_VOLK
     )
+
+    if(WIN32)
+        target_compile_definitions(ImGui PRIVATE "IMGUI_API=__declspec(dllexport)")
+    endif()
+
+    #imguizmo
+    set(IMGUIZMO_PATH  "ImGuizmo")
+    file(GLOB IMGUIZMO_SOURCES
+        ${IMGUIZMO_PATH}/*.cpp
+    )
+
+    add_library("ImGuizmo" STATIC ${IMGUIZMO_SOURCES})
+    target_include_directories("ImGuizmo" PUBLIC
+        ${IMGUIZMO_PATH}
+    )
+
+    target_link_libraries("ImGuizmo" PRIVATE ImGui)
+
+    if(WIN32)
+        target_compile_definitions(ImGuizmo PRIVATE "IMGUI_API=__declspec(dllexport)")
+    endif()
+
+    #imreflect
+    set(IMREFLECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ImReflect")
+
+    add_library(ImReflect INTERFACE)
+    target_include_directories(ImReflect INTERFACE ${IMREFLECT_PATH})
+    target_link_libraries(ImGui INTERFACE ImReflect)
 endif()
 
 # glm
@@ -239,6 +294,7 @@ add_library(thirdparty_engine INTERFACE)
 target_link_libraries(thirdparty_engine INTERFACE
     SDL3-static
     volk
+    cr
     VulkanMemoryAllocator
     assimp
     thirdparty_glm
@@ -255,6 +311,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(thirdparty_engine INTERFACE
         cpptrace::cpptrace
         ImGui
+        ImGuizmo
+        ImReflect
     )
 endif()
 

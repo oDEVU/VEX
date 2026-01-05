@@ -23,8 +23,8 @@
         "position": "absolute",
         "bottom": 5,
         "right": 5,
-        "image": "Assets/ui/RenderedLogo.png",
-        "size": [96, 64]
+        "image": "Assets/ui/Logo.png",
+        "size": [128, 64]
       },
       {
         "type": "container",

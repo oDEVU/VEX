@@ -6,7 +6,13 @@
 #include <sstream>
 #include <string>
 
+#if defined(UUID)
+    #undef UUID
+#endif
+
 // Random generation courtesy of https://lowrey.me/guid-generation-in-c-11/
+
+namespace tp {
 
 class UUID {
 public:
@@ -55,6 +61,6 @@ private:
     return dis(gen);
   }
 };
-
+}
 
 #endif

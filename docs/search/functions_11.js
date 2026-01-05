@@ -1,12 +1,10 @@
 var searchData=
 [
-  ['vexui_0',['VexUI',['../classvex_1_1VexUI.html#a5c081cf41b22e86604dd8016fbce0684',1,'vex::VexUI']]],
-  ['virtualfilesystem_1',['VirtualFileSystem',['../classvex_1_1VirtualFileSystem.html#a36825cf97628d454a9ff9dc6c2143039',1,'vex::VirtualFileSystem']]],
-  ['vpkstream_2',['VPKStream',['../classvex_1_1VirtualFileSystem_1_1VPKStream.html#a086b8d0661d2920106b7a3a382f9e98f',1,'vex::VirtualFileSystem::VPKStream']]],
-  ['vpkstreambuf_3',['VPKStreamBuf',['../classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html#ac12e8917a137c4ffeb2d6a8820946c04',1,'vex::VirtualFileSystem::VPKStream::VPKStreamBuf']]],
-  ['vulkanimguiwrapper_4',['VulkanImGUIWrapper',['../classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c',1,'vex::VulkanImGUIWrapper']]],
-  ['vulkanmesh_5',['VulkanMesh',['../classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89',1,'vex::VulkanMesh']]],
-  ['vulkanpipeline_6',['VulkanPipeline',['../classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b',1,'vex::VulkanPipeline']]],
-  ['vulkanresources_7',['VulkanResources',['../classvex_1_1VulkanResources.html#a8ebb059a4b2b6e280056197ce8d488b1',1,'vex::VulkanResources']]],
-  ['vulkanswapchainmanager_8',['VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html#a3f8b56ae0e97a0f784a88416c3892cd9',1,'vex::VulkanSwapchainManager']]]
+  ['testsphere_0',['testSphere',['../structvex_1_1Frustum.html#af7528ed5b75752f6acb4de6a20fffb09',1,'vex::Frustum']]],
+  ['textureexists_1',['textureExists',['../classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef',1,'vex::VulkanResources']]],
+  ['throw_5ferror_2',['throw_error',['../errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f',1,'vex']]],
+  ['transformcommand_3',['TransformCommand',['../classvex_1_1TransformCommand.html#aa537737ef456116651fdbee1232ba749',1,'vex::TransformCommand']]],
+  ['transformcomponent_4',['TransformComponent',['../structvex_1_1TransformComponent.html#ae70065fea511392b32fa96d64debcaf9',1,'vex::TransformComponent::TransformComponent(const TransformComponent &amp;other)'],['../structvex_1_1TransformComponent.html#a9436c3a66ec2b6ad04bd2eacd6de341a',1,'vex::TransformComponent::TransformComponent(entt::registry &amp;registry)'],['../structvex_1_1TransformComponent.html#a93e879969afa509ed59ea3a2526430b0',1,'vex::TransformComponent::TransformComponent(entt::registry &amp;registry, glm::vec3 pos, entt::entity p=entt::null)'],['../structvex_1_1TransformComponent.html#a3346a06d17b9ec57b71eef7715c3412c',1,'vex::TransformComponent::TransformComponent(entt::registry &amp;registry, glm::vec3 pos, glm::vec3 rot, entt::entity p=entt::null)'],['../structvex_1_1TransformComponent.html#aa330fe4f875724411e007dab5b9a8444',1,'vex::TransformComponent::TransformComponent(entt::registry &amp;registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p=entt::null)'],['../structvex_1_1TransformComponent.html#aabdd7a9fce7e11affdcade2ce972fdb8',1,'vex::TransformComponent::TransformComponent(entt::registry &amp;registry, entt::entity p)'],['../structvex_1_1TransformComponent.html#a2b34b417df4726815ce0cd2bbc5b440e',1,'vex::TransformComponent::TransformComponent()=default']]],
+  ['transformedlately_5',['transformedLately',['../structvex_1_1TransformComponent.html#a3fc63dce8a4f8b53f9ea1047bc178d54',1,'vex::TransformComponent']]],
+  ['transitionimagelayout_6',['transitionImageLayout',['../classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11',1,'vex::Renderer']]]
 ];

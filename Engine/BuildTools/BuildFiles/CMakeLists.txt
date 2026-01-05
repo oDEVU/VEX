@@ -1,12 +1,22 @@
 cmake_minimum_required(VERSION 3.16)
 project(VexProject)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
 set(CMAKE_DISABLE_TESTING TRUE CACHE BOOL "Force disable all tests" FORCE)
+
+if(WIN32)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
+        if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+            add_link_options("-Wl,/nodefaultlib:msvcrt" "-Wl,/defaultlib:msvcrtd")
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd")
+        endif()
+    endif()
+endif()
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VexProject.json")
     message(FATAL_ERROR "Project file not found!")
@@ -19,29 +29,188 @@ if(JSON_ERROR)
     message(FATAL_ERROR "Failed to parse project file: ${JSON_ERROR}")
 endif()
 
-string(JSON ENGINE_PATH ERROR_VARIABLE JSON_ERROR GET "${PROJECT_JSON}" "engine_path")
+string(JSON MAIN_SCENE_PATH ERROR_VARIABLE SCENE_ERROR GET "${PROJECT_JSON}" "main_scene")
 
-set(ENGINE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../${ENGINE_PATH})
-
-if(NOT EXISTS "${ENGINE_PATH}")
-    message(FATAL_ERROR "Project file has invalid engine path. Please check the path in the project file. Loaded path: ${ENGINE_PATH}")
+if(SCENE_ERROR OR MAIN_SCENE_PATH STREQUAL "")
+    message(WARNING "Could not find 'main_scene' in VexProject.json. Defaulting to 'Assets/scenes/main.json'")
+    set(MAIN_SCENE_PATH "Assets/scenes/main.json")
 endif()
 
-if(NOT EXISTS "${ENGINE_PATH}/BuildTools/build/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}")
-    message(FATAL_ERROR "BuildTools are not present. Make sure VPAK_Packer is built.")
+string(JSON WIN_TYPE ERROR_VARIABLE WIN_TYPE_ERROR GET "${PROJECT_JSON}" "window_type")
+if(WIN_TYPE_ERROR)
+    set(WIN_TYPE 0)
+endif()
+
+string(JSON RES_MODE ERROR_VARIABLE RES_MODE_ERROR GET "${PROJECT_JSON}" "resolution_mode")
+if(RES_MODE_ERROR)
+    set(RES_MODE 0)
+endif()
+
+string(JSON VSYNC_BOOL ERROR_VARIABLE VSYNC_ERROR GET "${PROJECT_JSON}" "vsync")
+if(VSYNC_ERROR)
+    set(VSYNC_BOOL true)
 endif()
 
 project(${PROJECT_NAME})
 
+option(VEX_DIST_BUILD "Build for distribution (Shipping)" OFF)
+
+if(VEX_DIST_BUILD)
+    add_compile_definitions(DIST_BUILD=1)
+endif()
+
+set(ENGINE_PATH "${VEX_ENGINE_PATH}" CACHE PATH "Path to Vex Engine Core")
+
+message(STATUS "DEBUG: ENGINE_PATH from Cache is: '${ENGINE_PATH}'")
+
+if(NOT ENGINE_PATH OR ENGINE_PATH STREQUAL "")
+    message(FATAL_ERROR "VEX_ENGINE_PATH is missing! Command line argument was not received.")
+endif()
+
+if(NOT EXISTS "${ENGINE_PATH}")
+    message(FATAL_ERROR "Provided engine path does not exist: ${ENGINE_PATH}")
+endif()
+
+if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
+    set(VEX_TOOLS_DIR "${ENGINE_PATH}/BuildTools/build_dist")
+else()
+    set(VEX_TOOLS_DIR "${ENGINE_PATH}/BuildTools/build")
+endif()
+
+if(NOT EXISTS "${VEX_TOOLS_DIR}/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}")
+    message(FATAL_ERROR "BuildTools are not present. Checked: ${VEX_TOOLS_DIR}")
+endif()
+
+#add_subdirectory(${ENGINE_PATH}/Core ${CMAKE_BINARY_DIR}/Engine)
+
+if(VEX_DIST_BUILD)
+    set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Distribution")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Debug")
+else()
+    set(VEX_BUILD_DIR "${ENGINE_PATH}/Core/bin/Release")
+endif()
+
+set(VEX_TARGETS_FILE "${VEX_BUILD_DIR}/VEXTargets.cmake")
+
+if(EXISTS "${VEX_TARGETS_FILE}")
+    message(STATUS "Linking shared VEX Engine from: ${VEX_BUILD_DIR}")
+    include("${VEX_TARGETS_FILE}")
+else()
+    message(FATAL_ERROR "VEX Engine targets not found at: ${VEX_TARGETS_FILE}\nPlease run the ProjectBuilder to compile the engine first.")
+endif()
+
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 # So zed would no longer show false errors you need to copy or link compile_commands.json file to root folder.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB GAME_SRC CONFIGURE_DEPENDS "Source/*.h" "Source/*.cpp")
 
-add_executable(${PROJECT_NAME} ${GAME_SRC})
+add_library(GameModule SHARED ${GAME_SRC})
+target_link_libraries(GameModule PUBLIC VEX::VEX)
+
+if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
+    set_target_properties(GameModule PROPERTIES
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()
+
+target_compile_definitions(GameModule PRIVATE
+    GAME_MODULE_EXPORTS
+    VEX_MAIN_SCENE=\"${MAIN_SCENE_PATH}\"
+    VEX_WINDOW_MODE=${WIN_TYPE}
+    VEX_RESOLUTION_MODE=${RES_MODE}
+    VEX_VSYNC=${VSYNC_BOOL}
+)
+
+string(JSON ICON_REL_PATH ERROR_VARIABLE ICON_ERROR GET "${PROJECT_JSON}" "icon_path")
+
+set(PROJECT_ICON_RESOURCE)
+
+if(NOT ICON_ERROR AND NOT ICON_REL_PATH STREQUAL "")
+    set(ICON_SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${ICON_REL_PATH}")
+
+    if(EXISTS "${ICON_SOURCE_PATH}")
+        message(STATUS "Found Project Icon: ${ICON_SOURCE_PATH}")
+
+        if(WIN32)
+            set(ICON_OUT_ICO "${CMAKE_CURRENT_BINARY_DIR}/game_icon.ico")
+            set(RC_FILE "${CMAKE_CURRENT_BINARY_DIR}/resources.rc")
+            get_filename_component(ICON_EXT "${ICON_SOURCE_PATH}" EXT)
+            set(HAVE_VALID_ICO FALSE)
+
+            if(ICON_EXT STREQUAL ".png")
+                find_program(MAGICK_EXE magick)
+                if(MAGICK_EXE)
+                    add_custom_command(
+                        OUTPUT "${ICON_OUT_ICO}"
+                        COMMAND ${MAGICK_EXE} "${ICON_SOURCE_PATH}" -define icon:auto-resize=256,128,64,48,32,16 "${ICON_OUT_ICO}"
+                        DEPENDS "${ICON_SOURCE_PATH}"
+                        COMMENT "Converting Project Icon to ICO..."
+                    )
+                    set(HAVE_VALID_ICO TRUE)
+                endif()
+            elseif(ICON_EXT STREQUAL ".ico")
+                configure_file("${ICON_SOURCE_PATH}" "${ICON_OUT_ICO}" COPYONLY)
+                set(HAVE_VALID_ICO TRUE)
+            endif()
+
+            if(HAVE_VALID_ICO)
+                file(WRITE "${RC_FILE}" "IDI_ICON1 ICON DISCARDABLE \"${ICON_OUT_ICO}\"")
+
+                set(PROJECT_ICON_RESOURCE "${RC_FILE}" "${ICON_OUT_ICO}")
+
+                set(COPY_ICON_TO_BIN TRUE)
+            endif()
+
+        elseif(UNIX AND NOT APPLE)
+            set(COPY_ICON_TO_BIN TRUE)
+            get_filename_component(ICON_FILENAME "${ICON_SOURCE_PATH}" NAME)
+        endif()
+    endif()
+endif()
+
+add_executable(${PROJECT_NAME} "main.cpp" ${PROJECT_ICON_RESOURCE})
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(WIN32)
+        target_compile_definitions(GameModule PRIVATE JPH_ENABLE_ASSERTS=0)
+    elseif(UNIX AND NOT APPLE)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}> $<TARGET_FILE:${PROJECT_NAME}>.debug
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:${PROJECT_NAME}>
+            COMMAND objcopy --add-gnu-debuglink=$<TARGET_FILE:${PROJECT_NAME}>.debug $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Splitting debug symbols for ${PROJECT_NAME}"
+        )
+
+        add_custom_command(TARGET GameModule POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:GameModule> $<TARGET_FILE:GameModule>.debug
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:GameModule>
+            COMMAND objcopy --add-gnu-debuglink=$<TARGET_FILE:GameModule>.debug $<TARGET_FILE:GameModule>
+            COMMENT "Splitting debug symbols for GameModule"
+        )
+    endif()
+endif()
+
+if(VEX_DIST_BUILD AND UNIX AND NOT APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    VEX_PROJECT_TITLE=\"${PROJECT_NAME}\"
+)
+target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dl)
+endif()
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -71,9 +240,100 @@ else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC DEBUG=0)
 endif()
 
-target_sources(${PROJECT_NAME} PRIVATE main.cpp)
-add_subdirectory(${ENGINE_PATH}/Core  ${CMAKE_BINARY_DIR}/Engine)
-target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
+if(VEX_DIST_BUILD)
+    add_compile_definitions(DIST_BUILD=1)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE GameModule)
+
+    if(UNIX AND NOT APPLE)
+        set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+        set_target_properties(GameModule PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+    endif()
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES "Release|RelWithDebInfo|MinSizeRel")
+
+    if(MSVC)
+        target_compile_options(${PROJECT_NAME} PRIVATE /Zi)
+        target_link_options(${PROJECT_NAME} PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+        target_compile_options(GameModule PRIVATE /Zi)
+        target_link_options(GameModule PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+    else()
+        target_compile_options(${PROJECT_NAME} PRIVATE -g)
+        target_compile_options(GameModule PRIVATE -g)
+        target_link_options(${PROJECT_NAME} PRIVATE -g)
+        target_link_options(GameModule PRIVATE -g)
+    endif()
+
+    get_filename_component(CURRENT_DIR_NAME "${CMAKE_CURRENT_SOURCE_DIR}" NAME)
+    if(CURRENT_DIR_NAME STREQUAL "Intermediate")
+        get_filename_component(REAL_PROJECT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+    else()
+        set(REAL_PROJECT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
+    endif()
+
+    if(VEX_DIST_BUILD)
+        string(TIMESTAMP BUILD_ID "%Y-%m-%d_%H-%M-%S")
+        set(SYM_DIR "${REAL_PROJECT_ROOT}/Build/Symbols/Distribution/${BUILD_ID}")
+
+        add_compile_definitions(DIST_BUILD=1)
+        target_link_libraries(${PROJECT_NAME} PRIVATE GameModule)
+        if(UNIX AND NOT APPLE)
+            set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+            set_target_properties(GameModule PROPERTIES INSTALL_RPATH "$ORIGIN" BUILD_WITH_INSTALL_RPATH TRUE)
+        endif()
+    else()
+        set(SYM_DIR "${REAL_PROJECT_ROOT}/Build/Symbols/Release/Latest")
+    endif()
+
+    file(MAKE_DIRECTORY ${SYM_DIR})
+
+    if(UNIX AND NOT APPLE)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${VEX_BUILD_DIR}/libVEX.so.debug" "${SYM_DIR}/"
+            COMMENT "Archiving Engine Debug Symbols to ${SYM_DIR}"
+        )
+    elseif(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${VEX_BUILD_DIR}/VEX.pdb" "${SYM_DIR}/"
+            COMMENT "Archiving Engine PDB to ${SYM_DIR}"
+        )
+    endif()
+
+    if(UNIX AND NOT APPLE)
+        set(GAME_DEBUG_FILE "${SYM_DIR}/${PROJECT_NAME}.debug")
+        set(LIB_DEBUG_FILE "${SYM_DIR}/libGameModule.so.debug")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}> ${GAME_DEBUG_FILE}
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:${PROJECT_NAME}>
+            COMMAND objcopy --add-gnu-debuglink=${GAME_DEBUG_FILE} $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Archiving Game Symbols to: ${SYM_DIR}"
+        )
+
+        add_custom_command(TARGET GameModule POST_BUILD
+            COMMAND objcopy --only-keep-debug $<TARGET_FILE:GameModule> ${LIB_DEBUG_FILE}
+            COMMAND strip --strip-debug --strip-unneeded $<TARGET_FILE:GameModule>
+            COMMAND objcopy --add-gnu-debuglink=${LIB_DEBUG_FILE} $<TARGET_FILE:GameModule>
+        )
+
+    elseif(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:${PROJECT_NAME}> ${SYM_DIR}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>
+            COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_PDB_FILE:${PROJECT_NAME}>
+            COMMENT "Moving Game PDBs to: ${SYM_DIR}"
+        )
+
+        add_custom_command(TARGET GameModule POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_PDB_FILE:GameModule> ${SYM_DIR}/$<TARGET_PDB_FILE_NAME:GameModule>
+            COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_PDB_FILE:GameModule>
+        )
+    endif()
+endif()
+
+#target_sources(${PROJECT_NAME} PRIVATE main.cpp)
+#add_subdirectory(${ENGINE_PATH}/Core  ${CMAKE_BINARY_DIR}/Engine)
+#target_link_libraries(${PROJECT_NAME} PRIVATE VEX::VEX)
 
 set(ASSETS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Assets")
 set(ASSETS_DEST_DIR "${CMAKE_CURRENT_BINARY_DIR}/Assets")
@@ -89,11 +349,29 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     make_directory(${ASSETS_DEST_DIR})
     add_custom_target(copy_Assets ALL
-        COMMAND ${ENGINE_PATH}/BuildTools/build/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}
+        COMMAND ${VEX_TOOLS_DIR}/VPAK_Packer${CMAKE_EXECUTABLE_SUFFIX}
         ${ASSETS_SOURCE_DIR}
         ${ASSETS_DEST_DIR}/assets.vpk
         COMMENT "Packing assets for release build"
     )
+endif()
+
+if(COPY_ICON_TO_BIN)
+    if(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${ICON_OUT_ICO}"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/icon.ico"
+            COMMENT "Copying icon.ico to binary directory"
+        )
+    elseif(UNIX AND NOT APPLE)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${ICON_SOURCE_PATH}"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/icon.png"
+            COMMENT "Copying icon image to binary directory as icon.png"
+        )
+    endif()
 endif()
 
 add_dependencies(${PROJECT_NAME} copy_Assets)

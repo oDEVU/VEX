@@ -1,5 +1,28 @@
 var searchData=
 [
-  ['destroybodyforentity_0',['DestroyBodyForEntity',['../classvex_1_1PhysicsSystem.html#ad40784cfa9e958d41b8ff8e4558b63da',1,'vex::PhysicsSystem']]],
-  ['draw_1',['draw',['../classvex_1_1VulkanMesh.html#af5624ae4b8abb1a3c453d9b904cad61f',1,'vex::VulkanMesh']]]
+  ['deletecommand_0',['DeleteCommand',['../classvex_1_1DeleteCommand.html#aaad9a74ec2ea89e993dea24e9939d5d3',1,'vex::DeleteCommand']]],
+  ['deleteselectedobject_1',['DeleteSelectedObject',['../classvex_1_1Editor.html#a4cdb7b12e54e7ecc89b7e59ece584966',1,'vex::Editor']]],
+  ['demangle_2',['Demangle',['../SceneMenu_8hpp.html#a0ae3e6d17bc7563bc57da4a016aaf41b',1,'SceneMenu.hpp']]],
+  ['destroy_3',['Destroy',['../classvex_1_1GameObject.html#a1ba0e5c35f4bfc561f7b2862667eef1a',1,'vex::GameObject']]],
+  ['destroybodyforentity_4',['DestroyBodyForEntity',['../classvex_1_1PhysicsSystem.html#ad40784cfa9e958d41b8ff8e4558b63da',1,'vex::PhysicsSystem']]],
+  ['destroygameobject_5',['DestroyGameObject',['../classvex_1_1Scene.html#a9e1119af8f263db062ed73d3d0bda269',1,'vex::Scene']]],
+  ['destroymodel_6',['destroyModel',['../classvex_1_1MeshManager.html#a651df97b135ae5108396d3e55a564b57',1,'vex::MeshManager']]],
+  ['dialogwindow_7',['DialogWindow',['../classvex_1_1DialogWindow.html#ade590af6a3ddae3c55da398ba14c894f',1,'vex::DialogWindow']]],
+  ['draw_8',['Draw',['../classvex_1_1AssetBrowser.html#a2f923d5050e53e6dc61de482804562c3',1,'vex::AssetBrowser']]],
+  ['draw_9',['draw',['../classvex_1_1VulkanMesh.html#abbb4f83d2aa6280bc4573bae8c4df2f4',1,'vex::VulkanMesh']]],
+  ['drawaddexistingmodal_10',['drawAddExistingModal',['../classvex_1_1ProjectSelector.html#a16b68758931371aa3265bd787f06f984',1,'vex::ProjectSelector']]],
+  ['drawbar_11',['DrawBar',['../classEditorMenuBar.html#a03a4c974246f5ad0c4494fe09db48f7f',1,'EditorMenuBar']]],
+  ['drawcreatormodal_12',['drawCreatorModal',['../classvex_1_1ProjectSelector.html#a70bffdd847d8d847c7c43669a002296a',1,'vex::ProjectSelector']]],
+  ['drawdebug_13',['drawDebug',['../classvex_1_1PhysicsSystem.html#ac2f6f572c8ad730ff72b0ff421ca66b6',1,'vex::PhysicsSystem']]],
+  ['drawdialogwindowlayout_14',['drawDialogWindowLayout',['../classvex_1_1DialogWindow.html#a11d572b9e8f98de37e3818cc26166231',1,'vex::DialogWindow']]],
+  ['draweditorlayout_15',['drawEditorLayout',['../classvex_1_1Editor.html#a5732b989d4fdf06a4abbb607ccac3663',1,'vex::Editor']]],
+  ['drawentitynode_16',['DrawEntityNode',['../SceneMenu_8hpp.html#a503df8ab9f67ef8361095f7518eeeef8',1,'SceneMenu.hpp']]],
+  ['drawgizmo_17',['drawGizmo',['../classvex_1_1Editor.html#a5907d48979da261bc6950b281f83fb6c',1,'vex::Editor']]],
+  ['drawinspectorforobject_18',['drawInspectorForObject',['../classvex_1_1ComponentRegistry.html#af362295b8118ca95e0766d7fb09be4e6',1,'vex::ComponentRegistry']]],
+  ['drawmoveprojectmodal_19',['drawMoveProjectModal',['../classvex_1_1ProjectSelector.html#a27cb5511411684e878f37d4c13b3f4f1',1,'vex::ProjectSelector']]],
+  ['drawpropertiesofanobject_20',['DrawPropertiesOfAnObject',['../PropertiesMenu_8hpp.html#a32cdf4900cd26c78a021944a6e45e050',1,'PropertiesMenu.hpp']]],
+  ['drawscenehierarchy_21',['DrawSceneHierarchy',['../SceneMenu_8hpp.html#a901e4adcdaccb4930222c23d660285ef',1,'SceneMenu.hpp']]],
+  ['drawselectorlayout_22',['drawSelectorLayout',['../classvex_1_1ProjectSelector.html#a28af76a2a88a82b1485c7fa247929401',1,'vex::ProjectSelector']]],
+  ['drawworldsettings_23',['DrawWorldSettings',['../worldSettingsMenu_8hpp.html#a7e48a1d9045a4f9560da9300e251db69',1,'vex']]],
+  ['duplicateselectedobject_24',['DuplicateSelectedObject',['../classvex_1_1Editor.html#aadf4580aa7b319911c589350a82dcdfd',1,'vex::Editor']]]
 ];

@@ -1,10 +1,45 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
 
 project(VEX)
 set(NAMESPACE_NAME "VEX")
 
-option(BUILD_SHARED_LIBS "Build the shared library" OFF)
+set(SRC_FILE "${CMAKE_CURRENT_SOURCE_DIR}/include/VexBuildVersion.hpp.in")
+set(DST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/include/VexBuildVersion.hpp")
+
+if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (NOT EXISTS "${DST_FILE}"))
+
+    message(STATUS ">> [BuildID] Generating new VEX Build ID (Config: ${CMAKE_BUILD_TYPE})...")
+
+    include(cmake/GenerateVersion.cmake OPTIONAL RESULT_VARIABLE VERSION_GEN_RESULT)
+    if(NOT VERSION_GEN_RESULT)
+        string(TIMESTAMP VEX_BUILD_ID "%Y%m%d%H%M%S")
+        configure_file(${SRC_FILE} ${DST_FILE} @ONLY)
+    endif()
+
+else()
+    message(STATUS ">> [BuildID] Skipping generation for ${CMAKE_BUILD_TYPE} (Using existing header).")
+endif()
+
+list(APPEND public_header_files include/VexBuildVersion.hpp)
+
+option(BUILD_SHARED_LIBS "Build the shared library" ON)
 set(BUILD_TESTING OFF CACHE BOOL "Disable all tests" FORCE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+option(VEX_DIST_BUILD "Build for distribution (Shipping)" OFF)
+
+if(VEX_DIST_BUILD)
+    add_compile_definitions(DIST_BUILD=1)
+endif()
+
+if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
+        add_link_options("-Wl,/nodefaultlib:msvcrt" "-Wl,/defaultlib:msvcrtd")
+    endif()
+endif()
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -18,7 +53,9 @@ set(CPP_LIBRARY_VERSION_MINOR 1)
 set(CPP_LIBRARY_VERSION_PATCH 0)
 set(CPP_LIBRARY_VERSION_STRING ${CPP_LIBRARY_VERSION_MAJOR}.${CPP_LIBRARY_VERSION_MINOR}.${CPP_LIBRARY_VERSION_PATCH})
 
-add_library(${PROJECT_NAME})
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+add_library(${PROJECT_NAME} SHARED)
 add_library(${NAMESPACE_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 message(STATUS "VEX build type: ${CMAKE_BUILD_TYPE}")
@@ -34,13 +71,11 @@ message(STATUS "Compile definitions for VEX: ${defs}")
 
 add_subdirectory(thirdparty)
 
-# Link to consolidated third-party interface
-target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
-
 generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 set(public_header_files
+    include/VexBuildVersion.hpp
     include/Engine.hpp
     include/components/Mesh.hpp
     include/components/ResolutionManager.hpp
@@ -52,6 +87,7 @@ set(public_header_files
     include/components/InputSystem.hpp
     include/components/PhysicsSystem.hpp
     include/components/JoltSafe.hpp
+    include/components/types.hpp
     include/components/UI/VexUI.hpp
     include/components/GameComponents/BasicComponents.hpp
     include/components/GameComponents/UiComponent.hpp
@@ -60,6 +96,7 @@ set(public_header_files
     include/components/GameObjects/GameObject.hpp
     include/components/GameObjects/ModelObject.hpp
     include/components/GameObjects/CameraObject.hpp
+    include/components/GameObjects/LightObject.hpp
     include/components/GameObjects/Creators/ModelCreator.hpp
     include/components/GameObjects/GameObjectFactory.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
@@ -75,6 +112,8 @@ set(source_files
         src/components/ResolutionManager.cpp
         src/components/Scene.cpp
         src/components/SceneManager.cpp
+        src/components/errorUtils.cpp
+        src/components/pathUtils.cpp
         src/components/Window.cpp
         src/components/Window.hpp
         src/components/VirtualFileSystem.cpp
@@ -100,7 +139,11 @@ set(source_files
         src/components/backends/vulkan/Renderer.hpp
         src/components/backends/vulkan/MeshManager.cpp
         src/components/backends/vulkan/MeshManager.hpp
+        src/components/backends/vulkan/PhysicsDebug.hpp
         src/components/GameObjects/Creators/ModelCreator.cpp
+        src/components/GameObjects/GameObject.cpp
+        src/components/GameObjects/GameObjectFactory.cpp
+        src/components/GameComponents/ComponentFactory.cpp
     )
 
 #if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -109,79 +152,20 @@ set(source_files
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LANGUAGES CXX
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED OFF
+    CXX_STANDARD 23
+    CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
     VERSION ${CPP_LIBRARY_VERSION_STRING}
     SOVERSION ${CPP_LIBRARY_VERSION_MAJOR}
     PUBLIC_HEADER "${public_header_files}"
-    CXX_VISIBILITY_PRESET hidden
-    VISIBILITY_INLINES_HIDDEN 1
+    CXX_VISIBILITY_PRESET default  # fix it with exports later
+    VISIBILITY_INLINES_HIDDEN 0
 )
 target_sources(${PROJECT_NAME}
     PRIVATE
         ${public_header_files}
         ${source_files}
 )
-
-target_include_directories(${PROJECT_NAME}
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
-
-#==============================================================================
-# INSTALLATION (Only for standalone engine builds)
-#==============================================================================
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
-
-    install(TARGETS ${PROJECT_NAME}
-        EXPORT ${PROJECT_NAME}Targets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Library
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Library
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  COMPONENT Library
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} COMPONENT Development
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
-
-    install(EXPORT ${PROJECT_NAME}Targets
-        FILE ${PROJECT_NAME}Targets.cmake
-        NAMESPACE ${NAMESPACE_NAME}::
-        DESTINATION ${ConfigPackageLocation}
-        COMPONENT Development
-    )
-
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glm/glm
-            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    )
-
-    configure_package_config_file(
-        ${PROJECT_NAME}Config.cmake.in
-        ${PROJECT_NAME}Config.cmake
-        INSTALL_DESTINATION "${ConfigPackageLocation}"
-        PATH_VARS CMAKE_INSTALL_PREFIX
-    )
-
-    write_basic_package_version_file(
-        ${PROJECT_NAME}ConfigVersion.cmake
-        VERSION ${CPP_LIBRARY_VERSION_STRING}
-        COMPATIBILITY AnyNewerVersion
-    )
-
-    install(
-        FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-        DESTINATION
-            ${ConfigPackageLocation}
-        COMPONENT
-            Development
-    )
-endif()
 
 #==============================================================================
 # COMPILE SHADERS
@@ -215,6 +199,12 @@ file(GLOB SLANG_SHADERS
 file(GLOB SLANG_DEPENDENCIES
     ${SHADER_SOURCE_DIR}/depends/*.slang
     ${SHADER_SOURCE_DIR}/effects/*.slang
+)
+
+set(BINDLESS_ELIGIBLE_SHADERS
+    "Opaque"
+    "Masked"
+    "Transparent"
 )
 
 set(SPV_SHADERS "")
@@ -260,7 +250,7 @@ foreach(source IN LISTS SLANG_SHADERS)
         )
         list(APPEND SPV_SHADERS ${OUTPUT_FILE})
 
-    # Case 2: ends with Frag → only fragment shader
+        # Case 2: ends with Frag → only fragment shader
     elseif(FILENAME MATCHES ".*Frag$")
         set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
         add_custom_command(
@@ -271,7 +261,7 @@ foreach(source IN LISTS SLANG_SHADERS)
         )
         list(APPEND SPV_SHADERS ${OUTPUT_FILE})
 
-    # Case 3: unified shader → compile both vertMain + fragMain
+        # Case 3: unified shader → compile both vertMain + fragMain
     else()
         set(VERT_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Vert.spv)
         set(FRAG_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Frag.spv)
@@ -291,7 +281,154 @@ foreach(source IN LISTS SLANG_SHADERS)
         )
 
         list(APPEND SPV_SHADERS ${VERT_OUTPUT} ${FRAG_OUTPUT})
+
+        if(FILENAME IN_LIST BINDLESS_ELIGIBLE_SHADERS)
+            set(FRAG_BINDLESS_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}FragBindless.spv)
+            add_custom_command(
+                OUTPUT ${FRAG_BINDLESS_OUTPUT}
+                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_6_0 -entry fragMain -o ${FRAG_BINDLESS_OUTPUT} ${source}
+                DEPENDS ${source} ${SLANG_DEPENDENCIES}
+                COMMENT "Compiling ${FILENAME} (Fragment Bindless)"
+            )
+            list(APPEND SPV_SHADERS ${FRAG_BINDLESS_OUTPUT})
+        endif()
     endif()
 endforeach()
 
 add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})
+
+target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
+
+if(DIST_BUILD AND UNIX AND NOT APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
+endif()
+
+if(TARGET ImGui)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        target_link_libraries(${PROJECT_NAME} PRIVATE -Wl,--whole-archive ImGui -Wl,--no-whole-archive)
+    elseif(MSVC)
+        target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:ImGui")
+        target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:SDL3-static")
+    elseif(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:ImGui>")
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:SDL3-static>")
+
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetWindowRelativeMouseMode")
+        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_LogError")
+    endif()
+endif()
+
+set(TP_RESOLVED_INCLUDES "")
+set(TP_RESOLVED_DEFINITIONS "")
+
+macro(extract_properties INPUT_TARGET)
+    if(TARGET ${INPUT_TARGET})
+        set(_REAL_TARGET ${INPUT_TARGET})
+
+        get_target_property(_ALIASED ${INPUT_TARGET} ALIASED_TARGET)
+        if(_ALIASED)
+            set(_REAL_TARGET ${_ALIASED})
+        endif()
+
+        get_target_property(_INCS ${_REAL_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
+        if(_INCS AND NOT "${_INCS}" MATCHES "NOTFOUND")
+            list(APPEND TP_RESOLVED_INCLUDES ${_INCS})
+        endif()
+
+        get_target_property(_SYS_INCS ${_REAL_TARGET} INTERFACE_SYSTEM_INCLUDE_DIRECTORIES)
+        if(_SYS_INCS AND NOT "${_SYS_INCS}" MATCHES "NOTFOUND")
+            list(APPEND TP_RESOLVED_INCLUDES ${_SYS_INCS})
+        endif()
+
+        get_target_property(_DEFS ${_REAL_TARGET} INTERFACE_COMPILE_DEFINITIONS)
+        if(_DEFS AND NOT "${_DEFS}" MATCHES "NOTFOUND")
+            list(APPEND TP_RESOLVED_DEFINITIONS ${_DEFS})
+        endif()
+    endif()
+endmacro()
+
+extract_properties(thirdparty_engine)
+
+get_target_property(TP_DEPS thirdparty_engine INTERFACE_LINK_LIBRARIES)
+if(TP_DEPS)
+    foreach(LIB ${TP_DEPS})
+        extract_properties(${LIB})
+    endforeach()
+endif()
+
+extract_properties(SDL3::SDL3)
+extract_properties(SDL3-static)
+extract_properties(SDL3-shared)
+
+if(DEFINED SDL3_SOURCE_DIR)
+    list(APPEND TP_RESOLVED_INCLUDES "${SDL3_SOURCE_DIR}/include")
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include")
+    list(APPEND TP_RESOLVED_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include")
+endif()
+
+list(REMOVE_DUPLICATES TP_RESOLVED_INCLUDES)
+list(REMOVE_DUPLICATES TP_RESOLVED_DEFINITIONS)
+
+message(STATUS ">> VEX Exporting Definitions: ${TP_RESOLVED_DEFINITIONS}")
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+foreach(DIR ${TP_RESOLVED_INCLUDES})
+    if(DIR)
+        target_include_directories(${PROJECT_NAME} PUBLIC
+            $<BUILD_INTERFACE:${DIR}>
+        )
+    endif()
+endforeach()
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+    ${TP_RESOLVED_DEFINITIONS}
+)
+
+if(WIN32)
+    target_compile_definitions(${PROJECT_NAME} INTERFACE "IMGUI_API=__declspec(dllimport)")
+endif()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES INTERFACE_LINK_LIBRARIES "")
+
+export(TARGETS VEX
+    FILE "${CMAKE_BINARY_DIR}/VEXTargets.cmake"
+    NAMESPACE VEX::
+)
+
+if(CMAKE_BUILD_TYPE MATCHES "Release|RelWithDebInfo|MinSizeRel")
+    if(MSVC)
+        target_compile_options(${PROJECT_NAME} PRIVATE /Zi)
+        target_link_options(${PROJECT_NAME} PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+    else()
+        target_compile_options(${PROJECT_NAME} PRIVATE -g)
+        target_link_options(${PROJECT_NAME} PRIVATE -g)
+    endif()
+
+    if(UNIX AND NOT APPLE)
+        set(ENGINE_LIB "$<TARGET_FILE:${PROJECT_NAME}>")
+        set(ENGINE_DEBUG_FILE "${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so.debug")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND objcopy --only-keep-debug ${ENGINE_LIB} ${ENGINE_DEBUG_FILE}
+            COMMAND strip --strip-debug --strip-unneeded ${ENGINE_LIB}
+            COMMAND objcopy --add-gnu-debuglink=${ENGINE_DEBUG_FILE} ${ENGINE_LIB}
+            COMMENT "Generating debug symbols for VEX Engine: ${ENGINE_DEBUG_FILE}"
+        )
+    elseif(MSVC)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo ">> Engine PDB Generated: $<TARGET_PDB_FILE:${PROJECT_NAME}>"
+        )
+    endif()
+endif()

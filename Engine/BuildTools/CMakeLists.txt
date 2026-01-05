@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.14)
 project(VEX_BuildTools)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # VPAK Packer executable
 add_executable(VPAK_Packer
@@ -11,6 +12,21 @@ add_executable(VPAK_Packer
 # Project Builder executable
 add_executable(ProjectBuilder
     projectBuilder.cpp
+)
+
+add_executable(VexCrashDecoder
+    VexCrashDecoder/main.cpp
+    VexCrashDecoder/CrashDecoder.cpp
+    VexCrashDecoder/CrashDecoder.hpp
+)
+
+if(WIN32)
+    target_link_libraries(VexCrashDecoder PRIVATE dbghelp)
+endif()
+
+target_include_directories(VexCrashDecoder PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/VexCrashDecoder
 )
 
 set(BUILD_FILES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/BuildFiles")

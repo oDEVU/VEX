@@ -1,8 +1,14 @@
 build
+build_dist
 Build
+Dist
+Distribution
+bin
 Intermediate
 .zed
+.vscode
 .cache
 compile_commands.json
 perf.data
 perf.data.old
+Engine/Core/include/VexBuildVersion.hpp

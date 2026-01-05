@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -119,6 +120,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a411e6fdeae8423308bd1c482156de5ad" id="r_a411e6fdeae8423308bd1c482156de5ad"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a411e6fdeae8423308bd1c482156de5ad">Box</a> (glm::vec3 halfExtents={0.5f, 0.5f, 0.5f}, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memitem:ae75419df8f5d5a7e9a6053f800e426ea" id="r_ae75419df8f5d5a7e9a6053f800e426ea"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae75419df8f5d5a7e9a6053f800e426ea">RoundedBox</a> (glm::vec3 halfExtents, float radius=0.05f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::DYNAMIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
 <tr class="memitem:ac29a3c343e7fe9f500ff6d35f4ffddfb" id="r_ac29a3c343e7fe9f500ff6d35f4ffddfb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac29a3c343e7fe9f500ff6d35f4ffddfb">Sphere</a> (float radius=0.5f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
 <tr class="memitem:adc26c4d469fd9140ac5c1c25d4ab4fcd" id="r_adc26c4d469fd9140ac5c1c25d4ab4fcd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc26c4d469fd9140ac5c1c25d4ab4fcd">Capsule</a> (float radius=0.5f, float height=1.0f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
 <tr class="memitem:a1be7fedba125fb6324925c033586fb85" id="r_a1be7fedba125fb6324925c033586fb85"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1be7fedba125fb6324925c033586fb85">Cylinder</a> (float radius=0.5f, float height=1.0f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
@@ -139,6 +141,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ac78ea2f7ae6b2f1f9f87be0ac4e282a2" id="r_ac78ea2f7ae6b2f1f9f87be0ac4e282a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac78ea2f7ae6b2f1f9f87be0ac4e282a2">isSensor</a> = false</td></tr>
 <tr class="memitem:a2d44faabe1dc0ae222bca7b606d82517" id="r_a2d44faabe1dc0ae222bca7b606d82517"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d44faabe1dc0ae222bca7b606d82517">allowSleeping</a> = true</td></tr>
 <tr class="memitem:a2c8de4835cc999306d858951a82178d2" id="r_a2c8de4835cc999306d858951a82178d2"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c8de4835cc999306d858951a82178d2">boxHalfExtents</a> = {0.5f, 0.5f, 0.5f}</td></tr>
+<tr class="memitem:abd427ae14abe0000f20a32ecb9bb1675" id="r_abd427ae14abe0000f20a32ecb9bb1675"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd427ae14abe0000f20a32ecb9bb1675">roundedRadius</a> = 0.05f</td></tr>
 <tr class="memitem:a91fffd3114755699d01d91eec7120477" id="r_a91fffd3114755699d01d91eec7120477"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91fffd3114755699d01d91eec7120477">sphereRadius</a> = 0.5f</td></tr>
 <tr class="memitem:a29b63e945f4d84b9ef0fdc44bc2d5e7a" id="r_a29b63e945f4d84b9ef0fdc44bc2d5e7a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29b63e945f4d84b9ef0fdc44bc2d5e7a">capsuleRadius</a> = 0.5f</td></tr>
 <tr class="memitem:acc5f54a25102d7c3b1221fa3fcdd6fbe" id="r_acc5f54a25102d7c3b1221fa3fcdd6fbe"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc5f54a25102d7c3b1221fa3fcdd6fbe">capsuleHeight</a> = 1.0f</td></tr>
@@ -154,7 +157,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure representing a physics component. </p>
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00091">91</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00100">100</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6cf651363a55814603b71d20423bdb7d" name="a6cf651363a55814603b71d20423bdb7d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6cf651363a55814603b71d20423bdb7d">&#9670;&#160;</a></span>PhysicsComponent()</h2>
@@ -179,7 +182,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00122">122</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00136">136</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -207,7 +210,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00214">214</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00280">280</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -234,7 +237,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00224">224</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00292">292</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -261,7 +264,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00219">219</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00286">286</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -307,7 +310,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00125">125</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00144">144</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -358,7 +361,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00149">149</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00198">198</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -404,7 +407,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00175">175</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00235">235</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -455,7 +458,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00162">162</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00217">217</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -501,7 +504,58 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00187">187</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00252">252</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae75419df8f5d5a7e9a6053f800e426ea" name="ae75419df8f5d5a7e9a6053f800e426ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae75419df8f5d5a7e9a6053f800e426ea">&#9670;&#160;</a></span>RoundedBox()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a> vex::PhysicsComponent::RoundedBox </td>
+          <td>(</td>
+          <td class="paramtype">glm::vec3</td>          <td class="paramname"><span class="paramname"><em>halfExtents</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.05f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a></td>          <td class="paramname"><span class="paramname"><em>bodyType</em></span><span class="paramdefsep"> = </span><span class="paramdefval">BodyType::DYNAMIC</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>mass</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1.0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>friction</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.5f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>bounce</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.1f</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00162">162</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -547,7 +601,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00137">137</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00180">180</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -564,7 +618,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00102">102</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00111">111</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -580,7 +634,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00100">100</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00109">109</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -596,7 +650,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00098">98</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00107">107</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -612,7 +666,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00093">93</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00102">102</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -628,7 +682,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00096">96</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00105">105</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -644,7 +698,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00104">104</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00113">113</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -660,7 +714,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00107">107</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00117">117</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -676,7 +730,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00106">106</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00116">116</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -692,7 +746,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00110">110</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00120">120</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -708,7 +762,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00109">109</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00119">119</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -724,7 +778,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00108">108</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00118">118</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -740,7 +794,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00095">95</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00104">104</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -756,7 +810,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00101">101</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00110">110</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -772,7 +826,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00099">99</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00108">108</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -788,7 +842,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00094">94</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00103">103</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -804,7 +858,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00112">112</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00122">122</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -820,7 +874,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00111">111</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00121">121</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -836,7 +890,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00097">97</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00106">106</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -852,7 +906,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00115">115</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00125">125</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -868,7 +922,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00117">117</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00127">127</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -884,7 +938,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00116">116</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00126">126</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abd427ae14abe0000f20a32ecb9bb1675" name="abd427ae14abe0000f20a32ecb9bb1675"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd427ae14abe0000f20a32ecb9bb1675">&#9670;&#160;</a></span>roundedRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float vex::PhysicsComponent::roundedRadius = 0.05f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00114">114</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -900,7 +970,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00092">92</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00101">101</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -916,7 +986,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00105">105</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00115">115</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
 </div>

@@ -30,42 +30,36 @@
       /// @details This class serves as the foundation for all game objects within the engine. It provides essential functionalities such as entity management, name registration, and basic component initialization.
   class GameObject {
   public:
-    /// @brief Default constructor for GameObject. You need to call it from your derived class, it gives your object a unique identifier and registers it with the engine.
-    GameObject(Engine& engine, const std::string& name)
-        : m_engine(engine), m_entity(m_engine.getRegistry().create()), m_isValid(true)  {
+    /// @brief Default constructor for GameObject.
+    /// @details
+    /// 1. Initializes the engine reference and marks object as valid.
+    /// 2. Creates a new `entt::entity` in the registry.
+    /// 3. Adds a `NameComponent`.
+    /// 4. Automatically registers the object with the current scene via `SceneManager::GetScene(lastSceneName)`.
+    /// @param Engine& engine - Reference to the engine instance.
+    /// @param const std::string& name - Unique name for the game object.
+    GameObject(Engine& engine, const std::string& name);
 
-        std::string tempName = name;
+    /// @brief Destroys the GameObject and removes it from the engine's registry.
+    /// @details
+    /// 1. Checks validity to prevent double deletion.
+    /// 2. Iterates `TransformComponent`s to find children and unparents them (sets parent to `entt::null`).
+    /// 3. Destroys the entity in the registry and marks this object as invalid.
+    void Destroy();
 
-        auto view = engine.getRegistry().view<NameComponent>();
-        for (auto entity : view) {
-            auto meshComponent = view.get<NameComponent>(entity);
-            if(meshComponent.name == tempName){
-                log("Warning: Object with name: '%s already exists! All objects should have unique names.", tempName.c_str());
-                UUID uuidGenerator;
-                tempName = tempName + uuidGenerator.generate_uuid();
-                log("Info: Object created with name: '%s', it is still recommended to not rely on this name for identification. It is different every app run.", tempName.c_str());
-            }
-        }
-        m_engine.getRegistry().emplace<NameComponent>(m_entity, tempName);
-      }
-      /// @brief Default destructor for GameObject. It removes the object from the engine's registry, and removes its reference from any child objects.
-      virtual ~GameObject() {
-          if (m_isValid) {
-              auto view = m_engine.getRegistry().view<TransformComponent>();
-              for (auto entity : view) {
-                  auto& transform = view.get<TransformComponent>(entity);
-                  if (transform.getParent() == m_entity) {
-                      transform.setParent(entt::null);
-                  }
-              }
-              if (m_engine.getRegistry().valid(m_entity)) {
-                  m_engine.getRegistry().destroy(m_entity);
-              }
-              m_entity = entt::null;
-              m_isValid = false;
-          }
-        log("GameObject destructor called");
-    };
+    /// @brief Destructor.
+    /// @details Calls `Destroy()` to ensure cleanup.
+    virtual ~GameObject();
+
+    GameObject(const GameObject&) = delete;
+    GameObject& operator=(const GameObject&) = delete;
+
+    GameObject(GameObject&& other) noexcept
+        : m_engine(other.m_engine), m_entity(other.m_entity), m_isValid(other.m_isValid) {
+        other.m_entity = entt::null;
+        other.m_isValid = false;
+    }
+
       /// @brief virtual void function you override to implement custom behavior when the game starts.
       virtual void BeginPlay() {}
       /// @brief virtual void function you override to implement custom behavior when the game updates (eg. every frame).
@@ -88,9 +82,10 @@
       /// @return True if the GameObject has the component, false otherwise.
       template<typename T> bool HasComponent() const { return m_engine.getRegistry().any_of<T>(m_entity); }
       bool isValid() const { return m_isValid; }
+
       /// @brief Function that parent this Object to another GameObject. You need to pass another GameObject's entity.
       /// @param entt::entity entity - Entity of GameObject we want to parent to.
-      /// @details Example usage:
+      /// @details Helper function that retrieves the `TransformComponent` of this object and calls `setParent` with the provided entity ID.
       /// @code
       /// GameObject* parent = new GameObject();
       /// GameObject* child = new GameObject();
@@ -99,9 +94,21 @@
       void ParentTo(entt::entity entity){
           GetComponent<TransformComponent>().setParent(entity);
       }
+
+      /// @brief Function that sets the type of the GameObject.
+      /// @param type - Type of the GameObject.
+      void setObjectType(const std::string& type) {
+              objectType = type;
+          }
+
+      /// @brief Function that returns the type of the GameObject.
+      /// @return Type of the GameObject.
+      const std::string& getObjectType() const { return objectType; }
+
       protected:
       Engine& m_engine;
       entt::entity m_entity;
       bool m_isValid;
+      std::string objectType;
   };
   }

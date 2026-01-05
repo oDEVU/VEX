@@ -1,68 +1,132 @@
 {
-  "environment": {
-    "lighting": {
-      "ambientLight": [0.5, 0.65, 1.0],
-      "ambientLightStrength": 0.3,
-      "sunLight": [1.0, 1.0, 1.0, 1.0],
-      "sunDirection": [1.0, 1.0, 1.0],
-      "clearColor": [0.2, 0.35, 1.0]
-    },
-    "shading": {
-      "gouraud": true,
-      "passiveVertexJitter": true,
-      "vertexSnapping": true,
-      "affineTextureWarping": true,
-      "colorQuantization": true,
-      "ntfsArtifacts": true
-    }
-  },
-  "objects": [
-    {
-      "type": "Player",
-      "name": "DebugCamera",
-      "components": [
-        {
-          "type": "TransformComponent",
-          "position": [0.0, 0.0, 5.0],
-          "rotation": [0.0, 0.0, 0.0],
-          "scale": [1.0, 1.0, 1.0]
+    "environment": {
+        "lighting": {
+            "ambientLight": [
+                0.4710424542427063,
+                0.6297299861907959,
+                1.0
+            ],
+            "ambientLightStrength": 0.30000001192092896,
+            "clearColor": [
+                0.2084941864013672,
+                0.35690170526504517,
+                1.0
+            ],
+            "sunDirection": [
+                0.75,
+                1.0,
+                0.5
+            ],
+            "sunLight": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "shading": {
+            "affineTextureWarping": true,
+            "colorQuantization": true,
+            "gouraud": true,
+            "ntfsArtifacts": true,
+            "passiveVertexJitter": true,
+            "vertexSnapping": true
         }
-      ]
     },
-    {
-      "type": "GameObject",
-      "name": "MyModel",
-      "components": [
+    "objects": [
         {
-          "type": "TransformComponent",
-          "position": [0.0, 5.0, 0.0],
-          "rotation": [0.0, 0.0, 0.0],
-          "scale": [1.0, 1.0, 1.0]
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        5.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                }
+            ],
+            "name": "DebugCamera",
+            "type": "Player"
         },
         {
-          "type": "MeshComponent",
-          "path": "Assets/human.obj"
-        }
-      ]
-    },
-    {
-      "type": "CameraObject",
-      "name": "newCamera",
-      "parent": "DebugCamera",
-      "components": [
-        {
-          "type": "TransformComponent",
-          "position": [0.0, 0.0, 0.0],
-          "rotation": [0.0, 0.0, 0.0],
-          "scale": [1.0, 1.0, 1.0]
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        5.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "path": "Assets/human.obj",
+                    "renderType": 0,
+                    "type": "vex::MeshComponent"
+                }
+            ],
+            "name": "MyModel",
+            "type": "GameObject"
         },
         {
-          "type": "CameraComponent",
-          "fov": 60.0,
-          "nearPlane": 0.1,
-          "farPlane": 100.0
+            "components": [],
+            "name": "Map",
+            "type": "Map"
+        },
+        {
+            "components": [
+                {
+                    "position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rotation": [
+                        0.0,
+                        -0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "type": "vex::TransformComponent"
+                },
+                {
+                    "farPlane": 100.0,
+                    "fov": 60.0,
+                    "nearPlane": 0.10000000149011612,
+                    "type": "vex::CameraComponent"
+                }
+            ],
+            "name": "newCamera",
+            "parent": "DebugCamera",
+            "type": "CameraObject"
         }
-      ]
-    }
-  ]
+    ]
 }

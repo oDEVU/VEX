@@ -1,12 +1,19 @@
 var searchData=
 [
-  ['basiccomponents_2ehpp_0',['BasicComponents.hpp',['../BasicComponents_8hpp.html',1,'']]],
-  ['beginframe_1',['beginFrame',['../classvex_1_1ImGUIWrapper.html#adb59498d778f116eb17eec998d8c79c3',1,'vex::ImGUIWrapper::beginFrame()'],['../classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646',1,'vex::VulkanImGUIWrapper::beginFrame()']]],
-  ['begingame_2',['beginGame',['../classvex_1_1Engine.html#a553fa7361373b5df5f4685210f54f1ab',1,'vex::Engine']]],
-  ['beginplay_3',['BeginPlay',['../classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8',1,'vex::GameObject']]],
-  ['beginsingletimecommands_4',['beginSingleTimeCommands',['../structvex_1_1VulkanContext.html#a146427df3fc36f89efe374be84e960b8',1,'vex::VulkanContext']]],
-  ['bindwindow_5',['bindWindow',['../classvex_1_1Interface.html#a2ade6ea1d65bd7460e47623d6a8376d0',1,'vex::Interface']]],
-  ['bodyidhasher_6',['BodyIDHasher',['../structvex_1_1BodyIDHasher.html',1,'vex']]],
-  ['bodytype_7',['BodyType',['../PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a',1,'vex']]],
-  ['bplayerinterfaceimpl_8',['BPLayerInterfaceImpl',['../classvex_1_1BPLayerInterfaceImpl.html',1,'vex']]]
+  ['basiccamera_0',['BasicCamera',['../classvex_1_1BasicCamera.html',1,'vex']]],
+  ['basiccomponents_2ehpp_1',['BasicComponents.hpp',['../BasicComponents_8hpp.html',1,'']]],
+  ['basicdialog_2ehpp_2',['basicDialog.hpp',['../basicDialog_8hpp.html',1,'']]],
+  ['basiceditorwindow_3',['BasicEditorWindow',['../structBasicEditorWindow.html',1,'']]],
+  ['batch_4',['batch',['../classvex_1_1VexUI.html#a2df1cf849e2807bd1fc9c1cc9e1578c1',1,'vex::VexUI']]],
+  ['beginframe_5',['beginFrame',['../classvex_1_1ImGUIWrapper.html#adb59498d778f116eb17eec998d8c79c3',1,'vex::ImGUIWrapper::beginFrame()'],['../classvex_1_1Renderer.html#a12fe57afbc50cd54c32095a99b544518',1,'vex::Renderer::beginFrame()'],['../classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646',1,'vex::VulkanImGUIWrapper::beginFrame()'],['../classEditorImGUIWrapper.html#a47aa3054bd852a263225a35d112dbc50',1,'EditorImGUIWrapper::beginFrame()']]],
+  ['begingame_6',['beginGame',['../classvex_1_1Engine.html#a553fa7361373b5df5f4685210f54f1ab',1,'vex::Engine']]],
+  ['beginplay_7',['BeginPlay',['../classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8',1,'vex::GameObject::BeginPlay()'],['../classvex_1_1BasicCamera.html#a3d328653828c54705ac3c5572982816d',1,'vex::BasicCamera::BeginPlay()']]],
+  ['beginsingletimecommands_8',['beginSingleTimeCommands',['../structvex_1_1VulkanContext.html#a146427df3fc36f89efe374be84e960b8',1,'vex::VulkanContext']]],
+  ['bindanddrawbatched_9',['bindAndDrawBatched',['../classvex_1_1VulkanMesh.html#ade013b77a1d009fe4126d21cb2d9f222',1,'vex::VulkanMesh']]],
+  ['bindwindow_10',['bindWindow',['../classvex_1_1Interface.html#a2ade6ea1d65bd7460e47623d6a8376d0',1,'vex::Interface']]],
+  ['bodyidhasher_11',['BodyIDHasher',['../structvex_1_1BodyIDHasher.html',1,'vex']]],
+  ['bodytype_12',['BodyType',['../PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a',1,'vex']]],
+  ['bplayerinterfaceimpl_13',['BPLayerInterfaceImpl',['../classvex_1_1BPLayerInterfaceImpl.html',1,'vex']]],
+  ['browsericons_14',['BrowserIcons',['../structvex_1_1BrowserIcons.html',1,'vex']]],
+  ['builddist_15',['BuildDist',['../classEditorMenuBar.html#ae15bcd914c5ce1871f08c031be192f43',1,'EditorMenuBar']]]
 ];

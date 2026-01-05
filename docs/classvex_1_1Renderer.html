@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -108,18 +109,29 @@ $(function(){initNavTree('classvex_1_1Renderer.html','','classvex_1_1Renderer-me
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a225f6e597ca87b995704de2571e990b7" id="r_a225f6e597ca87b995704de2571e990b7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a225f6e597ca87b995704de2571e990b7">Renderer</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;resources, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;pipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;transPipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;uiPipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanSwapchainManager.html">VulkanSwapchainManager</a> &gt; &amp;swapchainManager, std::unique_ptr&lt; <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a> &gt; &amp;meshManager)</td></tr>
-<tr class="memdesc:a225f6e597ca87b995704de2571e990b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> class.  <br /></td></tr>
+<tr class="memitem:a0951329951325b397a7a347f45ad8f74" id="r_a0951329951325b397a7a347f45ad8f74"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0951329951325b397a7a347f45ad8f74">Renderer</a> (<a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;context, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;resources, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;pipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;transPipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;maskPipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;uiPipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;fullscreenPipeline, std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanSwapchainManager.html">VulkanSwapchainManager</a> &gt; &amp;swapchainManager, std::unique_ptr&lt; <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a> &gt; &amp;meshManager)</td></tr>
+<tr class="memdesc:a0951329951325b397a7a347f45ad8f74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> class.  <br /></td></tr>
 <tr class="memitem:ab647f7466e1195b57864a5ead4c51cad" id="r_ab647f7466e1195b57864a5ead4c51cad"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab647f7466e1195b57864a5ead4c51cad">~Renderer</a> ()</td></tr>
 <tr class="memdesc:ab647f7466e1195b57864a5ead4c51cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> class.  <br /></td></tr>
-<tr class="memitem:af4ebb30cc25b1d7defa38a1bc669d40a" id="r_af4ebb30cc25b1d7defa38a1bc669d40a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4ebb30cc25b1d7defa38a1bc669d40a">renderFrame</a> (const entt::entity cameraEntity, glm::uvec2 renderResolution, entt::registry &amp;registry, <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;ui, uint64_t frame)</td></tr>
-<tr class="memdesc:af4ebb30cc25b1d7defa38a1bc669d40a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders a frame using the provided parameters.  <br /></td></tr>
+<tr class="memitem:a12fe57afbc50cd54c32095a99b544518" id="r_a12fe57afbc50cd54c32095a99b544518"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12fe57afbc50cd54c32095a99b544518">beginFrame</a> (glm::uvec2 renderResolution, <a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;outData)</td></tr>
+<tr class="memdesc:a12fe57afbc50cd54c32095a99b544518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares the frame for rendering.  <br /></td></tr>
+<tr class="memitem:abc86f3773560ddc13a15e79f2b663c5b" id="r_abc86f3773560ddc13a15e79f2b663c5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc86f3773560ddc13a15e79f2b663c5b">renderScene</a> (<a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;data, const entt::entity cameraEntity, entt::registry &amp;registry, int frame, const std::vector&lt; <a class="el" href="structvex_1_1DebugVertex.html">DebugVertex</a> &gt; *debugLines=nullptr, bool isEditorMode=false)</td></tr>
+<tr class="memdesc:abc86f3773560ddc13a15e79f2b663c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the 3D scene and UI to an offscreen low-res texture.  <br /></td></tr>
+<tr class="memitem:a806d1ad715ef403b147fffe4598fa5f1" id="r_a806d1ad715ef403b147fffe4598fa5f1"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a806d1ad715ef403b147fffe4598fa5f1">getImGuiTextureID</a> (<a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;ui)</td></tr>
+<tr class="memdesc:a806d1ad715ef403b147fffe4598fa5f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or creates a cached ImGui texture descriptor for the scene.  <br /></td></tr>
+<tr class="memitem:a3d76ea1772288bca785e7c8f70d128b9" id="r_a3d76ea1772288bca785e7c8f70d128b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d76ea1772288bca785e7c8f70d128b9">composeFrame</a> (<a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;data, <a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;ui, bool isEditorMode)</td></tr>
+<tr class="memdesc:a3d76ea1772288bca785e7c8f70d128b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Composes the final frame onto the Swapchain image.  <br /></td></tr>
+<tr class="memitem:adb6cce5b605d5027eb21a8de2feae2f1" id="r_adb6cce5b605d5027eb21a8de2feae2f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb6cce5b605d5027eb21a8de2feae2f1">endFrame</a> (<a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;data)</td></tr>
+<tr class="memdesc:adb6cce5b605d5027eb21a8de2feae2f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Submits the command buffer and presents the image.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a2f3486083d37afa6ab1d599ffae1ad11" id="r_a2f3486083d37afa6ab1d599ffae1ad11"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f3486083d37afa6ab1d599ffae1ad11">transitionImageLayout</a> (VkCommandBuffer cmd, VkImage image, VkImageLayout oldLayout, VkImageLayout newLayout, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkPipelineStageFlags srcStage, VkPipelineStageFlags dstStage)</td></tr>
 <tr class="memdesc:a2f3486083d37afa6ab1d599ffae1ad11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for image transition.  <br /></td></tr>
 <tr class="memitem:a0d45abf4f7e9f067137602128ed79d16" id="r_a0d45abf4f7e9f067137602128ed79d16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d45abf4f7e9f067137602128ed79d16">issueMultiDrawIndexed</a> (VkCommandBuffer cmd, const std::vector&lt; VkMultiDrawIndexedInfoEXT &gt; &amp;commands)</td></tr>
+<tr class="memdesc:a0d45abf4f7e9f067137602128ed79d16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issues a multi-draw indexed command used by transparent meshes since they are drawn triangle by triangle.  <br /></td></tr>
+<tr class="memitem:a432226c86a8d89f2131c7f17d768933d" id="r_a432226c86a8d89f2131c7f17d768933d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a432226c86a8d89f2131c7f17d768933d">updateScreenDescriptor</a> (VkImageView view)</td></tr>
+<tr class="memdesc:a432226c86a8d89f2131c7f17d768933d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the screen descriptor.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -127,24 +139,38 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a82e6f704ab480651ccbe579775594503" id="r_a82e6f704ab480651ccbe579775594503"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanResources.html">VulkanResources</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82e6f704ab480651ccbe579775594503">m_p_resources</a></td></tr>
 <tr class="memitem:a6336045d534c0ca08b04f6b7444d8659" id="r_a6336045d534c0ca08b04f6b7444d8659"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6336045d534c0ca08b04f6b7444d8659">m_p_pipeline</a></td></tr>
 <tr class="memitem:a10af581e6ffd663db96d0d52a817f596" id="r_a10af581e6ffd663db96d0d52a817f596"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10af581e6ffd663db96d0d52a817f596">m_p_transPipeline</a></td></tr>
+<tr class="memitem:a5610a386f5bced4ecb55df1a1b2b044a" id="r_a5610a386f5bced4ecb55df1a1b2b044a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5610a386f5bced4ecb55df1a1b2b044a">m_p_maskPipeline</a></td></tr>
 <tr class="memitem:a00b1937d114919d5ec3d74aeb8a3a96c" id="r_a00b1937d114919d5ec3d74aeb8a3a96c"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00b1937d114919d5ec3d74aeb8a3a96c">m_p_uiPipeline</a></td></tr>
+<tr class="memitem:abee604d26eb58efb445f09dd143c8b9c" id="r_abee604d26eb58efb445f09dd143c8b9c"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abee604d26eb58efb445f09dd143c8b9c">m_p_fullscreenPipeline</a></td></tr>
 <tr class="memitem:a40e4efe79e2de0f618a67fc9adee908b" id="r_a40e4efe79e2de0f618a67fc9adee908b"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanSwapchainManager.html">VulkanSwapchainManager</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40e4efe79e2de0f618a67fc9adee908b">m_p_swapchainManager</a></td></tr>
 <tr class="memitem:a896f0e60c8a66d83e22f5289f3e5e67e" id="r_a896f0e60c8a66d83e22f5289f3e5e67e"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a896f0e60c8a66d83e22f5289f3e5e67e">m_p_meshManager</a></td></tr>
 <tr class="memitem:a215e60209696767094c2204ef5061e74" id="r_a215e60209696767094c2204ef5061e74"><td class="memItemLeft" align="right" valign="top">std::chrono::high_resolution_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a215e60209696767094c2204ef5061e74">startTime</a></td></tr>
 <tr class="memitem:a6e0bb2b168fcfc38a34d8c0754439ef0" id="r_a6e0bb2b168fcfc38a34d8c0754439ef0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e0bb2b168fcfc38a34d8c0754439ef0">currentTime</a> = 0.0f</td></tr>
+<tr class="memitem:acca3e2a2d105b546e75ecc9f5e26a6b5" id="r_acca3e2a2d105b546e75ecc9f5e26a6b5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acca3e2a2d105b546e75ecc9f5e26a6b5">basicDiag</a> = true</td></tr>
 <tr class="memitem:ac253b7356c261b8fc699deb622d9ce4d" id="r_ac253b7356c261b8fc699deb622d9ce4d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structvex_1_1TransparentTriangle.html">TransparentTriangle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac253b7356c261b8fc699deb622d9ce4d">m_transparentTriangles</a></td></tr>
+<tr class="memitem:a18bafbc2e2c5e276ba096547be4d7a84" id="r_a18bafbc2e2c5e276ba096547be4d7a84"><td class="memItemLeft" align="right" valign="top">std::map&lt; uint32_t, glm::mat4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18bafbc2e2c5e276ba096547be4d7a84">trnasMatrixes</a></td></tr>
 <tr class="memitem:a80a35b0f30351c9ad6dcfc39974fb99f" id="r_a80a35b0f30351c9ad6dcfc39974fb99f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structvex_1_1UiComponent.html">UiComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80a35b0f30351c9ad6dcfc39974fb99f">m_uiObjects</a></td></tr>
 <tr class="memitem:a9087a0ad93b3624a6de7ff3dce71c413" id="r_a9087a0ad93b3624a6de7ff3dce71c413"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkMultiDrawIndexedInfoEXT &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9087a0ad93b3624a6de7ff3dce71c413">m_multiDrawInfos</a></td></tr>
 <tr class="memitem:a81d3aeb2623cec933e367d98cc85782f" id="r_a81d3aeb2623cec933e367d98cc85782f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81d3aeb2623cec933e367d98cc85782f">approxTriangles</a> = 0</td></tr>
 <tr class="memitem:ac44893725b402f6bc8f82e8d403b7948" id="r_ac44893725b402f6bc8f82e8d403b7948"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1SceneUBO.html">SceneUBO</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac44893725b402f6bc8f82e8d403b7948">m_sceneUBO</a></td></tr>
+<tr class="memitem:a69aab738af3892adf2595a94d0a75911" id="r_a69aab738af3892adf2595a94d0a75911"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69aab738af3892adf2595a94d0a75911">m_screenDescriptorSet</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:a0551e2161ef665a33e01306b23db7cf5" id="r_a0551e2161ef665a33e01306b23db7cf5"><td class="memItemLeft" align="right" valign="top">VkSampler&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0551e2161ef665a33e01306b23db7cf5">m_screenSampler</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:aeb27b497071ff27a811ee0edff084f74" id="r_aeb27b497071ff27a811ee0edff084f74"><td class="memItemLeft" align="right" valign="top">VkImageView&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb27b497071ff27a811ee0edff084f74">m_lastUsedView</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:ac0c3ed58f7b467b7755c1e84a5389173" id="r_ac0c3ed58f7b467b7755c1e84a5389173"><td class="memItemLeft" align="right" valign="top">VkDescriptorSet&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0c3ed58f7b467b7755c1e84a5389173">m_cachedImGuiDescriptor</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:a319e752fd86de2e709655cf70d26d2b3" id="r_a319e752fd86de2e709655cf70d26d2b3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; VkDescriptorSet &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a319e752fd86de2e709655cf70d26d2b3">m_garbageDescriptors</a></td></tr>
+<tr class="memitem:ade8fd8a9ea81af9f1d1cc49400f73a81" id="r_ade8fd8a9ea81af9f1d1cc49400f73a81"><td class="memItemLeft" align="right" valign="top">VkDescriptorPool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade8fd8a9ea81af9f1d1cc49400f73a81">m_localPool</a> = VK_NULL_HANDLE</td></tr>
+<tr class="memitem:af99f34584c4ca44bd3b151d95cb4715f" id="r_af99f34584c4ca44bd3b151d95cb4715f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structvex_1_1RenderItem.html">RenderItem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af99f34584c4ca44bd3b151d95cb4715f">opaqueQueue</a></td></tr>
+<tr class="memitem:a8aa1291e30d97c54fe104037649f8974" id="r_a8aa1291e30d97c54fe104037649f8974"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structvex_1_1RenderItem.html">RenderItem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8aa1291e30d97c54fe104037649f8974">maskedQueue</a></td></tr>
+<tr class="memitem:a8ba5af45f2a60bc51cf4c19f2077c4da" id="r_a8ba5af45f2a60bc51cf4c19f2077c4da"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VkBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ba5af45f2a60bc51cf4c19f2077c4da">m_indirectBuffers</a></td></tr>
+<tr class="memitem:a6f7c0c2d6c8db03e1fd86ce7b8a6e1e2" id="r_a6f7c0c2d6c8db03e1fd86ce7b8a6e1e2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; VmaAllocation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f7c0c2d6c8db03e1fd86ce7b8a6e1e2">m_indirectAllocations</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class responsible for rendering the scene using Vulkan backend. </p>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00025">25</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00041">41</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a225f6e597ca87b995704de2571e990b7" name="a225f6e597ca87b995704de2571e990b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a225f6e597ca87b995704de2571e990b7">&#9670;&#160;</a></span>Renderer()</h2>
+<a id="a0951329951325b397a7a347f45ad8f74" name="a0951329951325b397a7a347f45ad8f74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0951329951325b397a7a347f45ad8f74">&#9670;&#160;</a></span>Renderer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,7 +198,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>maskPipeline</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>uiPipeline</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>fullscreenPipeline</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -188,19 +224,22 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Constructor for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> class. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Initializes rendering resources such as the screen sampler, descriptor pools, and debug/indirect buffers if supported. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">std::shared_ptr&lt;VulkanResources&gt;&amp;</td><td>resources - Vulkan resources needed for textures std::map. </td></tr>
-    <tr><td class="paramname">std::unique_ptr&lt;VulkanPipeline&gt;&amp;</td><td>pipeline - <a class="el" href="classvex_1_1VulkanPipeline.html" title="A class managing creating vulkan pipelines. Both form meshes and UI elements.">VulkanPipeline</a>. </td></tr>
-    <tr><td class="paramname">std::unique_ptr&lt;VulkanPipeline&gt;&amp;</td><td>uiPipeline - <a class="el" href="classvex_1_1VulkanPipeline.html" title="A class managing creating vulkan pipelines. Both form meshes and UI elements.">VulkanPipeline</a> for UI rendering. </td></tr>
-    <tr><td class="paramname">std::unique_ptr&lt;VulkanSwapchainManager&gt;&amp;</td><td>swapchainManager - <a class="el" href="classvex_1_1VulkanSwapchainManager.html" title="Manages Vulkan swapchain resources.">VulkanSwapchainManager</a>. </td></tr>
-    <tr><td class="paramname">std::unique_ptr&lt;MeshManager&gt;&amp;</td><td>meshManager - <a class="el" href="classvex_1_1MeshManager.html">MeshManager</a>.</td></tr>
+    <tr><td class="paramname">VulkanContext&amp;</td><td>context - The Vulkan context. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;VulkanResources&gt;&amp;</td><td>resources - Resource manager for textures/buffers. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;VulkanPipeline&gt;&amp;</td><td>pipeline - Standard Opaque pipeline. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;VulkanPipeline&gt;&amp;</td><td>transPipeline - Transparent pipeline. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;VulkanPipeline&gt;&amp;</td><td>maskPipeline - Masked pipeline (alpha cutout). </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;VulkanPipeline&gt;&amp;</td><td>uiPipeline - User <a class="el" href="classvex_1_1Interface.html" title="Interface Class for vulkan backend.">Interface</a> pipeline. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;VulkanPipeline&gt;&amp;</td><td>fullscreenPipeline - Fullscreen/Post-process pipeline. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;VulkanSwapchainManager&gt;&amp;</td><td>swapchainManager - Swapchain manager. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;MeshManager&gt;&amp;</td><td>meshManager - Manager for mesh buffers. </td></tr>
   </table>
   </dd>
 </dl>
-<p>Its created and handled by VulkanInteface constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00019">19</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00024">24</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -220,12 +259,143 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destructor for <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> class. </p>
+<p>Cleans up samplers, descriptor pools, and buffers (debug/indirect). </p>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00037">37</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00114">114</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a12fe57afbc50cd54c32095a99b544518" name="a12fe57afbc50cd54c32095a99b544518"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12fe57afbc50cd54c32095a99b544518">&#9670;&#160;</a></span>beginFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::Renderer::beginFrame </td>
+          <td>(</td>
+          <td class="paramtype">glm::uvec2</td>          <td class="paramname"><span class="paramname"><em>renderResolution</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>outData</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prepares the frame for rendering. </p>
+<p>handles Swapchain recreation (if resolution changed), waits for fences, acquires the next image, and begins the command buffer. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">glm::uvec2</td><td>renderResolution - The desired resolution for the low-res render target. </td></tr>
+    <tr><td class="paramname">SceneRenderData&amp;</td><td>outData - Output struct filled with current frame context (cmd buffer, frame index). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool - True if frame acquisition was successful, False if swapchain needs regeneration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00163">163</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3d76ea1772288bca785e7c8f70d128b9" name="a3d76ea1772288bca785e7c8f70d128b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d76ea1772288bca785e7c8f70d128b9">&#9670;&#160;</a></span>composeFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Renderer::composeFrame </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ui</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isEditorMode</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Composes the final frame onto the Swapchain image. </p>
+<ul>
+<li><b>Game Mode</b>: Draws a fullscreen quad to upscale the low-res scene texture to the window size.</li>
+<li><b><a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> Mode</b>: Renders the ImGui overlay which contains the scene view. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">SceneRenderData&amp;</td><td>data - Frame context data. </td></tr>
+    <tr><td class="paramname">ImGUIWrapper&amp;</td><td>ui - UI wrapper for drawing. </td></tr>
+    <tr><td class="paramname">bool</td><td>isEditorMode - Toggles between Fullscreen Quad or ImGui composition. </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00696">696</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+
+</div>
+</div>
+<a id="adb6cce5b605d5027eb21a8de2feae2f1" name="adb6cce5b605d5027eb21a8de2feae2f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb6cce5b605d5027eb21a8de2feae2f1">&#9670;&#160;</a></span>endFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Renderer::endFrame </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Submits the command buffer and presents the image. </p>
+<p>Submits to the Graphics Queue and calls <span class="tt">vkQueuePresentKHR</span>. Handles <span class="tt">VK_ERROR_OUT_OF_DATE_KHR</span> by triggering swapchain recreation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">SceneRenderData&amp;</td><td>data - Frame context data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00784">784</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a806d1ad715ef403b147fffe4598fa5f1" name="a806d1ad715ef403b147fffe4598fa5f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a806d1ad715ef403b147fffe4598fa5f1">&#9670;&#160;</a></span>getImGuiTextureID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet vex::Renderer::getImGuiTextureID </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ui</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets or creates a cached ImGui texture descriptor for the scene. </p>
+<p>Used to display the rendered scene inside an ImGui window (<a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> Viewport). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ImGUIWrapper&amp;</td><td>ui - Reference to the UI wrapper to register the texture. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>VkDescriptorSet - The descriptor set handle for ImGui. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00671">671</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a0d45abf4f7e9f067137602128ed79d16" name="a0d45abf4f7e9f067137602128ed79d16"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d45abf4f7e9f067137602128ed79d16">&#9670;&#160;</a></span>issueMultiDrawIndexed()</h2>
 
@@ -253,25 +423,34 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00646">646</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p>Issues a multi-draw indexed command used by transparent meshes since they are drawn triangle by triangle. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VkCommandBuffer</td><td>cmd - Command buffer. </td></tr>
+    <tr><td class="paramname">const</td><td>std::vector&lt;VkMultiDrawIndexedInfoEXT&gt;&amp; commands - Vector of multi-draw indexed commands. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00893">893</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
-<a id="af4ebb30cc25b1d7defa38a1bc669d40a" name="af4ebb30cc25b1d7defa38a1bc669d40a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4ebb30cc25b1d7defa38a1bc669d40a">&#9670;&#160;</a></span>renderFrame()</h2>
+<a id="abc86f3773560ddc13a15e79f2b663c5b" name="abc86f3773560ddc13a15e79f2b663c5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc86f3773560ddc13a15e79f2b663c5b">&#9670;&#160;</a></span>renderScene()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void vex::Renderer::renderFrame </td>
+          <td class="memname">void vex::Renderer::renderScene </td>
           <td>(</td>
-          <td class="paramtype">const entt::entity</td>          <td class="paramname"><span class="paramname"><em>cameraEntity</em></span>, </td>
+          <td class="paramtype"><a class="el" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">glm::uvec2</td>          <td class="paramname"><span class="paramname"><em>renderResolution</em></span>, </td>
+          <td class="paramtype">const entt::entity</td>          <td class="paramname"><span class="paramname"><em>cameraEntity</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -281,30 +460,43 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classvex_1_1ImGUIWrapper.html">ImGUIWrapper</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ui</em></span>, </td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>frame</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>frame</em></span>&#160;)</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="structvex_1_1DebugVertex.html">DebugVertex</a> &gt; *</td>          <td class="paramname"><span class="paramname"><em>debugLines</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isEditorMode</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Renders a frame using the provided parameters. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Renders the 3D scene and UI to an offscreen low-res texture. </p>
+<ol type="1">
+<li>Updates <a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a> UBO (View/Proj, PS1 effects like jitter/snapping).</li>
+<li>Performs frustum culling on objects.</li>
+<li>Updates <a class="el" href="structvex_1_1Light.html" title="Light struct for shader.">Light</a> UBOs for visible objects.</li>
+<li>Sorts objects into Opaque, Masked, and Transparent queues.</li>
+<li>Executes draw calls (using MultiDraw for transparency if supported).</li>
+<li>Renders UI components on top. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>glm::mat4&amp; view - View matrix. </td></tr>
-    <tr><td class="paramname">const</td><td>glm::mat4&amp; proj - Projection matrix. </td></tr>
-    <tr><td class="paramname">glm::uvec2</td><td>renderResolution - Render resolution. </td></tr>
-    <tr><td class="paramname">entt::registry&amp;</td><td>registry - Entity registry. </td></tr>
-    <tr><td class="paramname">ImGUIWrapper&amp;</td><td>ui - ImGUI wrapper. </td></tr>
-    <tr><td class="paramname">uint64_t</td><td>frame - Frame number. </td></tr>
+    <tr><td class="paramname">SceneRenderData&amp;</td><td>data - Frame context data. </td></tr>
+    <tr><td class="paramname">const</td><td>entt::entity cameraEntity - The active camera entity. </td></tr>
+    <tr><td class="paramname">entt::registry&amp;</td><td>registry - ECS registry to query objects. </td></tr>
+    <tr><td class="paramname">int</td><td>frame - Current frame number (used for animations/logic). </td></tr>
+    <tr><td class="paramname">const</td><td>std::vector&lt;DebugVertex&gt;* debugLines - Optional debug lines to draw. </td></tr>
+    <tr><td class="paramname">bool</td><td>isEditorMode - If true, applies editor-specific logic (e.g. gizmos, override camera). </td></tr>
   </table>
   </dd>
 </dl>
+</li>
+</ol>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00041">41</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00224">224</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -381,7 +573,42 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>It is used internally to transition low resolution image to window resolution. </p>
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00604">604</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00854">854</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a432226c86a8d89f2131c7f17d768933d" name="a432226c86a8d89f2131c7f17d768933d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a432226c86a8d89f2131c7f17d768933d">&#9670;&#160;</a></span>updateScreenDescriptor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Renderer::updateScreenDescriptor </td>
+          <td>(</td>
+          <td class="paramtype">VkImageView</td>          <td class="paramname"><span class="paramname"><em>view</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates the screen descriptor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VkImageView</td><td>view - Image view. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8cpp_source.html#l00837">837</a> of file <a class="el" href="Renderer_8cpp_source.html">Renderer.cpp</a>.</p>
 
 </div>
 </div>
@@ -406,7 +633,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00084">84</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00175">175</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acca3e2a2d105b546e75ecc9f5e26a6b5" name="acca3e2a2d105b546e75ecc9f5e26a6b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acca3e2a2d105b546e75ecc9f5e26a6b5">&#9670;&#160;</a></span>basicDiag</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::Renderer::basicDiag = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00169">169</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -430,7 +681,151 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00080">80</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00167">167</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac0c3ed58f7b467b7755c1e84a5389173" name="ac0c3ed58f7b467b7755c1e84a5389173"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0c3ed58f7b467b7755c1e84a5389173">&#9670;&#160;</a></span>m_cachedImGuiDescriptor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet vex::Renderer::m_cachedImGuiDescriptor = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00182">182</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a319e752fd86de2e709655cf70d26d2b3" name="a319e752fd86de2e709655cf70d26d2b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a319e752fd86de2e709655cf70d26d2b3">&#9670;&#160;</a></span>m_garbageDescriptors</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;VkDescriptorSet&gt; &gt; vex::Renderer::m_garbageDescriptors</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00183">183</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6f7c0c2d6c8db03e1fd86ce7b8a6e1e2" name="a6f7c0c2d6c8db03e1fd86ce7b8a6e1e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f7c0c2d6c8db03e1fd86ce7b8a6e1e2">&#9670;&#160;</a></span>m_indirectAllocations</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VmaAllocation&gt; vex::Renderer::m_indirectAllocations</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00190">190</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8ba5af45f2a60bc51cf4c19f2077c4da" name="a8ba5af45f2a60bc51cf4c19f2077c4da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ba5af45f2a60bc51cf4c19f2077c4da">&#9670;&#160;</a></span>m_indirectBuffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;VkBuffer&gt; vex::Renderer::m_indirectBuffers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00189">189</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aeb27b497071ff27a811ee0edff084f74" name="aeb27b497071ff27a811ee0edff084f74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb27b497071ff27a811ee0edff084f74">&#9670;&#160;</a></span>m_lastUsedView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkImageView vex::Renderer::m_lastUsedView = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00181">181</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ade8fd8a9ea81af9f1d1cc49400f73a81" name="ade8fd8a9ea81af9f1d1cc49400f73a81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade8fd8a9ea81af9f1d1cc49400f73a81">&#9670;&#160;</a></span>m_localPool</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorPool vex::Renderer::m_localPool = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00184">184</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -454,7 +849,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00083">83</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00174">174</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abee604d26eb58efb445f09dd143c8b9c" name="abee604d26eb58efb445f09dd143c8b9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abee604d26eb58efb445f09dd143c8b9c">&#9670;&#160;</a></span>m_p_fullscreenPipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a>&gt;&amp; vex::Renderer::m_p_fullscreenPipeline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00162">162</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5610a386f5bced4ecb55df1a1b2b044a" name="a5610a386f5bced4ecb55df1a1b2b044a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5610a386f5bced4ecb55df1a1b2b044a">&#9670;&#160;</a></span>m_p_maskPipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classvex_1_1VulkanPipeline.html">VulkanPipeline</a>&gt;&amp; vex::Renderer::m_p_maskPipeline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00160">160</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -478,7 +921,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00078">78</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00164">164</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -502,7 +945,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00074">74</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00158">158</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -526,7 +969,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00073">73</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00157">157</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -550,7 +993,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00077">77</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00163">163</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -574,7 +1017,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00075">75</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00159">159</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -598,7 +1041,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00076">76</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00161">161</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -622,7 +1065,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00072">72</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00156">156</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -646,7 +1089,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00087">87</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00177">177</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a69aab738af3892adf2595a94d0a75911" name="a69aab738af3892adf2595a94d0a75911"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69aab738af3892adf2595a94d0a75911">&#9670;&#160;</a></span>m_screenDescriptorSet</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkDescriptorSet vex::Renderer::m_screenDescriptorSet = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00179">179</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0551e2161ef665a33e01306b23db7cf5" name="a0551e2161ef665a33e01306b23db7cf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0551e2161ef665a33e01306b23db7cf5">&#9670;&#160;</a></span>m_screenSampler</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">VkSampler vex::Renderer::m_screenSampler = VK_NULL_HANDLE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00180">180</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -670,7 +1161,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00081">81</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00171">171</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -694,7 +1185,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00082">82</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00173">173</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8aa1291e30d97c54fe104037649f8974" name="a8aa1291e30d97c54fe104037649f8974"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aa1291e30d97c54fe104037649f8974">&#9670;&#160;</a></span>maskedQueue</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structvex_1_1RenderItem.html">RenderItem</a>&gt; vex::Renderer::maskedQueue</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00187">187</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af99f34584c4ca44bd3b151d95cb4715f" name="af99f34584c4ca44bd3b151d95cb4715f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af99f34584c4ca44bd3b151d95cb4715f">&#9670;&#160;</a></span>opaqueQueue</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structvex_1_1RenderItem.html">RenderItem</a>&gt; vex::Renderer::opaqueQueue</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00186">186</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>
@@ -718,7 +1257,31 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00079">79</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00166">166</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a18bafbc2e2c5e276ba096547be4d7a84" name="a18bafbc2e2c5e276ba096547be4d7a84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18bafbc2e2c5e276ba096547be4d7a84">&#9670;&#160;</a></span>trnasMatrixes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;uint32_t, glm::mat4&gt; vex::Renderer::trnasMatrixes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Renderer_8hpp_source.html#l00172">172</a> of file <a class="el" href="Renderer_8hpp_source.html">Renderer.hpp</a>.</p>
 
 </div>
 </div>

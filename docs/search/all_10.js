@@ -1,22 +1,4 @@
 var searchData=
 [
-  ['raycast_0',['raycast',['../classvex_1_1PhysicsSystem.html#a59d757e1969612b26616c3664e8ac2dd',1,'vex::PhysicsSystem']]],
-  ['raycasthit_1',['RaycastHit',['../structvex_1_1RaycastHit.html',1,'vex']]],
-  ['recreatebodyforentity_2',['RecreateBodyForEntity',['../classvex_1_1PhysicsSystem.html#ad8cf78240326360124c832b53a5be7e7',1,'vex::PhysicsSystem']]],
-  ['recreateswapchain_3',['recreateSwapchain',['../classvex_1_1VulkanSwapchainManager.html#abf0fd1348a8dedd914065a6511097245',1,'vex::VulkanSwapchainManager']]],
-  ['register_5fcomponent_4',['REGISTER_COMPONENT',['../ComponentFactory_8hpp.html#a3c2eb139ecc6bb3b7733d2d2ecc67685',1,'ComponentFactory.hpp']]],
-  ['register_5fgame_5fobject_5',['REGISTER_GAME_OBJECT',['../GameObjectFactory_8hpp.html#a2e373409fc28437e3f9cd5f1f6423c88',1,'GameObjectFactory.hpp']]],
-  ['removeinstance_6',['removeInstance',['../classvex_1_1VulkanMesh.html#a85c4ec5bb63eb855353ac38eb6e0df1a',1,'vex::VulkanMesh']]],
-  ['render_7',['render',['../classvex_1_1VexUI.html#ae2ed2215b0e78bec7e54f83a493ca5ca',1,'vex::VexUI::render()'],['../classvex_1_1Engine.html#a651671153ff5f6edc58e2d76700c6c77',1,'vex::Engine::render()']]],
-  ['renderer_8',['Renderer',['../classvex_1_1Renderer.html',1,'vex::Renderer'],['../classvex_1_1Renderer.html#a225f6e597ca87b995704de2571e990b7',1,'vex::Renderer::Renderer()']]],
-  ['renderer_2ehpp_9',['Renderer.hpp',['../Renderer_8hpp.html',1,'']]],
-  ['renderframe_10',['renderFrame',['../classvex_1_1Renderer.html#af4ebb30cc25b1d7defa38a1bc669d40a',1,'vex::Renderer']]],
-  ['res_5f240p_11',['RES_240P',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaeabc3f998c9b1f13a5bb3c52a41e6fc3',1,'vex']]],
-  ['res_5f480p_12',['RES_480P',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6',1,'vex']]],
-  ['resolutionmanager_13',['ResolutionManager',['../classvex_1_1ResolutionManager.html',1,'vex::ResolutionManager'],['../classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382',1,'vex::ResolutionManager::ResolutionManager()']]],
-  ['resolutionmanager_2ehpp_14',['ResolutionManager.hpp',['../ResolutionManager_8hpp.html',1,'']]],
-  ['resolutionmode_15',['ResolutionMode',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7e',1,'vex']]],
-  ['resolve_5frelative_5fpath_16',['resolve_relative_path',['../classvex_1_1VirtualFileSystem.html#a6cabffa3f598dde4e3d26340a5b3d0f9',1,'vex::VirtualFileSystem']]],
-  ['resources_2ehpp_17',['Resources.hpp',['../Resources_8hpp.html',1,'']]],
-  ['run_18',['run',['../classvex_1_1Engine.html#a31e8a27cef3dc33821c15f7cbb49f107',1,'vex::Engine']]]
+  ['quit_0',['quit',['../classvex_1_1Engine.html#a2c473d0fcb2ab0090c202b0ec690e549',1,'vex::Engine']]]
 ];

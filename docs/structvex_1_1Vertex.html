@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -110,13 +111,13 @@ $(function(){initNavTree('structvex_1_1Vertex.html','','structvex_1_1Vertex-memb
 Public Attributes</h2></td></tr>
 <tr class="memitem:a18ef2e970ac8c1e7005b6481d8e0f072" id="r_a18ef2e970ac8c1e7005b6481d8e0f072"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18ef2e970ac8c1e7005b6481d8e0f072">position</a></td></tr>
 <tr class="memitem:a0d77f5b7f99b292075f965adc7dd334d" id="r_a0d77f5b7f99b292075f965adc7dd334d"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d77f5b7f99b292075f965adc7dd334d">normal</a></td></tr>
-<tr class="memitem:a1db72ea81494f63be7b4195717a38c5d" id="r_a1db72ea81494f63be7b4195717a38c5d"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1db72ea81494f63be7b4195717a38c5d">uv</a> = glm::vec2(-1.0f)</td></tr>
-<tr class="memdesc:a1db72ea81494f63be7b4195717a38c5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">UV coordinates for texture mapping but initialized to (-1, -1) for shader use. If loaded model doesnt update it engine knows it is not textured.  <br /></td></tr>
+<tr class="memitem:a1db72ea81494f63be7b4195717a38c5d" id="r_a1db72ea81494f63be7b4195717a38c5d"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1db72ea81494f63be7b4195717a38c5d">uv</a> = glm::vec2(-100000.0f)</td></tr>
+<tr class="memdesc:a1db72ea81494f63be7b4195717a38c5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">UV coordinates for texture mapping but initialized to (-100000, -100000) for shader use. If loaded model doesnt update it engine knows it is not textured.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="structvex_1_1Vertex.html" title="Vertex structure for mesh data.">Vertex</a> structure for mesh data. </p>
 
-<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00022">22</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00024">24</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
 </div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a0d77f5b7f99b292075f965adc7dd334d" name="a0d77f5b7f99b292075f965adc7dd334d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d77f5b7f99b292075f965adc7dd334d">&#9670;&#160;</a></span>normal</h2>
@@ -130,7 +131,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00024">24</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00026">26</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -146,7 +147,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00023">23</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00025">25</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -157,14 +158,14 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec2 vex::Vertex::uv = glm::vec2(-1.0f)</td>
+          <td class="memname">glm::vec2 vex::Vertex::uv = glm::vec2(-100000.0f)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>UV coordinates for texture mapping but initialized to (-1, -1) for shader use. If loaded model doesnt update it engine knows it is not textured. </p>
+<p>UV coordinates for texture mapping but initialized to (-100000, -100000) for shader use. If loaded model doesnt update it engine knows it is not textured. </p>
 
-<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00026">26</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00028">28</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
 
 </div>
 </div>

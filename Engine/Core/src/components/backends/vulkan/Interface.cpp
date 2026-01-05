@@ -16,6 +16,8 @@ namespace vex {
 
         m_context.currentRenderResolution = initialResolution;
 
+        try {
+
         log("Loading Vulkan library...");
         if (!SDL_Vulkan_LoadLibrary(nullptr)) {
             throw_error(SDL_GetError());
@@ -137,45 +139,126 @@ namespace vex {
         std::vector<const char*> deviceExtensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
             VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
-            VK_EXT_MULTI_DRAW_EXTENSION_NAME,
             VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME
 #ifdef __APPLE__
             , VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
 #endif
         };
 
-        VkPhysicalDeviceFeatures deviceFeatures = {};
-        deviceFeatures.samplerAnisotropy = VK_TRUE;
+        VkPhysicalDeviceFeatures2 deviceFeatures2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 };
+        VkPhysicalDeviceVulkan11Features features11 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES };
+        VkPhysicalDeviceVulkan12Features features12 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES };
+        VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES };
+        VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT };
+        VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT };
 
-        VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features{};
-        extendedDynamicState2Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
-        extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
-        extendedDynamicState2Features.extendedDynamicState2LogicOp = VK_TRUE;
-        extendedDynamicState2Features.extendedDynamicState2PatchControlPoints = VK_TRUE;
-
-        VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeature{};
-        dynamicRenderingFeature.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES;
-        dynamicRenderingFeature.dynamicRendering = VK_TRUE;
-
-        VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures{};
-        multiDrawFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT;
-        multiDrawFeatures.multiDraw = VK_TRUE;
-
+        deviceFeatures2.pNext = &features11;
+        features11.pNext = &features12;
+        features12.pNext = &dynamicRenderingFeatures;
+        dynamicRenderingFeatures.pNext = &multiDrawFeatures;
         multiDrawFeatures.pNext = &extendedDynamicState2Features;
-        dynamicRenderingFeature.pNext = &multiDrawFeatures;
+        extendedDynamicState2Features.pNext = nullptr;
 
-        VkDeviceCreateInfo deviceCreateInfo{};
-        deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        deviceCreateInfo.pNext = &dynamicRenderingFeature;
+        vkGetPhysicalDeviceFeatures2(m_context.physicalDevice, &deviceFeatures2);
+
+        if (deviceFeatures2.features.samplerAnisotropy) {
+            deviceFeatures2.features.samplerAnisotropy = VK_TRUE;
+        } else {
+            log(LogLevel::WARNING, "Sampler Anisotropy not supported.");
+        }
+
+        if (deviceFeatures2.features.multiDrawIndirect) {
+            m_context.supportsIndirectDraw = true;
+            VkPhysicalDeviceProperties properties;
+            vkGetPhysicalDeviceProperties(m_context.physicalDevice, &properties);
+            m_context.maxDrawIndirectCount = properties.limits.maxDrawIndirectCount;
+        } else {
+            m_context.supportsIndirectDraw = false;
+            deviceFeatures2.features.multiDrawIndirect = VK_FALSE;
+        }
+
+        if (features11.shaderDrawParameters) {
+            features11.shaderDrawParameters = VK_TRUE;
+            m_context.supportsShaderDrawParameters = true;
+        } else {
+            features11.shaderDrawParameters = VK_FALSE;
+            m_context.supportsShaderDrawParameters = false;
+        }
+
+        if (features12.descriptorBindingPartiallyBound &&
+            features12.runtimeDescriptorArray &&
+            features12.shaderSampledImageArrayNonUniformIndexing &&
+            features12.descriptorBindingSampledImageUpdateAfterBind) {
+
+            m_context.supportsBindlessTextures = true;
+
+            features12.descriptorBindingPartiallyBound = VK_TRUE;
+            features12.runtimeDescriptorArray = VK_TRUE;
+            features12.shaderSampledImageArrayNonUniformIndexing = VK_TRUE;
+            features12.descriptorBindingSampledImageUpdateAfterBind = VK_TRUE;
+        } else {
+            m_context.supportsBindlessTextures = false;
+
+            features12.descriptorBindingPartiallyBound = VK_FALSE;
+            features12.runtimeDescriptorArray = VK_FALSE;
+            features12.shaderSampledImageArrayNonUniformIndexing = VK_FALSE;
+            log(LogLevel::WARNING, "Bindless textures not supported.");
+        }
+
+        if (dynamicRenderingFeatures.dynamicRendering) {
+            dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
+        } else {
+            throw_error("Dynamic Rendering not supported by GPU!");
+        }
+
+        if (multiDrawFeatures.multiDraw) {
+            m_context.supportsMultiDraw = true;
+            multiDrawFeatures.multiDraw = VK_TRUE;
+            deviceExtensions.push_back(VK_EXT_MULTI_DRAW_EXTENSION_NAME);
+
+            VkPhysicalDeviceMultiDrawPropertiesEXT multiDrawProps{};
+            multiDrawProps.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_PROPERTIES_EXT;
+
+            VkPhysicalDeviceProperties2 props2{};
+            props2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+            props2.pNext = &multiDrawProps;
+
+            vkGetPhysicalDeviceProperties2(m_context.physicalDevice, &props2);
+            m_context.maxMultiDrawCount = multiDrawProps.maxMultiDrawCount;
+        } else {
+            m_context.supportsMultiDraw = false;
+            multiDrawFeatures.multiDraw = VK_FALSE;
+        }
+
+        if (extendedDynamicState2Features.extendedDynamicState2) {
+            extendedDynamicState2Features.extendedDynamicState2 = VK_TRUE;
+        } else {
+            extendedDynamicState2Features.extendedDynamicState2 = VK_FALSE;
+        }
+        extendedDynamicState2Features.extendedDynamicState2LogicOp =
+            extendedDynamicState2Features.extendedDynamicState2LogicOp ? VK_TRUE : VK_FALSE;
+        extendedDynamicState2Features.extendedDynamicState2PatchControlPoints =
+            extendedDynamicState2Features.extendedDynamicState2PatchControlPoints ? VK_TRUE : VK_FALSE;
+
+        VkDeviceCreateInfo deviceCreateInfo = { VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO };
+        deviceCreateInfo.pNext = &deviceFeatures2;
+        deviceCreateInfo.pEnabledFeatures = nullptr;
+
         deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
         deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
-        deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
         deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
         deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
         if (vkCreateDevice(m_context.physicalDevice, &deviceCreateInfo, nullptr, &m_context.device) != VK_SUCCESS) {
             throw_error("Failed to create logical device");
         }
+
+        log(" ======= Supported Features =======");
+        log("supportsMultiDraw: %s", m_context.supportsMultiDraw ? "true" : "false");
+        log("supportsIndirectDraw: %s", m_context.supportsIndirectDraw ? "true" : "false");
+        log("supportsBindlessTextures: %s", m_context.supportsBindlessTextures ? "true" : "false");
+        log("supportsShaderDrawParameters: %s", m_context.supportsShaderDrawParameters ? "true" : "false");
+        log(" ==================================");
 
         volkLoadDevice(m_context.device);
 
@@ -219,7 +302,7 @@ namespace vex {
         m_p_swapchainManager->createSwapchain();
 
         log("Initializing Resources...");
-        m_p_resources = std::make_unique<VulkanResources>(m_context);
+        m_p_resources = std::make_unique<VulkanResources>(m_context, m_vfs);
 
         log("Initializing Mesh Manager...");
         m_p_meshManager = std::make_unique<MeshManager>(m_context, m_p_resources, m_vfs);
@@ -237,9 +320,27 @@ namespace vex {
         attributes[1] = {1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)};
         attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)};
 
+        std::string opaqueFrag = m_context.supportsBindlessTextures
+                                 ? "Engine/shaders/OpaqueFragBindless.spv"
+                                 : "Engine/shaders/OpaqueFrag.spv";
+
         m_p_pipeline->createGraphicsPipeline(
             "Engine/shaders/OpaqueVert.spv",
-            "Engine/shaders/OpaqueFrag.spv",
+            opaqueFrag,
+            bindingDesc,
+            attributes
+        );
+
+        log("Initializing Masked Pipeline...");
+        m_p_maskPipeline = std::make_unique<VulkanPipeline>(m_context);
+
+        std::string maskedFrag = m_context.supportsBindlessTextures
+                                 ? "Engine/shaders/MaskedFragBindless.spv"
+                                 : "Engine/shaders/MaskedFrag.spv";
+
+        m_p_maskPipeline->createMaskedPipeline(
+            "Engine/shaders/MaskedVert.spv",
+            maskedFrag,
             bindingDesc,
             attributes
         );
@@ -247,9 +348,13 @@ namespace vex {
         log("Initializing Transparent Pipeline...");
         m_p_transPipeline = std::make_unique<VulkanPipeline>(m_context);
 
+        std::string transFrag = m_context.supportsBindlessTextures
+                                ? "Engine/shaders/TransparentFragBindless.spv"
+                                : "Engine/shaders/TransparentFrag.spv";
+
         m_p_transPipeline->createTransparentPipeline(
             "Engine/shaders/TransparentVert.spv",
-            "Engine/shaders/TransparentFrag.spv",
+            transFrag,
             bindingDesc,
             attributes
         );
@@ -275,10 +380,47 @@ namespace vex {
             uiAttrs
         );
 
+        log("Initializing Fullscreen Pipeline...");
+        m_p_fullscreenPipeline = std::make_unique<VulkanPipeline>(m_context);
+
+        VkVertexInputBindingDescription emptyBinding{};
+        std::vector<VkVertexInputAttributeDescription> emptyAttrs;
+
+        m_p_fullscreenPipeline->createFullscreenPipeline(
+            "Engine/shaders/ScreenVert.spv",
+            "Engine/shaders/ScreenFrag.spv"
+        );
+
+        #if DEBUG
+            log("Initializing Physics Debug...");
+            m_p_physicsDebug = std::make_unique<VulkanPhysicsDebug>();
+
+            m_p_debugPipeline = std::make_unique<VulkanPipeline>(m_context);
+            m_p_debugPipeline->createDebugPipeline("Engine/shaders/DebugVert.spv", "Engine/shaders/DebugFrag.spv");
+        #endif
+
         log("Initializing Renderer...");
-        m_p_renderer = std::make_unique<Renderer>(m_context, m_p_resources, m_p_pipeline, m_p_transPipeline, m_p_uiPipeline, m_p_swapchainManager, m_p_meshManager);
+        m_p_renderer = std::make_unique<Renderer>(
+            m_context,
+            m_p_resources,
+            m_p_pipeline,
+            m_p_transPipeline,
+            m_p_maskPipeline,
+            m_p_uiPipeline,
+            m_p_fullscreenPipeline,
+            m_p_swapchainManager,
+            m_p_meshManager
+        );
+
+        #if DEBUG
+            m_p_renderer->setDebugPipeline(&m_p_debugPipeline);
+        #endif
 
         log("Vulkan interface initialized successfully");
+
+        } catch (const std::exception& e) {
+            handle_critical_exception(e);
+        }
     }
 
     Interface::~Interface() {
@@ -289,7 +431,13 @@ namespace vex {
         m_p_resources.reset();
         m_p_pipeline.reset();
         m_p_transPipeline.reset();
+        m_p_maskPipeline.reset();
         m_p_uiPipeline.reset();
+        m_p_fullscreenPipeline.reset();
+        #if DEBUG
+        m_p_debugPipeline.reset();
+        m_p_physicsDebug.reset();
+        #endif
         m_p_swapchainManager->cleanupSwapchain();
         m_p_swapchainManager.reset();
 
@@ -301,31 +449,6 @@ namespace vex {
             vkDestroyDescriptorSetLayout(m_context.device, m_context.uboDescriptorSetLayout, nullptr);
             m_context.uboDescriptorSetLayout = VK_NULL_HANDLE;
         }
-
-        for (size_t i = 0; i < m_context.MAX_FRAMES_IN_FLIGHT; i++) {
-            if (m_context.imageAvailableSemaphores[i]) {
-                vkDestroySemaphore(m_context.device, m_context.imageAvailableSemaphores[i], nullptr);
-                m_context.imageAvailableSemaphores[i] = VK_NULL_HANDLE;
-            }
-            if (m_context.renderFinishedSemaphores[i]) {
-                vkDestroySemaphore(m_context.device, m_context.renderFinishedSemaphores[i], nullptr);
-                m_context.renderFinishedSemaphores[i] = VK_NULL_HANDLE;
-            }
-            if (m_context.inFlightFences[i]) {
-                vkDestroyFence(m_context.device, m_context.inFlightFences[i], nullptr);
-                m_context.inFlightFences[i] = VK_NULL_HANDLE;
-            }
-        }
-
-        m_context.commandBuffers.clear();
-        m_context.commandPools.clear();
-
-        for (auto& imageView : m_context.swapchainImageViews) {
-            if (imageView) {
-                vkDestroyImageView(m_context.device, imageView, nullptr);
-            }
-        }
-        m_context.swapchainImageViews.clear();
 
         if (m_context.allocator) {
             vmaDestroyAllocator(m_context.allocator);
@@ -354,6 +477,17 @@ namespace vex {
         m_p_resources->createDefaultTexture();
     }
 
+    void Interface::WaitForGPUToFinish() {
+        vkDeviceWaitIdle(m_context.device);
+    }
+
+    void Interface::setVSync(bool enabled) {
+        m_p_swapchainManager->setVSync(enabled);
+        vkDeviceWaitIdle(m_context.device);
+        m_context.requestSwapchainRecreation = true;
+        //m_p_swapchainManager->recreateSwapchain();
+    }
+
     void Interface::bindWindow(SDL_Window *m_p_window) {
         log("Binding window...");
         if (m_context.surface) return;
@@ -376,11 +510,5 @@ namespace vex {
 
         vkDestroySurfaceKHR(m_context.instance, m_context.surface, nullptr);
         m_context.surface = VK_NULL_HANDLE;
-    }
-
-    void Interface::setRenderResolution(glm::uvec2 resolution) {
-        m_context.currentRenderResolution = resolution;
-        m_p_swapchainManager->recreateSwapchain();
-        m_p_pipeline->updateViewport(resolution);
     }
 }

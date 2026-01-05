@@ -1,5 +1,8 @@
 var pathUtils_8hpp =
 [
-    [ "GetAssetPath", "pathUtils_8hpp.html#aab0b916c80e8bc113d5a3184f132a061", null ],
-    [ "GetExecutableDir", "pathUtils_8hpp.html#af5639fbb3bb2fe5ff20d1971df72206b", null ]
+    [ "vex::GetAssetDir", "pathUtils_8hpp.html#a0f7f70a0c306a3e9c987e4e32bc5fa8f", null ],
+    [ "vex::GetAssetPath", "pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2", null ],
+    [ "vex::GetExecutableDir", "pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2", null ],
+    [ "vex::GetLogDir", "pathUtils_8hpp.html#a82f8ac87aba16056ea7e7313c795f25f", null ],
+    [ "vex::SetAssetRoot", "pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99", null ]
 ];

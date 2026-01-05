@@ -50,7 +50,7 @@ VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
       (clipPos.xy / clipPos.w * 0.5 + 0.5) * scene.renderResolution;
   screenPos = applyJitter(screenPos, isEnabled(VERTEX_JITTER));
 
-  clipPos.xy = (screenPos / scene.windowResolution * 2.0 - 1.0) * clipPos.w;
+  clipPos.xy = (screenPos / scene.renderResolution * 2.0 - 1.0) * clipPos.w;
 
   output.position = clipPos;
 
@@ -91,9 +91,13 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
                             isEnabled(AFFINE_WARPING));
   float2 pixelCoord = fragCoord.xy;
 
-  float4 texColor = texSampler.Sample(uv);
+  float4 texColor = SampleMaterialTexture(uv, push.textureID);
   float4 pushColor = push.color;
   bool isUntextured = HasInValidUV(uv); // false;//(uv.x < 0.0 || uv.y < 0.0);
+
+  if (!isUntextured) {
+    texColor = texColor * pushColor;
+  }
 
   if (isUntextured) {
     if (pushColor.a < 0.05)
@@ -103,7 +107,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
       discard;
   }
 
-  if (isEnabled(COLOR_QUANTIZATION)) {
+  if (isEnabled(TEXTURE_QUANTIZATION)) {
     float4 c = isUntextured ? pushColor : texColor;
     c = applyQuantization(c, pixelCoord, true);
     if (isUntextured)
@@ -112,8 +116,8 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
       texColor = c;
   }
 
-  texColor.rgb =
-      applyNTSC(texColor.rgb, uv, pixelCoord, isEnabled(NTSC_ARTIFACTS));
+  texColor.rgb = applyNTSC(texColor.rgb, uv, pixelCoord,
+                           isEnabled(NTSC_ARTIFACTS), push.textureID);
 
   float diff = isEnabled(GOURAUD_SHADING)
                    ? input.fragDiff
@@ -127,6 +131,39 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float3 lighting = ambient + sunLight + input.fragLights;
   lighting = saturate(lighting);
 
-  return isUntextured ? (pushColor * float4(lighting, 1.0))
-                      : (texColor * float4(lighting, 1.0));
+  float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
+                                   : (texColor * float4(lighting, 1.0));
+
+
+  float fogIntensity = scene.fogColorAndIntensity.w;
+
+  if (fogIntensity > 0.0) {
+    float distance = abs(input.fragDepth);
+    float fogStart = scene.fogDistances.x;
+    float fogEnd = scene.fogDistances.y;
+    float3 fogColor = scene.fogColorAndIntensity.rgb;
+
+    float fogFactor = (fogEnd - distance) / (fogEnd - fogStart);
+
+    fogFactor = saturate(fogFactor);
+
+    fogFactor = lerp(1.0, fogFactor, fogIntensity);
+
+    finalColor.rgb = lerp(fogColor, finalColor.rgb, fogFactor);
+  }
+  // finalColor.a = 1.0;
+
+  if (isEnabled(COLOR_QUANTIZATION)) {
+    float4 c = finalColor;
+    c = applyQuantization(c, pixelCoord, true);
+    finalColor = c;
+  }
+
+  if (isEnabled(SCREEN_DITHER)) {
+    float3 c = finalColor.rgb;
+    c = applyDither(c, pixelCoord);
+    finalColor.rgb = c;
+  }
+
+  return finalColor;
 }

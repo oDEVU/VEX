@@ -1,11 +1,17 @@
 #include "VulkanMesh.hpp"
 #include "components/Mesh.hpp"
+#include "components/pathUtils.hpp"
 #include "glm/common.hpp"
 #include "glm/fwd.hpp"
 
 #include <SDL3/SDL.h>
 
 // debug
+#ifdef _WIN32
+// pass
+#else
+#include <X11/X.h>
+#endif
 #include <cstdint>
 #include <cstring>
 #include <iostream>
@@ -88,6 +94,7 @@ namespace vex {
         const glm::vec3& cameraPos,
         uint32_t modelIndex,
         uint32_t frameIndex,
+        entt::entity entity,
         std::vector<TransparentTriangle>& outTriangles
     ) {
         glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
@@ -110,7 +117,8 @@ namespace vex {
                     frameIndex,
                     i,
                     submeshIndex,
-                    this
+                    this,
+                    entity
                 });
             }
         }
@@ -125,7 +133,8 @@ namespace vex {
         uint32_t submeshIndex,
         glm::mat4 modelMatrix,
         bool modelChanged,
-        bool submeshChanged
+        bool submeshChanged,
+        const MeshComponent& mc
     ) const {
         const auto& buffers = m_submeshBuffers[submeshIndex];
         const auto& textureName = m_submeshTextures[submeshIndex];
@@ -147,36 +156,37 @@ namespace vex {
             );
         }
 
-        if(submeshChanged || modelChanged){
-            uint32_t textureIndex = resources.getTextureIndex(textureName);
-
-            if (textureIndex >= MAX_TEXTURES) {
-                SDL_LogError(SDL_LOG_CATEGORY_RENDER,
-                           "Invalid texture index %u for '%s' (Max: %u)",
-                           textureIndex, textureName.c_str(), MAX_TEXTURES);
-                textureIndex = 0;
-            }
-
-            VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
-            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                      pipelineLayout, 1, 1, &texSet,
-                                      0, nullptr);
+        uint32_t textureIndex = resources.getTextureIndex(textureName);
+        if (textureIndex >= MAX_TEXTURES) {
+            textureIndex = 0;
         }
 
-        if(modelChanged){
-            PushConstants modelPush{};
-            const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
+        if (m_r_context.supportsBindlessTextures) {
 
-            if (textureExists) {
-                modelPush.color = glm::vec4(1.0f);
-            } else {
-                modelPush.color = glm::vec4(1.0f);
-                if(!textureName.empty()) {
-                    log("Missing texture: %s", textureName.c_str());
-                }
+        }
+        else {
+            if(submeshChanged || modelChanged){
+                VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                        pipelineLayout, 1, 1, &texSet,
+                                        0, nullptr);
             }
+        }
 
+        bool needPush = modelChanged;
+        if (m_r_context.supportsBindlessTextures && submeshChanged) {
+            needPush = true;
+        }
+
+        if(needPush){
+            PushConstants modelPush{};
             modelPush.model = modelMatrix;
+            modelPush.color = mc.color;
+            modelPush.textureID = textureIndex;
+
+            if (!resources.textureExists(textureName) && !textureName.empty()) {
+                log(LogLevel::WARNING, "Missing texture...");
+            }
 
             vkCmdPushConstants(
                 cmd,
@@ -195,7 +205,7 @@ namespace vex {
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, glm::vec4 color) const {
+            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, const MeshComponent& mc) const {
 
         std::string currentTexture = "";
 
@@ -216,8 +226,20 @@ namespace vex {
 
         for (size_t i = 0; i < m_submeshBuffers.size(); i++) {
             const auto& buffers = m_submeshBuffers[i];
-            std::string textureName = m_submeshTextures[i];
-            uint32_t textureIndex = resources.getTextureIndex(textureName);
+            std::string textureName = "";
+            uint32_t textureIndex = 0;
+            if(mc.textureOverrides.contains(i)){
+                textureName = GetAssetPath(mc.textureOverrides.at(1));
+                textureIndex = resources.getTextureIndex(textureName);
+
+                if(textureIndex == 0){
+                    textureIndex = resources.getTextureIndex(m_submeshTextures[i]);
+                }
+            }else{
+                textureName = m_submeshTextures[i];
+                textureIndex = resources.getTextureIndex(m_submeshTextures[i]);
+            }
+
             //log("Invalid texture index %u for '%s'", textureIndex, textureName.c_str());
 
             if (textureIndex >= MAX_TEXTURES) {
@@ -229,48 +251,42 @@ namespace vex {
 
             const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
 
-            //log("Texture exists: %s, textureName: %s", textureExists ? "true" : "false", textureName.c_str());
+            //log("Texture exists: %s, textureName: %s, textureIndex: %d", textureExists ? "true" : "false", textureName.c_str(), textureIndex);
 
             if (!textureExists) {
                 textureName = "default";
             }
 
-            if (currentTexture != textureName) {
-                VkImageView textureView = resources.getTextureView(textureName);
-                VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
-                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                          pipelineLayout, 1, 1, &texSet,
-                                          0, nullptr);
-                currentTexture = textureName;
-            }
-
             PushConstants modelPush{};
-            if (textureExists) {
-                if (currentTexture != textureName) {
-                    VkImageView textureView = resources.getTextureView(textureName);
-                    if(textureView != VK_NULL_HANDLE) {
-                        resources.updateTextureDescriptor(frameIndex, textureView, i);
-                        currentTexture = textureName;
+
+            if (m_r_context.supportsBindlessTextures) {
+                    PushConstants modelPush{};
+                    modelPush.color = mc.color;
+                    modelPush.model = modelMatrix;
+                    modelPush.textureID = textureIndex;
+
+                    vkCmdPushConstants(
+                        cmd,
+                        pipelineLayout,
+                        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                        0,
+                        sizeof(PushConstants),
+                        &modelPush
+                    );
+                }
+                else {
+                    if (currentTexture != textureName) {
+                         VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
+                         vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &texSet, 0, nullptr);
+                         currentTexture = textureName;
                     }
-                }
-                modelPush.color = glm::vec4(1.0f);
-            } else {
-                modelPush.color = color;
-                if(!textureName.empty() && textureName != "default") {
-                    log("Missing texture: %s", textureName.c_str());
-                }
-            }
 
-            modelPush.model = modelMatrix;
+                    PushConstants modelPush{};
+                    modelPush.color = mc.color;
+                    modelPush.model = modelMatrix;
 
-            vkCmdPushConstants(
-                cmd,
-                pipelineLayout,
-                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                0,
-                sizeof(PushConstants),
-                &modelPush
-            );
+                    vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &modelPush);
+                }
 
             VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
             VkDeviceSize offsets[] = {0};

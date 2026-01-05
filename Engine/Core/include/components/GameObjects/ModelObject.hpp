@@ -15,17 +15,14 @@ namespace vex {
     class ModelObject : public GameObject {
         public:
         /// @brief Constructor for ModelObject class. As said earlier, ModelObject can only be created by Model Creators methods. So if you are reading this you are doing something wrong.
-            ModelObject(Engine& engine, const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent)
+            ModelObject(Engine& engine, const std::string& name, MeshComponent meshComponent = MeshComponent{}, TransformComponent transformComponent = TransformComponent{})
                 : GameObject(engine, name) {
                 AddComponent(TransformComponent{transformComponent});
                 AddComponent(MeshComponent{meshComponent});
             }
-/// @brief Destructor for ModelObject class. Cleans up the mesh data and logs a message.
+            /// @brief Destructor for ModelObject class.
             ~ModelObject() override {
-                cleanup(GetComponent<NameComponent>().name,GetComponent<MeshComponent>());
-                GetComponent<MeshComponent>().meshData.clear();
                 log("Model destructor called");
             }
-            std::function<void(std::string&, MeshComponent)> cleanup;
     };
 }

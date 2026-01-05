@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['uicomponent_2ehpp_0',['UiComponent.hpp',['../UiComponent_8hpp.html',1,'']]],
-  ['uivertex_2ehpp_1',['UIVertex.hpp',['../UIVertex_8hpp.html',1,'']]],
-  ['uniforms_2ehpp_2',['uniforms.hpp',['../uniforms_8hpp.html',1,'']]]
+  ['renderer_2ehpp_0',['Renderer.hpp',['../Renderer_8hpp.html',1,'']]],
+  ['resolutionmanager_2ehpp_1',['ResolutionManager.hpp',['../ResolutionManager_8hpp.html',1,'']]],
+  ['resources_2ehpp_2',['Resources.hpp',['../Resources_8hpp.html',1,'']]]
 ];

@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -122,11 +123,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa330fe4f875724411e007dab5b9a8444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor 4: Registry, Position, Rotation (Euler degrees), Scale, (optional Parent)  <br /></td></tr>
 <tr class="memitem:aabdd7a9fce7e11affdcade2ce972fdb8" id="r_aabdd7a9fce7e11affdcade2ce972fdb8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aabdd7a9fce7e11affdcade2ce972fdb8">TransformComponent</a> (entt::registry &amp;registry, entt::entity p)</td></tr>
 <tr class="memdesc:aabdd7a9fce7e11affdcade2ce972fdb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor 5: Registry, Parent only (useful for empty child objects)  <br /></td></tr>
-<tr class="memitem:ad47fe6cd20b433b4a71bc6fcbd6b9b3b" id="r_ad47fe6cd20b433b4a71bc6fcbd6b9b3b"><td class="memItemLeft" align="right" valign="top"><a id="ad47fe6cd20b433b4a71bc6fcbd6b9b3b" name="ad47fe6cd20b433b4a71bc6fcbd6b9b3b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TransformComponent</b> ()=delete</td></tr>
-<tr class="memdesc:ad47fe6cd20b433b4a71bc6fcbd6b9b3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor is deleted since registry is required. <br /></td></tr>
+<tr class="memitem:a2b34b417df4726815ce0cd2bbc5b440e" id="r_a2b34b417df4726815ce0cd2bbc5b440e"><td class="memItemLeft" align="right" valign="top"><a id="a2b34b417df4726815ce0cd2bbc5b440e" name="a2b34b417df4726815ce0cd2bbc5b440e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TransformComponent</b> ()=default</td></tr>
+<tr class="memdesc:a2b34b417df4726815ce0cd2bbc5b440e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor is deleted since registry is required. <br /></td></tr>
 <tr class="memitem:a3fc63dce8a4f8b53f9ea1047bc178d54" id="r_a3fc63dce8a4f8b53f9ea1047bc178d54"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fc63dce8a4f8b53f9ea1047bc178d54">transformedLately</a> ()</td></tr>
 <tr class="memdesc:a3fc63dce8a4f8b53f9ea1047bc178d54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the transform has been updated recently or if the parent has been updated recently. Used mainly in physics calculations.  <br /></td></tr>
+<tr class="memitem:ada2df75ab68cf4a63a5796a3c9b7a369" id="r_ada2df75ab68cf4a63a5796a3c9b7a369"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada2df75ab68cf4a63a5796a3c9b7a369">setRegistry</a> (entt::registry &amp;reg)</td></tr>
+<tr class="memitem:affcc916ebebca37b5630e3a3708206c3" id="r_affcc916ebebca37b5630e3a3708206c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affcc916ebebca37b5630e3a3708206c3">isReady</a> () const</td></tr>
 <tr class="memitem:ac8bd4f345f60640fc2960c9f62240ccf" id="r_ac8bd4f345f60640fc2960c9f62240ccf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8bd4f345f60640fc2960c9f62240ccf">isPhysicsAffected</a> ()</td></tr>
 <tr class="memdesc:ac8bd4f345f60640fc2960c9f62240ccf"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns if objet is affected by physics.  <br /></td></tr>
 <tr class="memitem:ac8e509a9c7040e7919caf9e9d5b720b6" id="r_ac8e509a9c7040e7919caf9e9d5b720b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8e509a9c7040e7919caf9e9d5b720b6">updatedPhysicsTransform</a> ()</td></tr>
@@ -195,13 +198,13 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a7d8eb012411857af3fd3bb51caf938a5" id="r_a7d8eb012411857af3fd3bb51caf938a5"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d8eb012411857af3fd3bb51caf938a5">scale</a> = {1.0f, 1.0f, 1.0f}</td></tr>
 <tr class="memitem:a971e04f3f946ca0a8c104a3b52fa037e" id="r_a971e04f3f946ca0a8c104a3b52fa037e"><td class="memItemLeft" align="right" valign="top">entt::entity&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a971e04f3f946ca0a8c104a3b52fa037e">parent</a> = entt::null</td></tr>
 <tr class="memitem:ad681f217ffd7c2aeb4e68c71948a9adb" id="r_ad681f217ffd7c2aeb4e68c71948a9adb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad681f217ffd7c2aeb4e68c71948a9adb">lastTransformed</a> = false</td></tr>
-<tr class="memitem:a42f6d4d4603d4016dccbeba627dc1c7f" id="r_a42f6d4d4603d4016dccbeba627dc1c7f"><td class="memItemLeft" align="right" valign="top">entt::registry &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42f6d4d4603d4016dccbeba627dc1c7f">m_registry</a></td></tr>
+<tr class="memitem:a2c50ac98a61e45fd5a765085000a9f0c" id="r_a2c50ac98a61e45fd5a765085000a9f0c"><td class="memItemLeft" align="right" valign="top">entt::registry *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c50ac98a61e45fd5a765085000a9f0c">m_registry</a> = nullptr</td></tr>
 <tr class="memitem:a57ca785fa9ad36e585de4fe233fb7a1d" id="r_a57ca785fa9ad36e585de4fe233fb7a1d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57ca785fa9ad36e585de4fe233fb7a1d">physicsAffected</a> = false</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Struct containing transform data and methods. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00026">26</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00031">31</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae70065fea511392b32fa96d64debcaf9" name="ae70065fea511392b32fa96d64debcaf9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae70065fea511392b32fa96d64debcaf9">&#9670;&#160;</a></span>TransformComponent() <span class="overload">[1/6]</span></h2>
@@ -228,7 +231,7 @@ Private Attributes</h2></td></tr>
 
 <p>Copy Constructor. Copies all data members and maintains the reference to the same registry. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00037">37</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00054">54</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -257,7 +260,7 @@ Private Attributes</h2></td></tr>
 
 <p>Constructor 1: Registry only. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00057">57</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00074">74</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -295,7 +298,7 @@ Private Attributes</h2></td></tr>
 
 <p>Constructor 2: Registry, Position, (optional Parent) </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00061">61</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00078">78</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -338,7 +341,7 @@ Private Attributes</h2></td></tr>
 
 <p>Constructor 3: Registry, Position, Rotation (Euler degrees), (optional Parent) </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00065">65</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00082">82</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -386,7 +389,7 @@ Private Attributes</h2></td></tr>
 
 <p>Constructor 4: Registry, Position, Rotation (Euler degrees), Scale, (optional Parent) </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00069">69</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00086">86</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -419,7 +422,7 @@ Private Attributes</h2></td></tr>
 
 <p>Constructor 5: Registry, Parent only (useful for empty child objects) </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00073">73</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00090">90</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -455,7 +458,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00257">257</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00300">300</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -490,7 +493,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00264">264</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00307">307</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -525,7 +528,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00273">273</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00316">316</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -560,7 +563,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00279">279</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00322">322</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -595,7 +598,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00297">297</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00340">340</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -630,7 +633,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00288">288</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00331">331</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -657,7 +660,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00104">104</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00143">143</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -684,7 +687,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00305">305</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00348">348</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -713,7 +716,7 @@ Private Attributes</h2></td></tr>
 
 <p>Get the local position. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00119">119</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00158">158</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -742,7 +745,7 @@ Private Attributes</h2></td></tr>
 
 <p>Get the local rotation (as Euler angles in degrees). </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00124">124</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00163">163</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -771,7 +774,7 @@ Private Attributes</h2></td></tr>
 
 <p>Get the local scale. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00129">129</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00168">168</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -800,7 +803,7 @@ Private Attributes</h2></td></tr>
 
 <p>Get the parent entity. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00114">114</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00153">153</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -830,7 +833,7 @@ Private Attributes</h2></td></tr>
 <p>Method to get normalized right vector. </p>
 <dl class="section return"><dt>Returns</dt><dd>glm::vec3 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00311">311</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00354">354</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -860,7 +863,7 @@ Private Attributes</h2></td></tr>
 <p>Method to get normalized up vector. </p>
 <dl class="section return"><dt>Returns</dt><dd>glm::vec3 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00317">317</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00360">360</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -890,7 +893,7 @@ Private Attributes</h2></td></tr>
 <p>Method to get world position, needed when object is parented as position parameter stores local position. </p>
 <dl class="section return"><dt>Returns</dt><dd>glm::vec3 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00187">187</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00230">230</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -919,7 +922,7 @@ Private Attributes</h2></td></tr>
 
 <p>Method to get the world rotation as a quaternion. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00153">153</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00192">192</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -949,7 +952,7 @@ Private Attributes</h2></td></tr>
 <p>Method to get world rotation, needed when object is parented as rotation parameter stores local rotation. </p>
 <dl class="section return"><dt>Returns</dt><dd>glm::vec3 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00193">193</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00236">236</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -979,7 +982,7 @@ Private Attributes</h2></td></tr>
 <p>Method to get world scale, needed when object is parented as scale parameter stores local scale. </p>
 <dl class="section return"><dt>Returns</dt><dd>glm::vec3 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00199">199</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00242">242</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1008,7 +1011,34 @@ Private Attributes</h2></td></tr>
 
 <p>returns if objet is affected by physics. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00089">89</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00128">128</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="affcc916ebebca37b5630e3a3708206c3" name="affcc916ebebca37b5630e3a3708206c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affcc916ebebca37b5630e3a3708206c3">&#9670;&#160;</a></span>isReady()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::TransformComponent::isReady </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00116">116</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1037,7 +1067,7 @@ Private Attributes</h2></td></tr>
 
 <p>Method used by renderer to calculate the transformation matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00173">173</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00216">216</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1066,7 +1096,7 @@ Private Attributes</h2></td></tr>
 
 <p>Copy Assignment Operator. Copies all data members and maintains the reference to the same registry. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00046">46</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00063">63</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1095,7 +1125,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set the local position. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00134">134</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00173">173</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1124,7 +1154,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set the local rotation (using Euler angles in degrees). </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00140">140</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00179">179</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1153,7 +1183,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set the local scale. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00146">146</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00185">185</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1182,7 +1212,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set the parent entity. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00109">109</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00148">148</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1211,7 +1241,34 @@ Private Attributes</h2></td></tr>
 
 <p>Set the physics affected status. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00100">100</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00139">139</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ada2df75ab68cf4a63a5796a3c9b7a369" name="ada2df75ab68cf4a63a5796a3c9b7a369"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada2df75ab68cf4a63a5796a3c9b7a369">&#9670;&#160;</a></span>setRegistry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::TransformComponent::setRegistry </td>
+          <td>(</td>
+          <td class="paramtype">entt::registry &amp;</td>          <td class="paramname"><span class="paramname"><em>reg</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00111">111</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1246,7 +1303,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00211">211</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00254">254</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1281,7 +1338,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00225">225</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00268">268</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1316,7 +1373,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00159">159</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00201">201</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1351,7 +1408,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00238">238</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00281">281</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1386,7 +1443,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00246">246</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00289">289</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1415,7 +1472,7 @@ Private Attributes</h2></td></tr>
 
 <p>Check if the transform has been updated recently or if the parent has been updated recently. Used mainly in physics calculations. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00080">80</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00097">97</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1444,7 +1501,7 @@ Private Attributes</h2></td></tr>
 
 <p>Updates transform status after physics calculations. DO NOT CALL MANUALLY if you dont want to invalidate last transform changes for physics objects. </p>
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00094">94</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00133">133</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1469,12 +1526,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00032">32</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00048">48</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a42f6d4d4603d4016dccbeba627dc1c7f" name="a42f6d4d4603d4016dccbeba627dc1c7f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42f6d4d4603d4016dccbeba627dc1c7f">&#9670;&#160;</a></span>m_registry</h2>
+<a id="a2c50ac98a61e45fd5a765085000a9f0c" name="a2c50ac98a61e45fd5a765085000a9f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c50ac98a61e45fd5a765085000a9f0c">&#9670;&#160;</a></span>m_registry</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1483,7 +1540,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">entt::registry&amp; vex::TransformComponent::m_registry</td>
+          <td class="memname">entt::registry* vex::TransformComponent::m_registry = nullptr</td>
         </tr>
       </table>
   </td>
@@ -1493,7 +1550,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00033">33</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00049">49</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1517,7 +1574,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00029">29</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00045">45</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1541,7 +1598,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00031">31</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00047">47</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1565,7 +1622,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00034">34</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00050">50</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1589,7 +1646,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00028">28</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00044">44</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>
@@ -1613,7 +1670,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00030">30</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BasicComponents_8hpp_source.html#l00046">46</a> of file <a class="el" href="BasicComponents_8hpp_source.html">BasicComponents.hpp</a>.</p>
 
 </div>
 </div>

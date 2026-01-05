@@ -42,6 +42,10 @@ public:
             spawned++;
         }
     }
+
+    ~PCube() {
+        // There's no need to delete the cube objects here, as they will be automatically deleted when the scene is destroyed.
+    }
 private:
     int cubes = 300, spawned = 0;
     std::vector<ModelObject*> cubeObjects;

@@ -68,7 +68,7 @@ public:
 
         glm::vec3 wp = GetComponent<TransformComponent>().getWorldPosition();
 
-        log("pos: %f, %f, %f", wp.x, wp.y, wp.z);
+        //log("pos: %f, %f, %f", wp.x, wp.y, wp.z);
     }
 private:
 };

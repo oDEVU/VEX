@@ -15,7 +15,9 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include <components/types.hpp>
 #include <string>
+#include <queue>
 #include "components/enviroment.hpp"
 
 namespace vex {
@@ -30,7 +32,7 @@ namespace vex {
         VmaAllocator allocator;
         VkSurfaceKHR surface;
 
-        VkSwapchainKHR swapchain;
+        VkSwapchainKHR swapchain= VK_NULL_HANDLE;
         std::vector<VkImage> swapchainImages;
         VkFormat swapchainImageFormat;
         VkExtent2D swapchainExtent;
@@ -38,7 +40,7 @@ namespace vex {
 
         VkImage depthImage = VK_NULL_HANDLE;
         VmaAllocation depthAllocation = VK_NULL_HANDLE;
-        VkImageView depthImageView;
+        VkImageView depthImageView = VK_NULL_HANDLE;
         VkFormat depthFormat;
 
         VkImage lowResColorImage = VK_NULL_HANDLE;
@@ -47,7 +49,6 @@ namespace vex {
         VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;
 
         VkPipelineLayout pipelineLayout;
-        //VkCommandPool commandPool;
 
         std::vector<VkCommandPool> commandPools;
         std::vector<VkCommandBuffer> commandBuffers;
@@ -95,21 +96,36 @@ namespace vex {
 
         uint32_t currentFrame = 0;
         uint32_t currentImageIndex = 0;
-        const uint32_t MAX_FRAMES_IN_FLIGHT = 3;
+        uint32_t MAX_FRAMES_IN_FLIGHT = 3;
 
         std::vector<VkSemaphore> imageAvailableSemaphores;
         std::vector<VkSemaphore> renderFinishedSemaphores;
         std::vector<VkFence> inFlightFences;
 
-        VkDescriptorSetLayout descriptorSetLayout;
-        VkDescriptorSetLayout uboDescriptorSetLayout;
-        VkDescriptorSetLayout textureDescriptorSetLayout;
+        VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorSetLayout uboDescriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorSetLayout textureDescriptorSetLayout = VK_NULL_HANDLE;
 
-        std::unordered_map<std::string, uint32_t> textureIndices;
+        vex_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;
+
+        std::queue<uint32_t> recycledTextureIndices;
 
         glm::uvec2 currentRenderResolution;
 
         enviroment m_enviroment;
+
+        bool supportsMultiDraw = false;
+        bool supportsIndirectDraw = false;
+        bool supportsBindlessTextures = false;
+        bool supportsShaderDrawParameters = false;
+
+        VkDescriptorSetLayout bindlessDescriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorPool bindlessDescriptorPool = VK_NULL_HANDLE;
+        VkDescriptorSet bindlessDescriptorSet = VK_NULL_HANDLE;
+
+        uint32_t maxDrawIndirectCount = 1;
+        uint32_t maxMultiDrawCount = 1;
+        bool requestSwapchainRecreation = false;
     };
 }

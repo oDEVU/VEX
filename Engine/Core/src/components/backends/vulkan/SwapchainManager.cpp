@@ -12,7 +12,10 @@ namespace vex {
     VulkanSwapchainManager::VulkanSwapchainManager(VulkanContext& context, SDL_Window* window) : m_r_context(context) {
         m_p_window = window;
     }
-    VulkanSwapchainManager::~VulkanSwapchainManager() {}
+    VulkanSwapchainManager::~VulkanSwapchainManager() {
+        cleanupSwapchain();
+        cleanupSyncObjects();
+    }
 
     void VulkanSwapchainManager::createSwapchain() {
         log("Creating Swapchain");
@@ -55,6 +58,8 @@ namespace vex {
             imageCount = capabilities.maxImageCount;
         }
 
+        m_r_context.MAX_FRAMES_IN_FLIGHT = imageCount;
+
         VkSwapchainCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         createInfo.surface = m_r_context.surface;
@@ -95,6 +100,10 @@ namespace vex {
 
         createImageViews();
 
+        if (m_r_context.commandPools.empty()) {
+            createCommandPool();
+        }
+
         VkCommandBuffer cmd = m_r_context.beginSingleTimeCommands();
 
         for (auto& image : m_r_context.swapchainImages) {
@@ -124,6 +133,16 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createDepthResources() {
+        if (m_r_context.depthImage != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.depthImage, m_r_context.depthAllocation);
+            m_r_context.depthImage = VK_NULL_HANDLE;
+            m_r_context.depthAllocation = VK_NULL_HANDLE;
+        }
+        if (m_r_context.depthImageView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.depthImageView, nullptr);
+            m_r_context.depthImageView = VK_NULL_HANDLE;
+        }
+
         log("Creating depth resources...");
 
         VkFormat depthFormat = findDepthFormat();
@@ -165,8 +184,6 @@ namespace vex {
         }
 
         m_r_context.depthFormat = depthFormat;
-
-        createCommandPool();
     }
 
     void VulkanSwapchainManager::createImageViews() {
@@ -200,6 +217,8 @@ namespace vex {
     void VulkanSwapchainManager::createCommandPool() {
         log("creating command pools");
 
+        if (!m_r_context.commandPools.empty()) return;
+
         m_r_context.commandPools.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
         for (int i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
@@ -222,13 +241,14 @@ namespace vex {
         if (vkCreateCommandPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.singleTimePool) != VK_SUCCESS) {
             throw_error("Failed to create single time command pool");
         }
-        //m_r_context.singleTimePool = createCommandPool(m_r_context.device, m_r_context.graphicsQueueFamily);
 
         createCommandBuffers();
     }
 
     void VulkanSwapchainManager::createCommandBuffers() {
         log("creating command buffers");
+
+        if (!m_r_context.commandBuffers.empty()) return;
 
         m_r_context.commandBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
 
@@ -248,6 +268,8 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::createSyncObjects() {
+        if (!m_r_context.imageAvailableSemaphores.empty()) return;
+
         log("Creating synchronization objects...");
 
         m_r_context.imageAvailableSemaphores.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
@@ -355,12 +377,7 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::cleanupSwapchain() {
-                    if (m_r_context.lowResColorView) {
-                        vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
-                    }
-                    if (m_r_context.lowResColorImage) {
-                        vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
-                    }
+        cleanupLowResResources();
 
         if (m_r_context.depthImageView) {
             vkDestroyImageView(m_r_context.device, m_r_context.depthImageView, nullptr);
@@ -369,6 +386,7 @@ namespace vex {
         if (m_r_context.depthImage) {
             vmaDestroyImage(m_r_context.allocator, m_r_context.depthImage, m_r_context.depthAllocation);
             m_r_context.depthImage = VK_NULL_HANDLE;
+            m_r_context.depthAllocation = VK_NULL_HANDLE;
         }
 
         for (auto& imageView : m_r_context.swapchainImageViews) {
@@ -376,25 +394,73 @@ namespace vex {
         }
         m_r_context.swapchainImageViews.clear();
 
-        vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
-        m_r_context.swapchain = VK_NULL_HANDLE;
+        if (m_r_context.swapchain) {
+            vkDestroySwapchainKHR(m_r_context.device, m_r_context.swapchain, nullptr);
+            m_r_context.swapchain = VK_NULL_HANDLE;
+        }
+    }
+
+    void VulkanSwapchainManager::cleanupSyncObjects() {
+        for (auto pool : m_r_context.commandPools) {
+            if (pool != VK_NULL_HANDLE) vkDestroyCommandPool(m_r_context.device, pool, nullptr);
+        }
+        m_r_context.commandPools.clear();
+
+        if (m_r_context.singleTimePool != VK_NULL_HANDLE) {
+            vkDestroyCommandPool(m_r_context.device, m_r_context.singleTimePool, nullptr);
+            m_r_context.singleTimePool = VK_NULL_HANDLE;
+        }
+
+        m_r_context.commandBuffers.clear();
+
+        for (size_t i = 0; i < m_r_context.imageAvailableSemaphores.size(); i++) {
+            if (m_r_context.imageAvailableSemaphores[i]) vkDestroySemaphore(m_r_context.device, m_r_context.imageAvailableSemaphores[i], nullptr);
+            if (m_r_context.renderFinishedSemaphores[i]) vkDestroySemaphore(m_r_context.device, m_r_context.renderFinishedSemaphores[i], nullptr);
+            if (m_r_context.inFlightFences[i]) vkDestroyFence(m_r_context.device, m_r_context.inFlightFences[i], nullptr);
+        }
+
+        m_r_context.imageAvailableSemaphores.clear();
+        m_r_context.renderFinishedSemaphores.clear();
+        m_r_context.inFlightFences.clear();
     }
 
     void VulkanSwapchainManager::recreateSwapchain() {
+        int width = 0, height = 0;
+        SDL_GetWindowSizeInPixels(m_p_window, &width, &height);
+
+        if (width == 0 || height == 0) {
+            return;
+        }
+
+        if (m_r_context.surface == VK_NULL_HANDLE) {
+            return;
+        }
+
+        VkSurfaceCapabilitiesKHR capabilities;
+        if (vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_r_context.physicalDevice, m_r_context.surface, &capabilities) != VK_SUCCESS) {
+            return;
+        }
+
+        if (capabilities.currentExtent.width == 0 || capabilities.currentExtent.height == 0) {
+            return;
+        }
+
         log("recreating swapchains");
         vkDeviceWaitIdle(m_r_context.device);
-        log("cleanupLowResResources");
-        cleanupLowResResources();
         log("cleanupSwapchain");
         cleanupSwapchain();
+        cleanupSyncObjects();
 
         createSwapchain();
-        log("createImageViews");
-        createImageViews();
-        log("createCommandBuffers");
-        createCommandPool();
-        log("createLowResResources");
         createLowResResources();
+        //log("createImageViews");
+        //createImageViews();
+        //log("createCommandBuffers");
+        //createCommandPool();
+        //log("createLowResResources");
+        //createLowResResources();
+        //
+        m_r_context.requestSwapchainRecreation = false;
     }
 
     VkSurfaceFormatKHR VulkanSwapchainManager::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
@@ -408,15 +474,19 @@ namespace vex {
         return availableFormats[0];
     }
 
+    void VulkanSwapchainManager::setVSync(bool enabled) {
+        m_vsyncEnabled = enabled;
+    }
+
     VkPresentModeKHR VulkanSwapchainManager::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
         log("choosing swap present mode");
 
-        for (const auto& availablePresentMode : availablePresentModes) {
-            if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
-                if (SDL_GetCurrentVideoDriver() && strcmp(SDL_GetCurrentVideoDriver(), "wayland") == 0) {
-                    log("Wayland detected, FIFO selected");
-                    return VK_PRESENT_MODE_FIFO_KHR;
-                }else{
+        if (!m_vsyncEnabled) {
+            for (const auto& availablePresentMode : availablePresentModes) {
+                if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+                    return availablePresentMode;
+                }
+                if (availablePresentMode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
                     return availablePresentMode;
                 }
             }
@@ -433,8 +503,8 @@ namespace vex {
             SDL_GetWindowSizeInPixels(m_p_window, &width, &height);
 
             VkExtent2D actualExtent = {
-                static_cast<uint32_t>(m_r_context.currentRenderResolution.x),
-                static_cast<uint32_t>(m_r_context.currentRenderResolution.y)
+                static_cast<uint32_t>(width),
+                static_cast<uint32_t>(height)
             };
 
             actualExtent.width = std::clamp(

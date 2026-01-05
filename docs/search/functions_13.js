@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['_7egameobject_0',['~GameObject',['../classvex_1_1GameObject.html#a50adafe3621e33b5cb1a778c419f363a',1,'vex::GameObject']]],
-  ['_7einterface_1',['~Interface',['../classvex_1_1Interface.html#a5b5f3faa74e9d23b5bd53c110e5e866c',1,'vex::Interface']]],
-  ['_7emodelobject_2',['~ModelObject',['../classvex_1_1ModelObject.html#aa3dc237babc57e7044871127bc35e00e',1,'vex::ModelObject']]],
-  ['_7ephysicssystem_3',['~PhysicsSystem',['../classvex_1_1PhysicsSystem.html#af0162eccb2cfdc2c320a435797de3e92',1,'vex::PhysicsSystem']]],
-  ['_7erenderer_4',['~Renderer',['../classvex_1_1Renderer.html#ab647f7466e1195b57864a5ead4c51cad',1,'vex::Renderer']]],
-  ['_7escene_5',['~Scene',['../classvex_1_1Scene.html#a259def38aebfd1eb64994c78768bff2f',1,'vex::Scene']]],
-  ['_7evulkanresources_6',['~VulkanResources',['../classvex_1_1VulkanResources.html#a929f9c55cb9204c67b5b8fd7f013a346',1,'vex::VulkanResources']]],
-  ['_7evulkanswapchainmanager_7',['~VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html#a24542bc6c7d15c346c2d554daabb92b9',1,'vex::VulkanSwapchainManager']]]
+  ['vexui_0',['VexUI',['../classvex_1_1VexUI.html#a5c081cf41b22e86604dd8016fbce0684',1,'vex::VexUI']]],
+  ['virtualfilesystem_1',['VirtualFileSystem',['../classvex_1_1VirtualFileSystem.html#a36825cf97628d454a9ff9dc6c2143039',1,'vex::VirtualFileSystem']]],
+  ['vpkstream_2',['VPKStream',['../classvex_1_1VirtualFileSystem_1_1VPKStream.html#a086b8d0661d2920106b7a3a382f9e98f',1,'vex::VirtualFileSystem::VPKStream']]],
+  ['vpkstreambuf_3',['VPKStreamBuf',['../classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html#ac12e8917a137c4ffeb2d6a8820946c04',1,'vex::VirtualFileSystem::VPKStream::VPKStreamBuf']]],
+  ['vulkanimguiwrapper_4',['VulkanImGUIWrapper',['../classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c',1,'vex::VulkanImGUIWrapper']]],
+  ['vulkanmesh_5',['VulkanMesh',['../classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89',1,'vex::VulkanMesh']]],
+  ['vulkanpipeline_6',['VulkanPipeline',['../classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b',1,'vex::VulkanPipeline']]],
+  ['vulkanresources_7',['VulkanResources',['../classvex_1_1VulkanResources.html#a706ff851677bcb804326ad8680f80a11',1,'vex::VulkanResources']]],
+  ['vulkanswapchainmanager_8',['VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html#a3f8b56ae0e97a0f784a88416c3892cd9',1,'vex::VulkanSwapchainManager']]]
 ];

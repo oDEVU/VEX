@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['engine_0',['Engine',['../classvex_1_1Engine.html',1,'vex']]],
-  ['enviroment_1',['enviroment',['../structvex_1_1enviroment.html',1,'vex']]]
+  ['cameracomponent_0',['CameraComponent',['../structvex_1_1CameraComponent.html',1,'vex']]],
+  ['cameraobject_1',['CameraObject',['../classvex_1_1CameraObject.html',1,'vex']]],
+  ['charactercomponent_2',['CharacterComponent',['../structvex_1_1CharacterComponent.html',1,'vex']]],
+  ['collisionhit_3',['CollisionHit',['../structvex_1_1CollisionHit.html',1,'vex']]],
+  ['componentregistry_4',['ComponentRegistry',['../classvex_1_1ComponentRegistry.html',1,'vex']]],
+  ['copiedobjectdata_5',['CopiedObjectData',['../structvex_1_1Editor_1_1CopiedObjectData.html',1,'vex::Editor']]]
 ];

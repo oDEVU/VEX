@@ -15,6 +15,7 @@
 [submodule "Engine/Core/thirdparty/imgui"]
 	path = Engine/Core/thirdparty/imgui
 	url = https://github.com/ocornut/imgui.git
+	branch = docking
 [submodule "Engine/Core/thirdparty/entt"]
 	path = Engine/Core/thirdparty/entt
 	url = https://github.com/skypjack/entt.git
@@ -35,3 +36,9 @@
 [submodule "Engine/Core/thirdparty/JoltPhysics"]
 	path = Engine/Core/thirdparty/JoltPhysics
 	url = https://github.com/jrouwe/JoltPhysics.git
+[submodule "Engine/Core/thirdparty/ImReflect"]
+	path = Engine/Core/thirdparty/ImReflect
+	url = https://github.com/Sven-vh/ImReflect.git
+[submodule "Engine/Core/thirdparty/ImGuizmo"]
+	path = Engine/Core/thirdparty/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

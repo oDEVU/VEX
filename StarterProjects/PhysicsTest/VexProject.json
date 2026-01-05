@@ -1,6 +1,9 @@
 {
-  "project_name": "PhysicsTest",
-  "main_scene": "Assets/scenes/main.json",
-  "version": "1",
-  "engine_path": "../../Engine"
+    "icon_path": "",
+    "main_scene": "Assets/scenes/main.json",
+    "project_name": "PhysicsTest",
+    "resolution_mode": 0,
+    "version": "1",
+    "vsync": true,
+    "window_type": 0
 }

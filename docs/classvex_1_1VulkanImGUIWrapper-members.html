@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -103,8 +104,10 @@ $(function(){initNavTree('classvex_1_1VulkanImGUIWrapper.html','',''); });
 
 <p>This is the complete list of members for <a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html#ab786a3144eeac18f060b69d8b26083d9">addUIFunction</a>(const std::function&lt; void()&gt; &amp;func)</td><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646">beginFrame</a>() override</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#adfe4a150cf9215b29ddcf23fddc59ee1">addTexture</a>(VkSampler sampler, VkImageView imageView, VkImageLayout layout)</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html#ab786a3144eeac18f060b69d8b26083d9">addUIFunction</a>(const std::function&lt; void()&gt; &amp;func)</td><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a5547c7ab8e934f8f936a717e9a277646">beginFrame</a>() override</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>draw</b>(VkCommandBuffer commandBuffer) (defined in <a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a>)</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a914707e58572f5540062faedcf186351">endFrame</a>() override</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html#a3430c862ee77326eebfbe2bce9de0fe9">executeUIFunctions</a>()</td><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a2c9291f4691960f3076f10f928aed2ab">init</a>() override</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
@@ -112,9 +115,10 @@ $(function(){initNavTree('classvex_1_1VulkanImGUIWrapper.html','',''); });
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>m_r_context</b> (defined in <a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a>)</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
   <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>m_uiFunctions</b> (defined in <a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a>)</td><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a3b3aaa57eadba08ccd0b6ee6d57d97cb">processEvent</a>(const SDL_Event *event) override</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c">VulkanImGUIWrapper</a>(SDL_Window *window, VulkanContext &amp;vulkanContext)</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>~ImGUIWrapper</b>()=default (defined in <a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a>)</td><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>~VulkanImGUIWrapper</b>() (defined in <a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a>)</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a7c0b22d1f94824f59b9d1c5b043d6461">removeTexture</a>(VkDescriptorSet descriptorSet)</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a3632c617d696b089815ff793cd5ea75c">VulkanImGUIWrapper</a>(SDL_Window *window, VulkanContext &amp;vulkanContext)</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>~ImGUIWrapper</b>()=default (defined in <a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a>)</td><td class="entry"><a class="el" href="classvex_1_1ImGUIWrapper.html">vex::ImGUIWrapper</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html#a26cf2cde6e20eb6b684d0c60f0349a62">~VulkanImGUIWrapper</a>()</td><td class="entry"><a class="el" href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

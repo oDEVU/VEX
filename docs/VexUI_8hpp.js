@@ -1,5 +1,6 @@
 var VexUI_8hpp =
 [
+    [ "vex::FontAtlas", "structvex_1_1FontAtlas.html", null ],
     [ "vex::UIStyle", "structvex_1_1UIStyle.html", null ],
     [ "vex::UIQuad", "structvex_1_1UIQuad.html", null ],
     [ "vex::Widget", "structvex_1_1Widget.html", null ],

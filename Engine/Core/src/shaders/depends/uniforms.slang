@@ -4,17 +4,24 @@ public[[vk::binding(0, 0)]]
 cbuffer SceneUBO {
   public float4x4 view;
   public float4x4 proj;
+
+  public float4 ambientLight;
+  public float4 sunLight;
+  public float4 sunDirection;
+
+  public float2 renderResolution;
+  public float2 windowResolution;
+
   public float snapResolution;
   public float jitterIntensity;
   public int enablePS1Effects;
   public float time;
-  public float2 renderResolution;
-  public float2 windowResolution;
+  public int frame;
   public float upscaleRatio;
-  public float4 ambientLight;
   public float ambientLightStrength;
-  public float4 sunLight;
-  public float4 sunDirection;
+
+  public float4 fogColorAndIntensity = float4(0.0f, 0.0f, 0.0f, 0.0f);
+  public float2 fogDistances = float2(0.0f, 0.0f);
 }
 scene;
 
@@ -36,6 +43,7 @@ public[[vk::push_constant]]
 cbuffer PushConstants {
   public float4 color;
   public float4x4 model;
+  public int textureID;
 }
 push;
 
@@ -47,5 +55,7 @@ public static const int COLOR_QUANTIZATION = 0x4;
 public static const int VERTEX_JITTER = 0x8;
 public static const int NTSC_ARTIFACTS = 0x10;
 public static const int GOURAUD_SHADING = 0x20;
+public static const int TEXTURE_QUANTIZATION = 0x40;
+public static const int SCREEN_DITHER = 0x80;
 
 public bool HasInValidUV(float2 uv) { return uv.x <= -10000.0; }

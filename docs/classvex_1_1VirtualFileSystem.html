@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -124,21 +125,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a36825cf97628d454a9ff9dc6c2143039" id="r_a36825cf97628d454a9ff9dc6c2143039"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36825cf97628d454a9ff9dc6c2143039">VirtualFileSystem</a> ()</td></tr>
 <tr class="memdesc:a36825cf97628d454a9ff9dc6c2143039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1VirtualFileSystem.html" title="This class provides abstraction of file system needed for loading packed and unpacked assets.">VirtualFileSystem</a>.  <br /></td></tr>
 <tr class="memitem:a8c34aea049bf26063de8875b915cd200" id="r_a8c34aea049bf26063de8875b915cd200"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c34aea049bf26063de8875b915cd200">initialize</a> (const std::string &amp;base_path)</td></tr>
-<tr class="memdesc:a8c34aea049bf26063de8875b915cd200"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the virtual file system checks if file exists and is proper format.  <br /></td></tr>
+<tr class="memdesc:a8c34aea049bf26063de8875b915cd200"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the virtual file system.  <br /></td></tr>
 <tr class="memitem:a2c225e9af2e7e8b64d2b346319c4f4c2" id="r_a2c225e9af2e7e8b64d2b346319c4f4c2"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structvex_1_1VirtualFileSystem_1_1FileData.html">FileData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c225e9af2e7e8b64d2b346319c4f4c2">load_file</a> (const std::string &amp;virtual_path)</td></tr>
-<tr class="memdesc:a2c225e9af2e7e8b64d2b346319c4f4c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads file from a specified path. For packed assets path is unique file id.  <br /></td></tr>
+<tr class="memdesc:a2c225e9af2e7e8b64d2b346319c4f4c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file into memory from the specified path.  <br /></td></tr>
 <tr class="memitem:a70d36126cd90d85f79640408688d93d9" id="r_a70d36126cd90d85f79640408688d93d9"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; std::istream &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70d36126cd90d85f79640408688d93d9">open_file_stream</a> (const std::string &amp;virtual_path)</td></tr>
-<tr class="memdesc:a70d36126cd90d85f79640408688d93d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a file stream from a specified path. For packed assets path is unique file id.  <br /></td></tr>
+<tr class="memdesc:a70d36126cd90d85f79640408688d93d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a file stream for reading from a specified path.  <br /></td></tr>
 <tr class="memitem:af7e5ffbb87270ae0927501e9284ba0b5" id="r_af7e5ffbb87270ae0927501e9284ba0b5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7e5ffbb87270ae0927501e9284ba0b5">file_exists</a> (const std::string &amp;virtual_path)</td></tr>
-<tr class="memdesc:af7e5ffbb87270ae0927501e9284ba0b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a file exists in the virtual file system.  <br /></td></tr>
+<tr class="memdesc:af7e5ffbb87270ae0927501e9284ba0b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a file exists in the currently active file system mode.  <br /></td></tr>
 <tr class="memitem:a53ea7c5182e2eb7a7fbfdb4c024c6aee" id="r_a53ea7c5182e2eb7a7fbfdb4c024c6aee"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53ea7c5182e2eb7a7fbfdb4c024c6aee">get_file_size</a> (const std::string &amp;virtual_path)</td></tr>
-<tr class="memdesc:a53ea7c5182e2eb7a7fbfdb4c024c6aee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the size of a file in the virtual file system.  <br /></td></tr>
+<tr class="memdesc:a53ea7c5182e2eb7a7fbfdb4c024c6aee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the size of a file in bytes.  <br /></td></tr>
 <tr class="memitem:a1a718f623d52dde02dcbe500dc67d203" id="r_a1a718f623d52dde02dcbe500dc67d203"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a718f623d52dde02dcbe500dc67d203">list_files</a> (const std::string &amp;virtual_dir=&quot;&quot;)</td></tr>
-<tr class="memdesc:a1a718f623d52dde02dcbe500dc67d203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lists all files in a directory in the virtual file system.  <br /></td></tr>
+<tr class="memdesc:a1a718f623d52dde02dcbe500dc67d203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lists all files contained within a specific directory.  <br /></td></tr>
+<tr class="memitem:a6cabffa3f598dde4e3d26340a5b3d0f9" id="r_a6cabffa3f598dde4e3d26340a5b3d0f9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cabffa3f598dde4e3d26340a5b3d0f9">resolve_relative_path</a> (const std::string &amp;base_path, const std::string &amp;relative_path)</td></tr>
+<tr class="memdesc:a6cabffa3f598dde4e3d26340a5b3d0f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves a relative path to a normalized, cleaner format.  <br /></td></tr>
 <tr class="memitem:a204e037f2da070924f6133019274c1b9" id="r_a204e037f2da070924f6133019274c1b9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a204e037f2da070924f6133019274c1b9">get_base_path</a> () const</td></tr>
 <tr class="memdesc:a204e037f2da070924f6133019274c1b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the base path of the virtual file system.  <br /></td></tr>
-<tr class="memitem:a6cabffa3f598dde4e3d26340a5b3d0f9" id="r_a6cabffa3f598dde4e3d26340a5b3d0f9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cabffa3f598dde4e3d26340a5b3d0f9">resolve_relative_path</a> (const std::string &amp;base_path, const std::string &amp;relative_path)</td></tr>
-<tr class="memdesc:a6cabffa3f598dde4e3d26340a5b3d0f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves a relative path to an absolute path.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -246,14 +247,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Checks if a file exists in the virtual file system. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Checks if a file exists in the currently active file system mode. </p>
+<ul>
+<li><b>Packed Mode</b>: Searches the <span class="tt">m_loaded_vpk-&gt;file_names</span> vector for the cleaned path.</li>
+<li><b>Loose Mode</b>: Uses <span class="tt">std::filesystem::exists</span> on the physical disk path. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path - The path to check. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool - true if the file exists, false otherwise. </dd></dl>
+</li>
+</ul>
 
 <p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8cpp_source.html#l00196">196</a> of file <a class="el" href="VirtualFileSystem_8cpp_source.html">VirtualFileSystem.cpp</a>.</p>
 
@@ -314,7 +319,7 @@ Private Attributes</h2></td></tr>
 <p>Gets the base path of the virtual file system. </p>
 <dl class="section return"><dt>Returns</dt><dd>std::string - base path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00070">70</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00093">93</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -333,14 +338,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Gets the size of a file in the virtual file system. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Gets the size of a file in bytes. </p>
+<p>Returns <span class="tt">entry-&gt;data_size</span> for packed files or <span class="tt">fs::file_size</span> for loose files. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path - The path of the file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>size_t - size of the file in bytes. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>size_t - Size of the file in bytes, or 0 if not found. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8cpp_source.html#l00214">214</a> of file <a class="el" href="VirtualFileSystem_8cpp_source.html">VirtualFileSystem.cpp</a>.</p>
 
@@ -361,14 +366,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes the virtual file system checks if file exists and is proper format. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Initializes the virtual file system. </p>
+<p>Sets the base path and checks for the existence of a packed asset file (<span class="tt">Assets/assets.vpk</span>). If the VPK exists, it attempts to load the header and file table. If the VPK is missing (or in Debug builds), it falls back to loose file loading (<span class="tt">m_use_packed_assets = false</span>). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; base_path </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; base_path - The root directory path (usually the executable directory) to initialize the VFS from. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>bool - true if initialization is successful, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>bool - true if initialization (VPK load or fallback setup) is successful, false otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8cpp_source.html#l00016">16</a> of file <a class="el" href="VirtualFileSystem_8cpp_source.html">VirtualFileSystem.cpp</a>.</p>
 
@@ -389,14 +394,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Lists all files in a directory in the virtual file system. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Lists all files contained within a specific directory. </p>
+<ul>
+<li><b>Packed Mode</b>: Iterates VPK file names and filters by the provided directory prefix.</li>
+<li><b>Loose Mode</b>: Uses <span class="tt">fs::recursive_directory_iterator</span> to traverse the physical <span class="tt">Assets/</span> directory. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; virtual_dir - directory path to list files from. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; virtual_dir - The directory path to filter by (default is root). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; - vector of file paths. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; - A vector of relative file paths found. </dd></dl>
+</li>
+</ul>
 
 <p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8cpp_source.html#l00235">235</a> of file <a class="el" href="VirtualFileSystem_8cpp_source.html">VirtualFileSystem.cpp</a>.</p>
 
@@ -417,14 +426,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Loads file from a specified path. For packed assets path is unique file id. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Loads a file into memory from the specified path. </p>
+<ul>
+<li><b>Packed Mode</b>: Locates the file entry in the loaded VPK, seeks to the data offset, and reads <span class="tt">entry-&gt;data_size</span> bytes.</li>
+<li><b>Loose Mode</b>: Reads the file from disk using <span class="tt">std::ifstream</span>, resolving the path relative to the base directory. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path - The relative path or unique ID of the file to load. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::unique_ptr&lt;FileData&gt; - unique pointer to the loaded file data. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::unique_ptr&lt;FileData&gt; - Unique pointer to the struct containing the raw data vector and size, or nullptr if not found. </dd></dl>
+</li>
+</ul>
 
 <p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8cpp_source.html#l00107">107</a> of file <a class="el" href="VirtualFileSystem_8cpp_source.html">VirtualFileSystem.cpp</a>.</p>
 
@@ -481,14 +494,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Opens a file stream from a specified path. For packed assets path is unique file id. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Opens a file stream for reading from a specified path. </p>
+<ul>
+<li><b>Packed Mode</b>: Reads the specific file chunk from the VPK into a memory buffer (protected by <span class="tt">stream_mutex</span>) and returns a custom <span class="tt"><a class="el" href="classvex_1_1VirtualFileSystem_1_1VPKStream.html" title="class implementing custom file stream functionality for virtual file system. Inherits from std::istre...">VPKStream</a></span> wrapped around that buffer.</li>
+<li><b>Loose Mode</b>: returns a standard <span class="tt">std::ifstream</span> opened in binary mode. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; virtual_path - The relative path to the file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::unique_ptr&lt;std::istream&gt; - unique pointer to the opened file stream. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::unique_ptr&lt;std::istream&gt; - Unique pointer to the input stream, or nullptr if the file cannot be opened. </dd></dl>
+</li>
+</ul>
 
 <p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8cpp_source.html#l00159">159</a> of file <a class="el" href="VirtualFileSystem_8cpp_source.html">VirtualFileSystem.cpp</a>.</p>
 
@@ -513,15 +530,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Resolves a relative path to an absolute path. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Resolves a relative path to a normalized, cleaner format. </p>
+<p>Uses <span class="tt">std::filesystem::lexically_normal()</span> to resolve <span class="tt">..</span> and <span class="tt">.</span> segments, and ensures consistent separators via <span class="tt">clean_path</span>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; base_path - base path to resolve from. </td></tr>
-    <tr><td class="paramname">const</td><td>std::string&amp; relative_path - relative path to resolve. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; base_path - The context path (e.g., the path of the file requesting the resolve). </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; relative_path - The path relative to <span class="tt">base_path</span>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::string - absolute path. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The resolved, cleaned virtual path. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8cpp_source.html#l00280">280</a> of file <a class="el" href="VirtualFileSystem_8cpp_source.html">VirtualFileSystem.cpp</a>.</p>
 
@@ -548,7 +565,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00130">130</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00146">146</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -572,7 +589,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00129">129</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00145">145</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -596,7 +613,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00131">131</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00147">147</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
 
 </div>
 </div>
@@ -620,7 +637,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00133">133</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VirtualFileSystem_8hpp_source.html#l00149">149</a> of file <a class="el" href="VirtualFileSystem_8hpp_source.html">VirtualFileSystem.hpp</a>.</p>
 
 </div>
 </div>

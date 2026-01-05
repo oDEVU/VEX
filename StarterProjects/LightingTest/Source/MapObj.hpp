@@ -28,7 +28,7 @@ public:
                 Model = vex::createModelFromComponents("gasStation", floorCubeMesh, cubeTransform, GetEngine());
 
                 vex::MeshComponent frCubeMesh = vex::createMeshFromPath("Assets/meshes/scene_transparent.gltf", GetEngine());
-                frCubeMesh.renderType = RenderType::TRANSPARENT;
+                frCubeMesh.renderType = RenderType::MASKED;
 
                 Transparent = vex::createModelFromComponents("gasStationTrees", frCubeMesh, cubeTransform, GetEngine());
     }
@@ -113,6 +113,10 @@ public:
 
     void Update(float deltaTime) override {
 
+    }
+
+    ~Map() {
+        // There's no need to delete the light objects here, as they will be automatically deleted when the scene is destroyed.
     }
 private:
 vex::ModelObject* Model;

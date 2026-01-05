@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -107,9 +108,11 @@ $(function(){initNavTree('GameObjectFactory_8hpp.html','',''); });
 <code>#include &quot;<a class="el" href="errorUtils_8hpp_source.html">components/errorUtils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="GameObject_8hpp_source.html">components/GameObjects/GameObject.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="BasicComponents_8hpp_source.html">components/GameComponents/BasicComponents.hpp</a>&quot;</code><br />
+<code>#include &quot;VEX/VEX_export.h&quot;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="GameObjectFactory_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -143,14 +146,14 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">namespace </span>{ \</div>
-<div class="line">        <span class="keyword">struct </span>ClassName##Registrar { \</div>
-<div class="line">            ClassName##Registrar() { \</div>
-<div class="line">                GameObjectFactory::getInstance().registerClass&lt;ClassName&gt;(#ClassName); \</div>
-<div class="line">            } \</div>
-<div class="line">        }; \</div>
-<div class="line">        <span class="keyword">static</span> ClassName##Registrar ClassName##registrar; \</div>
-<div class="line">    }</div>
+<b>Value:</b><div class="fragment"><div class="line">        <span class="keyword">namespace </span>{ \</div>
+<div class="line">            <span class="keyword">struct </span>ClassName##Registrar { \</div>
+<div class="line">                ClassName##Registrar() { \</div>
+<div class="line">                    GameObjectFactory::getInstance().registerClass&lt;ClassName&gt;(#ClassName, <span class="keyword">false</span>); \</div>
+<div class="line">                } \</div>
+<div class="line">            }; \</div>
+<div class="line">            <span class="keyword">static</span> ClassName##Registrar ClassName##registrar; \</div>
+<div class="line">        }</div>
 </div><!-- fragment -->
 <p>Macro for automatic GameObject registration, you should call it at the bottom of your class implementation. </p>
 <p>Example usage: </p><div class="fragment"><div class="line"><span class="keyword">class </span>MyGameObject : <span class="keyword">public</span> GameObject {</div>
@@ -159,9 +162,9 @@ Macros</h2></td></tr>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_define" href="#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a>(MyGameObject);</div>
-<div class="ttc" id="aGameObjectFactory_8hpp_html_a2e373409fc28437e3f9cd5f1f6423c88"><div class="ttname"><a href="#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a></div><div class="ttdeci">#define REGISTER_GAME_OBJECT(ClassName)</div><div class="ttdoc">Macro for automatic GameObject registration, you should call it at the bottom of your class implement...</div><div class="ttdef"><b>Definition</b> <a href="GameObjectFactory_8hpp_source.html#l00059">GameObjectFactory.hpp:59</a></div></div>
+<div class="ttc" id="aGameObjectFactory_8hpp_html_a2e373409fc28437e3f9cd5f1f6423c88"><div class="ttname"><a href="#a2e373409fc28437e3f9cd5f1f6423c88">REGISTER_GAME_OBJECT</a></div><div class="ttdeci">#define REGISTER_GAME_OBJECT(ClassName)</div><div class="ttdoc">Macro for automatic GameObject registration, you should call it at the bottom of your class implement...</div><div class="ttdef"><b>Definition</b> <a href="GameObjectFactory_8hpp_source.html#l00114">GameObjectFactory.hpp:114</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00059">59</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="GameObjectFactory_8hpp_source.html#l00114">114</a> of file <a class="el" href="GameObjectFactory_8hpp_source.html">GameObjectFactory.hpp</a>.</p>
 
 </div>
 </div>

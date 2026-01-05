@@ -47,6 +47,8 @@ namespace vex {
                             keyState.wasProcessedAsPressed = true;
                         } else if (!isPressed && binding.state == InputActionState::Released) {
                             binding.action(deltaTime);
+                        } else if (!isPressed && binding.state == InputActionState::Held) {
+                            binding.action(0.0f);
                         }
                     }
                 }
@@ -60,6 +62,37 @@ namespace vex {
                     binding.action(delta);
                 }
             }
+        } else if (event.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN || event.type == SDL_EVENT_GAMEPAD_BUTTON_UP) {
+            bool isPressed = (event.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN);
+            SDL_GamepadButton button = (SDL_GamepadButton)event.gbutton.button;
+
+            gamepadButtonStates[button].isPressed = isPressed;
+
+            auto view = m_registry.view<InputComponent>();
+            for (auto entity : view) {
+                auto& inputComp = view.get<InputComponent>(entity);
+                for (const auto& binding : inputComp.gamepadButtonBindings) {
+                    if (binding.button == button) {
+                        if (isPressed && binding.state == InputActionState::Pressed) {
+                            binding.action(deltaTime);
+                        } else if (!isPressed && binding.state == InputActionState::Released) {
+                            binding.action(deltaTime);
+                        }
+                    }
+                }
+            }
+        } else if (event.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {
+            float normalizedValue = event.gaxis.value / 32767.0f;
+
+            auto view = m_registry.view<InputComponent>();
+            for (auto entity : view) {
+                auto& inputComp = view.get<InputComponent>(entity);
+                for (const auto& binding : inputComp.gamepadAxisBindings) {
+                    if (binding.axis == (SDL_GamepadAxis)event.gaxis.axis) {
+                        binding.action(normalizedValue);
+                    }
+                }
+            }
         }
     }
 
@@ -69,6 +102,11 @@ namespace vex {
             auto& inputComp = view.get<InputComponent>(entity);
             for (const auto& binding : inputComp.bindings) {
                 if (binding.state == InputActionState::Held && keyStates[binding.scancode].isPressed) {
+                    binding.action(deltaTime);
+                }
+            }
+            for (const auto& binding : inputComp.gamepadButtonBindings) {
+                if (binding.state == InputActionState::Held && gamepadButtonStates[binding.button].isPressed) {
                     binding.action(deltaTime);
                 }
             }

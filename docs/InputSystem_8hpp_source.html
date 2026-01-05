@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -131,38 +132,39 @@ $(function(){initNavTree('InputSystem_8hpp_source.html','',''); });
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    }</div>
 </div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#a1c8042ce42b253872a991153fdc88a15">setInputMode</a>(<a class="code hl_enumeration" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a> mode);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="classvex_1_1InputSystem.html#abeab3f484cd87ed5fd1dcbf21fe645a3">   45</a></span>    <a class="code hl_enumeration" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a> <a class="code hl_function" href="classvex_1_1InputSystem.html#abeab3f484cd87ed5fd1dcbf21fe645a3">getInputMode</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_inputMode; }</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#aff1e50790e9b3f900ce77d9d6d6cb1fc">processEvent</a>(<span class="keyword">const</span> SDL_Event&amp; event, <span class="keywordtype">float</span> deltaTime);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">update</a>(<span class="keywordtype">float</span> deltaTime);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">private</span>:</div>
-<div class="foldopen" id="foldopen00058" data-start="{" data-end="};">
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="structvex_1_1InputSystem_1_1KeyState.html">   58</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputSystem_1_1KeyState.html">KeyState</a> {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordtype">bool</span> isPressed = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordtype">bool</span> wasProcessedAsPressed = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    };</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#a1c8042ce42b253872a991153fdc88a15">setInputMode</a>(<a class="code hl_enumeration" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a> mode);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classvex_1_1InputSystem.html#abeab3f484cd87ed5fd1dcbf21fe645a3">   48</a></span>    <a class="code hl_enumeration" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a> <a class="code hl_function" href="classvex_1_1InputSystem.html#abeab3f484cd87ed5fd1dcbf21fe645a3">getInputMode</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_inputMode; }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#aff1e50790e9b3f900ce77d9d6d6cb1fc">processEvent</a>(<span class="keyword">const</span> SDL_Event&amp; event, <span class="keywordtype">float</span> deltaTime);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">update</a>(<span class="keywordtype">float</span> deltaTime);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keyword">private</span>:</div>
+<div class="foldopen" id="foldopen00066" data-start="{" data-end="};">
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="structvex_1_1InputSystem_1_1KeyState.html">   66</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputSystem_1_1KeyState.html">KeyState</a> {</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordtype">bool</span> isPressed = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="keywordtype">bool</span> wasProcessedAsPressed = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    };</div>
 </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    entt::registry&amp; m_registry;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    SDL_Window* m_window;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <a class="code hl_enumeration" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a> m_inputMode;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    std::unordered_map&lt;SDL_Scancode, KeyState&gt; keyStates;</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>};</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    entt::registry&amp; m_registry;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    SDL_Window* m_window;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <a class="code hl_enumeration" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a> m_inputMode;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    std::unordered_map&lt;SDL_Scancode, KeyState&gt; keyStates;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    std::unordered_map&lt;SDL_GamepadButton, KeyState&gt; gamepadButtonStates;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>};</div>
 </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>}</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
 <div class="ttc" id="aInputComponent_8hpp_html"><div class="ttname"><a href="InputComponent_8hpp.html">InputComponent.hpp</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div></div>
 <div class="ttc" id="aInputSystem_8hpp_html_a814f1fff090d613f1d99c10566d4afc4"><div class="ttname"><a href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">vex::InputMode</a></div><div class="ttdeci">InputMode</div><div class="ttdoc">Enum representing different input modes.</div><div class="ttdef"><b>Definition</b> <a href="#l00022">InputSystem.hpp:22</a></div></div>
-<div class="ttc" id="aclassvex_1_1InputSystem_html_a1c8042ce42b253872a991153fdc88a15"><div class="ttname"><a href="classvex_1_1InputSystem.html#a1c8042ce42b253872a991153fdc88a15">vex::InputSystem::setInputMode</a></div><div class="ttdeci">void setInputMode(InputMode mode)</div><div class="ttdoc">Sets the input mode.</div><div class="ttdef"><b>Definition</b> <a href="InputSystem_8cpp_source.html#l00012">InputSystem.cpp:12</a></div></div>
+<div class="ttc" id="aclassvex_1_1InputSystem_html_a1c8042ce42b253872a991153fdc88a15"><div class="ttname"><a href="classvex_1_1InputSystem.html#a1c8042ce42b253872a991153fdc88a15">vex::InputSystem::setInputMode</a></div><div class="ttdeci">void setInputMode(InputMode mode)</div><div class="ttdoc">Sets the input processing mode.</div><div class="ttdef"><b>Definition</b> <a href="InputSystem_8cpp_source.html#l00011">InputSystem.cpp:11</a></div></div>
 <div class="ttc" id="aclassvex_1_1InputSystem_html_a5fe185afab2a985ea5c51e71471e57af"><div class="ttname"><a href="classvex_1_1InputSystem.html#a5fe185afab2a985ea5c51e71471e57af">vex::InputSystem::InputSystem</a></div><div class="ttdeci">InputSystem(entt::registry &amp;registry, SDL_Window *window)</div><div class="ttdoc">Constructor for InputSystem.</div><div class="ttdef"><b>Definition</b> <a href="#l00034">InputSystem.hpp:34</a></div></div>
-<div class="ttc" id="aclassvex_1_1InputSystem_html_a6953ed189c854f01ff1a5fe2dfea310f"><div class="ttname"><a href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">vex::InputSystem::update</a></div><div class="ttdeci">void update(float deltaTime)</div><div class="ttdoc">Updates the input system.</div><div class="ttdef"><b>Definition</b> <a href="InputSystem_8cpp_source.html#l00067">InputSystem.cpp:67</a></div></div>
-<div class="ttc" id="aclassvex_1_1InputSystem_html_abeab3f484cd87ed5fd1dcbf21fe645a3"><div class="ttname"><a href="classvex_1_1InputSystem.html#abeab3f484cd87ed5fd1dcbf21fe645a3">vex::InputSystem::getInputMode</a></div><div class="ttdeci">InputMode getInputMode() const</div><div class="ttdoc">Gets the current input mode.</div><div class="ttdef"><b>Definition</b> <a href="#l00045">InputSystem.hpp:45</a></div></div>
-<div class="ttc" id="aclassvex_1_1InputSystem_html_aff1e50790e9b3f900ce77d9d6d6cb1fc"><div class="ttname"><a href="classvex_1_1InputSystem.html#aff1e50790e9b3f900ce77d9d6d6cb1fc">vex::InputSystem::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event &amp;event, float deltaTime)</div><div class="ttdoc">Processes an SDL event.</div><div class="ttdef"><b>Definition</b> <a href="InputSystem_8cpp_source.html#l00024">InputSystem.cpp:24</a></div></div>
-<div class="ttc" id="astructvex_1_1InputSystem_1_1KeyState_html"><div class="ttname"><a href="structvex_1_1InputSystem_1_1KeyState.html">vex::InputSystem::KeyState</a></div><div class="ttdoc">Key state structure. Used to track the state of keyboard keys needed forr held state.</div><div class="ttdef"><b>Definition</b> <a href="#l00058">InputSystem.hpp:58</a></div></div>
+<div class="ttc" id="aclassvex_1_1InputSystem_html_a6953ed189c854f01ff1a5fe2dfea310f"><div class="ttname"><a href="classvex_1_1InputSystem.html#a6953ed189c854f01ff1a5fe2dfea310f">vex::InputSystem::update</a></div><div class="ttdeci">void update(float deltaTime)</div><div class="ttdoc">Per-frame update for continuous input states.</div><div class="ttdef"><b>Definition</b> <a href="InputSystem_8cpp_source.html#l00099">InputSystem.cpp:99</a></div></div>
+<div class="ttc" id="aclassvex_1_1InputSystem_html_abeab3f484cd87ed5fd1dcbf21fe645a3"><div class="ttname"><a href="classvex_1_1InputSystem.html#abeab3f484cd87ed5fd1dcbf21fe645a3">vex::InputSystem::getInputMode</a></div><div class="ttdeci">InputMode getInputMode() const</div><div class="ttdoc">Gets the current input mode.</div><div class="ttdef"><b>Definition</b> <a href="#l00048">InputSystem.hpp:48</a></div></div>
+<div class="ttc" id="aclassvex_1_1InputSystem_html_aff1e50790e9b3f900ce77d9d6d6cb1fc"><div class="ttname"><a href="classvex_1_1InputSystem.html#aff1e50790e9b3f900ce77d9d6d6cb1fc">vex::InputSystem::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event &amp;event, float deltaTime)</div><div class="ttdoc">Processes raw SDL events and maps them to Game Component actions.</div><div class="ttdef"><b>Definition</b> <a href="InputSystem_8cpp_source.html#l00023">InputSystem.cpp:23</a></div></div>
+<div class="ttc" id="astructvex_1_1InputSystem_1_1KeyState_html"><div class="ttname"><a href="structvex_1_1InputSystem_1_1KeyState.html">vex::InputSystem::KeyState</a></div><div class="ttdoc">Key state structure. Used to track the state of keyboard keys needed forr held state.</div><div class="ttdef"><b>Definition</b> <a href="#l00066">InputSystem.hpp:66</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

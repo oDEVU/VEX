@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['resolutionmode_0',['ResolutionMode',['../ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7e',1,'vex']]]
+  ['mouseaxis_0',['MouseAxis',['../InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236',1,'vex']]]
 ];

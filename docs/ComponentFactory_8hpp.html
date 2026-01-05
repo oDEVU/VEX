@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -105,10 +106,15 @@ $(function(){initNavTree('ComponentFactory_8hpp.html','',''); });
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="BasicComponents_8hpp_source.html">components/GameComponents/BasicComponents.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="errorUtils_8hpp_source.html">components/errorUtils.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="GameObject_8hpp_source.html">components/GameObjects/GameObject.hpp</a>&quot;</code><br />
+<code>#include &quot;components/colorTypes.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="SerializationUtils_8hpp_source.html">SerializationUtils.hpp</a>&quot;</code><br />
 <code>#include &lt;nlohmann/json.hpp&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;glm/glm.hpp&gt;</code><br />
+<code>#include &lt;<a class="el" href="Mesh_8hpp_source.html">components/Mesh.hpp</a>&gt;</code><br />
 </div>
 <p><a href="ComponentFactory_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -119,8 +125,20 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a3c2eb139ecc6bb3b7733d2d2ecc67685" id="r_a3c2eb139ecc6bb3b7733d2d2ecc67685"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c2eb139ecc6bb3b7733d2d2ecc67685">REGISTER_COMPONENT</a>(ComponentType,  LoadFunction)</td></tr>
-<tr class="memdesc:a3c2eb139ecc6bb3b7733d2d2ecc67685"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.  <br /></td></tr>
+<tr class="memitem:a773866edc40e57fe3250ca75c2369dcd" id="r_a773866edc40e57fe3250ca75c2369dcd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a773866edc40e57fe3250ca75c2369dcd">IMGUI_REFLECT</a>(...)</td></tr>
+<tr class="memitem:ad9f2c6b0bb32254114e7b70a3b42c72a" id="r_ad9f2c6b0bb32254114e7b70a3b42c72a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9f2c6b0bb32254114e7b70a3b42c72a">VEX_CAT_IMPL</a>(a,  b)</td></tr>
+<tr class="memdesc:ad9f2c6b0bb32254114e7b70a3b42c72a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper macros to generate unique names based on line number.  <br /></td></tr>
+<tr class="memitem:a484be628fa5170fd1c8f1e0d069d6ca1" id="r_a484be628fa5170fd1c8f1e0d069d6ca1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a484be628fa5170fd1c8f1e0d069d6ca1">VEX_CAT</a>(a,  b)</td></tr>
+<tr class="memitem:a99aa177b8022f7cd81925e2d87f45cb9" id="r_a99aa177b8022f7cd81925e2d87f45cb9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99aa177b8022f7cd81925e2d87f45cb9">VEX_UNIQUE_NAME</a>(prefix)</td></tr>
+<tr class="memitem:afa69f763d370fe1d1de1bb8cdf34ddfb" id="r_afa69f763d370fe1d1de1bb8cdf34ddfb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(Type, ...)</td></tr>
+<tr class="memdesc:afa69f763d370fe1d1de1bb8cdf34ddfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file.  <br /></td></tr>
+<tr class="memitem:a842f06c29165e3b9ae76b9687ac72ed3" id="r_a842f06c29165e3b9ae76b9687ac72ed3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a842f06c29165e3b9ae76b9687ac72ed3">REGISTER_COMPONENT_CUSTOM</a>(Type, ...)</td></tr>
+<tr class="memdesc:a842f06c29165e3b9ae76b9687ac72ed3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same macro just skips json registration for more complex components, it requires manual registration.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:af479ced456857c2213bd624c1b12d04b" id="r_af479ced456857c2213bd624c1b12d04b"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:af479ced456857c2213bd624c1b12d04b template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af479ced456857c2213bd624c1b12d04b">vex::GenericComponentInspector</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains ComponentRegistry class used to have register of posible to create components.. </p>
@@ -128,8 +146,28 @@ Macros</h2></td></tr>
 
 <p class="definition">Definition in file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 </div><a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
-<a id="a3c2eb139ecc6bb3b7733d2d2ecc67685" name="a3c2eb139ecc6bb3b7733d2d2ecc67685"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c2eb139ecc6bb3b7733d2d2ecc67685">&#9670;&#160;</a></span>REGISTER_COMPONENT</h2>
+<a id="a773866edc40e57fe3250ca75c2369dcd" name="a773866edc40e57fe3250ca75c2369dcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a773866edc40e57fe3250ca75c2369dcd">&#9670;&#160;</a></span>IMGUI_REFLECT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IMGUI_REFLECT</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">;</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00068">68</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afa69f763d370fe1d1de1bb8cdf34ddfb" name="afa69f763d370fe1d1de1bb8cdf34ddfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa69f763d370fe1d1de1bb8cdf34ddfb">&#9670;&#160;</a></span>REGISTER_COMPONENT</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,43 +175,164 @@ Macros</h2></td></tr>
         <tr>
           <td class="memname">#define REGISTER_COMPONENT</td>
           <td>(</td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>ComponentType</em></span>, </td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>Type</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>LoadFunction</em></span>&#160;)</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">namespace </span>{ \</div>
-<div class="line">        <span class="keyword">struct </span>ComponentType##Registrar { \</div>
-<div class="line">            ComponentType##Registrar() { \</div>
-<div class="line">                ComponentRegistry::getInstance().registerComponent(#ComponentType, LoadFunction); \</div>
-<div class="line">            } \</div>
-<div class="line">        }; \</div>
-<div class="line">        <span class="keyword">static</span> ComponentType##Registrar ComponentType##registrar; \</div>
-<div class="line">    }</div>
+<b>Value:</b><div class="fragment"><div class="line">        <span class="keyword">namespace </span>vex { NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__) } \</div>
+<div class="line">        IMGUI_REFLECT(Type, __VA_ARGS__) \</div>
+<div class="line">        <span class="keyword">namespace </span>{ \</div>
+<div class="line">            <span class="keyword">struct </span>VEX_UNIQUE_NAME(Registrar_) { \</div>
+<div class="line">                VEX_UNIQUE_NAME(Registrar_)() { \</div>
+<div class="line">                    vex::ComponentRegistry::getInstance().registerComponent&lt;Type&gt;(#Type, <span class="keyword">false</span>); \</div>
+<div class="line">                } \</div>
+<div class="line">                ~VEX_UNIQUE_NAME(Registrar_)() { \</div>
+<div class="line">                    vex::ComponentRegistry::getInstance().unregisterComponent(#Type); \</div>
+<div class="line">                } \</div>
+<div class="line">            }; \</div>
+<div class="line">            <span class="keyword">static</span> VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \</div>
+<div class="line">        }</div>
 </div><!-- fragment -->
 <p>Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene file. </p>
-<p>Example usage: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> LoadCameraComponent(GameObject&amp; obj, <span class="keyword">const</span> nlohmann::json&amp; json) {</div>
-<div class="line">    CameraComponent comp;</div>
-<div class="line">    <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;fov&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;fov&quot;</span>].is_array()) {</div>
-<div class="line">        comp.fov = json[<span class="stringliteral">&quot;fov&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line">    }</div>
-<div class="line">    <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;nearPlane&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;nearPlane&quot;</span>].is_array()) {</div>
-<div class="line">        comp.nearPlane = json[<span class="stringliteral">&quot;nearPlane&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line">    }</div>
-<div class="line">    <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;farPlane&quot;</span>) &amp;&amp; !json[<span class="stringliteral">&quot;farPlane&quot;</span>].is_array()) {</div>
-<div class="line">        comp.farPlane = json[<span class="stringliteral">&quot;farPlane&quot;</span>].get&lt;<span class="keywordtype">float</span>&gt;();</div>
-<div class="line">    }</div>
-<div class="line">    obj.AddComponent(comp);</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><a class="code hl_define" href="#a3c2eb139ecc6bb3b7733d2d2ecc67685">REGISTER_COMPONENT</a>(CameraComponent, LoadCameraComponent);</div>
-<div class="ttc" id="aComponentFactory_8hpp_html_a3c2eb139ecc6bb3b7733d2d2ecc67685"><div class="ttname"><a href="#a3c2eb139ecc6bb3b7733d2d2ecc67685">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(ComponentType, LoadFunction)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00067">ComponentFactory.hpp:67</a></div></div>
+<p>Example usage: </p><div class="fragment"><div class="line"><a class="code hl_define" href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a>(CameraComponent, fov, nearPlane, farPlane);</div>
+<div class="ttc" id="aComponentFactory_8hpp_html_afa69f763d370fe1d1de1bb8cdf34ddfb"><div class="ttname"><a href="#afa69f763d370fe1d1de1bb8cdf34ddfb">REGISTER_COMPONENT</a></div><div class="ttdeci">#define REGISTER_COMPONENT(Type,...)</div><div class="ttdoc">Macro used to register GameComponents in ComponentRegistry. It allows to add component from scene fil...</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00267">ComponentFactory.hpp:267</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00067">67</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00267">267</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a842f06c29165e3b9ae76b9687ac72ed3" name="a842f06c29165e3b9ae76b9687ac72ed3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a842f06c29165e3b9ae76b9687ac72ed3">&#9670;&#160;</a></span>REGISTER_COMPONENT_CUSTOM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REGISTER_COMPONENT_CUSTOM</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>Type</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">        IMGUI_REFLECT(Type, __VA_ARGS__) \</div>
+<div class="line">        <span class="keyword">namespace </span>{ \</div>
+<div class="line">            <span class="keyword">struct </span>VEX_UNIQUE_NAME(Registrar_) { \</div>
+<div class="line">                VEX_UNIQUE_NAME(Registrar_)() { \</div>
+<div class="line">                    vex::ComponentRegistry::getInstance().registerComponent&lt;Type&gt;(#Type, <span class="keyword">false</span>); \</div>
+<div class="line">                } \</div>
+<div class="line">                ~VEX_UNIQUE_NAME(Registrar_)() { \</div>
+<div class="line">                    vex::ComponentRegistry::getInstance().unregisterComponent(#Type); \</div>
+<div class="line">                } \</div>
+<div class="line">            }; \</div>
+<div class="line">            <span class="keyword">static</span> VEX_UNIQUE_NAME(Registrar_) VEX_UNIQUE_NAME(g_registrar_); \</div>
+<div class="line">        }</div>
+</div><!-- fragment -->
+<p>Same macro just skips json registration for more complex components, it requires manual registration. </p>
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00283">283</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a484be628fa5170fd1c8f1e0d069d6ca1" name="a484be628fa5170fd1c8f1e0d069d6ca1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a484be628fa5170fd1c8f1e0d069d6ca1">&#9670;&#160;</a></span>VEX_CAT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VEX_CAT</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>b</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><a class="code hl_define" href="#ad9f2c6b0bb32254114e7b70a3b42c72a">VEX_CAT_IMPL</a>(a, b)</div>
+<div class="ttc" id="aComponentFactory_8hpp_html_ad9f2c6b0bb32254114e7b70a3b42c72a"><div class="ttname"><a href="#ad9f2c6b0bb32254114e7b70a3b42c72a">VEX_CAT_IMPL</a></div><div class="ttdeci">#define VEX_CAT_IMPL(a, b)</div><div class="ttdoc">Helper macros to generate unique names based on line number.</div><div class="ttdef"><b>Definition</b> <a href="ComponentFactory_8hpp_source.html#l00227">ComponentFactory.hpp:227</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00228">228</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad9f2c6b0bb32254114e7b70a3b42c72a" name="ad9f2c6b0bb32254114e7b70a3b42c72a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9f2c6b0bb32254114e7b70a3b42c72a">&#9670;&#160;</a></span>VEX_CAT_IMPL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VEX_CAT_IMPL</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>b</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">a##b</div>
+</div><!-- fragment -->
+<p>Helper macros to generate unique names based on line number. </p>
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00227">227</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a99aa177b8022f7cd81925e2d87f45cb9" name="a99aa177b8022f7cd81925e2d87f45cb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99aa177b8022f7cd81925e2d87f45cb9">&#9670;&#160;</a></span>VEX_UNIQUE_NAME</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VEX_UNIQUE_NAME</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>prefix</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">VEX_CAT(prefix, __LINE__)</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00229">229</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="af479ced456857c2213bd624c1b12d04b" name="af479ced456857c2213bd624c1b12d04b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af479ced456857c2213bd624c1b12d04b">&#9670;&#160;</a></span>GenericComponentInspector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::GenericComponentInspector </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00074">74</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>

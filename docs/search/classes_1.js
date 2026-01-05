@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['cameracomponent_0',['CameraComponent',['../structvex_1_1CameraComponent.html',1,'vex']]],
-  ['cameraobject_1',['CameraObject',['../classvex_1_1CameraObject.html',1,'vex']]],
-  ['collisionhit_2',['CollisionHit',['../structvex_1_1CollisionHit.html',1,'vex']]],
-  ['componentregistry_3',['ComponentRegistry',['../classvex_1_1ComponentRegistry.html',1,'vex']]]
+  ['basiccamera_0',['BasicCamera',['../classvex_1_1BasicCamera.html',1,'vex']]],
+  ['basiceditorwindow_1',['BasicEditorWindow',['../structBasicEditorWindow.html',1,'']]],
+  ['bodyidhasher_2',['BodyIDHasher',['../structvex_1_1BodyIDHasher.html',1,'vex']]],
+  ['bplayerinterfaceimpl_3',['BPLayerInterfaceImpl',['../classvex_1_1BPLayerInterfaceImpl.html',1,'vex']]],
+  ['browsericons_4',['BrowserIcons',['../structvex_1_1BrowserIcons.html',1,'vex']]]
 ];

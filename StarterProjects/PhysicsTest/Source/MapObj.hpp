@@ -64,6 +64,10 @@ public:
     void Update(float deltaTime) override {
 
     }
+
+    ~Map() {
+        // Theres no need to delete these objects cause scene already takes care of it. Additionally it can cause double free if you do it.
+    }
 private:
 vex::ModelObject* Model;
 vex::ModelObject* wall1;

@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -109,28 +110,63 @@ $(function(){initNavTree('classvex_1_1Scene.html','','classvex_1_1Scene-members'
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a058f378a50b29cce15d24b4aa60f86d6" id="r_a058f378a50b29cce15d24b4aa60f86d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a058f378a50b29cce15d24b4aa60f86d6">Scene</a> (const std::string &amp;path, <a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine)</td></tr>
-<tr class="memdesc:a058f378a50b29cce15d24b4aa60f86d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor loads a scene from a file.  <br /></td></tr>
+<tr class="memdesc:a058f378a50b29cce15d24b4aa60f86d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor creates empty scene object.  <br /></td></tr>
+<tr class="memitem:a23f0b9363ac01c273bb47e7c4a9f3134" id="r_a23f0b9363ac01c273bb47e7c4a9f3134"><td class="memItemLeft" align="right" valign="top"><a id="a23f0b9363ac01c273bb47e7c4a9f3134" name="a23f0b9363ac01c273bb47e7c4a9f3134"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Scene</b> (const <a class="el" href="classvex_1_1Scene.html">Scene</a> &amp;)=delete</td></tr>
+<tr class="memitem:a0f8b6bb2cf44fa53155ee780dfbca76c" id="r_a0f8b6bb2cf44fa53155ee780dfbca76c"><td class="memItemLeft" align="right" valign="top"><a id="a0f8b6bb2cf44fa53155ee780dfbca76c" name="a0f8b6bb2cf44fa53155ee780dfbca76c"></a>
+<a class="el" href="classvex_1_1Scene.html">Scene</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classvex_1_1Scene.html">Scene</a> &amp;)=delete</td></tr>
+<tr class="memitem:a2e809bbc2b6d2dccfd01483f98044fff" id="r_a2e809bbc2b6d2dccfd01483f98044fff"><td class="memItemLeft" align="right" valign="top"><a id="a2e809bbc2b6d2dccfd01483f98044fff" name="a2e809bbc2b6d2dccfd01483f98044fff"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Scene</b> (<a class="el" href="classvex_1_1Scene.html">Scene</a> &amp;&amp;)=default</td></tr>
+<tr class="memitem:a4ffcf4e816d06fe0a828048a0d589f81" id="r_a4ffcf4e816d06fe0a828048a0d589f81"><td class="memItemLeft" align="right" valign="top"><a id="a4ffcf4e816d06fe0a828048a0d589f81" name="a4ffcf4e816d06fe0a828048a0d589f81"></a>
+<a class="el" href="classvex_1_1Scene.html">Scene</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classvex_1_1Scene.html">Scene</a> &amp;&amp;)=default</td></tr>
 <tr class="memitem:a259def38aebfd1eb64994c78768bff2f" id="r_a259def38aebfd1eb64994c78768bff2f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a259def38aebfd1eb64994c78768bff2f">~Scene</a> ()</td></tr>
 <tr class="memdesc:a259def38aebfd1eb64994c78768bff2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor clears the current scene.  <br /></td></tr>
 <tr class="memitem:af1402e2eb487a9f1e1fd3e3c9c7cc247" id="r_af1402e2eb487a9f1e1fd3e3c9c7cc247"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1402e2eb487a9f1e1fd3e3c9c7cc247">sceneBegin</a> ()</td></tr>
-<tr class="memdesc:af1402e2eb487a9f1e1fd3e3c9c7cc247"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calls beginGame in all objects it holds. This function needs to be called in your projects beginGame method.  <br /></td></tr>
+<tr class="memdesc:af1402e2eb487a9f1e1fd3e3c9c7cc247"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls <span class="tt">BeginPlay</span> on all objects in the scene.  <br /></td></tr>
 <tr class="memitem:af179bb0d7faab3a4bf2e25b0aa84a51a" id="r_af179bb0d7faab3a4bf2e25b0aa84a51a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af179bb0d7faab3a4bf2e25b0aa84a51a">sceneUpdate</a> (float deltaTime)</td></tr>
-<tr class="memdesc:af179bb0d7faab3a4bf2e25b0aa84a51a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calls update in all objects it holds. This function needs to be called in your projects update method.  <br /></td></tr>
-<tr class="memitem:a89e1806a6bfceb6cda24da72780145ac" id="r_a89e1806a6bfceb6cda24da72780145ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e1806a6bfceb6cda24da72780145ac">AddGameObject</a> (std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; gameObject)</td></tr>
-<tr class="memdesc:a89e1806a6bfceb6cda24da72780145ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to add a game object to the scene.  <br /></td></tr>
-<tr class="memitem:a24a98fd5c40feca2186c2b1c94b2967a" id="r_a24a98fd5c40feca2186c2b1c94b2967a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24a98fd5c40feca2186c2b1c94b2967a">GetGameObjectByName</a> (const std::string &amp;name)</td></tr>
-<tr class="memdesc:a24a98fd5c40feca2186c2b1c94b2967a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get game object by its unique name.  <br /></td></tr>
-<tr class="memitem:a26c5308e48b6534ce11c6a07fdb6ff21" id="r_a26c5308e48b6534ce11c6a07fdb6ff21"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26c5308e48b6534ce11c6a07fdb6ff21">GetGameObjectByEntity</a> (entt::entity &amp;entity)</td></tr>
-<tr class="memdesc:a26c5308e48b6534ce11c6a07fdb6ff21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get game object by its entity.  <br /></td></tr>
+<tr class="memdesc:af179bb0d7faab3a4bf2e25b0aa84a51a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates all objects in the scene.  <br /></td></tr>
+<tr class="memitem:aa214ee0178ac64b792ff6d93999c2f36" id="r_aa214ee0178ac64b792ff6d93999c2f36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa214ee0178ac64b792ff6d93999c2f36">AddGameObject</a> (std::unique_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; gameObject)</td></tr>
+<tr class="memdesc:aa214ee0178ac64b792ff6d93999c2f36"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Deprecated] Function to add a game object to the scene.  <br /></td></tr>
+<tr class="memitem:aa5988260d27459478a9b53c0c69663da" id="r_aa5988260d27459478a9b53c0c69663da"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5988260d27459478a9b53c0c69663da">GetAllGameObjectsByName</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:aa5988260d27459478a9b53c0c69663da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get all game objects with a specific name.  <br /></td></tr>
+<tr class="memitem:a434fc5bac20a90e6913bccbebf4fcfaa" id="r_a434fc5bac20a90e6913bccbebf4fcfaa"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a434fc5bac20a90e6913bccbebf4fcfaa">GetAllGameObjectsByClassName</a> (const std::string &amp;classname)</td></tr>
+<tr class="memdesc:a434fc5bac20a90e6913bccbebf4fcfaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get all game objects of a specific class type.  <br /></td></tr>
+<tr class="memitem:a74f005d7a8fa9943f1192408e51814e4" id="r_a74f005d7a8fa9943f1192408e51814e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74f005d7a8fa9943f1192408e51814e4">GetGameObjectByEntity</a> (entt::entity &amp;entity)</td></tr>
+<tr class="memdesc:a74f005d7a8fa9943f1192408e51814e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get a game object by its entity ID.  <br /></td></tr>
+<tr class="memitem:a3bdeb626c666621adfcbe6a0b5b21d47" id="r_a3bdeb626c666621adfcbe6a0b5b21d47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bdeb626c666621adfcbe6a0b5b21d47">RegisterGameObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> *gameObject)</td></tr>
+<tr class="memdesc:a3bdeb626c666621adfcbe6a0b5b21d47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a game object into the scene's internal storage.  <br /></td></tr>
+<tr class="memitem:a9e1119af8f263db062ed73d3d0bda269" id="r_a9e1119af8f263db062ed73d3d0bda269"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e1119af8f263db062ed73d3d0bda269">DestroyGameObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> *gameObject)</td></tr>
+<tr class="memdesc:a9e1119af8f263db062ed73d3d0bda269"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks a game object for destruction.  <br /></td></tr>
+<tr class="memitem:af775310eae79fd851885b1353554da00" id="r_af775310eae79fd851885b1353554da00"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af775310eae79fd851885b1353554da00">GetAllObjects</a> () const</td></tr>
+<tr class="memdesc:af775310eae79fd851885b1353554da00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get all game objects in the scene.  <br /></td></tr>
+<tr class="memitem:a9ea3e898550cab946424f5f40949e2d2" id="r_a9ea3e898550cab946424f5f40949e2d2"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ea3e898550cab946424f5f40949e2d2">GetAllAddedObjects</a> () const</td></tr>
+<tr class="memdesc:a9ea3e898550cab946424f5f40949e2d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get all added game objects in the scene.  <br /></td></tr>
+<tr class="memitem:a6d7688bf98b127621167f95622a2aaf1" id="r_a6d7688bf98b127621167f95622a2aaf1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d7688bf98b127621167f95622a2aaf1">Save</a> (const std::string &amp;outputPath)</td></tr>
+<tr class="memdesc:a6d7688bf98b127621167f95622a2aaf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the current state of the scene to a JSON file.  <br /></td></tr>
+<tr class="memitem:a2a6c9df0947f18b5ce1421ecd586529d" id="r_a2a6c9df0947f18b5ce1421ecd586529d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a6c9df0947f18b5ce1421ecd586529d">AddEditorGameObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> *gameObject)</td></tr>
+<tr class="memdesc:a2a6c9df0947f18b5ce1421ecd586529d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Promotes a temporary <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> (e.g., created by the <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a>) to a persistent <a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a> object.  <br /></td></tr>
+<tr class="memitem:af68b4aeb6f710c3d93775392b0478378" id="r_af68b4aeb6f710c3d93775392b0478378"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af68b4aeb6f710c3d93775392b0478378">GetScenePath</a> ()</td></tr>
+<tr class="memitem:a573c9cd828fa5def2785ca23c54249c2" id="r_a573c9cd828fa5def2785ca23c54249c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a573c9cd828fa5def2785ca23c54249c2">FlushDestructionQueue</a> ()</td></tr>
+<tr class="memdesc:a573c9cd828fa5def2785ca23c54249c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the queue of objects marked for destruction.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aacb1d984fb8c3e00330d35b52e75ebed" id="r_aacb1d984fb8c3e00330d35b52e75ebed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aacb1d984fb8c3e00330d35b52e75ebed">load</a> ()</td></tr>
+<tr class="memdesc:aacb1d984fb8c3e00330d35b52e75ebed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the scene data from the file path specified in the constructor.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a47c6cee7ba0cd735b7d9e9fe5161ec33" id="r_a47c6cee7ba0cd735b7d9e9fe5161ec33"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47c6cee7ba0cd735b7d9e9fe5161ec33">m_objects</a></td></tr>
+<tr class="memitem:aafc1fccbc015f565fe29f00dfb115d45" id="r_aafc1fccbc015f565fe29f00dfb115d45"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafc1fccbc015f565fe29f00dfb115d45">m_addedObjects</a></td></tr>
+<tr class="memitem:a2896f2201f4e38aa98374561281f821a" id="r_a2896f2201f4e38aa98374561281f821a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2896f2201f4e38aa98374561281f821a">m_pendingDestruction</a></td></tr>
+<tr class="memitem:a287b88999c976e1a4f2dc760324808b3" id="r_a287b88999c976e1a4f2dc760324808b3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a287b88999c976e1a4f2dc760324808b3">m_path</a></td></tr>
+<tr class="memitem:a2da003cbdfb10606f8a22167228c6fbf" id="r_a2da003cbdfb10606f8a22167228c6fbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Engine.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2da003cbdfb10606f8a22167228c6fbf">m_engine</a></td></tr>
+<tr class="memitem:add5050534bc707412e94cef5e2e65482" id="r_add5050534bc707412e94cef5e2e65482"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add5050534bc707412e94cef5e2e65482">m_creatingFromScene</a> = false</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a> class implements scene functionality like loading and holding game objects. </p>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00018">18</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00022">22</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a058f378a50b29cce15d24b4aa60f86d6" name="a058f378a50b29cce15d24b4aa60f86d6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a058f378a50b29cce15d24b4aa60f86d6">&#9670;&#160;</a></span>Scene()</h2>
@@ -151,7 +187,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor loads a scene from a file. </p>
+<p>Constructor creates empty scene object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">std::string&amp;</td><td>path - Path to the scene file. </td></tr>
@@ -160,7 +196,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00016">16</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00023">23</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -181,13 +217,40 @@ Private Attributes</h2></td></tr>
 
 <p>Destructor clears the current scene. </p>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00137">137</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00028">28</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a89e1806a6bfceb6cda24da72780145ac" name="a89e1806a6bfceb6cda24da72780145ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89e1806a6bfceb6cda24da72780145ac">&#9670;&#160;</a></span>AddGameObject()</h2>
+<a id="a2a6c9df0947f18b5ce1421ecd586529d" name="a2a6c9df0947f18b5ce1421ecd586529d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a6c9df0947f18b5ce1421ecd586529d">&#9670;&#160;</a></span>AddEditorGameObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Scene::AddEditorGameObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> *</td>          <td class="paramname"><span class="paramname"><em>gameObject</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Promotes a temporary <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> (e.g., created by the <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a>) to a persistent <a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a> object. </p>
+<p>Moves the object from the temporary <span class="tt">m_addedObjects</span> list to the primary <span class="tt">m_objects</span> storage, ensuring it is saved with the scene. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">GameObject*</td><td>gameObject - Pointer to the object to promote. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00446">446</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa214ee0178ac64b792ff6d93999c2f36" name="aa214ee0178ac64b792ff6d93999c2f36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa214ee0178ac64b792ff6d93999c2f36">&#9670;&#160;</a></span>AddGameObject()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -195,60 +258,139 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void vex::Scene::AddGameObject </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>gameObject</em></span></td><td>)</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>gameObject</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to add a game object to the scene. </p>
+<p>[Deprecated] Function to add a game object to the scene. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">std::shared_ptr&lt;GameObject&gt;</td><td>gameObject - Shared pointer to the game object to add. </td></tr>
+    <tr><td class="paramname">std::unique_ptr&lt;GameObject&gt;</td><td>gameObject - Shared pointer to the game object to add. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00161">161</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00240">240</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a26c5308e48b6534ce11c6a07fdb6ff21" name="a26c5308e48b6534ce11c6a07fdb6ff21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26c5308e48b6534ce11c6a07fdb6ff21">&#9670;&#160;</a></span>GetGameObjectByEntity()</h2>
+<a id="a9e1119af8f263db062ed73d3d0bda269" name="a9e1119af8f263db062ed73d3d0bda269"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e1119af8f263db062ed73d3d0bda269">&#9670;&#160;</a></span>DestroyGameObject()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; vex::Scene::GetGameObjectByEntity </td>
+          <td class="memname">void vex::Scene::DestroyGameObject </td>
           <td>(</td>
-          <td class="paramtype">entt::entity &amp;</td>          <td class="paramname"><span class="paramname"><em>entity</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> *</td>          <td class="paramname"><span class="paramname"><em>gameObject</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to get game object by its entity. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Marks a game object for destruction. </p>
+<p>Adds the object to <span class="tt">m_pendingDestruction</span> to be cleaned up at the start of the next <span class="tt">sceneUpdate</span>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">entt::entity&amp;</td><td>entity - Entity of the game object to get. </td></tr>
+    <tr><td class="paramname">GameObject*</td><td>gameObject - Pointer to the game object to destroy. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;GameObject&gt; - Shared pointer to the game object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00176">176</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00257">257</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a24a98fd5c40feca2186c2b1c94b2967a" name="a24a98fd5c40feca2186c2b1c94b2967a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24a98fd5c40feca2186c2b1c94b2967a">&#9670;&#160;</a></span>GetGameObjectByName()</h2>
+<a id="a573c9cd828fa5def2785ca23c54249c2" name="a573c9cd828fa5def2785ca23c54249c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a573c9cd828fa5def2785ca23c54249c2">&#9670;&#160;</a></span>FlushDestructionQueue()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; vex::Scene::GetGameObjectByName </td>
+          <td class="memname">void vex::Scene::FlushDestructionQueue </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Processes the queue of objects marked for destruction. </p>
+<p>Waits for the GPU to finish operations via <span class="tt"><a class="el" href="classvex_1_1Engine.html#a69eacf3eb729cd4b328416dd55c01647" title="Waits for the GPU to finish all pending operations.">Engine::WaitForGpu</a></span> to ensure safe deletion, then removes the objects from internal storage vectors. </p>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00265">265</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9ea3e898550cab946424f5f40949e2d2" name="a9ea3e898550cab946424f5f40949e2d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ea3e898550cab946424f5f40949e2d2">&#9670;&#160;</a></span>GetAllAddedObjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt; &amp; vex::Scene::GetAllAddedObjects </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Function to get all added game objects in the scene. </p>
+<dl class="section return"><dt>Returns</dt><dd>const std::vector&lt;std::shared_ptr&lt;GameObject&gt;&gt;&amp; - Reference to the vector of game objects. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00086">86</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a434fc5bac20a90e6913bccbebf4fcfaa" name="a434fc5bac20a90e6913bccbebf4fcfaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a434fc5bac20a90e6913bccbebf4fcfaa">&#9670;&#160;</a></span>GetAllGameObjectsByClassName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> * &gt; vex::Scene::GetAllGameObjectsByClassName </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>classname</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to get all game objects of a specific class type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; classname - Class name in string form. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;GameObject*&gt; - Vector of pointers to the matching game objects. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00307">307</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa5988260d27459478a9b53c0c69663da" name="aa5988260d27459478a9b53c0c69663da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5988260d27459478a9b53c0c69663da">&#9670;&#160;</a></span>GetAllGameObjectsByName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> * &gt; vex::Scene::GetAllGameObjectsByName </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
           <td></td>
@@ -256,16 +398,197 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to get game object by its unique name. </p>
+<p>Function to get all game objects with a specific name. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">const</td><td>std::string&amp; name - Name of the game object to get. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;GameObject&gt; - Shared pointer to the game object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;GameObject*&gt; - Vector of pointers to the matching game objects. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00167">167</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00292">292</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af775310eae79fd851885b1353554da00" name="af775310eae79fd851885b1353554da00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af775310eae79fd851885b1353554da00">&#9670;&#160;</a></span>GetAllObjects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt; &amp; vex::Scene::GetAllObjects </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Function to get all game objects in the scene. </p>
+<dl class="section return"><dt>Returns</dt><dd>const std::vector&lt;std::shared_ptr&lt;GameObject&gt;&gt;&amp; - Reference to the vector of game objects. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00082">82</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a74f005d7a8fa9943f1192408e51814e4" name="a74f005d7a8fa9943f1192408e51814e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74f005d7a8fa9943f1192408e51814e4">&#9670;&#160;</a></span>GetGameObjectByEntity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> * vex::Scene::GetGameObjectByEntity </td>
+          <td>(</td>
+          <td class="paramtype">entt::entity &amp;</td>          <td class="paramname"><span class="paramname"><em>entity</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to get a game object by its entity ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entt::entity&amp;</td><td>entity - Entity of the game object to get. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>GameObject* - Pointer to the game object, or nullptr if not found. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00322">322</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af68b4aeb6f710c3d93775392b0478378" name="af68b4aeb6f710c3d93775392b0478378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af68b4aeb6f710c3d93775392b0478378">&#9670;&#160;</a></span>GetScenePath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string vex::Scene::GetScenePath </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00102">102</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aacb1d984fb8c3e00330d35b52e75ebed" name="aacb1d984fb8c3e00330d35b52e75ebed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacb1d984fb8c3e00330d35b52e75ebed">&#9670;&#160;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Scene::load </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the scene data from the file path specified in the constructor. </p>
+<ol type="1">
+<li>Reads the JSON file from the Virtual File System.</li>
+<li>Parses and applies Global Environment settings (Lighting, Shading, Dithering).</li>
+<li>Iterates through the "objects" array, creating GameObjects via <span class="tt"><a class="el" href="classvex_1_1GameObjectFactory.html" title="Class responsible for registering and then creating GameObjects eg. Player, CameraObject....">GameObjectFactory</a></span>.</li>
+<li>Loads components for each object via <span class="tt"><a class="el" href="classvex_1_1ComponentRegistry.html" title="Class registering GameComponents mainly used to load them in SceneManager.">ComponentRegistry</a></span>.</li>
+<li>Reconstructs parent-child hierarchies based on name references. </li>
+</ol>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00033">33</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3bdeb626c666621adfcbe6a0b5b21d47" name="a3bdeb626c666621adfcbe6a0b5b21d47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bdeb626c666621adfcbe6a0b5b21d47">&#9670;&#160;</a></span>RegisterGameObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Scene::RegisterGameObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvex_1_1GameObject.html">GameObject</a> *</td>          <td class="paramname"><span class="paramname"><em>gameObject</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Registers a game object into the scene's internal storage. </p>
+<p>Places the object into <span class="tt">m_objects</span> if loading from a scene file, or <span class="tt">m_addedObjects</span> if created at runtime. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">GameObject*</td><td>gameObject - Pointer to the game object to register. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00246">246</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a6d7688bf98b127621167f95622a2aaf1" name="a6d7688bf98b127621167f95622a2aaf1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d7688bf98b127621167f95622a2aaf1">&#9670;&#160;</a></span>Save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Scene::Save </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>outputPath</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Saves the current state of the scene to a JSON file. </p>
+<p>Serializes:</p><ul>
+<li>Environment settings (Sun light, Ambient light, Shading artifacts).</li>
+<li>All GameObjects and their components (using <span class="tt"><a class="el" href="classvex_1_1ComponentRegistry.html#a0e0ddf666b509fe51d3f17deff0d6221" title="Serializes a component on a GameObject to JSON.">ComponentRegistry::saveComponent</a></span>).</li>
+<li>Object hierarchy (Parent/Child relationships).</li>
+<li>Sorts objects to ensure parents are written before children to maintain hierarchy integrity on load. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; outputPath - The filesystem path to write the .json file to. </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00336">336</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -284,9 +607,10 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function calls beginGame in all objects it holds. This function needs to be called in your projects beginGame method. </p>
+<p>Calls <span class="tt">BeginPlay</span> on all objects in the scene. </p>
+<p>Iterates through both main storage (<span class="tt">m_objects</span>) and the added queue (<span class="tt">m_addedObjects</span>). If <span class="tt">VEX_USE_PARALLEL_EXECUTION</span> is defined and object count &gt; 50, execution is parallelized. </p>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00141">141</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00180">180</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
@@ -305,19 +629,96 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function calls update in all objects it holds. This function needs to be called in your projects update method. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Updates all objects in the scene. </p>
+<ol type="1">
+<li>Flushes the destruction queue via <span class="tt">FlushDestructionQueue</span>.</li>
+<li>Calls <span class="tt">Update(deltaTime)</span> on all active objects.</li>
+<li>Supports parallel execution for large object counts if configured. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">float</td><td>deltaTime - Delta time since last frame. </td></tr>
   </table>
   </dd>
 </dl>
+</li>
+</ol>
 
-<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00151">151</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8cpp_source.html#l00210">210</a> of file <a class="el" href="Scene_8cpp_source.html">Scene.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="aafc1fccbc015f565fe29f00dfb115d45" name="aafc1fccbc015f565fe29f00dfb115d45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafc1fccbc015f565fe29f00dfb115d45">&#9670;&#160;</a></span>m_addedObjects</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="classvex_1_1GameObject.html">GameObject</a>&gt; &gt; vex::Scene::m_addedObjects</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00122">122</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="add5050534bc707412e94cef5e2e65482" name="add5050534bc707412e94cef5e2e65482"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add5050534bc707412e94cef5e2e65482">&#9670;&#160;</a></span>m_creatingFromScene</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::Scene::m_creatingFromScene = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00126">126</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2da003cbdfb10606f8a22167228c6fbf" name="a2da003cbdfb10606f8a22167228c6fbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2da003cbdfb10606f8a22167228c6fbf">&#9670;&#160;</a></span>m_engine</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classvex_1_1Engine.html">Engine</a>* vex::Scene::m_engine</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00125">125</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a47c6cee7ba0cd735b7d9e9fe5161ec33" name="a47c6cee7ba0cd735b7d9e9fe5161ec33"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47c6cee7ba0cd735b7d9e9fe5161ec33">&#9670;&#160;</a></span>m_objects</h2>
 
@@ -338,7 +739,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00049">49</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00121">121</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a287b88999c976e1a4f2dc760324808b3" name="a287b88999c976e1a4f2dc760324808b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a287b88999c976e1a4f2dc760324808b3">&#9670;&#160;</a></span>m_path</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string vex::Scene::m_path</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00124">124</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2896f2201f4e38aa98374561281f821a" name="a2896f2201f4e38aa98374561281f821a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2896f2201f4e38aa98374561281f821a">&#9670;&#160;</a></span>m_pendingDestruction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classvex_1_1GameObject.html">GameObject</a>*&gt; vex::Scene::m_pendingDestruction</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Scene_8hpp_source.html#l00123">123</a> of file <a class="el" href="Scene_8hpp_source.html">Scene.hpp</a>.</p>
 
 </div>
 </div>

@@ -22,6 +22,7 @@
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="style.css" rel="stylesheet" type="text/css"/>
+<link href="Sono-SemiBold.ttf" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -29,7 +30,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr id="projectrow">
-  <td id="projectlogo"><img alt="Logo" src="RenderedLogoLowRes.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="LogoTest_lojcst_c_scale,w_256.png"/></td>
   <td id="projectalign">
    <div id="projectname">VEX Engine
    </div>
@@ -143,31 +144,66 @@ $(function(){initNavTree('InputComponent_8hpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span></div>
 <div class="foldopen" id="foldopen00044" data-start="{" data-end="};">
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html">   44</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a> {</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    std::vector&lt;InputBinding&gt; bindings;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    std::vector&lt;MouseAxisBinding&gt; mouseAxisBindings;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
-<div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">   62</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">addBinding</a>(SDL_Scancode scancode, <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        bindings.push_back({scancode, state, action});</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structvex_1_1GamepadButtonBinding.html">   44</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1GamepadButtonBinding.html">GamepadButtonBinding</a> {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    SDL_GamepadButton button;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    std::function&lt;void(<span class="keywordtype">float</span>)&gt; action;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>};</div>
 </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span></div>
-<div class="foldopen" id="foldopen00079" data-start="{" data-end="}">
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">   79</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">addMouseAxisBinding</a>(<a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> axis, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        mouseAxisBindings.push_back({axis, action});</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span></div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="};">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="structvex_1_1GamepadAxisBinding.html">   51</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1GamepadAxisBinding.html">GamepadAxisBinding</a> {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    SDL_GamepadAxis axis;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    std::function&lt;void(<span class="keywordtype">float</span>)&gt; action;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>};</div>
 </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>};</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
+<div class="foldopen" id="foldopen00058" data-start="{" data-end="};">
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html">   58</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1InputComponent.html">InputComponent</a> {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::vector&lt;InputBinding&gt; bindings;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    std::vector&lt;MouseAxisBinding&gt; mouseAxisBindings;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    std::vector&lt;GamepadButtonBinding&gt; gamepadButtonBindings;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    std::vector&lt;GamepadAxisBinding&gt; gamepadAxisBindings;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span></div>
+<div class="foldopen" id="foldopen00078" data-start="{" data-end="}">
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">   78</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">addBinding</a>(SDL_Scancode scancode, <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        bindings.push_back({scancode, state, action});</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
 </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>}</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span></div>
+<div class="foldopen" id="foldopen00095" data-start="{" data-end="}">
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">   95</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">addMouseAxisBinding</a>(<a class="code hl_enumeration" href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">MouseAxis</a> axis, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        mouseAxisBindings.push_back({axis, action});</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    }</div>
+</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span></div>
+<div class="foldopen" id="foldopen00113" data-start="{" data-end="}">
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#a3e8693ba8df0106855ea8fba1f2990c8">  113</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#a3e8693ba8df0106855ea8fba1f2990c8">addGamepadButtonBinding</a>(SDL_GamepadButton button, <a class="code hl_enumeration" href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">InputActionState</a> state, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        gamepadButtonBindings.push_back({button, state, action});</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    }</div>
+</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span></div>
+<div class="foldopen" id="foldopen00130" data-start="{" data-end="}">
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno"><a class="line" href="structvex_1_1InputComponent.html#ad4ce03e08699e31aa9d17b48761db4c7">  130</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structvex_1_1InputComponent.html#ad4ce03e08699e31aa9d17b48761db4c7">addGamepadAxisBinding</a>(SDL_GamepadAxis axis, std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">float</span>)&gt; action) {</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        gamepadAxisBindings.push_back({axis, action});</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    }</div>
+</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>};</div>
+</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>}</div>
 <div class="ttc" id="aInputComponent_8hpp_html_ac124416b4019bbc3469060d23628f236"><div class="ttname"><a href="InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236">vex::MouseAxis</a></div><div class="ttdeci">MouseAxis</div><div class="ttdoc">Enum representing the axis of a mouse.</div><div class="ttdef"><b>Definition</b> <a href="#l00025">InputComponent.hpp:25</a></div></div>
 <div class="ttc" id="aInputComponent_8hpp_html_afa59d168ebb1f4a027aa18468ce8baee"><div class="ttname"><a href="InputComponent_8hpp.html#afa59d168ebb1f4a027aa18468ce8baee">vex::InputActionState</a></div><div class="ttdeci">InputActionState</div><div class="ttdoc">Enum representing the state of an input action.</div><div class="ttdef"><b>Definition</b> <a href="#l00018">InputComponent.hpp:18</a></div></div>
+<div class="ttc" id="astructvex_1_1GamepadAxisBinding_html"><div class="ttname"><a href="structvex_1_1GamepadAxisBinding.html">vex::GamepadAxisBinding</a></div><div class="ttdoc">Struct for Gamepad Axis bindings (Joysticks/Triggers)</div><div class="ttdef"><b>Definition</b> <a href="#l00051">InputComponent.hpp:51</a></div></div>
+<div class="ttc" id="astructvex_1_1GamepadButtonBinding_html"><div class="ttname"><a href="structvex_1_1GamepadButtonBinding.html">vex::GamepadButtonBinding</a></div><div class="ttdoc">Struct for Gamepad Button bindings.</div><div class="ttdef"><b>Definition</b> <a href="#l00044">InputComponent.hpp:44</a></div></div>
 <div class="ttc" id="astructvex_1_1InputBinding_html"><div class="ttname"><a href="structvex_1_1InputBinding.html">vex::InputBinding</a></div><div class="ttdoc">Struct representing an input binding. SDL_Scancode, state and std::function containing the action to ...</div><div class="ttdef"><b>Definition</b> <a href="#l00031">InputComponent.hpp:31</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="#l00044">InputComponent.hpp:44</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ab6b18d5459430bc38abfd71a5ee74650"><div class="ttname"><a href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">vex::InputComponent::addBinding</a></div><div class="ttdeci">void addBinding(SDL_Scancode scancode, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds input binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00062">InputComponent.hpp:62</a></div></div>
-<div class="ttc" id="astructvex_1_1InputComponent_html_ade73e4eef54216ef51d4b4c4c2e7787f"><div class="ttname"><a href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">vex::InputComponent::addMouseAxisBinding</a></div><div class="ttdeci">void addMouseAxisBinding(MouseAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds axis binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00079">InputComponent.hpp:79</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html"><div class="ttname"><a href="structvex_1_1InputComponent.html">vex::InputComponent</a></div><div class="ttdoc">Component you add to your GameObject to handle input, eg. add input bindings and mouse axis bindings.</div><div class="ttdef"><b>Definition</b> <a href="#l00058">InputComponent.hpp:58</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_a3e8693ba8df0106855ea8fba1f2990c8"><div class="ttname"><a href="structvex_1_1InputComponent.html#a3e8693ba8df0106855ea8fba1f2990c8">vex::InputComponent::addGamepadButtonBinding</a></div><div class="ttdeci">void addGamepadButtonBinding(SDL_GamepadButton button, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds gamepad button binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00113">InputComponent.hpp:113</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_ab6b18d5459430bc38abfd71a5ee74650"><div class="ttname"><a href="structvex_1_1InputComponent.html#ab6b18d5459430bc38abfd71a5ee74650">vex::InputComponent::addBinding</a></div><div class="ttdeci">void addBinding(SDL_Scancode scancode, InputActionState state, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds input binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00078">InputComponent.hpp:78</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_ad4ce03e08699e31aa9d17b48761db4c7"><div class="ttname"><a href="structvex_1_1InputComponent.html#ad4ce03e08699e31aa9d17b48761db4c7">vex::InputComponent::addGamepadAxisBinding</a></div><div class="ttdeci">void addGamepadAxisBinding(SDL_GamepadAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds gamepad axis binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00130">InputComponent.hpp:130</a></div></div>
+<div class="ttc" id="astructvex_1_1InputComponent_html_ade73e4eef54216ef51d4b4c4c2e7787f"><div class="ttname"><a href="structvex_1_1InputComponent.html#ade73e4eef54216ef51d4b4c4c2e7787f">vex::InputComponent::addMouseAxisBinding</a></div><div class="ttdeci">void addMouseAxisBinding(MouseAxis axis, std::function&lt; void(float)&gt; action)</div><div class="ttdoc">Adds axis binding.</div><div class="ttdef"><b>Definition</b> <a href="#l00095">InputComponent.hpp:95</a></div></div>
 <div class="ttc" id="astructvex_1_1MouseAxisBinding_html"><div class="ttname"><a href="structvex_1_1MouseAxisBinding.html">vex::MouseAxisBinding</a></div><div class="ttdoc">Struct representing an axis binding. Axis and std::function containing the action to be performed.</div><div class="ttdef"><b>Definition</b> <a href="#l00038">InputComponent.hpp:38</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

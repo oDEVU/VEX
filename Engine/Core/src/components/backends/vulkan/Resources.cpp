@@ -3,14 +3,16 @@
 #include <volk.h>
 #include <vk_mem_alloc.h>
 #include <SDL3/SDL_vulkan.h>
+#include <algorithm>
 #include "components/backends/vulkan/uniforms.hpp"
+#include "components/pathUtils.hpp"
 #include "limits.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../../thirdparty/stb/stb_image.h"
 
 namespace vex {
-    VulkanResources::VulkanResources(VulkanContext& context) : m_r_context(context) {
+    VulkanResources::VulkanResources(VulkanContext& context, VirtualFileSystem* vfs) : m_r_context(context), m_vfs(vfs) {
         createDefaultTexture();
         createTextureSampler();
         createUniformBuffers();
@@ -36,25 +38,53 @@ namespace vex {
             }
         }
 
-        for (auto& [name, image] : m_textureImages) {
-            if (m_textureViews[name] != VK_NULL_HANDLE) {
+        for (auto const& [name, image] : m_textureImages) {
+            if (m_textureViews.count(name) && m_textureViews[name] != VK_NULL_HANDLE) {
                 vkDestroyImageView(m_r_context.device, m_textureViews[name], nullptr);
-                m_textureViews[name] = VK_NULL_HANDLE;
             }
-            if (image != VK_NULL_HANDLE && m_textureAllocations[name] != VK_NULL_HANDLE) {
+
+            if (image != VK_NULL_HANDLE && m_textureAllocations.count(name)) {
                 vmaDestroyImage(m_r_context.allocator, image, m_textureAllocations[name]);
-                image = VK_NULL_HANDLE;
             }
+        }
+
+        m_textureImages.clear();
+        m_textureAllocations.clear();
+        m_textureViews.clear();
+        m_textures.clear();
+
+        if (m_r_context.bindlessDescriptorPool != VK_NULL_HANDLE) {
+            vkDestroyDescriptorPool(m_r_context.device, m_r_context.bindlessDescriptorPool, nullptr);
+            m_r_context.bindlessDescriptorPool = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.bindlessDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.bindlessDescriptorSetLayout, nullptr);
+            m_r_context.bindlessDescriptorSetLayout = VK_NULL_HANDLE;
         }
 
         if (m_descriptorPool != VK_NULL_HANDLE) {
             vkDestroyDescriptorPool(m_r_context.device, m_descriptorPool, nullptr);
             m_descriptorPool = VK_NULL_HANDLE;
         }
+
+        if (m_r_context.uboDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.uboDescriptorSetLayout, nullptr);
+            m_r_context.uboDescriptorSetLayout = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.textureDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.textureDescriptorSetLayout, nullptr);
+            m_r_context.textureDescriptorSetLayout = VK_NULL_HANDLE;
+        }
     }
 
     void VulkanResources::createTextureFromRaw(const std::vector<unsigned char>& rgba, int w, int h, const std::string& name) {
-        // Copy the loadTexture logic, but use rgba instead of stb_image
+        if (m_r_context.textureIndices.contains(name)) {
+            log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
+            return;
+        }
+
         VkBuffer stagingBuffer;
         VmaAllocation stagingAlloc;
 
@@ -170,11 +200,6 @@ namespace vex {
             throw_error("Failed to create texture image view!");
         }
 
-        if (m_r_context.textureIndices.contains(name)) {
-            log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
-            return;
-        }
-
         m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
         log("Assigned texture '%s' to index %u", name.c_str(), m_r_context.textureIndices[name]);
 
@@ -182,12 +207,6 @@ namespace vex {
         m_textureImages[name] = textureImage;
         m_textureAllocations[name] = textureAlloc;
         m_textureViews[name] = textureView;
-
-            if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
-                throw_error("Exceeded maximum texture count");
-            }
-            m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
-            log("Assigned texture '%s' to index %d", name.c_str(), m_r_context.textureIndices[name]);
 
         VkDescriptorImageInfo imageDescInfo{};
         imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -222,12 +241,10 @@ namespace vex {
         allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
 
         for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
-            // scene UBO
             bufferInfo.size = sizeof(SceneUBO);
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                           &m_sceneBuffers[i], &m_sceneAllocs[i], nullptr);
 
-            // Light UBO (dynamic)
             bufferInfo.size = sizeof(SceneLightsUBO) * MAX_MODELS;
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                             &m_lightBuffers[i], &m_lightAllocs[i], nullptr);
@@ -240,7 +257,7 @@ namespace vex {
         uboBindings[0].binding = 0;
         uboBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         uboBindings[0].descriptorCount = 1;
-        uboBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        uboBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 
         uboBindings[1].binding = 1;
         uboBindings[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
@@ -272,6 +289,55 @@ namespace vex {
         if (vkCreateDescriptorSetLayout(m_r_context.device, &texLayoutInfo, nullptr, &m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {
             throw_error("Failed to create descriptor set layout");
         }
+
+        if (m_r_context.supportsBindlessTextures) {
+                log("Creating Bindless Descriptor Layout...");
+
+                VkDescriptorBindingFlags bindlessFlags =
+                    VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT |
+                    VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
+
+                VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo{};
+                bindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
+                bindingFlagsInfo.bindingCount = 1;
+                bindingFlagsInfo.pBindingFlags = &bindlessFlags;
+
+                VkDescriptorSetLayoutBinding bindlessBinding{};
+                bindlessBinding.binding = 0;
+                bindlessBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                bindlessBinding.descriptorCount = MAX_TEXTURES;
+                bindlessBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+                bindlessBinding.pImmutableSamplers = nullptr;
+
+                VkDescriptorSetLayoutCreateInfo bindlessLayoutInfo{};
+                bindlessLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+                bindlessLayoutInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT;
+                bindlessLayoutInfo.bindingCount = 1;
+                bindlessLayoutInfo.pBindings = &bindlessBinding;
+                bindlessLayoutInfo.pNext = &bindingFlagsInfo;
+
+                if (vkCreateDescriptorSetLayout(m_r_context.device, &bindlessLayoutInfo, nullptr, &m_r_context.bindlessDescriptorSetLayout) != VK_SUCCESS) {
+                    throw_error("Failed to create bindless layout");
+                }
+
+                VkDescriptorPoolSize poolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES };
+                VkDescriptorPoolCreateInfo poolInfo{};
+                poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+                poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT;
+                poolInfo.maxSets = 1;
+                poolInfo.poolSizeCount = 1;
+                poolInfo.pPoolSizes = &poolSize;
+
+                vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.bindlessDescriptorPool);
+
+                VkDescriptorSetAllocateInfo allocInfo{};
+                allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+                allocInfo.descriptorPool = m_r_context.bindlessDescriptorPool;
+                allocInfo.descriptorSetCount = 1;
+                allocInfo.pSetLayouts = &m_r_context.bindlessDescriptorSetLayout;
+
+                vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_r_context.bindlessDescriptorSet);
+            }
 
         m_r_context.descriptorSetLayout = m_descriptorSetLayout;
 
@@ -345,11 +411,29 @@ namespace vex {
         }
     }
 
+    VkDescriptorSet VulkanResources::getUBODescriptorSet(uint32_t frameIndex) const {
+        if (frameIndex >= m_descriptorSets.size()) return VK_NULL_HANDLE;
+        return m_descriptorSets[frameIndex];
+    }
+
     void VulkanResources::updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex){
         VkDescriptorImageInfo imageInfo{};
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageInfo.imageView = textureView;
         imageInfo.sampler = m_textureSampler;
+
+        if (m_r_context.supportsBindlessTextures) {
+            VkWriteDescriptorSet bindlessWrite{};
+            bindlessWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            bindlessWrite.dstSet = m_r_context.bindlessDescriptorSet;
+            bindlessWrite.dstBinding = 0;
+            bindlessWrite.dstArrayElement = textureIndex;
+            bindlessWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            bindlessWrite.descriptorCount = 1;
+            bindlessWrite.pImageInfo = &imageInfo;
+
+            vkUpdateDescriptorSets(m_r_context.device, 1, &bindlessWrite, 0, nullptr);
+        }
 
         VkWriteDescriptorSet write{};
         write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -508,7 +592,7 @@ namespace vex {
     }
 
 
-    VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) {
+    VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) const {
         const uint32_t index = frameIndex * MAX_TEXTURES + textureIndex;
         if (index >= m_textureDescriptorSets.size()) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR,
@@ -538,50 +622,94 @@ namespace vex {
             vkCreateSampler(m_r_context.device, &samplerInfo, nullptr, &m_textureSampler);
         }
 
-        void VulkanResources::loadTexture(const std::string& path, const std::string& name, VirtualFileSystem *vfs) {
+
+        uint32_t VulkanResources::getTextureIndex(const std::string& name) {
+            auto it = m_r_context.textureIndices.find(name);
+            if (it != m_r_context.textureIndices.end()) return it->second;
+            if (std::find(m_ignoredTexturePaths.begin(), m_ignoredTexturePaths.end(), name) == m_ignoredTexturePaths.end()) {
+                if(loadTexture(name, name)){
+                    return getTextureIndex(name);
+                }else{
+                    m_ignoredTexturePaths.push_back(name);
+                    log(LogLevel::WARNING, "Texture '%s' could not be loaded!", name.c_str());
+                }
+            }
+            return 0;
+        }
+
+        bool VulkanResources::loadTexture(const std::string& path, const std::string& name) {
             std::string fullPath = path;//"Assets/" + std::string(path.c_str());
 
-            if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
-                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                           "Maximum texture count (%u) reached!",
-                           MAX_TEXTURES);
-                return;
+            if (m_r_context.textureIndices.contains(name)) {
+                log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
+                return true;
             }
 
+            if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
+                log(LogLevel::ERROR, "Maximum texture count (%u) reached!", MAX_TEXTURES);
+                return false;
+            }
+
+            stbi_uc* pixels = nullptr;
+            int texWidth, texHeight, texChannels;
+
+            try {
                 // Use VFS to check if file exists and get data
-                if (!vfs->file_exists(fullPath)) {
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Texture file not found in VFS: %s", fullPath.c_str());
-                    throw_error("Missing texture in VFS: " + fullPath);
+                if (!m_vfs->file_exists(fullPath)) {
+                    log(LogLevel::ERROR, "Texture file not found in VFS: %s", fullPath.c_str());
+                    return false;
                 }
 
                 log("VFS loading image...");
-                int texWidth, texHeight, texChannels;
+                //int texWidth, texHeight, texChannels;
 
                 // Load file data through VFS
-                auto fileData = vfs->load_file(fullPath);  // This returns std::unique_ptr<FileData>
+                auto fileData = m_vfs->load_file(fullPath);  // This returns std::unique_ptr<FileData>
                 if (!fileData) {
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "VFS failed to load texture: %s", fullPath.c_str());
-                    throw_error("VFS failed to load texture: " + fullPath);
+                    log(LogLevel::ERROR, "VFS failed to load texture: %s", fullPath.c_str());
+                    return false;
                 }
 
                 // Use stbi_load_from_memory instead of stbi_load
-                stbi_uc* pixels = stbi_load_from_memory(
+                pixels = stbi_load_from_memory(
                     reinterpret_cast<const stbi_uc*>(fileData->data.data()),  // fileData is a pointer
                     static_cast<int>(fileData->size),                         // fileData->size is member
                     &texWidth, &texHeight, &texChannels, STBI_rgb_alpha
                 );
 
                 if (!pixels) {
-                    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "STBI failed: %s", stbi_failure_reason());
-                    throw_error("Failed to load texture pixels from VFS data");
+                    log(LogLevel::ERROR, "STBI failed: %s", stbi_failure_reason());
+                    return false;
                 }
+            } catch (const std::exception& e) {
+                log(LogLevel::ERROR, "Failed to load image data for %s", fullPath.c_str());
+                if (pixels) stbi_image_free(pixels);
+                return false;
+            }
 
-                log("Image loaded from VFS: %dx%d, %d channels", texWidth, texHeight, texChannels);
+            log("Image loaded from VFS: %dx%d, %d channels", texWidth, texHeight, texChannels);
 
-                VkDeviceSize imageSize = texWidth * texHeight * 4;
+            uint32_t assignedIndex = 0;
+
+            if (!m_r_context.recycledTextureIndices.empty()) {
+                assignedIndex = m_r_context.recycledTextureIndices.front();
+                m_r_context.recycledTextureIndices.pop();
+                log("Recycling texture index: %u for '%s'", assignedIndex, name.c_str());
+            } else {
+                if (m_r_context.nextTextureIndex >= MAX_TEXTURES) {
+                    log(LogLevel::ERROR, "Maximum texture count (%u) reached!", MAX_TEXTURES);
+                    if (pixels) stbi_image_free(pixels);
+                    return false;
+                }
+                assignedIndex = m_r_context.nextTextureIndex++;
+                log("Assigning new texture index: %u for '%s'", assignedIndex, name.c_str());
+            }
+
+            VkDeviceSize imageSize = texWidth * texHeight * 4;
 
             if (!pixels) {
-                throw_error("Failed to load texture: " + fullPath);
+                log(LogLevel::ERROR, "Failed to load texture: %s", fullPath.c_str());
+                return false;
             }
 
             log("Creating staging buffer (%zu bytes)...",
@@ -696,15 +824,11 @@ namespace vex {
             VkImageView textureView;
             log("Creating vulkan texture view...");
             if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) {
-                throw_error("Failed to create texture image view!");
+                log(LogLevel::ERROR, "Failed to create texture image view!");
+                return false;
             }
 
-            if (m_r_context.textureIndices.contains(name)) {
-                log("Texture '%s' already exists at index %u", name.c_str(), m_r_context.textureIndices[name]);
-                return;
-            }
-
-            m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;
+            m_r_context.textureIndices[name] = assignedIndex;
             log("Assigned texture '%s' to index %u", name.c_str(), m_r_context.textureIndices[name]);
 
             m_textures[name] = textureView;
@@ -712,11 +836,23 @@ namespace vex {
             m_textureAllocations[name] = textureAlloc;
             m_textureViews[name] = textureView;
 
-                if (m_r_context.textureIndices.size() >= MAX_TEXTURES) {
-                    throw_error("Exceeded maximum texture count");
+            if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorImageInfo imageInfo{};
+                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                    imageInfo.imageView = textureView;
+                    imageInfo.sampler = m_textureSampler;
+
+                    VkWriteDescriptorSet write{};
+                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet = m_r_context.bindlessDescriptorSet;
+                    write.dstBinding = 0;
+                    write.dstArrayElement = assignedIndex;
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                    write.descriptorCount = 1;
+                    write.pImageInfo = &imageInfo;
+
+                    vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
                 }
-                m_r_context.textureIndices[name] = m_r_context.textureIndices.size();
-                log("Assigned texture '%s' to index %d", name.c_str(), m_r_context.textureIndices[name]);
 
                 VkDescriptorImageInfo imageDescInfo{};
                 imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -735,6 +871,7 @@ namespace vex {
                     vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
                 }
                 log("Updated texture descriptors for '%s'", name.c_str());
+                return true;
         }
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;
@@ -744,6 +881,8 @@ namespace vex {
                 log("Texture %s not loaded", name.c_str());
                 return;
             }
+
+            uint32_t textureIndex = m_r_context.textureIndices[name];
 
             vkDeviceWaitIdle(m_r_context.device);
 
@@ -757,10 +896,46 @@ namespace vex {
                 m_textureImages[name] = VK_NULL_HANDLE;
             }
 
+            VkImageView defaultView = getTextureView("default");
+
+            VkDescriptorImageInfo imageInfo{};
+            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            imageInfo.imageView = defaultView;
+            imageInfo.sampler = m_textureSampler;
+
+            if (m_r_context.supportsBindlessTextures) {
+                VkWriteDescriptorSet bindlessWrite{};
+                bindlessWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                bindlessWrite.dstSet = m_r_context.bindlessDescriptorSet;
+                bindlessWrite.dstBinding = 0;
+                bindlessWrite.dstArrayElement = textureIndex;
+                bindlessWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                bindlessWrite.descriptorCount = 1;
+                bindlessWrite.pImageInfo = &imageInfo;
+
+                vkUpdateDescriptorSets(m_r_context.device, 1, &bindlessWrite, 0, nullptr);
+            }
+
+            for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
+                VkWriteDescriptorSet write{};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = getTextureDescriptorSet(frame, textureIndex);
+                write.dstBinding = 0;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                write.descriptorCount = 1;
+                write.pImageInfo = &imageInfo;
+
+                vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+            }
+
             m_textures.erase(name);
             m_textureImages.erase(name);
             m_textureAllocations.erase(name);
             m_textureViews.erase(name);
+
+            m_r_context.textureIndices.erase(name);
+            m_r_context.recycledTextureIndices.push(textureIndex);
+
             log("Texture %s unloaded", name.c_str());
         }
 

@@ -1,84 +1,193 @@
 #include "components/SceneManager.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
+#include "components/GameComponents/CharacterComponent.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
+#include "components/GameObjects/LightObject.hpp"
+#include "components/GameObjects/FogObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
+#include "components/PhysicsSystem.hpp"
 #include "components/enviroment.hpp"
 #include "VirtualFileSystem.hpp"
+#include <memory>
 #include <nlohmann/json.hpp>
 #include <cstdint>
 #include <fstream>
 #include <filesystem>
 
 namespace vex {
-    void LoadTransformComponent(GameObject& obj, const nlohmann::json& json) {
-        TransformComponent comp(obj.GetEngine().getRegistry());
-        if (json.contains("position") && json["position"].is_array() && json["position"].size() >= 3) {
-            glm::vec3 position(
-                json["position"][0].get<float>(),
-                json["position"][1].get<float>(),
-                json["position"][2].get<float>()
-            );
-            comp.setLocalPosition(position);
-        }
-        if (json.contains("rotation") && json["rotation"].is_array() && json["rotation"].size() >= 3) {
-            glm::vec3 rotation(
-                json["rotation"][0].get<float>(),
-                json["rotation"][1].get<float>(),
-                json["rotation"][2].get<float>()
-            );
-            comp.setLocalRotation(rotation);
-        }
-        if (json.contains("scale") && json["scale"].is_array() && json["scale"].size() >= 3) {
-            glm::vec3 scale(
-                json["scale"][0].get<float>(),
-                json["scale"][1].get<float>(),
-                json["scale"][2].get<float>()
-            );
-            comp.setLocalScale(scale);
-        }
-        obj.AddComponent(comp);
-    }
 
-    void LoadCameraComponent(GameObject& obj, const nlohmann::json& json) {
-        CameraComponent comp;
-        if (json.contains("fov") && !json["fov"].is_array()) {
-            comp.fov = json["fov"].get<float>();
+    void to_json(nlohmann::json& j, const TransformComponent& t) {
+            j = nlohmann::json{
+                {"position", t.getLocalPosition()},
+                {"rotation", t.getLocalRotation()},
+                {"scale",    t.getLocalScale()}
+            };
         }
-        if (json.contains("nearPlane") && !json["nearPlane"].is_array()) {
-            comp.nearPlane = json["nearPlane"].get<float>();
-        }
-        if (json.contains("farPlane") && !json["farPlane"].is_array()) {
-            comp.farPlane = json["farPlane"].get<float>();
-        }
-        obj.AddComponent(comp);
-    }
 
-    void LoadMeshComponent(GameObject& obj, const nlohmann::json& json) {
-        MeshComponent comp;
-        if (json.contains("path") && !json["path"].is_array()) {
-            comp = createMeshFromPath(json["path"], obj.GetEngine());
+        void from_json(const nlohmann::json& j, TransformComponent& t) {
+            if(j.contains("position")) t.setLocalPosition(j["position"]);
+            if(j.contains("rotation")) t.setLocalRotation(j["rotation"]);
+            if(j.contains("scale"))    t.setLocalScale(j["scale"]);
         }
-        if (json.contains("transparent") && !json["transparent"].is_array()) {
-            bool transparent = json["transparent"].get<bool>();
-            if(transparent){
-                comp.renderType = RenderType::TRANSPARENT;
+
+
+        void to_json(nlohmann::json& j, const MeshComponent& m) {
+                j["path"] = m.meshData.meshPath;
+                j["renderType"] = (int)m.renderType;
+                j["color"] = m.color;
+                j["textureOverrides"] = m.textureOverrides;
             }
-        }
-        obj.AddComponent(comp);
-    }
 
-    // Loadable Components
-    REGISTER_COMPONENT(TransformComponent, LoadTransformComponent);
-    REGISTER_COMPONENT(CameraComponent, LoadCameraComponent);
-    REGISTER_COMPONENT(MeshComponent, LoadMeshComponent);
+            void from_json(const nlohmann::json& j, MeshComponent& m) {
+                if (j.contains("path")) {
+                    std::string path = j["path"];
+                    m.meshData.meshPath = path;
+                }
+                if (j.contains("renderType")) m.renderType = (RenderType)j["renderType"];
+                if (j.contains("color")) m.color = j["color"];
+                if (j.contains("textureOverrides")) m.textureOverrides = j["textureOverrides"];
+            }
 
-    /// @todo Add physics component loading function
 
-    // Loadable Objects
+        //REGISTER_COMPONENT(MeshComponent, meshData, renderType, color);
+
+        #if DEBUG
+        template<>
+            void vex::GenericComponentInspector<vex::PhysicsComponent>(GameObject& obj) {
+                std::string name = entt::type_id<vex::PhysicsComponent>().name().data();
+                std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+
+                ImGui::PushID(name.c_str());
+                if (obj.HasComponent<vex::PhysicsComponent>()) {
+                    if (ImGui::CollapsingHeader("PhysicsComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                        auto& pc = obj.GetComponent<vex::PhysicsComponent>();
+                        bool changed = false;
+
+                        if (ImReflect::Input("Shape", pc.shape).get<vex::ShapeType>().is_changed()) changed = true;
+
+                        if (pc.shape == ShapeType::BOX){
+                            changed |= ImGui::DragFloat3("Extents", &pc.boxHalfExtents.x);
+                        } else if (pc.shape == ShapeType::ROUNDED_BOX){
+                            changed |= ImGui::DragFloat3("Extents", &pc.boxHalfExtents.x);
+                            changed |= ImGui::DragFloat("Radius", &pc.roundedRadius);
+                        } else if (pc.shape == ShapeType::SPHERE) {
+                            changed |= ImGui::DragFloat("Radius", &pc.sphereRadius);
+                        } else if (pc.shape == ShapeType::CAPSULE){
+                            changed |= ImGui::DragFloat2("Radius", &pc.capsuleRadius);
+                            changed |= ImGui::DragFloat2("Height", &pc.capsuleHeight);
+                        } else if (pc.shape == ShapeType::CYLINDER){
+                            changed |= ImGui::DragFloat2("Radius", &pc.cylinderRadius);
+                            changed |= ImGui::DragFloat2("Height", &pc.cylinderHeight);
+                        }
+
+                        if (ImReflect::Input("BodyType", pc.bodyType).get<vex::BodyType>().is_changed()) changed = true;
+                        if (ImReflect::Input("Mass", pc.mass).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Friction", pc.friction).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Bounciness", pc.bounce).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Linear Damping", pc.linearDamping).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Angular Damping", pc.angularDamping).get<float>().is_changed()) changed = true;
+                        if (ImReflect::Input("Sensor", pc.isSensor).get<bool>().is_changed()) changed = true;
+                        if (ImReflect::Input("Allow Sleeping", pc.allowSleeping).get<bool>().is_changed()) changed = true;
+
+                        pc.updated = changed;
+
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.71f, 0.10f, 0.10f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.30f, 0.03f, 0.03f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.94f, 0.85f, 0.85f, 1.0f)); // White Text
+
+                        if (ImGui::Button("Remove")) {
+                            obj.GetEngine().getRegistry().remove<vex::PhysicsComponent>(obj.GetEntity());
+                        }
+
+                        ImGui::PopStyleColor(4);
+                    }
+                }
+                ImGui::PopID();
+            }
+            #endif
+
+
+
+                    #if DEBUG
+                    template<>
+                        void vex::GenericComponentInspector<vex::TransformComponent>(GameObject& obj) {
+                            std::string name = entt::type_id<vex::TransformComponent>().name().data();
+                            std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+
+                            ImGui::PushID(name.c_str());
+                            if (obj.HasComponent<vex::TransformComponent>()) {
+                                if (ImGui::CollapsingHeader("TransformComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                                    auto& tc = obj.GetComponent<vex::TransformComponent>();
+
+                                    if(( tc.rotation.x == 0 && tc.rotation.y == 0 && tc.rotation.z == 0 )&& (tc.getLocalRotation().x != 0 || tc.getLocalRotation().y != 0 || tc.getLocalRotation().z != 0)){
+                                        tc.rotation = tc.getLocalRotation();
+                                    }
+
+                                    ImGui::DragFloat3("Position", &tc.position.x);
+                                    ImGui::DragFloat3("Rotation", &tc.rotation.x);
+                                    ImGui::DragFloat3("Scale", &tc.scale.x);
+
+                                    tc.convertRot();
+
+                                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));
+                                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.71f, 0.10f, 0.10f, 1.0f));
+                                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.30f, 0.03f, 0.03f, 1.0f));
+                                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.94f, 0.85f, 0.85f, 1.0f));
+
+                                    if (ImGui::Button("Remove")) {
+                                        obj.GetEngine().getRegistry().remove<vex::PhysicsComponent>(obj.GetEntity());
+                                    }
+
+                                    ImGui::PopStyleColor(4);
+                                }
+                            }
+                            ImGui::PopID();
+                        }
+                        #endif
+}
+
+
+REGISTER_COMPONENT_CUSTOM(vex::TransformComponent, position, rotation, scale);
+REGISTER_COMPONENT_CUSTOM(vex::MeshComponent, meshData, renderType, color, textureOverrides);
+
+REGISTER_COMPONENT(vex::CameraComponent, fov, nearPlane, farPlane);
+REGISTER_COMPONENT(vex::LightComponent, color, intensity, radius);
+REGISTER_COMPONENT(vex::FogComponent, color, density, start, end);
+REGISTER_COMPONENT(vex::CharacterComponent, standingHeight, standingRadius, mass, maxSlopeAngle);
+
+//REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
+
+REGISTER_COMPONENT(vex::PhysicsComponent,
+    shape,
+    bodyType,
+    isSensor,
+    allowSleeping,
+
+    mass,
+    friction,
+    bounce,
+    linearDamping,
+    angularDamping,
+
+    boxHalfExtents,
+    roundedRadius,
+    sphereRadius,
+    capsuleRadius,
+    capsuleHeight,
+    cylinderRadius,
+    cylinderHeight
+);
+
+namespace vex {
+
     REGISTER_GAME_OBJECT(CameraObject);
     REGISTER_GAME_OBJECT(GameObject);
+    REGISTER_GAME_OBJECT(LightObject);
+    REGISTER_GAME_OBJECT(FogObject);
+    REGISTER_GAME_OBJECT(ModelObject);
 
 void SceneManager::loadScene(const std::string& path, Engine& engine) {
     clearScenes();
@@ -90,6 +199,7 @@ void SceneManager::unloadScene(const std::string& path) {
 }
 
 void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& engine) {
+    lastSceneName = path;
     m_scenes.emplace(path, std::make_shared<Scene>(path, engine));
     m_scenes[path]->sceneBegin();
 }
@@ -104,15 +214,14 @@ void SceneManager::scenesUpdate(float deltaTime){
     }
 }
 
-void SceneManager::AddGameObjectToScene(const std::string& scene, std::shared_ptr<GameObject> gameObject){
-    m_scenes[scene]->AddGameObject(gameObject);
-}
+std::vector<std::string> SceneManager::GetAllSceneNames() const {
+    std::vector<std::string> names;
+    names.reserve(m_scenes.size());
 
-std::shared_ptr<GameObject> SceneManager::GetGameObjectByName(const std::string& scene, const std::string& name){
-    return m_scenes[scene]->GetGameObjectByName(name);
-}
+    for (const auto& [name, scene] : m_scenes) {
+        names.push_back(name);
+    }
 
-std::shared_ptr<GameObject> SceneManager::GetGameObjectByEntity(const std::string& scene, entt::entity& entity){
-    return m_scenes[scene]->GetGameObjectByEntity(entity);
+    return names;
 }
 }
