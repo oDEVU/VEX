@@ -9,10 +9,11 @@ var searchData=
   ['begingame_6',['beginGame',['../classvex_1_1Engine.html#a553fa7361373b5df5f4685210f54f1ab',1,'vex::Engine']]],
   ['beginplay_7',['BeginPlay',['../classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8',1,'vex::GameObject::BeginPlay()'],['../classvex_1_1BasicCamera.html#a3d328653828c54705ac3c5572982816d',1,'vex::BasicCamera::BeginPlay()']]],
   ['beginsingletimecommands_8',['beginSingleTimeCommands',['../structvex_1_1VulkanContext.html#a146427df3fc36f89efe374be84e960b8',1,'vex::VulkanContext']]],
-  ['bindwindow_9',['bindWindow',['../classvex_1_1Interface.html#a2ade6ea1d65bd7460e47623d6a8376d0',1,'vex::Interface']]],
-  ['bodyidhasher_10',['BodyIDHasher',['../structvex_1_1BodyIDHasher.html',1,'vex']]],
-  ['bodytype_11',['BodyType',['../PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a',1,'vex']]],
-  ['bplayerinterfaceimpl_12',['BPLayerInterfaceImpl',['../classvex_1_1BPLayerInterfaceImpl.html',1,'vex']]],
-  ['browsericons_13',['BrowserIcons',['../structvex_1_1BrowserIcons.html',1,'vex']]],
-  ['builddist_14',['BuildDist',['../classEditorMenuBar.html#ae15bcd914c5ce1871f08c031be192f43',1,'EditorMenuBar']]]
+  ['bindanddrawbatched_9',['bindAndDrawBatched',['../classvex_1_1VulkanMesh.html#ade013b77a1d009fe4126d21cb2d9f222',1,'vex::VulkanMesh']]],
+  ['bindwindow_10',['bindWindow',['../classvex_1_1Interface.html#a2ade6ea1d65bd7460e47623d6a8376d0',1,'vex::Interface']]],
+  ['bodyidhasher_11',['BodyIDHasher',['../structvex_1_1BodyIDHasher.html',1,'vex']]],
+  ['bodytype_12',['BodyType',['../PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a',1,'vex']]],
+  ['bplayerinterfaceimpl_13',['BPLayerInterfaceImpl',['../classvex_1_1BPLayerInterfaceImpl.html',1,'vex']]],
+  ['browsericons_14',['BrowserIcons',['../structvex_1_1BrowserIcons.html',1,'vex']]],
+  ['builddist_15',['BuildDist',['../classEditorMenuBar.html#ae15bcd914c5ce1871f08c031be192f43',1,'EditorMenuBar']]]
 ];

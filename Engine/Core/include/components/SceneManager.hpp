@@ -15,25 +15,32 @@ namespace vex {
 /// @brief SceneManager class implements scene management functionality like loading and unloading scenes, holding game objects.
 class VEX_EXPORT SceneManager {
 public:
-/// @brief Function to load a scene from a file. Simply calls clearScene() and loadSceneWithoutClearing().
-/// @param std::string& path - Path to the scene file.
-/// @param Engine& engine - Reference to the engine instance.
+/// @brief Unloads all current scenes and loads a new one from a file.
+/// @details Effectively resets the game state by calling `clearScenes()` followed by `loadSceneWithoutClearing()`.
+/// @param const std::string& path - Path to the scene file.
+/// @param Engine& engine - Reference to the engine instance required for object creation.
 void loadScene(const std::string& path, Engine& engine);
 
-/// @brief Function to unload a scene from memory.
-/// @param std::string& path - Path to the scene file.
+/// @brief Unloads a specific scene from memory.
+/// @details Removes the scene from the internal `m_scenes` map, triggering the destructor of the `Scene` object.
+/// @param const std::string& path - Path/Name of the scene to unload.
 void unloadScene(const std::string& path);
 
-/// @brief Function to load a scene from a file without clearing the current scene.
-/// @param std::string& path - Path to the scene file.
+/// @brief Loads a scene from a file additively without clearing existing scenes.
+/// @details
+/// 1. Updates `lastSceneName` to the provided path.
+/// 2. Creates a new `Scene` shared pointer.
+/// 3. Calls `sceneBegin()` on the newly created scene to initialize its objects.
+/// @param const std::string& path - Path to the scene file.
 /// @param Engine& engine - Reference to the engine instance.
 void loadSceneWithoutClearing(const std::string& path, Engine& engine);
 
 /// @brief Function to clear the current scene.
 void clearScenes();
 
-/// @brief Function calls update in all objects it holds. This function needs to be called in your projects update method.
-/// @param float deltaTime - Delta time since last frame.
+/// @brief Updates all currently loaded scenes.
+/// @details Iterates through the `m_scenes` map and calls `sceneUpdate(deltaTime)` on each active scene.
+/// @param float deltaTime - Delta time since the last frame.
 void scenesUpdate(float deltaTime);
 
 /// @brief Function to get all game objects.
@@ -46,17 +53,19 @@ const std::vector<std::shared_ptr<GameObject>>& GetAllObjects(const std::string&
 /// @return const std::vector<std::shared_ptr<GameObject>>& - Vector of game objects.
 const std::vector<std::shared_ptr<GameObject>>& GetAllAddedObjects(const std::string& scene) const { return m_scenes.at(scene)->GetAllAddedObjects(); }
 
-/// @brief Function to get all scene names.
-/// @return std::vector<std::string> - Vector of scene names.
+/// @brief Retrieves the names of all currently loaded scenes.
+/// @details Iterates through the internal `m_scenes` map keys to construct the list.
+/// @return std::vector<std::string> - Vector containing the names/paths of active scenes.
 std::vector<std::string> GetAllSceneNames() const;
 
 /// @brief Function to get last scene name.
 /// @return std::string - Last scene name.
 std::string getLastSceneName() const { return lastSceneName; }
 
-/// @brief Function to get scene by its name.
-/// @param const std::string& scene - Name of the scene to get.
-/// @return Scene* - Pointer to the scene.
+/// @brief Safely retrieves a pointer to a specific Scene.
+/// @details Checks if the scene exists in the `m_scenes` map before returning.
+/// @param const std::string& scene - Name/Path of the scene to retrieve.
+/// @return Scene* - Pointer to the scene if found, otherwise `nullptr`.
 Scene* GetScene(const std::string& scene) const {
     if(m_scenes.contains(scene)){
         return m_scenes.at(scene).get();

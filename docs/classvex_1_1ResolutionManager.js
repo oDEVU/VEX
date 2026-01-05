@@ -6,5 +6,6 @@ var classvex_1_1ResolutionManager =
     [ "getRenderResolution", "classvex_1_1ResolutionManager.html#ad9547b6b5479891fe76d271e4f3e8f36", null ],
     [ "getUpscaleRatio", "classvex_1_1ResolutionManager.html#a48fa637b9efb4377a957af044f174c9a", null ],
     [ "getWindowResolution", "classvex_1_1ResolutionManager.html#a54e611ed2a60ed43409ef33c492483e4", null ],
-    [ "setMode", "classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a", null ]
+    [ "setMode", "classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a", null ],
+    [ "update", "classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4", null ]
 ];

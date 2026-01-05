@@ -21,35 +21,40 @@ namespace vex {
     class VulkanResources {
     public:
         /// @brief Simple constructor.
+        /// @details Initializes the resource manager: creates default textures, samplers, UBOs, and descriptor pools.
         /// @param VulkanContext& context - The Vulkan context to use.
-        /// @details Initializes the VulkanResources object with the provided Vulkan context. Its called by VulkanInterface constructor.
+        /// @param VirtualFileSystem* vfs - VFS for loading texture files.
         VulkanResources(VulkanContext& context, VirtualFileSystem* vfs);
 
         /// @brief Simple destructor.
+        /// @details Destroys all textures, buffers, samplers, and descriptor pools.
         ~VulkanResources();
 
         /// @brief Creates uniform buffers.
+        /// @details Allocates Scene and Light UBOs for each frame in flight using VMA.
         void createUniformBuffers();
 
         /// @brief Updates the scene uniform buffer.
-        /// @param const SceneUBO& data - The data to update the scene uniform buffer with.
+        /// @details Maps memory and copies the `SceneUBO` struct (camera, lighting, time data) to the GPU.
+        /// @param const SceneUBO& data - The data to update.
         void updateSceneUBO(const SceneUBO& data);
 
-        /// @brief Updates the light uniform buffer.
-        /// @param uint32_t frameIndex - The frame index to update.
-        /// @param uint32_t modelIndex - The model index to update.
-        /// @param const SceneLightsUBO& data - The data to update the light uniform buffer with.
+        /// @brief Updates the light uniform buffer for a specific model.
+        /// @details Updates the dynamic UBO section corresponding to a specific model index.
+        /// @param uint32_t frameIndex - Current frame.
+        /// @param uint32_t modelIndex - Index of the model to update lights for.
+        /// @param const SceneLightsUBO& data - Light data.
         void updateLightUBO(uint32_t frameIndex, uint32_t modelIndex, const SceneLightsUBO& data);
 
         /// @brief Creates a default texture.
-        /// @details Creates 1x1 white texture used for untextured models.
+        /// @details Generates a 1x1 white pixel texture, transitions it to `SHADER_READ_ONLY`, and assigns it to the "default" key.
         void createDefaultTexture();
 
         /// @brief Updates the texture descriptor.
-        /// @param uint32_t frameIndex - The frame index to update.
-        /// @param VkImageView textureView - The texture view to update.
-        /// @param uint32_t textureIndex - The texture index to update.
-        /// @details Updates the texture descriptor for the given frame index and texture index.
+        /// @details Updates the global descriptor set (or Bindless set) to point to the new texture view.
+        /// @param uint32_t frameIndex - Frame index.
+        /// @param VkImageView textureView - The new view.
+        /// @param uint32_t textureIndex - The slot index to update.
         void updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex);
 
         /// @brief Returns the default texture name.
@@ -59,33 +64,33 @@ namespace vex {
         }
 
         /// @brief Returns the uniform buffer descriptor set for the given frame index.
-        /// @param uint32_t frameIndex - The frame index to get the descriptor set for.
-        /// @return VkDescriptorSet - The uniform buffer descriptor set.
+        /// @param uint32_t frameIndex - The frame index.
+        /// @return VkDescriptorSet - The descriptor set binding UBOs.
         VkDescriptorSet getUBODescriptorSet(uint32_t frameIndex) const;
 
         /// @brief Loads a texture from a file.
-        /// @param const std::string& path - The path to the texture file.
-        /// @param const std::string& name - The name of the texture.
-        /// @details Loads a texture from a file and creates a texture view.
-        /// @return bool - True if the texture was loaded successfully or is already loaded, false otherwise.
+        /// @details Uses `stbi_load_from_memory` via VFS. Creates Vulkan Image, View, and uploads data via staging buffer. Recycles texture indices if available.
+        /// @param const std::string& path - File path.
+        /// @param const std::string& name - Unique identifier key.
+        /// @return bool - True if loaded successfully or already exists.
         bool loadTexture(const std::string& path, const std::string& name) ;
 
         /// @brief Unloads a texture.
-        /// @param const std::string& name - The name of the texture.
-        /// @details Unloads a texture and destroys its view.
+        /// @details Destroys the image/view and pushes the index to the recycled queue. Resets descriptors to the default texture.
+        /// @param const std::string& name - Identifier of the texture to unload.
         void unloadTexture(const std::string& name);
 
         /// @brief Returns the texture view for the given texture name.
-        /// @param const std::string& name - The name of the texture.
-        /// @return VkImageView - The texture view.
+        /// @param const std::string& name - The texture identifier.
+        /// @return VkImageView - The view, or the default texture view if not found.
         VkImageView getTextureView(const std::string& name) const;
 
         /// @brief Creates a texture from raw data.
-        /// @param const std::vector<unsigned char>& rgba - The raw data.
-        /// @param int w - The width of the texture.
-        /// @param int h - The height of the texture.
-        /// @param const std::string& name - The name of the texture.
-        /// @details Creates a texture from raw data and creates a texture view. Currently used for ui font textures.
+        /// @details Creates a GPU texture from a vector of bytes (RGBA). Useful for generated content like UI fonts.
+        /// @param const std::vector<unsigned char>& rgba - Raw pixel data.
+        /// @param int w - Width.
+        /// @param int h - Height.
+        /// @param const std::string& name - Identifier.
         void createTextureFromRaw(const std::vector<unsigned char>& rgba, int w, int h, const std::string& name);
 
         /// @brief Returns the descriptor set for the given frame index.
@@ -115,9 +120,9 @@ namespace vex {
         }
 
         /// @brief Returns a descriptor set for the given frame index and texture index.
-        /// @param uint32_t frameIndex - The index of the frame.
-        /// @param uint32_t textureIndex - The index of the texture.
-        /// @return VkDescriptorSet - The descriptor set.
+        /// @param uint32_t frameIndex - Frame index.
+        /// @param uint32_t textureIndex - Texture slot index.
+        /// @return VkDescriptorSet - The specific descriptor set for this texture/frame combo (used in non-bindless mode).
         VkDescriptorSet getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) const;
 
         /// @brief Returns a descriptor set layout.
@@ -132,8 +137,9 @@ namespace vex {
         }
 
         /// @brief Returns the index of a texture with the given name.
-        /// @param const std::string& name - The name of the texture.
-        /// @return uint32_t - The index of the texture.
+        /// @details If the texture isn't loaded, attempts to load it from disk using the name as the path.
+        /// @param const std::string& name - Texture path/name.
+        /// @return uint32_t - The texture index, or 0 (default) if loading fails.
         uint32_t getTextureIndex(const std::string& name);
 
         /// @brief Returns the texture sampler.

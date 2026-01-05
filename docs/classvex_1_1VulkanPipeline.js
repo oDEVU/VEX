@@ -9,5 +9,6 @@ var classvex_1_1VulkanPipeline =
     [ "get", "classvex_1_1VulkanPipeline.html#aa2b529bcec43595666b92dca25adbd1a", null ],
     [ "layout", "classvex_1_1VulkanPipeline.html#a3c4ff44fe6570165185103439aaada29", null ],
     [ "readFile", "classvex_1_1VulkanPipeline.html#a5f4a720c1604d20d374ec116c205c9da", null ],
-    [ "updateViewport", "classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49", null ]
+    [ "updateViewport", "classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49", null ],
+    [ "m_r_context", "classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82", null ]
 ];

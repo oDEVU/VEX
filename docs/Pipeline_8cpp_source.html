@@ -108,14 +108,14 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="uniforms_8hpp.html">uniforms.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span>vex {</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">    8</a></span>    <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">VulkanPipeline::VulkanPipeline</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; r_context) : m_r_context(r_context) {}</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">    8</a></span>    <a class="code hl_function" href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">VulkanPipeline::VulkanPipeline</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; r_context) : <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>(r_context) {}</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    VulkanPipeline::~VulkanPipeline() {</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>        <span class="keywordflow">if</span> (m_pipeline != VK_NULL_HANDLE) {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>            vkDestroyPipeline(m_r_context.device, m_pipeline, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>            vkDestroyPipeline(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, m_pipeline, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        }</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <span class="keywordflow">if</span> (m_layout != VK_NULL_HANDLE) {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>            vkDestroyPipelineLayout(m_r_context.device, m_layout, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>            vkDestroyPipelineLayout(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, m_layout, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        }</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    }</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
@@ -161,7 +161,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            VkShaderModule shaderModule;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create shader module&quot;</span>);</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            }</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <span class="keywordflow">return</span> shaderModule;</div>
@@ -202,8 +202,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        VkViewport viewport{};</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        viewport.x = 0.0f;</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        viewport.y = 0.0f;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        viewport.width = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_r_context.currentRenderResolution.x);</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        viewport.height = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_r_context.currentRenderResolution.y);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        viewport.width = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.currentRenderResolution.x);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        viewport.height = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.currentRenderResolution.y);</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        viewport.minDepth = 0.0f;</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        viewport.maxDepth = 1.0f;</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
@@ -262,12 +262,12 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            pushConstantRange.offset = 0;</div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>            pushConstantRange.size = <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a>);</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            VkDescriptorSetLayout textureLayout = m_r_context.supportsBindlessTextures</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                ? m_r_context.bindlessDescriptorSetLayout</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                : m_r_context.textureDescriptorSetLayout;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            VkDescriptorSetLayout textureLayout = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.supportsBindlessTextures</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                ? <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.bindlessDescriptorSetLayout</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                : <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.textureDescriptorSetLayout;</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>            std::array&lt;VkDescriptorSetLayout, 2&gt; setLayouts = {</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>                m_r_context.uboDescriptorSetLayout,</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>                <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.uboDescriptorSetLayout,</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>                textureLayout</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>            };</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
@@ -279,7 +279,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            pipelineLayoutInfo.pPushConstantRanges = &amp;pushConstantRange;</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating pipeline layout with %d descriptor sets&quot;</span>, setLayouts.size());</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create pipeline layout!&quot;</span>);</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            }</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
@@ -306,8 +306,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        VkPipelineRenderingCreateInfo renderingCreateInfo{};</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        renderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;</div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        renderingCreateInfo.colorAttachmentCount = 1;</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.swapchainImageFormat;</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        renderingCreateInfo.depthAttachmentFormat = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.depthFormat;</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Graphics pipeline...&quot;</span>);</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        VkGraphicsPipelineCreateInfo pipelineInfo{};</div>
@@ -325,13 +325,13 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        pipelineInfo.layout = m_layout;</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        }</div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
 <div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Cleanup shader modules...&quot;</span>);</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        vkDestroyShaderModule(m_r_context.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        vkDestroyShaderModule(m_r_context.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    }</div>
 </div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
@@ -353,7 +353,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>            createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            VkShaderModule shaderModule;</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create shader module&quot;</span>);</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>            }</div>
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            <span class="keywordflow">return</span> shaderModule;</div>
@@ -394,8 +394,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        VkViewport viewport{};</div>
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        viewport.x = 0.0f;</div>
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        viewport.y = 0.0f;</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>        viewport.width = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_r_context.currentRenderResolution.x);</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        viewport.height = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_r_context.currentRenderResolution.y);</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>        viewport.width = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.currentRenderResolution.x);</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        viewport.height = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.currentRenderResolution.y);</div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        viewport.minDepth = 0.0f;</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>        viewport.maxDepth = 1.0f;</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
@@ -454,12 +454,12 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>            pushConstantRange.offset = 0;</div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>            pushConstantRange.size = <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a>);</div>
 <div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>            VkDescriptorSetLayout textureLayout = m_r_context.supportsBindlessTextures</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>                ? m_r_context.bindlessDescriptorSetLayout</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>                : m_r_context.textureDescriptorSetLayout;</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>            VkDescriptorSetLayout textureLayout = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.supportsBindlessTextures</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>                ? <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.bindlessDescriptorSetLayout</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>                : <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.textureDescriptorSetLayout;</div>
 <div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
 <div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>            std::array&lt;VkDescriptorSetLayout, 2&gt; setLayouts = {</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>                m_r_context.uboDescriptorSetLayout,</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>                <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.uboDescriptorSetLayout,</div>
 <div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>                textureLayout</div>
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>            };</div>
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span> </div>
@@ -471,7 +471,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>            pipelineLayoutInfo.pPushConstantRanges = &amp;pushConstantRange;</div>
 <div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
 <div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating pipeline layout with %d descriptor sets&quot;</span>, setLayouts.size());</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create pipeline layout!&quot;</span>);</div>
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>            }</div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
@@ -498,8 +498,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>        VkPipelineRenderingCreateInfo renderingCreateInfo{};</div>
 <div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>        renderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;</div>
 <div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>        renderingCreateInfo.colorAttachmentCount = 1;</div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.swapchainImageFormat;</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        renderingCreateInfo.depthAttachmentFormat = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.depthFormat;</div>
 <div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span> </div>
 <div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Graphics pipeline...&quot;</span>);</div>
 <div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>        VkGraphicsPipelineCreateInfo pipelineInfo{};</div>
@@ -517,13 +517,13 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>        pipelineInfo.layout = m_layout;</div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span> </div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>        }</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span> </div>
 <div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Cleanup shader modules...&quot;</span>);</div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>        vkDestroyShaderModule(m_r_context.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>        vkDestroyShaderModule(m_r_context.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    }</div>
 </div>
 <div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span> </div>
@@ -545,7 +545,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>                createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span> </div>
 <div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>                VkShaderModule shaderModule;</div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>                <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>                <span class="keywordflow">if</span> (vkCreateShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create shader module&quot;</span>);</div>
 <div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>                }</div>
 <div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>                <span class="keywordflow">return</span> shaderModule;</div>
@@ -586,8 +586,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00474" name="l00474"></a><span class="lineno">  474</span>            VkViewport viewport{};</div>
 <div class="line"><a id="l00475" name="l00475"></a><span class="lineno">  475</span>            viewport.x = 0.0f;</div>
 <div class="line"><a id="l00476" name="l00476"></a><span class="lineno">  476</span>            viewport.y = 0.0f;</div>
-<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>            viewport.width = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_r_context.currentRenderResolution.x);</div>
-<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>            viewport.height = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_r_context.currentRenderResolution.y);</div>
+<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>            viewport.width = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.currentRenderResolution.x);</div>
+<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>            viewport.height = <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.currentRenderResolution.y);</div>
 <div class="line"><a id="l00479" name="l00479"></a><span class="lineno">  479</span>            viewport.minDepth = 0.0f;</div>
 <div class="line"><a id="l00480" name="l00480"></a><span class="lineno">  480</span>            viewport.maxDepth = 1.0f;</div>
 <div class="line"><a id="l00481" name="l00481"></a><span class="lineno">  481</span> </div>
@@ -646,12 +646,12 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>                pushConstantRange.offset = 0;</div>
 <div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span>                pushConstantRange.size = <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a>);</div>
 <div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span> </div>
-<div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span>                VkDescriptorSetLayout textureLayout = m_r_context.supportsBindlessTextures</div>
-<div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span>                    ? m_r_context.bindlessDescriptorSetLayout</div>
-<div class="line"><a id="l00539" name="l00539"></a><span class="lineno">  539</span>                    : m_r_context.textureDescriptorSetLayout;</div>
+<div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span>                VkDescriptorSetLayout textureLayout = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.supportsBindlessTextures</div>
+<div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span>                    ? <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.bindlessDescriptorSetLayout</div>
+<div class="line"><a id="l00539" name="l00539"></a><span class="lineno">  539</span>                    : <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.textureDescriptorSetLayout;</div>
 <div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span> </div>
 <div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>                std::array&lt;VkDescriptorSetLayout, 2&gt; setLayouts = {</div>
-<div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span>                    m_r_context.uboDescriptorSetLayout,</div>
+<div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span>                    <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.uboDescriptorSetLayout,</div>
 <div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>                    textureLayout</div>
 <div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span>                };</div>
 <div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span> </div>
@@ -663,7 +663,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>                pipelineLayoutInfo.pPushConstantRanges = &amp;pushConstantRange;</div>
 <div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span> </div>
 <div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating pipeline layout with %d descriptor sets&quot;</span>, setLayouts.size());</div>
-<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>                <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>                <span class="keywordflow">if</span> (vkCreatePipelineLayout(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create pipeline layout!&quot;</span>);</div>
 <div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>                }</div>
 <div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span> </div>
@@ -690,8 +690,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>            VkPipelineRenderingCreateInfo renderingCreateInfo{};</div>
 <div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>            renderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;</div>
 <div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>            renderingCreateInfo.colorAttachmentCount = 1;</div>
-<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>            renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
-<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>            renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>            renderingCreateInfo.pColorAttachmentFormats = &amp;<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.swapchainImageFormat;</div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>            renderingCreateInfo.depthAttachmentFormat = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.depthFormat;</div>
 <div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span> </div>
 <div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Graphics pipeline...&quot;</span>);</div>
 <div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>            VkGraphicsPipelineCreateInfo pipelineInfo{};</div>
@@ -709,13 +709,13 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>            pipelineInfo.layout = m_layout;</div>
 <div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>            pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
 <div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span> </div>
-<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>            <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>            <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>            }</div>
 <div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span> </div>
 <div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Cleanup shader modules...&quot;</span>);</div>
-<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>            vkDestroyShaderModule(m_r_context.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>            vkDestroyShaderModule(m_r_context.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>            vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>            vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>        }</div>
 </div>
 <div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span> </div>
@@ -736,7 +736,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>            createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
 <div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span> </div>
 <div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>            VkShaderModule shaderModule;</div>
-<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI shader module&quot;</span>);</div>
 <div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span>            }</div>
 <div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>            <span class="keywordflow">return</span> shaderModule;</div>
@@ -830,8 +830,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>        pushConstantRange.size       = <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1UIPushConstants.html">UIPushConstants</a>);</div>
 <div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span> </div>
 <div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>        std::array&lt;VkDescriptorSetLayout, 2&gt; setLayouts = {</div>
-<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>            m_r_context.uboDescriptorSetLayout,</div>
-<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>            m_r_context.textureDescriptorSetLayout</div>
+<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>            <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.uboDescriptorSetLayout,</div>
+<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>            <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.textureDescriptorSetLayout</div>
 <div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>        };</div>
 <div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span> </div>
 <div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};</div>
@@ -841,7 +841,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>        pipelineLayoutInfo.pushConstantRangeCount = 1;</div>
 <div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>        pipelineLayoutInfo.pPushConstantRanges    = &amp;pushConstantRange;</div>
 <div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span> </div>
-<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>        <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo,</div>
+<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>        <span class="keywordflow">if</span> (vkCreatePipelineLayout(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;pipelineLayoutInfo,</div>
 <div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span>                                   <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI pipeline layout!&quot;</span>);</div>
 <div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>        }</div>
@@ -849,8 +849,8 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>        VkPipelineRenderingCreateInfo renderingCreateInfo{};</div>
 <div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>        renderingCreateInfo.sType                = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;</div>
 <div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>        renderingCreateInfo.colorAttachmentCount = 1;</div>
-<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
-<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>        renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.swapchainImageFormat;</div>
+<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>        renderingCreateInfo.depthAttachmentFormat = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.depthFormat;</div>
 <div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span> </div>
 <div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>        VkGraphicsPipelineCreateInfo pipelineInfo{};</div>
 <div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>        pipelineInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;</div>
@@ -867,13 +867,13 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span>        pipelineInfo.layout              = m_layout;</div>
 <div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>        pipelineInfo.pNext               = &amp;renderingCreateInfo;</div>
 <div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span> </div>
-<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1,</div>
+<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, VK_NULL_HANDLE, 1,</div>
 <div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>                                      &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>        }</div>
 <div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span> </div>
-<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>        vkDestroyShaderModule(m_r_context.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>        vkDestroyShaderModule(m_r_context.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, vertShaderModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, fragShaderModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>    }</div>
 </div>
 <div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span> </div>
@@ -889,7 +889,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>            createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
 <div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span> </div>
 <div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>            VkShaderModule shaderModule;</div>
-<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>            <span class="keywordflow">if</span> (vkCreateShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UI shader module&quot;</span>);</div>
 <div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>            }</div>
 <div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>            <span class="keywordflow">return</span> shaderModule;</div>
@@ -939,15 +939,15 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00823" name="l00823"></a><span class="lineno">  823</span>        colorBlending.pAttachments = &amp;colorBlendAttachment;</div>
 <div class="line"><a id="l00824" name="l00824"></a><span class="lineno">  824</span> </div>
 <div class="line"><a id="l00825" name="l00825"></a><span class="lineno">  825</span>        std::array&lt;VkDescriptorSetLayout, 2&gt; setLayouts = {</div>
-<div class="line"><a id="l00826" name="l00826"></a><span class="lineno">  826</span>            m_r_context.uboDescriptorSetLayout,</div>
-<div class="line"><a id="l00827" name="l00827"></a><span class="lineno">  827</span>            m_r_context.textureDescriptorSetLayout</div>
+<div class="line"><a id="l00826" name="l00826"></a><span class="lineno">  826</span>            <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.uboDescriptorSetLayout,</div>
+<div class="line"><a id="l00827" name="l00827"></a><span class="lineno">  827</span>            <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.textureDescriptorSetLayout</div>
 <div class="line"><a id="l00828" name="l00828"></a><span class="lineno">  828</span>        };</div>
 <div class="line"><a id="l00829" name="l00829"></a><span class="lineno">  829</span> </div>
 <div class="line"><a id="l00830" name="l00830"></a><span class="lineno">  830</span>        VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};</div>
 <div class="line"><a id="l00831" name="l00831"></a><span class="lineno">  831</span>        pipelineLayoutInfo.setLayoutCount = setLayouts.size();</div>
 <div class="line"><a id="l00832" name="l00832"></a><span class="lineno">  832</span>        pipelineLayoutInfo.pSetLayouts = setLayouts.data();</div>
 <div class="line"><a id="l00833" name="l00833"></a><span class="lineno">  833</span> </div>
-<div class="line"><a id="l00834" name="l00834"></a><span class="lineno">  834</span>        <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00834" name="l00834"></a><span class="lineno">  834</span>        <span class="keywordflow">if</span> (vkCreatePipelineLayout(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00835" name="l00835"></a><span class="lineno">  835</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create fullscreen layout&quot;</span>);</div>
 <div class="line"><a id="l00836" name="l00836"></a><span class="lineno">  836</span>        }</div>
 <div class="line"><a id="l00837" name="l00837"></a><span class="lineno">  837</span> </div>
@@ -962,7 +962,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00846" name="l00846"></a><span class="lineno">  846</span> </div>
 <div class="line"><a id="l00847" name="l00847"></a><span class="lineno">  847</span>        VkPipelineRenderingCreateInfo renderingCreateInfo{VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO};</div>
 <div class="line"><a id="l00848" name="l00848"></a><span class="lineno">  848</span>        renderingCreateInfo.colorAttachmentCount = 1;</div>
-<div class="line"><a id="l00849" name="l00849"></a><span class="lineno">  849</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
+<div class="line"><a id="l00849" name="l00849"></a><span class="lineno">  849</span>        renderingCreateInfo.pColorAttachmentFormats = &amp;<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.swapchainImageFormat;</div>
 <div class="line"><a id="l00850" name="l00850"></a><span class="lineno">  850</span> </div>
 <div class="line"><a id="l00851" name="l00851"></a><span class="lineno">  851</span>        VkGraphicsPipelineCreateInfo pipelineInfo{VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};</div>
 <div class="line"><a id="l00852" name="l00852"></a><span class="lineno">  852</span>        pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
@@ -978,12 +978,12 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00862" name="l00862"></a><span class="lineno">  862</span>        pipelineInfo.pDynamicState = &amp;dynamicState;</div>
 <div class="line"><a id="l00863" name="l00863"></a><span class="lineno">  863</span>        pipelineInfo.layout = m_layout;</div>
 <div class="line"><a id="l00864" name="l00864"></a><span class="lineno">  864</span> </div>
-<div class="line"><a id="l00865" name="l00865"></a><span class="lineno">  865</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00865" name="l00865"></a><span class="lineno">  865</span>        <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00866" name="l00866"></a><span class="lineno">  866</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create fullscreen pipeline&quot;</span>);</div>
 <div class="line"><a id="l00867" name="l00867"></a><span class="lineno">  867</span>        }</div>
 <div class="line"><a id="l00868" name="l00868"></a><span class="lineno">  868</span> </div>
-<div class="line"><a id="l00869" name="l00869"></a><span class="lineno">  869</span>        vkDestroyShaderModule(m_r_context.device, vertModule, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00870" name="l00870"></a><span class="lineno">  870</span>        vkDestroyShaderModule(m_r_context.device, fragModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00869" name="l00869"></a><span class="lineno">  869</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, vertModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00870" name="l00870"></a><span class="lineno">  870</span>        vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, fragModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00871" name="l00871"></a><span class="lineno">  871</span>    }</div>
 </div>
 <div class="line"><a id="l00872" name="l00872"></a><span class="lineno">  872</span> </div>
@@ -1000,7 +1000,7 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00883" name="l00883"></a><span class="lineno">  883</span>                createInfo.codeSize = code.size();</div>
 <div class="line"><a id="l00884" name="l00884"></a><span class="lineno">  884</span>                createInfo.pCode = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>uint32_t*<span class="keyword">&gt;</span>(code.data());</div>
 <div class="line"><a id="l00885" name="l00885"></a><span class="lineno">  885</span>                VkShaderModule shaderModule;</div>
-<div class="line"><a id="l00886" name="l00886"></a><span class="lineno">  886</span>                <span class="keywordflow">if</span> (vkCreateShaderModule(m_r_context.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00886" name="l00886"></a><span class="lineno">  886</span>                <span class="keywordflow">if</span> (vkCreateShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;createInfo, <span class="keyword">nullptr</span>, &amp;shaderModule) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00887" name="l00887"></a><span class="lineno">  887</span>                    throw_error(<span class="stringliteral">&quot;Failed to create debug shader module&quot;</span>);</div>
 <div class="line"><a id="l00888" name="l00888"></a><span class="lineno">  888</span>                }</div>
 <div class="line"><a id="l00889" name="l00889"></a><span class="lineno">  889</span>                <span class="keywordflow">return</span> shaderModule;</div>
@@ -1087,16 +1087,16 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00970" name="l00970"></a><span class="lineno">  970</span> </div>
 <div class="line"><a id="l00971" name="l00971"></a><span class="lineno">  971</span>            VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};</div>
 <div class="line"><a id="l00972" name="l00972"></a><span class="lineno">  972</span>            pipelineLayoutInfo.setLayoutCount = 1;</div>
-<div class="line"><a id="l00973" name="l00973"></a><span class="lineno">  973</span>            pipelineLayoutInfo.pSetLayouts = &amp;m_r_context.uboDescriptorSetLayout;</div>
+<div class="line"><a id="l00973" name="l00973"></a><span class="lineno">  973</span>            pipelineLayoutInfo.pSetLayouts = &amp;<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.uboDescriptorSetLayout;</div>
 <div class="line"><a id="l00974" name="l00974"></a><span class="lineno">  974</span> </div>
-<div class="line"><a id="l00975" name="l00975"></a><span class="lineno">  975</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(m_r_context.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
+<div class="line"><a id="l00975" name="l00975"></a><span class="lineno">  975</span>            <span class="keywordflow">if</span> (vkCreatePipelineLayout(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, &amp;pipelineLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_layout) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00976" name="l00976"></a><span class="lineno">  976</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create debug pipeline layout&quot;</span>);</div>
 <div class="line"><a id="l00977" name="l00977"></a><span class="lineno">  977</span>            }</div>
 <div class="line"><a id="l00978" name="l00978"></a><span class="lineno">  978</span> </div>
 <div class="line"><a id="l00979" name="l00979"></a><span class="lineno">  979</span>            VkPipelineRenderingCreateInfo renderingCreateInfo{VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO};</div>
 <div class="line"><a id="l00980" name="l00980"></a><span class="lineno">  980</span>            renderingCreateInfo.colorAttachmentCount = 1;</div>
-<div class="line"><a id="l00981" name="l00981"></a><span class="lineno">  981</span>            renderingCreateInfo.pColorAttachmentFormats = &amp;m_r_context.swapchainImageFormat;</div>
-<div class="line"><a id="l00982" name="l00982"></a><span class="lineno">  982</span>            renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;</div>
+<div class="line"><a id="l00981" name="l00981"></a><span class="lineno">  981</span>            renderingCreateInfo.pColorAttachmentFormats = &amp;<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.swapchainImageFormat;</div>
+<div class="line"><a id="l00982" name="l00982"></a><span class="lineno">  982</span>            renderingCreateInfo.depthAttachmentFormat = <a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.depthFormat;</div>
 <div class="line"><a id="l00983" name="l00983"></a><span class="lineno">  983</span> </div>
 <div class="line"><a id="l00984" name="l00984"></a><span class="lineno">  984</span>            VkGraphicsPipelineCreateInfo pipelineInfo{VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};</div>
 <div class="line"><a id="l00985" name="l00985"></a><span class="lineno">  985</span>            pipelineInfo.pNext = &amp;renderingCreateInfo;</div>
@@ -1114,28 +1114,29 @@ $(function(){initNavTree('Pipeline_8cpp_source.html','',''); });
 <div class="line"><a id="l00997" name="l00997"></a><span class="lineno">  997</span>            pipelineInfo.subpass = 0;</div>
 <div class="line"><a id="l00998" name="l00998"></a><span class="lineno">  998</span>            pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;</div>
 <div class="line"><a id="l00999" name="l00999"></a><span class="lineno">  999</span> </div>
-<div class="line"><a id="l01000" name="l01000"></a><span class="lineno"> 1000</span>            <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
+<div class="line"><a id="l01000" name="l01000"></a><span class="lineno"> 1000</span>            <span class="keywordflow">if</span> (vkCreateGraphicsPipelines(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, VK_NULL_HANDLE, 1, &amp;pipelineInfo, <span class="keyword">nullptr</span>, &amp;m_pipeline) != VK_SUCCESS) {</div>
 <div class="line"><a id="l01001" name="l01001"></a><span class="lineno"> 1001</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create debug graphics pipeline&quot;</span>);</div>
 <div class="line"><a id="l01002" name="l01002"></a><span class="lineno"> 1002</span>            }</div>
 <div class="line"><a id="l01003" name="l01003"></a><span class="lineno"> 1003</span> </div>
-<div class="line"><a id="l01004" name="l01004"></a><span class="lineno"> 1004</span>            vkDestroyShaderModule(m_r_context.device, vertModule, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l01005" name="l01005"></a><span class="lineno"> 1005</span>            vkDestroyShaderModule(m_r_context.device, fragModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l01004" name="l01004"></a><span class="lineno"> 1004</span>            vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, vertModule, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l01005" name="l01005"></a><span class="lineno"> 1005</span>            vkDestroyShaderModule(<a class="code hl_variable" href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">m_r_context</a>.device, fragModule, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l01006" name="l01006"></a><span class="lineno"> 1006</span> </div>
 <div class="line"><a id="l01007" name="l01007"></a><span class="lineno"> 1007</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Debug Pipeline created successfully.&quot;</span>);</div>
 <div class="line"><a id="l01008" name="l01008"></a><span class="lineno"> 1008</span>        }</div>
 <div class="line"><a id="l01009" name="l01009"></a><span class="lineno"> 1009</span><span class="preprocessor">    #endif</span></div>
 <div class="line"><a id="l01010" name="l01010"></a><span class="lineno"> 1010</span>}</div>
 <div class="ttc" id="aPipeline_8hpp_html"><div class="ttname"><a href="Pipeline_8hpp.html">Pipeline.hpp</a></div><div class="ttdoc">This file defines VulkanPipeline Class.</div></div>
-<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a47011b44645a312f10711fc34eafbdce"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a47011b44645a312f10711fc34eafbdce">vex::VulkanPipeline::createMaskedPipeline</a></div><div class="ttdeci">void createMaskedPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a graphics VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00419">Pipeline.cpp:419</a></div></div>
-<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a4e6b47a0e253b2f2e6a2f7118adea69d"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d">vex::VulkanPipeline::createUIPipeline</a></div><div class="ttdeci">void createUIPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDesc, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attrDesc)</div><div class="ttdoc">Creates a UI VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00609">Pipeline.cpp:609</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a47011b44645a312f10711fc34eafbdce"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a47011b44645a312f10711fc34eafbdce">vex::VulkanPipeline::createMaskedPipeline</a></div><div class="ttdeci">void createMaskedPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a Masked Graphics Pipeline (Alpha Cutout).</div><div class="ttdef"><b>Definition</b> <a href="#l00419">Pipeline.cpp:419</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a4e6b47a0e253b2f2e6a2f7118adea69d"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a4e6b47a0e253b2f2e6a2f7118adea69d">vex::VulkanPipeline::createUIPipeline</a></div><div class="ttdeci">void createUIPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDesc, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attrDesc)</div><div class="ttdoc">Creates a UI Pipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00609">Pipeline.cpp:609</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a5f4a720c1604d20d374ec116c205c9da"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a5f4a720c1604d20d374ec116c205c9da">vex::VulkanPipeline::readFile</a></div><div class="ttdeci">std::vector&lt; char &gt; readFile(const std::string &amp;filename)</div><div class="ttdoc">Reads a file and returns its contents as a vector of characters.</div><div class="ttdef"><b>Definition</b> <a href="#l00019">Pipeline.cpp:19</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a98622acc241688b8fa46d13af4cd376b"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a98622acc241688b8fa46d13af4cd376b">vex::VulkanPipeline::VulkanPipeline</a></div><div class="ttdeci">VulkanPipeline(VulkanContext &amp;r_context)</div><div class="ttdoc">Constructor for VulkanPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00008">Pipeline.cpp:8</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_a99465080a250729d76cbd547c146eb82"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#a99465080a250729d76cbd547c146eb82">vex::VulkanPipeline::m_r_context</a></div><div class="ttdeci">VulkanContext &amp; m_r_context</div><div class="ttdoc">Creates a debug VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="Pipeline_8hpp_source.html#l00107">Pipeline.hpp:107</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aa4a1d52319fe905983561f4d04473d49"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aa4a1d52319fe905983561f4d04473d49">vex::VulkanPipeline::updateViewport</a></div><div class="ttdeci">void updateViewport(glm::uvec2 resolution)</div><div class="ttdoc">Updates viewport to new resolution.</div><div class="ttdef"><b>Definition</b> <a href="#l00035">Pipeline.cpp:35</a></div></div>
-<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aac43b2e87b883999cc2abfd635834a80"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aac43b2e87b883999cc2abfd635834a80">vex::VulkanPipeline::createGraphicsPipeline</a></div><div class="ttdeci">void createGraphicsPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a graphics VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00039">Pipeline.cpp:39</a></div></div>
-<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aba1457018582186f98cb75739148351f"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aba1457018582186f98cb75739148351f">vex::VulkanPipeline::createFullscreenPipeline</a></div><div class="ttdeci">void createFullscreenPipeline(const std::string &amp;vertPath, const std::string &amp;fragPath)</div><div class="ttdoc">Creates a fullscreen VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00765">Pipeline.cpp:765</a></div></div>
-<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_ac4c66041196d8c8d8f1410125923a34b"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#ac4c66041196d8c8d8f1410125923a34b">vex::VulkanPipeline::createTransparentPipeline</a></div><div class="ttdeci">void createTransparentPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a graphics VkPipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00229">Pipeline.cpp:229</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error with the given message and triggers cpptrace for debug builds.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00376">errorUtils.cpp:376</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00381">errorUtils.cpp:381</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aac43b2e87b883999cc2abfd635834a80"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aac43b2e87b883999cc2abfd635834a80">vex::VulkanPipeline::createGraphicsPipeline</a></div><div class="ttdeci">void createGraphicsPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a standard Opaque Graphics Pipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00039">Pipeline.cpp:39</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_aba1457018582186f98cb75739148351f"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#aba1457018582186f98cb75739148351f">vex::VulkanPipeline::createFullscreenPipeline</a></div><div class="ttdeci">void createFullscreenPipeline(const std::string &amp;vertPath, const std::string &amp;fragPath)</div><div class="ttdoc">Creates a Fullscreen Quad Pipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00765">Pipeline.cpp:765</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanPipeline_html_ac4c66041196d8c8d8f1410125923a34b"><div class="ttname"><a href="classvex_1_1VulkanPipeline.html#ac4c66041196d8c8d8f1410125923a34b">vex::VulkanPipeline::createTransparentPipeline</a></div><div class="ttdeci">void createTransparentPipeline(const std::string &amp;vertShaderPath, const std::string &amp;fragShaderPath, const VkVertexInputBindingDescription &amp;bindingDescription, const std::vector&lt; VkVertexInputAttributeDescription &gt; &amp;attributeDescriptions)</div><div class="ttdoc">Creates a Transparent Graphics Pipeline.</div><div class="ttdef"><b>Definition</b> <a href="#l00229">Pipeline.cpp:229</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error or terminates the application.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00376">errorUtils.cpp:376</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00381">errorUtils.cpp:381</a></div></div>
 <div class="ttc" id="astructvex_1_1PushConstants_html"><div class="ttname"><a href="structvex_1_1PushConstants.html">vex::PushConstants</a></div><div class="ttdoc">Push constants, holds model information.</div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00053">uniforms.hpp:53</a></div></div>
 <div class="ttc" id="astructvex_1_1UIPushConstants_html"><div class="ttname"><a href="structvex_1_1UIPushConstants.html">vex::UIPushConstants</a></div><div class="ttdoc">Push constants for UI rendering.</div><div class="ttdef"><b>Definition</b> <a href="UIVertex_8hpp_source.html#l00023">UIVertex.hpp:23</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00026">context.hpp:26</a></div></div>

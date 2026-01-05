@@ -1,5 +1,11 @@
 var NAVTREEINDEX5 =
 {
+"structvex_1_1LightComponent.html":[2,0,0,32],
+"structvex_1_1LogEntry.html":[1,0,0,35],
+"structvex_1_1LogEntry.html":[2,0,0,34],
+"structvex_1_1MeshComponent.html":[1,0,0,36],
+"structvex_1_1MeshComponent.html":[2,0,0,35],
+"structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736":[1,0,0,36,0],
 "structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736":[2,0,0,35,0],
 "structvex_1_1MeshComponent.html#a5d36e48131f49217c6c4c6b7976a3b51":[1,0,0,36,2],
 "structvex_1_1MeshComponent.html#a5d36e48131f49217c6c4c6b7976a3b51":[2,0,0,35,2],

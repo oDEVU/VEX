@@ -3,6 +3,7 @@ var classvex_1_1VulkanMesh =
     [ "SubmeshBuffers", "structvex_1_1VulkanMesh_1_1SubmeshBuffers.html", null ],
     [ "VulkanMesh", "classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89", null ],
     [ "addInstance", "classvex_1_1VulkanMesh.html#afe01f872274b8a6cdc42f2d1af82d134", null ],
+    [ "bindAndDrawBatched", "classvex_1_1VulkanMesh.html#ade013b77a1d009fe4126d21cb2d9f222", null ],
     [ "draw", "classvex_1_1VulkanMesh.html#abbb4f83d2aa6280bc4573bae8c4df2f4", null ],
     [ "getNumOfInstances", "classvex_1_1VulkanMesh.html#a018283187e61b83681b9bea1d3d6577f", null ],
     [ "removeInstance", "classvex_1_1VulkanMesh.html#a85c4ec5bb63eb855353ac38eb6e0df1a", null ],

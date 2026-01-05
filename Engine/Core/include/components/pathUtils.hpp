@@ -12,14 +12,35 @@
 #include "VEX/VEX_export.h"
 
 namespace vex {
-    /// @brief Called by the Editor to force GetAssetPath to look in the Project folder
+    /// @brief Overrides the default asset root directory.
+    /// @details Sets the global `g_AssetRootOverride` variable. This is primarily used by the Editor to force the engine to look for assets in a specific project folder instead of the default executable location.
+    /// @param const std::string& projectPath - The absolute path to the project's root directory.
     void VEX_EXPORT SetAssetRoot(const std::string& projectPath);
-    /// @brief Get the directory of assets
+
+    /// @brief Gets the current asset directory override.
+    /// @return std::string - The path set by `SetAssetRoot`, or an empty string if not set.
     std::string VEX_EXPORT GetAssetDir();
-    /// @brief Get the directory of the executable.
+
+    /// @brief Resolves the absolute path of an asset based on the current build configuration.
+    /// @details
+    /// - If an override is set (via `SetAssetRoot`), resolves relative to that path.
+    /// - **Debug Builds**: Resolves relative to the executable directory to allow loose file loading.
+    /// - **Release Builds**: Returns the `relativePath` as-is, assuming the VirtualFileSystem (VFS) will handle lookup within packed VPKs.
+    /// @param const std::string& relativePath - The path relative to the asset root (e.g., "Assets/Textures/img.png").
+    /// @return std::string - The resolved absolute path or the relative path depending on configuration.
     std::string VEX_EXPORT GetAssetPath(const std::string& relativePath);
-    /// @brief Get the path of an asset. Its different for debug and release builds since VirtualFileSystem implements asset loading differently depending on build type.
+
+    /// @brief Retrieves the directory containing the current executable.
+    /// @details Uses platform-specific API calls:
+    /// - **Windows**: `GetModuleFileNameW`.
+    /// - **macOS**: `_NSGetExecutablePath` (MacOS is not officially supported).
+    /// - **Linux**: Reading symlink `/proc/self/exe`.
+    /// @return std::filesystem::path - The path to the directory containing the executable.
     std::filesystem::path VEX_EXPORT GetExecutableDir();
-    /// @brief Get the directory where logs and crash dumps should be stored.
+
+    /// @brief Gets the directory where logs and crash dumps are stored.
+    /// @details Attempts to create and return `GetExecutableDir() / "Engine" / "logs"`.
+    /// If creation fails, falls back to `std::filesystem::current_path()`.
+    /// @return std::filesystem::path - The resolved log directory.
     std::filesystem::path VEX_EXPORT GetLogDir();
 }

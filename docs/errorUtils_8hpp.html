@@ -123,17 +123,17 @@ Enumerations</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a3e538975c87c06bcaab5919e616677b0" id="r_a3e538975c87c06bcaab5919e616677b0"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e538975c87c06bcaab5919e616677b0">vex::InitCrashHandler</a> ()</td></tr>
-<tr class="memdesc:a3e538975c87c06bcaab5919e616677b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the crash handler.  <br /></td></tr>
+<tr class="memdesc:a3e538975c87c06bcaab5919e616677b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the low-level crash handler.  <br /></td></tr>
 <tr class="memitem:a83677754024309fc36c4dd9cfc848a7f" id="r_a83677754024309fc36c4dd9cfc848a7f"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a> (const std::string &amp;msg)</td></tr>
-<tr class="memdesc:a83677754024309fc36c4dd9cfc848a7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Throws an error with the given message and triggers cpptrace for debug builds.  <br /></td></tr>
+<tr class="memdesc:a83677754024309fc36c4dd9cfc848a7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Throws an error or terminates the application.  <br /></td></tr>
 <tr class="memitem:a96b5f80aadf7f282e8238912cbc9675a" id="r_a96b5f80aadf7f282e8238912cbc9675a"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a> (const char *fmt,...)</td></tr>
-<tr class="memdesc:a96b5f80aadf7f282e8238912cbc9675a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs a message with the given format and arguments to the console, or does absolutely nothing for release builds.  <br /></td></tr>
+<tr class="memdesc:a96b5f80aadf7f282e8238912cbc9675a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs a formatted message.  <br /></td></tr>
 <tr class="memitem:a9e560a43e27b13f10c383ffff4a530c1" id="r_a9e560a43e27b13f10c383ffff4a530c1"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e560a43e27b13f10c383ffff4a530c1">vex::log</a> (<a class="el" href="#ae8216a00c20d22c391938395ef94f43e">LogLevel</a> level, const char *fmt,...)</td></tr>
-<tr class="memdesc:a9e560a43e27b13f10c383ffff4a530c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload of an log function that adds log level.  <br /></td></tr>
+<tr class="memdesc:a9e560a43e27b13f10c383ffff4a530c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs a formatted message with a specific severity level.  <br /></td></tr>
 <tr class="memitem:aa5548f25f6136e0f883252cfd09dd4b5" id="r_aa5548f25f6136e0f883252cfd09dd4b5"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5548f25f6136e0f883252cfd09dd4b5">vex::handle_exception</a> (const std::exception &amp;e)</td></tr>
-<tr class="memdesc:aa5548f25f6136e0f883252cfd09dd4b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an exception by logging it and rethrows it in release builds.  <br /></td></tr>
+<tr class="memdesc:aa5548f25f6136e0f883252cfd09dd4b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an exception based on build configuration.  <br /></td></tr>
 <tr class="memitem:a98df6c0f2c25bb67d5d5852ff2744d48" id="r_a98df6c0f2c25bb67d5d5852ff2744d48"><td class="memItemLeft" align="right" valign="top">void VEX_EXPORT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98df6c0f2c25bb67d5d5852ff2744d48">vex::handle_critical_exception</a> (const std::exception &amp;e)</td></tr>
-<tr class="memdesc:a98df6c0f2c25bb67d5d5852ff2744d48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles an exception by logging it and rethrows it in all builds.  <br /></td></tr>
+<tr class="memdesc:a98df6c0f2c25bb67d5d5852ff2744d48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles a critical exception, forcing termination.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file defines functions for logging and throwing errors. It provides error tracing for debugging purposes that are not present for release builds. </p>
@@ -183,13 +183,23 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Handles an exception by logging it and rethrows it in all builds. </p>
-<p>Example usage: </p><div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
+<p>Handles a critical exception, forcing termination. </p>
+<ul>
+<li><b>Debug</b>: Prints stack trace and rethrows.</li>
+<li><b>Release</b>: Writes a full crash report, closes logs, calls <span class="tt">SDL_LogCritical</span>, and terminates via <span class="tt">_exit(1)</span>. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::exception&amp; e - The exception to handle. <div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
 <div class="line">    something();</div>
 <div class="line">} <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
 <div class="line">    handle_critical_exception(e);</div>
 <div class="line">}</div>
-</div><!-- fragment --> 
+</div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
+
 <p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00395">395</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
@@ -209,13 +219,23 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Handles an exception by logging it and rethrows it in release builds. </p>
-<p>Example usage: </p><div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
+<p>Handles an exception based on build configuration. </p>
+<ul>
+<li><b>Debug</b>: Prints a stack trace using <span class="tt">cpptrace</span>.</li>
+<li><b>Release</b>: Pushes the error to the ring buffer and logs via <span class="tt">SDL_LogCritical</span>. Does not crash the application. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::exception&amp; e - The exception to handle. <div class="fragment"><div class="line"><span class="keywordflow">try</span> {</div>
 <div class="line">    something();</div>
 <div class="line">} <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
 <div class="line">    handle_exception(e);</div>
 <div class="line">}</div>
-</div><!-- fragment --> 
+</div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
+
 <p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00389">389</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
@@ -235,7 +255,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes the crash handler. </p>
+<p>Initializes the low-level crash handler. </p>
+<ol type="1">
+<li>Opens a persistent log file <span class="tt">game_session.log</span>.</li>
+<li><b>Windows</b>: Sets <span class="tt">SetUnhandledExceptionFilter</span>.</li>
+<li><b>Linux/Posix</b>: Sets signal handlers for <span class="tt">SIGSEGV</span>, <span class="tt">SIGABRT</span>, <span class="tt">SIGILL</span>, <span class="tt">SIGFPE</span>. The handler is capable of dumping CPU registers (RAX, RBX, etc.) and memory maps to the log file upon crash. </li>
+</ol>
 
 <p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00281">281</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
@@ -260,9 +285,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Logs a message with the given format and arguments to the console, or does absolutely nothing for release builds. </p>
-<p>Example usage: </p><div class="fragment"><div class="line">log(<span class="stringliteral">&quot;value a is %d&quot;</span>, a);</div>
-</div><!-- fragment --> 
+<p>Logs a formatted message. </p>
+<p>Internally calls <span class="tt">log_internal</span>, which:</p><ol type="1">
+<li>Formats the string.</li>
+<li>Pushes entry to a thread-safe ring buffer (<span class="tt">g_RingBuffer</span>).</li>
+<li>Writes to the persistent crash log file (if open).</li>
+<li>Prints to <span class="tt">SDL_LogMessage</span> (unless filtered by log level). <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>char* fmt - Printf-style format string. <div class="fragment"><div class="line">log(<span class="stringliteral">&quot;value a is %d&quot;</span>, a);</div>
+</div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ol>
+
 <p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00381">381</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
@@ -291,9 +328,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Overload of an log function that adds log level. </p>
-<p>Example usage: </p><div class="fragment"><div class="line">log(LogLevel::ERROR, <span class="stringliteral">&quot;value a is %d&quot;</span>, a);</div>
-</div><!-- fragment --> 
+<p>Logs a formatted message with a specific severity level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">LogLevel</td><td>level - Severity (INFO, WARNING, ERROR, CRITICAL). </td></tr>
+    <tr><td class="paramname">const</td><td>char* fmt - Printf-style format string. <div class="fragment"><div class="line">log(LogLevel::ERROR, <span class="stringliteral">&quot;value a is %d&quot;</span>, a);</div>
+</div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00385">385</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>
@@ -313,9 +357,19 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Throws an error with the given message and triggers cpptrace for debug builds. </p>
-<p>Example usage: </p><div class="fragment"><div class="line">throw_error(<span class="stringliteral">&quot;An error occurred&quot;</span>);</div>
-</div><!-- fragment --> 
+<p>Throws an error or terminates the application. </p>
+<ul>
+<li><b>Debug</b>: Throws a <span class="tt">cpptrace::runtime_error</span> to show a stack trace.</li>
+<li><b>Release</b>: Writes a crash report to the log file via <span class="tt">WriteCrashReport</span> and immediately exits with <span class="tt">_exit(1)</span>. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; msg - The error message. <div class="fragment"><div class="line">throw_error(<span class="stringliteral">&quot;An error occurred&quot;</span>);</div>
+</div><!-- fragment --> </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
+
 <p class="definition">Definition at line <a class="el" href="errorUtils_8cpp_source.html#l00376">376</a> of file <a class="el" href="errorUtils_8cpp_source.html">errorUtils.cpp</a>.</p>
 
 </div>

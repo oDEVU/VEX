@@ -114,7 +114,15 @@ public:
 
     static ComponentRegistry& getInstance();
 
-    /// @brief Generic Register Function, Used by macros defined later in this file.
+    /// @brief Template function to register a component type with the system.
+    /// @details Generates and stores lambdas for:
+    /// - **Loading**: Deserializes JSON into the component (creates it if missing).
+    /// - **Saving**: Serializes component to JSON.
+    /// - **Inspection**: Registers `GenericComponentInspector<T>` which uses `ImGui` and `ImReflect` to draw UI.
+    /// - **Checking**: Checks if an object has this component.
+    /// - **Creation**: Adds the default-constructed component to an object.
+    /// @param const std::string& name - The name of the component class.
+    /// @param bool isDynamic - Whether this component is part of a hot-reloadable module.
     template<typename T>
     void registerComponent(const std::string& name, bool isDynamic = false) {
         loaders[name] = [](GameObject& obj, const nlohmann::json& j) {
@@ -159,26 +167,42 @@ public:
         }
     }
 
-    /// @brief Unregister a component type.
+    /// @brief Unregisters a component type and removes all associated callbacks.
+    /// @details Erases entries from `loaders`, `savers`, `inspectors`, `checkers`, and `creators` maps, and removes the name from `registeredNames`.
+    /// @param const std::string& name - The name of the component to unregister.
     void unregisterComponent(const std::string& name);
 
-    /// @brief Clear all dynamic components.
+    /// @brief Clears all components registered as dynamic.
+    /// @details Used for hot-reloading. Iterates `dynamicComponents` and manually unregisters each one to clean up function pointers from unloaded DLLs.
     void clearDynamicComponents();
 
-    /// @brief Load a component from JSON data.
+    /// @brief Loads data into a component on a GameObject from JSON.
+    /// @details Finds the registered loader for `type` and executes it. Logs an error if the type is not registered.
+    /// @param GameObject& obj - The target object.
+    /// @param const std::string& type - The component type name.
+    /// @param const nlohmann::json& json - The JSON data to load.
+    /// @return bool - True if successful, false if type not found.
     bool loadComponent(GameObject& obj, const std::string& type, const nlohmann::json& json);
 
-    /// @brief Svaes component to disk in json format
+    /// @brief Serializes a component on a GameObject to JSON.
+    /// @param GameObject& obj - The source object.
+    /// @param const std::string& type - The component type name.
+    /// @return nlohmann::json - The serialized data, or nullptr if not found/registered.
     nlohmann::json saveComponent(GameObject& obj, const std::string& type);
 
-    /// @brief Draws editor inspector for a component.
+    /// @brief Draws the ImGui inspector for all components on the object.
+    /// @details Iterates through all registered inspectors and calls them on the object.
+    /// @param GameObject& obj - The object to inspect.
     void drawInspectorForObject(GameObject& obj);
+
+    /// @brief Creates and attaches a specific component to a game object.
+    /// @details Uses the registered creator lambda to default-construct and add the component.
+    /// @param GameObject& obj - The target object.
+    /// @param const std::string& name - The component type name.
+    void createComponent(GameObject& obj, const std::string& name);
 
     /// @brief Get missing components for a game object.
     std::vector<std::string> getMissingComponents(const GameObject& obj);
-
-    /// @brief Create a component for a game object.
-    void createComponent(GameObject& obj, const std::string& name);
 
     /// @brief Get component inspectors.
     const std::unordered_map<std::string, ComponentInspector>& getInspectors() const;

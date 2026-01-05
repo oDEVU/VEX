@@ -35,9 +35,16 @@ Scene& operator=(Scene&&) = default;
 /// @brief Destructor clears the current scene.
 ~Scene();
 
-/// @brief Function calls beginGame in all objects it holds. This function needs to be called in your projects beginGame method.
+/// @brief Calls `BeginPlay` on all objects in the scene.
+/// @details Iterates through both main storage (`m_objects`) and the added queue (`m_addedObjects`).
+/// If `VEX_USE_PARALLEL_EXECUTION` is defined and object count > 50, execution is parallelized.
 void sceneBegin();
-/// @brief Function calls update in all objects it holds. This function needs to be called in your projects update method.
+
+/// @brief Updates all objects in the scene.
+/// @details
+/// 1. Flushes the destruction queue via `FlushDestructionQueue`.
+/// 2. Calls `Update(deltaTime)` on all active objects.
+/// 3. Supports parallel execution for large object counts if configured.
 /// @param float deltaTime - Delta time since last frame.
 void sceneUpdate(float deltaTime);
 
@@ -45,26 +52,28 @@ void sceneUpdate(float deltaTime);
 /// @param std::unique_ptr<GameObject> gameObject - Shared pointer to the game object to add.
 void AddGameObject(std::unique_ptr<GameObject> gameObject);
 
-/// @brief Function to get all game objects with name.
+/// @brief Function to get all game objects with a specific name.
 /// @param const std::string& name - Name of the game object to get.
-/// @return std::vector<GameObject*> - vector of pointers to the game object.
+/// @return std::vector<GameObject*> - Vector of pointers to the matching game objects.
 std::vector<GameObject*> GetAllGameObjectsByName(const std::string& name);
 
-/// @brief Function to get all gameobject of class
-/// @param const std::string classname - class name in string form.
-/// @return std::vector<GameObject*> - vector of pointers to the game object.
+/// @brief Function to get all game objects of a specific class type.
+/// @param const std::string& classname - Class name in string form.
+/// @return std::vector<GameObject*> - Vector of pointers to the matching game objects.
 std::vector<GameObject*> GetAllGameObjectsByClassName(const std::string& classname);
 
-/// @brief Function to get game object by its entity.
+/// @brief Function to get a game object by its entity ID.
 /// @param entt::entity& entity - Entity of the game object to get.
-/// @return GameObject* - pointer to the game object.
+/// @return GameObject* - Pointer to the game object, or nullptr if not found.
 GameObject* GetGameObjectByEntity(entt::entity& entity);
 
-/// @brief Function to register a game object in the scene.
+/// @brief Registers a game object into the scene's internal storage.
+/// @details Places the object into `m_objects` if loading from a scene file, or `m_addedObjects` if created at runtime.
 /// @param GameObject* gameObject - Pointer to the game object to register.
 void RegisterGameObject(GameObject* gameObject);
 
-/// @brief Function to destroy a game object in the scene.
+/// @brief Marks a game object for destruction.
+/// @details Adds the object to `m_pendingDestruction` to be cleaned up at the start of the next `sceneUpdate`.
 /// @param GameObject* gameObject - Pointer to the game object to destroy.
 void DestroyGameObject(GameObject* gameObject);
 
@@ -76,12 +85,18 @@ const std::vector<std::shared_ptr<GameObject>>& GetAllObjects() const { return m
 /// @return const std::vector<std::shared_ptr<GameObject>>& - Reference to the vector of game objects.
 const std::vector<std::shared_ptr<GameObject>>& GetAllAddedObjects() const { return m_addedObjects; }
 
-/// @brief Function to save the scene to a file path.
-/// @param const std::string& outputPath - Path to save the scene to.
+/// @brief Saves the current state of the scene to a JSON file.
+/// @details Serializes:
+/// - Environment settings (Sun light, Ambient light, Shading artifacts).
+/// - All GameObjects and their components (using `ComponentRegistry::saveComponent`).
+/// - Object hierarchy (Parent/Child relationships).
+/// - Sorts objects to ensure parents are written before children to maintain hierarchy integrity on load.
+/// @param const std::string& outputPath - The filesystem path to write the .json file to.
 void Save(const std::string& outputPath);
 
-/// @brief Function to add a game object specifically for Editor usage (saved to file).
-/// @param GameObject* gameObject - Pointer to the object.
+/// @brief Promotes a temporary GameObject (e.g., created by the Editor) to a persistent Scene object.
+/// @details Moves the object from the temporary `m_addedObjects` list to the primary `m_objects` storage, ensuring it is saved with the scene.
+/// @param GameObject* gameObject - Pointer to the object to promote.
 void AddEditorGameObject(GameObject* gameObject);
 
 std::string GetScenePath(){
@@ -89,11 +104,18 @@ std::string GetScenePath(){
 }
 
 /// @brief Processes the queue of objects marked for destruction.
+/// @details Waits for the GPU to finish operations via `Engine::WaitForGpu` to ensure safe deletion, then removes the objects from internal storage vectors.
 void FlushDestructionQueue();
 
 private:
 
-/// @brief Function to load the scene from a file path saved in the constructor.
+/// @brief Loads the scene data from the file path specified in the constructor.
+/// @details
+/// 1. Reads the JSON file from the Virtual File System.
+/// 2. Parses and applies Global Environment settings (Lighting, Shading, Dithering).
+/// 3. Iterates through the "objects" array, creating GameObjects via `GameObjectFactory`.
+/// 4. Loads components for each object via `ComponentRegistry`.
+/// 5. Reconstructs parent-child hierarchies based on name references.
 void load();
 
 std::vector<std::shared_ptr<GameObject>> m_objects;

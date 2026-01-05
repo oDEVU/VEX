@@ -1,5 +1,11 @@
 var NAVTREEINDEX4 =
 {
+"classvex_1_1VulkanResources.html#ab4d964bb1cefadb20140dedf53da9893":[2,0,0,82,22],
+"classvex_1_1VulkanResources.html#ab7c1816ff613680e55a277249a653168":[1,0,0,83,14],
+"classvex_1_1VulkanResources.html#ab7c1816ff613680e55a277249a653168":[2,0,0,82,14],
+"classvex_1_1VulkanResources.html#abefc56e46967586e0dd33c50c1f815d1":[1,0,0,83,2],
+"classvex_1_1VulkanResources.html#abefc56e46967586e0dd33c50c1f815d1":[2,0,0,82,2],
+"classvex_1_1VulkanResources.html#ac14d5b2f5f8102b54bcaa5328470dd22":[1,0,0,83,12],
 "classvex_1_1VulkanResources.html#ac14d5b2f5f8102b54bcaa5328470dd22":[2,0,0,82,12],
 "classvex_1_1VulkanResources.html#ac55a799b0723985d996d95cb51a462a4":[1,0,0,83,5],
 "classvex_1_1VulkanResources.html#ac55a799b0723985d996d95cb51a462a4":[2,0,0,82,5],
@@ -243,11 +249,5 @@ var NAVTREEINDEX4 =
 "structvex_1_1InputSystem_1_1KeyState.html":[2,0,0,29,0],
 "structvex_1_1Light.html":[1,0,0,32],
 "structvex_1_1Light.html":[2,0,0,31],
-"structvex_1_1LightComponent.html":[1,0,0,33],
-"structvex_1_1LightComponent.html":[2,0,0,32],
-"structvex_1_1LogEntry.html":[1,0,0,35],
-"structvex_1_1LogEntry.html":[2,0,0,34],
-"structvex_1_1MeshComponent.html":[1,0,0,36],
-"structvex_1_1MeshComponent.html":[2,0,0,35],
-"structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736":[1,0,0,36,0]
+"structvex_1_1LightComponent.html":[1,0,0,33]
 };

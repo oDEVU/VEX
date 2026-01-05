@@ -110,9 +110,9 @@ $(function(){initNavTree('structvex_1_1MeshData.html','','structvex_1_1MeshData-
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5bf5b7daa3cea00ae8a53e32ea39ddd5" id="r_a5bf5b7daa3cea00ae8a53e32ea39ddd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bf5b7daa3cea00ae8a53e32ea39ddd5">loadFromFile</a> (const std::string &amp;path, <a class="el" href="classvex_1_1VirtualFileSystem.html">VirtualFileSystem</a> *vfs)</td></tr>
-<tr class="memdesc:a5bf5b7daa3cea00ae8a53e32ea39ddd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads mesh using <a class="el" href="classvex_1_1VirtualFileSystem.html" title="This class provides abstraction of file system needed for loading packed and unpacked assets.">VirtualFileSystem</a> (supports compressed VPKs)  <br /></td></tr>
+<tr class="memdesc:a5bf5b7daa3cea00ae8a53e32ea39ddd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads mesh data from a file using the Virtual File System.  <br /></td></tr>
 <tr class="memitem:ad3fa63bc893326c4468c2caf4ab017e4" id="r_ad3fa63bc893326c4468c2caf4ab017e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3fa63bc893326c4468c2caf4ab017e4">loadFromRawFile</a> (const std::string &amp;relativePath)</td></tr>
-<tr class="memdesc:ad3fa63bc893326c4468c2caf4ab017e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads mesh directly from disk relative to executable (Skips VFS, useful for <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> assets)  <br /></td></tr>
+<tr class="memdesc:ad3fa63bc893326c4468c2caf4ab017e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a mesh directly from the physical disk, bypassing the VFS.  <br /></td></tr>
 <tr class="memitem:a3482da92215bc05779cd140fc57be9f5" id="r_a3482da92215bc05779cd140fc57be9f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3482da92215bc05779cd140fc57be9f5">clear</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -123,7 +123,7 @@ Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a677cdb6e94f680b17bc44864cb45585f" id="r_a677cdb6e94f680b17bc44864cb45585f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a677cdb6e94f680b17bc44864cb45585f">processScene</a> (const aiScene *scene, const std::string &amp;textureBaseDir)</td></tr>
-<tr class="memdesc:a677cdb6e94f680b17bc44864cb45585f"><td class="mdescLeft">&#160;</td><td class="mdescRight">internal helper to convert Assimp scene to Submeshes  <br /></td></tr>
+<tr class="memdesc:a677cdb6e94f680b17bc44864cb45585f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal helper to convert an Assimp <span class="tt">aiScene</span> into VEX <span class="tt"><a class="el" href="structvex_1_1Submesh.html" title="Submesh structure for mesh data, its made like this cause some file formats hold multiple meshes in o...">Submesh</a></span> structures.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Mesh data structure for loading and managing mesh data. </p>
@@ -153,7 +153,7 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00050">50</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Mesh_8hpp_source.html#l00056">56</a> of file <a class="el" href="Mesh_8hpp_source.html">Mesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -176,7 +176,14 @@ Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Loads mesh using <a class="el" href="classvex_1_1VirtualFileSystem.html" title="This class provides abstraction of file system needed for loading packed and unpacked assets.">VirtualFileSystem</a> (supports compressed VPKs) </p>
+<p>Loads mesh data from a file using the Virtual File System. </p>
+<p>Uses Assimp with a custom <span class="tt"><a class="el" href="classvex_1_1VPKAssimpIOSystem.html">VPKAssimpIOSystem</a></span> to read files directly from VFS memory buffers (supporting compressed VPKs). Post-processes the mesh to Triangulate, Generate Normals, and Flip UVs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; path - Path to the mesh file within the VFS. </td></tr>
+    <tr><td class="paramname">VirtualFileSystem*</td><td>vfs - Pointer to the active <a class="el" href="classvex_1_1VirtualFileSystem.html" title="This class provides abstraction of file system needed for loading packed and unpacked assets.">VirtualFileSystem</a> instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="Mesh_8cpp_source.html#l00271">271</a> of file <a class="el" href="Mesh_8cpp_source.html">Mesh.cpp</a>.</p>
 
@@ -197,7 +204,13 @@ Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Loads mesh directly from disk relative to executable (Skips VFS, useful for <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> assets) </p>
+<p>Loads a mesh directly from the physical disk, bypassing the VFS. </p>
+<p>Useful for <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> assets or raw files not yet packed into VPKs. Reads relative to the executable directory. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; relativePath - File path relative to the executable. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="Mesh_8cpp_source.html#l00240">240</a> of file <a class="el" href="Mesh_8cpp_source.html">Mesh.cpp</a>.</p>
 
@@ -230,7 +243,14 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>internal helper to convert Assimp scene to Submeshes </p>
+<p>Internal helper to convert an Assimp <span class="tt">aiScene</span> into VEX <span class="tt"><a class="el" href="structvex_1_1Submesh.html" title="Submesh structure for mesh data, its made like this cause some file formats hold multiple meshes in o...">Submesh</a></span> structures. </p>
+<p>Extracts vertices, normals, and texture coordinates. If texture coordinates are missing, initializes UVs to <span class="tt">(-100000.0f)</span> to signal the shader. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>aiScene* scene - The loaded Assimp scene pointer. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; textureBaseDir - Base directory string for resolving texture paths. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="Mesh_8cpp_source.html#l00183">183</a> of file <a class="el" href="Mesh_8cpp_source.html">Mesh.cpp</a>.</p>
 

@@ -21,28 +21,33 @@ namespace vex {
     class VulkanSwapchainManager {
     public:
         /// @brief Constructor for VulkanSwapchainManager.
-        /// @param VulkanContext& context - Used to save swapchain resources to context.
-        /// @param SDL_Window* window
+        /// @param VulkanContext& context - Context to store swapchain images/views.
+        /// @param SDL_Window* window - Window to query surface capabilities from.
         VulkanSwapchainManager(VulkanContext& context, SDL_Window* window);
 
-        /// @brief Simple destructor for VulkanSwapchainManager.
+        /// @brief Simple destructor.
         ~VulkanSwapchainManager();
 
-        /// @brief creates or recreates swapchain.
+        /// @brief Creates or recreates the swapchain.
+        /// @details Selects surface format, present mode (FIFO/Mailbox), and extent. Creates Swapchain, Image Views, Depth Resources, and Low-Res offscreen resources.
         void createSwapchain();
 
-        /// @brief cleans up swapchain resources.
+        /// @brief Cleans up swapchain resources.
+        /// @details Destroys image views, depth buffers, framebuffers, and the swapchain itself.
         void cleanupSwapchain();
 
-        /// @brief cleans up synchronization objects.
+        /// @brief Cleans up synchronization objects.
+        /// @details Destroys Semaphores (ImageAvailable/RenderFinished) and Fences (InFlight).
         void cleanupSyncObjects();
 
-        /// @brief Simple function to cleanup old swapchain and create new one, used when resizing the window.
+        /// @brief Recreates the swapchain.
+        /// @details Calls `cleanupSwapchain` followed by `createSwapchain`. Typically called on window resize.
         void recreateSwapchain();
 
         /// @brief Sets the vsync enabled state.
+        /// @details Stores the preference. Effect takes place on next `createSwapchain` call (usually triggered via Interface).
+        /// @param bool enabled - True for VSync (FIFO), False for Uncapped (Immediate/Mailbox).
         void setVSync(bool enabled);
-
     private:
         /// @brief Helper function to create image views for swapchain images.
         void createImageViews();

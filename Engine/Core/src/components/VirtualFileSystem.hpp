@@ -35,46 +35,62 @@ public:
     VirtualFileSystem();
     ~VirtualFileSystem();
 
-    /// @brief Initializes the virtual file system checks if file exists and is proper format.
-    /// @param const std::string& base_path
-    /// @return bool - true if initialization is successful, false otherwise.
+    /// @brief Initializes the virtual file system.
+    /// @details Sets the base path and checks for the existence of a packed asset file (`Assets/assets.vpk`).
+    /// If the VPK exists, it attempts to load the header and file table.
+    /// If the VPK is missing (or in Debug builds), it falls back to loose file loading (`m_use_packed_assets = false`).
+    /// @param const std::string& base_path - The root directory path (usually the executable directory) to initialize the VFS from.
+    /// @return bool - true if initialization (VPK load or fallback setup) is successful, false otherwise.
     bool initialize(const std::string& base_path);
 
-    /// @brief Loads file from a specified path. For packed assets path is unique file id.
-    /// @param const std::string& virtual_path
-    /// @return std::unique_ptr<FileData> - unique pointer to the loaded file data.
+    /// @brief Loads a file into memory from the specified path.
+    /// @details
+    /// - **Packed Mode**: Locates the file entry in the loaded VPK, seeks to the data offset, and reads `entry->data_size` bytes.
+    /// - **Loose Mode**: Reads the file from disk using `std::ifstream`, resolving the path relative to the base directory.
+    /// @param const std::string& virtual_path - The relative path or unique ID of the file to load.
+    /// @return std::unique_ptr<FileData> - Unique pointer to the struct containing the raw data vector and size, or nullptr if not found.
     std::unique_ptr<FileData> load_file(const std::string& virtual_path);
 
-    /// @brief Opens a file stream from a specified path. For packed assets path is unique file id.
-    /// @param const std::string& virtual_path
-    /// @return std::unique_ptr<std::istream> - unique pointer to the opened file stream.
+    /// @brief Opens a file stream for reading from a specified path.
+    /// @details
+    /// - **Packed Mode**: Reads the specific file chunk from the VPK into a memory buffer (protected by `stream_mutex`) and returns a custom `VPKStream` wrapped around that buffer.
+    /// - **Loose Mode**: returns a standard `std::ifstream` opened in binary mode.
+    /// @param const std::string& virtual_path - The relative path to the file.
+    /// @return std::unique_ptr<std::istream> - Unique pointer to the input stream, or nullptr if the file cannot be opened.
     std::unique_ptr<std::istream> open_file_stream(const std::string& virtual_path);
 
-    /// @brief Checks if a file exists in the virtual file system.
-    /// @param const std::string& virtual_path
+    /// @brief Checks if a file exists in the currently active file system mode.
+    /// @details
+    /// - **Packed Mode**: Searches the `m_loaded_vpk->file_names` vector for the cleaned path.
+    /// - **Loose Mode**: Uses `std::filesystem::exists` on the physical disk path.
+    /// @param const std::string& virtual_path - The path to check.
     /// @return bool - true if the file exists, false otherwise.
     bool file_exists(const std::string& virtual_path);
 
-    /// @brief Gets the size of a file in the virtual file system.
-    /// @param const std::string& virtual_path
-    /// @return size_t - size of the file in bytes.
+    /// @brief Gets the size of a file in bytes.
+    /// @details Returns `entry->data_size` for packed files or `fs::file_size` for loose files.
+    /// @param const std::string& virtual_path - The path of the file.
+    /// @return size_t - Size of the file in bytes, or 0 if not found.
     size_t get_file_size(const std::string& virtual_path);
 
-    /// @brief Lists all files in a directory in the virtual file system.
-    /// @param const std::string& virtual_dir - directory path to list files from.
-    /// @return std::vector<std::string> - vector of file paths.
+    /// @brief Lists all files contained within a specific directory.
+    /// @details
+    /// - **Packed Mode**: Iterates VPK file names and filters by the provided directory prefix.
+    /// - **Loose Mode**: Uses `fs::recursive_directory_iterator` to traverse the physical `Assets/` directory.
+    /// @param const std::string& virtual_dir - The directory path to filter by (default is root).
+    /// @return std::vector<std::string> - A vector of relative file paths found.
     std::vector<std::string> list_files(const std::string& virtual_dir = "");
+
+    /// @brief Resolves a relative path to a normalized, cleaner format.
+    /// @details Uses `std::filesystem::lexically_normal()` to resolve `..` and `.` segments, and ensures consistent separators via `clean_path`.
+    /// @param const std::string& base_path - The context path (e.g., the path of the file requesting the resolve).
+    /// @param const std::string& relative_path - The path relative to `base_path`.
+    /// @return std::string - The resolved, cleaned virtual path.
+    std::string resolve_relative_path(const std::string& base_path, const std::string& relative_path);
 
     /// @brief Gets the base path of the virtual file system.
     /// @return std::string - base path.
     std::string get_base_path() const { return m_base_path; }
-
-    /// @brief Resolves a relative path to an absolute path.
-    /// @param const std::string& base_path - base path to resolve from.
-    /// @param const std::string& relative_path - relative path to resolve.
-    /// @return std::string - absolute path.
-    std::string resolve_relative_path(const std::string& base_path, const std::string& relative_path);
-
 private:
     /// @brief struct defining vpak file header data, used to validate file integrity.
     struct VPKHeader {

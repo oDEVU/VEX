@@ -110,7 +110,7 @@ $(function(){initNavTree('classvex_1_1Window.html','','classvex_1_1Window-member
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae57e58f01774bd314764a060ce164c91" id="r_ae57e58f01774bd314764a060ce164c91"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae57e58f01774bd314764a060ce164c91">Window</a> (std::string title, int resx=480, int resy=640)</td></tr>
-<tr class="memdesc:ae57e58f01774bd314764a060ce164c91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1Window.html" title="This class esentially abstracts SDL_Window.">Window</a> class. Creates a new SDL_Window with the given title and resolution.  <br /></td></tr>
+<tr class="memdesc:ae57e58f01774bd314764a060ce164c91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for <a class="el" href="classvex_1_1Window.html" title="This class esentially abstracts SDL_Window.">Window</a> class.  <br /></td></tr>
 <tr class="memitem:a9f55e03567720265b43277eb4df8e5b5" id="r_a9f55e03567720265b43277eb4df8e5b5"><td class="memItemLeft" align="right" valign="top">SDL_Window *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f55e03567720265b43277eb4df8e5b5">GetSDLWindow</a> ()</td></tr>
 <tr class="memdesc:a9f55e03567720265b43277eb4df8e5b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for SDL_Window pointer.  <br /></td></tr>
 <tr class="memitem:a91cc9c0a13451850ea19491d600559e0" id="r_a91cc9c0a13451850ea19491d600559e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91cc9c0a13451850ea19491d600559e0">setFullscreen</a> (bool enabled, bool exclusive=false)</td></tr>
@@ -154,7 +154,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor for <a class="el" href="classvex_1_1Window.html" title="This class esentially abstracts SDL_Window.">Window</a> class. Creates a new SDL_Window with the given title and resolution. </p>
+<p>Constructor for <a class="el" href="classvex_1_1Window.html" title="This class esentially abstracts SDL_Window.">Window</a> class. </p>
+<p>Initializes SDL with Video and Gamepad subsystems.</p><ul>
+<li>On Linux, attempts to hint <span class="tt">wayland,x11</span> drivers.</li>
+<li>Creates the window with flags: <span class="tt">SDL_WINDOW_VULKAN</span>, <span class="tt">SDL_WINDOW_HIGH_PIXEL_DENSITY</span>, and <span class="tt">SDL_WINDOW_RESIZABLE</span>. <dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>- If SDL initialization or <a class="el" href="classvex_1_1Window.html" title="This class esentially abstracts SDL_Window.">Window</a> creation fails. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">std::string</td><td>title - Title of the window. </td></tr>
@@ -163,6 +171,8 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+</li>
+</ul>
 
 <p class="definition">Definition at line <a class="el" href="Window_8cpp_source.html#l00004">4</a> of file <a class="el" href="Window_8cpp_source.html">Window.cpp</a>.</p>
 
@@ -204,7 +214,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the refresh rate of the display the window is currently on. </p>
-<dl class="section return"><dt>Returns</dt><dd>float - Refresh rate in Hz (e.g., 60.0, 144.0). Returns 60.0 on failure. </dd></dl>
+<p>Queries <span class="tt">SDL_GetDisplayForWindow</span> followed by <span class="tt">SDL_GetCurrentDisplayMode</span>. </p><dl class="section return"><dt>Returns</dt><dd>float - Refresh rate in Hz. Returns 60.0f as a fallback if the query fails. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="Window_8cpp_source.html#l00077">77</a> of file <a class="el" href="Window_8cpp_source.html">Window.cpp</a>.</p>
 
@@ -274,13 +284,17 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Setter for fullscreen mode. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<ul>
+<li><b>Exclusive</b>: Queries the current display mode and sets <span class="tt">SDL_SetWindowFullscreenMode</span> before entering fullscreen.</li>
+<li><b>Borderless</b>: Sets the mode to NULL (desktop fullscreen) before entering fullscreen. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">bool</td><td>enabled - True to enable fullscreen, false to disable. </td></tr>
-    <tr><td class="paramname">bool</td><td>exclusive - True for exclusive fullscreen, false for borderless (Defaults to false) </td></tr>
+    <tr><td class="paramname">bool</td><td>exclusive - True for exclusive fullscreen (changes video mode), false for borderless windowed </td></tr>
   </table>
   </dd>
 </dl>
+</li>
+</ul>
 
 <p class="definition">Definition at line <a class="el" href="Window_8cpp_source.html#l00052">52</a> of file <a class="el" href="Window_8cpp_source.html">Window.cpp</a>.</p>
 

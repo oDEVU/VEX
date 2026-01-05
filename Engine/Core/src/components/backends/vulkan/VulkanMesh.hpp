@@ -29,10 +29,12 @@ namespace vex {
         ~VulkanMesh();
 
         /// @brief Uploads mesh data to the GPU.
-        /// @param const MeshData& meshData - Mesh data to be uploaded.
+        /// @details Creates VMA buffers (`VK_BUFFER_USAGE_VERTEX_BUFFER_BIT` / `INDEX`) and uploads data from `MeshData`. Stores CPU copies of triangle centers for transparency sorting.
+        /// @param const MeshData& meshData - The source mesh data.
         void upload(const MeshData& meshData);
 
         // @brief Function to extract transparent triangles
+        // @details Transforms triangle centers to world space, calculates distance to camera, and populates `outTriangles` with render data.
         // @param const glm::mat4& modelMatrix - Model matrix for the mesh.
         // @param const glm::vec3& cameraPos - Position of the camera.
         // @param uint32_t modelIndex - Index of the current model.
@@ -49,6 +51,7 @@ namespace vex {
         );
 
         /// @brief Draws the mesh to the screen.
+        /// @details Binds buffers, descriptors, and issues draw calls for each submesh. Resolves texture overrides from `MeshComponent`.
         /// @param VkCommandBuffer cmd - Command buffer to draw the mesh.
         /// @param VkPipelineLayout pipelineLayout - Pipeline layout for the mesh.
         /// @param VulkanResources& resources - Vulkan resources for the mesh.
@@ -60,14 +63,19 @@ namespace vex {
         void draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
                 VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, const MeshComponent& mc) const;
 
-            // @brief This function contains all the setup logic (binding buffers, descriptor sets, and pushing constants) that only needs to be performed when the mesh or submesh (and thus the buffers/texture) changes.
-            // @param const glm::mat4& modelMatrix - Model matrix for the mesh.
-            // @param const glm::vec3& cameraPos - Position of the camera.
-            // @param uint32_t modelIndex - Index of the current model.
-            // @param uint32_t frameIndex - Index of the current frame.
-            // @param entt::entity entity - Entity associated with the mesh.
-            // @param std::vector<TransparentTriangle>& outTriangles - Vector to store extracted transparent triangles.
-            void bindAndDrawBatched(
+        /// @brief Batch-optimized draw call for sorted transparent triangles.
+        /// @details Only re-binds descriptors/buffers if `modelChanged` or `submeshChanged` is true. Used in conjunction with `issueMultiDrawIndexed`.
+        /// @param VkCommandBuffer cmd - Command buffer.
+        /// @param VkPipelineLayout pipelineLayout - Pipeline layout.
+        /// @param VulkanResources& resources - Resource manager.
+        /// @param uint32_t frameIndex - Frame index.
+        /// @param uint32_t modelIndex - Model index.
+        /// @param uint32_t submeshIndex - Submesh index.
+        /// @param glm::mat4 modelMatrix - Transform matrix.
+        /// @param bool modelChanged - Flag indicating if model-level data (matrix/lights) needs rebinding.
+        /// @param bool submeshChanged - Flag indicating if submesh-level data (buffers/textures) needs rebinding.
+        /// @param const MeshComponent& mc - Component data.
+        void bindAndDrawBatched(
                 VkCommandBuffer cmd,
                 VkPipelineLayout pipelineLayout,
                 VulkanResources& resources,

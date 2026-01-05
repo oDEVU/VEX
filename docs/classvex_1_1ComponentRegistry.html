@@ -119,21 +119,21 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1c371346b13d058743bb8cc344eb2cd7" id="r_a1c371346b13d058743bb8cc344eb2cd7"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a1c371346b13d058743bb8cc344eb2cd7 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c371346b13d058743bb8cc344eb2cd7">registerComponent</a> (const std::string &amp;name, bool isDynamic=false)</td></tr>
-<tr class="memdesc:a1c371346b13d058743bb8cc344eb2cd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic Register Function, Used by macros defined later in this file.  <br /></td></tr>
+<tr class="memdesc:a1c371346b13d058743bb8cc344eb2cd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template function to register a component type with the system.  <br /></td></tr>
 <tr class="memitem:aa9bce26cfbe971ac29ddab3ac0bbb5a5" id="r_aa9bce26cfbe971ac29ddab3ac0bbb5a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9bce26cfbe971ac29ddab3ac0bbb5a5">unregisterComponent</a> (const std::string &amp;name)</td></tr>
-<tr class="memdesc:aa9bce26cfbe971ac29ddab3ac0bbb5a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister a component type.  <br /></td></tr>
+<tr class="memdesc:aa9bce26cfbe971ac29ddab3ac0bbb5a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregisters a component type and removes all associated callbacks.  <br /></td></tr>
 <tr class="memitem:a3acf42084e1d0db11ea49e8de38e85f3" id="r_a3acf42084e1d0db11ea49e8de38e85f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3acf42084e1d0db11ea49e8de38e85f3">clearDynamicComponents</a> ()</td></tr>
-<tr class="memdesc:a3acf42084e1d0db11ea49e8de38e85f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all dynamic components.  <br /></td></tr>
+<tr class="memdesc:a3acf42084e1d0db11ea49e8de38e85f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all components registered as dynamic.  <br /></td></tr>
 <tr class="memitem:a42e4df6a19410afc5a7f8d7337e66969" id="r_a42e4df6a19410afc5a7f8d7337e66969"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42e4df6a19410afc5a7f8d7337e66969">loadComponent</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj, const std::string &amp;type, const nlohmann::json &amp;json)</td></tr>
-<tr class="memdesc:a42e4df6a19410afc5a7f8d7337e66969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a component from JSON data.  <br /></td></tr>
+<tr class="memdesc:a42e4df6a19410afc5a7f8d7337e66969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads data into a component on a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> from JSON.  <br /></td></tr>
 <tr class="memitem:a0e0ddf666b509fe51d3f17deff0d6221" id="r_a0e0ddf666b509fe51d3f17deff0d6221"><td class="memItemLeft" align="right" valign="top">nlohmann::json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e0ddf666b509fe51d3f17deff0d6221">saveComponent</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj, const std::string &amp;type)</td></tr>
-<tr class="memdesc:a0e0ddf666b509fe51d3f17deff0d6221"><td class="mdescLeft">&#160;</td><td class="mdescRight">Svaes component to disk in json format.  <br /></td></tr>
+<tr class="memdesc:a0e0ddf666b509fe51d3f17deff0d6221"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serializes a component on a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> to JSON.  <br /></td></tr>
 <tr class="memitem:af362295b8118ca95e0766d7fb09be4e6" id="r_af362295b8118ca95e0766d7fb09be4e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af362295b8118ca95e0766d7fb09be4e6">drawInspectorForObject</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj)</td></tr>
-<tr class="memdesc:af362295b8118ca95e0766d7fb09be4e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws editor inspector for a component.  <br /></td></tr>
+<tr class="memdesc:af362295b8118ca95e0766d7fb09be4e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the ImGui inspector for all components on the object.  <br /></td></tr>
+<tr class="memitem:a58888ec4c065c1cde1f5eee1b643c423" id="r_a58888ec4c065c1cde1f5eee1b643c423"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58888ec4c065c1cde1f5eee1b643c423">createComponent</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj, const std::string &amp;name)</td></tr>
+<tr class="memdesc:a58888ec4c065c1cde1f5eee1b643c423"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and attaches a specific component to a game object.  <br /></td></tr>
 <tr class="memitem:a68e619ee85d50c162e8bb31bd408e6f5" id="r_a68e619ee85d50c162e8bb31bd408e6f5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68e619ee85d50c162e8bb31bd408e6f5">getMissingComponents</a> (const <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj)</td></tr>
 <tr class="memdesc:a68e619ee85d50c162e8bb31bd408e6f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get missing components for a game object.  <br /></td></tr>
-<tr class="memitem:a58888ec4c065c1cde1f5eee1b643c423" id="r_a58888ec4c065c1cde1f5eee1b643c423"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58888ec4c065c1cde1f5eee1b643c423">createComponent</a> (<a class="el" href="classvex_1_1GameObject.html">GameObject</a> &amp;obj, const std::string &amp;name)</td></tr>
-<tr class="memdesc:a58888ec4c065c1cde1f5eee1b643c423"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a component for a game object.  <br /></td></tr>
 <tr class="memitem:a12d5f044cf405039592a4fed4c979f14" id="r_a12d5f044cf405039592a4fed4c979f14"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, ComponentInspector &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12d5f044cf405039592a4fed4c979f14">getInspectors</a> () const</td></tr>
 <tr class="memdesc:a12d5f044cf405039592a4fed4c979f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get component inspectors.  <br /></td></tr>
 <tr class="memitem:a9a317391f0c1263d40354203f8ac7b36" id="r_a9a317391f0c1263d40354203f8ac7b36"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a317391f0c1263d40354203f8ac7b36">getRegisteredNames</a> () const</td></tr>
@@ -254,7 +254,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Clear all dynamic components. </p>
+<p>Clears all components registered as dynamic. </p>
+<p>Used for hot-reloading. Iterates <span class="tt">dynamicComponents</span> and manually unregisters each one to clean up function pointers from unloaded DLLs. </p>
 
 <p class="definition">Definition at line <a class="el" href="ComponentFactory_8cpp_source.html#l00026">26</a> of file <a class="el" href="ComponentFactory_8cpp_source.html">ComponentFactory.cpp</a>.</p>
 
@@ -279,7 +280,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Create a component for a game object. </p>
+<p>Creates and attaches a specific component to a game object. </p>
+<p>Uses the registered creator lambda to default-construct and add the component. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">GameObject&amp;</td><td>obj - The target object. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; name - The component type name. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="ComponentFactory_8cpp_source.html#l00079">79</a> of file <a class="el" href="ComponentFactory_8cpp_source.html">ComponentFactory.cpp</a>.</p>
 
@@ -300,7 +308,13 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Draws editor inspector for a component. </p>
+<p>Draws the ImGui inspector for all components on the object. </p>
+<p>Iterates through all registered inspectors and calls them on the object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">GameObject&amp;</td><td>obj - The object to inspect. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="ComponentFactory_8cpp_source.html#l00063">63</a> of file <a class="el" href="ComponentFactory_8cpp_source.html">ComponentFactory.cpp</a>.</p>
 
@@ -420,7 +434,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Load a component from JSON data. </p>
+<p>Loads data into a component on a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> from JSON. </p>
+<p>Finds the registered loader for <span class="tt">type</span> and executes it. Logs an error if the type is not registered. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">GameObject&amp;</td><td>obj - The target object. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; type - The component type name. </td></tr>
+    <tr><td class="paramname">const</td><td>nlohmann::json&amp; json - The JSON data to load. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool - True if successful, false if type not found. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ComponentFactory_8cpp_source.html#l00048">48</a> of file <a class="el" href="ComponentFactory_8cpp_source.html">ComponentFactory.cpp</a>.</p>
 
@@ -455,9 +478,23 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Generic Register Function, Used by macros defined later in this file. </p>
+<p>Template function to register a component type with the system. </p>
+<p>Generates and stores lambdas for:</p><ul>
+<li><b>Loading</b>: Deserializes JSON into the component (creates it if missing).</li>
+<li><b>Saving</b>: Serializes component to JSON.</li>
+<li><b>Inspection</b>: Registers <span class="tt">GenericComponentInspector&lt;T&gt;</span> which uses <span class="tt">ImGui</span> and <span class="tt">ImReflect</span> to draw UI.</li>
+<li><b>Checking</b>: Checks if an object has this component.</li>
+<li><b>Creation</b>: Adds the default-constructed component to an object. <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the component class. </td></tr>
+    <tr><td class="paramname">bool</td><td>isDynamic - Whether this component is part of a hot-reloadable module. </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00119">119</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00127">127</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -480,7 +517,15 @@ template&lt;typename T&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Svaes component to disk in json format. </p>
+<p>Serializes a component on a <a class="el" href="classvex_1_1GameObject.html" title="Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.">GameObject</a> to JSON. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">GameObject&amp;</td><td>obj - The source object. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; type - The component type name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>nlohmann::json - The serialized data, or nullptr if not found/registered. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ComponentFactory_8cpp_source.html#l00058">58</a> of file <a class="el" href="ComponentFactory_8cpp_source.html">ComponentFactory.cpp</a>.</p>
 
@@ -501,7 +546,13 @@ template&lt;typename T&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Unregister a component type. </p>
+<p>Unregisters a component type and removes all associated callbacks. </p>
+<p>Erases entries from <span class="tt">loaders</span>, <span class="tt">savers</span>, <span class="tt">inspectors</span>, <span class="tt">checkers</span>, and <span class="tt">creators</span> maps, and removes the name from <span class="tt">registeredNames</span>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">const</td><td>std::string&amp; name - The name of the component to unregister. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="ComponentFactory_8cpp_source.html#l00011">11</a> of file <a class="el" href="ComponentFactory_8cpp_source.html">ComponentFactory.cpp</a>.</p>
 
@@ -528,7 +579,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00196">196</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00220">220</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -552,7 +603,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00197">197</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00221">221</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -576,7 +627,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00192">192</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00216">216</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -600,7 +651,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00195">195</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00219">219</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -624,7 +675,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00193">193</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00217">217</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -648,7 +699,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00191">191</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00215">215</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>
@@ -672,7 +723,7 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00194">194</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ComponentFactory_8hpp_source.html#l00218">218</a> of file <a class="el" href="ComponentFactory_8hpp_source.html">ComponentFactory.hpp</a>.</p>
 
 </div>
 </div>

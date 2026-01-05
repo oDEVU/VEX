@@ -109,29 +109,30 @@ $(function(){initNavTree('ResolutionManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="foldopen" id="foldopen00007" data-start="{" data-end="}">
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno"><a class="line" href="classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382">    7</a></span><a class="code hl_function" href="classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382">ResolutionManager::ResolutionManager</a>(SDL_Window* window) : m_p_window(window) {</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    update();</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    <a class="code hl_function" href="classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4">update</a>();</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>}</div>
 </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="foldopen" id="foldopen00011" data-start="{" data-end="}">
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a">   11</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a">ResolutionManager::setMode</a>(<a class="code hl_enumeration" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7e">ResolutionMode</a> mode) {</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    m_currentMode = mode;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    update();</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_function" href="classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4">update</a>();</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>}</div>
 </div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keywordtype">void</span> ResolutionManager::update() {</div>
+<div class="foldopen" id="foldopen00016" data-start="{" data-end="}">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4">   16</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4">ResolutionManager::update</a>() {</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">int</span> width, height;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    SDL_GetWindowSizeInPixels(m_p_window, &amp;width, &amp;height);</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    m_windowResolution = {width, height};</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordflow">switch</span>(m_currentMode) {</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keywordflow">case</span> ResolutionMode::NATIVE:</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaf78504d96ba7177dc0c6784905ac8743">ResolutionMode::NATIVE</a>:</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            m_renderResolution = m_windowResolution;</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            m_upscaleRatio = 1.0f;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keywordflow">case</span> ResolutionMode::RES_240P: {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaeabc3f998c9b1f13a5bb3c52a41e6fc3">ResolutionMode::RES_240P</a>: {</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keywordtype">float</span> aspect = width / <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(height);</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            m_renderResolution.y = 240;</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            m_renderResolution.x = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(240 * aspect);</div>
@@ -139,7 +140,7 @@ $(function(){initNavTree('ResolutionManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        }</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keywordflow">case</span> ResolutionMode::RES_480P: {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6">ResolutionMode::RES_480P</a>: {</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keywordtype">float</span> aspect = width / <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(height);</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            m_renderResolution.y = 480;</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            m_renderResolution.x = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(480 * aspect);</div>
@@ -147,7 +148,7 @@ $(function(){initNavTree('ResolutionManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        }</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">case</span> ResolutionMode::PS1_SHARP:</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485">ResolutionMode::PS1_SHARP</a>:</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            <a class="code hl_function" href="classvex_1_1ResolutionManager.html#a4bd8ebdaf15b7e91218b836610c53484">calculatePS1SharpResolution</a>();</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    }</div>
@@ -157,6 +158,7 @@ $(function(){initNavTree('ResolutionManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>           m_windowResolution.x, m_windowResolution.y,</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>           m_upscaleRatio);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}</div>
+</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
 <div class="foldopen" id="foldopen00054" data-start="{" data-end="}">
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classvex_1_1ResolutionManager.html#a4bd8ebdaf15b7e91218b836610c53484">   54</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1ResolutionManager.html#a4bd8ebdaf15b7e91218b836610c53484">ResolutionManager::calculatePS1SharpResolution</a>() {</div>
@@ -180,11 +182,16 @@ $(function(){initNavTree('ResolutionManager_8cpp_source.html','',''); });
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>} <span class="comment">// namespace vex</span></div>
 <div class="ttc" id="aResolutionManager_8hpp_html"><div class="ttname"><a href="ResolutionManager_8hpp.html">ResolutionManager.hpp</a></div><div class="ttdoc">This file defines ResolutionManager class and ResolutionMode struct.</div></div>
 <div class="ttc" id="aResolutionManager_8hpp_html_a6c6347ce8388807f7722c3d4a3554b7e"><div class="ttname"><a href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7e">vex::ResolutionMode</a></div><div class="ttdeci">ResolutionMode</div><div class="ttdoc">Enumeration representing different resolution modes.</div><div class="ttdef"><b>Definition</b> <a href="ResolutionManager_8hpp_source.html#l00034">ResolutionManager.hpp:34</a></div></div>
+<div class="ttc" id="aResolutionManager_8hpp_html_a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485"><div class="ttname"><a href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaaf546d122777f1f481ef5cee4a9ec485">vex::ResolutionMode::PS1_SHARP</a></div><div class="ttdeci">@ PS1_SHARP</div><div class="ttdoc">Integer-scaled resolution closest to PS1.</div><div class="ttdef"><b>Definition</b> <a href="ResolutionManager_8hpp_source.html#l00042">ResolutionManager.hpp:42</a></div></div>
+<div class="ttc" id="aResolutionManager_8hpp_html_a6c6347ce8388807f7722c3d4a3554b7eaeabc3f998c9b1f13a5bb3c52a41e6fc3"><div class="ttname"><a href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaeabc3f998c9b1f13a5bb3c52a41e6fc3">vex::ResolutionMode::RES_240P</a></div><div class="ttdeci">@ RES_240P</div><div class="ttdoc">240p (426x240 for 16:9).</div><div class="ttdef"><b>Definition</b> <a href="ResolutionManager_8hpp_source.html#l00038">ResolutionManager.hpp:38</a></div></div>
+<div class="ttc" id="aResolutionManager_8hpp_html_a6c6347ce8388807f7722c3d4a3554b7eaf78504d96ba7177dc0c6784905ac8743"><div class="ttname"><a href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eaf78504d96ba7177dc0c6784905ac8743">vex::ResolutionMode::NATIVE</a></div><div class="ttdeci">@ NATIVE</div><div class="ttdoc">Use window resolution.</div><div class="ttdef"><b>Definition</b> <a href="ResolutionManager_8hpp_source.html#l00036">ResolutionManager.hpp:36</a></div></div>
+<div class="ttc" id="aResolutionManager_8hpp_html_a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6"><div class="ttname"><a href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7eafbf6d2d0430684d72025f143143a50a6">vex::ResolutionMode::RES_480P</a></div><div class="ttdeci">@ RES_480P</div><div class="ttdoc">480p (854x480 for 16:9).</div><div class="ttdef"><b>Definition</b> <a href="ResolutionManager_8hpp_source.html#l00040">ResolutionManager.hpp:40</a></div></div>
 <div class="ttc" id="aWindow_8hpp_html"><div class="ttname"><a href="Window_8hpp.html">Window.hpp</a></div><div class="ttdoc">This file defines Window class.</div></div>
 <div class="ttc" id="aclassvex_1_1ResolutionManager_html_a1dab58ae6c60cf30759c6a431ed63f1a"><div class="ttname"><a href="classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a">vex::ResolutionManager::setMode</a></div><div class="ttdeci">void setMode(ResolutionMode mode)</div><div class="ttdoc">Function to set the resolution mode. It is called by engine method.</div><div class="ttdef"><b>Definition</b> <a href="#l00011">ResolutionManager.cpp:11</a></div></div>
 <div class="ttc" id="aclassvex_1_1ResolutionManager_html_a3d09291c8dac471dc4dd889907988382"><div class="ttname"><a href="classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382">vex::ResolutionManager::ResolutionManager</a></div><div class="ttdeci">ResolutionManager(SDL_Window *p_window)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition</b> <a href="#l00007">ResolutionManager.cpp:7</a></div></div>
-<div class="ttc" id="aclassvex_1_1ResolutionManager_html_a4bd8ebdaf15b7e91218b836610c53484"><div class="ttname"><a href="classvex_1_1ResolutionManager.html#a4bd8ebdaf15b7e91218b836610c53484">vex::ResolutionManager::calculatePS1SharpResolution</a></div><div class="ttdeci">void calculatePS1SharpResolution()</div><div class="ttdoc">Function to calculate the PS1 sharp resolution.</div><div class="ttdef"><b>Definition</b> <a href="#l00054">ResolutionManager.cpp:54</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a message with the given format and arguments to the console, or does absolutely nothing for rel...</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00381">errorUtils.cpp:381</a></div></div>
+<div class="ttc" id="aclassvex_1_1ResolutionManager_html_a4bd8ebdaf15b7e91218b836610c53484"><div class="ttname"><a href="classvex_1_1ResolutionManager.html#a4bd8ebdaf15b7e91218b836610c53484">vex::ResolutionManager::calculatePS1SharpResolution</a></div><div class="ttdeci">void calculatePS1SharpResolution()</div><div class="ttdoc">Internal helper to calculate integer-scaled resolutions for the PS1_SHARP mode.</div><div class="ttdef"><b>Definition</b> <a href="#l00054">ResolutionManager.cpp:54</a></div></div>
+<div class="ttc" id="aclassvex_1_1ResolutionManager_html_add9146f9f1bb17b33b0b9d06491c69f4"><div class="ttname"><a href="classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4">vex::ResolutionManager::update</a></div><div class="ttdeci">void update()</div><div class="ttdoc">Updates the internal resolution state based on the current window size and mode.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">ResolutionManager.cpp:16</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00381">errorUtils.cpp:381</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

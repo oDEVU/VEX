@@ -237,6 +237,8 @@ var NAVTREEINDEX2 =
 "classvex_1_1ResolutionManager.html#a7c992a0cdfd97eb54d4653be647dcb0f":[2,0,0,54,2],
 "classvex_1_1ResolutionManager.html#ad9547b6b5479891fe76d271e4f3e8f36":[1,0,0,55,3],
 "classvex_1_1ResolutionManager.html#ad9547b6b5479891fe76d271e4f3e8f36":[2,0,0,54,3],
+"classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4":[1,0,0,55,7],
+"classvex_1_1ResolutionManager.html#add9146f9f1bb17b33b0b9d06491c69f4":[2,0,0,54,7],
 "classvex_1_1Scene.html":[1,0,0,58],
 "classvex_1_1Scene.html":[2,0,0,57],
 "classvex_1_1Scene.html#a058f378a50b29cce15d24b4aa60f86d6":[1,0,0,58,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classvex_1_1Scene.html#a2a6c9df0947f18b5ce1421ecd586529d":[2,0,0,57,2],
 "classvex_1_1Scene.html#a3bdeb626c666621adfcbe6a0b5b21d47":[1,0,0,58,12],
 "classvex_1_1Scene.html#a3bdeb626c666621adfcbe6a0b5b21d47":[2,0,0,57,12],
-"classvex_1_1Scene.html#a434fc5bac20a90e6913bccbebf4fcfaa":[1,0,0,58,7],
-"classvex_1_1Scene.html#a434fc5bac20a90e6913bccbebf4fcfaa":[2,0,0,57,7],
-"classvex_1_1Scene.html#a573c9cd828fa5def2785ca23c54249c2":[1,0,0,58,5]
+"classvex_1_1Scene.html#a434fc5bac20a90e6913bccbebf4fcfaa":[1,0,0,58,7]
 };

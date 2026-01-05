@@ -57,9 +57,9 @@ var NAVTREEINDEX =
 "AssetBrowser_8cpp_source.html",
 "classvex_1_1AssetBrowser.html#a8836a330665804a78db9298b69290d97",
 "classvex_1_1GameObjectFactory.html#af5cf5855390185a1e2850e6ddfb1c1a0",
-"classvex_1_1Scene.html#a573c9cd828fa5def2785ca23c54249c2",
-"classvex_1_1VulkanResources.html#ac14d5b2f5f8102b54bcaa5328470dd22",
-"structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736"
+"classvex_1_1Scene.html#a434fc5bac20a90e6913bccbebf4fcfaa",
+"classvex_1_1VulkanResources.html#ab4d964bb1cefadb20140dedf53da9893",
+"structvex_1_1LightComponent.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

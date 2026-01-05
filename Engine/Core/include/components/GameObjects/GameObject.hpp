@@ -30,15 +30,25 @@
       /// @details This class serves as the foundation for all game objects within the engine. It provides essential functionalities such as entity management, name registration, and basic component initialization.
   class GameObject {
   public:
-    /// @brief Default constructor for GameObject. You need to call it from your derived class, it gives your object a unique identifier and registers it with the engine.
-    /// @param Engine& engine Reference to the engine instance.
-    /// @param std::string name Unique name for the game object.
+    /// @brief Default constructor for GameObject.
+    /// @details
+    /// 1. Initializes the engine reference and marks object as valid.
+    /// 2. Creates a new `entt::entity` in the registry.
+    /// 3. Adds a `NameComponent`.
+    /// 4. Automatically registers the object with the current scene via `SceneManager::GetScene(lastSceneName)`.
+    /// @param Engine& engine - Reference to the engine instance.
+    /// @param const std::string& name - Unique name for the game object.
     GameObject(Engine& engine, const std::string& name);
 
     /// @brief Destroys the GameObject and removes it from the engine's registry.
+    /// @details
+    /// 1. Checks validity to prevent double deletion.
+    /// 2. Iterates `TransformComponent`s to find children and unparents them (sets parent to `entt::null`).
+    /// 3. Destroys the entity in the registry and marks this object as invalid.
     void Destroy();
 
-    /// @brief Destruktor woła Destroy
+    /// @brief Destructor.
+    /// @details Calls `Destroy()` to ensure cleanup.
     virtual ~GameObject();
 
     GameObject(const GameObject&) = delete;
@@ -72,9 +82,10 @@
       /// @return True if the GameObject has the component, false otherwise.
       template<typename T> bool HasComponent() const { return m_engine.getRegistry().any_of<T>(m_entity); }
       bool isValid() const { return m_isValid; }
+
       /// @brief Function that parent this Object to another GameObject. You need to pass another GameObject's entity.
       /// @param entt::entity entity - Entity of GameObject we want to parent to.
-      /// @details Example usage:
+      /// @details Helper function that retrieves the `TransformComponent` of this object and calls `setParent` with the provided entity ID.
       /// @code
       /// GameObject* parent = new GameObject();
       /// GameObject* child = new GameObject();

@@ -68,10 +68,17 @@ public:
     /// @return float - The current upscale ratio.
     float getUpscaleRatio() const { return m_upscaleRatio; }
 
+    /// @brief Updates the internal resolution state based on the current window size and mode.
+    /// @details Queries the actual window size from SDL (`SDL_GetWindowSizeInPixels`). Depending on `m_currentMode`:
+    /// - **NATIVE**: Matches render resolution to window size (1:1).
+    /// - **RES_240P/480P**: Fixes the vertical resolution to 240 or 480 and calculates width based on aspect ratio.
+    /// - **PS1_SHARP**: Calls `calculatePS1SharpResolution()` to find an integer scale factor.
     void update();
 
 private:
-/// @brief Function to calculate the PS1 sharp resolution.
+    /// @brief Internal helper to calculate integer-scaled resolutions for the PS1_SHARP mode.
+    /// @details Determines the maximum integer scale factor (clamped between 1 and 4) that fits within the current window height.
+    /// Ensures the render height does not drop below 240p.
     void calculatePS1SharpResolution();
 
     SDL_Window *m_p_window;

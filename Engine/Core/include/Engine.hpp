@@ -36,23 +36,34 @@ class SceneManager;
 
 struct SkipInit {};
 
-/// @brief Class for interaction with engine systems, your game main class will Inherit from it.
+/// @brief Class for interaction with engine systems.
 class VEX_EXPORT Engine {
 public:
     /// @brief returns engine hash generated during build process.
     static const char* GetBuildHash();
 
-    /// @brief Constructor for Engine class, that will handle initialization of every system with given params.
-    /// @param char* title       - Title of the game window.
-    /// @param int width  - Initial width of the game window.
-    /// @param int length - Initial height of the game window.
-    /// @param GameInfo gInfo    - Game Info class containing version, name etc.
-    ///
+    /// @brief Constructor for the Engine class.
+    /// @details Initializes the core systems in the following order:
+    /// 1. Window creation and ResolutionManager.
+    /// 2. Virtual File System (VFS) rooted at the executable directory.
+    /// 3. PhysicsSystem.
+    /// 4. Vulkan Interface (Renderer) and ImGui wrapper.
+    /// 5. InputSystem and SceneManager.
+    /// @note Detects Wayland on Linux to enforce software VSync strategies if necessary.
+    /// @param const char* title - Title of the game window.
+    /// @param int width - Initial width of the game window.
+    /// @param int height - Initial height of the game window.
+    /// @param GameInfo gInfo - Game Info struct containing versioning and metadata.
     Engine(const char* title, int width, int height, GameInfo gInfo);
     ~Engine();
 
-    /// @brief Function starting and running main game loop.
-    /// @param std::function<void()> onUpdateLoop - Optional callback function for hot reload logic.
+    /// @brief Starts and runs the main game loop.
+    /// @details Handles the lifecycle of the application, including:
+    /// - Event polling (`SDL_PollEvent`) and dispatching.
+    /// - Frame timing, delta time calculation, and frame limiting (FPS cap).
+    /// - Handling application background/foreground states (`SDL_EVENT_WILL_ENTER_BACKGROUND`) to pause/resume rendering.
+    /// - Triggering Update and Render cycles.
+    /// @param std::function<void()> onUpdateLoop - Optional callback function, primarily used for hot-reload logic to inject code into the loop.
     void run(std::function<void()> onUpdateLoop = nullptr);
 
     /// @brief Function returning the entity of the camera.
@@ -62,8 +73,8 @@ public:
         return view.empty() ? entt::null : view.front();
     }
 
-    /// @brief Function allowing for changing resolution mode at runtime.
-    /// @param ResolutionMode mode - Enum storing resolution modes.
+    /// @brief Sets the resolution mode and updates the resolution manager.
+    /// @param ResolutionMode mode - The new resolution mode (e.g., NATIVE, PS1_SHARP).
     void setResolutionMode(ResolutionMode mode);
 
     /// @brief Internal function for handling pausing and resuming the game.
@@ -86,8 +97,8 @@ public:
     /// @return InputMode - Current input mode.
     InputMode getInputMode() const { return m_inputSystem->getInputMode(); }
 
-    /// @brief Function allowing for changing environment settings at runtime.
-    /// @param enviroment settings - Enum storing environment settings.
+    /// @brief Applies new global environment settings (lighting, shading) to the interface.
+    /// @param enviroment settings - The new environment configuration struct.
     void setEnvironmentSettings(enviroment settings);
 
     /// @brief Returns the current environment settings.
@@ -109,7 +120,9 @@ public:
     /// @brief Returns pointer to SceneManager.
     SceneManager* getSceneManager();
 
-    /// @brief Creates and returns a std::shared_ptr of VexUI.
+    /// @brief Creates and returns a shared pointer to a VexUI instance.
+    /// @details Constructs a VexUI object linked to the current Vulkan context, VFS, and resource manager.
+    /// @return std::shared_ptr<VexUI> - A ready-to-use UI instance.
     std::shared_ptr<VexUI> createVexUI();
 
     /// @brief Returns current frame number.
@@ -130,24 +143,33 @@ public:
     /// @brief Function to get the last loaded scenes.
     std::vector<std::string> getLastLoadedScenes() { return lastLoadedScenes; }
 
-    /// @brief Function to prepare scenes for hot reload.
+    /// @brief Prepares the engine for a hot-reload event.
+    /// @details Snapshots the names of currently loaded scenes into `lastLoadedScenes` via `SceneManager::GetAllSceneNames` so they can be restored after the reload.
     void prepareScenesForHotReload();
 
     /// @brief Internal virtual function for handling window/keyboard events.
-    /// @param SDL_Event - Event to process.
-    /// @param float - Time since last frame.
+    /// @details Delegates processing to the `InputSystem`.
+    /// @param const SDL_Event& event - The SDL event to process.
+    /// @param float deltaTime - Time since last frame.
     virtual void processEvent(const SDL_Event& event, float deltaTime);
 
     /// @brief Internal virtual function for handling stuff right at the beginning of the game but after initialization of the engine.
     virtual void beginGame();
 
-    /// @brief Internal virtual function for handling updates, it is called every frame rightbefore rendering.
-    /// @param float deltaTime - Time since last frame.
+    /// @brief Internal function for handling updates; called every frame before rendering.
+    /// @details Updates the InputSystem, initializes/updates dynamic UiComponents, and steps the SceneManager and PhysicsSystem.
+    /// Skips scene and physics updates if the engine is paused (`m_paused` or `m_internally_paused`).
+    /// @param float deltaTime - Time elapsed since the last frame in seconds.
     virtual void update(float deltaTime);
 
-    /// @brief Internal virtual function calling renderers renderFrame function. It also handles camera matrixes since camera object is handled by engine anyway and theres no reason to mass it to renderer.
-    /// @see vex::Renderer::renderFrame()
-    /// @param float deltaTime - Time since last frame.
+    /// @brief Internal function that orchestrates the frame rendering process.
+    /// @details
+    /// 1. Acquires the current render resolution and Camera entity.
+    /// 2. Prepares `SceneRenderData` via the Vulkan Interface.
+    /// 3. If `m_renderPhysicsDebug` is enabled, populates debug lines for wireframe rendering.
+    /// 4. Calls `Renderer::renderScene` followed by UI composition and frame presentation.
+    /// @see vex::Renderer
+    /// @throws std::exception - If frame rendering fails, logging the error before handling.
     virtual void render();
 
     /// @brief Internal virtual function for editor.
@@ -158,10 +180,13 @@ public:
     /// @brief Simply sets m_running to false, Effectivelly soft shuting down the engine.
     void quit(){ m_running = false; }
 
-    /// @brief Waits for the GPU to finish all operations. Essential before destroying resources.
+    /// @brief Waits for the GPU to finish all pending operations.
+    /// @details Essential to call before destroying resources (e.g., during shutdown or scene transitions) to prevent Vulkan validation errors or crashes.
     void WaitForGpu();
 
-    /// @brief Sets the target frame rate. Pass 0 for unlimited.
+    /// @brief Sets the target frame rate limit.
+    /// @details Uses `SDL_Delay` in the main loop to sleep if the frame completes faster than the target time.
+    /// @param int fps - Target FPS. Pass 0 to disable the limit (unlimited FPS).
     void setFrameLimit(int fps);
     int getFrameLimit() const { return m_targetFps; }
 

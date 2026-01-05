@@ -45,11 +45,12 @@ public:
         registerCreator(name, &constructObject<T>, isDynamic);
     }
 
-    /// @brief Create a GameObject of the specified type.
-    /// @param std::string& type The type of the GameObject to create.
-    /// @param Engine& engine The engine instance.
-    /// @param std::string& name The name of the GameObject.
-    /// @return GameObject* The created GameObject.
+    /// @brief Create a GameObject instance of the specified type string.
+    /// @details Looks up the creator in the `creators` map. If found, invokes it. If not found, logs an error and returns `nullptr`.
+    /// @param const std::string& type - The registered type string.
+    /// @param Engine& engine - The engine instance to pass to the constructor.
+    /// @param const std::string& name - The name for the new GameObject instance.
+    /// @return GameObject* - Pointer to the created object or nullptr on failure.
     GameObject* create(const std::string& type, Engine& engine, const std::string& name);
 
     /// @brief Get all registered object types.
@@ -64,16 +65,23 @@ public:
     /// @return std::vector<std::string> The dynamic registered object types.
     std::vector<std::string> GetDynamicRegisteredObjectTypes();
 
-    /// @brief Clear all dynamic GameObjects.
+    /// @brief Clears all GameObjects registered as dynamic.
+    /// @details Used during hot-reload. Iterates through `dynamicTypes`, removes them from the `creators` map, and resets the `allTypes` list.
     void clearDynamicGameObjects();
 
-    /// @brief Unregister all GameObjects.
+    /// @brief Unregisters all GameObjects and clears internal lists.
+    /// @details Clears `creators`, `dynamicTypes`, `nonDynamicTypes`, and `allTypes`.
     void UnregisterGameObjects();
 
 private:
     GameObjectFactory() = default;
 
-    /// @brief Register a GameObject creator for a given name.
+    /// @brief Registers a creator function for a specific GameObject type string.
+    /// @details Stores a lambda in the `creators` map that constructs the object and sets its `objectType`.
+    /// Appends the name to `allTypes` and either `dynamicTypes` or `nonDynamicTypes` based on the flag.
+    /// @param const std::string& name - The string identifier for the class.
+    /// @param ObjectConstructor ctor - Function pointer to the constructor.
+    /// @param bool isDynamic - True if this class is part of a hot-reloadable module.
     void registerCreator(const std::string& name, ObjectConstructor ctor, bool isDynamic);
 
     std::unordered_map<std::string, Creator> creators;

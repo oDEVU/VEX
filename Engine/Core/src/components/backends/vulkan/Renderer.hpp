@@ -41,15 +41,16 @@ namespace vex {
     class Renderer {
     public:
         /// @brief Constructor for Renderer class.
-        /// @param std::shared_ptr<VulkanResources>& resources - Vulkan resources needed for textures std::map.
-        /// @param std::unique_ptr<VulkanPipeline>& pipeline - VulkanPipeline.
-        /// @param std::unique_ptr<VulkanPipeline>& transPipeline - VulkanPipeline for transparent objects.
-        /// @param std::unique_ptr<VulkanPipeline>& maskPipeline - VulkanPipeline for masked objects.
-        /// @param std::unique_ptr<VulkanPipeline>& uiPipeline - VulkanPipeline for UI rendering.
-        /// @param std::unique_ptr<VulkanPipeline>& fullscreenPipeline - VulkanPipeline for fullscreen effects.
-        /// @param std::unique_ptr<VulkanSwapchainManager>& swapchainManager - VulkanSwapchainManager.
-        /// @param std::unique_ptr<MeshManager>& meshManager - MeshManager.
-        /// @details Its created and handled by VulkanInteface constructor.
+        /// @details Initializes rendering resources such as the screen sampler, descriptor pools, and debug/indirect buffers if supported.
+        /// @param VulkanContext& context - The Vulkan context.
+        /// @param std::unique_ptr<VulkanResources>& resources - Resource manager for textures/buffers.
+        /// @param std::unique_ptr<VulkanPipeline>& pipeline - Standard Opaque pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& transPipeline - Transparent pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& maskPipeline - Masked pipeline (alpha cutout).
+        /// @param std::unique_ptr<VulkanPipeline>& uiPipeline - User Interface pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& fullscreenPipeline - Fullscreen/Post-process pipeline.
+        /// @param std::unique_ptr<VulkanSwapchainManager>& swapchainManager - Swapchain manager.
+        /// @param std::unique_ptr<MeshManager>& meshManager - Manager for mesh buffers.
         Renderer(VulkanContext& context,
                  std::unique_ptr<VulkanResources>& resources,
                  std::unique_ptr<VulkanPipeline>& pipeline,
@@ -61,18 +62,30 @@ namespace vex {
                  std::unique_ptr<MeshManager>& meshManager);
 
         /// @brief Destructor for Renderer class.
+        /// @details Cleans up samplers, descriptor pools, and buffers (debug/indirect).
         ~Renderer();
 
-        /// @brief Prepares frame, acquires image, handles resize
-        /// @param glm::uvec2 renderResolution - Resolution of the render target.
-        /// @param SceneRenderData& outData - Output data for the frame.
-        /// @return bool - True if the frame was prepared successfully, false otherwise.
+        /// @brief Prepares the frame for rendering.
+        /// @details handles Swapchain recreation (if resolution changed), waits for fences, acquires the next image, and begins the command buffer.
+        /// @param glm::uvec2 renderResolution - The desired resolution for the low-res render target.
+        /// @param SceneRenderData& outData - Output struct filled with current frame context (cmd buffer, frame index).
+        /// @return bool - True if frame acquisition was successful, False if swapchain needs regeneration.
         bool beginFrame(glm::uvec2 renderResolution, SceneRenderData& outData);
 
-        /// @brief Renders 3D scene and VexUI to low-res texture
-        /// @param SceneRenderData& data - Data for the frame.
-        /// @param const entt::entity cameraEntity - Entity representing the camera.
-        /// @param entt::registry& registry - Registry containing entities and components.
+        /// @brief Renders the 3D scene and UI to an offscreen low-res texture.
+        /// @details
+        /// 1. Updates Scene UBO (View/Proj, PS1 effects like jitter/snapping).
+        /// 2. Performs frustum culling on objects.
+        /// 3. Updates Light UBOs for visible objects.
+        /// 4. Sorts objects into Opaque, Masked, and Transparent queues.
+        /// 5. Executes draw calls (using MultiDraw for transparency if supported).
+        /// 6. Renders UI components on top.
+        /// @param SceneRenderData& data - Frame context data.
+        /// @param const entt::entity cameraEntity - The active camera entity.
+        /// @param entt::registry& registry - ECS registry to query objects.
+        /// @param int frame - Current frame number (used for animations/logic).
+        /// @param const std::vector<DebugVertex>* debugLines - Optional debug lines to draw.
+        /// @param bool isEditorMode - If true, applies editor-specific logic (e.g. gizmos, override camera).
         void renderScene(SceneRenderData& data,
                          const entt::entity cameraEntity,
                          entt::registry& registry,
@@ -80,25 +93,38 @@ namespace vex {
                          const std::vector<DebugVertex>* debugLines = nullptr,
                          bool isEditorMode = false);
 
-        /// @brief Get the ImGui texture ID
-        /// @param ImGUIWrapper& ui - ImGUI wrapper.
-        /// @return VkDescriptorSet - Descriptor set for the ImGui texture.
+        /// @brief Gets or creates a cached ImGui texture descriptor for the scene.
+        /// @details Used to display the rendered scene inside an ImGui window (Editor Viewport).
+        /// @param ImGUIWrapper& ui - Reference to the UI wrapper to register the texture.
+        /// @return VkDescriptorSet - The descriptor set handle for ImGui.
         VkDescriptorSet getImGuiTextureID(ImGUIWrapper& ui);
 
-        /// @brief Composite to screen (Fullscreen Quad or ImGui)
-        /// @param SceneRenderData& data - Data for the frame.
-        /// @param ImGUIWrapper& ui - ImGUI wrapper.
-        /// @param bool isEditorMode - Whether the editor mode is active.
+        /// @brief Composes the final frame onto the Swapchain image.
+        /// @details
+        /// - **Game Mode**: Draws a fullscreen quad to upscale the low-res scene texture to the window size.
+        /// - **Editor Mode**: Renders the ImGui overlay which contains the scene view.
+        /// @param SceneRenderData& data - Frame context data.
+        /// @param ImGUIWrapper& ui - UI wrapper for drawing.
+        /// @param bool isEditorMode - Toggles between Fullscreen Quad or ImGui composition.
         void composeFrame(SceneRenderData& data,
                           ImGUIWrapper& ui,
                           bool isEditorMode);
 
-        /// @brief Submits and Presents
-        /// @param SceneRenderData& data - Data for the frame.
+        /// @brief Submits the command buffer and presents the image.
+        /// @details Submits to the Graphics Queue and calls `vkQueuePresentKHR`. Handles `VK_ERROR_OUT_OF_DATE_KHR` by triggering swapchain recreation.
+        /// @param SceneRenderData& data - Frame context data.
         void endFrame(SceneRenderData& data);
 
         #if DEBUG
+            /// @brief Sets the debug pipeline used for wireframe/line rendering.
+            /// @param std::unique_ptr<VulkanPipeline>* pipeline - Pointer to the pipeline pointer.
             void setDebugPipeline(std::unique_ptr<VulkanPipeline>* pipeline) { m_pp_debugPipeline = pipeline; }
+
+            /// @brief Renders debug lines.
+            /// @details Updates the debug vertex buffer and issues a draw call.
+            /// @param VkCommandBuffer cmd - The command buffer.
+            /// @param int frameIndex - Current frame index.
+            /// @param const std::vector<DebugVertex>& lines - Vertices to draw.
             void renderDebug(VkCommandBuffer cmd, int frameIndex, const std::vector<DebugVertex>& lines);
         #endif
 

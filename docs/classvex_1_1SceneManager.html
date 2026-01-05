@@ -110,25 +110,25 @@ $(function(){initNavTree('classvex_1_1SceneManager.html','','classvex_1_1SceneMa
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a17bf28d146396ccc922252322ce6b953" id="r_a17bf28d146396ccc922252322ce6b953"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17bf28d146396ccc922252322ce6b953">loadScene</a> (const std::string &amp;path, <a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine)</td></tr>
-<tr class="memdesc:a17bf28d146396ccc922252322ce6b953"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to load a scene from a file. Simply calls clearScene() and <a class="el" href="#ab38b9cd1f2f59c325b5591952a964846" title="Function to load a scene from a file without clearing the current scene.">loadSceneWithoutClearing()</a>.  <br /></td></tr>
+<tr class="memdesc:a17bf28d146396ccc922252322ce6b953"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads all current scenes and loads a new one from a file.  <br /></td></tr>
 <tr class="memitem:a09d5b129d8681a293e2806ab6f0446b3" id="r_a09d5b129d8681a293e2806ab6f0446b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09d5b129d8681a293e2806ab6f0446b3">unloadScene</a> (const std::string &amp;path)</td></tr>
-<tr class="memdesc:a09d5b129d8681a293e2806ab6f0446b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to unload a scene from memory.  <br /></td></tr>
+<tr class="memdesc:a09d5b129d8681a293e2806ab6f0446b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads a specific scene from memory.  <br /></td></tr>
 <tr class="memitem:ab38b9cd1f2f59c325b5591952a964846" id="r_ab38b9cd1f2f59c325b5591952a964846"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab38b9cd1f2f59c325b5591952a964846">loadSceneWithoutClearing</a> (const std::string &amp;path, <a class="el" href="classvex_1_1Engine.html">Engine</a> &amp;engine)</td></tr>
-<tr class="memdesc:ab38b9cd1f2f59c325b5591952a964846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to load a scene from a file without clearing the current scene.  <br /></td></tr>
+<tr class="memdesc:ab38b9cd1f2f59c325b5591952a964846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a scene from a file additively without clearing existing scenes.  <br /></td></tr>
 <tr class="memitem:a9b9af95362d39787631b323c6f351526" id="r_a9b9af95362d39787631b323c6f351526"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b9af95362d39787631b323c6f351526">clearScenes</a> ()</td></tr>
 <tr class="memdesc:a9b9af95362d39787631b323c6f351526"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to clear the current scene.  <br /></td></tr>
 <tr class="memitem:acb010cf8ca366670931c2d4fa7e881fb" id="r_acb010cf8ca366670931c2d4fa7e881fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb010cf8ca366670931c2d4fa7e881fb">scenesUpdate</a> (float deltaTime)</td></tr>
-<tr class="memdesc:acb010cf8ca366670931c2d4fa7e881fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calls update in all objects it holds. This function needs to be called in your projects update method.  <br /></td></tr>
+<tr class="memdesc:acb010cf8ca366670931c2d4fa7e881fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates all currently loaded scenes.  <br /></td></tr>
 <tr class="memitem:a445b1cfaed3cc4ad8b47fac01c4749a7" id="r_a445b1cfaed3cc4ad8b47fac01c4749a7"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a445b1cfaed3cc4ad8b47fac01c4749a7">GetAllObjects</a> (const std::string &amp;scene) const</td></tr>
 <tr class="memdesc:a445b1cfaed3cc4ad8b47fac01c4749a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get all game objects.  <br /></td></tr>
 <tr class="memitem:aa6d03a78a9ac7d14bb4db3348f33d8fa" id="r_aa6d03a78a9ac7d14bb4db3348f33d8fa"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classvex_1_1GameObject.html">GameObject</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6d03a78a9ac7d14bb4db3348f33d8fa">GetAllAddedObjects</a> (const std::string &amp;scene) const</td></tr>
 <tr class="memdesc:aa6d03a78a9ac7d14bb4db3348f33d8fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get all added game objects.  <br /></td></tr>
 <tr class="memitem:affd2f3e3df3cc9d260e27097b2311e75" id="r_affd2f3e3df3cc9d260e27097b2311e75"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affd2f3e3df3cc9d260e27097b2311e75">GetAllSceneNames</a> () const</td></tr>
-<tr class="memdesc:affd2f3e3df3cc9d260e27097b2311e75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get all scene names.  <br /></td></tr>
+<tr class="memdesc:affd2f3e3df3cc9d260e27097b2311e75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the names of all currently loaded scenes.  <br /></td></tr>
 <tr class="memitem:a7de7bd0981763e96e862cb5bc153dde6" id="r_a7de7bd0981763e96e862cb5bc153dde6"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7de7bd0981763e96e862cb5bc153dde6">getLastSceneName</a> () const</td></tr>
 <tr class="memdesc:a7de7bd0981763e96e862cb5bc153dde6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get last scene name.  <br /></td></tr>
 <tr class="memitem:a5765f36b31f641df1690c1c76bfc1c89" id="r_a5765f36b31f641df1690c1c76bfc1c89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1Scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5765f36b31f641df1690c1c76bfc1c89">GetScene</a> (const std::string &amp;scene) const</td></tr>
-<tr class="memdesc:a5765f36b31f641df1690c1c76bfc1c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to get scene by its name.  <br /></td></tr>
+<tr class="memdesc:a5765f36b31f641df1690c1c76bfc1c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Safely retrieves a pointer to a specific <a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a>.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -193,7 +193,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>const std::vector&lt;std::shared_ptr&lt;GameObject&gt;&gt;&amp; - Vector of game objects. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00047">47</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00054">54</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -229,7 +229,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>const std::vector&lt;std::shared_ptr&lt;GameObject&gt;&gt;&amp; - Vector of game objects. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00042">42</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00049">49</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -248,8 +248,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to get all scene names. </p>
-<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; - Vector of scene names. </dd></dl>
+<p>Retrieves the names of all currently loaded scenes. </p>
+<p>Iterates through the internal <span class="tt">m_scenes</span> map keys to construct the list. </p><dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; - Vector containing the names/paths of active scenes. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00217">217</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
@@ -281,7 +281,7 @@ Private Attributes</h2></td></tr>
 <p>Function to get last scene name. </p>
 <dl class="section return"><dt>Returns</dt><dd>std::string - Last scene name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00055">55</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00063">63</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -308,16 +308,16 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function to get scene by its name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Safely retrieves a pointer to a specific <a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a>. </p>
+<p>Checks if the scene exists in the <span class="tt">m_scenes</span> map before returning. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">const</td><td>std::string&amp; scene - Name of the scene to get. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; scene - Name/Path of the scene to retrieve. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Scene* - Pointer to the scene. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Scene* - Pointer to the scene if found, otherwise <span class="tt">nullptr</span>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00060">60</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00069">69</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -340,11 +340,11 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to load a scene from a file. Simply calls clearScene() and <a class="el" href="#ab38b9cd1f2f59c325b5591952a964846" title="Function to load a scene from a file without clearing the current scene.">loadSceneWithoutClearing()</a>. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Unloads all current scenes and loads a new one from a file. </p>
+<p>Effectively resets the game state by calling <span class="tt"><a class="el" href="#a9b9af95362d39787631b323c6f351526" title="Function to clear the current scene.">clearScenes()</a></span> followed by <span class="tt"><a class="el" href="#ab38b9cd1f2f59c325b5591952a964846" title="Loads a scene from a file additively without clearing existing scenes.">loadSceneWithoutClearing()</a></span>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">std::string&amp;</td><td>path - Path to the scene file. </td></tr>
-    <tr><td class="paramname">Engine&amp;</td><td>engine - Reference to the engine instance. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; path - Path to the scene file. </td></tr>
+    <tr><td class="paramname">Engine&amp;</td><td>engine - Reference to the engine instance required for object creation. </td></tr>
   </table>
   </dd>
 </dl>
@@ -372,14 +372,19 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to load a scene from a file without clearing the current scene. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Loads a scene from a file additively without clearing existing scenes. </p>
+<ol type="1">
+<li>Updates <span class="tt">lastSceneName</span> to the provided path.</li>
+<li>Creates a new <span class="tt"><a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a></span> shared pointer.</li>
+<li>Calls <span class="tt">sceneBegin()</span> on the newly created scene to initialize its objects. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">std::string&amp;</td><td>path - Path to the scene file. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; path - Path to the scene file. </td></tr>
     <tr><td class="paramname">Engine&amp;</td><td>engine - Reference to the engine instance. </td></tr>
   </table>
   </dd>
 </dl>
+</li>
+</ol>
 
 <p class="definition">Definition at line <a class="el" href="SceneManager_8cpp_source.html#l00201">201</a> of file <a class="el" href="SceneManager_8cpp_source.html">SceneManager.cpp</a>.</p>
 
@@ -400,10 +405,10 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function calls update in all objects it holds. This function needs to be called in your projects update method. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Updates all currently loaded scenes. </p>
+<p>Iterates through the <span class="tt">m_scenes</span> map and calls <span class="tt">sceneUpdate(deltaTime)</span> on each active scene. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">float</td><td>deltaTime - Delta time since last frame. </td></tr>
+    <tr><td class="paramname">float</td><td>deltaTime - Delta time since the last frame. </td></tr>
   </table>
   </dd>
 </dl>
@@ -427,10 +432,10 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to unload a scene from memory. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Unloads a specific scene from memory. </p>
+<p>Removes the scene from the internal <span class="tt">m_scenes</span> map, triggering the destructor of the <span class="tt"><a class="el" href="classvex_1_1Scene.html" title="Scene class implements scene functionality like loading and holding game objects.">Scene</a></span> object. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">std::string&amp;</td><td>path - Path to the scene file. </td></tr>
+    <tr><td class="paramname">const</td><td>std::string&amp; path - Path/Name of the scene to unload. </td></tr>
   </table>
   </dd>
 </dl>
@@ -460,7 +465,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00069">69</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00078">78</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 
 </div>
 </div>
@@ -484,7 +489,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00068">68</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SceneManager_8hpp_source.html#l00077">77</a> of file <a class="el" href="SceneManager_8hpp_source.html">SceneManager.hpp</a>.</p>
 
 </div>
 </div>
