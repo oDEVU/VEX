@@ -25,7 +25,7 @@
 
 #include "../../../src/components/backends/vulkan/context.hpp"
 #include "../../../src/components/backends/vulkan/Resources.hpp"
-#include "../../../src/components/VirtualFileSystem.hpp"
+#include "components/VirtualFileSystem.hpp"
 
 #include "../../../thirdparty/stb/stb_truetype.h"
 

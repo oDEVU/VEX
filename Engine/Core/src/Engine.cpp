@@ -50,6 +50,9 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
     m_physicsSystem->init();
 
+    m_audioSystem = std::make_unique<AudioSystem>(m_registry);
+    m_audioSystem->Init(m_vfs.get());
+
     auto renderRes = m_resolutionManager->getRenderResolution();
     log("Initializing Vulkan interface...");
     m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
@@ -189,6 +192,8 @@ bool Engine::getVSync() const {
 }
 
 Engine::~Engine() {
+    m_audioSystem->Shutdown();
+    m_audioSystem.reset();
     if (m_physicsSystem) {
         m_physicsSystem->shutdown();
         m_physicsSystem.reset();
@@ -239,6 +244,11 @@ void Engine::processEvent(const SDL_Event& event, float deltaTime) {
 
 void Engine::update(float deltaTime) {
     m_inputSystem->update(deltaTime);
+
+    auto cameraEntity = getCamera();
+    if (cameraEntity != entt::null) {
+        m_audioSystem->Update(cameraEntity);
+    }
 
     if(m_frame > 0){
 

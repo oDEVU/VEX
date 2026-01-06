@@ -8,7 +8,7 @@
 #include "uniforms.hpp"
 #include "context.hpp"
 #include "components/errorUtils.hpp"
-#include "../../VirtualFileSystem.hpp"
+#include "components/VirtualFileSystem.hpp"
 
 #include <components/types.hpp>
 #include <string>

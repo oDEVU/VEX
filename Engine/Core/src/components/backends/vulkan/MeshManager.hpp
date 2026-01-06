@@ -4,7 +4,7 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameObjects/ModelObject.hpp"
 #include "components/Mesh.hpp"
-#include "../../VirtualFileSystem.hpp"
+#include "components/VirtualFileSystem.hpp"
 #include "entt/entity/fwd.hpp"
 #include "Engine.hpp"
 

@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include "SDL3/SDL_mouse.h"
 #include "components/GameComponents/InputComponent.hpp"
+#include "components/errorUtils.hpp"
 
 
 namespace vex {
@@ -34,6 +35,10 @@ public:
     InputSystem(entt::registry& registry, SDL_Window* window)
         : m_registry(registry), m_window(window), m_inputMode(InputMode::Game) {
         setInputMode(InputMode::Game);
+
+        if (!SDL_InitSubSystem(SDL_INIT_GAMEPAD)) {
+            log(LogLevel::ERROR, "Could not initialize gamepad subsystem: %s", SDL_GetError());
+        }
     }
 
     /// @brief Sets the input processing mode.
