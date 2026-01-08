@@ -13,6 +13,7 @@
 #include <X11/X.h>
 #endif
 #include <cstdint>
+#include <immintrin.h>
 #include <cstring>
 #include <iostream>
 
@@ -37,6 +38,30 @@ namespace vex {
         }
     }
 
+    void VulkanMesh::StreamToGPU(void* dst, const void* src, size_t sizeBytes) {
+        auto* dst128 = static_cast<__m128i*>(dst);
+        auto* src128 = static_cast<const __m128i*>(src);
+
+        size_t loops = sizeBytes / sizeof(__m128i);
+        size_t tail  = sizeBytes % sizeof(__m128i);
+
+        for (size_t i = 0; i < loops; ++i) {
+            __m128i data = _mm_loadu_si128(src128 + i);
+            _mm_stream_si128(dst128 + i, data);
+        }
+
+        if (tail > 0) {
+            size_t offset = loops * sizeof(__m128i);
+            std::memcpy(
+                static_cast<char*>(dst) + offset,
+                static_cast<const char*>(src) + offset,
+                tail
+            );
+        }
+
+        _mm_sfence();
+    }
+
     void VulkanMesh::upload(const MeshData& meshData) {
         log("Uploading mesh with %zu submeshes", meshData.submeshes.size());
 
@@ -59,7 +84,7 @@ namespace vex {
 
             void* data;
             vmaMapMemory(m_r_context.allocator, buffers.vertexAlloc, &data);
-            memcpy(data, srcSubmesh.vertices.data(), bufferInfo.size);
+            StreamToGPU(data, srcSubmesh.vertices.data(), bufferInfo.size);
             vmaUnmapMemory(m_r_context.allocator, buffers.vertexAlloc);
 
             bufferInfo.size = srcSubmesh.indices.size() * sizeof(uint32_t);
@@ -68,7 +93,7 @@ namespace vex {
                             &buffers.indexBuffer, &buffers.indexAlloc, nullptr);
 
             vmaMapMemory(m_r_context.allocator, buffers.indexAlloc, &data);
-            memcpy(data, srcSubmesh.indices.data(), bufferInfo.size);
+            StreamToGPU(data, srcSubmesh.indices.data(), bufferInfo.size);
             vmaUnmapMemory(m_r_context.allocator, buffers.indexAlloc);
 
             buffers.indexCount = static_cast<uint32_t>(srcSubmesh.indices.size());

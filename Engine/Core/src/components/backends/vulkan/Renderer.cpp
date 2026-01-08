@@ -10,12 +10,42 @@
 #include <components/GameComponents/BasicComponents.hpp>
 #include "frustum.hpp"
 #include "limits.hpp"
+#include "../../HardwareInfo.hpp"
+#include <immintrin.h>
 
 #if defined(max)
     #undef max
 #endif
 
 namespace vex {
+    struct FrustumSoA {
+        __m256 nx, ny, nz, dist;
+
+        void init(const vex::Frustum& f) {
+            nx = _mm256_setr_ps(f.planes[0].normal.x, f.planes[1].normal.x, f.planes[2].normal.x, f.planes[3].normal.x, f.planes[4].normal.x, f.planes[5].normal.x, 0.0f, 0.0f);
+            ny = _mm256_setr_ps(f.planes[0].normal.y, f.planes[1].normal.y, f.planes[2].normal.y, f.planes[3].normal.y, f.planes[4].normal.y, f.planes[5].normal.y, 0.0f, 0.0f);
+            nz = _mm256_setr_ps(f.planes[0].normal.z, f.planes[1].normal.z, f.planes[2].normal.z, f.planes[3].normal.z, f.planes[4].normal.z, f.planes[5].normal.z, 0.0f, 0.0f);
+            dist = _mm256_setr_ps(f.planes[0].distance, f.planes[1].distance, f.planes[2].distance, f.planes[3].distance, f.planes[4].distance, f.planes[5].distance, 0.0f, 0.0f);
+        }
+
+        __attribute__((target("avx2")))
+        bool testSphereAVX(const glm::vec3& center, float radius) const {
+            __m256 cx = _mm256_set1_ps(center.x);
+            __m256 cy = _mm256_set1_ps(center.y);
+            __m256 cz = _mm256_set1_ps(center.z);
+            __m256 r  = _mm256_set1_ps(-radius);
+
+            __m256 dot = _mm256_fmadd_ps(nx, cx, dist);
+            dot = _mm256_fmadd_ps(ny, cy, dot);
+            dot = _mm256_fmadd_ps(nz, cz, dot);
+            __m256 mask = _mm256_cmp_ps(dot, r, _CMP_LT_OQ);
+
+            int res = _mm256_movemask_ps(mask);
+
+            return (res & 0x3F) == 0;
+        }
+    };
+
     glm::vec3 extractCameraPosition(const glm::mat4& view) {
         glm::mat4 invView = glm::inverse(view);
         return glm::vec3(invView[3]);
@@ -323,10 +353,11 @@ namespace vex {
             auto& transform = registry.get<TransformComponent>(cameraEntity);
             auto& camera = registry.get<CameraComponent>(cameraEntity);
 
-
             if(!transform.isReady()){
                 transform.setRegistry(registry);
             }
+
+            transform.recalculateMatrix();
 
             view = glm::lookAt(transform.getWorldPosition(), transform.getWorldPosition() + transform.getForwardVector(), transform.getUpVector());
             proj = glm::perspective(glm::radians(camera.fov), (float)m_r_context.currentRenderResolution.x / (float)m_r_context.currentRenderResolution.y, camera.nearPlane, camera.farPlane);
@@ -399,8 +430,31 @@ namespace vex {
             opaqueQueue.clear();
             maskedQueue.clear();
 
+            FrustumSoA frustumSimd;
+            static bool useAVX = HardwareInfo::HasAVX2();
+            if (useAVX) {
+                frustumSimd.init(camFrustum);
+            }
+
             auto modelView = registry.view<TransformComponent, MeshComponent>();
-            for (auto entity : modelView) {
+            auto it = modelView.begin();
+            auto end = modelView.end();
+
+            for (; it != end; ++it) {
+                const auto entity = *it;
+
+                auto nextIt = it;
+                ++nextIt;
+                if (nextIt != end) {
+                    const auto nextEntity = *nextIt;
+                    if(const auto* nextMesh = registry.try_get<MeshComponent>(nextEntity)) {
+                        _mm_prefetch(reinterpret_cast<const char*>(nextMesh), _MM_HINT_T0);
+                    }
+                    if(const auto* nextTrans = registry.try_get<TransformComponent>(nextEntity)) {
+                        _mm_prefetch(reinterpret_cast<const char*>(nextTrans), _MM_HINT_T0);
+                    }
+                }
+
                 auto& transform = modelView.get<TransformComponent>(entity);
                 auto& mesh = modelView.get<MeshComponent>(entity);
                 glm::mat4 modelMatrix = transform.matrix();
@@ -429,10 +483,15 @@ namespace vex {
                     #endif
                 }
 
-                if(!mesh.getIsFresh()){
-                    if (!camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius)) {
-                        continue;
+                if(!mesh.getIsFresh()) [[unlikely]]{
+                    bool visible;
+                    if (useAVX) [[likely]] {
+                        visible = frustumSimd.testSphereAVX(mesh.worldCenter, mesh.worldRadius);
+                    } else {
+                        visible = camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius);
                     }
+
+                    if (!visible) continue;
                 }
 
                 auto lightView = registry.view<TransformComponent, LightComponent>();
@@ -738,7 +797,7 @@ namespace vex {
             scissor.extent = m_r_context.swapchainExtent;
             vkCmdSetScissor(cmd, 0, 1, &scissor);
 
-            if (isEditorMode) {
+            if (isEditorMode) [[unlikely]] {
                     VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
 
                     if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
@@ -747,7 +806,7 @@ namespace vex {
                     data.imguiTextureID = m_cachedImGuiDescriptor;
 
                     vkUI.draw(cmd);
-            } else {
+            } else [[likely]] {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->get());
 
                 VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
@@ -893,7 +952,7 @@ namespace vex {
     void Renderer::issueMultiDrawIndexed(VkCommandBuffer cmd, const std::vector<VkMultiDrawIndexedInfoEXT>& commands) {
         if (commands.empty()) return;
 
-        if (m_r_context.supportsMultiDraw && m_r_context.maxMultiDrawCount > 0) {
+        if (m_r_context.supportsMultiDraw && m_r_context.maxMultiDrawCount > 0) [[likely]] {
             const uint32_t limit = m_r_context.maxMultiDrawCount;
             size_t remaining = commands.size();
             size_t offset = 0;
@@ -917,7 +976,7 @@ namespace vex {
             return;
         }
 
-        if(basicDiag){
+        if(basicDiag) [[unlikely]] {
             log(LogLevel::WARNING, "MultiDraw fallback active. Count: %zu", commands.size());
             basicDiag = false;
         }
