@@ -100,6 +100,13 @@ namespace vex {
             uint32_t indexCount;
         };
 
+        /// @brief Helper function to stream data to GPU memory.
+        /// @details Copies data to GPU memory using non-temporal stores (bypasses CPU cache)
+        /// @param void* dst Destination buffer on GPU memory
+        /// @param const void* src Source buffer on CPU memory
+        /// @param size_t sizeBytes Size of data to copy in bytes
+        void StreamToGPU(void* dst, const void* src, size_t sizeBytes);
+
         VulkanContext& m_r_context;
         std::vector<SubmeshBuffers> m_submeshBuffers;
         std::vector<std::string> m_submeshTextures;

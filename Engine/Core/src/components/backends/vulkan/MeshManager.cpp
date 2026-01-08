@@ -117,7 +117,7 @@ namespace vex {
         std::string& installedPath = m_installedPaths[meshComponent.id];
         std::string requestedPath = meshComponent.meshData.meshPath;
 
-        if (installedPath != requestedPath) {
+        if (installedPath != requestedPath) [[unlikely]] {
             log("Swapping mesh %s -> %s", installedPath.c_str(), requestedPath.c_str());
 
             releaseMeshReference(installedPath, meshComponent);
@@ -131,7 +131,7 @@ namespace vex {
             if (alreadyExisted && m_vulkanMeshes.count(requestedPath)) {
                 m_vulkanMeshes.at(requestedPath)->addInstance();
             }
-        } else {
+        } else [[likely]] {
             registerVulkanMesh(meshComponent);
         }
 
@@ -154,7 +154,7 @@ namespace vex {
             }
             return;
         }
-        if (!(meshComponent.meshData.meshPath == "" || meshComponent.meshData.meshPath.empty() || path == GetAssetDir())) {
+        if (!(meshComponent.meshData.meshPath == "" || meshComponent.meshData.meshPath.empty() || path == GetAssetDir())) [[unlikely]] {
             #if DEBUG
             if (meshComponent.meshData.meshPath.empty() || path == GetAssetDir() || !m_vfs->file_exists(GetAssetPath(path))) {
                 log(LogLevel::WARNING, "Skipping registration for invalid path: %s", path.c_str());
@@ -171,7 +171,7 @@ namespace vex {
             m_meshBoundsCache[path] = { loadedAsset.localCenter, loadedAsset.localRadius };
 
             meshComponent.textureNames = std::move(loadedAsset.textureNames);
-        }else{
+        }else [[likely]] {
             return;
         }
 

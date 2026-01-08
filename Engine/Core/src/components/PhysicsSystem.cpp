@@ -24,6 +24,14 @@
 
 namespace vex {
 
+    inline void FastSyncTransform(const glm::vec3& pos, const glm::quat& rot,
+                                      JPH::BodyInterface& bi, const JPH::BodyID& id) {
+        JPH::RVec3 jPos(pos.x, pos.y, pos.z);
+        JPH::Quat jRot(rot.x, rot.y, rot.z, rot.w);
+
+        bi.SetPositionAndRotation(id, jPos, jRot, JPH::EActivation::DontActivate);
+    }
+
     bool PhysicsSystem::init(size_t maxBodies) {
         JPH::RegisterDefaultAllocator();
 
@@ -138,7 +146,7 @@ namespace vex {
                 auto& tc = view.get<TransformComponent>(e);
                 auto& pc = view.get<PhysicsComponent>(e);
 
-                if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) {
+                if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) [[unlikely]] {
                     CreateBodyForEntity(e, m_registry, pc);
                     continue;
                 }else if(pc.updated){
@@ -146,9 +154,7 @@ namespace vex {
                     continue;
                 }
 
-                JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
-                JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
-                bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
+                FastSyncTransform(tc.getWorldPosition(), tc.getWorldQuaternion(), bodyInterface, pc.bodyId);
             }
             #else
             log("This method is meant for debug builds only");

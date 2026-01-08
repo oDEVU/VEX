@@ -9,8 +9,40 @@
 
 #include <components/errorUtils.hpp>
 #include <components/pathUtils.hpp>
+#include "../HardwareInfo.hpp"
 
 namespace vex {
+
+    void RotateQuad_Scalar(float* outVerts, float pivotX, float pivotY,
+                           float sinA, float cosA, float x0, float y0, float x1, float y1) {
+        float px[] = {x0, x1, x0, x1};
+        float py[] = {y0, y0, y1, y1};
+
+        for(int i=0; i<4; ++i) {
+            float dx = px[i] - pivotX;
+            float dy = py[i] - pivotY;
+            outVerts[i*2+0] = pivotX + (dx * cosA - dy * sinA);
+            outVerts[i*2+1] = pivotY + (dx * sinA + dy * cosA);
+        }
+    }
+
+    __attribute__((target("avx2")))
+    void RotateQuad_AVX2(float* outVerts, float pivotX, float pivotY,
+                         float sinA, float cosA, float x0, float y0, float x1, float y1) {
+
+        __m256 vPos = _mm256_setr_ps(x0, y0, x1, y0, x0, y1, x1, y1);
+        __m256 vPivot = _mm256_setr_ps(pivotX, pivotY, pivotX, pivotY, pivotX, pivotY, pivotX, pivotY);
+        __m256 vDelta = _mm256_sub_ps(vPos, vPivot);
+        __m256 vCos = _mm256_set1_ps(cosA);
+        __m256 vSin = _mm256_set1_ps(sinA);
+        __m256 vDeltaSwapped = _mm256_permute_ps(vDelta, 0xB1);
+        __m256 t1 = _mm256_mul_ps(vDelta, vCos);
+        __m256 t2 = _mm256_mul_ps(vDeltaSwapped, vSin);
+        __m256 vResult = _mm256_addsub_ps(t1, t2);
+        vResult = _mm256_add_ps(vResult, vPivot);
+
+        _mm256_storeu_ps(outVerts, vResult);
+    }
 
 Widget::~Widget() {
     if (yoga) YGNodeFree(yoga);
@@ -519,35 +551,31 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) 
     float height = YGNodeLayoutGetHeight(w->yoga);
 
     glm::vec2 pivot = { x + width * 0.5f, y + height * 0.5f };
-        float rads = glm::radians(w->rotation);
-        float cosA = cos(rads);
-        float sinA = sin(rads);
 
-    auto rotate = [&](float px, float py) -> glm::vec2 {
-            if (w->rotation == 0.f) return {px, py};
-            float dx = px - pivot.x;
-            float dy = py - pivot.y;
-            return {
-                pivot.x + (dx * cosA - dy * sinA),
-                pivot.y + (dx * sinA + dy * cosA)
-            };
-        };
+    float rads = glm::radians(w->rotation);
+    float cosA = cos(rads);
+    float sinA = sin(rads);
 
     auto pushQuad = [&](float x0, float y0, float u0, float v0,
                         float x1, float y1, float u1, float v1,
                         const glm::vec4& col, float texIdx) {
-        glm::vec2 p0 = rotate(x0, y0);
-        glm::vec2 p1 = rotate(x1, y0);
-        glm::vec2 p2 = rotate(x0, y1);
-        glm::vec2 p3 = rotate(x1, y1);
+        float rV[8];
 
-        verts.insert(verts.end(), {p0.x, p0.y, u0, v0, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {p1.x, p1.y, u1, v0, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {p2.x, p2.y, u0, v1, col.r, col.g, col.b, col.a, texIdx});
+        static bool useAVX2 = HardwareInfo::HasAVX2();
 
-        verts.insert(verts.end(), {p1.x, p1.y, u1, v0, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {p3.x, p3.y, u1, v1, col.r, col.g, col.b, col.a, texIdx});
-        verts.insert(verts.end(), {p2.x, p2.y, u0, v1, col.r, col.g, col.b, col.a, texIdx});
+        if (useAVX2) {
+            RotateQuad_AVX2(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
+        } else {
+            RotateQuad_Scalar(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
+        }
+
+        verts.insert(verts.end(), {rV[0], rV[1], u0, v0, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {rV[2], rV[3], u1, v0, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {rV[4], rV[5], u0, v1, col.r, col.g, col.b, col.a, texIdx});
+
+        verts.insert(verts.end(), {rV[2], rV[3], u1, v0, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {rV[6], rV[7], u1, v1, col.r, col.g, col.b, col.a, texIdx});
+        verts.insert(verts.end(), {rV[4], rV[5], u0, v1, col.r, col.g, col.b, col.a, texIdx});
     };
 
     if (w->style.bgColor.a > 0.f) {

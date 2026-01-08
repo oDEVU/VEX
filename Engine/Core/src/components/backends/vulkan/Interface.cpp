@@ -10,6 +10,9 @@
 #include <set>
 #include <fstream>
 
+#include <immintrin.h>
+#include "../../HardwareInfo.hpp"
+
 namespace vex {
     Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo, VirtualFileSystem* vfs) : m_p_window(window), m_vfs(vfs) {
         constexpr uint32_t apiVersion = VK_API_VERSION_1_3;
@@ -254,10 +257,13 @@ namespace vex {
         }
 
         log(" ======= Supported Features =======");
+        log("GPU:");
         log("supportsMultiDraw: %s", m_context.supportsMultiDraw ? "true" : "false");
         log("supportsIndirectDraw: %s", m_context.supportsIndirectDraw ? "true" : "false");
         log("supportsBindlessTextures: %s", m_context.supportsBindlessTextures ? "true" : "false");
         log("supportsShaderDrawParameters: %s", m_context.supportsShaderDrawParameters ? "true" : "false");
+        log("CPU:");
+        log("supports AVX2: %s", HardwareInfo::HasAVX2() ? "true" : "false");
         log(" ==================================");
 
         volkLoadDevice(m_context.device);

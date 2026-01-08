@@ -99,7 +99,7 @@ struct TransformComponent {
     bool transformedLately(){
         bool result = false;
 
-        if (!isReady()) {
+        if (!isReady()) [[unlikely]] {
             log("TransformComponent is not ready, registry is not valid");
             return false;
         }
@@ -232,9 +232,10 @@ struct TransformComponent {
     }
 
     /// @brief Method used by renderer to calculate the transformation matrix.
-    glm::mat4 matrix() {
-        if(transformedLately()){
-            lastTransformed = false;
+    /// @param bool forceRecalculate if force recalculate
+    glm::mat4 matrix(bool forceRecalculate = false) {
+        if(transformedLately() || forceRecalculate){
+            lastTransformed = forceRecalculate;
             return recalculateMatrix();
         }
 
