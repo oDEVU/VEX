@@ -40,6 +40,7 @@ struct TransformComponent {
     entt::registry* m_registry = nullptr;
     bool physicsAffected = false;
     glm::mat4 cachedMatrix = glm::mat4(1.0f);
+    bool dirty = true;
     #else
     private:
     glm::vec3 position = {0.0f, 0.0f, 0.0f};
@@ -50,6 +51,7 @@ struct TransformComponent {
     entt::registry* m_registry = nullptr;
     bool physicsAffected = false;
     glm::mat4 cachedMatrix = glm::mat4(1.0f);
+    bool dirty = true;
     public:
     #endif
     /// @brief Copy Constructor. Copies all data members and maintains the reference to the same registry.
@@ -110,8 +112,22 @@ struct TransformComponent {
         return (lastTransformed || result);
     }
 
+    bool isDirty(){
+        bool result = false;
+
+        if (!isReady()) [[unlikely]] {
+            log("TransformComponent is not ready, registry is not valid");
+            return false;
+        }
+
+        if (parent != entt::null && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+            result = m_registry->get<TransformComponent>(parent).isDirty();
+        }
+        return (dirty || result);
+    }
+
     void setRegistry(entt::registry& reg) {
-        lastTransformed = true;
+        enableLastTransformed();
         m_registry = &reg;
     }
 
@@ -134,6 +150,7 @@ struct TransformComponent {
     /// @brief Updates transform status after physics calculations. DO NOT CALL MANUALLY if you dont want to invalidate last transform changes for physics objects.
     void updatedPhysicsTransform(){
         physicsAffected = true;
+        dirty = true;
     }
 
     /// @brief Set the physics affected status.
@@ -143,6 +160,7 @@ struct TransformComponent {
 
     void enableLastTransformed(){
         lastTransformed = true;
+        dirty = true;
     }
 
     /// @brief Set the parent entity.
@@ -172,19 +190,19 @@ struct TransformComponent {
 
     /// @brief Set the local position.
     void setLocalPosition(glm::vec3 newPosition) {
-        lastTransformed = true;
+        enableLastTransformed();
         position = newPosition;
     }
 
     /// @brief Set the local rotation (using Euler angles in degrees).
     void setLocalRotation(glm::vec3 newRotation) {
-        lastTransformed = true;
+        enableLastTransformed();
         m_rotationQuat = glm::normalize(glm::quat(glm::radians(newRotation)));
     }
 
     /// @brief Set the local scale.
     void setLocalScale(glm::vec3 newScale) {
-        lastTransformed = true;
+        enableLastTransformed();
         scale = newScale;
     }
 
@@ -201,7 +219,7 @@ struct TransformComponent {
         /// @brief Method to set world rotation using a quaternion (for physics systems).
         /// @param targetWorldQuat glm::quat The desired world rotation quaternion.
         void setWorldQuaternion(glm::quat targetWorldQuat) {
-            lastTransformed = true;
+            enableLastTransformed();
             if (parent != entt::null && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
                 glm::quat parentWorldQuat = m_registry->get<TransformComponent>(parent).getWorldQuaternion();
 
@@ -227,19 +245,17 @@ struct TransformComponent {
             cachedMatrix = local;
         }
 
-        //std::cout << "Matrix recalculated" << std::endl;
         return cachedMatrix;
     }
 
     /// @brief Method used by renderer to calculate the transformation matrix.
     /// @param bool forceRecalculate if force recalculate
     glm::mat4 matrix(bool forceRecalculate = false) {
-        if(transformedLately() || forceRecalculate){
-            lastTransformed = forceRecalculate;
+        if(isDirty() || forceRecalculate){
+            dirty = false;
             return recalculateMatrix();
         }
 
-        //std::cout << "Matrix not recalculated" << std::endl;
         return cachedMatrix;
     }
 
@@ -270,7 +286,7 @@ struct TransformComponent {
     /// @brief Method to set world position, needed when object is parented as position parameter stores local position.
     /// @param newPosition glm::vec3
     void setWorldPosition(glm::vec3 newPosition) {
-        lastTransformed = true;
+        enableLastTransformed();
         if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
             glm::mat4 parentWorldMatrix = m_registry->get<TransformComponent>(parent).matrix();
             glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
@@ -297,7 +313,7 @@ struct TransformComponent {
     /// @brief Method to set world rotation, needed when object is parented as rotation parameter stores local rotation.
     /// @param newRotation glm::vec3
     void setWorldRotation(glm::vec3 newRotation) {
-        lastTransformed = true;
+        enableLastTransformed();
         glm::quat targetWorldQuat = glm::quat(glm::radians(newRotation));
         setWorldQuaternion(targetWorldQuat);
     }
@@ -305,7 +321,7 @@ struct TransformComponent {
     /// @brief Method to set world scale, needed when object is parented as rotation parameter stores local rotation.
     /// @param newScale glm::vec3
     void setWorldScale(glm::vec3 newScale) {
-        lastTransformed = true;
+        enableLastTransformed();
         if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
             glm::vec3 parentWorldScale = m_registry->get<TransformComponent>(parent).getWorldScale();
             scale = newScale / parentWorldScale;
@@ -317,14 +333,14 @@ struct TransformComponent {
     /// @brief Method to add local position.
     /// @param newPosition glm::vec3
     void addLocalPosition(glm::vec3 newPosition) {
-        lastTransformed = true;
+        enableLastTransformed();
         position += newPosition;
     }
 
     /// @brief Method to add local rotation (Euler angles in degrees).
     /// @param newRotation glm::vec3
     void addLocalRotation(glm::vec3 newRotation) {
-        lastTransformed = true;
+        enableLastTransformed();
         glm::quat deltaQuat = glm::quat(glm::radians(newRotation));
         m_rotationQuat = m_rotationQuat * deltaQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);
@@ -333,14 +349,14 @@ struct TransformComponent {
     /// @brief Method to add local scale.
     /// @param newScale glm::vec3
     void addLocalScale(glm::vec3 newScale) {
-        lastTransformed = true;
+        enableLastTransformed();
         scale += newScale;
     }
 
     /// @brief Method to add to the local pitch (rotation around X-axis).
     /// @param deltaPitch float The amount to add in degrees.
     void addPitch(float deltaPitch) {
-        lastTransformed = true;
+        enableLastTransformed();
         glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaPitch), glm::vec3(1.0f, 0.0f, 0.0f));
         m_rotationQuat = m_rotationQuat * deltaQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);
@@ -349,7 +365,7 @@ struct TransformComponent {
     /// @brief Method to add to the local yaw (rotation around Y-axis).
     /// @param deltaYaw float The amount to add in degrees.
     void addYaw(float deltaYaw) {
-        lastTransformed = true;
+        enableLastTransformed();
         glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaYaw), glm::vec3(0.0f, 1.0f, 0.0f));
         m_rotationQuat = deltaQuat * m_rotationQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);
@@ -358,7 +374,7 @@ struct TransformComponent {
     /// @brief Method to add to the local roll (rotation around Z-axis).
     /// @param deltaRoll float The amount to add in degrees.
     void addRoll(float deltaRoll) {
-        lastTransformed = true;
+        enableLastTransformed();
         glm::quat deltaQuat = glm::angleAxis(glm::radians(deltaRoll), glm::vec3(0.0f, 0.0f, 1.0f));
         m_rotationQuat = m_rotationQuat * deltaQuat;
         m_rotationQuat = glm::normalize(m_rotationQuat);

@@ -560,13 +560,8 @@ namespace vex {
                 auto& transform = registry.get<TransformComponent>(item.entity);
                 auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
 
-                bool isDynamic = false;
-                if (auto* physics = registry.try_get<PhysicsComponent>(item.entity)) {
-                    isDynamic = physics->bodyType == BodyType::DYNAMIC;
-                }
-
                 if (vulkanMesh) {
-                    vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(isDynamic), mesh);
+                    vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(), mesh);
                 }
             }
 
@@ -602,13 +597,8 @@ namespace vex {
                     auto& transform = registry.get<TransformComponent>(item.entity);
                     auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
 
-                    bool isDynamic = false;
-                    if (auto* physics = registry.try_get<PhysicsComponent>(item.entity)) {
-                        isDynamic = physics->bodyType == BodyType::DYNAMIC;
-                    }
-
                     if (vulkanMesh) {
-                        vulkanMesh->draw(cmd, m_p_maskPipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(isDynamic), mesh);
+                        vulkanMesh->draw(cmd, m_p_maskPipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(), mesh);
                     }
                 }
             }
