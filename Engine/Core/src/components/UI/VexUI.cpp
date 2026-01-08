@@ -5,6 +5,7 @@
 #include <components/UI/VexUI.hpp>
 #include <components/UI/UIVertex.hpp>
 #include <glm/glm.hpp>
+#include <immintrin.h>
 
 #include <components/errorUtils.hpp>
 #include <components/pathUtils.hpp>
@@ -141,7 +142,16 @@ void VexUI::loadFonts(Widget* w) {
     }
 
 recurse:
-    for (auto* c : w->children) loadFonts(c);
+    const auto& children = w->children;
+    size_t count = children.size();
+
+    for (size_t i = 0; i < count; ++i) {
+        if (i + 1 < count) {
+            Widget* nextSibling = children[i + 1];
+            _mm_prefetch(reinterpret_cast<const char*>(nextSibling) + 64, _MM_HINT_T0);
+        }
+        loadFonts(children[i]);
+    }
 }
 
 void VexUI::loadImages(Widget* w) {
@@ -149,7 +159,17 @@ void VexUI::loadImages(Widget* w) {
     if (!w->image.empty()) {
         m_res->loadTexture(GetAssetPath(w->image), GetAssetPath(w->image));
     }
-    for (auto* c : w->children) loadImages(c);
+
+    const auto& children = w->children;
+    size_t count = children.size();
+
+    for (size_t i = 0; i < count; ++i) {
+        if (i + 1 < count) {
+            Widget* nextSibling = children[i + 1];
+            _mm_prefetch(reinterpret_cast<const char*>(nextSibling) + 64, _MM_HINT_T0);
+        }
+        loadImages(children[i]);
+    }
 }
 
 // @todo Implement more of yogas features like margin, flexes?, aligments.
@@ -623,8 +643,16 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) 
         }
     }
 
-    for (auto* c : w->children) {
-        batch(c, verts, {x, y});
+
+    const auto& children = w->children;
+    size_t count = children.size();
+
+    for (size_t i = 0; i < count; ++i) {
+        if (i + 1 < count) {
+            Widget* nextSibling = children[i + 1];
+            _mm_prefetch(reinterpret_cast<const char*>(nextSibling) + 64, _MM_HINT_T0);
+        }
+        batch(children[i], verts, {x, y});
     }
 }
 
