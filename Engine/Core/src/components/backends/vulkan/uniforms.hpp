@@ -10,7 +10,7 @@
 
 namespace vex {
     /// @brief Scene uniform buffer object. Holds data that is bind once per scene.
-    struct SceneUBO {
+    struct alignas(256) SceneUBO {
         /// @brief View matrix
         alignas(16) glm::mat4 view;
         /// @brief Projection matrix
@@ -44,7 +44,7 @@ namespace vex {
     };
 
     /// @brief Scene lights uniform buffer object.
-    struct SceneLightsUBO {
+    struct alignas(256) SceneLightsUBO {
         alignas(4) uint32_t lightCount;
         alignas(16) Light lights[MAX_DYNAMIC_LIGHTS]; // Light is already glm::vec4 position + glm::vec4 color
     };
@@ -53,7 +53,7 @@ namespace vex {
     struct PushConstants {
         alignas(16) glm::vec4 color;
         alignas(16) glm::mat4 model;
-        alignas(4)  int textureID = 0;
+        alignas(16) uint32_t textureIDs[12];
     };
 
     /// @brief PS1Effects namespace for easier setting of them in push constant.

@@ -11,11 +11,13 @@ import effects.VertexJitter;
 
 struct VSInput {
   [[vk::location(0)]]
-  float3 position : POSITION;
+  float3 position;
   [[vk::location(1)]]
-  float3 normal : NORMAL;
+  float3 normal;
   [[vk::location(2)]]
-  float2 uv : TEXCOORD0;
+  float2 uv;
+  [[vk::location(3)]]
+  uint localTexIndex;
 };
 
 struct VSOutput {
@@ -34,11 +36,19 @@ struct VSOutput {
   noperspective float2 fragUVNum : TEXCOORD4;
   [[vk::location(6)]]
   noperspective float fragInvW : TEXCOORD5;
+  [[vk::location(7)]]
+  nointerpolation int fragGlobalTexID : TEXCOORD6;
 };
 
 [shader("vertex")]
 VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
   VSOutput output;
+
+  output.fragGlobalTexID = push.textureIDs[input.localTexIndex];
+
+  if (input.localTexIndex > 12) {
+    output.fragGlobalTexID = 0;
+  }
 
   float4 worldPos = mul(push.model, float4(input.position, 1.0));
   worldPos = applySnapping(worldPos, isEnabled(VERTEX_SNAPPING));
@@ -91,7 +101,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
                             isEnabled(AFFINE_WARPING));
   float2 pixelCoord = fragCoord.xy;
 
-  float4 texColor = SampleMaterialTexture(uv, push.textureID);
+  float4 texColor = SampleMaterialTexture(uv, input.fragGlobalTexID);
   float4 pushColor = push.color;
   bool isUntextured = HasInValidUV(uv); // false;//(uv.x < 0.0 || uv.y < 0.0);
 
@@ -109,7 +119,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   }
 
   texColor.rgb = applyNTSC(texColor.rgb, uv, pixelCoord,
-                           isEnabled(NTSC_ARTIFACTS), push.textureID);
+                           isEnabled(NTSC_ARTIFACTS), input.fragGlobalTexID);
 
   float diff = isEnabled(GOURAUD_SHADING)
                    ? input.fragDiff
@@ -141,9 +151,9 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
     fogFactor = lerp(1.0, fogFactor, fogIntensity);
 
     finalColor.rgb = lerp(fogColor, finalColor.rgb, fogFactor);
-}
+  }
 
-finalColor.a = 1.0;
+  finalColor.a = 1.0;
 
   if (isEnabled(COLOR_QUANTIZATION)) {
     float4 c = finalColor;

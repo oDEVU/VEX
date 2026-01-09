@@ -321,10 +321,11 @@ namespace vex {
         bindingDesc.stride = sizeof(Vertex);
         bindingDesc.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-        std::vector<VkVertexInputAttributeDescription> attributes(3);
+        std::vector<VkVertexInputAttributeDescription> attributes(4);
         attributes[0] = {0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position)};
         attributes[1] = {1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)};
         attributes[2] = {2, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv)};
+        attributes[3] = {3, 0, VK_FORMAT_R32_UINT, offsetof(Vertex, textureIndex)};
 
         std::string opaqueFrag = m_context.supportsBindlessTextures
                                  ? "Engine/shaders/OpaqueFragBindless.spv"

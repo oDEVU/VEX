@@ -26,16 +26,18 @@ namespace vex {
         log("Destroying VulkanMesh");
         vkDeviceWaitIdle(m_r_context.device);
 
-        for (auto& submesh : m_submeshBuffers) {
-            if (submesh.vertexBuffer != VK_NULL_HANDLE) {
-                vmaDestroyBuffer(m_r_context.allocator, submesh.vertexBuffer, submesh.vertexAlloc);
-                submesh.vertexBuffer = VK_NULL_HANDLE;
+        m_Textures.clear();
+        m_ranges.clear();
+        m_triangleCenters.clear();
+
+            if (m_Buffer.vertexBuffer != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(m_r_context.allocator, m_Buffer.vertexBuffer, m_Buffer.vertexAlloc);
+                m_Buffer.vertexBuffer = VK_NULL_HANDLE;
             }
-            if (submesh.indexBuffer != VK_NULL_HANDLE) {
-                vmaDestroyBuffer(m_r_context.allocator, submesh.indexBuffer, submesh.indexAlloc);
-                submesh.indexBuffer = VK_NULL_HANDLE;
+            if (m_Buffer.indexBuffer != VK_NULL_HANDLE) {
+                vmaDestroyBuffer(m_r_context.allocator, m_Buffer.indexBuffer, m_Buffer.indexAlloc);
+                m_Buffer.indexBuffer = VK_NULL_HANDLE;
             }
-        }
     }
 
     void VulkanMesh::StreamToGPU(void* dst, const void* src, size_t sizeBytes) {
@@ -65,52 +67,70 @@ namespace vex {
     void VulkanMesh::upload(const MeshData& meshData) {
         log("Uploading mesh with %zu submeshes", meshData.submeshes.size());
 
-        m_submeshBuffers.reserve(meshData.submeshes.size());
-        m_submeshTextures.reserve(meshData.submeshes.size());
-        m_cpuSubmeshData = meshData.submeshes;
+        if (m_Buffer.vertexBuffer != VK_NULL_HANDLE) {
+            vmaDestroyBuffer(m_r_context.allocator, m_Buffer.vertexBuffer, m_Buffer.vertexAlloc);
+            m_Buffer.vertexBuffer = VK_NULL_HANDLE;
+        }
+        if (m_Buffer.indexBuffer != VK_NULL_HANDLE) {
+            vmaDestroyBuffer(m_r_context.allocator, m_Buffer.indexBuffer, m_Buffer.indexAlloc);
+            m_Buffer.indexBuffer = VK_NULL_HANDLE;
+        }
 
-        for (auto& srcSubmesh : m_cpuSubmeshData) {
-            SubmeshBuffers buffers{};
+        m_Textures = meshData.texturePaths;
+        m_ranges = meshData.submeshes;
+        m_cpuMeshData = meshData;
 
-            VkBufferCreateInfo bufferInfo{};
-            bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            bufferInfo.size = srcSubmesh.vertices.size() * sizeof(Vertex);
-            bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size = m_cpuMeshData.vertices.size() * sizeof(Vertex);
+        bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 
-            VmaAllocationCreateInfo allocInfo{};
-            allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
-            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
-                            &buffers.vertexBuffer, &buffers.vertexAlloc, nullptr);
+        VmaAllocationCreateInfo allocInfo{};
+        allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+        vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
+                        &m_Buffer.vertexBuffer, &m_Buffer.vertexAlloc, nullptr);
 
-            void* data;
-            vmaMapMemory(m_r_context.allocator, buffers.vertexAlloc, &data);
-            StreamToGPU(data, srcSubmesh.vertices.data(), bufferInfo.size);
-            vmaUnmapMemory(m_r_context.allocator, buffers.vertexAlloc);
+        void* data;
+        vmaMapMemory(m_r_context.allocator, m_Buffer.vertexAlloc, &data);
+        StreamToGPU(data, m_cpuMeshData.vertices.data(), bufferInfo.size);
+        vmaUnmapMemory(m_r_context.allocator, m_Buffer.vertexAlloc);
 
-            bufferInfo.size = srcSubmesh.indices.size() * sizeof(uint32_t);
-            bufferInfo.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
-            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
-                            &buffers.indexBuffer, &buffers.indexAlloc, nullptr);
+        m_Buffer.vertexCount = static_cast<uint32_t>(m_cpuMeshData.vertices.size());
 
-            vmaMapMemory(m_r_context.allocator, buffers.indexAlloc, &data);
-            StreamToGPU(data, srcSubmesh.indices.data(), bufferInfo.size);
-            vmaUnmapMemory(m_r_context.allocator, buffers.indexAlloc);
+        bufferInfo.size = m_cpuMeshData.indices.size() * sizeof(uint32_t);
+        bufferInfo.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+        vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
+                        &m_Buffer.indexBuffer, &m_Buffer.indexAlloc, nullptr);
 
-            buffers.indexCount = static_cast<uint32_t>(srcSubmesh.indices.size());
+        vmaMapMemory(m_r_context.allocator, m_Buffer.indexAlloc, &data);
+        StreamToGPU(data, m_cpuMeshData.indices.data(), bufferInfo.size);
+        vmaUnmapMemory(m_r_context.allocator, m_Buffer.indexAlloc);
 
-            m_submeshBuffers.push_back(buffers);
-            m_submeshTextures.push_back(srcSubmesh.texturePath);
+        m_Buffer.indexCount = static_cast<uint32_t>(m_cpuMeshData.indices.size());
 
-            for (size_t i = 0; i < srcSubmesh.indices.size(); i += 3) {
-                const auto& p0 = srcSubmesh.vertices[srcSubmesh.indices[i+0]].position;
-                const auto& p1 = srcSubmesh.vertices[srcSubmesh.indices[i+1]].position;
-                const auto& p2 = srcSubmesh.vertices[srcSubmesh.indices[i+2]].position;
-                srcSubmesh.triangleCenters.push_back((p0 + p1 + p2) / 3.0f);
+        m_triangleCenters.clear();
+        m_triangleSubmeshIndices.clear();
+
+        size_t totalTriangles = m_cpuMeshData.indices.size() / 3;
+        m_triangleCenters.reserve(totalTriangles);
+        m_triangleSubmeshIndices.reserve(totalTriangles);
+
+        for (size_t i = 0; i < m_cpuMeshData.indices.size(); i += 3) {
+            // Safety check
+            if (i + 2 >= m_cpuMeshData.indices.size()) break;
+
+            const auto& p0 = m_cpuMeshData.vertices[m_cpuMeshData.indices[i+0]].position;
+            const auto& p1 = m_cpuMeshData.vertices[m_cpuMeshData.indices[i+1]].position;
+            const auto& p2 = m_cpuMeshData.vertices[m_cpuMeshData.indices[i+2]].position;
+            m_triangleCenters.push_back((p0 + p1 + p2) / 3.0f);
+        }
+
+        for (size_t subIdx = 0; subIdx < m_ranges.size(); subIdx++) {
+            const auto& range = m_ranges[subIdx];
+            size_t triCount = range.indexCount / 3;
+            for (size_t k = 0; k < triCount; k++) {
+                m_triangleSubmeshIndices.push_back(static_cast<uint8_t>(subIdx));
             }
-
-            log("Uploaded submesh: %zu vertices, %u indices, texture: '%s'",
-                   srcSubmesh.vertices.size(), buffers.indexCount,
-                   srcSubmesh.texturePath.c_str());
         }
     }
 
@@ -125,200 +145,152 @@ namespace vex {
         glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
         glm::vec3 translation_vector = glm::vec3(modelMatrix[3]);
 
-        for (uint32_t submeshIndex = 0; submeshIndex < m_cpuSubmeshData.size(); ++submeshIndex) {
-            const auto& submesh = m_cpuSubmeshData[submeshIndex];
-            const size_t indexCount = submesh.indices.size();
-            const glm::vec3* centers = submesh.triangleCenters.data();
+        size_t triCount = m_triangleCenters.size();
+        for (size_t i = 0; i < triCount; ++i) {
+            glm::vec3 center_world = rotation_scale_matrix * m_triangleCenters[i] + translation_vector;
 
-            for (uint32_t i = 0; i < indexCount; i += 3) {
-                glm::vec3 center_world = rotation_scale_matrix * centers[i/3] + translation_vector;
+            glm::vec3 d = center_world - cameraPos;
+            float distanceSq = glm::dot(d, d);
 
-                glm::vec3 d = center_world - cameraPos;
-                float distanceSq = glm::dot(d, d);
-
-                outTriangles.push_back({
-                    distanceSq,
-                    modelIndex,
-                    frameIndex,
-                    i,
-                    submeshIndex,
-                    this,
-                    entity
-                });
-            }
+            outTriangles.push_back({
+                distanceSq,
+                modelIndex,
+                frameIndex,
+                static_cast<uint32_t>(i * 3),
+                static_cast<uint32_t>(m_triangleSubmeshIndices[i]),
+                this,
+                entity
+            });
         }
-    }
-
-    void VulkanMesh::bindAndDrawBatched(
-        VkCommandBuffer cmd,
-        VkPipelineLayout pipelineLayout,
-        VulkanResources& resources,
-        uint32_t frameIndex,
-        uint32_t modelIndex,
-        uint32_t submeshIndex,
-        glm::mat4 modelMatrix,
-        bool modelChanged,
-        bool submeshChanged,
-        const MeshComponent& mc
-    ) const {
-        const auto& buffers = m_submeshBuffers[submeshIndex];
-        const auto& textureName = m_submeshTextures[submeshIndex];
-
-        if(modelChanged){
-            uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
-            uint32_t dynamicOffsets[1] = { lightsDynamicOffset };
-
-            VkDescriptorSet globalSet = resources.getDescriptorSet(frameIndex);
-            vkCmdBindDescriptorSets(
-                cmd,
-                VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipelineLayout,
-                0,
-                1,
-                &globalSet,
-                1,
-                dynamicOffsets
-            );
-        }
-
-        uint32_t textureIndex = resources.getTextureIndex(textureName);
-        if (textureIndex >= MAX_TEXTURES) {
-            textureIndex = 0;
-        }
-
-        if (m_r_context.supportsBindlessTextures) {
-
-        }
-        else {
-            if(submeshChanged || modelChanged){
-                VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
-                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                        pipelineLayout, 1, 1, &texSet,
-                                        0, nullptr);
-            }
-        }
-
-        bool needPush = modelChanged;
-        if (m_r_context.supportsBindlessTextures && submeshChanged) {
-            needPush = true;
-        }
-
-        if(needPush){
-            PushConstants modelPush{};
-            modelPush.model = modelMatrix;
-            modelPush.color = mc.color;
-            modelPush.textureID = textureIndex;
-
-            if (!resources.textureExists(textureName) && !textureName.empty()) {
-                log(LogLevel::WARNING, "Missing texture...");
-            }
-
-            vkCmdPushConstants(
-                cmd,
-                pipelineLayout,
-                VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                0,
-                sizeof(PushConstants),
-                &modelPush
-            );
-        }
-
-        VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
-        VkDeviceSize offsets[] = {0};
-        vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
-        vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
     }
 
     void VulkanMesh::draw(VkCommandBuffer cmd, VkPipelineLayout pipelineLayout,
-            VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex, glm::mat4 modelMatrix, const MeshComponent& mc) const {
+                VulkanResources& resources, uint32_t frameIndex, uint32_t modelIndex,
+                glm::mat4 modelMatrix, const MeshComponent& mc) const {
 
-        std::string currentTexture = "";
+            uint32_t lightsOffset = modelIndex * sizeof(SceneLightsUBO);
+            VkDescriptorSet frameSet = resources.getDescriptorSet(frameIndex);
+            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout,
+                                    0, 1, &frameSet, 1, &lightsOffset);
 
-            uint32_t lightsDynamicOffset = modelIndex * static_cast<uint32_t>(sizeof(SceneLightsUBO));
-            uint32_t dynamicOffsets[1] = { lightsDynamicOffset };
-
-            VkDescriptorSet globalSet = resources.getDescriptorSet(frameIndex);
-            vkCmdBindDescriptorSets(
-                cmd,
-                VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipelineLayout,
-                0,
-                1,
-                &globalSet,
-                1,
-                dynamicOffsets
-            );
-
-        for (size_t i = 0; i < m_submeshBuffers.size(); i++) {
-            const auto& buffers = m_submeshBuffers[i];
-            std::string textureName = "";
-            uint32_t textureIndex = 0;
-            if(mc.textureOverrides.contains(i)){
-                textureName = GetAssetPath(mc.textureOverrides.at(1));
-                textureIndex = resources.getTextureIndex(textureName);
-
-                if(textureIndex == 0){
-                    textureIndex = resources.getTextureIndex(m_submeshTextures[i]);
-                }
-            }else{
-                textureName = m_submeshTextures[i];
-                textureIndex = resources.getTextureIndex(m_submeshTextures[i]);
-            }
-
-            //log("Invalid texture index %u for '%s'", textureIndex, textureName.c_str());
-
-            if (textureIndex >= MAX_TEXTURES) {
-                SDL_LogError(SDL_LOG_CATEGORY_RENDER,
-                           "Invalid texture index %u for '%s' (Max: %u)",
-                           textureIndex, textureName.c_str(), MAX_TEXTURES);
-                textureIndex = 0;
-            }
-
-            const bool textureExists = !textureName.empty() && resources.textureExists(textureName);
-
-            //log("Texture exists: %s, textureName: %s, textureIndex: %d", textureExists ? "true" : "false", textureName.c_str(), textureIndex);
-
-            if (!textureExists) {
-                textureName = "default";
-            }
-
-            PushConstants modelPush{};
-
-            if (m_r_context.supportsBindlessTextures) {
-                    PushConstants modelPush{};
-                    modelPush.color = mc.color;
-                    modelPush.model = modelMatrix;
-                    modelPush.textureID = textureIndex;
-
-                    vkCmdPushConstants(
-                        cmd,
-                        pipelineLayout,
-                        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                        0,
-                        sizeof(PushConstants),
-                        &modelPush
-                    );
-                }
-                else {
-                    if (currentTexture != textureName) {
-                         VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, textureIndex);
-                         vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &texSet, 0, nullptr);
-                         currentTexture = textureName;
-                    }
-
-                    PushConstants modelPush{};
-                    modelPush.color = mc.color;
-                    modelPush.model = modelMatrix;
-
-                    vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &modelPush);
-                }
-
-            VkBuffer vertexBuffers[] = {buffers.vertexBuffer};
+            VkBuffer vertexBuffers[] = {m_Buffer.vertexBuffer};
             VkDeviceSize offsets[] = {0};
             vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
-            vkCmdBindIndexBuffer(cmd, buffers.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+            vkCmdBindIndexBuffer(cmd, m_Buffer.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
 
-            vkCmdDrawIndexed(cmd, buffers.indexCount, 1, 0, 0, 0);
+            if (m_r_context.supportsBindlessTextures) [[likely]] {
+                 PushConstants pc{};
+                 pc.color = mc.color;
+                 pc.model = modelMatrix;
+
+                 size_t count = std::min(m_Textures.size(), (size_t)12);
+                 for(size_t i = 0; i < count; i++) {
+                     std::string texName = m_Textures[i];
+                     if(mc.textureOverrides.contains(i)) texName = GetAssetPath(mc.textureOverrides.at(i));
+                     pc.textureIDs[i] = resources.getTextureIndex(texName);
+                 }
+
+                 vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                                    0, sizeof(PushConstants), &pc);
+
+                 vkCmdDrawIndexed(cmd, m_Buffer.indexCount, 1, 0, 0, 0);
+            } else [[unlikely]] {
+                 std::string currentBoundTex = "";
+
+                 for (size_t i = 0; i < m_ranges.size(); i++) {
+                     const auto& range = m_ranges[i];
+
+                     std::string texName;
+                     if (mc.textureOverrides.contains(i)) {
+                         texName = GetAssetPath(mc.textureOverrides.at(i));
+                     } else {
+                         texName = m_Textures[range.textureIndex];
+                     }
+
+                     if (texName != currentBoundTex) {
+                         uint32_t idx = resources.getTextureIndex(texName);
+                         VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, idx);
+                         vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout,
+                                                 1, 1, &texSet, 0, nullptr);
+                         currentBoundTex = texName;
+                     }
+
+                     PushConstants pc{};
+                     pc.color = mc.color;
+                     pc.model = modelMatrix;
+
+                     vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                                        0, sizeof(PushConstants), &pc);
+
+                     vkCmdDrawIndexed(cmd, range.indexCount, 1, range.firstIndex, 0, 0);
+                 }
+            }
         }
-    }
+
+        void VulkanMesh::bindAndDrawBatched(
+            VkCommandBuffer cmd,
+            VkPipelineLayout pipelineLayout,
+            VulkanResources& resources,
+            uint32_t frameIndex,
+            uint32_t modelIndex,
+            uint32_t submeshIndex,
+            glm::mat4 modelMatrix,
+            bool modelChanged,
+            bool submeshChanged,
+            const MeshComponent& mc
+        ) const {
+
+            if (modelChanged) {
+                uint32_t lightsOffset = modelIndex * sizeof(SceneLightsUBO);
+                VkDescriptorSet frameSet = resources.getDescriptorSet(frameIndex);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout,
+                                        0, 1, &frameSet, 1, &lightsOffset);
+
+                VkBuffer vertexBuffers[] = {m_Buffer.vertexBuffer};
+                VkDeviceSize offsets[] = {0};
+                vkCmdBindVertexBuffers(cmd, 0, 1, vertexBuffers, offsets);
+                vkCmdBindIndexBuffer(cmd, m_Buffer.indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+            }
+
+            if (m_r_context.supportsBindlessTextures) [[likely]] {
+                 if (modelChanged) {
+                     PushConstants pc{};
+                     pc.color = mc.color;
+                     pc.model = modelMatrix;
+
+                     size_t count = std::min(m_Textures.size(), (size_t)12);
+                     for(size_t i = 0; i < count; i++) {
+                         std::string texName = m_Textures[i];
+                         if(mc.textureOverrides.contains(i)) texName = GetAssetPath(mc.textureOverrides.at(i));
+                         pc.textureIDs[i] = resources.getTextureIndex(texName);
+                     }
+                     vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                                        0, sizeof(PushConstants), &pc);
+                 }
+            } else [[unlikely]] {
+                 if (submeshIndex < m_ranges.size()) {
+                     const auto& range = m_ranges[submeshIndex];
+
+                     std::string texName;
+                     if (mc.textureOverrides.contains(submeshIndex)) {
+                         texName = GetAssetPath(mc.textureOverrides.at(submeshIndex));
+                     } else {
+                         texName = m_Textures[range.textureIndex];
+                     }
+
+                     uint32_t idx = resources.getTextureIndex(texName);
+                     VkDescriptorSet texSet = resources.getTextureDescriptorSet(frameIndex, idx);
+                     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout,
+                                             1, 1, &texSet, 0, nullptr);
+
+                     if (modelChanged) {
+                        PushConstants pc{};
+                        pc.color = mc.color;
+                        pc.model = modelMatrix;
+                        vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                                           0, sizeof(PushConstants), &pc);
+                     }
+                 }
+            }
+        }
 }

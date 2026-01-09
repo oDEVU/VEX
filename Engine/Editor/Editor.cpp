@@ -721,11 +721,11 @@ namespace vex {
                     float localClosest = std::numeric_limits<float>::max();
                     bool hitMesh = false;
 
-                    for (const auto& submesh : mesh.meshData.submeshes) {
-                        for (size_t i = 0; i < submesh.indices.size(); i += 3) {
-                            const auto& v0 = submesh.vertices[submesh.indices[i]].position;
-                            const auto& v1 = submesh.vertices[submesh.indices[i+1]].position;
-                            const auto& v2 = submesh.vertices[submesh.indices[i+2]].position;
+                    //for (const auto& submesh : mesh.meshData.submeshes) {
+                        for (size_t i = 0; i < mesh.meshData.indices.size(); i += 3) {
+                            const auto& v0 = mesh.meshData.vertices[mesh.meshData.indices[i]].position;
+                            const auto& v1 = mesh.meshData.vertices[mesh.meshData.indices[i+1]].position;
+                            const auto& v2 = mesh.meshData.vertices[mesh.meshData.indices[i+2]].position;
 
                             float t = rayTriangleIntersect(localOrigin, localDir, v0, v1, v2);
 
@@ -734,7 +734,7 @@ namespace vex {
                                 hitMesh = true;
                             }
                         }
-                    }
+                    //}
 
                     if (hitMesh) {
                         glm::vec3 hitPointLocal = localOrigin + (localDir * localClosest);

@@ -256,21 +256,21 @@ namespace vex {
             pc.mass = mass;
             pc.friction = friction;
             pc.bounce = bounce;
-            if (!mesh.meshData.submeshes.empty()) {
+            if (!mesh.meshData.vertices.empty()) {
                 pc.meshVertices.clear();
                 pc.meshIndices.clear();
 
                 size_t vertexOffset = 0;
 
-                for (const auto& sm : mesh.meshData.submeshes) {
-                    for (const auto& v : sm.vertices) {
+                //for (const auto& sm : mesh.meshData.submeshes) {
+                    for (const auto& v : mesh.meshData.vertices) {
                         pc.meshVertices.push_back(v.position);
                     }
-                    for (auto idx : sm.indices) {
+                    for (auto idx : mesh.meshData.indices) {
                         pc.meshIndices.push_back(static_cast<uint32_t>(idx + vertexOffset));
                     }
-                    vertexOffset += sm.vertices.size();
-                }
+                    vertexOffset += mesh.meshData.vertices.size();
+                    //}
             }
             return pc;
         }

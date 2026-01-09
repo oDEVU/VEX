@@ -186,23 +186,59 @@ void MeshData::processScene(const aiScene* scene, const std::string& textureBase
         }
 
         submeshes.clear();
-        submeshes.resize(scene->mNumMeshes);
+        clear();
+
+        uint32_t indexOffset = 0;
+        uint32_t globalIndexCounter = 0;
 
         for (unsigned m = 0; m < scene->mNumMeshes; m++) {
             log("Processing mesh %i...", m);
             aiMesh* aiMesh = scene->mMeshes[m];
-            Submesh& submesh = submeshes[m];
 
-            submesh.vertices.resize(aiMesh->mNumVertices);
+            std::string texPath = "default";
+            if (aiMesh->mMaterialIndex >= 0) {
+                aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
+                aiString assimpTexPath;
+                if (material->GetTexture(aiTextureType_DIFFUSE, 0, &assimpTexPath) == AI_SUCCESS) {
+                    texPath = textureBaseDir + assimpTexPath.C_Str();
+                }
+            }
+
+            int existingIndex = -1;
+            for (size_t i = 0; i < texturePaths.size(); ++i) {
+                if (texturePaths[i] == texPath) {
+                    existingIndex = static_cast<int>(i);
+                    break;
+                }
+            }
+
+            uint32_t currentTexIndex = 0;
+            if (existingIndex != -1) {
+                currentTexIndex = static_cast<uint32_t>(existingIndex);
+            } else {
+                if (texturePaths.size() >= 12) {
+                    log(LogLevel::WARNING, "Mesh uses >12 materials. Clamping to 0.");
+                    currentTexIndex = 0;
+                } else {
+                    texturePaths.push_back(texPath);
+                    currentTexIndex = texturePaths.size() - 1;
+                }
+            }
+
+            SubmeshRange range;
+            range.firstIndex = globalIndexCounter;
+            range.textureIndex = currentTexIndex;
+
             for (unsigned i = 0; i < aiMesh->mNumVertices; i++) {
-                submesh.vertices[i].position = {
+                Vertex v;
+                v.position = {
                     aiMesh->mVertices[i].x,
                     aiMesh->mVertices[i].y,
                     aiMesh->mVertices[i].z
                 };
 
                 if(aiMesh->mNormals) {
-                    submesh.vertices[i].normal = {
+                    v.normal = {
                         aiMesh->mNormals[i].x,
                         aiMesh->mNormals[i].y,
                         aiMesh->mNormals[i].z
@@ -210,30 +246,30 @@ void MeshData::processScene(const aiScene* scene, const std::string& textureBase
                 }
 
                 if (aiMesh->mTextureCoords[0]) {
-                    submesh.vertices[i].uv = {
+                    v.uv = {
                         aiMesh->mTextureCoords[0][i].x,
                         aiMesh->mTextureCoords[0][i].y
                     };
                 } else {
-                    submesh.vertices[i].uv = glm::vec2(-100000.f);
+                    v.uv = glm::vec2(-100000.f);
                 }
+                v.textureIndex = currentTexIndex;
+
+                vertices.push_back(v);
             }
 
-            submesh.indices.reserve(aiMesh->mNumFaces * 3);
+            //submesh.indices.reserve(aiMesh->mNumFaces * 3);
             for (unsigned i = 0; i < aiMesh->mNumFaces; i++) {
                 aiFace face = aiMesh->mFaces[i];
                 for (unsigned j = 0; j < face.mNumIndices; j++) {
-                    submesh.indices.push_back(face.mIndices[j]);
+                    indices.push_back(face.mIndices[j] + indexOffset);
+                    globalIndexCounter++;
                 }
             }
 
-            if (aiMesh->mMaterialIndex >= 0) {
-                aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
-                aiString texPath;
-                if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath) == AI_SUCCESS) {
-                    submesh.texturePath = textureBaseDir + texPath.C_Str();
-                }
-            }
+            range.indexCount = globalIndexCounter - range.firstIndex;
+            submeshes.push_back(range);
+            indexOffset += aiMesh->mNumVertices;
         }
     }
 

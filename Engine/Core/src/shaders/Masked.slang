@@ -16,6 +16,8 @@ struct VSInput {
   float3 normal : NORMAL;
   [[vk::location(2)]]
   float2 uv : TEXCOORD0;
+  [[vk::location(3)]]
+  nointerpolation uint localTexIndex;
 };
 
 struct VSOutput {
@@ -34,11 +36,15 @@ struct VSOutput {
   noperspective float2 fragUVNum : TEXCOORD4;
   [[vk::location(6)]]
   noperspective float fragInvW : TEXCOORD5;
+  [[vk::location(7)]]
+  nointerpolation int fragGlobalTexID : TEXCOORD6;
 };
 
 [shader("vertex")]
 VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
   VSOutput output;
+
+  output.fragGlobalTexID = push.textureIDs[input.localTexIndex];
 
   float4 worldPos = mul(push.model, float4(input.position, 1.0));
   worldPos = applySnapping(worldPos, isEnabled(VERTEX_SNAPPING));
@@ -91,7 +97,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
                             isEnabled(AFFINE_WARPING));
   float2 pixelCoord = fragCoord.xy;
 
-  float4 texColor = SampleMaterialTexture(uv, push.textureID);
+  float4 texColor = SampleMaterialTexture(uv, input.fragGlobalTexID);
   float4 pushColor = push.color;
   bool isUntextured = HasInValidUV(uv);
 
@@ -117,7 +123,7 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   }
 
   texColor.rgb = applyNTSC(texColor.rgb, uv, pixelCoord,
-                           isEnabled(NTSC_ARTIFACTS), push.textureID);
+                           isEnabled(NTSC_ARTIFACTS), input.fragGlobalTexID);
 
   float diff = isEnabled(GOURAUD_SHADING)
                    ? input.fragDiff
@@ -133,7 +139,6 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
 
   float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
                                    : (texColor * float4(lighting, 1.0));
-
 
   float fogIntensity = scene.fogColorAndIntensity.w;
 

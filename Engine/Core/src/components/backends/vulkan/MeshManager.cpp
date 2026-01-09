@@ -43,11 +43,10 @@ namespace vex {
         meshComponent.id = newId;
         meshComponent.textureNames.clear();
 
-                for (const auto& submesh : meshComponent.meshData.submeshes) {
-                    if (!submesh.texturePath.empty()) {
-                        meshComponent.textureNames.push_back(submesh.texturePath);
-                    }
-                }
+        for (const auto& texturePath : meshComponent.meshData.texturePaths) {
+            meshComponent.textureNames.push_back(texturePath);
+        }
+
         try {
             log("Creating Vulkan mesh for %s", tempName.c_str());
             if(m_vulkanMeshes.find(meshComponent.meshData.meshPath) == m_vulkanMeshes.end()){
@@ -97,11 +96,9 @@ namespace vex {
         glm::vec3 min = glm::vec3(FLT_MAX);
         glm::vec3 max = glm::vec3(-FLT_MAX);
 
-        for(auto& submesh : meshComponent.meshData.submeshes) {
-            for(auto& vertex : submesh.vertices) {
-                min = glm::min(min, vertex.position);
-                max = glm::max(max, vertex.position);
-            }
+        for(auto& vertex : meshComponent.meshData.vertices) {
+            min = glm::min(min, vertex.position);
+            max = glm::max(max, vertex.position);
         }
 
         glm::vec3 center = (min + max) * 0.5f;
@@ -178,14 +175,14 @@ namespace vex {
         meshComponent.textureNames.clear();
         std::unordered_set<std::string> uniqueTextures;
 
-        for (const auto& submesh : meshComponent.meshData.submeshes) {
-            if (!submesh.texturePath.empty()) {
-                uniqueTextures.insert(submesh.texturePath);
-                 meshComponent.textureNames.push_back(submesh.texturePath);
+        for (const auto& texturePath : meshComponent.meshData.texturePaths) {
+            if (!texturePath.empty()) {
+                uniqueTextures.insert(texturePath);
+                meshComponent.textureNames.push_back(texturePath);
             }
         }
 
-        log("Lazy-loading %zu submesh textures for %s", uniqueTextures.size(), path.c_str());
+        log("Lazy-loading %zu textures for %s", uniqueTextures.size(), path.c_str());
 
         for (const auto& texPath : uniqueTextures) {
             if (!m_p_resources->textureExists(texPath)) {

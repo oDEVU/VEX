@@ -374,21 +374,21 @@ namespace vex {
                 if(r.any_of<MeshComponent>(e)){
                     auto& mc = r.get<MeshComponent>(e);
 
-                    if (!mc.meshData.submeshes.empty()) {
+                    if (!mc.meshData.vertices.empty()) {
                         pc.meshVertices.clear();
                         pc.meshIndices.clear();
 
                         size_t vertexOffset = 0;
 
-                        for (const auto& sm : mc.meshData.submeshes) {
-                            for (const auto& v : sm.vertices) {
+                        //for (const auto& sm : mc.meshData.submeshes) {
+                            for (const auto& v : mc.meshData.vertices) {
                                 pc.meshVertices.push_back(v.position);
                             }
-                            for (auto idx : sm.indices) {
+                            for (auto idx : mc.meshData.indices) {
                                 pc.meshIndices.push_back(static_cast<uint32_t>(idx + vertexOffset));
                             }
-                            vertexOffset += sm.vertices.size();
-                        }
+                            vertexOffset += mc.meshData.vertices.size();
+                        //}
 
                         if (pc.meshVertices.empty() || pc.meshIndices.empty()) {
                             log(LogLevel::ERROR, "Mesh shape has no vertices or indices. I have no fucking idea why because it just copied those and would error out if there were none :C");
