@@ -5,6 +5,7 @@
 
 #include "components/errorUtils.hpp"
 #include "components/pathUtils.hpp"
+#include "components/assetTypes.hpp"
 
 namespace vex {
 
@@ -18,8 +19,10 @@ namespace vex {
         std::string ext = entry.path().extension().string();
         std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 
-        if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp") return icons.texture;
-        if (ext == ".fbx" || ext == ".obj" || ext == ".gltf" || ext == ".glb") return icons.mesh;
+        if (AssetExtensions::IsValid(ext, AssetExtensions::Texture)) return icons.texture;
+        if (AssetExtensions::IsValid(ext, AssetExtensions::Mesh))    return icons.mesh;
+        if (AssetExtensions::IsValid(ext, AssetExtensions::Audio))   return icons.audio;
+
         if (ext == ".txt" || ext == ".md") return icons.text;
         if (ext == ".json"){
             int type = GetJSONAssetType(entry.path().string());

@@ -7,6 +7,7 @@
 #pragma once
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/errorUtils.hpp"
+#include "components/pathUtils.hpp"
 #include "components/GameObjects/GameObject.hpp"
 #include "components/colorTypes.hpp"
 #include "SerializationUtils.hpp"
@@ -19,6 +20,154 @@
 
 #if DEBUG
     #include <ImReflect.hpp>
+
+    template<typename T>
+        void DrawAssetSlot(const char* label, T& value, ImTextureID icon, const char* hint) {
+            ImGui::PushID(label);
+
+            float thumbnailSize = 32.0f;
+            std::string ext = std::filesystem::path(value.c_str()).extension().string();
+            std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+            bool good = true;
+            if constexpr (std::is_same_v<T, vex::mesh_asset_path>) {
+                good = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Mesh);
+            }
+            else if constexpr (std::is_same_v<T, vex::texture_asset_path>) {
+                good = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Texture);
+            }
+            else if constexpr (std::is_same_v<T, vex::audio_asset_path>) {
+                good = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Audio);
+            }
+
+            ImTextureID drawIcon = (value.empty()) ? vex::InspectorIcons::unknown : icon;
+            if (drawIcon == 0) drawIcon = vex::InspectorIcons::file;
+
+            ImGui::BeginGroup();
+
+            if (ImGui::ImageButton("##AssetIcon", drawIcon, { thumbnailSize, thumbnailSize }, ImVec2(0, 0), ImVec2(1, 1))) {
+                /// @todo Open a list off all compatible assets (just like unreal does it)
+            }
+
+            ImGui::SameLine();
+            ImGui::BeginGroup();
+
+            static ImGuiID activeAssetID = 0;
+            ImGuiID currentID = ImGui::GetID("##PathInput");
+
+            if (activeAssetID == currentID) {
+                if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)) {
+                    ImGui::SetKeyboardFocusHere(0);
+                }
+
+                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+
+                if (ImGui::InputText("##PathInput", (std::string*)&value, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll)) {
+                    activeAssetID = 0;
+                }
+
+                if (!ImGui::IsItemActive() && (ImGui::IsMouseClicked(ImGuiMouseButton_Left) || ImGui::IsMouseClicked(ImGuiMouseButton_Right))) {
+                    activeAssetID = 0;
+                }
+            }
+            else {
+                static std::unordered_map<std::string, std::pair<bool, double>> fileCache;
+                bool fileExists = true;
+
+                if (!value.empty()) {
+                    double currentTime = ImGui::GetTime();
+                    auto& entry = fileCache[value];
+
+                    if (currentTime - entry.second > 5.0f) {
+                        entry.first = std::filesystem::exists(vex::GetAssetPath(value));
+                        entry.second = currentTime;
+                    }
+                    fileExists = entry.first;
+                }
+
+                std::string displayStr;
+                bool colorPushed = false;
+                if (value.empty()) {
+                    displayStr = "Empty (" + std::string(hint) + ")";
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                    colorPushed = true;
+                } else {
+                    displayStr = std::filesystem::path(value.c_str()).filename().string();
+                    if(!fileExists || !good){
+                        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.1f, 0.1f, 1.0f));
+                        colorPushed = true;
+                    }
+                }
+
+                if (ImGui::Selectable(displayStr.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick)) {
+                    activeAssetID = currentID;
+                }
+
+                if (colorPushed) {
+                    ImGui::PopStyleColor();
+                }
+
+                if (!value.empty() && ImGui::IsItemHovered()) {
+                    ImGui::SetTooltip("%s", value.c_str());
+                }
+            }
+            ImGui::EndGroup();
+
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.47f, 0.05f, 0.05f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.71f, 0.10f, 0.10f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.30f, 0.03f, 0.03f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.94f, 0.85f, 0.85f, 1.0f));
+
+            if (ImGui::Button("Clear", ImVec2(0, 0))) {
+                value.clear();
+            }
+
+            ImGui::PopStyleColor(4);
+            ImGui::EndGroup();
+
+            if (ImGui::BeginDragDropTarget()) {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
+                    std::string fullPath = (const char*)payload->Data;
+
+                    std::string ext = std::filesystem::path(fullPath).extension().string();
+                    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+                    bool valid = true;
+
+                    if constexpr (std::is_same_v<T, vex::mesh_asset_path>) {
+                        valid = (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb");
+                    }
+                    else if constexpr (std::is_same_v<T, vex::texture_asset_path>) {
+                        valid = (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp");
+                    }
+                    else if constexpr (std::is_same_v<T, vex::audio_asset_path>) {
+                        valid = (ext == ".wav" || ext == ".ogg" || ext == ".flac");
+                    }
+
+                    if (valid) {
+                        value = std::filesystem::relative(fullPath, vex::GetAssetDir()).string();
+                    }
+                }
+                ImGui::EndDragDropTarget();
+            }
+            ImGui::PopID();
+        }
+
+        inline void tag_invoke(ImReflect::ImInput_t, const char* label, vex::mesh_asset_path& value, ImSettings& settings, ImResponse& response) {
+            DrawAssetSlot(label, value, vex::InspectorIcons::mesh, "Mesh");
+        }
+
+        inline void tag_invoke(ImReflect::ImInput_t, const char* label, vex::texture_asset_path& value, ImSettings& settings, ImResponse& response) {
+            DrawAssetSlot(label, value, vex::InspectorIcons::texture, "Texture");
+        }
+
+        inline void tag_invoke(ImReflect::ImInput_t, const char* label, vex::audio_asset_path& value, ImSettings& settings, ImResponse& response) {
+            DrawAssetSlot(label, value, vex::InspectorIcons::audio, "Audio");
+        }
+
+        inline void tag_invoke(ImReflect::ImInput_t, const char* label, vex::asset_path& value, ImSettings& settings, ImResponse& response) {
+            DrawAssetSlot(label, value, vex::InspectorIcons::file, "Asset");
+        }
 
     inline void tag_invoke(ImReflect::ImInput_t, const char* label, glm::vec4& value, ImSettings& settings, ImResponse& response) {
         ImGui::DragFloat4(label, &value.x);

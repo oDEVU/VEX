@@ -8,6 +8,7 @@
 #include <SDL3/SDL.h>
 #include "SDL3/SDL_audio.h"
 #include "components/errorUtils.hpp"
+#include "components/assetTypes.hpp"
 #include <string>
 #include "components/VirtualFileSystem.hpp"
 
@@ -52,7 +53,7 @@ private:
     AudioClip* clip = nullptr;
     AudioState state = AudioState::STOPPED;
 public:
-    std::string audioFilePath;
+    audio_asset_path audioFilePath;
     bool loop = false;
     bool is3D = false;
     bool autoPlay = false;

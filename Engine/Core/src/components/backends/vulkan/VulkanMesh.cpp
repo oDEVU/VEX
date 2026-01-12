@@ -254,7 +254,7 @@ namespace vex {
             std::string textureName = "";
             uint32_t textureIndex = 0;
             if(mc.textureOverrides.contains(i)){
-                textureName = GetAssetPath(mc.textureOverrides.at(1));
+                textureName = GetAssetPath(mc.textureOverrides.at(i));
                 textureIndex = resources.getTextureIndex(textureName);
 
                 if(textureIndex == 0){

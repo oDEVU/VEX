@@ -21,6 +21,7 @@
 #include "components/Mesh.hpp"
 #include "components/errorUtils.hpp"
 #include "components/colorTypes.hpp"
+#include "components/assetTypes.hpp"
 #include "entt/entity/fwd.hpp"
 
 #include "components/errorUtils.hpp"
@@ -422,7 +423,7 @@ struct MeshComponent {
     RenderType renderType = RenderType::OPAQUE;
     vex::rgba color = glm::vec4(1.f);
 
-    std::map<int, std::string> textureOverrides;
+    std::map<int, texture_asset_path> textureOverrides;
 
     // Simple bounding data
     glm::vec3 localCenter = glm::vec3(0.0f);
