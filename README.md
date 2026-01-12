@@ -45,15 +45,17 @@ Custom packing system that differentiates between development and deployment. De
 You must install all the following dependencies for your specific operating system before proceeding.
 
 #### Windows Requirements
-| Tool | Recommended Installation | Notes |
+| Dependency | Recommended Installation | Notes |
 | :--- | :--- | :--- |
-| **Git** | Standard installer. | Used for version control. |
-| **CMake** | Windows x64 Installer. | **Ensure it is added to your System `PATH`** during installation. |
-| **Ninja-build** | `winget install Ninja-build.Ninja` | A fast build system generator. |
-| **Clang** (LLVM) | `winget install -e --id LLVM.LLVM` | Required C++ compiler. You need **7-Zip** for the installation to succeed. Add binaries to `PATH`: `C:\Program Files\LLVM\bin`. |
-| **ImageMagick** | `winget install ImageMagick.ImageMagick` | **Required** for generating project icons (`.ico` files) during the build process. |
-| **Windows SDK** | Visual Studio 2022 Installer. | Provides essential system headers. |
-| **Vulkan SDK** | **[LunarG website](https://www.lunarg.com/vulkan-sdk/)** | Must include **Validation Layers** and **SlangC**. |
+| **Visual Studio Build Tools 2022** | [Download Installer](https://www.google.com/search?q=https://visualstudio.microsoft.com/visual-cpp-build-tools/) | **CRITICAL:** Run the installer and select the **"Desktop development with C++"** workload. Ensure **Windows 10/11 SDK** is checked in the sidebar. |
+| **Git** | [Official Installer](https://git-scm.com/download/win) | Standard installer. Used for version control. |
+| **CMake** | [Official Installer](https://cmake.org/download/) | Use the Windows x64 Installer (`.msi`). <br><br>**Important:** Select *"Add CMake to the system PATH for all users"* during installation. |
+| **LLVM (Clang)** | [GitHub Releases](https://github.com/llvm/llvm-project/releases) | Download the `LLVM-xx.x.x-win64.exe` <br><br>**Important:** Select *"Add LLVM to the system PATH"* during installation. |
+| **Ninja Build** | [GitHub Releases](https://github.com/ninja-build/ninja/releases) | Download `ninja-win.zip`. <br><br>**Action Required:** Extract `ninja.exe` to a folder (e.g., `C:\Program Files\Ninja\`) and manually add that folder to your System `PATH`. |
+| **Vulkan SDK** | [LunarG Website](https://vulkan.lunarg.com/sdk/home) | **Must include:** <br>• Validation Layers<br>• SlangC |
+| **ImageMagick** | [Official Installer](https://www.google.com/search?q=https://imagemagick.org/script/download.php%23windows) | Download the `Q16-HDRI-x64-dll.exe`. <br><br>**Important:** Check *"Add application directory to your system path"*. |
+
+---
 
 #### Linux Requirements
 | Tool | Notes |
