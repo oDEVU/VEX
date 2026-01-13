@@ -130,6 +130,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a85c4ec5bb63eb855353ac38eb6e0df1a" id="r_a85c4ec5bb63eb855353ac38eb6e0df1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85c4ec5bb63eb855353ac38eb6e0df1a">removeInstance</a> ()</td></tr>
 <tr class="memdesc:a85c4ec5bb63eb855353ac38eb6e0df1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">decrements number of mesh components using this <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a> instance.  <br /></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a50de65660a5f1d58d516b329acd1220a" id="r_a50de65660a5f1d58d516b329acd1220a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50de65660a5f1d58d516b329acd1220a">StreamToGPU</a> (void *dst, const void *src, size_t sizeBytes)</td></tr>
+<tr class="memdesc:a50de65660a5f1d58d516b329acd1220a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to stream data to GPU memory.  <br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a3297d89cf14d2a568bf28824904b8c7f" id="r_a3297d89cf14d2a568bf28824904b8c7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structvex_1_1VulkanContext.html">VulkanContext</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3297d89cf14d2a568bf28824904b8c7f">m_r_context</a></td></tr>
@@ -166,7 +171,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00020">20</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00021">21</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
 </div>
@@ -185,7 +190,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00024">24</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00025">25</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
 </div>
@@ -295,7 +300,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00127">127</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00152">152</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
 </div>
@@ -358,7 +363,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <p>It is called automatically in <a class="el" href="classvex_1_1Renderer.html" title="Class responsible for rendering the scene using Vulkan backend.">Renderer</a> for every mesh component having a <a class="el" href="classvex_1_1VulkanMesh.html" title="Class defining mesh object with vulkan specific data and methods.">VulkanMesh</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00207">207</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00232">232</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
 </div>
@@ -401,7 +406,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00092">92</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00117">117</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
 </div>
@@ -464,6 +469,52 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a50de65660a5f1d58d516b329acd1220a" name="a50de65660a5f1d58d516b329acd1220a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50de65660a5f1d58d516b329acd1220a">&#9670;&#160;</a></span>StreamToGPU()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::VulkanMesh::StreamToGPU </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>dst</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *</td>          <td class="paramname"><span class="paramname"><em>src</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>sizeBytes</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper function to stream data to GPU memory. </p>
+<p>Copies data to GPU memory using non-temporal stores (bypasses CPU cache) </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">void*</td><td>dst Destination buffer on GPU memory </td></tr>
+    <tr><td class="paramname">const</td><td>void* src Source buffer on CPU memory </td></tr>
+    <tr><td class="paramname">size_t</td><td>sizeBytes Size of data to copy in bytes </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00041">41</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
+
+</div>
+</div>
 <a id="ac8f9fc0c2c186c80b5085afd662ebd3f" name="ac8f9fc0c2c186c80b5085afd662ebd3f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8f9fc0c2c186c80b5085afd662ebd3f">&#9670;&#160;</a></span>upload()</h2>
 
@@ -487,7 +538,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00040">40</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8cpp_source.html#l00065">65</a> of file <a class="el" href="VulkanMesh_8cpp_source.html">VulkanMesh.cpp</a>.</p>
 
 </div>
 </div>
@@ -512,7 +563,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00116">116</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00123">123</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -536,7 +587,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00111">111</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00118">118</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -560,7 +611,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00112">112</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00119">119</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -584,7 +635,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00113">113</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00120">120</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>
@@ -608,7 +659,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00114">114</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="VulkanMesh_8hpp_source.html#l00121">121</a> of file <a class="el" href="VulkanMesh_8hpp_source.html">VulkanMesh.hpp</a>.</p>
 
 </div>
 </div>

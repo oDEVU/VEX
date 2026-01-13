@@ -4,6 +4,7 @@ var classvex_1_1Engine =
     [ "Engine", "classvex_1_1Engine.html#a73324310e3b2705b7a6a0f411b0083bd", null ],
     [ "beginGame", "classvex_1_1Engine.html#a553fa7361373b5df5f4685210f54f1ab", null ],
     [ "createVexUI", "classvex_1_1Engine.html#ad745a460f7ea3921a13f176fce6f152c", null ],
+    [ "getAudioSystem", "classvex_1_1Engine.html#a681774e8eecb528929b9c6ad60527a31", null ],
     [ "getCamera", "classvex_1_1Engine.html#a2934946b6915ee75d1384f185d11a9e0", null ],
     [ "GetCurrentFrame", "classvex_1_1Engine.html#a97bee5a3c7fb37dd9e63c920787175b5", null ],
     [ "getDeltaTime", "classvex_1_1Engine.html#aceb64f100da979f2a302756d24b25672", null ],

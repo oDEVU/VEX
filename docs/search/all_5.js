@@ -14,5 +14,6 @@ var searchData=
   ['forcerefresh_11',['forceRefresh',['../structvex_1_1MeshComponent.html#a20da54a1c03dbf8d0d91e95100a5b736',1,'vex::MeshComponent']]],
   ['freetree_12',['freeTree',['../classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e',1,'vex::VexUI']]],
   ['frustum_13',['Frustum',['../structvex_1_1Frustum.html',1,'vex']]],
-  ['frustum_2ehpp_14',['frustum.hpp',['../frustum_8hpp.html',1,'']]]
+  ['frustum_2ehpp_14',['frustum.hpp',['../frustum_8hpp.html',1,'']]],
+  ['frustumsoa_15',['FrustumSoA',['../structvex_1_1FrustumSoA.html',1,'vex']]]
 ];

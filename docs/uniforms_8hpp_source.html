@@ -109,7 +109,7 @@ $(function(){initNavTree('uniforms_8hpp_source.html','',''); });
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>vex {</div>
 <div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="structvex_1_1SceneUBO.html">   13</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1SceneUBO.html">SceneUBO</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="structvex_1_1SceneUBO.html">   13</a></span>    <span class="keyword">struct </span><span class="keyword">alignas</span>(256) <a class="code hl_struct" href="structvex_1_1SceneUBO.html">SceneUBO</a> {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structvex_1_1SceneUBO.html#aff32b4ef5b2c8dc91b5657cda6b90470">   15</a></span>        <span class="keyword">alignas</span>(16) glm::mat4 <a class="code hl_variable" href="structvex_1_1SceneUBO.html#aff32b4ef5b2c8dc91b5657cda6b90470">view</a>;</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structvex_1_1SceneUBO.html#a3aab80337d4e64fa023ce6f89182ca0d">   17</a></span>        <span class="keyword">alignas</span>(16) glm::mat4 <a class="code hl_variable" href="structvex_1_1SceneUBO.html#a3aab80337d4e64fa023ce6f89182ca0d">proj</a>;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
@@ -135,21 +135,21 @@ $(function(){initNavTree('uniforms_8hpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
 <div class="foldopen" id="foldopen00041" data-start="{" data-end="};">
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="structvex_1_1Light.html">   41</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1Light.html">Light</a> {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="structvex_1_1Light.html">   41</a></span>    <span class="keyword">struct </span><span class="keyword">alignas</span>(16) <a class="code hl_struct" href="structvex_1_1Light.html">Light</a> {</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        glm::vec4 position = glm::vec4(0.0f); <span class="comment">// w = radius</span></div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        glm::vec4 color = glm::vec4(0.0f);    <span class="comment">// w = intensity</span></div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    };</div>
 </div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span></div>
 <div class="foldopen" id="foldopen00047" data-start="{" data-end="};">
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="structvex_1_1SceneLightsUBO.html">   47</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a> {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="structvex_1_1SceneLightsUBO.html">   47</a></span>    <span class="keyword">struct </span><span class="keyword">alignas</span>(256) <a class="code hl_struct" href="structvex_1_1SceneLightsUBO.html">SceneLightsUBO</a> {</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keyword">alignas</span>(4) uint32_t lightCount;</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">alignas</span>(16) <a class="code hl_struct" href="structvex_1_1Light.html">Light</a> lights[MAX_DYNAMIC_LIGHTS]; <span class="comment">// Light is already glm::vec4 position + glm::vec4 color</span></div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    };</div>
 </div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span></div>
 <div class="foldopen" id="foldopen00053" data-start="{" data-end="};">
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="structvex_1_1PushConstants.html">   53</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a> {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="structvex_1_1PushConstants.html">   53</a></span>    <span class="keyword">struct </span><span class="keyword">alignas</span>(128) <a class="code hl_struct" href="structvex_1_1PushConstants.html">PushConstants</a> {</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">alignas</span>(16) glm::vec4 color;</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keyword">alignas</span>(16) glm::mat4 model;</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keyword">alignas</span>(4)  <span class="keywordtype">int</span> textureID = 0;</div>

@@ -61,7 +61,9 @@ var searchData=
   ['setworldrotation_58',['setWorldRotation',['../structvex_1_1TransformComponent.html#a27dafee59fd73df4757b560c9aad25ab',1,'vex::TransformComponent']]],
   ['setworldscale_59',['setWorldScale',['../structvex_1_1TransformComponent.html#a9fad49e87b97014f7bc749b318c30f20',1,'vex::TransformComponent']]],
   ['setzindex_60',['setZIndex',['../classvex_1_1VexUI.html#a3330bb72abd6ecbe257c4813cc4842c3',1,'vex::VexUI']]],
-  ['shutdown_61',['shutdown',['../classvex_1_1PhysicsSystem.html#a9344768ca2718429a24ca7a3ee94ff87',1,'vex::PhysicsSystem']]],
-  ['stop_62',['stop',['../classvex_1_1DialogWindow.html#aad70f7dc44f78aa1731da6e13e3a324b',1,'vex::DialogWindow']]],
-  ['syncbodies_63',['SyncBodies',['../classvex_1_1PhysicsSystem.html#a1c19ad9f75b5c858b93ad64ab0743304',1,'vex::PhysicsSystem']]]
+  ['shutdown_61',['Shutdown',['../classvex_1_1AudioSystem.html#aba3023867ad4fee7376113806b03554b',1,'vex::AudioSystem']]],
+  ['shutdown_62',['shutdown',['../classvex_1_1PhysicsSystem.html#a9344768ca2718429a24ca7a3ee94ff87',1,'vex::PhysicsSystem']]],
+  ['stop_63',['stop',['../classvex_1_1DialogWindow.html#aad70f7dc44f78aa1731da6e13e3a324b',1,'vex::DialogWindow']]],
+  ['streamtogpu_64',['StreamToGPU',['../classvex_1_1VulkanMesh.html#a50de65660a5f1d58d516b329acd1220a',1,'vex::VulkanMesh']]],
+  ['syncbodies_65',['SyncBodies',['../classvex_1_1PhysicsSystem.html#a1c19ad9f75b5c858b93ad64ab0743304',1,'vex::PhysicsSystem']]]
 ];

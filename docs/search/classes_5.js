@@ -4,5 +4,6 @@ var searchData=
   ['fogcomponent_1',['FogComponent',['../structvex_1_1FogComponent.html',1,'vex']]],
   ['fogobject_2',['FogObject',['../classvex_1_1FogObject.html',1,'vex']]],
   ['fontatlas_3',['FontAtlas',['../structvex_1_1FontAtlas.html',1,'vex']]],
-  ['frustum_4',['Frustum',['../structvex_1_1Frustum.html',1,'vex']]]
+  ['frustum_4',['Frustum',['../structvex_1_1Frustum.html',1,'vex']]],
+  ['frustumsoa_5',['FrustumSoA',['../structvex_1_1FrustumSoA.html',1,'vex']]]
 ];

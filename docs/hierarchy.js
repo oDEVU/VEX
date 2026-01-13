@@ -1,6 +1,9 @@
 var hierarchy =
 [
     [ "vex::AssetBrowser", "classvex_1_1AssetBrowser.html", null ],
+    [ "vex::AudioClip", "structvex_1_1AudioClip.html", null ],
+    [ "vex::AudioSourceComponent", "structvex_1_1AudioSourceComponent.html", null ],
+    [ "vex::AudioSystem", "classvex_1_1AudioSystem.html", null ],
     [ "BasicEditorWindow", "structBasicEditorWindow.html", null ],
     [ "JPH::BodyActivationListener", null, [
       [ "vex::MyActivationListener", "classvex_1_1MyActivationListener.html", null ]
@@ -31,6 +34,7 @@ var hierarchy =
     [ "vex::FogComponent", "structvex_1_1FogComponent.html", null ],
     [ "vex::FontAtlas", "structvex_1_1FontAtlas.html", null ],
     [ "vex::Frustum", "structvex_1_1Frustum.html", null ],
+    [ "vex::FrustumSoA", "structvex_1_1FrustumSoA.html", null ],
     [ "vex::GameInfo", "structvex_1_1GameInfo.html", null ],
     [ "vex::GameObject", "classvex_1_1GameObject.html", [
       [ "vex::BasicCamera", "classvex_1_1BasicCamera.html", null ],
@@ -44,6 +48,7 @@ var hierarchy =
     [ "vex::GameObjectFactory", "classvex_1_1GameObjectFactory.html", null ],
     [ "vex::GamepadAxisBinding", "structvex_1_1GamepadAxisBinding.html", null ],
     [ "vex::GamepadButtonBinding", "structvex_1_1GamepadButtonBinding.html", null ],
+    [ "vex::HardwareInfo", "classvex_1_1HardwareInfo.html", null ],
     [ "vex::ICommand", "structvex_1_1ICommand.html", [
       [ "vex::DeleteCommand", "classvex_1_1DeleteCommand.html", null ],
       [ "vex::TransformCommand", "classvex_1_1TransformCommand.html", null ]
@@ -102,6 +107,13 @@ var hierarchy =
     [ "vex::SkipInit", "structvex_1_1SkipInit.html", null ],
     [ "std::streambuf", null, [
       [ "vex::VirtualFileSystem::VPKStream::VPKStreamBuf", "classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html", null ]
+    ] ],
+    [ "std::string", null, [
+      [ "vex::asset_path", "structvex_1_1asset__path.html", [
+        [ "vex::audio_asset_path", "structvex_1_1audio__asset__path.html", null ],
+        [ "vex::mesh_asset_path", "structvex_1_1mesh__asset__path.html", null ],
+        [ "vex::texture_asset_path", "structvex_1_1texture__asset__path.html", null ]
+      ] ]
     ] ],
     [ "vex::Submesh", "structvex_1_1Submesh.html", null ],
     [ "vex::VulkanMesh::SubmeshBuffers", "structvex_1_1VulkanMesh_1_1SubmeshBuffers.html", null ],

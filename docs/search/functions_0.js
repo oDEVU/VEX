@@ -24,5 +24,6 @@ var searchData=
   ['addtorque_21',['AddTorque',['../classvex_1_1PhysicsSystem.html#a7cd9dc0e143969c4e5fee105226cd390',1,'vex::PhysicsSystem']]],
   ['adduifunction_22',['addUIFunction',['../classvex_1_1ImGUIWrapper.html#ab786a3144eeac18f060b69d8b26083d9',1,'vex::ImGUIWrapper']]],
   ['addyaw_23',['addYaw',['../structvex_1_1TransformComponent.html#a8134355d65be1d0d5fca521fbd8ba975',1,'vex::TransformComponent']]],
-  ['assetbrowser_24',['AssetBrowser',['../classvex_1_1AssetBrowser.html#a014e5a20507c167bb53ec15c45f0d52e',1,'vex::AssetBrowser']]]
+  ['assetbrowser_24',['AssetBrowser',['../classvex_1_1AssetBrowser.html#a014e5a20507c167bb53ec15c45f0d52e',1,'vex::AssetBrowser']]],
+  ['audiosystem_25',['AudioSystem',['../classvex_1_1AudioSystem.html#a7470b94d2d244d8bb016152c2d204f63',1,'vex::AudioSystem']]]
 ];

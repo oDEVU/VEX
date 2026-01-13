@@ -27,6 +27,13 @@ var searchData=
   ['affinewarping_24',['affineWarping',['../structvex_1_1enviroment.html#a132b454d664718ea4ecd1070c7583959',1,'vex::enviroment']]],
   ['ambientlight_25',['ambientLight',['../structvex_1_1enviroment.html#ab03745583ed0f9d1b7aa12dea945be20',1,'vex::enviroment']]],
   ['ambientlightstrength_26',['ambientLightStrength',['../structvex_1_1enviroment.html#ad87ef5444451cd33ec46822445dc2540',1,'vex::enviroment']]],
-  ['assetbrowser_27',['AssetBrowser',['../classvex_1_1AssetBrowser.html',1,'vex::AssetBrowser'],['../classvex_1_1AssetBrowser.html#a014e5a20507c167bb53ec15c45f0d52e',1,'vex::AssetBrowser::AssetBrowser()']]],
-  ['assetbrowser_2ehpp_28',['AssetBrowser.hpp',['../AssetBrowser_8hpp.html',1,'']]]
+  ['asset_5fpath_27',['asset_path',['../structvex_1_1asset__path.html',1,'vex']]],
+  ['assetbrowser_28',['AssetBrowser',['../classvex_1_1AssetBrowser.html',1,'vex::AssetBrowser'],['../classvex_1_1AssetBrowser.html#a014e5a20507c167bb53ec15c45f0d52e',1,'vex::AssetBrowser::AssetBrowser()']]],
+  ['assetbrowser_2ehpp_29',['AssetBrowser.hpp',['../AssetBrowser_8hpp.html',1,'']]],
+  ['audio_5fasset_5fpath_30',['audio_asset_path',['../structvex_1_1audio__asset__path.html',1,'vex']]],
+  ['audioclip_31',['AudioClip',['../structvex_1_1AudioClip.html',1,'vex']]],
+  ['audiosourcecomponent_32',['AudioSourceComponent',['../structvex_1_1AudioSourceComponent.html',1,'vex']]],
+  ['audiosourcecomponent_2ehpp_33',['AudioSourceComponent.hpp',['../AudioSourceComponent_8hpp.html',1,'']]],
+  ['audiosystem_34',['AudioSystem',['../classvex_1_1AudioSystem.html',1,'vex::AudioSystem'],['../classvex_1_1AudioSystem.html#a7470b94d2d244d8bb016152c2d204f63',1,'vex::AudioSystem::AudioSystem()']]],
+  ['audiosystem_2ehpp_35',['AudioSystem.hpp',['../AudioSystem_8hpp.html',1,'']]]
 ];
