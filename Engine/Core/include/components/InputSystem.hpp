@@ -32,14 +32,7 @@ public:
     /// @brief Constructor for InputSystem.
     /// @param entt::registry& registry Reference to the entity registry.
     /// @param SDL_Window* window Pointer to the SDL window.
-    InputSystem(entt::registry& registry, SDL_Window* window)
-        : m_registry(registry), m_window(window), m_inputMode(InputMode::Game) {
-        setInputMode(InputMode::Game);
-
-        if (!SDL_InitSubSystem(SDL_INIT_GAMEPAD)) {
-            log(LogLevel::ERROR, "Could not initialize gamepad subsystem: %s", SDL_GetError());
-        }
-    }
+    InputSystem(entt::registry& registry, SDL_Window* window);
 
     /// @brief Sets the input processing mode.
     /// @details

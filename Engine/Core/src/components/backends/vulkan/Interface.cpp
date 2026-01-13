@@ -87,39 +87,68 @@ namespace vex {
         std::vector<VkPhysicalDevice> devices(deviceCount);
         vkEnumeratePhysicalDevices(m_context.instance, &deviceCount, devices.data());
 
+        VkPhysicalDevice selectedDevice = VK_NULL_HANDLE;
+        int bestScore = -1;
+
         for (const auto& device : devices) {
             VkPhysicalDeviceProperties deviceProperties;
             vkGetPhysicalDeviceProperties(device, &deviceProperties);
-            log("Selected GPU: %s", deviceProperties.deviceName);
+
+            log("Avaiable GPU (%s): %s", deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ? "DISCRETE" : "INTEGRATED",  deviceProperties.deviceName);
+            int score = 0;
+
+            if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+            {
+                score += 1000;
+            }
 
             uint32_t queueFamilyCount = 0;
             vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
             std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
             vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+            uint32_t graphicsIdx = UINT32_MAX;
+            uint32_t presentIdx = UINT32_MAX;
 
             int i = 0;
             for (const auto& queueFamily : queueFamilies) {
                 if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-                    m_context.graphicsQueueFamily = i;
+                    graphicsIdx = i;
                 }
 
                 VkBool32 presentSupport = false;
                 vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_context.surface, &presentSupport);
 
                 if (presentSupport) {
-                    m_context.presentQueueFamily = i;
+                    presentIdx = i;
                 }
 
-                if (m_context.graphicsQueueFamily != UINT32_MAX && m_context.presentQueueFamily != UINT32_MAX) {
+                if (graphicsIdx != UINT32_MAX && presentIdx != UINT32_MAX)
+                {
                     break;
                 }
                 i++;
             }
 
-            if (m_context.graphicsQueueFamily != UINT32_MAX && m_context.presentQueueFamily != UINT32_MAX) {
-                m_context.physicalDevice = device;
-                break;
+            if (graphicsIdx != UINT32_MAX && presentIdx != UINT32_MAX)
+            {
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    selectedDevice = device;
+                    m_context.graphicsQueueFamily = graphicsIdx;
+                    m_context.presentQueueFamily = presentIdx;
+                }
             }
+        }
+
+        if (selectedDevice != VK_NULL_HANDLE)
+        {
+            VkPhysicalDeviceProperties deviceProperties;
+            vkGetPhysicalDeviceProperties(selectedDevice, &deviceProperties);
+
+            log("Selected GPU: %s", deviceProperties.deviceName);
+
+            m_context.physicalDevice = selectedDevice;
         }
 
         if (m_context.physicalDevice == VK_NULL_HANDLE) {
