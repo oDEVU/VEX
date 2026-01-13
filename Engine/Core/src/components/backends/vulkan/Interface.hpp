@@ -20,7 +20,7 @@
 #include <memory>
 #include <components/GameInfo.hpp>
 #include <components/UI/UIVertex.hpp>
-#include "../../VirtualFileSystem.hpp"
+#include "components/VirtualFileSystem.hpp"
 #include "components/enviroment.hpp"
 
 namespace vex {

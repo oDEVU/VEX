@@ -6,12 +6,17 @@ ninja -C build
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 echo Checking PATH...
-echo %PATH% | findstr /I /C:"%BUILD_DIR%" >nul
-if %errorlevel% neq 0 (
-    echo Adding %BUILD_DIR% to User PATH...
-    for /f "tokens=2*" %%A in ('reg query "HKCU\Environment" /v Path') do set "OLD_PATH=%%B"
-    setx PATH "%BUILD_DIR%;%OLD_PATH%"
-    echo [+] Path updated. Please restart your terminal for changes to take effect.
-) else (
-    echo [!] Build directory is already in PATH.
-)
+powershell -NoProfile -Command ^
+    "$targetPath = '%BUILD_DIR%'; " ^
+    "$currentPath = [Environment]::GetEnvironmentVariable('Path', 'User'); " ^
+    "if (-not ($currentPath.Split(';') -contains $targetPath)) { " ^
+    "    Write-Host 'Adding BuildTools to User PATH...'; " ^
+    "    $newPath = $currentPath + ';' + $targetPath; " ^
+    "    [Environment]::SetEnvironmentVariable('Path', $newPath, 'User'); " ^
+    "    Write-Host '[+] Path updated safely.'; " ^
+    "} else { " ^
+    "    Write-Host '[!] Build directory is already in PATH.'; " ^
+    "}"
+
+echo === BuildTools Build Complete ===
+endlocal

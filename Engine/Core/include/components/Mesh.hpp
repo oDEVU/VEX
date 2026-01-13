@@ -6,6 +6,7 @@
 
 #pragma once
 #include "components/pathUtils.hpp"
+#include "components/assetTypes.hpp"
 
 #include <filesystem>
 #include <glm/glm.hpp>
@@ -32,14 +33,14 @@ namespace vex {
     struct Submesh {
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
-        std::string texturePath;
+        texture_asset_path texturePath;
         std::vector<glm::vec3> triangleCenters;
     };
 
     /// @brief Mesh data structure for loading and managing mesh data
     struct MeshData {
         std::vector<Submesh> submeshes;
-        std::string meshPath;
+        mesh_asset_path meshPath;
 
         /// @brief Loads mesh data from a file using the Virtual File System.
         /// @details Uses Assimp with a custom `VPKAssimpIOSystem` to read files directly from VFS memory buffers (supporting compressed VPKs).

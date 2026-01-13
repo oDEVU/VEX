@@ -5,7 +5,7 @@
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/enviroment.hpp"
-#include "VirtualFileSystem.hpp"
+#include "components/VirtualFileSystem.hpp"
 
 #if defined(__cpp_lib_execution) && defined(__cpp_lib_parallel_algorithm)
     #include <execution>

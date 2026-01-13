@@ -15,6 +15,7 @@
 
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
+#include "components/assetTypes.hpp"
 #include "ImReflect.hpp"
 
 #include "../Core/include/components/SceneManager.hpp"
@@ -335,7 +336,8 @@ namespace vex {
             { "../Assets/icons/file-image-fill.png",   &m_icons.texture },
             { "../Assets/icons/map-2-fill.png",   &m_icons.scene },
             { "../Assets/icons/file-text-fill.png",   &m_icons.text },
-            { "../Assets/icons/window-fill.png",   &m_icons.ui }
+            { "../Assets/icons/window-fill.png",   &m_icons.ui },
+            { "../Assets/icons/file-music-fill.png",   &m_icons.audio }
         };
 
         VkSampler sampler = resources->getTextureSampler();
@@ -365,6 +367,11 @@ namespace vex {
                 *targetPtr = (ImTextureID)ds;
             }
         }
+        
+        vex::ComponentRegistry::getInstance().SetEditorIcon("mesh", m_icons.mesh);
+        vex::ComponentRegistry::getInstance().SetEditorIcon("texture", m_icons.texture);
+        vex::ComponentRegistry::getInstance().SetEditorIcon("audio", m_icons.audio);
+        vex::ComponentRegistry::getInstance().SetEditorIcon("file", m_icons.file);
     }
 
     void Editor::drawGizmo(const glm::vec2& viewportPos, const glm::vec2& viewportSize) {

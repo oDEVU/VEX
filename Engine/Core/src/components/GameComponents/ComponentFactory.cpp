@@ -8,6 +8,23 @@ namespace vex {
         return instance;
     }
 
+#if DEBUG
+    void ComponentRegistry::SetEditorIcon(const std::string &name, ImTextureID icon)
+    {
+        m_editorIcons[name] = icon;
+    }
+
+    ImTextureID ComponentRegistry::GetEditorIcon(const std::string &name)
+    {
+        return m_editorIcons[name];
+    }
+
+    ImTextureID GetEditorIcon_Internal(const std::string &name)
+    {
+        return ComponentRegistry::getInstance().GetEditorIcon(name);
+    }
+#endif
+
     void ComponentRegistry::unregisterComponent(const std::string& name) {
             loaders.erase(name);
             savers.erase(name);

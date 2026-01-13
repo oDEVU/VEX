@@ -83,6 +83,8 @@ set(public_header_files
     include/components/SceneManager.hpp
     include/components/errorUtils.hpp
     include/components/pathUtils.hpp
+    include/components/VirtualFileSystem.hpp
+    include/components/AudioSystem.hpp
     include/components/ImGUIWrapper.hpp
     include/components/InputSystem.hpp
     include/components/PhysicsSystem.hpp
@@ -93,6 +95,7 @@ set(public_header_files
     include/components/GameComponents/UiComponent.hpp
     include/components/GameComponents/ComponentFactory.hpp
     include/components/GameComponents/InputComponent.hpp
+    include/components/GameComponents/AudioSourceComponent.hpp
     include/components/GameObjects/GameObject.hpp
     include/components/GameObjects/ModelObject.hpp
     include/components/GameObjects/CameraObject.hpp
@@ -117,7 +120,7 @@ set(source_files
         src/components/Window.cpp
         src/components/Window.hpp
         src/components/VirtualFileSystem.cpp
-        src/components/VirtualFileSystem.hpp
+        src/components/AudioSystem.cpp
         src/components/InputSystem.cpp
         src/components/PhysicsSystem.cpp
         src/components/UI/VexUI.cpp

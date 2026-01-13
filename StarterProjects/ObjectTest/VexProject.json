@@ -4,6 +4,6 @@
     "project_name": "ObjectTest",
     "resolution_mode": 0,
     "version": "1",
-    "vsync": true,
+    "vsync": false,
     "window_type": 0
 }

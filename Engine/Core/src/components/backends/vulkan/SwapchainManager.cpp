@@ -48,17 +48,13 @@ namespace vex {
         VkFormatProperties formatProps;
         vkGetPhysicalDeviceFormatProperties(m_r_context.physicalDevice, surfaceFormat.format, &formatProps);
 
-        if (!(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) ||
-            !(formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_BLIT_DST_BIT)) {
-            throw_error("Swapchain format doesn't support blitting!");
-        }
-
         uint32_t imageCount = capabilities.minImageCount + 1;
         if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
             imageCount = capabilities.maxImageCount;
         }
 
         m_r_context.MAX_FRAMES_IN_FLIGHT = imageCount;
+        VkSwapchainKHR oldSwapchain = m_r_context.swapchain;
 
         VkSwapchainCreateInfoKHR createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -69,6 +65,7 @@ namespace vex {
         createInfo.imageExtent = extent;
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        //createInfo.oldSwapchain = oldSwapchain;
 
         uint32_t queueFamilyIndices[] = {m_r_context.graphicsQueueFamily, m_r_context.presentQueueFamily};
         if (m_r_context.graphicsQueueFamily != m_r_context.presentQueueFamily) {
@@ -85,18 +82,33 @@ namespace vex {
         createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
         createInfo.presentMode = presentMode;
         createInfo.clipped = VK_TRUE;
-        createInfo.oldSwapchain = VK_NULL_HANDLE;
+        createInfo.oldSwapchain = oldSwapchain;
 
-        if (vkCreateSwapchainKHR(m_r_context.device, &createInfo, nullptr, &m_r_context.swapchain) != VK_SUCCESS) {
+        VkSwapchainKHR newSwapchain;
+        if (vkCreateSwapchainKHR(m_r_context.device, &createInfo, nullptr, &newSwapchain) != VK_SUCCESS)
+        {
             throw_error("Failed to create swapchain");
         }
 
+        if (oldSwapchain != VK_NULL_HANDLE)
+        {
+            vkDestroySwapchainKHR(m_r_context.device, oldSwapchain, nullptr);
+        }
+
+        m_r_context.swapchain = newSwapchain;
         vkGetSwapchainImagesKHR(m_r_context.device, m_r_context.swapchain, &imageCount, nullptr);
         m_r_context.swapchainImages.resize(imageCount);
         vkGetSwapchainImagesKHR(m_r_context.device, m_r_context.swapchain, &imageCount, m_r_context.swapchainImages.data());
 
         m_r_context.swapchainImageFormat = surfaceFormat.format;
         m_r_context.swapchainExtent = extent;
+
+        for (auto &view : m_r_context.swapchainImageViews)
+        {
+            if (view != VK_NULL_HANDLE)
+                vkDestroyImageView(m_r_context.device, view, nullptr);
+        }
+        m_r_context.swapchainImageViews.clear();
 
         createImageViews();
 
@@ -448,11 +460,12 @@ namespace vex {
         log("recreating swapchains");
         vkDeviceWaitIdle(m_r_context.device);
         log("cleanupSwapchain");
-        cleanupSwapchain();
+        cleanupLowResResources();
         cleanupSyncObjects();
 
         createSwapchain();
         createLowResResources();
+        createSyncObjects();
         //log("createImageViews");
         //createImageViews();
         //log("createCommandBuffers");

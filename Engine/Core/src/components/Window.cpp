@@ -8,7 +8,7 @@ namespace vex {
             SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland,x11");
         #endif
 
-        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
+        if (!SDL_Init(SDL_INIT_VIDEO)) {
             const char* error = SDL_GetError();
             log("SDL_Init failed: %s", error);
             throw_error(error);

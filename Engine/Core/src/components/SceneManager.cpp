@@ -1,6 +1,7 @@
 #include "components/SceneManager.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameComponents/CharacterComponent.hpp"
+#include "components/GameComponents/AudioSourceComponent.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
@@ -9,7 +10,7 @@
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/PhysicsSystem.hpp"
 #include "components/enviroment.hpp"
-#include "VirtualFileSystem.hpp"
+#include "components/VirtualFileSystem.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <cstdint>
@@ -157,6 +158,7 @@ REGISTER_COMPONENT(vex::CameraComponent, fov, nearPlane, farPlane);
 REGISTER_COMPONENT(vex::LightComponent, color, intensity, radius);
 REGISTER_COMPONENT(vex::FogComponent, color, density, start, end);
 REGISTER_COMPONENT(vex::CharacterComponent, standingHeight, standingRadius, mass, maxSlopeAngle);
+REGISTER_COMPONENT(vex::AudioSourceComponent, audioFilePath, loop, is3D, autoPlay, volume, pitch, distance);
 
 //REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
 

@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include "SDL3/SDL_mouse.h"
 #include "components/GameComponents/InputComponent.hpp"
+#include "components/errorUtils.hpp"
 
 
 namespace vex {
@@ -31,10 +32,7 @@ public:
     /// @brief Constructor for InputSystem.
     /// @param entt::registry& registry Reference to the entity registry.
     /// @param SDL_Window* window Pointer to the SDL window.
-    InputSystem(entt::registry& registry, SDL_Window* window)
-        : m_registry(registry), m_window(window), m_inputMode(InputMode::Game) {
-        setInputMode(InputMode::Game);
-    }
+    InputSystem(entt::registry& registry, SDL_Window* window);
 
     /// @brief Sets the input processing mode.
     /// @details

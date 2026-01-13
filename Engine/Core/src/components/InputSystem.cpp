@@ -8,6 +8,17 @@
 
 namespace vex {
 
+    InputSystem::InputSystem(entt::registry &registry, SDL_Window *window)
+        : m_registry(registry), m_window(window), m_inputMode(InputMode::Game)
+    {
+        setInputMode(InputMode::Game);
+
+        if (!SDL_InitSubSystem(SDL_INIT_GAMEPAD))
+        {
+            log(LogLevel::ERROR, "Could not initialize gamepad subsystem: %s", SDL_GetError());
+        }
+    }
+
     void InputSystem::setInputMode(InputMode mode) {
         m_inputMode = mode;
         if (mode == InputMode::Game) {

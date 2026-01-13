@@ -22,6 +22,7 @@ namespace vex {
         ImTextureID scene = 0;
         ImTextureID text = 0;
         ImTextureID ui = 0;
+        ImTextureID audio = 0;
     };
 
     /// @brief Class responsible for displaying and navigating project assets within an ImGUI window.

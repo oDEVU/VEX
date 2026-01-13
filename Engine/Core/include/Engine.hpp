@@ -24,6 +24,7 @@
 #include "components/enviroment.hpp"
 #include "components/UI/VexUI.hpp"
 #include "components/PhysicsSystem.hpp"
+#include "components/AudioSystem.hpp"
 
 #include "VEX/VEX_export.h"
 
@@ -198,6 +199,10 @@ public:
 
     /// @brief Returns the time since last frame.
     float getDeltaTime() const { return m_deltaTime; }
+
+    /// @brief Returns the audio system.
+    std::shared_ptr<AudioSystem> getAudioSystem() const { return m_audioSystem; }
+
 protected:
 
     /// @brief Alternative constructor for editor to skip default init code.
@@ -205,6 +210,7 @@ protected:
 
     std::shared_ptr<Window> m_window;
     std::shared_ptr<VirtualFileSystem> m_vfs;
+    std::shared_ptr<AudioSystem> m_audioSystem;
 
     std::unique_ptr<Interface> m_interface;
     std::unique_ptr<ResolutionManager> m_resolutionManager;

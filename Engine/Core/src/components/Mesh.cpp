@@ -1,6 +1,6 @@
 #include "components/Mesh.hpp"
 #include "components/errorUtils.hpp"
-#include "components/VirtualFileSystem.hpp" // Add this include
+#include "components/VirtualFileSystem.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
