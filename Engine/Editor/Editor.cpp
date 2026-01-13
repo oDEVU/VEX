@@ -367,12 +367,11 @@ namespace vex {
                 *targetPtr = (ImTextureID)ds;
             }
         }
-
-        vex::InspectorIcons::mesh = m_icons.mesh;
-        vex::InspectorIcons::texture = m_icons.texture;
-        vex::InspectorIcons::audio = m_icons.audio;
-        vex::InspectorIcons::file = m_icons.file;
-        vex::InspectorIcons::unknown = m_icons.file;
+        
+        vex::ComponentRegistry::getInstance().SetEditorIcon("mesh", m_icons.mesh);
+        vex::ComponentRegistry::getInstance().SetEditorIcon("texture", m_icons.texture);
+        vex::ComponentRegistry::getInstance().SetEditorIcon("audio", m_icons.audio);
+        vex::ComponentRegistry::getInstance().SetEditorIcon("file", m_icons.file);
     }
 
     void Editor::drawGizmo(const glm::vec2& viewportPos, const glm::vec2& viewportSize) {

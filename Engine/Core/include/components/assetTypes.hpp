@@ -53,14 +53,4 @@ namespace vex {
         using asset_path::asset_path;
         audio_asset_path(const std::string& s) : asset_path(s) {}
     };
-
-    #if DEBUG
-    struct InspectorIcons {
-        static inline ImTextureID mesh = 0;
-        static inline ImTextureID texture = 0;
-        static inline ImTextureID audio = 0;
-        static inline ImTextureID file = 0;
-        static inline ImTextureID unknown = 0;
-    };
-    #endif
 }
