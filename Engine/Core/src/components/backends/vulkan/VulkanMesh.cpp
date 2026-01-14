@@ -39,24 +39,38 @@ namespace vex {
     }
 
     void VulkanMesh::StreamToGPU(void* dst, const void* src, size_t sizeBytes) {
-        auto* dst128 = static_cast<__m128i*>(dst);
-        auto* src128 = static_cast<const __m128i*>(src);
+        char* dstPtr = static_cast<char*>(dst);
+        const char* srcPtr = static_cast<const char*>(src);
 
-        size_t loops = sizeBytes / sizeof(__m128i);
-        size_t tail  = sizeBytes % sizeof(__m128i);
+        size_t dstAddr = reinterpret_cast<size_t>(dstPtr);
+        size_t misalignment = dstAddr & 15;
+        size_t head = (misalignment == 0) ? 0 : (16 - misalignment);
+
+        if (head > sizeBytes) head = sizeBytes;
+
+        if (head > 0) {
+            std::memcpy(dstPtr, srcPtr, head);
+            dstPtr += head;
+            srcPtr += head;
+            sizeBytes -= head;
+        }
+
+        size_t vecSize = sizeof(__m128i);
+        size_t loops = sizeBytes / vecSize;
+
+        auto* dst128 = reinterpret_cast<__m128i*>(dstPtr);
+        auto* src128 = reinterpret_cast<const __m128i*>(srcPtr);
 
         for (size_t i = 0; i < loops; ++i) {
             __m128i data = _mm_loadu_si128(src128 + i);
             _mm_stream_si128(dst128 + i, data);
         }
 
+        size_t bytesHandled = loops * vecSize;
+        size_t tail = sizeBytes - bytesHandled;
+
         if (tail > 0) {
-            size_t offset = loops * sizeof(__m128i);
-            std::memcpy(
-                static_cast<char*>(dst) + offset,
-                static_cast<const char*>(src) + offset,
-                tail
-            );
+            std::memcpy(dstPtr + bytesHandled, srcPtr + bytesHandled, tail);
         }
 
         _mm_sfence();
