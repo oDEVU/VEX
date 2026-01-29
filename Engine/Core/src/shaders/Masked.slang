@@ -37,7 +37,7 @@ struct VSOutput {
 };
 
 [shader("vertex")]
-VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
+VSOutput vertMain(VSInput input, uint vertId: SV_VulkanVertexID) {
   VSOutput output;
 
   float4 worldPos = mul(push.model, float4(input.position, 1.0));

@@ -12,7 +12,7 @@ struct VSOutput {
 Sampler2D<float4> screenTexture;
 
 [shader("vertex")]
-VSOutput vertMain(uint vertexID: SV_VertexID) {
+VSOutput vertMain(uint vertexID: SV_VulkanVertexID) {
   VSOutput output;
   output.uv = float2((vertexID << 1) & 2, vertexID & 2);
   output.position = float4(output.uv * 2.0 - 1.0, 0.0, 1.0);

@@ -127,5 +127,7 @@ namespace vex {
         uint32_t maxDrawIndirectCount = 1;
         uint32_t maxMultiDrawCount = 1;
         bool requestSwapchainRecreation = false;
+
+        uint32_t vulkanVersion = 0;
     };
 }

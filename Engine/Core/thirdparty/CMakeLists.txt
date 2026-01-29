@@ -240,7 +240,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
     target_link_libraries("ImGui" PRIVATE SDL3-static volk)
     target_compile_definitions(ImGui PRIVATE
-        IMGUI_IMPL_VULKAN_USE_VOLK
+        IMGUI_IMPL_VULKAN_NO_PROTOTYPES
     )
 
     if(WIN32)

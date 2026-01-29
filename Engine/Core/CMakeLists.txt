@@ -237,6 +237,7 @@ foreach(source IN LISTS SLANG_SHADERS)
     get_filename_component(FILENAME ${source} NAME_WE)
 
     set(SLANG_FLAGS "-I${SHADER_SOURCE_DIR}")
+    list(APPEND SLANG_FLAGS "-emit-spirv-via-glsl")
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         list(APPEND SLANG_FLAGS "-O3")
         #list(APPEND SLANG_FLAGS "-O2") Rewert to this if O3 is too aggresive C:
@@ -247,7 +248,7 @@ foreach(source IN LISTS SLANG_SHADERS)
         set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
         add_custom_command(
             OUTPUT ${OUTPUT_FILE}
-            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_6_0 -o ${OUTPUT_FILE} ${source}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_5_0 -o ${OUTPUT_FILE} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling vertex shader ${FILENAME}"
         )
@@ -258,7 +259,7 @@ foreach(source IN LISTS SLANG_SHADERS)
         set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
         add_custom_command(
             OUTPUT ${OUTPUT_FILE}
-            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_6_0 -o ${OUTPUT_FILE} ${source}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_5_0 -o ${OUTPUT_FILE} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling fragment shader ${FILENAME}"
         )
@@ -271,14 +272,14 @@ foreach(source IN LISTS SLANG_SHADERS)
 
         add_custom_command(
             OUTPUT ${VERT_OUTPUT}
-            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_6_0 -entry vertMain -o ${VERT_OUTPUT} ${source}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_5_0 -entry vertMain -o ${VERT_OUTPUT} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling combined shader vertex entry 'vertMain' from ${FILENAME}.slang"
         )
 
         add_custom_command(
             OUTPUT ${FRAG_OUTPUT}
-            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_6_0 -entry fragMain -o ${FRAG_OUTPUT} ${source}
+            COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_5_0 -entry fragMain -o ${FRAG_OUTPUT} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling combined shader fragment entry 'fragMain' from ${FILENAME}.slang"
         )
@@ -289,7 +290,7 @@ foreach(source IN LISTS SLANG_SHADERS)
             set(FRAG_BINDLESS_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}FragBindless.spv)
             add_custom_command(
                 OUTPUT ${FRAG_BINDLESS_OUTPUT}
-                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_6_0 -entry fragMain -o ${FRAG_BINDLESS_OUTPUT} ${source}
+                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_5_0 -entry fragMain -o ${FRAG_BINDLESS_OUTPUT} ${source}
                 DEPENDS ${source} ${SLANG_DEPENDENCIES}
                 COMMENT "Compiling ${FILENAME} (Fragment Bindless)"
             )

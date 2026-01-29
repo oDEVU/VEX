@@ -52,6 +52,15 @@ namespace vex {
         try {
             log("Initialization of DearImGUI");
 
+            ImGui_ImplVulkan_LoadFunctions(m_r_context.vulkanVersion, [](const char* function_name, void* user_data) {
+                VulkanContext* ctx = reinterpret_cast<VulkanContext*>(user_data);
+
+                auto addr = vkGetDeviceProcAddr(ctx->device, function_name);
+                if (addr) return addr;
+
+                return vkGetInstanceProcAddr(ctx->instance, function_name);
+            }, &m_r_context);
+
             volatile auto forceLink = ImGuizmo::BeginFrame;
 
             IMGUI_CHECKVERSION();

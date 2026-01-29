@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cstdint>
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 1
 
@@ -109,6 +110,9 @@ namespace vex {
         std::unique_ptr<VulkanPipeline> m_p_fullscreenPipeline;
         std::unique_ptr<MeshManager> m_p_meshManager;
         std::unique_ptr<Renderer> m_p_renderer;
+
+        uint32_t GetBestDeviceVersion();
+        bool CheckValidationLayerSupport();
 
         #if DEBUG
             std::unique_ptr<VulkanPipeline> m_p_debugPipeline;

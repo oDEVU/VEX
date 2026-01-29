@@ -14,10 +14,65 @@
 #include "../../HardwareInfo.hpp"
 
 namespace vex {
-    Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo, VirtualFileSystem* vfs) : m_p_window(window), m_vfs(vfs) {
-        constexpr uint32_t apiVersion = VK_API_VERSION_1_3;
 
-        m_context.currentRenderResolution = initialResolution;
+bool Interface::CheckValidationLayerSupport() {
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+    for (const auto& layerProperties : availableLayers) {
+        if (strcmp("VK_LAYER_KHRONOS_validation", layerProperties.layerName) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+uint32_t Interface::GetBestDeviceVersion() {
+    uint32_t bestVersion = VK_API_VERSION_1_0;
+
+    VkApplicationInfo appInfo = { VK_STRUCTURE_TYPE_APPLICATION_INFO };
+    appInfo.apiVersion = VK_API_VERSION_1_0;
+    appInfo.pApplicationName = "VEX_PROBE";
+    appInfo.pEngineName = "VEX_PROBE";
+
+    VkInstanceCreateInfo createInfo = { VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
+    createInfo.pApplicationInfo = &appInfo;
+
+    VkInstance probeInstance = VK_NULL_HANDLE;
+    if (vkCreateInstance(&createInfo, nullptr, &probeInstance) != VK_SUCCESS) {
+        return VK_API_VERSION_1_1;
+    }
+
+    volkLoadInstance(probeInstance);
+
+    uint32_t gpuCount = 0;
+    vkEnumeratePhysicalDevices(probeInstance, &gpuCount, nullptr);
+
+    if (gpuCount > 0) {
+        std::vector<VkPhysicalDevice> devices(gpuCount);
+        vkEnumeratePhysicalDevices(probeInstance, &gpuCount, devices.data());
+
+        for (const auto& device : devices) {
+            VkPhysicalDeviceProperties props;
+            vkGetPhysicalDeviceProperties(device, &props);
+
+            if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+                if (props.apiVersion > bestVersion) {
+                    bestVersion = props.apiVersion;
+                }
+            } else if (bestVersion == VK_API_VERSION_1_0) {
+                bestVersion = props.apiVersion;
+            }
+        }
+    }
+
+    vkDestroyInstance(probeInstance, nullptr);
+    return bestVersion;
+}
+
+    Interface::Interface(SDL_Window* window, glm::uvec2 initialResolution, GameInfo gInfo, VirtualFileSystem* vfs) : m_p_window(window), m_vfs(vfs) {
 
         try {
 
@@ -28,6 +83,27 @@ namespace vex {
 
         log("Initializing Volk...");
         volkInitializeCustom(reinterpret_cast<PFN_vkGetInstanceProcAddr>(SDL_Vulkan_GetVkGetInstanceProcAddr()));
+
+        uint32_t loaderVersion = VK_API_VERSION_1_0;
+        if (vkEnumerateInstanceVersion) {
+            vkEnumerateInstanceVersion(&loaderVersion);
+        }
+
+        uint32_t deviceVersion = GetBestDeviceVersion();
+
+        uint32_t apiVersion = std::min(loaderVersion, deviceVersion);
+
+        if (apiVersion > VK_API_VERSION_1_3) {
+            apiVersion = VK_API_VERSION_1_3;
+        }
+
+        log("API Negotiation: Loader %u.%u | Device %u.%u -> Selected %u.%u",
+                    VK_VERSION_MAJOR(loaderVersion), VK_VERSION_MINOR(loaderVersion),
+                    VK_VERSION_MAJOR(deviceVersion), VK_VERSION_MINOR(deviceVersion),
+                    VK_VERSION_MAJOR(apiVersion), VK_VERSION_MINOR(apiVersion));
+
+        m_context.vulkanVersion = apiVersion;
+        m_context.currentRenderResolution = initialResolution;
 
         log("Creating Vulkan instance...");
         uint32_t sdlExtensionCount = 0;
@@ -40,11 +116,14 @@ namespace vex {
 #endif
 
 #if DEBUG
-        const std::vector<const char*> validationLayers = {
-            "VK_LAYER_KHRONOS_validation"
-        };
+    std::vector<const char*> validationLayers;
+    if (CheckValidationLayerSupport()) {
+        validationLayers.push_back("VK_LAYER_KHRONOS_validation");
+    } else {
+        log(LogLevel::WARNING, "Validation layers requested but not available!");
+    }
 #else
-        const std::vector<const char*> validationLayers;
+    const std::vector<const char*> validationLayers;
 #endif
 
         VkApplicationInfo appInfo = {};
@@ -97,9 +176,81 @@ namespace vex {
             log("Avaiable GPU (%s): %s", deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU ? "DISCRETE" : "INTEGRATED",  deviceProperties.deviceName);
             int score = 0;
 
+            bool hasCore13 = deviceProperties.apiVersion >= VK_API_VERSION_1_3;
+
+            uint32_t extCount;
+            vkEnumerateDeviceExtensionProperties(device, nullptr, &extCount, nullptr);
+            std::vector<VkExtensionProperties> availableExtensions(extCount);
+            vkEnumerateDeviceExtensionProperties(device, nullptr, &extCount, availableExtensions.data());
+
+            bool hasKHR = false;
+            for (const auto& ext : availableExtensions) {
+                if (strcmp(ext.extensionName, VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME) == 0) {
+                    hasKHR = true;
+                    break;
+                }
+            }
+
+            if (!hasCore13 && !hasKHR) {
+                log("Skipping GPU %s due to lack of Vulkan 1.3 or KHR dynamic rendering extension", deviceProperties.deviceName);
+                continue;
+            }
+
+            uint32_t formatCount;
+            vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_context.surface, &formatCount, nullptr);
+
+            uint32_t presentModeCount;
+            vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_context.surface, &presentModeCount, nullptr);
+
+            if (formatCount == 0 || presentModeCount == 0) {
+                log("Skipping GPU %s due to lack of formats or present modes", deviceProperties.deviceName);
+                continue;
+            }
+
+            bool legacySufficient = deviceProperties.limits.maxPerStageDescriptorSampledImages >= MAX_TEXTURES;
+
+            bool bindlessSufficient = false;
+
+            if (deviceProperties.apiVersion >= VK_API_VERSION_1_2 && apiVersion >= VK_API_VERSION_1_2) {
+                VkPhysicalDeviceDescriptorIndexingProperties indexingProps = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES };
+                VkPhysicalDeviceProperties2 props2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
+                props2.pNext = &indexingProps;
+                vkGetPhysicalDeviceProperties2(device, &props2);
+
+                if (indexingProps.maxPerStageDescriptorUpdateAfterBindSampledImages >= MAX_TEXTURES) {
+                    bindlessSufficient = true;
+                }
+
+                if (!legacySufficient && !bindlessSufficient) {
+                    log("Skipping GPU %s due to Legacy texture limit (%u) and Bindless texture limit (%u) being both too low for MAX_TEXTURES (%u)",
+                        deviceProperties.deviceName,
+                        deviceProperties.limits.maxPerStageDescriptorSampledImages,
+                        indexingProps.maxPerStageDescriptorUpdateAfterBindSampledImages,
+                        MAX_TEXTURES);
+                    continue;
+                }
+            }else{
+                if (!legacySufficient) {
+                    log("Skipping GPU %s due to texture limit (%u) being too low for MAX_TEXTURES (%u)",
+                        deviceProperties.deviceName,
+                        deviceProperties.limits.maxPerStageDescriptorSampledImages,
+                        MAX_TEXTURES);
+                    continue;
+                }
+            }
+
+
             if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
             {
                 score += 1000;
+            }
+
+            if (bindlessSufficient){
+                score += 500;
+            }
+
+            if (hasCore13){
+                score += 250;
             }
 
             uint32_t queueFamilyCount = 0;
@@ -111,20 +262,21 @@ namespace vex {
 
             int i = 0;
             for (const auto& queueFamily : queueFamilies) {
-                if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+                bool hasGraphics = queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT;
+                VkBool32 hasPresent = false;
+                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_context.surface, &hasPresent);
+
+                if (hasGraphics && hasPresent) {
+                    graphicsIdx = i;
+                    presentIdx = i;
+                    break;
+                }
+
+                if (hasGraphics && graphicsIdx == UINT32_MAX) {
                     graphicsIdx = i;
                 }
-
-                VkBool32 presentSupport = false;
-                vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_context.surface, &presentSupport);
-
-                if (presentSupport) {
+                if (hasPresent && presentIdx == UINT32_MAX) {
                     presentIdx = i;
-                }
-
-                if (graphicsIdx != UINT32_MAX && presentIdx != UINT32_MAX)
-                {
-                    break;
                 }
                 i++;
             }
@@ -141,13 +293,12 @@ namespace vex {
             }
         }
 
+        VkPhysicalDeviceProperties deviceProperties;
+
         if (selectedDevice != VK_NULL_HANDLE)
         {
-            VkPhysicalDeviceProperties deviceProperties;
             vkGetPhysicalDeviceProperties(selectedDevice, &deviceProperties);
-
             log("Selected GPU: %s", deviceProperties.deviceName);
-
             m_context.physicalDevice = selectedDevice;
         }
 
@@ -170,12 +321,30 @@ namespace vex {
 
         std::vector<const char*> deviceExtensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-            VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME,
             VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME
-#ifdef __APPLE__
-            , VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
-#endif
         };
+
+        uint32_t extCount = 0;
+        vkEnumerateDeviceExtensionProperties(m_context.physicalDevice, nullptr, &extCount, nullptr);
+        std::vector<VkExtensionProperties> availableExts(extCount);
+        vkEnumerateDeviceExtensionProperties(m_context.physicalDevice, nullptr, &extCount, availableExts.data());
+
+        for(const auto& ext : availableExts) {
+            if(strcmp(ext.extensionName, "VK_KHR_portability_subset") == 0) {
+                deviceExtensions.push_back("VK_KHR_portability_subset");
+                break;
+            }
+        }
+
+        if (apiVersion < VK_API_VERSION_1_3) {
+            deviceExtensions.push_back(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
+            deviceExtensions.push_back(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME);
+            deviceExtensions.push_back(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME);
+        }
+
+        if (apiVersion < VK_API_VERSION_1_2) {
+            deviceExtensions.push_back("VK_EXT_descriptor_indexing");
+        }
 
         VkPhysicalDeviceFeatures2 deviceFeatures2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 };
         VkPhysicalDeviceVulkan11Features features11 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES };
@@ -184,12 +353,26 @@ namespace vex {
         VkPhysicalDeviceMultiDrawFeaturesEXT multiDrawFeatures = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MULTI_DRAW_FEATURES_EXT };
         VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendedDynamicState2Features = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT };
 
-        deviceFeatures2.pNext = &features11;
-        features11.pNext = &features12;
-        features12.pNext = &dynamicRenderingFeatures;
-        dynamicRenderingFeatures.pNext = &multiDrawFeatures;
-        multiDrawFeatures.pNext = &extendedDynamicState2Features;
-        extendedDynamicState2Features.pNext = nullptr;
+        void** tail = &deviceFeatures2.pNext;
+
+        *tail = &features11;
+        tail = &features11.pNext;
+
+        if (apiVersion >= VK_API_VERSION_1_2) {
+            *tail = &features12;
+            tail = &features12.pNext;
+        }
+
+        *tail = &dynamicRenderingFeatures;
+        tail = &dynamicRenderingFeatures.pNext;
+
+        *tail = &multiDrawFeatures;
+        tail = &multiDrawFeatures.pNext;
+
+        *tail = &extendedDynamicState2Features;
+        tail = &extendedDynamicState2Features.pNext;
+
+        *tail = nullptr;
 
         vkGetPhysicalDeviceFeatures2(m_context.physicalDevice, &deviceFeatures2);
 
@@ -217,24 +400,58 @@ namespace vex {
             m_context.supportsShaderDrawParameters = false;
         }
 
-        if (features12.descriptorBindingPartiallyBound &&
-            features12.runtimeDescriptorArray &&
-            features12.shaderSampledImageArrayNonUniformIndexing &&
-            features12.descriptorBindingSampledImageUpdateAfterBind) {
+        if (apiVersion >= VK_API_VERSION_1_2) {
+            VkPhysicalDeviceDescriptorIndexingProperties indexingProps = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES };
+            VkPhysicalDeviceProperties2 props2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
+            props2.pNext = &indexingProps;
+            vkGetPhysicalDeviceProperties2(m_context.physicalDevice, &props2);
 
-            m_context.supportsBindlessTextures = true;
+            const uint32_t REQUIRED_BINDLESS_COUNT = MAX_TEXTURES;
+            uint32_t samplerLimit = indexingProps.maxPerStageDescriptorUpdateAfterBindSamplers;
+            uint32_t imageLimit = indexingProps.maxPerStageDescriptorUpdateAfterBindSampledImages;
 
-            features12.descriptorBindingPartiallyBound = VK_TRUE;
-            features12.runtimeDescriptorArray = VK_TRUE;
-            features12.shaderSampledImageArrayNonUniformIndexing = VK_TRUE;
-            features12.descriptorBindingSampledImageUpdateAfterBind = VK_TRUE;
+            log("Bindless Limits -> Samplers: %u | Images: %u (Req: %u)", samplerLimit, imageLimit, REQUIRED_BINDLESS_COUNT);
+
+            if (imageLimit < REQUIRED_BINDLESS_COUNT || samplerLimit < REQUIRED_BINDLESS_COUNT) {
+                log(LogLevel::WARNING, "Device limits too low. Forcing Bindless OFF to prevent validation errors.");
+                m_context.supportsBindlessTextures = false;
+            } else {
+                m_context.supportsBindlessTextures =
+                    features12.descriptorBindingPartiallyBound &&
+                    features12.runtimeDescriptorArray;
+            }
         } else {
             m_context.supportsBindlessTextures = false;
+        }
 
-            features12.descriptorBindingPartiallyBound = VK_FALSE;
-            features12.runtimeDescriptorArray = VK_FALSE;
-            features12.shaderSampledImageArrayNonUniformIndexing = VK_FALSE;
-            log(LogLevel::WARNING, "Bindless textures not supported.");
+        if (apiVersion >= VK_API_VERSION_1_2) {
+            if (m_context.supportsBindlessTextures) {
+                features12.descriptorBindingPartiallyBound = VK_TRUE;
+                features12.runtimeDescriptorArray = VK_TRUE;
+                features12.shaderSampledImageArrayNonUniformIndexing = VK_TRUE;
+                features12.descriptorBindingSampledImageUpdateAfterBind = VK_TRUE;
+                features12.descriptorBindingVariableDescriptorCount = VK_TRUE;
+            } else {
+                features12.descriptorBindingPartiallyBound = VK_FALSE;
+                features12.runtimeDescriptorArray = VK_FALSE;
+                features12.shaderSampledImageArrayNonUniformIndexing = VK_FALSE;
+                features12.descriptorBindingVariableDescriptorCount = VK_FALSE;
+
+                features12.descriptorBindingSampledImageUpdateAfterBind = VK_FALSE;
+                features12.descriptorBindingStorageImageUpdateAfterBind = VK_FALSE;
+
+                features12.descriptorBindingUniformBufferUpdateAfterBind = VK_FALSE;
+                features12.descriptorBindingStorageBufferUpdateAfterBind = VK_FALSE;
+                features12.descriptorBindingUniformTexelBufferUpdateAfterBind = VK_FALSE;
+                features12.descriptorBindingStorageTexelBufferUpdateAfterBind = VK_FALSE;
+            }
+
+            if (deviceFeatures2.features.robustBufferAccess) {
+                features12.descriptorBindingUniformBufferUpdateAfterBind = VK_FALSE;
+                features12.descriptorBindingStorageBufferUpdateAfterBind = VK_FALSE;
+                features12.descriptorBindingUniformTexelBufferUpdateAfterBind = VK_FALSE;
+                features12.descriptorBindingStorageTexelBufferUpdateAfterBind = VK_FALSE;
+            }
         }
 
         if (dynamicRenderingFeatures.dynamicRendering) {
@@ -285,8 +502,16 @@ namespace vex {
             throw_error("Failed to create logical device");
         }
 
+        uint32_t deviceApiVersion = deviceProperties.apiVersion;
+
+        uint32_t major = VK_VERSION_MAJOR(deviceApiVersion);
+        uint32_t minor = VK_VERSION_MINOR(deviceApiVersion);
+        uint32_t patch = VK_VERSION_PATCH(deviceApiVersion);
+
         log(" ======= Supported Features =======");
         log("GPU:");
+        log("Vulkan Device API version: %u.%u.%u", major, minor, patch);
+        log("Vulkan Requested API version: %u.%u", VK_VERSION_MAJOR(apiVersion), VK_VERSION_MINOR(apiVersion));
         log("supportsMultiDraw: %s", m_context.supportsMultiDraw ? "true" : "false");
         log("supportsIndirectDraw: %s", m_context.supportsIndirectDraw ? "true" : "false");
         log("supportsBindlessTextures: %s", m_context.supportsBindlessTextures ? "true" : "false");
@@ -296,6 +521,18 @@ namespace vex {
         log(" ==================================");
 
         volkLoadDevice(m_context.device);
+
+        if (apiVersion < VK_API_VERSION_1_3) {
+            if (!vkCmdBeginRendering) {
+                vkCmdBeginRendering = reinterpret_cast<PFN_vkCmdBeginRendering>(vkGetDeviceProcAddr(m_context.device, "vkCmdBeginRenderingKHR"));
+            }
+            if (!vkCmdEndRendering) {
+                vkCmdEndRendering = reinterpret_cast<PFN_vkCmdEndRendering>(vkGetDeviceProcAddr(m_context.device, "vkCmdEndRenderingKHR"));
+            }
+            if (!vkCmdPipelineBarrier2) {
+                vkCmdPipelineBarrier2 = reinterpret_cast<PFN_vkCmdPipelineBarrier2>(vkGetDeviceProcAddr(m_context.device, "vkCmdPipelineBarrier2KHR"));
+            }
+        }
 
         vkGetDeviceQueue(m_context.device, m_context.graphicsQueueFamily, 0, &m_context.graphicsQueue);
         vkGetDeviceQueue(m_context.device, m_context.presentQueueFamily, 0, &m_context.presentQueue);
