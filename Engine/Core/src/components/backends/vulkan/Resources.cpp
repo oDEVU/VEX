@@ -213,16 +213,29 @@ namespace vex {
         imageDescInfo.sampler = m_textureSampler;
         imageDescInfo.imageView = textureView;
 
-        for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
+        if (m_r_context.supportsBindlessTextures) {
             VkWriteDescriptorSet write{};
             write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = getTextureDescriptorSet(frame, m_r_context.textureIndices[name]);
+            write.dstSet = m_r_context.bindlessDescriptorSet;
             write.dstBinding = 0;
+            write.dstArrayElement = m_r_context.textureIndices[name];
             write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             write.descriptorCount = 1;
             write.pImageInfo = &imageDescInfo;
 
             vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+        } else {
+            for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
+                VkWriteDescriptorSet write{};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = getTextureDescriptorSet(frame, m_r_context.textureIndices[name]);
+                write.dstBinding = 0;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                write.descriptorCount = 1;
+                write.pImageInfo = &imageDescInfo;
+
+                vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+            }
         }
     }
 
@@ -271,75 +284,81 @@ namespace vex {
 
         log("Creating Uniform buffer bindings...");
         if (vkCreateDescriptorSetLayout(m_r_context.device, &uboLayoutInfo, nullptr, &m_r_context.uboDescriptorSetLayout) != VK_SUCCESS) {
-            throw_error("Failed to create descriptor set layout");
+            throw_error("Failed to create UBO layout");
         }
 
-    VkDescriptorSetLayoutBinding texBinding{};
-    texBinding.binding = 0;
-    texBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    texBinding.descriptorCount = 1;
-    texBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        VkDescriptorSetLayoutBinding texBinding{};
+        texBinding.binding = 0;
+        texBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        texBinding.descriptorCount = 1;
+        texBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-    VkDescriptorSetLayoutCreateInfo texLayoutInfo{};
-    texLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    texLayoutInfo.bindingCount = 1;
-    texLayoutInfo.pBindings = &texBinding;
+        VkDescriptorSetLayoutCreateInfo texLayoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+        texLayoutInfo.bindingCount = 1;
+        texLayoutInfo.pBindings = &texBinding;
 
-        log("Creating Texture bindings...");
         if (vkCreateDescriptorSetLayout(m_r_context.device, &texLayoutInfo, nullptr, &m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {
-            throw_error("Failed to create descriptor set layout");
+            throw_error("Failed to create legacy texture layout");
         }
 
         if (m_r_context.supportsBindlessTextures) {
-                log("Creating Bindless Descriptor Layout...");
+            log("Initializing Texture System: BINDLESS (Global Array)");
 
-                VkDescriptorBindingFlags bindlessFlags =
-                    VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT |
-                    VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
+            VkDescriptorBindingFlags bindlessFlags = VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
 
-                VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo{};
-                bindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
-                bindingFlagsInfo.bindingCount = 1;
-                bindingFlagsInfo.pBindingFlags = &bindlessFlags;
+            VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO};
+            bindingFlagsInfo.bindingCount = 1;
+            bindingFlagsInfo.pBindingFlags = &bindlessFlags;
 
-                VkDescriptorSetLayoutBinding bindlessBinding{};
-                bindlessBinding.binding = 0;
-                bindlessBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                bindlessBinding.descriptorCount = MAX_TEXTURES;
-                bindlessBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-                bindlessBinding.pImmutableSamplers = nullptr;
+            VkDescriptorSetLayoutBinding bindlessBinding{};
+            bindlessBinding.binding = 0;
+            bindlessBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            bindlessBinding.descriptorCount = MAX_TEXTURES;
+            bindlessBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+            bindlessBinding.pImmutableSamplers = nullptr;
 
-                VkDescriptorSetLayoutCreateInfo bindlessLayoutInfo{};
-                bindlessLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-                bindlessLayoutInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT;
-                bindlessLayoutInfo.bindingCount = 1;
-                bindlessLayoutInfo.pBindings = &bindlessBinding;
-                bindlessLayoutInfo.pNext = &bindingFlagsInfo;
+            VkDescriptorSetLayoutCreateInfo bindlessLayoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+            bindlessLayoutInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT;
+            bindlessLayoutInfo.bindingCount = 1;
+            bindlessLayoutInfo.pBindings = &bindlessBinding;
+            bindlessLayoutInfo.pNext = &bindingFlagsInfo;
 
-                if (vkCreateDescriptorSetLayout(m_r_context.device, &bindlessLayoutInfo, nullptr, &m_r_context.bindlessDescriptorSetLayout) != VK_SUCCESS) {
-                    throw_error("Failed to create bindless layout");
-                }
-
-                VkDescriptorPoolSize poolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES };
-                VkDescriptorPoolCreateInfo poolInfo{};
-                poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-                poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT;
-                poolInfo.maxSets = 1;
-                poolInfo.poolSizeCount = 1;
-                poolInfo.pPoolSizes = &poolSize;
-
-                vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.bindlessDescriptorPool);
-
-                VkDescriptorSetAllocateInfo allocInfo{};
-                allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-                allocInfo.descriptorPool = m_r_context.bindlessDescriptorPool;
-                allocInfo.descriptorSetCount = 1;
-                allocInfo.pSetLayouts = &m_r_context.bindlessDescriptorSetLayout;
-
-                vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_r_context.bindlessDescriptorSet);
+            if (vkCreateDescriptorSetLayout(m_r_context.device, &bindlessLayoutInfo, nullptr, &m_r_context.bindlessDescriptorSetLayout) != VK_SUCCESS) {
+                throw_error("Failed to create bindless layout");
             }
 
-        m_r_context.descriptorSetLayout = m_descriptorSetLayout;
+            VkDescriptorPoolSize poolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES };
+            VkDescriptorPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO};
+            poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT;
+            poolInfo.maxSets = 1;
+            poolInfo.poolSizeCount = 1;
+            poolInfo.pPoolSizes = &poolSize;
+
+            vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_r_context.bindlessDescriptorPool);
+
+            VkDescriptorSetAllocateInfo allocInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO};
+            allocInfo.descriptorPool = m_r_context.bindlessDescriptorPool;
+            allocInfo.descriptorSetCount = 1;
+            allocInfo.pSetLayouts = &m_r_context.bindlessDescriptorSetLayout;
+
+            vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_r_context.bindlessDescriptorSet);
+        } else {
+            log("Initializing Texture System: LEGACY (One Set Per Texture)");
+
+            VkDescriptorSetLayoutBinding texBinding{};
+            texBinding.binding = 0;
+            texBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            texBinding.descriptorCount = 1;
+            texBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+            VkDescriptorSetLayoutCreateInfo texLayoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+            texLayoutInfo.bindingCount = 1;
+            texLayoutInfo.pBindings = &texBinding;
+
+            if (vkCreateDescriptorSetLayout(m_r_context.device, &texLayoutInfo, nullptr, &m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {
+                throw_error("Failed to create legacy texture layout");
+            }
+        }
 
         std::array<VkDescriptorPoolSize, 3> poolSizes{};
 
@@ -353,17 +372,17 @@ namespace vex {
 
         // Textures
         poolSizes[2].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[2].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_TEXTURES;
+        poolSizes[2].descriptorCount = m_r_context.supportsBindlessTextures ? 1 : (m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_TEXTURES);
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
         poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (3 + MAX_TEXTURES);
+        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (3 + (m_r_context.supportsBindlessTextures ? 0 : MAX_TEXTURES));
 
         log("Creating descriptor pool with %d max sets", poolInfo.maxSets);
         if (vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS) {
-            throw_error("Failed to create descriptor pool");
+            throw_error("Failed to create general descriptor pool");
         }
 
         std::vector<VkDescriptorSetLayout> uboLayouts(m_r_context.MAX_FRAMES_IN_FLIGHT, m_r_context.uboDescriptorSetLayout);
@@ -379,7 +398,6 @@ namespace vex {
             throw_error("Failed to allocate UBO descriptor sets");
         }
 
-        createPerMeshTextureSets();
         for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
             std::array<VkWriteDescriptorSet, 2> uboWrites{};
 
@@ -409,6 +427,10 @@ namespace vex {
 
             vkUpdateDescriptorSets(m_r_context.device, uboWrites.size(), uboWrites.data(), 0, nullptr);
         }
+
+        if (!m_r_context.supportsBindlessTextures) {
+            createPerMeshTextureSets();
+        }
     }
 
     VkDescriptorSet VulkanResources::getUBODescriptorSet(uint32_t frameIndex) const {
@@ -416,15 +438,15 @@ namespace vex {
         return m_descriptorSets[frameIndex];
     }
 
-    void VulkanResources::updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex){
+    void VulkanResources::updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex) {
         VkDescriptorImageInfo imageInfo{};
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageInfo.imageView = textureView;
         imageInfo.sampler = m_textureSampler;
 
         if (m_r_context.supportsBindlessTextures) {
-            VkWriteDescriptorSet bindlessWrite{};
-            bindlessWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            // Path A: Update the global array
+            VkWriteDescriptorSet bindlessWrite{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
             bindlessWrite.dstSet = m_r_context.bindlessDescriptorSet;
             bindlessWrite.dstBinding = 0;
             bindlessWrite.dstArrayElement = textureIndex;
@@ -433,17 +455,16 @@ namespace vex {
             bindlessWrite.pImageInfo = &imageInfo;
 
             vkUpdateDescriptorSets(m_r_context.device, 1, &bindlessWrite, 0, nullptr);
+        } else {
+            VkWriteDescriptorSet write{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+            write.dstSet = getTextureDescriptorSet(frameIndex, textureIndex);
+            write.dstBinding = 0;
+            write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            write.descriptorCount = 1;
+            write.pImageInfo = &imageInfo;
+
+            vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
         }
-
-        VkWriteDescriptorSet write{};
-        write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        write.dstSet = getTextureDescriptorSet(frameIndex, textureIndex);
-        write.dstBinding = 0;
-        write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        write.descriptorCount = 1;
-        write.pImageInfo = &imageInfo;
-
-        vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
     }
 
     void VulkanResources::updateSceneUBO(const SceneUBO& data) {
@@ -837,23 +858,22 @@ namespace vex {
             m_textureViews[name] = textureView;
 
             if (m_r_context.supportsBindlessTextures) {
-                    VkDescriptorImageInfo imageInfo{};
-                    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-                    imageInfo.imageView = textureView;
-                    imageInfo.sampler = m_textureSampler;
+                VkDescriptorImageInfo imageInfo{};
+                imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageInfo.imageView = textureView;
+                imageInfo.sampler = m_textureSampler;
 
-                    VkWriteDescriptorSet write{};
-                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    write.dstSet = m_r_context.bindlessDescriptorSet;
-                    write.dstBinding = 0;
-                    write.dstArrayElement = assignedIndex;
-                    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                    write.descriptorCount = 1;
-                    write.pImageInfo = &imageInfo;
+                VkWriteDescriptorSet write{};
+                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                write.dstSet = m_r_context.bindlessDescriptorSet;
+                write.dstBinding = 0;
+                write.dstArrayElement = assignedIndex;
+                write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                write.descriptorCount = 1;
+                write.pImageInfo = &imageInfo;
 
-                    vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
-                }
-
+                vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+            }else{
                 VkDescriptorImageInfo imageDescInfo{};
                 imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
                 imageDescInfo.sampler = m_textureSampler;
@@ -870,8 +890,9 @@ namespace vex {
 
                     vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
                 }
-                log("Updated texture descriptors for '%s'", name.c_str());
-                return true;
+            }
+            log("Updated texture descriptors for '%s'", name.c_str());
+            return true;
         }
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;
@@ -914,18 +935,18 @@ namespace vex {
                 bindlessWrite.pImageInfo = &imageInfo;
 
                 vkUpdateDescriptorSets(m_r_context.device, 1, &bindlessWrite, 0, nullptr);
-            }
+            } else {
+                for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
+                    VkWriteDescriptorSet write{};
+                    write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    write.dstSet = getTextureDescriptorSet(frame, textureIndex);
+                    write.dstBinding = 0;
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                    write.descriptorCount = 1;
+                    write.pImageInfo = &imageInfo;
 
-            for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
-                VkWriteDescriptorSet write{};
-                write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                write.dstSet = getTextureDescriptorSet(frame, textureIndex);
-                write.dstBinding = 0;
-                write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-                write.descriptorCount = 1;
-                write.pImageInfo = &imageInfo;
-
-                vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+                    vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+                }
             }
 
             m_textures.erase(name);

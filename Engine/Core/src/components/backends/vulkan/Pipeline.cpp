@@ -715,9 +715,13 @@ namespace vex {
         pushConstantRange.offset     = 0;
         pushConstantRange.size       = sizeof(UIPushConstants);
 
+        VkDescriptorSetLayout textureLayout = m_r_context.supportsBindlessTextures
+            ? m_r_context.bindlessDescriptorSetLayout
+            : m_r_context.textureDescriptorSetLayout;
+
         std::array<VkDescriptorSetLayout, 2> setLayouts = {
             m_r_context.uboDescriptorSetLayout,
-            m_r_context.textureDescriptorSetLayout
+            textureLayout
         };
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};

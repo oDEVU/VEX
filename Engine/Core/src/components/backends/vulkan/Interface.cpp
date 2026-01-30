@@ -207,46 +207,10 @@ uint32_t Interface::GetBestDeviceVersion() {
                 continue;
             }
 
-            bool legacySufficient = deviceProperties.limits.maxPerStageDescriptorSampledImages >= MAX_TEXTURES;
-
-            bool bindlessSufficient = false;
-
-            if (deviceProperties.apiVersion >= VK_API_VERSION_1_2 && apiVersion >= VK_API_VERSION_1_2) {
-                VkPhysicalDeviceDescriptorIndexingProperties indexingProps = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES };
-                VkPhysicalDeviceProperties2 props2 = { VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2 };
-                props2.pNext = &indexingProps;
-                vkGetPhysicalDeviceProperties2(device, &props2);
-
-                if (indexingProps.maxPerStageDescriptorUpdateAfterBindSampledImages >= MAX_TEXTURES) {
-                    bindlessSufficient = true;
-                }
-
-                if (!legacySufficient && !bindlessSufficient) {
-                    log("Skipping GPU %s due to Legacy texture limit (%u) and Bindless texture limit (%u) being both too low for MAX_TEXTURES (%u)",
-                        deviceProperties.deviceName,
-                        deviceProperties.limits.maxPerStageDescriptorSampledImages,
-                        indexingProps.maxPerStageDescriptorUpdateAfterBindSampledImages,
-                        MAX_TEXTURES);
-                    continue;
-                }
-            }else{
-                if (!legacySufficient) {
-                    log("Skipping GPU %s due to texture limit (%u) being too low for MAX_TEXTURES (%u)",
-                        deviceProperties.deviceName,
-                        deviceProperties.limits.maxPerStageDescriptorSampledImages,
-                        MAX_TEXTURES);
-                    continue;
-                }
-            }
-
 
             if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
             {
                 score += 1000;
-            }
-
-            if (bindlessSufficient){
-                score += 500;
             }
 
             if (hasCore13){
@@ -645,9 +609,14 @@ uint32_t Interface::GetBestDeviceVersion() {
         uiAttrs[2] = {2, 0, VK_FORMAT_R32G32B32A32_SFLOAT,offsetof(UIVertex, color)};
         uiAttrs[3] = {3, 0, VK_FORMAT_R32_SFLOAT,         offsetof(UIVertex, texIndex)};
 
+
+        std::string UiFrag = m_context.supportsBindlessTextures
+                                 ? "Engine/shaders/UiFragBindless.spv"
+                                 : "Engine/shaders/UiFrag.spv";
+
         m_p_uiPipeline->createUIPipeline(
             "Engine/shaders/UiVert.spv",
-            "Engine/shaders/UiFrag.spv",
+            UiFrag,
             uiBinding,
             uiAttrs
         );

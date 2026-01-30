@@ -208,6 +208,7 @@ set(BINDLESS_ELIGIBLE_SHADERS
     "Opaque"
     "Masked"
     "Transparent"
+    "Ui"
 )
 
 set(SPV_SHADERS "")

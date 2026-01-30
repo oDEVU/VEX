@@ -701,8 +701,6 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
 
     VkDescriptorSet globalUBO = m_res->getUBODescriptorSet(currentFrame);
         if (globalUBO != VK_NULL_HANDLE) {
-            // We must provide an offset because Binding 1 is DYNAMIC.
-            // We use 0 since the UI doesn't actually read lights, but the API demands a valid offset.
             uint32_t dynamicOffset = 0;
 
             vkCmdBindDescriptorSets(
@@ -711,7 +709,7 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
                 pipelineLayout,
                 0,
                 1, &globalUBO,
-                1, &dynamicOffset // <--- Changed from 0, nullptr
+                1, &dynamicOffset
             );
         }
 
@@ -744,6 +742,8 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
     int currentTexIndex = INT_MIN;
     VkDescriptorSet currentTexSet = VK_NULL_HANDLE;
 
+    bool useBindless = m_ctx.supportsBindlessTextures;
+
     while (currentVertex < totalVertices) {
         uint32_t quadStart = currentVertex * floatsPerVertex;
         float texIndexFloat = verts[quadStart + 8];
@@ -753,20 +753,22 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
         if (texIndex != currentTexIndex) {
             currentTexIndex = texIndex;
 
-            if (texIndex >= 0) {
-                currentTexSet = m_res->getTextureDescriptorSet(currentFrame, texIndex);
-            } else {
-                currentTexSet = m_res->getTextureDescriptorSet(currentFrame, 0);
-            }
+            if (!useBindless) {
+                if (texIndex >= 0) {
+                    currentTexSet = m_res->getTextureDescriptorSet(currentFrame, texIndex);
+                } else {
+                    currentTexSet = m_res->getTextureDescriptorSet(currentFrame, 0);
+                }
 
-            vkCmdBindDescriptorSets(
-                cmd,
-                VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipelineLayout,
-                1,
-                1, &currentTexSet,
-                0, nullptr
-            );
+                vkCmdBindDescriptorSets(
+                    cmd,
+                    VK_PIPELINE_BIND_POINT_GRAPHICS,
+                    pipelineLayout,
+                    1,
+                    1, &currentTexSet,
+                    0, nullptr
+                );
+            }
         }
 
         vkCmdDraw(cmd, 6, 1, currentVertex, 0);
