@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <cstdint>
+#include <string>
 
 #ifdef _MSC_VER
     #include <intrin.h>
@@ -11,12 +12,13 @@
 namespace vex {
     class HardwareInfo {
     public:
-        static bool HasAVX2() {
-            static bool supported = CheckHardwareSupport();
-            return supported;
-        }
+        static bool HasAVX2();
+        static std::string GetGPUName();
+        static void SetGPUName(const std::string& name);
 
     private:
+        static std::string GPUName;
+
         static void CpuId(int info[4], int function_id) {
             #ifdef _MSC_VER
                 __cpuidex(info, function_id, 0);
@@ -30,28 +32,6 @@ namespace vex {
             #endif
         }
 
-        static bool CheckHardwareSupport() {
-            int info[4];
-            CpuId(info, 1);
-
-            bool osUsesXSAVE_XRSTORE = (info[2] & (1 << 27)) != 0;
-            bool cpuHasAVX = (info[2] & (1 << 28)) != 0;
-
-            if (!osUsesXSAVE_XRSTORE || !cpuHasAVX) return false;
-
-            unsigned long long xcrFeatureMask = 0;
-            #ifdef _MSC_VER
-                xcrFeatureMask = _xgetbv(_XCR_XFEATURE_ENABLED_MASK);
-            #else
-                __asm__ ("xgetbv" : "=A" (xcrFeatureMask) : "c" (0));
-            #endif
-
-            if ((xcrFeatureMask & 0x6) != 0x6) return false;
-
-            CpuId(info, 7);
-            bool cpuHasAVX2 = (info[1] & (1 << 5)) != 0;
-
-            return cpuHasAVX2;
-        }
+        static bool CheckHardwareSupport();
     };
 }

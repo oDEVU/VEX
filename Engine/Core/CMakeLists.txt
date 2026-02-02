@@ -119,6 +119,8 @@ set(source_files
         src/components/pathUtils.cpp
         src/components/Window.cpp
         src/components/Window.hpp
+        src/components/HardwareInfo.cpp
+        src/components/HardwareInfo.hpp
         src/components/VirtualFileSystem.cpp
         src/components/AudioSystem.cpp
         src/components/InputSystem.cpp

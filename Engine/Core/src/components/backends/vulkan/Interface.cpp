@@ -263,6 +263,7 @@ uint32_t Interface::GetBestDeviceVersion() {
         {
             vkGetPhysicalDeviceProperties(selectedDevice, &deviceProperties);
             log("Selected GPU: %s", deviceProperties.deviceName);
+            HardwareInfo::SetGPUName(deviceProperties.deviceName);
             m_context.physicalDevice = selectedDevice;
         }
 
