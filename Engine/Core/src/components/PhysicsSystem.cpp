@@ -184,74 +184,75 @@ namespace vex {
     void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;
 
-        auto charView = m_registry.view<CharacterComponent, TransformComponent>();
+        // 1. Sync PhysicsComponents to Jolt (Your existing lines 179-195)
+            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
+            auto view = m_registry.view<PhysicsComponent, TransformComponent>();
+            for (auto e : view) {
+                auto& tc = view.get<TransformComponent>(e);
+                auto& pc = view.get<PhysicsComponent>(e);
+                if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) {
+                    CreateBodyForEntity(e, m_registry, pc);
+                    continue;
+                }
+                if (tc.transformedLately()) {
+                    JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
+                    JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
+                    bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
+                    tc.updatedPhysicsTransform();
+                }
+            }
+
+            m_accumulator += deltaTime;
+
+            auto charView = m_registry.view<CharacterComponent, TransformComponent>();
+
+            while (m_accumulator >= m_fixedDt) {
+                for (auto e : charView) {
+                    auto& cc = charView.get<CharacterComponent>(e);
+                    auto& tc = charView.get<TransformComponent>(e);
+
+                    if (!cc.isInitialized()) InitializeCharacter(e, cc);
+
+                    if (tc.transformedLately()) {
+                        cc.character->SetPosition(JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z));
+                    }
+
+                    JPH::Vec3 currentVelocity = cc.character->GetLinearVelocity();
+
+                    float newVerticalVel = currentVelocity.GetY() + m_physicsSystem->GetGravity().GetY() * m_fixedDt;
+                    if (cc.character->IsSupported()) {
+                        newVerticalVel = std::max(0.0f, newVerticalVel);
+                    }
+
+                    JPH::Vec3 finalVelocity(cc.controlInput.x, (newVerticalVel + cc.controlInput.y), cc.controlInput.z);
+                    cc.character->SetLinearVelocity(finalVelocity);
+
+                    JPH::CharacterVirtual::ExtendedUpdateSettings updateSettings;
+                    JPH::ObjectLayer charLayer = 0;
+
+                    cc.character->ExtendedUpdate(
+                        m_fixedDt,
+                        m_physicsSystem->GetGravity(),
+                        updateSettings,
+                        m_physicsSystem->GetDefaultBroadPhaseLayerFilter(charLayer),
+                        m_physicsSystem->GetDefaultLayerFilter(charLayer),
+                        {}, {}, *m_tempAllocator
+                    );
+
+                    JPH::RVec3 newPos = cc.character->GetPosition();
+                    tc.setWorldPositionPhys(glm::vec3(newPos.GetX(), newPos.GetY(), newPos.GetZ()));
+
+                    tc.updatedPhysicsTransform();
+                }
+
+                m_physicsSystem->Update(m_fixedDt, collisionSteps, m_tempAllocator, m_jobSystem);
+                m_accumulator -= m_fixedDt;
+            }
+
             for (auto e : charView) {
                 auto& cc = charView.get<CharacterComponent>(e);
-                auto& tc = charView.get<TransformComponent>(e);
-
-                if (!cc.isInitialized()) {
-                    InitializeCharacter(e, cc);
-                }
-
-                if (tc.transformedLately()) {
-                    cc.character->SetPosition(JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z));
-                }
-
-                JPH::Vec3 currentVelocity = cc.character->GetLinearVelocity();
-
-                float newVerticalVel = currentVelocity.GetY() + m_physicsSystem->GetGravity().GetY() * deltaTime;
-                if (cc.character->IsSupported()) {
-                    newVerticalVel = std::max(0.0f, newVerticalVel);
-                }
-
-                JPH::Vec3 finalVelocity(cc.controlInput.x, ( newVerticalVel + cc.controlInput.y ), cc.controlInput.z);
-
-                cc.character->SetLinearVelocity(finalVelocity);
-
-                JPH::CharacterVirtual::ExtendedUpdateSettings updateSettings;
-                JPH::ObjectLayer charLayer = 0;
-
-                cc.character->ExtendedUpdate(
-                    deltaTime,
-                    m_physicsSystem->GetGravity(),
-                    updateSettings,
-                    m_physicsSystem->GetDefaultBroadPhaseLayerFilter(charLayer),
-                    m_physicsSystem->GetDefaultLayerFilter(charLayer),
-                    {},
-                    {},
-                    *m_tempAllocator
-                );
-
-                JPH::RVec3 newPos = cc.character->GetPosition();
-                tc.setWorldPositionPhys(glm::vec3(newPos.GetX(), newPos.GetY(), newPos.GetZ()));
-
-                tc.updatedPhysicsTransform();
                 cc.controlInput = glm::vec3(0.0f);
             }
-
-        auto& bodyInterface = m_physicsSystem->GetBodyInterface();
-        auto view = m_registry.view<PhysicsComponent, TransformComponent>();
-        for (auto e : view) {
-            auto& tc = view.get<TransformComponent>(e);
-            auto& pc = view.get<PhysicsComponent>(e);
-            if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) {
-                CreateBodyForEntity(e, m_registry, pc);
-                continue;
-            }
-            if (tc.transformedLately()) {
-                JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
-                JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
-                    bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
-                tc.updatedPhysicsTransform();
-            }
-        }
-
-        m_accumulator += deltaTime;
-
-        while (m_accumulator >= m_fixedDt) {
-            m_physicsSystem->Update(m_fixedDt, collisionSteps, m_tempAllocator, m_jobSystem);
-            m_accumulator -= m_fixedDt;
-        }
 
         #ifdef VEX_HAS_PARALLEL_EXECUTION
             if(view.size_hint() > 64){

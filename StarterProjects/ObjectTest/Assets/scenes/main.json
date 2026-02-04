@@ -25,10 +25,12 @@
         },
         "shading": {
             "affineTextureWarping": true,
-            "colorQuantization": true,
             "gouraud": true,
             "ntfsArtifacts": true,
             "passiveVertexJitter": true,
+            "screenDither": true,
+            "screenQuantization": true,
+            "textureQuantization": true,
             "vertexSnapping": true
         }
     },
@@ -86,6 +88,7 @@
                     ],
                     "path": "Assets/human.obj",
                     "renderType": 0,
+                    "textureOverrides": [],
                     "type": "vex::MeshComponent"
                 }
             ],
