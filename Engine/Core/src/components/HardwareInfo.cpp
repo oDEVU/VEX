@@ -5,6 +5,14 @@
 #include <vector>
 #include <algorithm>
 
+#ifdef _WIN32
+    #include <io.h>
+    #define WRITE_FUNC _write
+#else
+    #include <unistd.h>
+    #define WRITE_FUNC write
+#endif
+
 #define V_MAJOR(v) ((v) >> 22)
 #define V_MINOR(v) (((v) >> 12) & 0x3FF)
 #define V_PATCH(v) ((v) & 0xFFF)
@@ -18,6 +26,47 @@ std::string HardwareInfo::DriverVersion = "Unknown";
 std::string HardwareInfo::VulkanDeviceVersion = "0.0.0";
 std::string HardwareInfo::VulkanRequestedVersion = "0.0.0";
 VulkanFeatures HardwareInfo::GPUFeatures = {};
+
+void HardwareInfo::PrintCrashDump(int fd) {
+    if (fd < 0) return;
+
+    auto safe_write = [fd](const char* label, const std::string& val) {
+        if (!label) return;
+        WRITE_FUNC(fd, label, strlen(label));
+        if (!val.empty()) {
+            WRITE_FUNC(fd, val.c_str(), val.length());
+        } else {
+            WRITE_FUNC(fd, "Unknown", 7);
+        }
+        WRITE_FUNC(fd, "\n", 1);
+    };
+
+    auto safe_write_bool = [fd](const char* label, bool val) {
+        WRITE_FUNC(fd, label, strlen(label));
+        if (val) WRITE_FUNC(fd, "YES\n", 4);
+        else WRITE_FUNC(fd, "NO\n", 3);
+    };
+
+    const char* header = "\n=== SYSTEM INFO ===\n";
+    WRITE_FUNC(fd, header, strlen(header));
+
+    if(CPUName.empty()) DetectCPUName();
+    if(SystemMemory.empty()) DetectSystemMemory();
+
+    safe_write("CPU:                 ", CPUName);
+    safe_write("RAM:                 ", SystemMemory);
+    safe_write_bool("AVX2:                ", HasAVX2());
+
+    safe_write("GPU:                 ", GPUName);
+    safe_write("Driver:              ", DriverVersion);
+    safe_write("Vulkan Device:       ", VulkanDeviceVersion);
+    safe_write("Vulkan Requested:    ", VulkanRequestedVersion);
+
+    safe_write_bool("Feat: MultiDraw:     ", GPUFeatures.multiDraw);
+    safe_write_bool("Feat: Indirect:      ", GPUFeatures.indirectDraw);
+    safe_write_bool("Feat: Bindless:      ", GPUFeatures.bindlessTextures);
+    safe_write_bool("Feat: Shader Params: ", GPUFeatures.shaderDrawParameters);
+}
 
 static std::string DecodeDriverVersion(uint32_t vendorID, uint32_t v) {
     if (vendorID == 0x10DE) {

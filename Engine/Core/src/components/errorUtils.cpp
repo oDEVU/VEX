@@ -1,5 +1,6 @@
 #include "components/errorUtils.hpp"
 #include "components/pathUtils.hpp"
+#include "components/HardwareInfo.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -225,6 +226,9 @@ namespace vex {
             }
 
             DumpRegisters(fd, context);
+
+            HardwareInfo::PrintCrashDump(fd);
+
             DumpProcessMap(fd);
 
             SafeWriteStr(fd, "\n--- RECENT LOGS ---\n");

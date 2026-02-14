@@ -35,6 +35,8 @@ namespace vex {
 
         static void SetVulkanFeatures(const VulkanFeatures& features);
         static VulkanFeatures GetVulkanFeatures();
+
+        static void PrintCrashDump(int fd);
     private:
         static std::string CPUName;
         static std::string SystemMemory;
