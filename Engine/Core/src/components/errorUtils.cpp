@@ -18,12 +18,15 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <thread>
 
 #if defined(_WIN32)
+    #include <shellapi.h>
     #include <windows.h>
     #include <psapi.h>
     #include <io.h>
     #define WRITE_FUNC _write
+    #define SYNC_FUNC _commit
     #define OPEN_FUNC _open
     #define CLOSE_FUNC _close
     #define READ_FUNC _read
@@ -35,6 +38,7 @@
     #include <ucontext.h>
     #include <unistd.h>
     #define WRITE_FUNC write
+    #define SYNC_FUNC fsync
     #define OPEN_FUNC open
     #define CLOSE_FUNC close
     #define READ_FUNC read
@@ -53,6 +57,82 @@ namespace vex {
     void AddLogCallback(LogCallbackFn callback) {
         std::lock_guard<std::mutex> lock(g_CallbackMutex);
         g_LogCallbacks.push_back(callback);
+    }
+
+    static void ShowCrashDialog(const std::string& logPath) {
+    #if defined(_WIN32)
+        char tempPath[MAX_PATH];
+        GetTempPathA(MAX_PATH, tempPath);
+        std::string psScriptPath = std::string(tempPath) + "vex_crash_reporter.ps1";
+
+        std::string psCode =
+            "Add-Type -AssemblyName System.Windows.Forms\n"
+            "Add-Type -AssemblyName System.Drawing\n"
+            "$form = New-Object System.Windows.Forms.Form\n"
+            "$form.Text = 'Vex Engine Crash Reporter'\n"
+            "$form.Size = New-Object System.Drawing.Size(800, 600)\n"
+            "$form.StartPosition = 'CenterScreen'\n"
+            "\n"
+            "$label = New-Object System.Windows.Forms.Label\n"
+            "$label.Text = 'Sorry, the application has crashed. Please share this log with the developer.'\n"
+            "$label.AutoSize = $true\n"
+            "$label.Location = New-Object System.Drawing.Point(10, 10)\n"
+            "$form.Controls.Add($label)\n"
+            "\n"
+            "$textBox = New-Object System.Windows.Forms.TextBox\n"
+            "$textBox.Multiline = $true\n"
+            "$textBox.ScrollBars = 'Vertical'\n"
+            "$textBox.ReadOnly = $true\n"
+            "$textBox.Location = New-Object System.Drawing.Point(10, 40)\n"
+            "$textBox.Size = New-Object System.Drawing.Size(760, 500)\n"
+            "$textBox.Anchor = [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Left -bor [System.Windows.Forms.AnchorStyles]::Right\n"
+            "$textBox.Font = New-Object System.Drawing.Font('Consolas', 10)\n"
+            "\n"
+            "if (Test-Path '" + logPath + "') {\n"
+            "    $textBox.Text = Get-Content '" + logPath + "' -Raw\n"
+            "} else {\n"
+            "    $textBox.Text = 'Error: Log file not found at " + logPath + "'\n"
+            "}\n"
+            "\n"
+            "$form.Controls.Add($textBox)\n"
+            "$form.ShowDialog()";
+
+        FILE* fp = fopen(psScriptPath.c_str(), "w");
+        if (fp) {
+            fprintf(fp, "%s", psCode.c_str());
+            fclose(fp);
+
+            ShellExecuteA(NULL, "open", "powershell.exe",
+                ("-ExecutionPolicy Bypass -WindowStyle Hidden -File \"" + psScriptPath + "\"").c_str(),
+                NULL, SW_HIDE);
+        } else {
+            ShellExecuteA(NULL, "open", "notepad.exe", logPath.c_str(), NULL, SW_SHOWNORMAL);
+        }
+
+    #elif defined(__linux__)
+        pid_t pid = fork();
+        if (pid == 0) {
+            setsid();
+
+            execlp("zenity", "zenity",
+                   "--text-info",
+                   "--filename", logPath.c_str(),
+                   "--title", "Vex Engine Crash Reporter",
+                   "--width=800", "--height=600",
+                   "--font=Monospace 10",
+                   (char*)NULL);
+
+            execlp("kdialog", "kdialog",
+                   "--title", "Vex Engine Crash Reporter",
+                   "--textbox", logPath.c_str(),
+                   "800", "600",
+                   (char*)NULL);
+
+            execlp("xterm", "xterm", "-hold", "-e", "cat", logPath.c_str(), (char*)NULL);
+
+            _exit(1);
+        }
+    #endif
     }
 
     struct LogEntry {
@@ -108,9 +188,16 @@ namespace vex {
 
     static void SafeWriteStr(int fd, const char* s) {
         if (!s || fd < 0) return;
-        size_t len = 0;
-        while (s[len]) len++;
-        WRITE_FUNC(fd, s, len);
+
+        for (size_t i = 0; s[i] != '\0'; ++i) {
+            unsigned char c = (unsigned char)s[i];
+            if (c == 9 || c == 10 || c == 13 || (c >= 32 && c <= 126)) {
+                WRITE_FUNC(fd, &c, 1);
+            } else {
+                const char replacement = '?';
+                WRITE_FUNC(fd, &replacement, 1);
+            }
+        }
     }
 
     static void SafeWriteHex(int fd, uintptr_t val) {
@@ -245,6 +332,13 @@ namespace vex {
 
             const char* msg = "\n[CRITICAL] CRASH DUMP SAVED TO LOG.\n";
             WRITE_FUNC(2, msg, 36);
+
+            SYNC_FUNC(fd);
+
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+
+            std::filesystem::path logPath = GetLogDir() / "game_session.log";
+            ShowCrashDialog(logPath.string());
         } else {
             const char* msg = "\n[CRITICAL] NO CRASH FILE OPEN.\n";
             WRITE_FUNC(2, msg, 31);
