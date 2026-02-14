@@ -23,6 +23,7 @@
 #include "../Core/include/components/InputSystem.hpp"
 
 #include "../Core/src/components/Window.hpp"
+#include "../Core/src/components/EngineCommands.hpp"
 #include "../Core/src/components/backends/vulkan/Interface.hpp"
 #include "../Core/src/components/backends/vulkan/Renderer.hpp"
 #include "../Core/src/components/backends/vulkan/VulkanImGUIWrapper.hpp"
@@ -62,6 +63,8 @@ namespace vex {
         m_imgui = std::make_unique<EditorImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
         m_imgui->init();
 
+        vex::DebugConsole::Get().Init();
+
         log("Initializing engine components...");
 
         m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
@@ -69,6 +72,8 @@ namespace vex {
 
         getInterface()->getMeshManager().init(static_cast<Engine*>(this));
         setInputMode(InputMode::UI);
+
+        RegisterEngineCommands(this);
 
         log("Initializing editor components...");
 
@@ -305,6 +310,10 @@ namespace vex {
                 m_viewportSize = newRes;
             }
 
+            if (showConsole) {
+                vex::DebugConsole::Get().Draw(&showConsole, true);
+            }
+
             m_imgui->endFrame();
             m_interface->getRenderer().composeFrame(renderData, *m_imgui, true);
             m_interface->getRenderer().endFrame(renderData);
@@ -367,7 +376,7 @@ namespace vex {
                 *targetPtr = (ImTextureID)ds;
             }
         }
-        
+
         vex::ComponentRegistry::getInstance().SetEditorIcon("mesh", m_icons.mesh);
         vex::ComponentRegistry::getInstance().SetEditorIcon("texture", m_icons.texture);
         vex::ComponentRegistry::getInstance().SetEditorIcon("audio", m_icons.audio);

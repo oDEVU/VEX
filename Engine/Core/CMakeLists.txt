@@ -82,6 +82,7 @@ set(public_header_files
     include/components/Scene.hpp
     include/components/SceneManager.hpp
     include/components/errorUtils.hpp
+    include/components/DebugConsole.hpp
     include/components/pathUtils.hpp
     include/components/VirtualFileSystem.hpp
     include/components/AudioSystem.hpp
@@ -91,6 +92,7 @@ set(public_header_files
     include/components/JoltSafe.hpp
     include/components/types.hpp
     include/components/UI/VexUI.hpp
+    include/components/HardwareInfo.hpp
     include/components/GameComponents/BasicComponents.hpp
     include/components/GameComponents/UiComponent.hpp
     include/components/GameComponents/ComponentFactory.hpp
@@ -116,11 +118,13 @@ set(source_files
         src/components/Scene.cpp
         src/components/SceneManager.cpp
         src/components/errorUtils.cpp
+        src/components/DebugConsole.cpp
+        src/components/EngineCommands.hpp
+        src/components/EngineCommands.cpp
         src/components/pathUtils.cpp
         src/components/Window.cpp
         src/components/Window.hpp
         src/components/HardwareInfo.cpp
-        src/components/HardwareInfo.hpp
         src/components/VirtualFileSystem.cpp
         src/components/AudioSystem.cpp
         src/components/InputSystem.cpp

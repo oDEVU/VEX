@@ -11,7 +11,7 @@
 #include <fstream>
 
 #include <immintrin.h>
-#include "../../HardwareInfo.hpp"
+#include "components/HardwareInfo.hpp"
 
 namespace vex {
 
@@ -263,7 +263,14 @@ uint32_t Interface::GetBestDeviceVersion() {
         {
             vkGetPhysicalDeviceProperties(selectedDevice, &deviceProperties);
             log("Selected GPU: %s", deviceProperties.deviceName);
-            HardwareInfo::SetGPUName(deviceProperties.deviceName);
+            //HardwareInfo::SetGPUName(deviceProperties.deviceName);
+
+            HardwareInfo::SetGPUInfo(
+                deviceProperties.deviceName,
+                deviceProperties.vendorID,
+                deviceProperties.driverVersion
+            );
+
             m_context.physicalDevice = selectedDevice;
         }
 
@@ -472,6 +479,20 @@ uint32_t Interface::GetBestDeviceVersion() {
         uint32_t major = VK_VERSION_MAJOR(deviceApiVersion);
         uint32_t minor = VK_VERSION_MINOR(deviceApiVersion);
         uint32_t patch = VK_VERSION_PATCH(deviceApiVersion);
+
+        std::stringstream deviceVerSS, reqVerSS;
+        deviceVerSS << major << "." << minor << "." << patch;
+        reqVerSS << VK_VERSION_MAJOR(apiVersion) << "." << VK_VERSION_MINOR(apiVersion);
+
+        HardwareInfo::SetVulkanVersions(deviceVerSS.str(), reqVerSS.str());
+
+        VulkanFeatures features;
+        features.multiDraw = m_context.supportsMultiDraw;
+        features.indirectDraw = m_context.supportsIndirectDraw;
+        features.bindlessTextures = m_context.supportsBindlessTextures;
+        features.shaderDrawParameters = m_context.supportsShaderDrawParameters;
+
+        HardwareInfo::SetVulkanFeatures(features);
 
         log(" ======= Supported Features =======");
         log("GPU:");

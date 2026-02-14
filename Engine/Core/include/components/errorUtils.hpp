@@ -31,6 +31,13 @@
         CRITICAL
     };
 
+    /// @brief Defines the callback signature
+    typedef void (*LogCallbackFn)(LogLevel level, const char* message);
+
+    /// @brief Adds a callback function to be called when a log message is generated.
+    /// @param callback The callback function to be added.
+    void VEX_EXPORT AddLogCallback(LogCallbackFn callback);
+
     /// @brief Initializes the low-level crash handler.
     /// @details
     /// 1. Opens a persistent log file `game_session.log`.

@@ -81,6 +81,12 @@ void EditorMenuBar::DrawBar(){
             }
             ImGui::EndMenu();
         }
+        if (ImGui::BeginMenu("Window")) {
+            if (ImGui::MenuItem("Console")){
+                m_editor.ShowConsole();
+            }
+            ImGui::EndMenu();
+        }
 
         float runMenuWidth = ImGui::CalcTextSize("Run").x + 40.0f;
         float currentPos = ImGui::GetCursorPosX();

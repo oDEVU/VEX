@@ -15,6 +15,8 @@
 #include "Tools/EditorMenuBar.hpp"
 #include "Tools/AssetBrowser.hpp"
 
+#include "components/DebugConsole.hpp"
+
 #include <ImGuizmo.h>
 #include <nlohmann/json.hpp>
 
@@ -115,6 +117,11 @@ namespace vex {
 
         /// @brief Redoes the last undone action in the editor.
         void Redo();
+
+        /// @brief Shows the debug console.
+        void ShowConsole() {
+            showConsole = true;
+        }
     private:
         /**
         * @brief Helper to draw the ImGUI dockspace and viewport window for the editor.
@@ -278,6 +285,7 @@ namespace vex {
         int m_fps = 0;
 
         bool m_refresh = false;
+        bool showConsole = false;
     };
 
 }

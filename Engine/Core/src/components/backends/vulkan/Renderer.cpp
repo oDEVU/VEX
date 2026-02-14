@@ -10,7 +10,7 @@
 #include <components/GameComponents/BasicComponents.hpp>
 #include "frustum.hpp"
 #include "limits.hpp"
-#include "../../HardwareInfo.hpp"
+#include "components/HardwareInfo.hpp"
 #include <immintrin.h>
 
 #if defined(max)

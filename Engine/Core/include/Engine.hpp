@@ -25,6 +25,7 @@
 #include "components/UI/VexUI.hpp"
 #include "components/PhysicsSystem.hpp"
 #include "components/AudioSystem.hpp"
+#include "components/DebugConsole.hpp"
 
 #include "VEX/VEX_export.h"
 

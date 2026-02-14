@@ -46,6 +46,13 @@
 #endif
 
 namespace vex {
+    static std::vector<LogCallbackFn> g_LogCallbacks;
+    static std::mutex g_CallbackMutex;
+
+    void AddLogCallback(LogCallbackFn callback) {
+        std::lock_guard<std::mutex> lock(g_CallbackMutex);
+        g_LogCallbacks.push_back(callback);
+    }
 
     struct LogEntry {
         char time[16];
@@ -320,6 +327,13 @@ namespace vex {
         vsnprintf(buffer.data(), buffer.size(), fmt, args);
 
         push_to_ring(level, buffer.data());
+
+        {
+            std::lock_guard<std::mutex> lock(g_CallbackMutex);
+            for (auto& callback : g_LogCallbacks) {
+                callback(level, buffer.data());
+            }
+        }
 
         if (g_CrashLogFD >= 0) {
             std::string timeStr = get_time_str();

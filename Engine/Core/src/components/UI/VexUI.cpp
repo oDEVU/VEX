@@ -9,7 +9,7 @@
 
 #include <components/errorUtils.hpp>
 #include <components/pathUtils.hpp>
-#include "../HardwareInfo.hpp"
+#include "components/HardwareInfo.hpp"
 
 namespace vex {
 

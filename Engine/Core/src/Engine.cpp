@@ -2,10 +2,12 @@
 #include "Engine.hpp"
 #include "SDL3/SDL_events.h"
 
-#include "components/GameComponents/BasicComponents.hpp"
 #include "components/VirtualFileSystem.hpp"
 #include "components/Window.hpp"
 #include "components/pathUtils.hpp"
+#include "components/EngineCommands.hpp"
+
+#include "components/GameComponents/BasicComponents.hpp"
 #include <components/GameComponents/UiComponent.hpp>
 
 #include "components/backends/vulkan/Interface.hpp"
@@ -59,12 +61,16 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
 
+    vex::DebugConsole::Get().Init();
+
     log("Initializing engine components...");
 
     m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
     m_sceneManager = std::make_unique<SceneManager>();
 
     getInterface()->getMeshManager().init(this);
+
+    RegisterEngineCommands(this);
     log("Engine initialized successfully");
 }
 
