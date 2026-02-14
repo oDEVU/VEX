@@ -11,7 +11,7 @@
 #endif
 
 namespace vex {
-    class DebugConsole {
+    class VEX_EXPORT DebugConsole {
     public:
         static DebugConsole& Get() {
             static DebugConsole instance;
