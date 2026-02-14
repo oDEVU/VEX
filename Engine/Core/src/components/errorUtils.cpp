@@ -202,12 +202,12 @@ namespace vex {
         #endif
     }
 
-    static void WriteCrashReport(const char* reason, void* context) {
+    static void WriteCrashReport(const char* reason, void* context, uintptr_t manualAddr = 0) {
         bool expected = false;
         if (!g_IsCrashing.compare_exchange_strong(expected, true)) return;
 
         int fd = g_CrashLogFD;
-        uintptr_t crashAddr = 0;
+        uintptr_t crashAddr = manualAddr;
 
         #if defined(__linux__) && defined(__x86_64__)
         if (context) crashAddr = (uintptr_t)((ucontext_t*)context)->uc_mcontext.gregs[REG_RIP];
@@ -391,8 +391,16 @@ namespace vex {
         throw;
     }
 #else
-    [[noreturn]] void throw_error(const std::string& msg) {
-        WriteCrashReport(msg.c_str(), nullptr);
+    [[noreturn]] void throw_error(const std::string& msg) {// [CHANGE] Capture the address of the code that called this function
+        uintptr_t callerAddress = 0;
+
+        #ifdef _MSC_VER
+            callerAddress = (uintptr_t)_ReturnAddress();
+        #else
+            callerAddress = (uintptr_t)__builtin_return_address(0);
+        #endif
+
+        WriteCrashReport(msg.c_str(), nullptr, callerAddress);
         if (g_CrashLogFD >= 0) CLOSE_FUNC(g_CrashLogFD);
         _exit(1);
     }
@@ -411,7 +419,14 @@ namespace vex {
         #endif
     }
     void handle_critical_exception(const std::exception& e) {
-        WriteCrashReport(e.what(), nullptr);
+        uintptr_t callerAddress = 0;
+        #ifdef _MSC_VER
+            callerAddress = (uintptr_t)_ReturnAddress();
+        #else
+            callerAddress = (uintptr_t)__builtin_return_address(0);
+        #endif
+
+        WriteCrashReport(e.what(), nullptr, callerAddress);
         if (g_CrashLogFD >= 0) CLOSE_FUNC(g_CrashLogFD);
         #ifndef DIST_BUILD
         SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());

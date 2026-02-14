@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <cctype>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -337,6 +338,28 @@ std::string CrashDecoder::decode() const {
     }
 
     auto it = moduleToSymbolFile_.find(moduleName);
+
+    if (it == moduleToSymbolFile_.end()) {
+        std::string cleanName = moduleName;
+        size_t dot = cleanName.find_last_of('.');
+        if (dot != std::string::npos) {
+            size_t numStart = dot;
+            while (numStart > 0 && std::isdigit(cleanName[numStart - 1])) {
+                numStart--;
+            }
+
+            if (numStart < dot) {
+                cleanName.erase(numStart, dot - numStart);
+
+                it = moduleToSymbolFile_.find(cleanName);
+
+                if (it == moduleToSymbolFile_.end() && cleanName.size() > 3 && cleanName.compare(0, 3, "lib") == 0) {
+                    it = moduleToSymbolFile_.find(cleanName.substr(3));
+                }
+            }
+        }
+    }
+
     if (it == moduleToSymbolFile_.end()) {
         for (const auto& pair : moduleToSymbolFile_) {
             if (pair.first.find(moduleName) != std::string::npos ||
