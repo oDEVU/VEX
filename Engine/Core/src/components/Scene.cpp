@@ -41,7 +41,7 @@ void Scene::load(){
 
     auto fileData = m_engine->getFileSystem()->load_file(realPath);
 
-    log("Scene data: \n%s",fileData->data.data()); // It works on my PC lol, (this comment exists cause there was a compter that had seqfault here couple times)
+    //log("Scene data: \n%s",fileData->data.data()); // It works on my PC lol, (this comment exists cause there was a compter that had seqfault here couple times)
 
     nlohmann::json json;
     json = nlohmann::json::parse(fileData->data.begin(), fileData->data.end(), nullptr, true);
