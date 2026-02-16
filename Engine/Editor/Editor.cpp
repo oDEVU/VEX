@@ -675,7 +675,7 @@ namespace vex {
                     std::filesystem::path path(filepath);
                     std::string ext = path.extension().string();
 
-                    if (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb") {
+                    if (AssetExtensions::IsValid(ext, AssetExtensions::Mesh)) {
                         HandleMeshDrop(filepath, entt::null);
                     }
                 }

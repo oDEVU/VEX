@@ -475,6 +475,7 @@ namespace vex {
         } else {
             log(LogLevel::CRITICAL, "%s", e.what());
         }
+        throw;
     }
     void handle_critical_exception(const std::exception& e) {
         if(auto* cpptr = dynamic_cast<const cpptrace::exception*>(&e)) {

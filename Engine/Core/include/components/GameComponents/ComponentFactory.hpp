@@ -166,15 +166,15 @@ namespace vex
 
                 if constexpr (std::is_same_v<T, vex::mesh_asset_path>)
                 {
-                    valid = (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb");
+                    valid = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Mesh);
                 }
                 else if constexpr (std::is_same_v<T, vex::texture_asset_path>)
                 {
-                    valid = (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp");
+                    valid = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Texture);
                 }
                 else if constexpr (std::is_same_v<T, vex::audio_asset_path>)
                 {
-                    valid = (ext == ".wav" || ext == ".ogg" || ext == ".flac");
+                    valid = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Audio);
                 }
 
                 if (valid)
