@@ -94,16 +94,7 @@ namespace vex {
             }
         } else if (event.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {
             float normalizedValue = event.gaxis.value / 32767.0f;
-
-            auto view = m_registry.view<InputComponent>();
-            for (auto entity : view) {
-                auto& inputComp = view.get<InputComponent>(entity);
-                for (const auto& binding : inputComp.gamepadAxisBindings) {
-                    if (binding.axis == (SDL_GamepadAxis)event.gaxis.axis) {
-                        binding.action(normalizedValue);
-                    }
-                }
-            }
+            gamepadAxisStates[(SDL_GamepadAxis)event.gaxis.axis] = normalizedValue;
         }
     }
 
@@ -120,6 +111,10 @@ namespace vex {
                 if (binding.state == InputActionState::Held && gamepadButtonStates[binding.button].isPressed) {
                     binding.action(deltaTime);
                 }
+            }
+            for (const auto& binding : inputComp.gamepadAxisBindings) {
+                float currentValue = gamepadAxisStates[binding.axis];
+                binding.action(currentValue);
             }
         }
     }
