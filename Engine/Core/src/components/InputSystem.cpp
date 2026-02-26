@@ -102,19 +102,19 @@ namespace vex {
         auto view = m_registry.view<InputComponent>();
         for (auto entity : view) {
             auto& inputComp = view.get<InputComponent>(entity);
-            for (const auto& binding : inputComp.bindings) {
-                if (binding.state == InputActionState::Held && keyStates[binding.scancode].isPressed) {
-                    binding.action(deltaTime);
-                }
+            for (const auto& binding : inputComp.gamepadAxisBindings) {
+                float currentValue = gamepadAxisStates[binding.axis];
+                binding.action(currentValue);
             }
             for (const auto& binding : inputComp.gamepadButtonBindings) {
                 if (binding.state == InputActionState::Held && gamepadButtonStates[binding.button].isPressed) {
                     binding.action(deltaTime);
                 }
             }
-            for (const auto& binding : inputComp.gamepadAxisBindings) {
-                float currentValue = gamepadAxisStates[binding.axis];
-                binding.action(currentValue);
+            for (const auto& binding : inputComp.bindings) {
+                if (binding.state == InputActionState::Held && keyStates[binding.scancode].isPressed) {
+                    binding.action(deltaTime);
+                }
             }
         }
     }
