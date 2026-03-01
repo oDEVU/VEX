@@ -1,11 +1,11 @@
 [submodule "Engine/Core/thirdparty/SDL"]
 	path = Engine/Core/thirdparty/SDL
 	url = https://github.com/libsdl-org/SDL.git
-	branch = release-3.2.x
+	branch = release-3.4.x
 [submodule "Engine/Core/thirdparty/volk"]
 	path = Engine/Core/thirdparty/volk
 	url = https://github.com/zeux/volk
-	branch = vulkan-sdk-1.4.313
+	branch = vulkan-sdk-1.4.341
 [submodule "Engine/Core/thirdparty/glm"]
 	path = Engine/Core/thirdparty/glm
 	url = https://github.com/g-truc/glm.git

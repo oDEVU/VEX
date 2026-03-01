@@ -10,7 +10,7 @@ cmake --build ./bin --config Debug --parallel
 echo "=== Editor Build Process Completed ==="
 
 echo ""
-read -p "Install Vex Engine system-wide? (Global CLI commands + App Menu Shortcut) [y/N] " -n 1 -r
+read -p "Install Vex Engine system-wide? (Global CLI commands + App Menu Shortcut) (Choose 'Y' if updating) [y/N] " -n 1 -r
 echo ""
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -50,41 +50,34 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     curl
 
-# LLVM 17 Setup (This part was working fine)
-RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc && \
-    echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-17 main" > /etc/apt/sources.list.d/llvm.list && \
-    apt-get update && \
-    apt-get install -y clang-17 lld-17 libc++-17-dev libc++abi-17-dev
+# --- LLVM 21 Setup ---
+RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc && \\
+    echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-21 main" > /etc/apt/sources.list.d/llvm.list && \\
+    apt-get update && \\
+    apt-get install -y clang-21 lld-21 libc++-21-dev libc++abi-21-dev
 
-RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-17 100 && \
-    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-17 100
+RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-21 100 && \\
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-21 100
 
-# FIX: Install CMake via official install script instead of flaky APT repo
-# This installs CMake 3.29.2 directly to /usr/local/bin
-RUN wget -q https://github.com/Kitware/CMake/releases/download/v3.29.2/cmake-3.29.2-linux-x86_64.sh && \
-    chmod +x cmake-3.29.2-linux-x86_64.sh && \
-    ./cmake-3.29.2-linux-x86_64.sh --prefix=/usr/local --exclude-subdir --skip-license && \
-    rm cmake-3.29.2-linux-x86_64.sh
+# --- CMake 3.31.5 Setup ---
+RUN wget -q https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-linux-x86_64.sh && \\
+    chmod +x cmake-3.31.5-linux-x86_64.sh && \\
+    ./cmake-3.31.5-linux-x86_64.sh --prefix=/usr/local --exclude-subdir --skip-license && \\
+    rm cmake-3.31.5-linux-x86_64.sh
 
-# --- Vulkan SDK Setup (Tarball Method) ---
-# Installs version 1.3.296.0 directly to avoid broken APT repos
+# --- Vulkan SDK 1.4.309.0 Setup ---
 WORKDIR /usr/local
-RUN wget -q https://sdk.lunarg.com/sdk/download/1.3.296.0/linux/vulkansdk-linux-x86_64-1.3.296.0.tar.xz && \
-    tar -xf vulkansdk-linux-x86_64-1.3.296.0.tar.xz && \
-    rm vulkansdk-linux-x86_64-1.3.296.0.tar.xz && \
-    mv 1.3.296.0 vulkansdk
+RUN wget -q https://sdk.lunarg.com/sdk/download/1.4.309.0/linux/vulkansdk-linux-x86_64-1.4.309.0.tar.xz && \\
+    tar -xf vulkansdk-linux-x86_64-1.4.309.0.tar.xz && \\
+    rm vulkansdk-linux-x86_64-1.4.309.0.tar.xz && \\
+    mv 1.4.309.0 vulkansdk
 
-# Set environment variables for Vulkan SDK so glslc is found
+# Set environment variables for Vulkan SDK
 ENV VULKAN_SDK=/usr/local/vulkansdk/x86_64
 ENV PATH=\$VULKAN_SDK/bin:\$PATH
 ENV LD_LIBRARY_PATH=\$VULKAN_SDK/lib:\$LD_LIBRARY_PATH
 ENV VK_LAYER_PATH=\$VULKAN_SDK/etc/vulkan/explicit_layer.d
-
-# --- Slang Compiler Setup ---
-WORKDIR /usr/local
-RUN wget -q https://github.com/shader-slang/slang/releases/download/v2024.1.13/slang-2024.1.13-linux-x86_64.tar.gz && \
-    tar -xzf slang-2024.1.13-linux-x86_64.tar.gz --strip-components=1 && \
-    rm slang-2024.1.13-linux-x86_64.tar.gz
+ENV SLANGC=\$VULKAN_SDK/bin/slangc
 
 ENV CXX=clang++
 ENV CC=clang
