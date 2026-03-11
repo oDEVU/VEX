@@ -191,10 +191,18 @@ namespace vex {
     REGISTER_GAME_OBJECT(FogObject);
     REGISTER_GAME_OBJECT(ModelObject);
 
-void SceneManager::loadScene(const std::string& path, Engine& engine) {
-    clearScenes();
-    loadSceneWithoutClearing(path, engine);
-}
+    void SceneManager::loadScene(const std::string& path, Engine& engine) {
+        if (m_isUpdating) {
+            m_pendingActions.push_back([this, path, &engine]() {
+                clearScenes();
+                loadSceneWithoutClearing(path, engine);
+            });
+            return;
+        }
+
+        clearScenes();
+        loadSceneWithoutClearing(path, engine);
+    }
 
 void SceneManager::unloadScene(const std::string& path) {
     m_scenes.erase(path);
@@ -211,8 +219,17 @@ void SceneManager::clearScenes() {
 }
 
 void SceneManager::scenesUpdate(float deltaTime){
+    m_isUpdating = true;
     for (auto& scene : m_scenes) {
         scene.second->sceneUpdate(deltaTime);
+    }
+    m_isUpdating = false;
+
+    if (!m_pendingActions.empty()) {
+        for (auto& action : m_pendingActions) {
+            action();
+        }
+        m_pendingActions.clear();
     }
 }
 

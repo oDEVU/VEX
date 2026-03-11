@@ -8,6 +8,8 @@
 
 #include <components/Scene.hpp>
 #include <memory>
+#include <functional>
+
 #include "VEX/VEX_export.h"
 
 namespace vex {
@@ -76,6 +78,9 @@ Scene* GetScene(const std::string& scene) const {
 private:
 std::map<std::string, std::shared_ptr<Scene>> m_scenes;
 std::string lastSceneName = "";
+
+bool m_isUpdating = false;
+std::vector<std::function<void()>> m_pendingActions;
 };
 
 } // namespace vex
