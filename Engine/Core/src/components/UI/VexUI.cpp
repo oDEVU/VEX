@@ -366,8 +366,8 @@ void VexUI::load(const std::string& path) {
         m_root = nullptr;
         if (json.contains("root")) {
             m_root = parseNode(json["root"]);
-            if (json.contains("zindex")){
-                zIndex = json["zindex"].get<int>();
+            if (json["root"].contains("zindex")){
+                zIndex = json["root"]["zindex"].get<int>();
             }
         }
         if (m_root && json.contains("overlays") && json["overlays"].is_array()) {
