@@ -544,7 +544,6 @@ void EditorMenuBar::BuildDist() {
         std::string containerProjectPath = "/VexProject";
 
         std::string shellCmd =
-                    "export VEX_CXX_COMPILER=clang++-17 && "
                     "echo '>> Compiling ProjectBuilder (Container)...' && "
                     "cd " + containerEnginePath + "/BuildTools && "
                     "chmod +x rebuild-buildtools-linux.sh && "

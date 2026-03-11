@@ -129,14 +129,6 @@ std::string GetModuleHash(const std::string& libPath) {
 void RebuildProject(const std::filesystem::path& projectPath, vex::GameInfo& info, bool clean) {
     vex::DialogWindow dialogWindow(clean ? "Engine Updated - Clean Rebuilding..." : "Building Project...", info);
 
-    std::atomic<bool> ui_ready{false};
-    std::thread ui_thread([&]() {
-        ui_ready.store(true);
-        dialogWindow.run();
-    });
-
-    while (!ui_ready.load()) std::this_thread::yield();
-
     std::string command;
     std::string cleanFlag = clean ? " -clean" : "";
 
@@ -146,15 +138,19 @@ void RebuildProject(const std::filesystem::path& projectPath, vex::GameInfo& inf
         command = "../../BuildTools/build/ProjectBuilder \"" + projectPath.string() + "\" -d" + cleanFlag;
     #endif
 
-    std::string outputLog;
-    executeCommandRealTime(command, [&](const std::string& line) {
-        outputLog += line;
-        std::cout << line;
-        dialogWindow.setDialogContent(outputLog);
+    std::thread build_thread([&]() {
+        std::string outputLog;
+        executeCommandRealTime(command, [&](const std::string& line) {
+            outputLog += line;
+            std::cout << line;
+            dialogWindow.setDialogContent(outputLog);
+        });
+
+        dialogWindow.stop();
     });
 
-    dialogWindow.stop();
-    ui_thread.join();
+    dialogWindow.run();
+    build_thread.join();
 }
 
 int main(int argc, char* argv[]) {
@@ -170,6 +166,7 @@ int main(int argc, char* argv[]) {
     }
 
     vex::GameInfo dialogGameInfo("Dialog Window", 1, 0, 0);
+    SDL_SetAppMetadata("Vex Engine", "1.0", "VexEngine");
 
     std::filesystem::path projectPath = argv[1];
     std::filesystem::path modulePath = projectPath / "Build" / "Debug";
