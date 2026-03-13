@@ -118,6 +118,9 @@ namespace vex {
         /// @brief Redoes the last undone action in the editor.
         void Redo();
 
+        /// @brief Returns true if the engine is running in editor mode.
+        bool IsEditor() override { return true; }
+
         /// @brief Shows the debug console.
         void ShowConsole() {
             showConsole = true;

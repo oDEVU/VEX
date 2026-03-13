@@ -59,6 +59,9 @@ public:
     Engine(const char* title, int width, int height, GameInfo gInfo);
     ~Engine();
 
+    /// @brief Returns true if the engine is running in editor mode.
+    virtual bool IsEditor() { return false; }
+
     /// @brief Starts and runs the main game loop.
     /// @details Handles the lifecycle of the application, including:
     /// - Event polling (`SDL_PollEvent`) and dispatching.

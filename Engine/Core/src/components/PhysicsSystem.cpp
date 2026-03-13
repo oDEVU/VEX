@@ -447,7 +447,7 @@ namespace vex {
         JPH::EMotionType motion = JPH::EMotionType::Static;
         if (pc.bodyType == BodyType::DYNAMIC) motion = JPH::EMotionType::Dynamic;
         else if (pc.bodyType == BodyType::KINEMATIC) motion = JPH::EMotionType::Kinematic;
-        else if (pc.bodyType == BodyType::SENSOR) motion = JPH::EMotionType::Dynamic;
+        else if (pc.bodyType == BodyType::SENSOR) motion = JPH::EMotionType::Static;
 
         JPH::BodyCreationSettings settings(shape, pos, rot, motion, pc.objectLayer);
         settings.mLinearDamping = pc.linearDamping;
