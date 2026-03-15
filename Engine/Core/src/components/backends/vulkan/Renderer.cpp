@@ -457,13 +457,14 @@ namespace vex {
 
                 auto& transform = modelView.get<TransformComponent>(entity);
                 auto& mesh = modelView.get<MeshComponent>(entity);
+                bool boundsNeedUpdate = transform.isDirty() || mesh.getIsFresh() || isEditorMode || mesh.worldRadius <= 0.0f;
                 glm::mat4 modelMatrix = transform.matrix();
 
                 if(!transform.isReady()){
                     transform.setRegistry(registry);
                 }
 
-                if(transform.transformedLately() || mesh.getIsFresh() || transform.isPhysicsAffected() || isEditorMode || mesh.worldRadius <= 0.0f){
+                if(boundsNeedUpdate){
                     float scaleX = glm::length(glm::vec3(modelMatrix[0]));
                     float scaleY = glm::length(glm::vec3(modelMatrix[1]));
                     float scaleZ = glm::length(glm::vec3(modelMatrix[2]));

@@ -194,11 +194,27 @@ namespace vex {
                     CreateBodyForEntity(e, m_registry, pc);
                     continue;
                 }
-                if (tc.transformedLately()) {
-                    JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
-                    JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
-                    bodyInterface.SetPositionAndRotation(pc.bodyId, pos, rot, JPH::EActivation::Activate);
-                    tc.updatedPhysicsTransform();
+
+                auto& cache = m_interpCache[pc.bodyId];
+
+                glm::vec3 vexPos = tc.getWorldPosition();
+                glm::quat vexRot = tc.getWorldQuaternion();
+
+                float posDiff = glm::distance(vexPos, cache.lastVisualPos);
+                glm::quat jRotGlm(cache.lastVisualRot.w, cache.lastVisualRot.x, cache.lastVisualRot.y, cache.lastVisualRot.z);
+                float rotDiff = 1.0f - std::abs(glm::dot(vexRot, jRotGlm));
+
+                if (posDiff > 0.0001f || rotDiff > 0.0001f || cache.desynced) {
+                    bodyInterface.SetPositionAndRotation(
+                        pc.bodyId,
+                        JPH::RVec3(vexPos.x, vexPos.y, vexPos.z),
+                        GlmToJph(vexRot),
+                        JPH::EActivation::Activate
+                    );
+
+                    cache.prevPos = cache.currPos = cache.lastVisualPos = vexPos;
+                    cache.prevRot = cache.currRot = cache.lastVisualRot = vexRot;
+                    cache.desynced = false;
                 }
             }
 
@@ -207,14 +223,23 @@ namespace vex {
             auto charView = m_registry.view<CharacterComponent, TransformComponent>();
 
             while (m_accumulator >= m_fixedDt) {
+                for (auto e : view) {
+                    auto& pc = view.get<PhysicsComponent>(e);
+                    auto& cache = m_interpCache[pc.bodyId];
+                    cache.prevPos = cache.currPos;
+                    cache.prevRot = cache.currRot;
+                }
+
                 for (auto e : charView) {
                     auto& cc = charView.get<CharacterComponent>(e);
                     auto& tc = charView.get<TransformComponent>(e);
 
                     if (!cc.isInitialized()) InitializeCharacter(e, cc);
 
-                    if (tc.transformedLately()) {
-                        cc.character->SetPosition(JPH::RVec3(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z));
+                    glm::vec3 vexPos = tc.getWorldPosition();
+                    JPH::RVec3 charPos = cc.character->GetPosition();
+                    if (glm::distance(vexPos, glm::vec3(charPos.GetX(), charPos.GetY(), charPos.GetZ())) > 0.0001f) {
+                        cc.character->SetPosition(JPH::RVec3(vexPos.x, vexPos.y, vexPos.z));
                     }
 
                     JPH::Vec3 currentVelocity = cc.character->GetLinearVelocity();
@@ -241,11 +266,19 @@ namespace vex {
 
                     JPH::RVec3 newPos = cc.character->GetPosition();
                     tc.setWorldPositionPhys(glm::vec3(newPos.GetX(), newPos.GetY(), newPos.GetZ()));
-
-                    tc.updatedPhysicsTransform();
                 }
 
                 m_physicsSystem->Update(m_fixedDt, collisionSteps, m_tempAllocator, m_jobSystem);
+
+                for (auto e : view) {
+                    auto& pc = view.get<PhysicsComponent>(e);
+                    auto& cache = m_interpCache[pc.bodyId];
+                    JPH::RVec3 pos = bodyInterface.GetCenterOfMassPosition(pc.bodyId);
+                    JPH::Quat rot = bodyInterface.GetRotation(pc.bodyId);
+                    cache.currPos = glm::vec3(pos.GetX(), pos.GetY(), pos.GetZ());
+                    cache.currRot = glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ());
+                }
+
                 m_accumulator -= m_fixedDt;
             }
 
@@ -254,13 +287,15 @@ namespace vex {
                 cc.controlInput = glm::vec3(0.0f);
             }
 
+            float alpha = m_accumulator / m_fixedDt;
+
         #ifdef VEX_HAS_PARALLEL_EXECUTION
             if(view.size_hint() > 64){
                 //log("--- mt ---");
                 std::for_each(std::execution::par_unseq, view.begin(), view.end(), [&](auto e) {
                     auto& pc = view.get<PhysicsComponent>(e);
                     if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
-                        SyncBodyToTransform(e, m_registry, pc.bodyId);
+                        SyncBodyToTransform(e, m_registry, pc.bodyId, alpha);
                     }
                 });
             }else
@@ -270,7 +305,7 @@ namespace vex {
             for (auto e : view) {
                 auto& pc = view.get<PhysicsComponent>(e);
                 if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
-                    SyncBodyToTransform(e, m_registry, pc.bodyId);
+                    SyncBodyToTransform(e, m_registry, pc.bodyId, alpha);
                 }
             }
         }
@@ -323,7 +358,6 @@ namespace vex {
         if (!m_physicsSystem || !r.all_of<TransformComponent>(e)) return std::nullopt;
 
         auto& t = r.get<TransformComponent>(e);
-        t.setPhysicsAffected(true);
         JPH::RVec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
         JPH::Quat rot = GlmToJph(t.getWorldQuaternion());
 
@@ -469,6 +503,14 @@ namespace vex {
         pc.bodyId = bodyId;
         m_bodyToEntity[bodyId] = e;
 
+        JPH::RVec3 jPos = bodyInterface.GetCenterOfMassPosition(bodyId);
+        JPH::Quat jRot = bodyInterface.GetRotation(bodyId);
+
+        InterpCache cache;
+        cache.prevPos = cache.currPos = cache.lastVisualPos = glm::vec3(jPos.GetX(), jPos.GetY(), jPos.GetZ());
+        cache.prevRot = cache.currRot = cache.lastVisualRot = glm::quat(jRot.GetW(), jRot.GetX(), jRot.GetY(), jRot.GetZ());
+        m_interpCache[bodyId] = cache;
+
         return bodyId;
     }
 
@@ -483,6 +525,7 @@ namespace vex {
         bi.RemoveBody(pc.bodyId);
         bi.DestroyBody(pc.bodyId);
         m_bodyToEntity.erase(pc.bodyId);
+        m_interpCache.erase(pc.bodyId);
         pc.bodyId = JPH::BodyID(JPH::BodyID::cInvalidBodyID);
     }
 
@@ -504,14 +547,45 @@ namespace vex {
         return glm::degrees(glm::eulerAngles(gq));
     }
 
-    void PhysicsSystem::SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id) {
-        auto& bi = m_physicsSystem->GetBodyInterfaceNoLock();
-        JPH::RVec3 pos = bi.GetCenterOfMassPosition(id);
-        JPH::Quat rot = bi.GetRotation(id);
+    void PhysicsSystem::SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id, float alpha) {
+        if(!enableSmoothing) alpha = 1.f;
 
         auto& t = r.get<TransformComponent>(e);
-        t.setWorldPositionPhys(glm::vec3(pos.GetX(), pos.GetY(), pos.GetZ()));
-        t.setWorldQuaternion(glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ()));
+        auto& cache = m_interpCache[id];
+
+        glm::vec3 vexPos = t.getWorldPosition();
+        glm::quat vexRot = t.getWorldQuaternion();
+
+        float posDiff = glm::distance(vexPos, cache.lastVisualPos);
+        glm::quat jRotGlm(cache.lastVisualRot.w, cache.lastVisualRot.x, cache.lastVisualRot.y, cache.lastVisualRot.z);
+        float rotDiff = 1.0f - std::abs(glm::dot(vexRot, jRotGlm));
+
+        const float EPSILON = 0.0001f;
+
+        if (posDiff > EPSILON || rotDiff > EPSILON) {
+            glm::vec3 deltaPos = vexPos - cache.lastVisualPos;
+            glm::quat deltaRot = vexRot * glm::inverse(cache.lastVisualRot);
+
+            cache.prevPos += deltaPos;
+            cache.currPos += deltaPos;
+            cache.prevRot = glm::normalize(deltaRot * cache.prevRot);
+            cache.currRot = glm::normalize(deltaRot * cache.currRot);
+            cache.desynced = true;
+        }
+
+        glm::vec3 interpPos = glm::mix(cache.prevPos, cache.currPos, alpha);
+
+        glm::quat targetRot = cache.currRot;
+        if (glm::dot(cache.prevRot, targetRot) < 0.0f) {
+            targetRot = -targetRot;
+        }
+        glm::quat interpRot = glm::slerp(cache.prevRot, targetRot, alpha);
+
+        t.setWorldPositionPhys(interpPos);
+        t.setWorldQuaternionPhys(interpRot);
+
+        cache.lastVisualPos = interpPos;
+        cache.lastVisualRot = interpRot;
     }
 
     PhysicsComponent& PhysicsSystem::getPhysicsComponentByBodyId(JPH::BodyID id) {
@@ -632,6 +706,18 @@ namespace vex {
 
     bool PhysicsSystem::GetBodyActive(JPH::BodyID bodyId) {
         return m_physicsSystem->GetBodyInterface().IsActive(bodyId);
+    }
+
+    glm::vec3 PhysicsSystem::GetPhysicsPosition(JPH::BodyID bodyId) {
+        if (!m_physicsSystem || bodyId.IsInvalid()) return glm::vec3(0.0f);
+        JPH::RVec3 pos = m_physicsSystem->GetBodyInterfaceNoLock().GetCenterOfMassPosition(bodyId);
+        return glm::vec3(pos.GetX(), pos.GetY(), pos.GetZ());
+    }
+
+    glm::quat PhysicsSystem::GetPhysicsRotation(JPH::BodyID bodyId) {
+        if (!m_physicsSystem || bodyId.IsInvalid()) return glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+        JPH::Quat rot = m_physicsSystem->GetBodyInterfaceNoLock().GetRotation(bodyId);
+        return glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ());
     }
 
     void MyContactListener::OnContactAdded(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings) {

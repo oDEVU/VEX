@@ -466,6 +466,20 @@ namespace vex {
         /// @param int steps - number of collision steps
         void setCollisionSteps(int steps) { collisionSteps = steps; }
 
+        /// @brief Allows for enabling/disabling smoothing.
+        /// @param bool enable - true to enable smoothing, false to disable
+        void setEnableSmoothing(bool enable) { enableSmoothing = enable; }
+
+        /// @brief Retrieves the physics position of a body.
+        /// @param JPH::BodyID bodyId - the body ID to retrieve the position for
+        /// @return glm::vec3 - the physics position of the body
+        glm::vec3 GetPhysicsPosition(JPH::BodyID bodyId);
+
+        /// @brief Retrieves the physics rotation of a body.
+        /// @param JPH::BodyID bodyId - the body ID to retrieve the rotation for
+        /// @return glm::quat - the physics rotation of the body
+        glm::quat GetPhysicsRotation(JPH::BodyID bodyId);
+
         // @brief Retrieves the physics component associated with a body ID.
         // @param JPH::BodyID id - the body ID to retrieve the physics component for
         // @return PhysicsComponent& - the physics component associated with the body ID
@@ -480,6 +494,7 @@ namespace vex {
         friend class MyContactListener;
 
         int collisionSteps = 3;
+        bool enableSmoothing = true;
 
         JPH::TempAllocatorImpl* m_tempAllocator = nullptr;
         JPH::JobSystem* m_jobSystem = nullptr;
@@ -495,6 +510,17 @@ namespace vex {
         std::unique_ptr<JPH::ContactListener> m_contactListener;
 
         std::unordered_map<JPH::BodyID, entt::entity, BodyIDHasher> m_bodyToEntity;
+
+        struct InterpCache {
+                glm::vec3 prevPos = {0.0f, 0.0f, 0.0f};
+                glm::quat prevRot = {1.0f, 0.0f, 0.0f, 0.0f};
+                glm::vec3 currPos = {0.0f, 0.0f, 0.0f};
+                glm::quat currRot = {1.0f, 0.0f, 0.0f, 0.0f};
+                glm::vec3 lastVisualPos = {0.0f, 0.0f, 0.0f};
+                glm::quat lastVisualRot = {1.0f, 0.0f, 0.0f, 0.0f};
+                bool desynced = false;
+        };
+        std::unordered_map<JPH::BodyID, InterpCache, BodyIDHasher> m_interpCache;
 
         entt::scoped_connection m_destroyConnection;
 
@@ -513,7 +539,8 @@ namespace vex {
         // @param entt::entity e - the entity to synchronize
         // @param entt::registry& r - the registry containing the entity
         // @param const JPH::BodyID& id - the ID of the body to synchronize
-        void SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id);
+        // @param float alpha - the interpolation factor (0.0f = no interpolation, 1.0f = full interpolation)
+        void SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id, float alpha = 1.0f);
 
         // @brief Handles physics component destruction.
         // @param entt::registry& reg - the registry containing the entity
