@@ -433,7 +433,24 @@ namespace vex {
             }
         }
 
-        if (g_CrashLogFD >= 0) {
+        bool quiet_terminal = false;
+        bool skip_file = false;
+
+        #if !DEBUG
+            if (level == LogLevel::INFO) {
+                skip_file = true;
+            }
+
+            if (level == LogLevel::INFO || level == LogLevel::WARNING) {
+                quiet_terminal = true;
+            }
+
+            #ifdef DIST_BUILD
+                quiet_terminal = true;
+            #endif
+        #endif
+
+        if (g_CrashLogFD >= 0 && !skip_file) {
             std::string timeStr = get_time_str();
             const char* levelStr = get_level_str(level);
             SafeWriteStr(g_CrashLogFD, "["); SafeWriteStr(g_CrashLogFD, timeStr.c_str()); SafeWriteStr(g_CrashLogFD, "] ");
@@ -441,19 +458,11 @@ namespace vex {
             SafeWriteStr(g_CrashLogFD, buffer.data()); SafeWriteStr(g_CrashLogFD, "\n");
         }
 
-        bool quiet = false;
-        #if !DEBUG
-            if (level == LogLevel::INFO || level == LogLevel::WARNING) quiet = true;
-            #ifdef DIST_BUILD
-                quiet = true;
-            #endif
-        #endif
-
-        if (!quiet) {
+        if (!quiet_terminal) {
             std::string timeStr = get_time_str();
             const char* levelStr = get_level_str(level);
             SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO,
-                           "%s [%s] %s", timeStr.c_str(), levelStr, buffer.data());
+                               "%s [%s] %s", timeStr.c_str(), levelStr, buffer.data());
         }
     }
 

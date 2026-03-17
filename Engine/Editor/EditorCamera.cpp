@@ -1,5 +1,6 @@
 #include "EditorCamera.hpp"
 #include <components/GameComponents/BasicComponents.hpp>
+#include <components/GameComponents/EngineUtility.hpp>
 
 
 EditorCameraObject::EditorCameraObject(vex::Engine& engine, const std::string& name, SDL_Window* window)
@@ -7,6 +8,7 @@ EditorCameraObject::EditorCameraObject(vex::Engine& engine, const std::string& n
         GetComponent<vex::CameraComponent>().fov = 60;
         GetComponent<vex::CameraComponent>().farPlane = 1000;
 
+        AddComponent(vex::PersistentTag());
 }
 
 void EditorCameraObject::processEvent(const SDL_Event& event, float deltaTime) {

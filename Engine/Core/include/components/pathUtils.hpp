@@ -17,9 +17,17 @@ namespace vex {
     /// @param const std::string& projectPath - The absolute path to the project's root directory.
     void VEX_EXPORT SetAssetRoot(const std::string& projectPath);
 
+    /// @brief Sets the current user data directory.
+    /// @param const std::string& userDataDir - The absolute path to the user data directory.
+    void VEX_EXPORT SetUserDataDir(const std::string& userDataDir);
+
     /// @brief Gets the current asset directory override.
     /// @return std::string - The path set by `SetAssetRoot`, or an empty string if not set.
     std::string VEX_EXPORT GetAssetDir();
+
+    /// @brief Gets the current user data directory.
+    /// @return std::string - The path to the user data directory.
+    std::string VEX_EXPORT GetUserDataDir();
 
     /// @brief Resolves the absolute path of an asset based on the current build configuration.
     /// @details
@@ -29,6 +37,11 @@ namespace vex {
     /// @param const std::string& relativePath - The path relative to the asset root (e.g., "Assets/Textures/img.png").
     /// @return std::string - The resolved absolute path or the relative path depending on configuration.
     std::string VEX_EXPORT GetAssetPath(const std::string& relativePath);
+
+    /// @brief Resolves the absolute path of a user data file based on the current user data directory.
+    /// @param const std::string& relativePath - The path relative to the user data directory (e.g., "savegame/save1.sav").
+    /// @return std::string - The resolved absolute path. (eg. %APPDATA%/<GameName>/savegame/save1.sav)
+    std::string VEX_EXPORT GetUserDataPath(const std::string& relativePath);
 
     /// @brief Retrieves the directory containing the current executable.
     /// @details Uses platform-specific API calls:

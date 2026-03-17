@@ -114,11 +114,20 @@ namespace vex {
     }
 
     std::unique_ptr<VulkanMesh>& MeshManager::getVulkanMeshByMesh(MeshComponent& meshComponent) {
+        if (meshComponent.id == UINT32_MAX) {
+            if (!m_freeModelIds.empty()) {
+                meshComponent.id = m_freeModelIds.back();
+                m_freeModelIds.pop_back();
+            } else {
+                meshComponent.id = m_nextModelId++;
+            }
+        }
+
         std::string& installedPath = m_installedPaths[meshComponent.id];
         std::string requestedPath = meshComponent.meshData.meshPath;
 
         if (installedPath != requestedPath) [[unlikely]] {
-            log("Swapping mesh %s -> %s", installedPath.c_str(), requestedPath.c_str());
+            log("Swapping mesh %s -> %s for model %d", installedPath.c_str(), requestedPath.c_str(), meshComponent.id);
 
             releaseMeshReference(installedPath, meshComponent);
 
@@ -212,6 +221,14 @@ namespace vex {
         } catch (const std::exception& e) {
             log(LogLevel::ERROR, "Failed to register VulkanMesh: %s", path.c_str());
         }
+    }
+
+    void MeshManager::clearState() {
+        m_freeModelIds.clear();
+        m_nextModelId = 0;
+        m_vulkanMeshes.clear();
+        m_installedPaths.clear();
+        m_meshBoundsCache.clear();
     }
 
     void MeshManager::onMeshComponentConstruct(entt::registry& registry, entt::entity entity) {

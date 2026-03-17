@@ -13,13 +13,25 @@
 namespace vex {
 
 static std::string g_AssetRootOverride = "";
+static std::string g_UserDataDir = "";
 
 void SetAssetRoot(const std::string& projectPath) {
     g_AssetRootOverride = projectPath;
 }
 
+void SetUserDataDir(const std::string& userDataDir) {
+    if (!std::filesystem::exists(userDataDir)) {
+        std::filesystem::create_directories(userDataDir);
+    }
+    g_UserDataDir = userDataDir;
+}
+
 std::string GetAssetDir() {
     return g_AssetRootOverride;
+}
+
+std::string GetUserDataDir() {
+    return g_UserDataDir;
 }
 
 std::filesystem::path GetExecutableDir() {
@@ -76,10 +88,14 @@ std::string GetAssetPath(const std::string& relativePath) {
     #endif
 }
 
+std::string GetUserDataPath(const std::string& relativePath) {
+    return (std::filesystem::path(g_UserDataDir) / relativePath).string();
+}
+
 std::filesystem::path GetLogDir() {
     std::filesystem::path logDir;
     try {
-        logDir = GetExecutableDir() / "Engine" / "logs";
+        logDir = GetUserDataPath("logs");
         if (!std::filesystem::exists(logDir)) {
             std::filesystem::create_directories(logDir);
         }

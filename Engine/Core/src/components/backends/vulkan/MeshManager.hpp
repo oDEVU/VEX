@@ -65,6 +65,9 @@ namespace vex {
         /// @return std::unique_ptr<VulkanMesh>&
         std::unique_ptr<VulkanMesh>& getVulkanMeshByMesh(MeshComponent& meshComponent);
 
+        /// @brief Clears the state of the mesh manager, resetting model IDs and clearing the mesh map.
+        void clearState();
+
     private:
         VulkanContext& m_r_context;
         Engine* m_p_engine = nullptr;

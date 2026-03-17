@@ -49,6 +49,10 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_vfs = std::make_shared<VirtualFileSystem>();
     m_vfs->initialize(GetExecutableDir().string());
 
+    std::string defaultUserDataDir = std::string(SDL_GetUserFolder(SDL_Folder::SDL_FOLDER_DOCUMENTS) + gInfo.projectName);
+    SetUserDataDir(defaultUserDataDir);
+    //vex::log("Setting user data dir: %s", defaultUserDataDir.c_str());
+
     m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
     m_physicsSystem->init();
 

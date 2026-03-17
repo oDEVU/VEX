@@ -38,7 +38,9 @@ void unloadScene(const std::string& path);
 void loadSceneWithoutClearing(const std::string& path, Engine& engine);
 
 /// @brief Function to clear the current scene.
-void clearScenes();
+/// @details Clears also all entities in the registry without PersistentTags and MeshManager.
+/// @details Clears the registry and then clears the `m_scenes` map.
+void clearScenes(Engine& engine);
 
 /// @brief Updates all currently loaded scenes.
 /// @details Iterates through the `m_scenes` map and calls `sceneUpdate(deltaTime)` on each active scene.

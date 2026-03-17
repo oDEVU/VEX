@@ -160,7 +160,7 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
                 fflush(stdout);
                 engine->WaitForGpu();
                 engine->prepareScenesForHotReload();
-                engine->getSceneManager()->clearScenes();
+                engine->getSceneManager()->clearScenes(*engine);
                 vex::ComponentRegistry::getInstance().clearDynamicComponents();
                 vex::GameObjectFactory::getInstance().clearDynamicGameObjects();
                 vex::log(vex::LogLevel::INFO, "[HotReload] Unload Cleanup Finished.");

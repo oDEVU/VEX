@@ -2,6 +2,7 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameComponents/CharacterComponent.hpp"
 #include "components/GameComponents/AudioSourceComponent.hpp"
+#include "components/GameComponents/EngineUtility.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
@@ -11,6 +12,8 @@
 #include "components/PhysicsSystem.hpp"
 #include "components/enviroment.hpp"
 #include "components/VirtualFileSystem.hpp"
+#include "backends/vulkan/MeshManager.hpp"
+#include "backends/vulkan/Interface.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <cstdint>
@@ -194,13 +197,13 @@ namespace vex {
     void SceneManager::loadScene(const std::string& path, Engine& engine) {
         if (m_isUpdating) {
             m_pendingActions.push_back([this, path, &engine]() {
-                clearScenes();
+                clearScenes(engine);
                 loadSceneWithoutClearing(path, engine);
             });
             return;
         }
 
-        clearScenes();
+        clearScenes(engine);
         loadSceneWithoutClearing(path, engine);
     }
 
@@ -214,8 +217,23 @@ void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& eng
     m_scenes[path]->sceneBegin();
 }
 
-void SceneManager::clearScenes() {
+void SceneManager::clearScenes(Engine& engine) {
     m_scenes.clear();
+
+    auto& registry = engine.getRegistry();
+    std::vector<entt::entity> toDestroy;
+
+    for (auto entity : registry.storage<entt::entity>()) {
+        if (!registry.all_of<PersistentTag>(entity)) {
+            toDestroy.push_back(entity);
+        }
+    }
+
+    for (auto entity : toDestroy) {
+        registry.destroy(entity);
+    }
+
+    engine.getInterface()->getMeshManager().clearState();
 }
 
 void SceneManager::scenesUpdate(float deltaTime){
