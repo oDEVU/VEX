@@ -109,6 +109,7 @@ namespace vex {
         float angularDamping = 0.05f;
         bool isSensor = false;
         bool allowSleeping = true;
+        bool debugDraw = true;
 
         glm::vec3 boxHalfExtents = {0.5f, 0.5f, 0.5f};
         float roundedRadius = 0.05f;
@@ -591,4 +592,18 @@ namespace vex {
     private:
         PhysicsSystem& m_system;
     };
+
+        /// @brief Implementation of JPH::BodyDrawFilter for debugging physics bodies.
+        class DebugDrawFilter : public JPH::BodyDrawFilter {
+        public:
+            DebugDrawFilter(PhysicsSystem& system) : m_system(system) {}
+
+            virtual bool ShouldDraw(const JPH::Body& body) const override {
+                auto& pc = m_system.getPhysicsComponentByBodyId(body.GetID());
+                return pc.debugDraw;
+            }
+
+        private:
+            PhysicsSystem& m_system;
+        };
 }

@@ -94,6 +94,7 @@ namespace vex {
                         if (ImReflect::Input("Angular Damping", pc.angularDamping).get<float>().is_changed()) changed = true;
                         if (ImReflect::Input("Sensor", pc.isSensor).get<bool>().is_changed()) changed = true;
                         if (ImReflect::Input("Allow Sleeping", pc.allowSleeping).get<bool>().is_changed()) changed = true;
+                        if (ImReflect::Input("Draw Debug", pc.debugDraw).get<bool>().is_changed()) changed = true;
 
                         pc.updated = changed;
 
@@ -170,6 +171,7 @@ REGISTER_COMPONENT(vex::PhysicsComponent,
     bodyType,
     isSensor,
     allowSleeping,
+    debugDraw,
 
     mass,
     friction,

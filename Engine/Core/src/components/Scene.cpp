@@ -108,6 +108,9 @@ void Scene::load(){
         return;
     }
 
+    std::unordered_map<std::string, GameObject*> objectDirectory;
+    std::vector<std::pair<GameObject*, std::string>> pendingParenting;
+
     for (const auto& obj : objects) {
         std::string type = obj.value("type", "");
         std::string name = obj.value("name", "");
@@ -123,6 +126,8 @@ void Scene::load(){
             continue;
         }
 
+        objectDirectory[name] = gameObj;
+
         auto components = obj["components"];
         if (!components.is_array()) {
             log(LogLevel::WARNING, "Object '%s' has no components to load", name.c_str());
@@ -137,38 +142,25 @@ void Scene::load(){
             }
         }
 
-        std::string parent = obj.value("parent", "");
-                        if (!parent.empty()) {
-                            bool parentFound = false;
-                            for(const auto& m_obj : m_objects) {
-                                // FIX: Check if m_obj is valid and its entity exists in registry
-                                if (!m_obj || !m_obj->isValid() || !m_engine->getRegistry().valid(m_obj->GetEntity())) {
-                                    continue;
-                                }
+        std::string parentName = obj.value("parent", "");
+        if (!parentName.empty()) {
+            pendingParenting.push_back({gameObj, parentName});
+        }
 
-                                entt::entity e = m_obj->GetEntity();
-                                bool valid = m_engine->getRegistry().valid(e);
+        for (auto& pair : pendingParenting) {
+            GameObject* child = pair.first;
+            const std::string& parentName = pair.second;
 
-                                log("Checking Object at %p | Entity ID: %u (Hex: %X) | Valid in Registry: %d",
-                                        (void*)m_obj.get(), (uint32_t)e, (uint32_t)e, valid);
-
-                                // Safe to access component now
-                                if (m_obj->GetComponent<NameComponent>().name == parent) {
-                                    gameObj->ParentTo(m_obj->GetEntity());
-                                    log("Parented object '%s' to '%s'", name.c_str(), parent.c_str());
-                                    parentFound = true;
-                                    break;
-                                }
-                            }
-                            if (!parentFound) {
-                                log(LogLevel::WARNING, "Parent '%s' not found for object '%s'", parent.c_str(), name.c_str());
-                            }
-                        }
-
-        if (gameObj) {
-            //DestroyGameObject(*gameObj);
-            //auto ptr = std::shared_ptr<GameObject>(gameObj);
-            //m_objects.push_back(std::move(ptr));
+            auto it = objectDirectory.find(parentName);
+            if (it != objectDirectory.end()) {
+                GameObject* parentObj = it->second;
+                if (parentObj->isValid() && m_engine->getRegistry().valid(parentObj->GetEntity())) {
+                    child->ParentTo(parentObj->GetEntity()); //
+                    log("Parented object '%s' to '%s'", child->GetComponent<NameComponent>().name.c_str(), parentName.c_str());
+                }
+            } else {
+                log(LogLevel::WARNING, "Parent '%s' not found", parentName.c_str());
+            }
         }
     }
     } catch (const std::exception& e) {

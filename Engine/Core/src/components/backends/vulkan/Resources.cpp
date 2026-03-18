@@ -12,6 +12,18 @@
 #include "../../../../thirdparty/stb/stb_image.h"
 
 namespace vex {
+/// @brief Helper struct for batching texture loading.
+struct BatchedTextureData {
+    int w, h, channels;
+    stbi_uc* pixels = nullptr;
+    std::string path;
+    uint32_t assignedIndex = 0;
+    VkBuffer stagingBuffer = VK_NULL_HANDLE;
+    VmaAllocation stagingAlloc = VK_NULL_HANDLE;
+    VkImage image = VK_NULL_HANDLE;
+    VmaAllocation imageAlloc = VK_NULL_HANDLE;
+};
+
     VulkanResources::VulkanResources(VulkanContext& context, VirtualFileSystem* vfs) : m_r_context(context), m_vfs(vfs) {
         createDefaultTexture();
         createTextureSampler();
@@ -894,6 +906,162 @@ namespace vex {
             log("Updated texture descriptors for '%s'", name.c_str());
             return true;
         }
+
+        void VulkanResources::loadTexturesBatched(const std::vector<std::string>& paths) {
+            std::vector<std::string> neededPaths;
+
+            for (const auto& path : paths) {
+                if (!m_r_context.textureIndices.contains(path) &&
+                    std::find(m_ignoredTexturePaths.begin(), m_ignoredTexturePaths.end(), path) == m_ignoredTexturePaths.end()) {
+                    neededPaths.push_back(path);
+                }
+            }
+
+            if (neededPaths.empty()) return;
+
+            std::vector<std::future<BatchedTextureData>> futures;
+
+            for (const auto& path : neededPaths) {
+                futures.push_back(GetThreadPool().enqueue([this, path]() {
+                    BatchedTextureData data;
+                    data.path = path;
+                    auto fileData = m_vfs->load_file(path);
+                    if (fileData) {
+                        data.pixels = stbi_load_from_memory(
+                            reinterpret_cast<const stbi_uc*>(fileData->data.data()),
+                            static_cast<int>(fileData->size),
+                            &data.w, &data.h, &data.channels, STBI_rgb_alpha
+                        );
+                    }
+                    return data;
+                }));
+            }
+
+            std::vector<BatchedTextureData> validData;
+            for (auto& f : futures) {
+                auto data = f.get();
+                if (data.pixels) {
+                    if (!m_r_context.recycledTextureIndices.empty()) {
+                        data.assignedIndex = m_r_context.recycledTextureIndices.front();
+                        m_r_context.recycledTextureIndices.pop();
+                    } else {
+                        data.assignedIndex = m_r_context.nextTextureIndex++;
+                    }
+                    validData.push_back(data);
+                } else {
+                    m_ignoredTexturePaths.push_back(data.path);
+                    log(LogLevel::WARNING, "Batched load failed for: %s", data.path.c_str());
+                }
+            }
+
+            if (validData.empty()) return;
+
+            for (auto& data : validData) {
+                VkDeviceSize imageSize = data.w * data.h * 4;
+
+                VkBufferCreateInfo bufferInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+                bufferInfo.size = imageSize;
+                bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+                VmaAllocationCreateInfo allocInfo{ .usage = VMA_MEMORY_USAGE_CPU_TO_GPU };
+                vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo, &data.stagingBuffer, &data.stagingAlloc, nullptr);
+
+                void* mapped;
+                vmaMapMemory(m_r_context.allocator, data.stagingAlloc, &mapped);
+                memcpy(mapped, data.pixels, static_cast<size_t>(imageSize));
+                vmaUnmapMemory(m_r_context.allocator, data.stagingAlloc);
+                stbi_image_free(data.pixels);
+
+                VkImageCreateInfo imageInfo{VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO};
+                imageInfo.imageType = VK_IMAGE_TYPE_2D;
+                imageInfo.extent = {static_cast<uint32_t>(data.w), static_cast<uint32_t>(data.h), 1};
+                imageInfo.mipLevels = 1;
+                imageInfo.arrayLayers = 1;
+                imageInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
+                imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+                imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+                imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+                VmaAllocationCreateInfo imageAllocInfo{ .usage = VMA_MEMORY_USAGE_GPU_ONLY };
+
+                vmaCreateImage(m_r_context.allocator, &imageInfo, &imageAllocInfo, &data.image, &data.imageAlloc, nullptr);
+            }
+
+            VkCommandBuffer cmd = m_r_context.beginSingleTimeCommands();
+
+            for (const auto& data : validData) {
+                VkImageMemoryBarrier barrier{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
+                barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+                barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+                barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+                barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+                barrier.image = data.image;
+                barrier.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+                barrier.srcAccessMask = 0;
+                barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+                vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+
+                VkBufferImageCopy region{};
+                region.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
+                region.imageExtent = {static_cast<uint32_t>(data.w), static_cast<uint32_t>(data.h), 1};
+                vkCmdCopyBufferToImage(cmd, data.stagingBuffer, data.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+                barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+                barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+                barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+                vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+            }
+
+            m_r_context.endSingleTimeCommands(cmd);
+
+            for (const auto& data : validData) {
+                vmaDestroyBuffer(m_r_context.allocator, data.stagingBuffer, data.stagingAlloc);
+
+                VkImageViewCreateInfo viewInfo{VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
+                viewInfo.image = data.image;
+                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+                viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
+                viewInfo.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+
+                VkImageView textureView;
+                if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) continue;
+
+                m_r_context.textureIndices[data.path] = data.assignedIndex;
+                m_textures[data.path] = textureView;
+                m_textureImages[data.path] = data.image;
+                m_textureAllocations[data.path] = data.imageAlloc;
+                m_textureViews[data.path] = textureView;
+
+                VkDescriptorImageInfo imageDescInfo{};
+                imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageDescInfo.sampler = m_textureSampler;
+                imageDescInfo.imageView = textureView;
+
+                if (m_r_context.supportsBindlessTextures) {
+                    VkWriteDescriptorSet write{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+                    write.dstSet = m_r_context.bindlessDescriptorSet;
+                    write.dstBinding = 0;
+                    write.dstArrayElement = data.assignedIndex;
+                    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                    write.descriptorCount = 1;
+                    write.pImageInfo = &imageDescInfo;
+                    vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+                } else {
+                    for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
+                        VkWriteDescriptorSet write{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+                        write.dstSet = getTextureDescriptorSet(frame, data.assignedIndex);
+                        write.dstBinding = 0;
+                        write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                        write.descriptorCount = 1;
+                        write.pImageInfo = &imageDescInfo;
+                        vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+                    }
+                }
+            }
+        }
+
         void VulkanResources::unloadTexture(const std::string& name) {
             if (name == "default") return;
 

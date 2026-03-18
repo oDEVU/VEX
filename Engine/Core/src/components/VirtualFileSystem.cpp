@@ -118,11 +118,14 @@ std::unique_ptr<VirtualFileSystem::FileData> VirtualFileSystem::load_file(const 
         file_data->data.resize(entry->data_size);
         file_data->size = entry->data_size;
 
-        m_loaded_vpk->file_stream.seekg(m_loaded_vpk->header.data_offset + entry->data_offset);
-        m_loaded_vpk->file_stream.read(
-            reinterpret_cast<char*>(file_data->data.data()),
-            entry->data_size
-        );
+        {
+            std::lock_guard<std::mutex> lock(stream_mutex);
+            m_loaded_vpk->file_stream.seekg(m_loaded_vpk->header.data_offset + entry->data_offset);
+            m_loaded_vpk->file_stream.read(
+                reinterpret_cast<char*>(file_data->data.data()),
+                entry->data_size
+            );
+        }
 
         return file_data;
     } else {

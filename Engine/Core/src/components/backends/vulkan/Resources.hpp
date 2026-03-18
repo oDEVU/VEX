@@ -9,6 +9,7 @@
 #include "context.hpp"
 #include "components/errorUtils.hpp"
 #include "components/VirtualFileSystem.hpp"
+#include "components/ThreadPool.hpp"
 
 #include <components/types.hpp>
 #include <string>
@@ -74,6 +75,10 @@ namespace vex {
         /// @param const std::string& name - Unique identifier key.
         /// @return bool - True if loaded successfully or already exists.
         bool loadTexture(const std::string& path, const std::string& name) ;
+
+        /// @brief Loads multiple textures in batches.
+        /// @param const std::vector<std::string>& paths - List of file paths to load.
+        void loadTexturesBatched(const std::vector<std::string>& paths);
 
         /// @brief Unloads a texture.
         /// @details Destroys the image/view and pushes the index to the recycled queue. Resets descriptors to the default texture.

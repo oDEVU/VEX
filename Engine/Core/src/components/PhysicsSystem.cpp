@@ -122,7 +122,10 @@ namespace vex {
                 JPH::BodyManager::DrawSettings settings;
                 settings.mDrawShape = drawWireframe;
                 settings.mDrawShapeWireframe = drawWireframe;
-                m_physicsSystem->DrawBodies(settings, m_debugRenderer);
+
+                DebugDrawFilter filter(*this);
+
+                m_physicsSystem->DrawBodies(settings, m_debugRenderer, &filter);
 
                 if (drawConstraints) {
                     m_physicsSystem->DrawConstraints(m_debugRenderer);

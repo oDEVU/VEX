@@ -286,6 +286,31 @@ namespace vex {
                 break;
             }
 
+            auto modelView = registry.view<TransformComponent, MeshComponent>();
+            std::vector<MeshComponent*> pendingMeshes;
+
+            for (auto entity : modelView) {
+                auto& mesh = modelView.get<MeshComponent>(entity);
+                const std::string& path = mesh.meshData.meshPath;
+
+                if (!path.empty() && !m_p_meshManager->isMeshLoaded(path)) {
+                    bool found = false;
+                    for (auto* m : pendingMeshes) {
+                        if (m->meshData.meshPath == path) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        pendingMeshes.push_back(&mesh);
+                    }
+                }
+            }
+
+            if (!pendingMeshes.empty()) {
+                m_p_meshManager->loadMeshesAsync(pendingMeshes);
+            }
+
             transitionImageLayout(cmd,
                                 m_r_context.lowResColorImage,
                                 VK_IMAGE_LAYOUT_UNDEFINED,
@@ -436,7 +461,7 @@ namespace vex {
                 frustumSimd.init(camFrustum);
             }
 
-            auto modelView = registry.view<TransformComponent, MeshComponent>();
+            //auto modelView = registry.view<TransformComponent, MeshComponent>();
             auto it = modelView.begin();
             auto end = modelView.end();
 

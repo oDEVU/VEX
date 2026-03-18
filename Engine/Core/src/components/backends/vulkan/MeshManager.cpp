@@ -3,6 +3,7 @@
 #include "components/PhysicsSystem.hpp"
 #include "components/Mesh.hpp"
 #include "components/errorUtils.hpp"
+#include "components/ThreadPool.hpp"
 #include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"
 #include <fstream>
@@ -196,15 +197,10 @@ namespace vex {
 
         log("Lazy-loading %zu submesh textures for %s", uniqueTextures.size(), path.c_str());
 
-        for (const auto& texPath : uniqueTextures) {
-            if (!m_p_resources->textureExists(texPath)) {
-                try {
-                    m_p_resources->loadTexture(texPath, texPath);
-                    log("Loaded texture: %s", texPath.c_str());
-                } catch (const std::exception& e) {
-                    log(LogLevel::ERROR, "Failed to load texture %s", texPath.c_str());
-                }
-            }
+        if (!uniqueTextures.empty()) {
+            std::vector<std::string> texturesToLoad(uniqueTextures.begin(), uniqueTextures.end());
+            m_p_resources->loadTexturesBatched(texturesToLoad);
+            log("Batch Loaded textures");
         }
 
         try {
@@ -220,6 +216,69 @@ namespace vex {
 
         } catch (const std::exception& e) {
             log(LogLevel::ERROR, "Failed to register VulkanMesh: %s", path.c_str());
+        }
+    }
+
+    void MeshManager::loadMeshesAsync(const std::vector<MeshComponent*>& pendingComponents) {
+        if (pendingComponents.empty()) return;
+
+        std::vector<std::future<std::pair<MeshComponent*, MeshComponent>>> futures;
+
+        for (MeshComponent* comp : pendingComponents) {
+            const std::string path = comp->meshData.meshPath;
+            futures.push_back(GetThreadPool().enqueue([this, comp, path]() {
+                return std::make_pair(comp, this->loadMesh(path));
+            }));
+        }
+
+        std::unordered_set<std::string> uniqueTextures;
+
+        for (auto& future : futures) {
+            auto result = future.get();
+            MeshComponent* originalComp = result.first;
+            MeshComponent loadedData = std::move(result.second);
+
+            uint32_t originalId = originalComp->id;
+            RenderType originalRenderType = originalComp->renderType;
+            vex::rgba originalColor = originalComp->color;
+            auto originalOverrides = originalComp->textureOverrides;
+
+            *originalComp = std::move(loadedData);
+
+            originalComp->id = originalId;
+            originalComp->renderType = originalRenderType;
+            originalComp->color = originalColor;
+            originalComp->textureOverrides = originalOverrides;
+
+            for (const auto& texPath : originalComp->textureNames) {
+                if (!texPath.empty()) {
+                    uniqueTextures.insert(texPath);
+                }
+            }
+        }
+
+        if (!uniqueTextures.empty()) {
+            std::vector<std::string> texturesToLoad(uniqueTextures.begin(), uniqueTextures.end());
+            m_p_resources->loadTexturesBatched(texturesToLoad);
+        }
+
+        for (MeshComponent* comp : pendingComponents) {
+            const std::string& path = comp->meshData.meshPath;
+
+            if (m_vulkanMeshes.find(path) == m_vulkanMeshes.end()) {
+                auto newVulkanMesh = std::make_unique<VulkanMesh>(m_r_context);
+                newVulkanMesh->upload(comp->meshData);
+                newVulkanMesh->addInstance();
+
+                m_meshBoundsCache[path] = { comp->localCenter, comp->localRadius };
+                m_vulkanMeshes.emplace(path, std::move(newVulkanMesh));
+
+                log("Async bulk loaded & registered mesh: %s", path.c_str());
+            } else {
+                m_vulkanMeshes[path]->addInstance();
+            }
+
+            comp->forceRefresh();
         }
     }
 

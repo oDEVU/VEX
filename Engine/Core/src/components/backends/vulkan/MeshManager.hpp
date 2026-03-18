@@ -65,6 +65,17 @@ namespace vex {
         /// @return std::unique_ptr<VulkanMesh>&
         std::unique_ptr<VulkanMesh>& getVulkanMeshByMesh(MeshComponent& meshComponent);
 
+        /// @brief Loads meshes asynchronously from the given paths.
+        /// @param const std::vector<MeshComponent*>& pendingComponents
+        void loadMeshesAsync(const std::vector<MeshComponent*>& pendingComponents);
+
+        /// @brief Checks if a mesh is loaded by path.
+        /// @param const std::string& path
+        /// @return bool
+        bool isMeshLoaded(const std::string& path) const {
+            return m_vulkanMeshes.find(path) != m_vulkanMeshes.end();
+        }
+
         /// @brief Clears the state of the mesh manager, resetting model IDs and clearing the mesh map.
         void clearState();
 

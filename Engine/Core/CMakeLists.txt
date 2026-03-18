@@ -93,6 +93,7 @@ set(public_header_files
     include/components/types.hpp
     include/components/UI/VexUI.hpp
     include/components/HardwareInfo.hpp
+    include/components/ThreadPool.hpp
     include/components/GameComponents/BasicComponents.hpp
     include/components/GameComponents/UiComponent.hpp
     include/components/GameComponents/ComponentFactory.hpp
