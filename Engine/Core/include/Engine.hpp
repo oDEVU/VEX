@@ -94,6 +94,10 @@ public:
     /// @return ResolutionMode - Current resolution mode.
     ResolutionMode getResolutionMode() const { return m_resolutionManager->getCurrentMode(); }
 
+    /// @brief returns a pointer to the resolution manager.
+    /// @return ResolutionManager* - Pointer to the resolution manager.
+    ResolutionManager* getResolutionManager() const { return m_resolutionManager.get(); }
+
     /// @brief Function allowing for changing input mode at runtime.
     /// @param InputMode mode - Enum storing input modes.
     void setInputMode(InputMode mode) { m_inputSystem->setInputMode(mode); }
