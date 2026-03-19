@@ -1,6 +1,6 @@
 var classvex_1_1SceneManager =
 [
-    [ "clearScenes", "classvex_1_1SceneManager.html#a9b9af95362d39787631b323c6f351526", null ],
+    [ "clearScenes", "classvex_1_1SceneManager.html#afb867b2de73d7fb77129b1fc70bb5fdc", null ],
     [ "GetAllAddedObjects", "classvex_1_1SceneManager.html#aa6d03a78a9ac7d14bb4db3348f33d8fa", null ],
     [ "GetAllObjects", "classvex_1_1SceneManager.html#a445b1cfaed3cc4ad8b47fac01c4749a7", null ],
     [ "GetAllSceneNames", "classvex_1_1SceneManager.html#affd2f3e3df3cc9d260e27097b2311e75", null ],

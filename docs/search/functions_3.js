@@ -8,7 +8,7 @@ var searchData=
   ['destroygameobject_5',['DestroyGameObject',['../classvex_1_1Scene.html#a9e1119af8f263db062ed73d3d0bda269',1,'vex::Scene']]],
   ['destroymodel_6',['destroyModel',['../classvex_1_1MeshManager.html#a651df97b135ae5108396d3e55a564b57',1,'vex::MeshManager']]],
   ['dialogwindow_7',['DialogWindow',['../classvex_1_1DialogWindow.html#ade590af6a3ddae3c55da398ba14c894f',1,'vex::DialogWindow']]],
-  ['draw_8',['Draw',['../classvex_1_1AssetBrowser.html#a2f923d5050e53e6dc61de482804562c3',1,'vex::AssetBrowser']]],
+  ['draw_8',['Draw',['../classvex_1_1DebugConsole.html#ab256c107bc7d1b1c6f6d72b0b62f31d4',1,'vex::DebugConsole::Draw()'],['../classvex_1_1AssetBrowser.html#a2f923d5050e53e6dc61de482804562c3',1,'vex::AssetBrowser::Draw()']]],
   ['draw_9',['draw',['../classvex_1_1VulkanMesh.html#abbb4f83d2aa6280bc4573bae8c4df2f4',1,'vex::VulkanMesh']]],
   ['drawaddexistingmodal_10',['drawAddExistingModal',['../classvex_1_1ProjectSelector.html#a16b68758931371aa3265bd787f06f984',1,'vex::ProjectSelector']]],
   ['drawbar_11',['DrawBar',['../classEditorMenuBar.html#a03a4c974246f5ad0c4494fe09db48f7f',1,'EditorMenuBar']]],

@@ -164,6 +164,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a372b999d73647be059512d5c75a6c7a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undoes the last action performed in the editor.  <br /></td></tr>
 <tr class="memitem:a5feb171667bd81a9dd92ed904288fbf7" id="r_a5feb171667bd81a9dd92ed904288fbf7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5feb171667bd81a9dd92ed904288fbf7">Redo</a> ()</td></tr>
 <tr class="memdesc:a5feb171667bd81a9dd92ed904288fbf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redoes the last undone action in the editor.  <br /></td></tr>
+<tr class="memitem:a303786ec0ec2c326aaf88b31997dc1f5" id="r_a303786ec0ec2c326aaf88b31997dc1f5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a303786ec0ec2c326aaf88b31997dc1f5">IsEditor</a> () override</td></tr>
+<tr class="memdesc:a303786ec0ec2c326aaf88b31997dc1f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the engine is running in editor mode.  <br /></td></tr>
+<tr class="memitem:ac94bab275a42fc5cd06a1814c495274d" id="r_ac94bab275a42fc5cd06a1814c495274d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac94bab275a42fc5cd06a1814c495274d">ShowConsole</a> ()</td></tr>
+<tr class="memdesc:ac94bab275a42fc5cd06a1814c495274d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows the debug console.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classvex_1_1Engine"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classvex_1_1Engine')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classvex_1_1Engine.html">vex::Engine</a></td></tr>
 <tr class="memitem:ab9aa221f6146c728213c148cba72b245 inherit pub_methods_classvex_1_1Engine" id="r_ab9aa221f6146c728213c148cba72b245"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#ab9aa221f6146c728213c148cba72b245">Engine</a> (const char *title, int width, int height, <a class="el" href="structvex_1_1GameInfo.html">GameInfo</a> gInfo)</td></tr>
 <tr class="memdesc:ab9aa221f6146c728213c148cba72b245 inherit pub_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems.">Engine</a> class.  <br /></td></tr>
@@ -179,6 +183,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a2712148f198e8c221ab8d18b5112ecae inherit pub_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function returning the current state of the game.  <br /></td></tr>
 <tr class="memitem:a990ca389e3e97678e7a090d8903acb47 inherit pub_methods_classvex_1_1Engine" id="r_a990ca389e3e97678e7a090d8903acb47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="ResolutionManager_8hpp.html#a6c6347ce8388807f7722c3d4a3554b7e">ResolutionMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a990ca389e3e97678e7a090d8903acb47">getResolutionMode</a> () const</td></tr>
 <tr class="memdesc:a990ca389e3e97678e7a090d8903acb47 inherit pub_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current resolution mode.  <br /></td></tr>
+<tr class="memitem:a11a1581f5a6ab2c85099346b7252bb21 inherit pub_methods_classvex_1_1Engine" id="r_a11a1581f5a6ab2c85099346b7252bb21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classvex_1_1ResolutionManager.html">ResolutionManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a11a1581f5a6ab2c85099346b7252bb21">getResolutionManager</a> () const</td></tr>
+<tr class="memdesc:a11a1581f5a6ab2c85099346b7252bb21 inherit pub_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns a pointer to the resolution manager.  <br /></td></tr>
 <tr class="memitem:a22b26b2a4c127db42bba2eb1da77ad50 inherit pub_methods_classvex_1_1Engine" id="r_a22b26b2a4c127db42bba2eb1da77ad50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a22b26b2a4c127db42bba2eb1da77ad50">setInputMode</a> (<a class="el" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a> mode)</td></tr>
 <tr class="memdesc:a22b26b2a4c127db42bba2eb1da77ad50 inherit pub_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function allowing for changing input mode at runtime.  <br /></td></tr>
 <tr class="memitem:a7b503ecc63cd29aeae1dd22d0a3573ef inherit pub_methods_classvex_1_1Engine" id="r_a7b503ecc63cd29aeae1dd22d0a3573ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a7b503ecc63cd29aeae1dd22d0a3573ef">getInputMode</a> () const</td></tr>
@@ -284,12 +290,21 @@ struct <a class="el" href="structvex_1_1Editor_1_1CopiedObjectData.html">vex::Ed
 <tr class="memitem:ae91440aa20e02befe81902775626d8bc" id="r_ae91440aa20e02befe81902775626d8bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structProjectProperties.html">ProjectProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae91440aa20e02befe81902775626d8bc">m_SavedProjectProperties</a></td></tr>
 <tr class="memitem:a814adbe3aa5134a9810225ec00b655b0" id="r_a814adbe3aa5134a9810225ec00b655b0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a814adbe3aa5134a9810225ec00b655b0">m_fps</a> = 0</td></tr>
 <tr class="memitem:ac3ee62a3ebca6517615552cf46cbbe65" id="r_ac3ee62a3ebca6517615552cf46cbbe65"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3ee62a3ebca6517615552cf46cbbe65">m_refresh</a> = false</td></tr>
+<tr class="memitem:a4d3d66d7ac2e49f0bfdff83ce84b5e72" id="r_a4d3d66d7ac2e49f0bfdff83ce84b5e72"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d3d66d7ac2e49f0bfdff83ce84b5e72">showConsole</a> = false</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_static_methods_classvex_1_1Engine"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_static_methods_classvex_1_1Engine')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Static Public Member Functions inherited from <a class="el" href="classvex_1_1Engine.html">vex::Engine</a></td></tr>
 <tr class="memitem:a978bfa9693ecaf4574d2efbfbe31b9ee inherit pub_static_methods_classvex_1_1Engine" id="r_a978bfa9693ecaf4574d2efbfbe31b9ee"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a978bfa9693ecaf4574d2efbfbe31b9ee">GetBuildHash</a> ()</td></tr>
 <tr class="memdesc:a978bfa9693ecaf4574d2efbfbe31b9ee inherit pub_static_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns engine hash generated during build process.  <br /></td></tr>
+<tr class="memitem:af1454351884e13ed0682d592fa11d5d3 inherit pub_static_methods_classvex_1_1Engine" id="r_af1454351884e13ed0682d592fa11d5d3"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#af1454351884e13ed0682d592fa11d5d3">GetVersionMajor</a> ()</td></tr>
+<tr class="memdesc:af1454351884e13ed0682d592fa11d5d3 inherit pub_static_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the major version of the engine.  <br /></td></tr>
+<tr class="memitem:a4190e53396405d75a079b6dbb9074c8a inherit pub_static_methods_classvex_1_1Engine" id="r_a4190e53396405d75a079b6dbb9074c8a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a4190e53396405d75a079b6dbb9074c8a">GetVersionMinor</a> ()</td></tr>
+<tr class="memdesc:a4190e53396405d75a079b6dbb9074c8a inherit pub_static_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minor version of the engine.  <br /></td></tr>
+<tr class="memitem:aa5b8d33fef087be798d7075ae51f2826 inherit pub_static_methods_classvex_1_1Engine" id="r_aa5b8d33fef087be798d7075ae51f2826"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#aa5b8d33fef087be798d7075ae51f2826">GetVersionPatch</a> ()</td></tr>
+<tr class="memdesc:aa5b8d33fef087be798d7075ae51f2826 inherit pub_static_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the patch version of the engine.  <br /></td></tr>
+<tr class="memitem:a5285f47bcd080e3309325683b8d402d8 inherit pub_static_methods_classvex_1_1Engine" id="r_a5285f47bcd080e3309325683b8d402d8"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a5285f47bcd080e3309325683b8d402d8">GetVersionString</a> ()</td></tr>
+<tr class="memdesc:a5285f47bcd080e3309325683b8d402d8 inherit pub_static_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the version string of the engine.  <br /></td></tr>
 <tr class="inherit_header pro_methods_classvex_1_1Engine"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classvex_1_1Engine')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Protected Member Functions inherited from <a class="el" href="classvex_1_1Engine.html">vex::Engine</a></td></tr>
 <tr class="memitem:a73324310e3b2705b7a6a0f411b0083bd inherit pro_methods_classvex_1_1Engine" id="r_a73324310e3b2705b7a6a0f411b0083bd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvex_1_1Engine.html#a73324310e3b2705b7a6a0f411b0083bd">Engine</a> (<a class="el" href="structvex_1_1SkipInit.html">SkipInit</a>)</td></tr>
 <tr class="memdesc:a73324310e3b2705b7a6a0f411b0083bd inherit pro_methods_classvex_1_1Engine"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alternative constructor for editor to skip default init code.  <br /></td></tr>
@@ -318,7 +333,7 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The main <a class="el" href="classvex_1_1Editor.html" title="The main Editor class, inheriting from Engine and providing editor-specific functionality and UI.">Editor</a> class, inheriting from <a class="el" href="classvex_1_1Engine.html" title="Class for interaction with engine systems.">Engine</a> and providing editor-specific functionality and UI. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00030">30</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00032">32</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abf2f5ffc25db406eb6baf79e4a743ab0" name="abf2f5ffc25db406eb6baf79e4a743ab0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf2f5ffc25db406eb6baf79e4a743ab0">&#9670;&#160;</a></span>Editor()</h2>
@@ -366,7 +381,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00032">32</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00033">33</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -393,7 +408,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00042">42</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00044">44</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -415,7 +430,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Copies the selected object to the clipboard. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00149">149</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00154">154</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -436,7 +451,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Deletes the selected object from the scene. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00185">185</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00190">190</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -476,7 +491,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00573">573</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00582">582</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -516,7 +531,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00377">377</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00386">386</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -537,7 +552,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Duplicates the selected object in the scene. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00180">180</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00185">185</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -577,7 +592,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00529">529</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00538">538</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -607,7 +622,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a pointer to the <a class="el" href="classvex_1_1AssetBrowser.html" title="Class responsible for displaying and navigating project assets within an ImGUI window.">AssetBrowser</a> instance. </p>
 <dl class="section return"><dt>Returns</dt><dd>AssetBrowser* - Pointer to the <a class="el" href="classvex_1_1AssetBrowser.html" title="Class responsible for displaying and navigating project assets within an ImGUI window.">AssetBrowser</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00070">70</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00072">72</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -637,7 +652,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the collection of icons used within the editor's UI. </p>
 <dl class="section return"><dt>Returns</dt><dd>const <a class="el" href="structvex_1_1BrowserIcons.html" title="Structure holding texture IDs for various asset types displayed in the browser.">BrowserIcons</a>&amp; - Reference to the icon collection. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00074">74</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00076">76</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -667,7 +682,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a pointer to the mutable editor properties. </p>
 <dl class="section return"><dt>Returns</dt><dd>EditorProperties* - Pointer to the editor properties structure. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00078">78</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00080">80</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -697,7 +712,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the path to the project's binary directory. </p>
 <dl class="section return"><dt>Returns</dt><dd>std::string - The project binary path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00066">66</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00068">68</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -727,7 +742,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a pointer to the mutable project properties. </p>
 <dl class="section return"><dt>Returns</dt><dd>ProjectProperties* - Pointer to the project properties structure. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00082">82</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00084">84</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -759,7 +774,38 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00541">541</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00550">550</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a303786ec0ec2c326aaf88b31997dc1f5" name="a303786ec0ec2c326aaf88b31997dc1f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a303786ec0ec2c326aaf88b31997dc1f5">&#9670;&#160;</a></span>IsEditor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::Editor::IsEditor </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the engine is running in editor mode. </p>
+
+<p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#a7bb9ddebd24d0ea7529911d9e018dfe9">vex::Engine</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00122">122</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -788,7 +834,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Loads the texture icons used for the Asset Browser and other UI elements. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00324">324</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00333">333</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -828,7 +874,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00182">182</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00192">192</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -868,7 +914,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00214">214</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00224">224</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -889,7 +935,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Handler for post-hot-reload operations. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00885">885</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00894">894</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -910,7 +956,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pastes the object from the clipboard to the scene. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00163">163</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00168">168</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -931,7 +977,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Processes editor shortcuts. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00099">99</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00104">104</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -973,7 +1019,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#aeeb81fa77c9f740100285bedda1d9f09">vex::Engine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00260">260</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00265">265</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1002,7 +1048,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pushes a command onto the undo stack and clears the redo stack. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00233">233</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00243">243</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1055,7 +1101,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>float - The distance to the intersection point, or infinity if no intersection. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00492">492</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00501">501</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1114,7 +1160,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>float - The distance to the intersection point, or infinity if no intersection. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00503">503</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00512">512</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1135,7 +1181,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Redoes the last undone action in the editor. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00142">142</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00147">147</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1166,7 +1212,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#aaeed76b0ced7dc92bf4a19467c56489a">vex::Engine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00093">93</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00095">95</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1197,7 +1243,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#a651671153ff5f6edc58e2d76700c6c77">vex::Engine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00264">264</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00269">269</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1224,7 +1270,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00318">318</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00327">327</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1264,7 +1310,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00169">169</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00179">179</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1304,7 +1350,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00201">201</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00211">211</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1339,7 +1385,36 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#a2eb368e0be3b1408b8f3630614692bcf">vex::Engine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00058">58</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00060">60</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac94bab275a42fc5cd06a1814c495274d" name="ac94bab275a42fc5cd06a1814c495274d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac94bab275a42fc5cd06a1814c495274d">&#9670;&#160;</a></span>ShowConsole()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vex::Editor::ShowConsole </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Shows the debug console. </p>
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00125">125</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1360,7 +1435,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Undoes the last action performed in the editor. </p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00135">135</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00140">140</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1397,7 +1472,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classvex_1_1Engine.html#a9d7355662abceb4069d112e4ab3b67ea">vex::Engine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00198">198</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8cpp_source.html#l00203">203</a> of file <a class="el" href="Editor_8cpp_source.html">Editor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1422,7 +1497,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00257">257</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00267">267</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1446,7 +1521,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00254">254</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00264">264</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1470,7 +1545,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00266">266</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00276">276</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1494,7 +1569,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00265">265</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00275">275</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1518,7 +1593,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00255">255</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00265">265</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1542,7 +1617,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00272">272</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00282">282</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1566,7 +1641,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00278">278</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00288">288</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1590,7 +1665,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00247">247</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00257">257</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1614,7 +1689,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00248">248</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00258">258</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1638,7 +1713,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00249">249</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00259">259</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1662,7 +1737,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00246">246</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00256">256</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1686,7 +1761,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00258">258</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00268">268</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1710,7 +1785,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00251">251</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00261">261</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1734,7 +1809,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00270">270</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00280">280</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1758,7 +1833,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00260">260</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00270">270</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1782,7 +1857,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00263">263</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00273">273</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1806,7 +1881,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00275">275</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00285">285</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1830,7 +1905,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00229">229</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00239">239</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1854,7 +1929,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00280">280</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00290">290</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1878,7 +1953,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00273">273</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00283">283</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1902,7 +1977,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00276">276</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00286">286</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1926,7 +2001,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00256">256</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00266">266</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1950,7 +2025,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00268">268</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00278">278</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1974,7 +2049,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00228">228</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00238">238</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1998,7 +2073,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00267">267</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00277">277</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2022,7 +2097,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00253">253</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00263">263</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2046,7 +2121,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00261">261</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00271">271</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>
@@ -2070,7 +2145,31 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00230">230</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00240">240</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4d3d66d7ac2e49f0bfdff83ce84b5e72" name="a4d3d66d7ac2e49f0bfdff83ce84b5e72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d3d66d7ac2e49f0bfdff83ce84b5e72">&#9670;&#160;</a></span>showConsole</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool vex::Editor::showConsole = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Editor_8hpp_source.html#l00291">291</a> of file <a class="el" href="Editor_8hpp_source.html">Editor.hpp</a>.</p>
 
 </div>
 </div>

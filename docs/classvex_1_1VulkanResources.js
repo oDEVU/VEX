@@ -20,6 +20,7 @@ var classvex_1_1VulkanResources =
     [ "getTextureView", "classvex_1_1VulkanResources.html#afc98d19439dc53425270d0a302e30466", null ],
     [ "getUBODescriptorSet", "classvex_1_1VulkanResources.html#a234ce352ae63fd822c06cd7a3e00c2e4", null ],
     [ "loadTexture", "classvex_1_1VulkanResources.html#a46cf7cb8e3c1921551d473fb62b7c2b0", null ],
+    [ "loadTexturesBatched", "classvex_1_1VulkanResources.html#ac21e226e03dcc1939df08ca99b3bf2bf", null ],
     [ "textureExists", "classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef", null ],
     [ "unloadTexture", "classvex_1_1VulkanResources.html#a777c49742fa6e898a46d8a6c97d75b0c", null ],
     [ "updateLightUBO", "classvex_1_1VulkanResources.html#ab4d964bb1cefadb20140dedf53da9893", null ],

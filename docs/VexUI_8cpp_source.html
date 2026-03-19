@@ -112,7 +112,7 @@ $(function(){initNavTree('VexUI_8cpp_source.html','',''); });
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&gt;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;<a class="code" href="pathUtils_8hpp.html">components/pathUtils.hpp</a>&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;../HardwareInfo.hpp&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;components/HardwareInfo.hpp&quot;</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>vex {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
@@ -482,8 +482,8 @@ $(function(){initNavTree('VexUI_8cpp_source.html','',''); });
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>        m_root = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;root&quot;</span>)) {</div>
 <div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>            m_root = <a class="code hl_function" href="classvex_1_1VexUI.html#ab8c6e168537470132f0d8959763518f3">parseNode</a>(json[<span class="stringliteral">&quot;root&quot;</span>]);</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>            <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;zindex&quot;</span>)){</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>                zIndex = json[<span class="stringliteral">&quot;zindex&quot;</span>].get&lt;<span class="keywordtype">int</span>&gt;();</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>            <span class="keywordflow">if</span> (json[<span class="stringliteral">&quot;root&quot;</span>].contains(<span class="stringliteral">&quot;zindex&quot;</span>)){</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>                zIndex = json[<span class="stringliteral">&quot;root&quot;</span>][<span class="stringliteral">&quot;zindex&quot;</span>].get&lt;<span class="keywordtype">int</span>&gt;();</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>            }</div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>        }</div>
 <div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>        <span class="keywordflow">if</span> (m_root &amp;&amp; json.contains(<span class="stringliteral">&quot;overlays&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;overlays&quot;</span>].is_array()) {</div>
@@ -837,48 +837,48 @@ $(function(){initNavTree('VexUI_8cpp_source.html','',''); });
 <div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span> </div>
 <div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>    VkDescriptorSet globalUBO = m_res-&gt;getUBODescriptorSet(currentFrame);</div>
 <div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>        <span class="keywordflow">if</span> (globalUBO != VK_NULL_HANDLE) {</div>
-<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>            <span class="comment">// We must provide an offset because Binding 1 is DYNAMIC.</span></div>
-<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>            <span class="comment">// We use 0 since the UI doesn&#39;t actually read lights, but the API demands a valid offset.</span></div>
-<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span>            uint32_t dynamicOffset = 0;</div>
-<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span> </div>
-<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>            vkCmdBindDescriptorSets(</div>
-<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>                cmd,</div>
-<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>                VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
-<div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>                pipelineLayout,</div>
-<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>                0,</div>
-<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>                1, &amp;globalUBO,</div>
-<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>                1, &amp;dynamicOffset <span class="comment">// &lt;--- Changed from 0, nullptr</span></div>
-<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span>            );</div>
-<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>        }</div>
-<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span> </div>
-<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>    glm::mat4 ortho = glm::ortho(</div>
-<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>        0.0f, <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_ctx.currentRenderResolution.x),</div>
-<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>        0.0f, <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_ctx.currentRenderResolution.y),</div>
-<div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>        -1.0f, 1.0f</div>
-<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span>    );</div>
+<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>            uint32_t dynamicOffset = 0;</div>
+<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span> </div>
+<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span>            vkCmdBindDescriptorSets(</div>
+<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>                cmd,</div>
+<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>                VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
+<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>                pipelineLayout,</div>
+<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>                0,</div>
+<div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>                1, &amp;globalUBO,</div>
+<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>                1, &amp;dynamicOffset</div>
+<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>            );</div>
+<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>        }</div>
+<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span> </div>
+<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>    glm::mat4 ortho = glm::ortho(</div>
+<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span>        0.0f, <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_ctx.currentRenderResolution.x),</div>
+<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>        0.0f, <span class="keyword">static_cast&lt;</span><span class="keywordtype">float</span><span class="keyword">&gt;</span>(m_ctx.currentRenderResolution.y),</div>
+<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>        -1.0f, 1.0f</div>
+<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>    );</div>
+<div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span> </div>
+<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span>    <a class="code hl_struct" href="structvex_1_1UIPushConstants.html">UIPushConstants</a> uiPC{ ortho };</div>
 <div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span> </div>
-<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>    <a class="code hl_struct" href="structvex_1_1UIPushConstants.html">UIPushConstants</a> uiPC{ ortho };</div>
-<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span> </div>
-<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>    vkCmdPushConstants(</div>
-<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>        cmd,</div>
-<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>        pipelineLayout,</div>
-<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>        VK_SHADER_STAGE_VERTEX_BIT,</div>
-<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>        0,</div>
-<div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span>        <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1UIPushConstants.html">UIPushConstants</a>),</div>
-<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>        &amp;uiPC);</div>
-<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span> </div>
-<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>    VkDeviceSize offset = 0;</div>
-<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>    vkCmdBindVertexBuffers(cmd, 0, 1, &amp;m_vb, &amp;offset);</div>
-<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span> </div>
-<div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>    <span class="keyword">const</span> uint32_t verticesPerQuad = 6;</div>
-<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>    <span class="keyword">const</span> uint32_t floatsPerVertex = 9;</div>
-<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>    <span class="keyword">const</span> uint32_t floatsPerQuad = verticesPerQuad * floatsPerVertex;</div>
-<div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span> </div>
-<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>    uint32_t totalVertices = verts.size() / floatsPerVertex;</div>
-<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>    uint32_t currentVertex = 0;</div>
-<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span> </div>
-<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>    <span class="keywordtype">int</span> currentTexIndex = INT_MIN;</div>
-<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>    VkDescriptorSet currentTexSet = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>    vkCmdPushConstants(</div>
+<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>        cmd,</div>
+<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>        pipelineLayout,</div>
+<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>        VK_SHADER_STAGE_VERTEX_BIT,</div>
+<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>        0,</div>
+<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>        <span class="keyword">sizeof</span>(<a class="code hl_struct" href="structvex_1_1UIPushConstants.html">UIPushConstants</a>),</div>
+<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>        &amp;uiPC);</div>
+<div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span> </div>
+<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>    VkDeviceSize offset = 0;</div>
+<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>    vkCmdBindVertexBuffers(cmd, 0, 1, &amp;m_vb, &amp;offset);</div>
+<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span> </div>
+<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>    <span class="keyword">const</span> uint32_t verticesPerQuad = 6;</div>
+<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>    <span class="keyword">const</span> uint32_t floatsPerVertex = 9;</div>
+<div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>    <span class="keyword">const</span> uint32_t floatsPerQuad = verticesPerQuad * floatsPerVertex;</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span> </div>
+<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>    uint32_t totalVertices = verts.size() / floatsPerVertex;</div>
+<div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span>    uint32_t currentVertex = 0;</div>
+<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span> </div>
+<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>    <span class="keywordtype">int</span> currentTexIndex = INT_MIN;</div>
+<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span>    VkDescriptorSet currentTexSet = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span> </div>
+<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>    <span class="keywordtype">bool</span> useBindless = m_ctx.supportsBindlessTextures;</div>
 <div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span> </div>
 <div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span>    <span class="keywordflow">while</span> (currentVertex &lt; totalVertices) {</div>
 <div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span>        uint32_t quadStart = currentVertex * floatsPerVertex;</div>
@@ -889,167 +889,169 @@ $(function(){initNavTree('VexUI_8cpp_source.html','',''); });
 <div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span>        <span class="keywordflow">if</span> (texIndex != currentTexIndex) {</div>
 <div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>            currentTexIndex = texIndex;</div>
 <div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span> </div>
-<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>            <span class="keywordflow">if</span> (texIndex &gt;= 0) {</div>
-<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>                currentTexSet = m_res-&gt;getTextureDescriptorSet(currentFrame, texIndex);</div>
-<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>                currentTexSet = m_res-&gt;getTextureDescriptorSet(currentFrame, 0);</div>
-<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>            }</div>
-<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span> </div>
-<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>            vkCmdBindDescriptorSets(</div>
-<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>                cmd,</div>
-<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>                VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
-<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>                pipelineLayout,</div>
-<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>                1,</div>
-<div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span>                1, &amp;currentTexSet,</div>
-<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>                0, <span class="keyword">nullptr</span></div>
-<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>            );</div>
-<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>        }</div>
-<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span> </div>
-<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>        vkCmdDraw(cmd, 6, 1, currentVertex, 0);</div>
-<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>        currentVertex += 6;</div>
-<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>    }</div>
-<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>}</div>
+<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>            <span class="keywordflow">if</span> (!useBindless) {</div>
+<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>                <span class="keywordflow">if</span> (texIndex &gt;= 0) {</div>
+<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>                    currentTexSet = m_res-&gt;getTextureDescriptorSet(currentFrame, texIndex);</div>
+<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>                    currentTexSet = m_res-&gt;getTextureDescriptorSet(currentFrame, 0);</div>
+<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>                }</div>
+<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span> </div>
+<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>                vkCmdBindDescriptorSets(</div>
+<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>                    cmd,</div>
+<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>                    VK_PIPELINE_BIND_POINT_GRAPHICS,</div>
+<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>                    pipelineLayout,</div>
+<div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span>                    1,</div>
+<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>                    1, &amp;currentTexSet,</div>
+<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>                    0, <span class="keyword">nullptr</span></div>
+<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>                );</div>
+<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>            }</div>
+<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>        }</div>
+<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span> </div>
+<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>        vkCmdDraw(cmd, 6, 1, currentVertex, 0);</div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>        currentVertex += 6;</div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>    }</div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>}</div>
 </div>
-<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span> </div>
-<div class="foldopen" id="foldopen00777" data-start="{" data-end="}">
-<div class="line"><a id="l00777" name="l00777"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#abcd53da19f458b2381ed410916eeb546">  777</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#abcd53da19f458b2381ed410916eeb546">VexUI::uploadVerts</a>(<span class="keyword">const</span> std::vector&lt;float&gt;&amp; verts) {</div>
-<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>    <span class="keywordflow">if</span> (verts.empty()) <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>    <span class="keywordtype">size_t</span> bytes = verts.size() * <span class="keyword">sizeof</span>(float);</div>
-<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>    <span class="keywordflow">if</span> (bytes &gt; m_vbSize) <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;UI VB overflow&quot;</span>);</div>
-<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span> </div>
-<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>    <span class="keywordtype">void</span>* dst; vmaMapMemory(m_ctx.allocator, m_vbAlloc, &amp;dst);</div>
-<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>    memcpy(dst, verts.data(), bytes);</div>
-<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>    vmaUnmapMemory(m_ctx.allocator, m_vbAlloc);</div>
-<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span>}</div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span> </div>
+<div class="foldopen" id="foldopen00779" data-start="{" data-end="}">
+<div class="line"><a id="l00779" name="l00779"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#abcd53da19f458b2381ed410916eeb546">  779</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#abcd53da19f458b2381ed410916eeb546">VexUI::uploadVerts</a>(<span class="keyword">const</span> std::vector&lt;float&gt;&amp; verts) {</div>
+<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>    <span class="keywordflow">if</span> (verts.empty()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>    <span class="keywordtype">size_t</span> bytes = verts.size() * <span class="keyword">sizeof</span>(float);</div>
+<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>    <span class="keywordflow">if</span> (bytes &gt; m_vbSize) <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;UI VB overflow&quot;</span>);</div>
+<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span> </div>
+<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>    <span class="keywordtype">void</span>* dst; vmaMapMemory(m_ctx.allocator, m_vbAlloc, &amp;dst);</div>
+<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span>    memcpy(dst, verts.data(), bytes);</div>
+<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>    vmaUnmapMemory(m_ctx.allocator, m_vbAlloc);</div>
+<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>}</div>
 </div>
-<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span> </div>
-<div class="foldopen" id="foldopen00787" data-start="{" data-end="}">
-<div class="line"><a id="l00787" name="l00787"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">  787</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">VexUI::freeTree</a>(<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>    <span class="keywordflow">if</span> (!w) <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>* c : w-&gt;children) <a class="code hl_function" href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">freeTree</a>(c);</div>
-<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>    <span class="keyword">delete</span> w;</div>
-<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>}</div>
+<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span> </div>
+<div class="foldopen" id="foldopen00789" data-start="{" data-end="}">
+<div class="line"><a id="l00789" name="l00789"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">  789</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">VexUI::freeTree</a>(<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>    <span class="keywordflow">if</span> (!w) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>* c : w-&gt;children) <a class="code hl_function" href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">freeTree</a>(c);</div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>    <span class="keyword">delete</span> w;</div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>}</div>
 </div>
-<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span> </div>
-<div class="foldopen" id="foldopen00793" data-start="{" data-end="}">
-<div class="line"><a id="l00793" name="l00793"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a195b928e240b41ab7f574beb5ad7980a">  793</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a195b928e240b41ab7f574beb5ad7980a">VexUI::setRotation</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> degrees) {</div>
-<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [degrees](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>        w-&gt;rotation = degrees;</div>
-<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>    });</div>
-<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>}</div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span> </div>
+<div class="foldopen" id="foldopen00795" data-start="{" data-end="}">
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a195b928e240b41ab7f574beb5ad7980a">  795</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a195b928e240b41ab7f574beb5ad7980a">VexUI::setRotation</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> degrees) {</div>
+<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [degrees](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>        w-&gt;rotation = degrees;</div>
+<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>    });</div>
+<div class="line"><a id="l00799" name="l00799"></a><span class="lineno">  799</span>}</div>
 </div>
-<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span> </div>
-<div class="foldopen" id="foldopen00799" data-start="{" data-end="}">
-<div class="line"><a id="l00799" name="l00799"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a43ecc65f1729fbb75a3b0ac42564a1ed">  799</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a43ecc65f1729fbb75a3b0ac42564a1ed">VexUI::setPosition</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y) {</div>
-<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [x, y](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span>        YGNodeStyleSetPosition(w-&gt;yoga, YGEdgeLeft, x);</div>
-<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>        YGNodeStyleSetPosition(w-&gt;yoga, YGEdgeTop, y);</div>
-<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>    });</div>
-<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>}</div>
+<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span> </div>
+<div class="foldopen" id="foldopen00801" data-start="{" data-end="}">
+<div class="line"><a id="l00801" name="l00801"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a43ecc65f1729fbb75a3b0ac42564a1ed">  801</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a43ecc65f1729fbb75a3b0ac42564a1ed">VexUI::setPosition</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y) {</div>
+<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [x, y](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>        YGNodeStyleSetPosition(w-&gt;yoga, YGEdgeLeft, x);</div>
+<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>        YGNodeStyleSetPosition(w-&gt;yoga, YGEdgeTop, y);</div>
+<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span>    });</div>
+<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span>}</div>
 </div>
-<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span> </div>
-<div class="foldopen" id="foldopen00806" data-start="{" data-end="}">
-<div class="line"><a id="l00806" name="l00806"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a0d69da44576b33dd3f3a3b693c27adf2">  806</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a0d69da44576b33dd3f3a3b693c27adf2">VexUI::setSize</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height) {</div>
-<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [width, height](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00808" name="l00808"></a><span class="lineno">  808</span>        w-&gt;size = {width, height};</div>
-<div class="line"><a id="l00809" name="l00809"></a><span class="lineno">  809</span>        YGNodeStyleSetWidth(w-&gt;yoga, width);</div>
-<div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span>        YGNodeStyleSetHeight(w-&gt;yoga, height);</div>
-<div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span>    });</div>
-<div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>}</div>
+<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span> </div>
+<div class="foldopen" id="foldopen00808" data-start="{" data-end="}">
+<div class="line"><a id="l00808" name="l00808"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a0d69da44576b33dd3f3a3b693c27adf2">  808</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a0d69da44576b33dd3f3a3b693c27adf2">VexUI::setSize</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height) {</div>
+<div class="line"><a id="l00809" name="l00809"></a><span class="lineno">  809</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [width, height](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span>        w-&gt;size = {width, height};</div>
+<div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span>        YGNodeStyleSetWidth(w-&gt;yoga, width);</div>
+<div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>        YGNodeStyleSetHeight(w-&gt;yoga, height);</div>
+<div class="line"><a id="l00813" name="l00813"></a><span class="lineno">  813</span>    });</div>
+<div class="line"><a id="l00814" name="l00814"></a><span class="lineno">  814</span>}</div>
 </div>
-<div class="line"><a id="l00813" name="l00813"></a><span class="lineno">  813</span> </div>
-<div class="foldopen" id="foldopen00814" data-start="{" data-end="}">
-<div class="line"><a id="l00814" name="l00814"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455">  814</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455">VexUI::setImage</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; path) {</div>
-<div class="line"><a id="l00815" name="l00815"></a><span class="lineno">  815</span>    <span class="keywordflow">if</span> (initialized) {</div>
-<div class="line"><a id="l00816" name="l00816"></a><span class="lineno">  816</span>        <span class="keywordflow">if</span> (<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w = <a class="code hl_function" href="classvex_1_1VexUI.html#a82668cb58dd4b75060111559bf1ec2ec">findById</a>(m_root, <span class="keywordtype">id</span>)) {</div>
-<div class="line"><a id="l00817" name="l00817"></a><span class="lineno">  817</span>            w-&gt;image = path;</div>
-<div class="line"><a id="l00818" name="l00818"></a><span class="lineno">  818</span>            m_res-&gt;loadTexture(<a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path), <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path));</div>
-<div class="line"><a id="l00819" name="l00819"></a><span class="lineno">  819</span>        }</div>
-<div class="line"><a id="l00820" name="l00820"></a><span class="lineno">  820</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00821" name="l00821"></a><span class="lineno">  821</span>        pendingSetters.push_back([<span class="keyword">this</span>, <span class="keywordtype">id</span>, path]() {</div>
-<div class="line"><a id="l00822" name="l00822"></a><span class="lineno">  822</span>            <span class="keywordflow">if</span> (<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w = <a class="code hl_function" href="classvex_1_1VexUI.html#a82668cb58dd4b75060111559bf1ec2ec">findById</a>(m_root, <span class="keywordtype">id</span>)) {</div>
-<div class="line"><a id="l00823" name="l00823"></a><span class="lineno">  823</span>                w-&gt;image = path;</div>
-<div class="line"><a id="l00824" name="l00824"></a><span class="lineno">  824</span>                m_res-&gt;loadTexture(<a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path), <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path));</div>
-<div class="line"><a id="l00825" name="l00825"></a><span class="lineno">  825</span>            }</div>
-<div class="line"><a id="l00826" name="l00826"></a><span class="lineno">  826</span>        });</div>
-<div class="line"><a id="l00827" name="l00827"></a><span class="lineno">  827</span>    }</div>
-<div class="line"><a id="l00828" name="l00828"></a><span class="lineno">  828</span>}</div>
+<div class="line"><a id="l00815" name="l00815"></a><span class="lineno">  815</span> </div>
+<div class="foldopen" id="foldopen00816" data-start="{" data-end="}">
+<div class="line"><a id="l00816" name="l00816"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455">  816</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455">VexUI::setImage</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; path) {</div>
+<div class="line"><a id="l00817" name="l00817"></a><span class="lineno">  817</span>    <span class="keywordflow">if</span> (initialized) {</div>
+<div class="line"><a id="l00818" name="l00818"></a><span class="lineno">  818</span>        <span class="keywordflow">if</span> (<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w = <a class="code hl_function" href="classvex_1_1VexUI.html#a82668cb58dd4b75060111559bf1ec2ec">findById</a>(m_root, <span class="keywordtype">id</span>)) {</div>
+<div class="line"><a id="l00819" name="l00819"></a><span class="lineno">  819</span>            w-&gt;image = path;</div>
+<div class="line"><a id="l00820" name="l00820"></a><span class="lineno">  820</span>            m_res-&gt;loadTexture(<a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path), <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path));</div>
+<div class="line"><a id="l00821" name="l00821"></a><span class="lineno">  821</span>        }</div>
+<div class="line"><a id="l00822" name="l00822"></a><span class="lineno">  822</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00823" name="l00823"></a><span class="lineno">  823</span>        pendingSetters.push_back([<span class="keyword">this</span>, <span class="keywordtype">id</span>, path]() {</div>
+<div class="line"><a id="l00824" name="l00824"></a><span class="lineno">  824</span>            <span class="keywordflow">if</span> (<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w = <a class="code hl_function" href="classvex_1_1VexUI.html#a82668cb58dd4b75060111559bf1ec2ec">findById</a>(m_root, <span class="keywordtype">id</span>)) {</div>
+<div class="line"><a id="l00825" name="l00825"></a><span class="lineno">  825</span>                w-&gt;image = path;</div>
+<div class="line"><a id="l00826" name="l00826"></a><span class="lineno">  826</span>                m_res-&gt;loadTexture(<a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path), <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(path));</div>
+<div class="line"><a id="l00827" name="l00827"></a><span class="lineno">  827</span>            }</div>
+<div class="line"><a id="l00828" name="l00828"></a><span class="lineno">  828</span>        });</div>
+<div class="line"><a id="l00829" name="l00829"></a><span class="lineno">  829</span>    }</div>
+<div class="line"><a id="l00830" name="l00830"></a><span class="lineno">  830</span>}</div>
 </div>
-<div class="line"><a id="l00829" name="l00829"></a><span class="lineno">  829</span> </div>
-<div class="foldopen" id="foldopen00830" data-start="{" data-end="}">
-<div class="line"><a id="l00830" name="l00830"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#afa1ded868149577938794cea93d216b9">  830</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#afa1ded868149577938794cea93d216b9">VexUI::setFont</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; fontPath, <span class="keywordtype">float</span> fontSize) {</div>
-<div class="line"><a id="l00831" name="l00831"></a><span class="lineno">  831</span>    <span class="keyword">auto</span> action = [<span class="keyword">this</span>, fontPath, fontSize](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00832" name="l00832"></a><span class="lineno">  832</span>        w-&gt;style.font = fontPath;</div>
-<div class="line"><a id="l00833" name="l00833"></a><span class="lineno">  833</span>        w-&gt;style.fontSize = fontSize;</div>
-<div class="line"><a id="l00834" name="l00834"></a><span class="lineno">  834</span>        this-&gt;<a class="code hl_function" href="classvex_1_1VexUI.html#a8440f7af66e918a93327ff1da7a94ac4">loadFonts</a>(w);</div>
-<div class="line"><a id="l00835" name="l00835"></a><span class="lineno">  835</span>    };</div>
-<div class="line"><a id="l00836" name="l00836"></a><span class="lineno">  836</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, action);</div>
-<div class="line"><a id="l00837" name="l00837"></a><span class="lineno">  837</span>}</div>
+<div class="line"><a id="l00831" name="l00831"></a><span class="lineno">  831</span> </div>
+<div class="foldopen" id="foldopen00832" data-start="{" data-end="}">
+<div class="line"><a id="l00832" name="l00832"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#afa1ded868149577938794cea93d216b9">  832</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#afa1ded868149577938794cea93d216b9">VexUI::setFont</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; fontPath, <span class="keywordtype">float</span> fontSize) {</div>
+<div class="line"><a id="l00833" name="l00833"></a><span class="lineno">  833</span>    <span class="keyword">auto</span> action = [<span class="keyword">this</span>, fontPath, fontSize](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00834" name="l00834"></a><span class="lineno">  834</span>        w-&gt;style.font = fontPath;</div>
+<div class="line"><a id="l00835" name="l00835"></a><span class="lineno">  835</span>        w-&gt;style.fontSize = fontSize;</div>
+<div class="line"><a id="l00836" name="l00836"></a><span class="lineno">  836</span>        this-&gt;<a class="code hl_function" href="classvex_1_1VexUI.html#a8440f7af66e918a93327ff1da7a94ac4">loadFonts</a>(w);</div>
+<div class="line"><a id="l00837" name="l00837"></a><span class="lineno">  837</span>    };</div>
+<div class="line"><a id="l00838" name="l00838"></a><span class="lineno">  838</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, action);</div>
+<div class="line"><a id="l00839" name="l00839"></a><span class="lineno">  839</span>}</div>
 </div>
-<div class="line"><a id="l00838" name="l00838"></a><span class="lineno">  838</span> </div>
-<div class="foldopen" id="foldopen00839" data-start="{" data-end="}">
-<div class="line"><a id="l00839" name="l00839"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a07b951882b60c6de08ee98d652cab04e">  839</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a07b951882b60c6de08ee98d652cab04e">VexUI::setColor</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, glm::vec4 color) {</div>
-<div class="line"><a id="l00840" name="l00840"></a><span class="lineno">  840</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [color](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00841" name="l00841"></a><span class="lineno">  841</span>        w-&gt;style.color = color;</div>
-<div class="line"><a id="l00842" name="l00842"></a><span class="lineno">  842</span>    });</div>
-<div class="line"><a id="l00843" name="l00843"></a><span class="lineno">  843</span>}</div>
+<div class="line"><a id="l00840" name="l00840"></a><span class="lineno">  840</span> </div>
+<div class="foldopen" id="foldopen00841" data-start="{" data-end="}">
+<div class="line"><a id="l00841" name="l00841"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a07b951882b60c6de08ee98d652cab04e">  841</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a07b951882b60c6de08ee98d652cab04e">VexUI::setColor</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, glm::vec4 color) {</div>
+<div class="line"><a id="l00842" name="l00842"></a><span class="lineno">  842</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [color](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00843" name="l00843"></a><span class="lineno">  843</span>        w-&gt;style.color = color;</div>
+<div class="line"><a id="l00844" name="l00844"></a><span class="lineno">  844</span>    });</div>
+<div class="line"><a id="l00845" name="l00845"></a><span class="lineno">  845</span>}</div>
 </div>
-<div class="line"><a id="l00844" name="l00844"></a><span class="lineno">  844</span> </div>
-<div class="foldopen" id="foldopen00845" data-start="{" data-end="}">
-<div class="line"><a id="l00845" name="l00845"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#ada777282bbc3f703fae01533fd58c6b7">  845</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#ada777282bbc3f703fae01533fd58c6b7">VexUI::setBackgroundColor</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, glm::vec4 color) {</div>
-<div class="line"><a id="l00846" name="l00846"></a><span class="lineno">  846</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [color](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00847" name="l00847"></a><span class="lineno">  847</span>        w-&gt;style.bgColor = color;</div>
-<div class="line"><a id="l00848" name="l00848"></a><span class="lineno">  848</span>    });</div>
-<div class="line"><a id="l00849" name="l00849"></a><span class="lineno">  849</span>}</div>
+<div class="line"><a id="l00846" name="l00846"></a><span class="lineno">  846</span> </div>
+<div class="foldopen" id="foldopen00847" data-start="{" data-end="}">
+<div class="line"><a id="l00847" name="l00847"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#ada777282bbc3f703fae01533fd58c6b7">  847</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#ada777282bbc3f703fae01533fd58c6b7">VexUI::setBackgroundColor</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, glm::vec4 color) {</div>
+<div class="line"><a id="l00848" name="l00848"></a><span class="lineno">  848</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [color](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00849" name="l00849"></a><span class="lineno">  849</span>        w-&gt;style.bgColor = color;</div>
+<div class="line"><a id="l00850" name="l00850"></a><span class="lineno">  850</span>    });</div>
+<div class="line"><a id="l00851" name="l00851"></a><span class="lineno">  851</span>}</div>
 </div>
-<div class="line"><a id="l00850" name="l00850"></a><span class="lineno">  850</span> </div>
-<div class="foldopen" id="foldopen00851" data-start="{" data-end="}">
-<div class="line"><a id="l00851" name="l00851"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a6b7e102155cc11a80b902a1ecd8cc078">  851</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a6b7e102155cc11a80b902a1ecd8cc078">VexUI::setBorder</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> width, glm::vec4 color) {</div>
-<div class="line"><a id="l00852" name="l00852"></a><span class="lineno">  852</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [width, color](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
-<div class="line"><a id="l00853" name="l00853"></a><span class="lineno">  853</span>        w-&gt;style.borderWidth = width;</div>
-<div class="line"><a id="l00854" name="l00854"></a><span class="lineno">  854</span>        w-&gt;style.borderColor = color;</div>
-<div class="line"><a id="l00855" name="l00855"></a><span class="lineno">  855</span>        YGNodeStyleSetBorder(w-&gt;yoga, YGEdgeAll, width);</div>
-<div class="line"><a id="l00856" name="l00856"></a><span class="lineno">  856</span>    });</div>
-<div class="line"><a id="l00857" name="l00857"></a><span class="lineno">  857</span>}</div>
-</div>
-<div class="line"><a id="l00858" name="l00858"></a><span class="lineno">  858</span> </div>
+<div class="line"><a id="l00852" name="l00852"></a><span class="lineno">  852</span> </div>
+<div class="foldopen" id="foldopen00853" data-start="{" data-end="}">
+<div class="line"><a id="l00853" name="l00853"></a><span class="lineno"><a class="line" href="classvex_1_1VexUI.html#a6b7e102155cc11a80b902a1ecd8cc078">  853</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VexUI.html#a6b7e102155cc11a80b902a1ecd8cc078">VexUI::setBorder</a>(<span class="keyword">const</span> std::string&amp; <span class="keywordtype">id</span>, <span class="keywordtype">float</span> width, glm::vec4 color) {</div>
+<div class="line"><a id="l00854" name="l00854"></a><span class="lineno">  854</span>    <a class="code hl_function" href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">safeUpdate</a>(<span class="keywordtype">id</span>, [width, color](<a class="code hl_struct" href="structvex_1_1Widget.html">Widget</a>* w) {</div>
+<div class="line"><a id="l00855" name="l00855"></a><span class="lineno">  855</span>        w-&gt;style.borderWidth = width;</div>
+<div class="line"><a id="l00856" name="l00856"></a><span class="lineno">  856</span>        w-&gt;style.borderColor = color;</div>
+<div class="line"><a id="l00857" name="l00857"></a><span class="lineno">  857</span>        YGNodeStyleSetBorder(w-&gt;yoga, YGEdgeAll, width);</div>
+<div class="line"><a id="l00858" name="l00858"></a><span class="lineno">  858</span>    });</div>
 <div class="line"><a id="l00859" name="l00859"></a><span class="lineno">  859</span>}</div>
+</div>
+<div class="line"><a id="l00860" name="l00860"></a><span class="lineno">  860</span> </div>
+<div class="line"><a id="l00861" name="l00861"></a><span class="lineno">  861</span>}</div>
 <div class="ttc" id="aUIVertex_8hpp_html"><div class="ttname"><a href="UIVertex_8hpp.html">UIVertex.hpp</a></div><div class="ttdoc">This file defines structs needed for UI rendering.</div></div>
 <div class="ttc" id="aVexUI_8hpp_html"><div class="ttname"><a href="VexUI_8hpp.html">VexUI.hpp</a></div><div class="ttdoc">This file defines vex ui class, very basic ui system.</div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_a07b951882b60c6de08ee98d652cab04e"><div class="ttname"><a href="classvex_1_1VexUI.html#a07b951882b60c6de08ee98d652cab04e">vex::VexUI::setColor</a></div><div class="ttdeci">void setColor(const std::string &amp;id, glm::vec4 color)</div><div class="ttdoc">Set text/tint color.</div><div class="ttdef"><b>Definition</b> <a href="#l00839">VexUI.cpp:839</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_a0d69da44576b33dd3f3a3b693c27adf2"><div class="ttname"><a href="classvex_1_1VexUI.html#a0d69da44576b33dd3f3a3b693c27adf2">vex::VexUI::setSize</a></div><div class="ttdeci">void setSize(const std::string &amp;id, float w, float h)</div><div class="ttdoc">Resize a widget.</div><div class="ttdef"><b>Definition</b> <a href="#l00806">VexUI.cpp:806</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_a195b928e240b41ab7f574beb5ad7980a"><div class="ttname"><a href="classvex_1_1VexUI.html#a195b928e240b41ab7f574beb5ad7980a">vex::VexUI::setRotation</a></div><div class="ttdeci">void setRotation(const std::string &amp;id, float degrees)</div><div class="ttdoc">Set rotation of a widget in degrees.</div><div class="ttdef"><b>Definition</b> <a href="#l00793">VexUI.cpp:793</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_a07b951882b60c6de08ee98d652cab04e"><div class="ttname"><a href="classvex_1_1VexUI.html#a07b951882b60c6de08ee98d652cab04e">vex::VexUI::setColor</a></div><div class="ttdeci">void setColor(const std::string &amp;id, glm::vec4 color)</div><div class="ttdoc">Set text/tint color.</div><div class="ttdef"><b>Definition</b> <a href="#l00841">VexUI.cpp:841</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_a0d69da44576b33dd3f3a3b693c27adf2"><div class="ttname"><a href="classvex_1_1VexUI.html#a0d69da44576b33dd3f3a3b693c27adf2">vex::VexUI::setSize</a></div><div class="ttdeci">void setSize(const std::string &amp;id, float w, float h)</div><div class="ttdoc">Resize a widget.</div><div class="ttdef"><b>Definition</b> <a href="#l00808">VexUI.cpp:808</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_a195b928e240b41ab7f574beb5ad7980a"><div class="ttname"><a href="classvex_1_1VexUI.html#a195b928e240b41ab7f574beb5ad7980a">vex::VexUI::setRotation</a></div><div class="ttdeci">void setRotation(const std::string &amp;id, float degrees)</div><div class="ttdoc">Set rotation of a widget in degrees.</div><div class="ttdef"><b>Definition</b> <a href="#l00795">VexUI.cpp:795</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a286978b6084ce72404d2147288da3cab"><div class="ttname"><a href="classvex_1_1VexUI.html#a286978b6084ce72404d2147288da3cab">vex::VexUI::loadImages</a></div><div class="ttdeci">void loadImages(Widget *w)</div><div class="ttdoc">Loads images for the UI.</div><div class="ttdef"><b>Definition</b> <a href="#l00189">VexUI.cpp:189</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a2df1cf849e2807bd1fc9c1cc9e1578c1"><div class="ttname"><a href="classvex_1_1VexUI.html#a2df1cf849e2807bd1fc9c1cc9e1578c1">vex::VexUI::batch</a></div><div class="ttdeci">void batch(Widget *w, std::vector&lt; float &gt; &amp;verts, glm::vec2 parentOffset={0.f, 0.f})</div><div class="ttdoc">Batches the UI for rendering.</div><div class="ttdef"><b>Definition</b> <a href="#l00544">VexUI.cpp:544</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_a43ecc65f1729fbb75a3b0ac42564a1ed"><div class="ttname"><a href="classvex_1_1VexUI.html#a43ecc65f1729fbb75a3b0ac42564a1ed">vex::VexUI::setPosition</a></div><div class="ttdeci">void setPosition(const std::string &amp;id, float x, float y)</div><div class="ttdoc">Move a widget (sets Left/Top yoga properties). Works best with position: absolute,...</div><div class="ttdef"><b>Definition</b> <a href="#l00799">VexUI.cpp:799</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_a43ecc65f1729fbb75a3b0ac42564a1ed"><div class="ttname"><a href="classvex_1_1VexUI.html#a43ecc65f1729fbb75a3b0ac42564a1ed">vex::VexUI::setPosition</a></div><div class="ttdeci">void setPosition(const std::string &amp;id, float x, float y)</div><div class="ttdoc">Move a widget (sets Left/Top yoga properties). Works best with position: absolute,...</div><div class="ttdef"><b>Definition</b> <a href="#l00801">VexUI.cpp:801</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a5242341707a743b565e963c66dc57618"><div class="ttname"><a href="classvex_1_1VexUI.html#a5242341707a743b565e963c66dc57618">vex::VexUI::setText</a></div><div class="ttdeci">void setText(const std::string &amp;id, const std::string &amp;txt)</div><div class="ttdoc">Set text of a UI element.</div><div class="ttdef"><b>Definition</b> <a href="#l00435">VexUI.cpp:435</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a574755bc5cf4a1aaafef0b5b95611a72"><div class="ttname"><a href="classvex_1_1VexUI.html#a574755bc5cf4a1aaafef0b5b95611a72">vex::VexUI::init</a></div><div class="ttdeci">bool init()</div><div class="ttdoc">Initialize the UI system, components needed later on.</div><div class="ttdef"><b>Definition</b> <a href="#l00087">VexUI.cpp:87</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a5c081cf41b22e86604dd8016fbce0684"><div class="ttname"><a href="classvex_1_1VexUI.html#a5c081cf41b22e86604dd8016fbce0684">vex::VexUI::VexUI</a></div><div class="ttdeci">VexUI(VulkanContext &amp;ctx, VirtualFileSystem *vfs, VulkanResources *res)</div><div class="ttdoc">Constructor for VexUI.</div><div class="ttdef"><b>Definition</b> <a href="#l00074">VexUI.cpp:74</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_a6b7e102155cc11a80b902a1ecd8cc078"><div class="ttname"><a href="classvex_1_1VexUI.html#a6b7e102155cc11a80b902a1ecd8cc078">vex::VexUI::setBorder</a></div><div class="ttdeci">void setBorder(const std::string &amp;id, float width, glm::vec4 color)</div><div class="ttdoc">Set border properties.</div><div class="ttdef"><b>Definition</b> <a href="#l00851">VexUI.cpp:851</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_a6b7e102155cc11a80b902a1ecd8cc078"><div class="ttname"><a href="classvex_1_1VexUI.html#a6b7e102155cc11a80b902a1ecd8cc078">vex::VexUI::setBorder</a></div><div class="ttdeci">void setBorder(const std::string &amp;id, float width, glm::vec4 color)</div><div class="ttdoc">Set border properties.</div><div class="ttdef"><b>Definition</b> <a href="#l00853">VexUI.cpp:853</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a82668cb58dd4b75060111559bf1ec2ec"><div class="ttname"><a href="classvex_1_1VexUI.html#a82668cb58dd4b75060111559bf1ec2ec">vex::VexUI::findById</a></div><div class="ttdeci">Widget * findById(Widget *w, const std::string &amp;id)</div><div class="ttdoc">Finds a widget by its id.</div><div class="ttdef"><b>Definition</b> <a href="#l00428">VexUI.cpp:428</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a8440f7af66e918a93327ff1da7a94ac4"><div class="ttname"><a href="classvex_1_1VexUI.html#a8440f7af66e918a93327ff1da7a94ac4">vex::VexUI::loadFonts</a></div><div class="ttdeci">void loadFonts(Widget *w)</div><div class="ttdoc">Loads fonts for the UI.</div><div class="ttdef"><b>Definition</b> <a href="#l00121">VexUI.cpp:121</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a91fa6fcfa093d41407c479fbed895041"><div class="ttname"><a href="classvex_1_1VexUI.html#a91fa6fcfa093d41407c479fbed895041">vex::VexUI::processEvent</a></div><div class="ttdeci">void processEvent(const SDL_Event &amp;ev)</div><div class="ttdoc">Process mouse and keyboard events.</div><div class="ttdef"><b>Definition</b> <a href="#l00457">VexUI.cpp:457</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a9392e4b4add95d788f39701d86bd9619"><div class="ttname"><a href="classvex_1_1VexUI.html#a9392e4b4add95d788f39701d86bd9619">vex::VexUI::measureTextNode</a></div><div class="ttdeci">static YGSize measureTextNode(const YGNode *node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode)</div><div class="ttdoc">Measures a text node.</div><div class="ttdef"><b>Definition</b> <a href="#l00513">VexUI.cpp:513</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a987b762f2266455ef4f26c718c9dad5a"><div class="ttname"><a href="classvex_1_1VexUI.html#a987b762f2266455ef4f26c718c9dad5a">vex::VexUI::calculateTextSize</a></div><div class="ttdeci">YGSize calculateTextSize(Widget *w, float maxWidth=FLT_MAX)</div><div class="ttdoc">Calculates the size of the text.</div><div class="ttdef"><b>Definition</b> <a href="#l00470">VexUI.cpp:470</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_a9da952c028b06606a80ddad453cb2dd5"><div class="ttname"><a href="classvex_1_1VexUI.html#a9da952c028b06606a80ddad453cb2dd5">vex::VexUI::safeUpdate</a></div><div class="ttdeci">void safeUpdate(const std::string &amp;id, std::function&lt; void(Widget *)&gt; action)</div><div class="ttdoc">Updates a widget safely.</div><div class="ttdef"><b>Definition</b> <a href="#l00105">VexUI.cpp:105</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_ab19dd949009c288840645f8fdd862f1e"><div class="ttname"><a href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">vex::VexUI::freeTree</a></div><div class="ttdeci">void freeTree(Widget *w)</div><div class="ttdoc">Frees the widget tree.</div><div class="ttdef"><b>Definition</b> <a href="#l00787">VexUI.cpp:787</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_ab19dd949009c288840645f8fdd862f1e"><div class="ttname"><a href="classvex_1_1VexUI.html#ab19dd949009c288840645f8fdd862f1e">vex::VexUI::freeTree</a></div><div class="ttdeci">void freeTree(Widget *w)</div><div class="ttdoc">Frees the widget tree.</div><div class="ttdef"><b>Definition</b> <a href="#l00789">VexUI.cpp:789</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_ab74640bfd9c9e8d55e7d5ce23450f5d4"><div class="ttname"><a href="classvex_1_1VexUI.html#ab74640bfd9c9e8d55e7d5ce23450f5d4">vex::VexUI::setOnClick</a></div><div class="ttdeci">void setOnClick(const std::string &amp;id, std::function&lt; void()&gt; cb)</div><div class="ttdoc">Set on-click callback of a UI element.</div><div class="ttdef"><b>Definition</b> <a href="#l00445">VexUI.cpp:445</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_ab8c6e168537470132f0d8959763518f3"><div class="ttname"><a href="classvex_1_1VexUI.html#ab8c6e168537470132f0d8959763518f3">vex::VexUI::parseNode</a></div><div class="ttdeci">Widget * parseNode(const nlohmann::json &amp;j)</div><div class="ttdoc">Parses a node from json to widgets.</div><div class="ttdef"><b>Definition</b> <a href="#l00208">VexUI.cpp:208</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_ab96139dffea45215fcbffa20498e97be"><div class="ttname"><a href="classvex_1_1VexUI.html#ab96139dffea45215fcbffa20498e97be">vex::VexUI::layout</a></div><div class="ttdeci">void layout(glm::uvec2 res)</div><div class="ttdoc">Layouts the UI using yoga.</div><div class="ttdef"><b>Definition</b> <a href="#l00391">VexUI.cpp:391</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_abcd53da19f458b2381ed410916eeb546"><div class="ttname"><a href="classvex_1_1VexUI.html#abcd53da19f458b2381ed410916eeb546">vex::VexUI::uploadVerts</a></div><div class="ttdeci">void uploadVerts(const std::vector&lt; float &gt; &amp;verts)</div><div class="ttdoc">Uploads the vertex buffer to the GPU.</div><div class="ttdef"><b>Definition</b> <a href="#l00777">VexUI.cpp:777</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_ad424591e2eacf6de0481e338d5658455"><div class="ttname"><a href="classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455">vex::VexUI::setImage</a></div><div class="ttdeci">void setImage(const std::string &amp;id, const std::string &amp;path)</div><div class="ttdoc">Change the image of an image widget.</div><div class="ttdef"><b>Definition</b> <a href="#l00814">VexUI.cpp:814</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_abcd53da19f458b2381ed410916eeb546"><div class="ttname"><a href="classvex_1_1VexUI.html#abcd53da19f458b2381ed410916eeb546">vex::VexUI::uploadVerts</a></div><div class="ttdeci">void uploadVerts(const std::vector&lt; float &gt; &amp;verts)</div><div class="ttdoc">Uploads the vertex buffer to the GPU.</div><div class="ttdef"><b>Definition</b> <a href="#l00779">VexUI.cpp:779</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_ad424591e2eacf6de0481e338d5658455"><div class="ttname"><a href="classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455">vex::VexUI::setImage</a></div><div class="ttdeci">void setImage(const std::string &amp;id, const std::string &amp;path)</div><div class="ttdoc">Change the image of an image widget.</div><div class="ttdef"><b>Definition</b> <a href="#l00816">VexUI.cpp:816</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_ad473b0b2c29ea76fd2de94059fc12795"><div class="ttname"><a href="classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795">vex::VexUI::load</a></div><div class="ttdeci">void load(const std::string &amp;path)</div><div class="ttdoc">Load UI data from a JSON file.</div><div class="ttdef"><b>Definition</b> <a href="#l00355">VexUI.cpp:355</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_ad4832f9e16e910d12407d40ed6bb0f23"><div class="ttname"><a href="classvex_1_1VexUI.html#ad4832f9e16e910d12407d40ed6bb0f23">vex::VexUI::findWidgetAt</a></div><div class="ttdeci">Widget * findWidgetAt(Widget *w, glm::vec2 pos, glm::vec2 parentOffset={0.f, 0.f})</div><div class="ttdoc">Finds a widget at a position.</div><div class="ttdef"><b>Definition</b> <a href="#l00395">VexUI.cpp:395</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_ada777282bbc3f703fae01533fd58c6b7"><div class="ttname"><a href="classvex_1_1VexUI.html#ada777282bbc3f703fae01533fd58c6b7">vex::VexUI::setBackgroundColor</a></div><div class="ttdeci">void setBackgroundColor(const std::string &amp;id, glm::vec4 color)</div><div class="ttdoc">Set background color.</div><div class="ttdef"><b>Definition</b> <a href="#l00845">VexUI.cpp:845</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_ada777282bbc3f703fae01533fd58c6b7"><div class="ttname"><a href="classvex_1_1VexUI.html#ada777282bbc3f703fae01533fd58c6b7">vex::VexUI::setBackgroundColor</a></div><div class="ttdeci">void setBackgroundColor(const std::string &amp;id, glm::vec4 color)</div><div class="ttdoc">Set background color.</div><div class="ttdef"><b>Definition</b> <a href="#l00847">VexUI.cpp:847</a></div></div>
 <div class="ttc" id="aclassvex_1_1VexUI_html_ae2ed2215b0e78bec7e54f83a493ca5ca"><div class="ttname"><a href="classvex_1_1VexUI.html#ae2ed2215b0e78bec7e54f83a493ca5ca">vex::VexUI::render</a></div><div class="ttdeci">void render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pipelineLayout, int currentFrame)</div><div class="ttdoc">Render the UI. It is called by main rendering function.</div><div class="ttdef"><b>Definition</b> <a href="#l00687">VexUI.cpp:687</a></div></div>
-<div class="ttc" id="aclassvex_1_1VexUI_html_afa1ded868149577938794cea93d216b9"><div class="ttname"><a href="classvex_1_1VexUI.html#afa1ded868149577938794cea93d216b9">vex::VexUI::setFont</a></div><div class="ttdeci">void setFont(const std::string &amp;id, const std::string &amp;fontPath, float fontSize)</div><div class="ttdoc">Change font properties.</div><div class="ttdef"><b>Definition</b> <a href="#l00830">VexUI.cpp:830</a></div></div>
+<div class="ttc" id="aclassvex_1_1VexUI_html_afa1ded868149577938794cea93d216b9"><div class="ttname"><a href="classvex_1_1VexUI.html#afa1ded868149577938794cea93d216b9">vex::VexUI::setFont</a></div><div class="ttdeci">void setFont(const std::string &amp;id, const std::string &amp;fontPath, float fontSize)</div><div class="ttdoc">Change font properties.</div><div class="ttdef"><b>Definition</b> <a href="#l00832">VexUI.cpp:832</a></div></div>
 <div class="ttc" id="aclassvex_1_1VirtualFileSystem_html"><div class="ttname"><a href="classvex_1_1VirtualFileSystem.html">vex::VirtualFileSystem</a></div><div class="ttdoc">This class provides abstraction of file system needed for loading packed and unpacked assets.</div><div class="ttdef"><b>Definition</b> <a href="VirtualFileSystem_8hpp_source.html#l00024">VirtualFileSystem.hpp:24</a></div></div>
-<div class="ttc" id="aclassvex_1_1VulkanResources_html"><div class="ttname"><a href="classvex_1_1VulkanResources.html">vex::VulkanResources</a></div><div class="ttdoc">This class manages resources like textures, descriptor sets, and uniform buffers.</div><div class="ttdef"><b>Definition</b> <a href="Resources_8hpp_source.html#l00021">Resources.hpp:21</a></div></div>
+<div class="ttc" id="aclassvex_1_1VulkanResources_html"><div class="ttname"><a href="classvex_1_1VulkanResources.html">vex::VulkanResources</a></div><div class="ttdoc">This class manages resources like textures, descriptor sets, and uniform buffers.</div><div class="ttdef"><b>Definition</b> <a href="Resources_8hpp_source.html#l00022">Resources.hpp:22</a></div></div>
 <div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error or terminates the application.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00376">errorUtils.cpp:376</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00381">errorUtils.cpp:381</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error or terminates the application.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00498">errorUtils.cpp:498</a></div></div>
+<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
 <div class="ttc" id="apathUtils_8hpp_html"><div class="ttname"><a href="pathUtils_8hpp.html">pathUtils.hpp</a></div><div class="ttdoc">This file implements path-related utilities.</div></div>
-<div class="ttc" id="apathUtils_8hpp_html_aa19dc36f35689a3623a28fb816af93d2"><div class="ttname"><a href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">vex::GetAssetPath</a></div><div class="ttdeci">std::string VEX_EXPORT GetAssetPath(const std::string &amp;relativePath)</div><div class="ttdoc">Resolves the absolute path of an asset based on the current build configuration.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00061">pathUtils.cpp:61</a></div></div>
+<div class="ttc" id="apathUtils_8hpp_html_aa19dc36f35689a3623a28fb816af93d2"><div class="ttname"><a href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">vex::GetAssetPath</a></div><div class="ttdeci">std::string VEX_EXPORT GetAssetPath(const std::string &amp;relativePath)</div><div class="ttdoc">Resolves the absolute path of an asset based on the current build configuration.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00073">pathUtils.cpp:73</a></div></div>
 <div class="ttc" id="astructvex_1_1FontAtlas_html"><div class="ttname"><a href="structvex_1_1FontAtlas.html">vex::FontAtlas</a></div><div class="ttdoc">Font atlas structure.</div><div class="ttdef"><b>Definition</b> <a href="VexUI_8hpp_source.html#l00037">VexUI.hpp:37</a></div></div>
 <div class="ttc" id="astructvex_1_1UIPushConstants_html"><div class="ttname"><a href="structvex_1_1UIPushConstants.html">vex::UIPushConstants</a></div><div class="ttdoc">Push constants for UI rendering.</div><div class="ttdef"><b>Definition</b> <a href="UIVertex_8hpp_source.html#l00023">UIVertex.hpp:23</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00026">context.hpp:26</a></div></div>

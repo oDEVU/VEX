@@ -1,5 +1,6 @@
 var classvex_1_1PhysicsSystem =
 [
+    [ "InterpCache", "structvex_1_1PhysicsSystem_1_1InterpCache.html", null ],
     [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html#a9328d456cb41c2082006ba2d660b2dd5", null ],
     [ "~PhysicsSystem", "classvex_1_1PhysicsSystem.html#af0162eccb2cfdc2c320a435797de3e92", null ],
     [ "AddAngularImpulse", "classvex_1_1PhysicsSystem.html#a67b9f41f4fdc25640083de847a1b8e5d", null ],
@@ -19,6 +20,8 @@ var classvex_1_1PhysicsSystem =
     [ "GetCollisionSteps", "classvex_1_1PhysicsSystem.html#a028993d45b85c7e53f48130c22099724", null ],
     [ "GetFriction", "classvex_1_1PhysicsSystem.html#a475dd9a786ea2720a01ecb299cbd0825", null ],
     [ "GetLinearVelocity", "classvex_1_1PhysicsSystem.html#aa2ef3bac869e66618b366c34a4b49d95", null ],
+    [ "GetPhysicsPosition", "classvex_1_1PhysicsSystem.html#a97ed59539d338bb3037071afadf549b6", null ],
+    [ "GetPhysicsRotation", "classvex_1_1PhysicsSystem.html#afb40287e000ef38da71575764d09023c", null ],
     [ "GetVelocityAtPosition", "classvex_1_1PhysicsSystem.html#aed7dc72997f969a1a95c26fdbdd8e0f6", null ],
     [ "init", "classvex_1_1PhysicsSystem.html#ab4d41b9237df55089fa519ab4c183e50", null ],
     [ "raycast", "classvex_1_1PhysicsSystem.html#a59d757e1969612b26616c3664e8ac2dd", null ],
@@ -28,6 +31,7 @@ var classvex_1_1PhysicsSystem =
     [ "SetBounciness", "classvex_1_1PhysicsSystem.html#ad4f1da12c3866c9777ffa73a8ba7f505", null ],
     [ "setCollisionSteps", "classvex_1_1PhysicsSystem.html#ae68c87217b877ded3de4bf5750903a17", null ],
     [ "setDebugRenderer", "classvex_1_1PhysicsSystem.html#a5026e988720c3af1ea1cc0727fc3cf03", null ],
+    [ "setEnableSmoothing", "classvex_1_1PhysicsSystem.html#a068abde8bc2500cb5cc826353cf13596", null ],
     [ "SetFriction", "classvex_1_1PhysicsSystem.html#a432972a37330f75f940efa0e9d47837e", null ],
     [ "SetGravityFactor", "classvex_1_1PhysicsSystem.html#af3dea3d17b9e1df8f7792fd8cf3a364c", null ],
     [ "SetGravityVector", "classvex_1_1PhysicsSystem.html#a6632176736787dad393d5400ca24d4f2", null ],

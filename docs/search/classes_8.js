@@ -5,5 +5,6 @@ var searchData=
   ['inputbinding_2',['InputBinding',['../structvex_1_1InputBinding.html',1,'vex']]],
   ['inputcomponent_3',['InputComponent',['../structvex_1_1InputComponent.html',1,'vex']]],
   ['inputsystem_4',['InputSystem',['../classvex_1_1InputSystem.html',1,'vex']]],
-  ['interface_5',['Interface',['../classvex_1_1Interface.html',1,'vex']]]
+  ['interface_5',['Interface',['../classvex_1_1Interface.html',1,'vex']]],
+  ['interpcache_6',['InterpCache',['../structvex_1_1PhysicsSystem_1_1InterpCache.html',1,'vex::PhysicsSystem']]]
 ];

@@ -4,5 +4,8 @@ var pathUtils_8hpp =
     [ "vex::GetAssetPath", "pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2", null ],
     [ "vex::GetExecutableDir", "pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2", null ],
     [ "vex::GetLogDir", "pathUtils_8hpp.html#a82f8ac87aba16056ea7e7313c795f25f", null ],
-    [ "vex::SetAssetRoot", "pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99", null ]
+    [ "vex::GetUserDataDir", "pathUtils_8hpp.html#acaefcdf7c62cae71b8ed30087e38d2e6", null ],
+    [ "vex::GetUserDataPath", "pathUtils_8hpp.html#af6ff7df692852e53dd26e430bfe85023", null ],
+    [ "vex::SetAssetRoot", "pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99", null ],
+    [ "vex::SetUserDataDir", "pathUtils_8hpp.html#ae8969861f510356c5929d8a9a8e0fedf", null ]
 ];

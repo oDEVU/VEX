@@ -107,12 +107,14 @@ $(function(){initNavTree('projectProperties_8hpp.html','',''); });
 <div class="textblock"><code>#include &lt;ImReflect.hpp&gt;</code><br />
 <code>#include &lt;nlohmann/json.hpp&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
 <code>#include &quot;<a class="el" href="ResolutionManager_8hpp_source.html">components/ResolutionManager.hpp</a>&quot;</code><br />
 </div>
 <p><a href="projectProperties_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:ProjectVersion" id="r_ProjectVersion"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structProjectVersion.html">ProjectVersion</a></td></tr>
 <tr class="memitem:ProjectProperties" id="r_ProjectProperties"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structProjectProperties.html">ProjectProperties</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to hold all configurable project settings and properties.  <a href="structProjectProperties.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
@@ -126,6 +128,10 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ab2c771924bc1a762fdbaaf06b997d6c8" id="r_ab2c771924bc1a762fdbaaf06b997d6c8"><td class="memItemLeft" align="right" valign="top"><a id="ab2c771924bc1a762fdbaaf06b997d6c8" name="ab2c771924bc1a762fdbaaf06b997d6c8"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>IMGUI_REFLECT</b> (<a class="el" href="structProjectVersion.html">ProjectVersion</a>, major, minor, patch)</td></tr>
+<tr class="memitem:a77ef15b92ee3ccebac53e37d60720d73" id="r_a77ef15b92ee3ccebac53e37d60720d73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77ef15b92ee3ccebac53e37d60720d73">to_json</a> (nlohmann::json &amp;j, const <a class="el" href="structProjectVersion.html">ProjectVersion</a> &amp;v)</td></tr>
+<tr class="memitem:a67ba61cd31c685fbc95ea93971dd0581" id="r_a67ba61cd31c685fbc95ea93971dd0581"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67ba61cd31c685fbc95ea93971dd0581">from_json</a> (const nlohmann::json &amp;j, <a class="el" href="structProjectVersion.html">ProjectVersion</a> &amp;v)</td></tr>
 <tr class="memitem:ad1946433fd3da17a5e0c17073130f4b9" id="r_ad1946433fd3da17a5e0c17073130f4b9"><td class="memItemLeft" align="right" valign="top"><a id="ad1946433fd3da17a5e0c17073130f4b9" name="ad1946433fd3da17a5e0c17073130f4b9"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>IMGUI_REFLECT</b> (<a class="el" href="structProjectProperties.html">ProjectProperties</a>, project_name, main_scene, icon_path, version, window_type, resolution_mode, vsync)</td></tr>
 <tr class="memitem:ad1cbd26d67b6eacc9c714b2ff95db25c" id="r_ad1cbd26d67b6eacc9c714b2ff95db25c"><td class="memItemLeft" align="right" valign="top"><a id="ad1cbd26d67b6eacc9c714b2ff95db25c" name="ad1cbd26d67b6eacc9c714b2ff95db25c"></a>
@@ -159,7 +165,70 @@ Functions</h2></td></tr>
 
 <p>Window Mode Enum. </p>
 
-<p class="definition">Definition at line <a class="el" href="projectProperties_8hpp_source.html#l00016">16</a> of file <a class="el" href="projectProperties_8hpp_source.html">projectProperties.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="projectProperties_8hpp_source.html#l00017">17</a> of file <a class="el" href="projectProperties_8hpp_source.html">projectProperties.hpp</a>.</p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a67ba61cd31c685fbc95ea93971dd0581" name="a67ba61cd31c685fbc95ea93971dd0581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67ba61cd31c685fbc95ea93971dd0581">&#9670;&#160;</a></span>from_json()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void from_json </td>
+          <td>(</td>
+          <td class="paramtype">const nlohmann::json &amp;</td>          <td class="paramname"><span class="paramname"><em>j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structProjectVersion.html">ProjectVersion</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="projectProperties_8hpp_source.html#l00032">32</a> of file <a class="el" href="projectProperties_8hpp_source.html">projectProperties.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a77ef15b92ee3ccebac53e37d60720d73" name="a77ef15b92ee3ccebac53e37d60720d73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77ef15b92ee3ccebac53e37d60720d73">&#9670;&#160;</a></span>to_json()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void to_json </td>
+          <td>(</td>
+          <td class="paramtype">nlohmann::json &amp;</td>          <td class="paramname"><span class="paramname"><em>j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structProjectVersion.html">ProjectVersion</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="projectProperties_8hpp_source.html#l00028">28</a> of file <a class="el" href="projectProperties_8hpp_source.html">projectProperties.hpp</a>.</p>
 
 </div>
 </div>

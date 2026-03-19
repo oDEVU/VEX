@@ -10,9 +10,10 @@ var searchData=
   ['vpkstream_7',['VPKStream',['../classvex_1_1VirtualFileSystem_1_1VPKStream.html',1,'vex::VirtualFileSystem']]],
   ['vpkstreambuf_8',['VPKStreamBuf',['../classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html',1,'vex::VirtualFileSystem::VPKStream']]],
   ['vulkancontext_9',['VulkanContext',['../structvex_1_1VulkanContext.html',1,'vex']]],
-  ['vulkanimguiwrapper_10',['VulkanImGUIWrapper',['../classvex_1_1VulkanImGUIWrapper.html',1,'vex']]],
-  ['vulkanmesh_11',['VulkanMesh',['../classvex_1_1VulkanMesh.html',1,'vex']]],
-  ['vulkanpipeline_12',['VulkanPipeline',['../classvex_1_1VulkanPipeline.html',1,'vex']]],
-  ['vulkanresources_13',['VulkanResources',['../classvex_1_1VulkanResources.html',1,'vex']]],
-  ['vulkanswapchainmanager_14',['VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html',1,'vex']]]
+  ['vulkanfeatures_10',['VulkanFeatures',['../structvex_1_1VulkanFeatures.html',1,'vex']]],
+  ['vulkanimguiwrapper_11',['VulkanImGUIWrapper',['../classvex_1_1VulkanImGUIWrapper.html',1,'vex']]],
+  ['vulkanmesh_12',['VulkanMesh',['../classvex_1_1VulkanMesh.html',1,'vex']]],
+  ['vulkanpipeline_13',['VulkanPipeline',['../classvex_1_1VulkanPipeline.html',1,'vex']]],
+  ['vulkanresources_14',['VulkanResources',['../classvex_1_1VulkanResources.html',1,'vex']]],
+  ['vulkanswapchainmanager_15',['VulkanSwapchainManager',['../classvex_1_1VulkanSwapchainManager.html',1,'vex']]]
 ];

@@ -14,6 +14,7 @@ var classvex_1_1Editor =
     [ "getProjectBinaryPath", "classvex_1_1Editor.html#aab489c844a5f2f25fd43bb69e539cdad", null ],
     [ "getProjectProperties", "classvex_1_1Editor.html#a5b01f217271ae04eb2c08480465490c5", null ],
     [ "HandleMeshDrop", "classvex_1_1Editor.html#a71c77b9615fa2e00f226b893ad5be389", null ],
+    [ "IsEditor", "classvex_1_1Editor.html#a303786ec0ec2c326aaf88b31997dc1f5", null ],
     [ "loadAssetIcons", "classvex_1_1Editor.html#af37e5e2f6d9dd6e82921086be6abac54", null ],
     [ "LoadConfig", "classvex_1_1Editor.html#a0eeaa473de394f5bfb0a91854372efb5", null ],
     [ "LoadProjectConfig", "classvex_1_1Editor.html#a23b00ead29ed6c4630cc0387e34ded5b", null ],
@@ -31,6 +32,7 @@ var classvex_1_1Editor =
     [ "SaveConfig", "classvex_1_1Editor.html#a654160f282249e0d704bb2c4db621014", null ],
     [ "SaveProjectConfig", "classvex_1_1Editor.html#a51e716607891a7678c6cd35945e4fbf3", null ],
     [ "setFullscreen", "classvex_1_1Editor.html#aa3dff0316e2c4a6ba9b5b507adc46a23", null ],
+    [ "ShowConsole", "classvex_1_1Editor.html#ac94bab275a42fc5cd06a1814c495274d", null ],
     [ "Undo", "classvex_1_1Editor.html#a372b999d73647be059512d5c75a6c7a9", null ],
     [ "update", "classvex_1_1Editor.html#afc38ec50583bd6c8ed02ccb10867980b", null ]
 ];

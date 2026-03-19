@@ -6,9 +6,11 @@ var dir_79d06d028994328d57ce2d43853ace3c =
     [ "assetTypes.hpp", "assetTypes_8hpp_source.html", null ],
     [ "AudioSystem.hpp", "AudioSystem_8hpp.html", "AudioSystem_8hpp" ],
     [ "colorTypes.hpp", "colorTypes_8hpp_source.html", null ],
+    [ "DebugConsole.hpp", "DebugConsole_8hpp_source.html", null ],
     [ "enviroment.hpp", "enviroment_8hpp.html", "enviroment_8hpp" ],
     [ "errorUtils.hpp", "errorUtils_8hpp.html", "errorUtils_8hpp" ],
     [ "GameInfo.hpp", "GameInfo_8hpp.html", "GameInfo_8hpp" ],
+    [ "HardwareInfo.hpp", "HardwareInfo_8hpp_source.html", null ],
     [ "ImGUIWrapper.hpp", "ImGUIWrapper_8hpp.html", "ImGUIWrapper_8hpp" ],
     [ "InputSystem.hpp", "InputSystem_8hpp.html", "InputSystem_8hpp" ],
     [ "JoltSafe.hpp", "JoltSafe_8hpp.html", null ],
@@ -18,6 +20,7 @@ var dir_79d06d028994328d57ce2d43853ace3c =
     [ "ResolutionManager.hpp", "ResolutionManager_8hpp.html", "ResolutionManager_8hpp" ],
     [ "Scene.hpp", "Scene_8hpp.html", "Scene_8hpp" ],
     [ "SceneManager.hpp", "SceneManager_8hpp.html", "SceneManager_8hpp" ],
+    [ "ThreadPool.hpp", "ThreadPool_8hpp_source.html", null ],
     [ "types.hpp", "types_8hpp_source.html", null ],
     [ "VirtualFileSystem.hpp", "VirtualFileSystem_8hpp.html", "VirtualFileSystem_8hpp" ]
 ];

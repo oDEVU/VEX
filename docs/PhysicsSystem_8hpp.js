@@ -9,7 +9,9 @@ var PhysicsSystem_8hpp =
     [ "vex::RaycastHit", "structvex_1_1RaycastHit.html", null ],
     [ "vex::PhysicsComponent", "structvex_1_1PhysicsComponent.html", "structvex_1_1PhysicsComponent" ],
     [ "vex::PhysicsSystem", "classvex_1_1PhysicsSystem.html", "classvex_1_1PhysicsSystem" ],
+    [ "vex::PhysicsSystem::InterpCache", "structvex_1_1PhysicsSystem_1_1InterpCache.html", null ],
     [ "vex::MyContactListener", "classvex_1_1MyContactListener.html", null ],
+    [ "vex::DebugDrawFilter", "classvex_1_1DebugDrawFilter.html", null ],
     [ "vex::BodyType", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a", [
       [ "STATIC", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aafe6f99ef1ec99efbdc19a9786cf1facc", null ],
       [ "DYNAMIC", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aa0fcc90da4811c877ba9f9c12f7d60bc9", null ],

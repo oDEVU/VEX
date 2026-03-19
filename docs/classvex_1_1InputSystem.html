@@ -132,6 +132,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:af1cddc941dc41a8a5118ba0410499fd7" id="r_af1cddc941dc41a8a5118ba0410499fd7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4">InputMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1cddc941dc41a8a5118ba0410499fd7">m_inputMode</a></td></tr>
 <tr class="memitem:ac760f51defa1eb7654d6bd0dcc94cdb9" id="r_ac760f51defa1eb7654d6bd0dcc94cdb9"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; SDL_Scancode, <a class="el" href="structvex_1_1InputSystem_1_1KeyState.html">KeyState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac760f51defa1eb7654d6bd0dcc94cdb9">keyStates</a></td></tr>
 <tr class="memitem:a57095b825ad6545a05d57e5d100d7c6c" id="r_a57095b825ad6545a05d57e5d100d7c6c"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; SDL_GamepadButton, <a class="el" href="structvex_1_1InputSystem_1_1KeyState.html">KeyState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57095b825ad6545a05d57e5d100d7c6c">gamepadButtonStates</a></td></tr>
+<tr class="memitem:a40e3aa206e390ee1daa8ae6dad5bf367" id="r_a40e3aa206e390ee1daa8ae6dad5bf367"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; SDL_GamepadAxis, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40e3aa206e390ee1daa8ae6dad5bf367">gamepadAxisStates</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Input system class responsible for handling input events and updating input components. </p>
@@ -292,11 +293,35 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="InputSystem_8cpp_source.html#l00110">110</a> of file <a class="el" href="InputSystem_8cpp_source.html">InputSystem.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="InputSystem_8cpp_source.html#l00101">101</a> of file <a class="el" href="InputSystem_8cpp_source.html">InputSystem.cpp</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a40e3aa206e390ee1daa8ae6dad5bf367" name="a40e3aa206e390ee1daa8ae6dad5bf367"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40e3aa206e390ee1daa8ae6dad5bf367">&#9670;&#160;</a></span>gamepadAxisStates</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;SDL_GamepadAxis, float&gt; vex::InputSystem::gamepadAxisStates</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="InputSystem_8hpp_source.html#l00074">74</a> of file <a class="el" href="InputSystem_8hpp_source.html">InputSystem.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a57095b825ad6545a05d57e5d100d7c6c" name="a57095b825ad6545a05d57e5d100d7c6c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a57095b825ad6545a05d57e5d100d7c6c">&#9670;&#160;</a></span>gamepadButtonStates</h2>
 
