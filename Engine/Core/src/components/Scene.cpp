@@ -7,6 +7,9 @@
 #include "components/enviroment.hpp"
 #include "components/VirtualFileSystem.hpp"
 
+#include <thread>
+#include <chrono>
+
 #if defined(__cpp_lib_execution) && defined(__cpp_lib_parallel_algorithm)
     #include <execution>
     #define VEX_USE_PARALLEL_EXECUTION
@@ -39,7 +42,21 @@ void Scene::load(){
 
     try {
 
-    auto fileData = m_engine->getFileSystem()->load_file(realPath);
+    std::unique_ptr<VirtualFileSystem::FileData> fileData = nullptr;
+    const int maxRetries = 10;
+    const int retryDelayMs = 100;
+
+    for (int i = 0; i < maxRetries; ++i) {
+        fileData = m_engine->getFileSystem()->load_file(realPath);
+        if (fileData && !fileData->data.empty()) {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(retryDelayMs));
+    }
+
+    if (!fileData || fileData->data.empty()) {
+        throw_error("Failed to read scene file after 1 second of retries. File is empty, missing, or permanently locked by the OS: " + realPath);
+    }
 
     //log("Scene data: \n%s",fileData->data.data()); // It works on my PC lol, (this comment exists cause there was a compter that had seqfault here couple times)
 
@@ -146,21 +163,20 @@ void Scene::load(){
         if (!parentName.empty()) {
             pendingParenting.push_back({gameObj, parentName});
         }
+    }
+    for (auto& pair : pendingParenting) {
+        GameObject* child = pair.first;
+        const std::string& parentName = pair.second;
 
-        for (auto& pair : pendingParenting) {
-            GameObject* child = pair.first;
-            const std::string& parentName = pair.second;
-
-            auto it = objectDirectory.find(parentName);
-            if (it != objectDirectory.end()) {
-                GameObject* parentObj = it->second;
-                if (parentObj->isValid() && m_engine->getRegistry().valid(parentObj->GetEntity())) {
-                    child->ParentTo(parentObj->GetEntity()); //
-                    log("Parented object '%s' to '%s'", child->GetComponent<NameComponent>().name.c_str(), parentName.c_str());
-                }
-            } else {
-                log(LogLevel::WARNING, "Parent '%s' not found", parentName.c_str());
+        auto it = objectDirectory.find(parentName);
+        if (it != objectDirectory.end()) {
+            GameObject* parentObj = it->second;
+            if (parentObj->isValid() && m_engine->getRegistry().valid(parentObj->GetEntity())) {
+                child->ParentTo(parentObj->GetEntity()); //
+                log("Parented object '%s' to '%s'", child->GetComponent<NameComponent>().name.c_str(), parentName.c_str());
             }
+        } else {
+            log(LogLevel::WARNING, "Parent '%s' not found", parentName.c_str());
         }
     }
     } catch (const std::exception& e) {

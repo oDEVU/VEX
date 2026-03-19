@@ -318,6 +318,12 @@ if(DIST_BUILD AND UNIX AND NOT APPLE)
     )
 endif()
 
+if(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetWindowRelativeMouseMode")
+    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_LogError")
+    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetAppMetadata")
+endif()
+
 if(TARGET ImGui)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
         target_link_libraries(${PROJECT_NAME} PRIVATE -Wl,--whole-archive ImGui -Wl,--no-whole-archive)
@@ -327,9 +333,6 @@ if(TARGET ImGui)
     elseif(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:ImGui>")
         target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:SDL3-static>")
-
-        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetWindowRelativeMouseMode")
-        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_LogError")
     endif()
 endif()
 
