@@ -131,7 +131,7 @@ uint32_t Interface::GetBestDeviceVersion() {
         appInfo.pApplicationName = gInfo.projectName.c_str();
         appInfo.applicationVersion = VK_MAKE_VERSION(gInfo.versionMajor, gInfo.versionMinor, gInfo.versionPatch);
         appInfo.pEngineName = "VEX";
-        appInfo.engineVersion = VK_MAKE_VERSION(0, 1, 0);
+        appInfo.engineVersion = VK_MAKE_VERSION(VEX_VERSION_MAJOR, VEX_VERSION_MINOR, VEX_VERSION_PATCH);
         appInfo.apiVersion = apiVersion;
 
         VkInstanceCreateInfo createInfo = {};

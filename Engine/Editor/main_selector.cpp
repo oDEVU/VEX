@@ -31,7 +31,7 @@ std::filesystem::path GetSelfDir() {
 
 int main(int argc, char* argv[]) {
     std::string selectedPath;
-    SDL_SetAppMetadata("Vex Engine", "1.0", "VexEngine");
+    SDL_SetAppMetadata("Vex Engine", vex::Engine::GetVersionString(), "VexEngine");
 
     {
         try {

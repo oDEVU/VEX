@@ -9,8 +9,8 @@
 extern "C" void VexGame_Init(vex::Engine* engine);
 
 int main(int argc, char* argv[]) {
-    SDL_SetAppMetadata(VEX_PROJECT_TITLE, "1.0", VEX_PROJECT_TITLE);
-    vex::GameInfo gInfo{VEX_PROJECT_TITLE, 0, 1, 0};
+    SDL_SetAppMetadata(VEX_PROJECT_TITLE, VEX_GAME_VERSION_STRING, VEX_PROJECT_TITLE);
+    vex::GameInfo gInfo{VEX_PROJECT_TITLE, VEX_GAME_VERSION_MAJOR, VEX_GAME_VERSION_MINOR, VEX_GAME_VERSION_PATCH};
     vex::Engine engine(VEX_PROJECT_TITLE, 1280, 720, gInfo);
 
     #ifdef DIST_BUILD

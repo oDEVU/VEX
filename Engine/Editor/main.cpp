@@ -165,8 +165,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    vex::GameInfo dialogGameInfo("Dialog Window", 1, 0, 0);
-    SDL_SetAppMetadata("Vex Engine", "1.0", "VexEngine");
+    //vex::GameInfo dialogGameInfo("Dialog Window", vex::Engine::GetVersionMajor(), vex::Engine::GetVersionMinor(), vex::Engine::GetVersionPatch());
+    vex::GameInfo dialogGameInfo("Dialog Window", static_cast<uint16_t>(vex::Engine::GetVersionMajor()), static_cast<uint16_t>(vex::Engine::GetVersionMinor()), static_cast<uint16_t>(vex::Engine::GetVersionPatch()));
+    SDL_SetAppMetadata("Vex Engine", vex::Engine::GetVersionString(), "VexEngine");
 
     std::filesystem::path projectPath = argv[1];
     std::filesystem::path modulePath = projectPath / "Build" / "Debug";
@@ -211,7 +212,13 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    vex::GameInfo gInfo{"VEX Editor", 0, 1, 0};
+    //vex::GameInfo gInfo{"VEX Editor", vex::Engine::GetVersionMajor(), vex::Engine::GetVersionMinor(), vex::Engine::GetVersionPatch()};
+    vex::GameInfo gInfo{
+            "VEX Editor",
+            static_cast<uint16_t>(vex::Engine::GetVersionMajor()),
+            static_cast<uint16_t>(vex::Engine::GetVersionMinor()),
+            static_cast<uint16_t>(vex::Engine::GetVersionPatch())
+        };
     vex::Editor engine("VEX Editor", 1280, 720, gInfo, projectPath.string());
     ctx.userdata = &engine;
 

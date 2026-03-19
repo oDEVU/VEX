@@ -26,6 +26,22 @@
 
 namespace vex {
 
+    int Engine::GetVersionMajor() {
+        return VEX_VERSION_MAJOR;
+    }
+
+    int Engine::GetVersionMinor() {
+        return VEX_VERSION_MINOR;
+    }
+
+    int Engine::GetVersionPatch() {
+        return VEX_VERSION_PATCH;
+    }
+
+    const char* Engine::GetVersionString() {
+        return VEX_VERSION_STRING;
+    }
+
 Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     std::filesystem::current_path(GetExecutableDir());
     m_gameInfo = gInfo;

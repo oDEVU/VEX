@@ -44,6 +44,18 @@ public:
     /// @brief returns engine hash generated during build process.
     static const char* GetBuildHash();
 
+    /// @brief Returns the major version of the engine.
+    static int GetVersionMajor();
+
+    /// @brief Returns the minor version of the engine.
+    static int GetVersionMinor();
+
+    /// @brief Returns the patch version of the engine.
+    static int GetVersionPatch();
+
+    /// @brief Returns the version string of the engine.
+    static const char* GetVersionString();
+
     /// @brief Constructor for the Engine class.
     /// @details Initializes the core systems in the following order:
     /// 1. Window creation and ResolutionManager.
