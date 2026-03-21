@@ -126,7 +126,7 @@ $(function(){initNavTree('DialogWindow_8cpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    DialogWindow::~DialogWindow() {</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;DialogWindow destroyed&quot;</span>);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        log(<span class="stringliteral">&quot;DialogWindow destroyed&quot;</span>);</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    }</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="foldopen" id="foldopen00027" data-start="{" data-end="}">
@@ -142,7 +142,7 @@ $(function(){initNavTree('DialogWindow_8cpp_source.html','',''); });
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <a class="code hl_struct" href="structvex_1_1SceneRenderData.html">SceneRenderData</a> renderData{};</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="keywordflow">if</span> (!m_interface-&gt;getRenderer().beginFrame(m_resolutionManager-&gt;getWindowResolution(), renderData)) {</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Skipping frame.&quot;</span>);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                log(<span class="stringliteral">&quot;Skipping frame.&quot;</span>);</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            }</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            renderData.imguiTextureID = m_interface-&gt;getRenderer().getImGuiTextureID(*m_imgui);</div>
@@ -159,7 +159,7 @@ $(function(){initNavTree('DialogWindow_8cpp_source.html','',''); });
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            SDL_LogError(SDL_LOG_CATEGORY_ERROR, <span class="stringliteral">&quot;Dialogwindow render failed&quot;</span>);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">handle_critical_exception</a>(e);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            handle_critical_exception(e);</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        }</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    }</div>
 </div>
@@ -171,7 +171,7 @@ $(function(){initNavTree('DialogWindow_8cpp_source.html','',''); });
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        ImGui::SetNextWindowSize(viewport-&gt;Size);</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        ImGui::SetNextWindowViewport(viewport-&gt;ID);</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                                        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                                        ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;</div>
@@ -180,31 +180,31 @@ $(function(){initNavTree('DialogWindow_8cpp_source.html','',''); });
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        ImGui::Begin(<span class="stringliteral">&quot;DialogWindowkSpace&quot;</span>, <span class="keyword">nullptr</span>, window_flags);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        ImGui::Begin(<span class="stringliteral">&quot;DialogWindowkSpace&quot;</span>, <span class="keyword">nullptr</span>, windowFlags);</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        ImGui::PopStyleVar(3);</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        ImGuiID dockspace_id = ImGui::GetID(<span class="stringliteral">&quot;MyDialogDockSpace&quot;</span>);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        ImGuiID dockspaceId = ImGui::GetID(<span class="stringliteral">&quot;MyDialogDockSpace&quot;</span>);</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        dockFlags |= ImGuiDockNodeFlags_NoUndocking;</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordflow">if</span> (!ImGui::DockBuilderGetNode(dockspace_id)) {</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            ImGui::DockBuilderRemoveNode(dockspace_id);</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            ImGui::DockBuilderSetNodeSize(dockspace_id, viewport-&gt;Size);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordflow">if</span> (!ImGui::DockBuilderGetNode(dockspaceId)) {</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>            ImGui::DockBuilderRemoveNode(dockspaceId);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            ImGui::DockBuilderAddNode(dockspaceId, ImGuiDockNodeFlags_DockSpace);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            ImGui::DockBuilderSetNodeSize(dockspaceId, viewport-&gt;Size);</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>            ImGuiID dock_main_id = dockspace_id;</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, <span class="keyword">nullptr</span>, &amp;dock_main_id);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>            ImGuiID dockMainId = dockspaceId;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            ImGuiID dockRightId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Right, 0.2f, <span class="keyword">nullptr</span>, &amp;dockMainId);</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Dialog&quot;</span>, dock_main_id);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Dialog&quot;</span>, dockMainId);</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>            ImGui::DockBuilderFinish(dockspace_id);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>            ImGui::DockBuilderFinish(dockspaceId);</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        }</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockFlags);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockFlags);</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        ImGui::End();</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        ImGuiDockNode* node = ImGui::DockBuilderGetNode(dockspace_id);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        ImGuiDockNode* node = ImGui::DockBuilderGetNode(dockspaceId);</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keywordflow">if</span> (node) {</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            node-&gt;LocalFlags |= ImGuiDockNodeFlags_NoTabBar;</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        }</div>
@@ -248,8 +248,6 @@ $(function(){initNavTree('DialogWindow_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1Engine_html_a9565d468a161b49467252c66a15e9d4a"><div class="ttname"><a href="classvex_1_1Engine.html#a9565d468a161b49467252c66a15e9d4a">vex::Engine::setResolutionMode</a></div><div class="ttdeci">void setResolutionMode(ResolutionMode mode)</div><div class="ttdoc">Sets the resolution mode and updates the resolution manager.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8cpp_source.html#l00238">Engine.cpp:238</a></div></div>
 <div class="ttc" id="aclassvex_1_1Engine_html_a990ca389e3e97678e7a090d8903acb47"><div class="ttname"><a href="classvex_1_1Engine.html#a990ca389e3e97678e7a090d8903acb47">vex::Engine::getResolutionMode</a></div><div class="ttdeci">ResolutionMode getResolutionMode() const</div><div class="ttdoc">Returns the current resolution mode.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8hpp_source.html#l00107">Engine.hpp:107</a></div></div>
 <div class="ttc" id="aclassvex_1_1Engine_html_ab9aa221f6146c728213c148cba72b245"><div class="ttname"><a href="classvex_1_1Engine.html#ab9aa221f6146c728213c148cba72b245">vex::Engine::Engine</a></div><div class="ttdeci">Engine(const char *title, int width, int height, GameInfo gInfo)</div><div class="ttdoc">Constructor for the Engine class.</div><div class="ttdef"><b>Definition</b> <a href="Engine_8cpp_source.html#l00045">Engine.cpp:45</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a98df6c0f2c25bb67d5d5852ff2744d48"><div class="ttname"><a href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">vex::handle_critical_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_critical_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles a critical exception, forcing termination.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00525">errorUtils.cpp:525</a></div></div>
 <div class="ttc" id="astructvex_1_1GameInfo_html"><div class="ttname"><a href="structvex_1_1GameInfo.html">vex::GameInfo</a></div><div class="ttdoc">this struct contains information about the game. like project name and version.</div><div class="ttdef"><b>Definition</b> <a href="GameInfo_8hpp_source.html#l00015">GameInfo.hpp:15</a></div></div>
 <div class="ttc" id="astructvex_1_1SceneRenderData_html"><div class="ttname"><a href="structvex_1_1SceneRenderData.html">vex::SceneRenderData</a></div><div class="ttdoc">Data structure to pass state between render stages.</div><div class="ttdef"><b>Definition</b> <a href="Renderer_8hpp_source.html#l00032">Renderer.hpp:32</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

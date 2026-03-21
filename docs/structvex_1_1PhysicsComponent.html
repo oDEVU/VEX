@@ -114,18 +114,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a2c9577b29ba09c8e46870814d0d79707"><td class="mdescLeft">&#160;</td><td class="mdescRight">&mdash; Constructors &mdash; <br /></td></tr>
 <tr class="memitem:a6cf651363a55814603b71d20423bdb7d" id="r_a6cf651363a55814603b71d20423bdb7d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cf651363a55814603b71d20423bdb7d">PhysicsComponent</a> (<a class="el" href="PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249e">ShapeType</a> s)</td></tr>
 <tr class="memitem:ae835b02b6855a3d6092272baf7e4a349" id="r_ae835b02b6855a3d6092272baf7e4a349"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae835b02b6855a3d6092272baf7e4a349">addCollisionEnterBinding</a> (std::function&lt; void(entt::entity, entt::entity, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;)&gt; callback)</td></tr>
+<tr class="memdesc:ae835b02b6855a3d6092272baf7e4a349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds a callback for collision enter events.  <br /></td></tr>
 <tr class="memitem:a7e98fd977db98920da77abcb687e0549" id="r_a7e98fd977db98920da77abcb687e0549"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e98fd977db98920da77abcb687e0549">addCollisionStayBinding</a> (std::function&lt; void(entt::entity, entt::entity, const <a class="el" href="structvex_1_1CollisionHit.html">CollisionHit</a> &amp;)&gt; callback)</td></tr>
+<tr class="memdesc:a7e98fd977db98920da77abcb687e0549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds a callback for collision stay events.  <br /></td></tr>
 <tr class="memitem:abd0c106ce0d82fe17ffadfb96be9cef0" id="r_abd0c106ce0d82fe17ffadfb96be9cef0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd0c106ce0d82fe17ffadfb96be9cef0">addCollisionExitBinding</a> (std::function&lt; void(entt::entity, entt::entity)&gt; callback)</td></tr>
+<tr class="memdesc:abd0c106ce0d82fe17ffadfb96be9cef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds a callback for collision exit events.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a411e6fdeae8423308bd1c482156de5ad" id="r_a411e6fdeae8423308bd1c482156de5ad"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a411e6fdeae8423308bd1c482156de5ad">Box</a> (glm::vec3 halfExtents={0.5f, 0.5f, 0.5f}, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memdesc:a411e6fdeae8423308bd1c482156de5ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a box-shaped physics component.  <br /></td></tr>
 <tr class="memitem:ae75419df8f5d5a7e9a6053f800e426ea" id="r_ae75419df8f5d5a7e9a6053f800e426ea"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae75419df8f5d5a7e9a6053f800e426ea">RoundedBox</a> (glm::vec3 halfExtents, float radius=0.05f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::DYNAMIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memdesc:ae75419df8f5d5a7e9a6053f800e426ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a rounded box.  <br /></td></tr>
 <tr class="memitem:ac29a3c343e7fe9f500ff6d35f4ffddfb" id="r_ac29a3c343e7fe9f500ff6d35f4ffddfb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac29a3c343e7fe9f500ff6d35f4ffddfb">Sphere</a> (float radius=0.5f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memdesc:ac29a3c343e7fe9f500ff6d35f4ffddfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a sphere-shaped physics component.  <br /></td></tr>
 <tr class="memitem:adc26c4d469fd9140ac5c1c25d4ab4fcd" id="r_adc26c4d469fd9140ac5c1c25d4ab4fcd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc26c4d469fd9140ac5c1c25d4ab4fcd">Capsule</a> (float radius=0.5f, float height=1.0f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memdesc:adc26c4d469fd9140ac5c1c25d4ab4fcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a capsule-shaped physics component.  <br /></td></tr>
 <tr class="memitem:a1be7fedba125fb6324925c033586fb85" id="r_a1be7fedba125fb6324925c033586fb85"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1be7fedba125fb6324925c033586fb85">Cylinder</a> (float radius=0.5f, float height=1.0f, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memdesc:a1be7fedba125fb6324925c033586fb85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a cylinder-shaped physics component.  <br /></td></tr>
 <tr class="memitem:a7d45d7729dafb373ecf85d661239b281" id="r_a7d45d7729dafb373ecf85d661239b281"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d45d7729dafb373ecf85d661239b281">ConvexHull</a> (std::vector&lt; JPH::Vec3 &gt; points, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memdesc:a7d45d7729dafb373ecf85d661239b281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a convex hull-shaped physics component.  <br /></td></tr>
 <tr class="memitem:a0b06ac4ac1ba707a44066b1edd0c7a6f" id="r_a0b06ac4ac1ba707a44066b1edd0c7a6f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1PhysicsComponent.html">PhysicsComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b06ac4ac1ba707a44066b1edd0c7a6f">Mesh</a> (<a class="el" href="structvex_1_1MeshComponent.html">MeshComponent</a> &amp;mesh, <a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a">BodyType</a> bodyType=BodyType::STATIC, float mass=1.0f, float friction=0.5f, float bounce=0.1f)</td></tr>
+<tr class="memdesc:a0b06ac4ac1ba707a44066b1edd0c7a6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mesh-shaped physics component.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -211,6 +221,14 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Binds a callback for collision enter events. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::function&lt;void(entt::entity,entt::entity,const</td><td><a class="el" href="structvex_1_1CollisionHit.html" title="Structure representing a collision hit.">CollisionHit</a>&amp;)&gt; callback The callback function to bind. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00281">281</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
@@ -238,6 +256,14 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Binds a callback for collision exit events. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::function&lt;void(entt::entity,entt::entity)&gt;</td><td>callback The callback function to bind. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00293">293</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
@@ -264,6 +290,14 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Binds a callback for collision stay events. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::function&lt;void(entt::entity,entt::entity,const</td><td><a class="el" href="structvex_1_1CollisionHit.html" title="Structure representing a collision hit.">CollisionHit</a>&amp;)&gt; callback The callback function to bind. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00287">287</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
@@ -310,6 +344,18 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a box-shaped physics component. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">glm::vec3</td><td>halfExtents The half-extents of the box. </td></tr>
+    <tr><td class="paramname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a" title="Enumeration of available body types for physics components.">BodyType</a></td><td>bodyType The type of body (static, dynamic, kinematic). </td></tr>
+    <tr><td class="paramname">float</td><td>mass The mass of the box. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The friction coefficient of the box. </td></tr>
+    <tr><td class="paramname">float</td><td>bounce The bounce coefficient of the box. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00145">145</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
@@ -362,6 +408,19 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Creates a capsule-shaped physics component. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">float</td><td>radius The radius of the capsule. </td></tr>
+    <tr><td class="paramname">float</td><td>height The height of the capsule. </td></tr>
+    <tr><td class="paramname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a" title="Enumeration of available body types for physics components.">BodyType</a></td><td>bodyType The type of body (static, dynamic, kinematic). </td></tr>
+    <tr><td class="paramname">float</td><td>mass The mass of the capsule. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The friction coefficient of the capsule. </td></tr>
+    <tr><td class="paramname">float</td><td>bounce The bounce coefficient of the capsule. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00199">199</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
@@ -407,6 +466,18 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a convex hull-shaped physics component. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">std::vector&lt;JPH::Vec3&gt;</td><td>points The points defining the convex hull. </td></tr>
+    <tr><td class="paramname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a" title="Enumeration of available body types for physics components.">BodyType</a></td><td>bodyType The type of body (static, dynamic, kinematic). </td></tr>
+    <tr><td class="paramname">float</td><td>mass The mass of the convex hull. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The friction coefficient of the convex hull. </td></tr>
+    <tr><td class="paramname">float</td><td>bounce The bounce coefficient of the convex hull. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00236">236</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
@@ -459,6 +530,19 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Creates a cylinder-shaped physics component. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">float</td><td>radius The radius of the cylinder. </td></tr>
+    <tr><td class="paramname">float</td><td>height The height of the cylinder. </td></tr>
+    <tr><td class="paramname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a" title="Enumeration of available body types for physics components.">BodyType</a></td><td>bodyType The type of body (static, dynamic, kinematic). </td></tr>
+    <tr><td class="paramname">float</td><td>mass The mass of the cylinder. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The friction coefficient of the cylinder. </td></tr>
+    <tr><td class="paramname">float</td><td>bounce The bounce coefficient of the cylinder. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00218">218</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
@@ -504,6 +588,18 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a mesh-shaped physics component. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">MeshComponent&amp;</td><td>mesh The mesh component to create the physics component from. </td></tr>
+    <tr><td class="paramname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a" title="Enumeration of available body types for physics components.">BodyType</a></td><td>bodyType The type of body (static, dynamic, kinematic). </td></tr>
+    <tr><td class="paramname">float</td><td>mass The mass of the mesh. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The friction coefficient of the mesh. </td></tr>
+    <tr><td class="paramname">float</td><td>bounce The bounce coefficient of the mesh. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00253">253</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
@@ -556,6 +652,19 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Creates a rounded box. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">glm::vec3</td><td>halfExtents The half-extents of the rounded box. </td></tr>
+    <tr><td class="paramname">float</td><td>radius The radius of the rounded corners. </td></tr>
+    <tr><td class="paramname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a" title="Enumeration of available body types for physics components.">BodyType</a></td><td>bodyType The type of body (static, dynamic, kinematic). </td></tr>
+    <tr><td class="paramname">float</td><td>mass The mass of the rounded box. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The friction coefficient of the rounded box. </td></tr>
+    <tr><td class="paramname">float</td><td>bounce The bounce coefficient of the rounded box. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00163">163</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 
 </div>
@@ -601,6 +710,18 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a sphere-shaped physics component. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">float</td><td>radius The radius of the sphere. </td></tr>
+    <tr><td class="paramname"><a class="el" href="PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a" title="Enumeration of available body types for physics components.">BodyType</a></td><td>bodyType The type of body (static, dynamic, kinematic). </td></tr>
+    <tr><td class="paramname">float</td><td>mass The mass of the sphere. </td></tr>
+    <tr><td class="paramname">float</td><td>friction The friction coefficient of the sphere. </td></tr>
+    <tr><td class="paramname">float</td><td>bounce The bounce coefficient of the sphere. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="PhysicsSystem_8hpp_source.html#l00181">181</a> of file <a class="el" href="PhysicsSystem_8hpp_source.html">PhysicsSystem.hpp</a>.</p>
 

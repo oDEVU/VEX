@@ -101,21 +101,38 @@ $(function(){initNavTree('classvex_1_1HardwareInfo.html','','classvex_1_1Hardwar
   <div class="headertitle"><div class="title">vex::HardwareInfo Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Utility class for retrieving and storing hardware and driver information.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e8087d8f63cc83baccb936f98ca989c" id="r_a0e8087d8f63cc83baccb936f98ca989c"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e8087d8f63cc83baccb936f98ca989c">GetCPUName</a> ()</td></tr>
+<tr class="memdesc:a0e8087d8f63cc83baccb936f98ca989c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of the CPU.  <br /></td></tr>
 <tr class="memitem:adef1626e3a86d084e024931ac8383039" id="r_adef1626e3a86d084e024931ac8383039"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adef1626e3a86d084e024931ac8383039">GetSystemMemory</a> ()</td></tr>
+<tr class="memdesc:adef1626e3a86d084e024931ac8383039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the total amount of system memory.  <br /></td></tr>
 <tr class="memitem:a4fd945bb6d2a3b03c4826231cb446c7a" id="r_a4fd945bb6d2a3b03c4826231cb446c7a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fd945bb6d2a3b03c4826231cb446c7a">HasAVX2</a> ()</td></tr>
+<tr class="memdesc:a4fd945bb6d2a3b03c4826231cb446c7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the CPU supports the AVX2 instruction set.  <br /></td></tr>
 <tr class="memitem:a6dde2bf9b8884a3d0606fdff5a5dd397" id="r_a6dde2bf9b8884a3d0606fdff5a5dd397"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6dde2bf9b8884a3d0606fdff5a5dd397">SetGPUInfo</a> (const std::string &amp;name, uint32_t vendorID, uint32_t driverVersion)</td></tr>
+<tr class="memdesc:a6dde2bf9b8884a3d0606fdff5a5dd397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the stored GPU information.  <br /></td></tr>
 <tr class="memitem:ab340989b9816f09cff2faec9f0c73d4b" id="r_ab340989b9816f09cff2faec9f0c73d4b"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab340989b9816f09cff2faec9f0c73d4b">GetGPUName</a> ()</td></tr>
+<tr class="memdesc:ab340989b9816f09cff2faec9f0c73d4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of the GPU.  <br /></td></tr>
 <tr class="memitem:adb34133fa8b6346ad5b956ae1cd8804d" id="r_adb34133fa8b6346ad5b956ae1cd8804d"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb34133fa8b6346ad5b956ae1cd8804d">GetDriverVersion</a> ()</td></tr>
+<tr class="memdesc:adb34133fa8b6346ad5b956ae1cd8804d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the GPU driver version.  <br /></td></tr>
 <tr class="memitem:a459b3a176ca46f9a2deff7cb7819c069" id="r_a459b3a176ca46f9a2deff7cb7819c069"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a459b3a176ca46f9a2deff7cb7819c069">SetVulkanVersions</a> (const std::string &amp;deviceVer, const std::string &amp;requestedVer)</td></tr>
+<tr class="memdesc:a459b3a176ca46f9a2deff7cb7819c069"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Vulkan API versions.  <br /></td></tr>
 <tr class="memitem:a0192961ccafb82f82c57594198bf7cfe" id="r_a0192961ccafb82f82c57594198bf7cfe"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0192961ccafb82f82c57594198bf7cfe">GetVulkanDeviceVersion</a> ()</td></tr>
+<tr class="memdesc:a0192961ccafb82f82c57594198bf7cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the Vulkan version supported by the device.  <br /></td></tr>
 <tr class="memitem:a5e72c7b6ffbdac9c2208edf85c00788c" id="r_a5e72c7b6ffbdac9c2208edf85c00788c"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e72c7b6ffbdac9c2208edf85c00788c">GetVulkanRequestedVersion</a> ()</td></tr>
+<tr class="memdesc:a5e72c7b6ffbdac9c2208edf85c00788c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the Vulkan version requested by the engine.  <br /></td></tr>
 <tr class="memitem:a5ea57c7d1bbe24925421f28ea07a6ec3" id="r_a5ea57c7d1bbe24925421f28ea07a6ec3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ea57c7d1bbe24925421f28ea07a6ec3">SetVulkanFeatures</a> (const <a class="el" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a> &amp;features)</td></tr>
+<tr class="memdesc:a5ea57c7d1bbe24925421f28ea07a6ec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the active Vulkan features.  <br /></td></tr>
 <tr class="memitem:aa53122fe7349c00d9e97f44b9463506f" id="r_aa53122fe7349c00d9e97f44b9463506f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa53122fe7349c00d9e97f44b9463506f">GetVulkanFeatures</a> ()</td></tr>
+<tr class="memdesc:aa53122fe7349c00d9e97f44b9463506f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the active Vulkan features.  <br /></td></tr>
 <tr class="memitem:a9e0756db34e8faa6fa7f5f02ec28fdb5" id="r_a9e0756db34e8faa6fa7f5f02ec28fdb5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e0756db34e8faa6fa7f5f02ec28fdb5">PrintCrashDump</a> (int fd)</td></tr>
+<tr class="memdesc:a9e0756db34e8faa6fa7f5f02ec28fdb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints hardware information to a crash dump file descriptor.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-static-methods" class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -135,8 +152,9 @@ Static Private Attributes</h2></td></tr>
 <tr class="memitem:aa7f2ecd277518821b4ef0357464c462b" id="r_aa7f2ecd277518821b4ef0357464c462b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7f2ecd277518821b4ef0357464c462b">GPUFeatures</a> = {}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00022">22</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<div class="textblock"><p>Utility class for retrieving and storing hardware and driver information. </p>
+
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00024">24</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="a7d71f2a89611b3076da6ba5b34f63067" name="a7d71f2a89611b3076da6ba5b34f63067"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d71f2a89611b3076da6ba5b34f63067">&#9670;&#160;</a></span>CheckHardwareSupport()</h2>
@@ -192,7 +210,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00050">50</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00086">86</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>
@@ -273,6 +291,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the name of the CPU. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The CPU model name. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00116">116</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
 </div>
@@ -299,6 +320,9 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves the GPU driver version. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The driver version string. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00102">102</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
@@ -327,6 +351,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the name of the GPU. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The GPU name. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00101">101</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
 </div>
@@ -353,6 +380,9 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves the total amount of system memory. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The total system memory formatted as a string. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00121">121</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
@@ -381,6 +411,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the Vulkan version supported by the device. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The device Vulkan version. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00108">108</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
 </div>
@@ -407,6 +440,9 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Retrieves the active Vulkan features. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structvex_1_1VulkanFeatures.html" title="Holds the status of various Vulkan features.">VulkanFeatures</a> - The currently stored Vulkan features. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00114">114</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
@@ -435,6 +471,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the Vulkan version requested by the engine. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string - The requested Vulkan version. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00109">109</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
 </div>
@@ -462,6 +501,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Checks if the CPU supports the AVX2 instruction set. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool - True if AVX2 is supported, false otherwise. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00200">200</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
 </div>
@@ -488,6 +530,14 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Prints hardware information to a crash dump file descriptor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fd</td><td>The file descriptor to write to. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00030">30</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
@@ -525,6 +575,16 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets the stored GPU information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the GPU device. </td></tr>
+    <tr><td class="paramname">vendorID</td><td>The vendor ID of the GPU. </td></tr>
+    <tr><td class="paramname">driverVersion</td><td>The driver version of the GPU. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00097">97</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
 </div>
@@ -551,6 +611,14 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sets the active Vulkan features. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">features</td><td>The Vulkan features structure. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00111">111</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
@@ -583,6 +651,15 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets the Vulkan API versions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">deviceVer</td><td>The version supported by the device. </td></tr>
+    <tr><td class="paramname">requestedVer</td><td>The version requested by the engine. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="HardwareInfo_8cpp_source.html#l00104">104</a> of file <a class="el" href="HardwareInfo_8cpp_source.html">HardwareInfo.cpp</a>.</p>
 
 </div>
@@ -608,7 +685,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00041">41</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00077">77</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>
@@ -632,7 +709,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00045">45</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00081">81</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>
@@ -656,7 +733,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00048">48</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00084">84</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>
@@ -680,7 +757,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00044">44</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00080">80</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>
@@ -704,7 +781,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00042">42</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00078">78</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>
@@ -728,7 +805,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00046">46</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00082">82</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>
@@ -752,7 +829,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00047">47</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HardwareInfo_8hpp_source.html#l00083">83</a> of file <a class="el" href="HardwareInfo_8hpp_source.html">HardwareInfo.hpp</a>.</p>
 
 </div>
 </div>

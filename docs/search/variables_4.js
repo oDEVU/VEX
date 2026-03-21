@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gourardshading_0',['gourardShading',['../structvex_1_1enviroment.html#a099696b2a0f948fad8ac1b2624a53383',1,'vex::enviroment']]]
+  ['enableps1effects_0',['enablePS1Effects',['../structvex_1_1SceneUBO.html#aa681b12faa37d28fd25196665c351c1c',1,'vex::SceneUBO']]]
 ];

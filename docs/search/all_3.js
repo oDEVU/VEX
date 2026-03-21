@@ -28,6 +28,5 @@ var searchData=
   ['drawpropertiesofanobject_25',['DrawPropertiesOfAnObject',['../PropertiesMenu_8hpp.html#a32cdf4900cd26c78a021944a6e45e050',1,'PropertiesMenu.hpp']]],
   ['drawscenehierarchy_26',['DrawSceneHierarchy',['../SceneMenu_8hpp.html#a901e4adcdaccb4930222c23d660285ef',1,'SceneMenu.hpp']]],
   ['drawselectorlayout_27',['drawSelectorLayout',['../classvex_1_1ProjectSelector.html#a28af76a2a88a82b1485c7fa247929401',1,'vex::ProjectSelector']]],
-  ['drawworldsettings_28',['DrawWorldSettings',['../worldSettingsMenu_8hpp.html#a7e48a1d9045a4f9560da9300e251db69',1,'vex']]],
-  ['duplicateselectedobject_29',['DuplicateSelectedObject',['../classvex_1_1Editor.html#aadf4580aa7b319911c589350a82dcdfd',1,'vex::Editor']]]
+  ['duplicateselectedobject_28',['DuplicateSelectedObject',['../classvex_1_1Editor.html#aadf4580aa7b319911c589350a82dcdfd',1,'vex::Editor']]]
 ];

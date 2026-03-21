@@ -178,7 +178,7 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            m_interface-&gt;getRenderer().endFrame(renderData);</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Selector render failed: %s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            log(LogLevel::ERROR, <span class="stringliteral">&quot;Selector render failed: %s&quot;</span>, e.what());</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        }</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        }</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    }</div>
@@ -191,14 +191,14 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        ImGui::SetNextWindowSize(viewport-&gt;Size);</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        ImGui::SetNextWindowViewport(viewport-&gt;ID);</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                                        ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus |</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                                        ImGuiWindowFlags_NoNavFocus;</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20.0f, 20.0f));</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        ImGui::Begin(<span class="stringliteral">&quot;SelectorSpace&quot;</span>, <span class="keyword">nullptr</span>, window_flags);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        ImGui::Begin(<span class="stringliteral">&quot;SelectorSpace&quot;</span>, <span class="keyword">nullptr</span>, windowFlags);</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        ImGui::Text(<span class="stringliteral">&quot;VEX ENGINE - PROJECTS&quot;</span>);</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        ImGui::Separator();</div>
@@ -349,7 +349,7 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="foldopen" id="foldopen00236" data-start="{" data-end="}">
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="classvex_1_1ProjectSelector.html#a5e6e4813654a8f0cdf971a2ecbb948e2">  236</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1ProjectSelector.html#a5e6e4813654a8f0cdf971a2ecbb948e2">ProjectSelector::removeProject</a>(<span class="keywordtype">int</span> index) {</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>                <span class="keywordflow">if</span> (index &gt;= 0 &amp;&amp; index &lt; m_projects.size()) {</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Removing project from list: %s&quot;</span>, m_projects[index].name.c_str());</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>                    log(<span class="stringliteral">&quot;Removing project from list: %s&quot;</span>, m_projects[index].name.c_str());</div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>                    m_projects.erase(m_projects.begin() + index);</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>                    <a class="code hl_function" href="classvex_1_1ProjectSelector.html#a6e79586b4586e1ef9d5434812834e146">saveKnownProjects</a>();</div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                }</div>
@@ -366,11 +366,11 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>                std::filesystem::path newPath = newParent / oldPath.filename();</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                <span class="keywordflow">if</span> (!std::filesystem::exists(oldPath)) {</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Source path does not exist!&quot;</span>);</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>                    log(LogLevel::ERROR, <span class="stringliteral">&quot;Source path does not exist!&quot;</span>);</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>                    <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>                }</div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>                <span class="keywordflow">if</span> (std::filesystem::exists(newPath)) {</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Destination already exists: %s&quot;</span>, newPath.string().c_str());</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>                    log(LogLevel::ERROR, <span class="stringliteral">&quot;Destination already exists: %s&quot;</span>, newPath.string().c_str());</div>
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>                    <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>                }</div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
@@ -378,14 +378,14 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                    <span class="keywordflow">if</span> (!std::filesystem::exists(newParent)) std::filesystem::create_directories(newParent);</div>
 <div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span> </div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>                    std::filesystem::rename(oldPath, newPath);</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Project moved to: %s&quot;</span>, newPath.string().c_str());</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                    log(<span class="stringliteral">&quot;Project moved to: %s&quot;</span>, newPath.string().c_str());</div>
 <div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>                    proj.path = newPath.string();</div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                    <a class="code hl_function" href="classvex_1_1ProjectSelector.html#a6e79586b4586e1ef9d5434812834e146">saveKnownProjects</a>();</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to move project: %s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                    log(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to move project: %s&quot;</span>, e.what());</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                }</div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>            }</div>
 </div>
@@ -403,7 +403,7 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>                <a class="code hl_function" href="classvex_1_1ProjectSelector.html#afe424a57003ebe5fa728f4ba4a9d0517">scanAndAddProject</a>(item[<span class="stringliteral">&quot;path&quot;</span>].get&lt;std::string&gt;());</div>
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>            }</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load projects: %s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>            log(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load projects: %s&quot;</span>, e.what());</div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        }</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    }</div>
 </div>
@@ -443,20 +443,20 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span> </div>
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>                m_projects.push_back({pName, pathStr, pVer});</div>
 <div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>                <a class="code hl_function" href="classvex_1_1ProjectSelector.html#a6e79586b4586e1ef9d5434812834e146">saveKnownProjects</a>();</div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Added project: %s&quot;</span>, pName.c_str());</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>                log(<span class="stringliteral">&quot;Added project: %s&quot;</span>, pName.c_str());</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>            } <span class="keywordflow">catch</span>(<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Invalid VexProject.json at %s: %s&quot;</span>, pathStr.c_str(), e.what());</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Invalid VexProject.json at %s: %s&quot;</span>, pathStr.c_str(), e.what());</div>
 <div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            }</div>
 <div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;No VexProject.json found at %s&quot;</span>, pathStr.c_str());</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>            log(LogLevel::ERROR, <span class="stringliteral">&quot;No VexProject.json found at %s&quot;</span>, pathStr.c_str());</div>
 <div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        }</div>
 <div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    }</div>
 </div>
 <div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span> </div>
 <div class="foldopen" id="foldopen00334" data-start="{" data-end="}">
 <div class="line"><a id="l00334" name="l00334"></a><span class="lineno"><a class="line" href="classvex_1_1ProjectSelector.html#aceebef03d1b87b280ef35725ce415492">  334</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1ProjectSelector.html#aceebef03d1b87b280ef35725ce415492">ProjectSelector::selectProject</a>(<span class="keyword">const</span> std::string&amp; projectPath) {</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Project selected: %s&quot;</span>, projectPath.c_str());</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        log(<span class="stringliteral">&quot;Project selected: %s&quot;</span>, projectPath.c_str());</div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>        m_selectedProjectPath = projectPath;</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>        shouldClose = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>    }</div>
@@ -512,11 +512,11 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
 <div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>            <span class="keywordflow">if</span> (name.empty() || parent.empty()) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span> </div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>            std::filesystem::path exeDir = <a class="code hl_function" href="pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2">GetExecutableDir</a>();</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>            std::filesystem::path exeDir = GetExecutableDir();</div>
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>            std::filesystem::path templatePath = exeDir / <span class="stringliteral">&quot;..&quot;</span> / <span class="stringliteral">&quot;Assets&quot;</span> / <span class="stringliteral">&quot;default&quot;</span> / <span class="stringliteral">&quot;NewProject&quot;</span>;</div>
 <div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span> </div>
 <div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>            <span class="keywordflow">if</span> (!std::filesystem::exists(templatePath)) {</div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Missing template: %s&quot;</span>, templatePath.string().c_str());</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Missing template: %s&quot;</span>, templatePath.string().c_str());</div>
 <div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>            }</div>
 <div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span> </div>
@@ -524,7 +524,7 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>            std::filesystem::path newProjectPath = destParent / name;</div>
 <div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span> </div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>            <span class="keywordflow">if</span> (std::filesystem::exists(newProjectPath)) {</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Project already exists at: %s&quot;</span>, newProjectPath.string().c_str());</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Project already exists at: %s&quot;</span>, newProjectPath.string().c_str());</div>
 <div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>            }</div>
 <div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
@@ -548,10 +548,10 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>                }</div>
 <div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span> </div>
 <div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>                <a class="code hl_function" href="classvex_1_1ProjectSelector.html#afe424a57003ebe5fa728f4ba4a9d0517">scanAndAddProject</a>(newProjectPath.string());</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Created project: %s&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>                log(<span class="stringliteral">&quot;Created project: %s&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span> </div>
 <div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>            } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Creation failed: %s&quot;</span>, e.what());</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Creation failed: %s&quot;</span>, e.what());</div>
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>            }</div>
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>        }</div>
 </div>
@@ -596,8 +596,6 @@ $(function(){initNavTree('ProjectSelector_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1ProjectSelector_html_aceebef03d1b87b280ef35725ce415492"><div class="ttname"><a href="classvex_1_1ProjectSelector.html#aceebef03d1b87b280ef35725ce415492">vex::ProjectSelector::selectProject</a></div><div class="ttdeci">void selectProject(const std::string &amp;projectPath)</div><div class="ttdoc">Sets the path of the project that the user selected and triggers the closure of the selector.</div><div class="ttdef"><b>Definition</b> <a href="#l00334">ProjectSelector.cpp:334</a></div></div>
 <div class="ttc" id="aclassvex_1_1ProjectSelector_html_adfb55b8f6cb66f3a9556e894430ee841"><div class="ttname"><a href="classvex_1_1ProjectSelector.html#adfb55b8f6cb66f3a9556e894430ee841">vex::ProjectSelector::ProjectSelector</a></div><div class="ttdeci">ProjectSelector(const char *title)</div><div class="ttdoc">Constructs the ProjectSelector window.</div><div class="ttdef"><b>Definition</b> <a href="#l00022">ProjectSelector.cpp:22</a></div></div>
 <div class="ttc" id="aclassvex_1_1ProjectSelector_html_afe424a57003ebe5fa728f4ba4a9d0517"><div class="ttname"><a href="classvex_1_1ProjectSelector.html#afe424a57003ebe5fa728f4ba4a9d0517">vex::ProjectSelector::scanAndAddProject</a></div><div class="ttdeci">void scanAndAddProject(const std::string &amp;path)</div><div class="ttdoc">Scans a directory path for a valid VEX project file and adds it to the list.</div><div class="ttdef"><b>Definition</b> <a href="#l00305">ProjectSelector.cpp:305</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html_a6012eb60cd3da12ce61a5175a7471ba2"><div class="ttname"><a href="pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2">vex::GetExecutableDir</a></div><div class="ttdeci">std::filesystem::path VEX_EXPORT GetExecutableDir()</div><div class="ttdoc">Retrieves the directory containing the current executable.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00037">pathUtils.cpp:37</a></div></div>
 <div class="ttc" id="astructvex_1_1GameInfo_html"><div class="ttname"><a href="structvex_1_1GameInfo.html">vex::GameInfo</a></div><div class="ttdoc">this struct contains information about the game. like project name and version.</div><div class="ttdef"><b>Definition</b> <a href="GameInfo_8hpp_source.html#l00015">GameInfo.hpp:15</a></div></div>
 <div class="ttc" id="astructvex_1_1SceneRenderData_html"><div class="ttname"><a href="structvex_1_1SceneRenderData.html">vex::SceneRenderData</a></div><div class="ttdoc">Data structure to pass state between render stages.</div><div class="ttdef"><b>Definition</b> <a href="Renderer_8hpp_source.html#l00032">Renderer.hpp:32</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

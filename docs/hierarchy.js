@@ -34,7 +34,7 @@ var hierarchy =
       [ "vex::Editor", "classvex_1_1Editor.html", null ],
       [ "vex::ProjectSelector", "classvex_1_1ProjectSelector.html", null ]
     ] ],
-    [ "vex::enviroment", "structvex_1_1enviroment.html", null ],
+    [ "vex::environment", "structvex_1_1environment.html", null ],
     [ "vex::VirtualFileSystem::FileData", "structvex_1_1VirtualFileSystem_1_1FileData.html", null ],
     [ "vex::FogComponent", "structvex_1_1FogComponent.html", null ],
     [ "vex::FontAtlas", "structvex_1_1FontAtlas.html", null ],

@@ -6,7 +6,5 @@ var searchData=
   ['widget_3',['Widget',['../structvex_1_1Widget.html',1,'vex']]],
   ['widgettype_4',['WidgetType',['../VexUI_8hpp.html#a7f58754048eee9edc68ba1d810291eba',1,'vex']]],
   ['window_5',['Window',['../classvex_1_1Window.html',1,'vex::Window'],['../classvex_1_1Window.html#ae57e58f01774bd314764a060ce164c91',1,'vex::Window::Window()']]],
-  ['window_2ehpp_6',['Window.hpp',['../Window_8hpp.html',1,'']]],
-  ['windowtype_7',['WindowType',['../projectProperties_8hpp.html#a476342970f954b62d70552bcbb5ee509',1,'projectProperties.hpp']]],
-  ['worldsettingsmenu_2ehpp_8',['worldSettingsMenu.hpp',['../worldSettingsMenu_8hpp.html',1,'']]]
+  ['window_2ehpp_6',['Window.hpp',['../Window_8hpp.html',1,'']]]
 ];

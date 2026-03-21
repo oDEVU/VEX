@@ -27,8 +27,5 @@ var searchData=
   ['loadscenewithoutclearing_24',['loadSceneWithoutClearing',['../classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846',1,'vex::SceneManager']]],
   ['loadtexture_25',['loadTexture',['../classvex_1_1VulkanResources.html#a46cf7cb8e3c1921551d473fb62b7c2b0',1,'vex::VulkanResources']]],
   ['loadtexturesbatched_26',['loadTexturesBatched',['../classvex_1_1VulkanResources.html#ac21e226e03dcc1939df08ca99b3bf2bf',1,'vex::VulkanResources']]],
-  ['log_27',['log',['../errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a',1,'vex::log(const char *fmt,...)'],['../errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1',1,'vex::log(LogLevel level, const char *fmt,...)']]],
-  ['logcallbackfn_28',['LogCallbackFn',['../errorUtils_8hpp.html#a2664450bc0c062bee18cd0f5622ec0a4',1,'vex']]],
-  ['logentry_29',['LogEntry',['../structvex_1_1DebugConsole_1_1LogEntry.html',1,'vex::DebugConsole::LogEntry'],['../structvex_1_1LogEntry.html',1,'vex::LogEntry']]],
-  ['loglevel_30',['LogLevel',['../errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43e',1,'vex']]]
+  ['logentry_27',['LogEntry',['../structvex_1_1DebugConsole_1_1LogEntry.html',1,'vex::DebugConsole::LogEntry'],['../structvex_1_1LogEntry.html',1,'vex::LogEntry']]]
 ];

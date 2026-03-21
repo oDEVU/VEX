@@ -137,7 +137,7 @@ $(function(){initNavTree('GameObjectFactory_8cpp_source.html','',''); });
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keywordflow">if</span> (it != creators.end()) {</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            <span class="keywordflow">return</span> it-&gt;second(engine, name);</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        }</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Error: Type &#39;%s&#39; not registered&quot;</span>, type.c_str());</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        log(<span class="stringliteral">&quot;Error: Type &#39;%s&#39; not registered&quot;</span>, type.c_str());</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    }</div>
 </div>
@@ -164,7 +164,7 @@ $(function(){initNavTree('GameObjectFactory_8cpp_source.html','',''); });
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classvex_1_1GameObjectFactory.html#adbe9ab803514b898698a0585ea83fa86">   48</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1GameObjectFactory.html#adbe9ab803514b898698a0585ea83fa86">GameObjectFactory::clearDynamicGameObjects</a>() {</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keywordflow">if</span>(dynamicTypes.empty()) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Hot Reload: Clearing %zu dynamic GameObjects...&quot;</span>, dynamicTypes.size());</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        log(<span class="stringliteral">&quot;Hot Reload: Clearing %zu dynamic GameObjects...&quot;</span>, dynamicTypes.size());</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; name : dynamicTypes) {</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            creators.erase(name);</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
@@ -194,7 +194,6 @@ $(function(){initNavTree('GameObjectFactory_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1GameObjectFactory_html_af5cf5855390185a1e2850e6ddfb1c1a0"><div class="ttname"><a href="classvex_1_1GameObjectFactory.html#af5cf5855390185a1e2850e6ddfb1c1a0">vex::GameObjectFactory::GetAllRegisteredObjectTypes</a></div><div class="ttdeci">std::vector&lt; std::string &gt; GetAllRegisteredObjectTypes()</div><div class="ttdoc">Get all registered object types.</div><div class="ttdef"><b>Definition</b> <a href="#l00036">GameObjectFactory.cpp:36</a></div></div>
 <div class="ttc" id="aclassvex_1_1GameObject_html"><div class="ttname"><a href="classvex_1_1GameObject.html">vex::GameObject</a></div><div class="ttdoc">Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00031">GameObject.hpp:31</a></div></div>
 <div class="ttc" id="aclassvex_1_1GameObject_html_af6e23b5a1aff264edd4bc04e63d55647"><div class="ttname"><a href="classvex_1_1GameObject.html#af6e23b5a1aff264edd4bc04e63d55647">vex::GameObject::setObjectType</a></div><div class="ttdeci">void setObjectType(const std::string &amp;type)</div><div class="ttdoc">Function that sets the type of the GameObject.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00100">GameObject.hpp:100</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

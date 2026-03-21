@@ -7,5 +7,5 @@ var dir_43f58e953be9dbd8f46679184aa78f8b =
     [ "EditorWindow.hpp", "EditorWindow_8hpp.html", "EditorWindow_8hpp" ],
     [ "PropertiesMenu.hpp", "PropertiesMenu_8hpp.html", "PropertiesMenu_8hpp" ],
     [ "SceneMenu.hpp", "SceneMenu_8hpp.html", "SceneMenu_8hpp" ],
-    [ "worldSettingsMenu.hpp", "worldSettingsMenu_8hpp.html", "worldSettingsMenu_8hpp" ]
+    [ "WorldSettingsMenu.hpp", "WorldSettingsMenu_8hpp_source.html", null ]
 ];

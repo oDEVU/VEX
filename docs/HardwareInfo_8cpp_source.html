@@ -130,10 +130,11 @@ $(function(){initNavTree('HardwareInfo_8cpp_source.html','',''); });
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>std::string HardwareInfo::VulkanRequestedVersion = <span class="stringliteral">&quot;0.0.0&quot;</span>;</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><a class="code hl_struct" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a> HardwareInfo::GPUFeatures = {};</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keywordtype">void</span> HardwareInfo::PrintCrashDump(<span class="keywordtype">int</span> fd) {</div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="}">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a9e0756db34e8faa6fa7f5f02ec28fdb5">   30</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a9e0756db34e8faa6fa7f5f02ec28fdb5">HardwareInfo::PrintCrashDump</a>(<span class="keywordtype">int</span> fd) {</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">if</span> (fd &lt; 0) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">auto</span> safe_write = [fd](<span class="keyword">const</span> <span class="keywordtype">char</span>* label, <span class="keyword">const</span> std::string&amp; val) {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">auto</span> safeWrite = [fd](<span class="keyword">const</span> <span class="keywordtype">char</span>* label, <span class="keyword">const</span> std::string&amp; val) {</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keywordflow">if</span> (!label) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        WRITE_FUNC(fd, label, strlen(label));</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keywordflow">if</span> (!val.empty()) {</div>
@@ -144,7 +145,7 @@ $(function(){initNavTree('HardwareInfo_8cpp_source.html','',''); });
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        WRITE_FUNC(fd, <span class="stringliteral">&quot;\n&quot;</span>, 1);</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    };</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">auto</span> safe_write_bool = [fd](<span class="keyword">const</span> <span class="keywordtype">char</span>* label, <span class="keywordtype">bool</span> val) {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keyword">auto</span> safeWriteBool = [fd](<span class="keyword">const</span> <span class="keywordtype">char</span>* label, <span class="keywordtype">bool</span> val) {</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        WRITE_FUNC(fd, label, strlen(label));</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordflow">if</span> (val) WRITE_FUNC(fd, <span class="stringliteral">&quot;YES\n&quot;</span>, 4);</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordflow">else</span> WRITE_FUNC(fd, <span class="stringliteral">&quot;NO\n&quot;</span>, 3);</div>
@@ -156,22 +157,23 @@ $(function(){initNavTree('HardwareInfo_8cpp_source.html','',''); });
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordflow">if</span>(CPUName.empty()) DetectCPUName();</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordflow">if</span>(SystemMemory.empty()) DetectSystemMemory();</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    safe_write(<span class="stringliteral">&quot;CPU:                 &quot;</span>, CPUName);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    safe_write(<span class="stringliteral">&quot;RAM:                 &quot;</span>, SystemMemory);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    safe_write_bool(<span class="stringliteral">&quot;AVX2:                &quot;</span>, HasAVX2());</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    safeWrite(<span class="stringliteral">&quot;CPU:                 &quot;</span>, CPUName);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    safeWrite(<span class="stringliteral">&quot;RAM:                 &quot;</span>, SystemMemory);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    safeWriteBool(<span class="stringliteral">&quot;AVX2:                &quot;</span>, <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a4fd945bb6d2a3b03c4826231cb446c7a">HasAVX2</a>());</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    safe_write(<span class="stringliteral">&quot;GPU:                 &quot;</span>, GPUName);</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    safe_write(<span class="stringliteral">&quot;Driver:              &quot;</span>, DriverVersion);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    safe_write(<span class="stringliteral">&quot;Vulkan Device:       &quot;</span>, VulkanDeviceVersion);</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    safe_write(<span class="stringliteral">&quot;Vulkan Requested:    &quot;</span>, VulkanRequestedVersion);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    safeWrite(<span class="stringliteral">&quot;GPU:                 &quot;</span>, GPUName);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    safeWrite(<span class="stringliteral">&quot;Driver:              &quot;</span>, DriverVersion);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    safeWrite(<span class="stringliteral">&quot;Vulkan Device:       &quot;</span>, VulkanDeviceVersion);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    safeWrite(<span class="stringliteral">&quot;Vulkan Requested:    &quot;</span>, VulkanRequestedVersion);</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    safe_write_bool(<span class="stringliteral">&quot;Feat: MultiDraw:     &quot;</span>, GPUFeatures.multiDraw);</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    safe_write_bool(<span class="stringliteral">&quot;Feat: Indirect:      &quot;</span>, GPUFeatures.indirectDraw);</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    safe_write_bool(<span class="stringliteral">&quot;Feat: Bindless:      &quot;</span>, GPUFeatures.bindlessTextures);</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    safe_write_bool(<span class="stringliteral">&quot;Feat: Shader Params: &quot;</span>, GPUFeatures.shaderDrawParameters);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    safeWriteBool(<span class="stringliteral">&quot;Feat: MultiDraw:     &quot;</span>, GPUFeatures.multiDraw);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    safeWriteBool(<span class="stringliteral">&quot;Feat: Indirect:      &quot;</span>, GPUFeatures.indirectDraw);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    safeWriteBool(<span class="stringliteral">&quot;Feat: Bindless:      &quot;</span>, GPUFeatures.bindlessTextures);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    safeWriteBool(<span class="stringliteral">&quot;Feat: Shader Params: &quot;</span>, GPUFeatures.shaderDrawParameters);</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>}</div>
+</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="keyword">static</span> std::string DecodeDriverVersion(uint32_t vendorID, uint32_t v) {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="keyword">static</span> std::string decodeDriverVersion(uint32_t vendorID, uint32_t v) {</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">if</span> (vendorID == 0x10DE) {</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keywordtype">int</span> major = (v &gt;&gt; 22) &amp; 0x3FF;</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="keywordtype">int</span> minor = (v &gt;&gt; 14) &amp; 0xFF;</div>
@@ -197,34 +199,44 @@ $(function(){initNavTree('HardwareInfo_8cpp_source.html','',''); });
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordflow">return</span> ss.str();</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>}</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="keywordtype">void</span> HardwareInfo::SetGPUInfo(<span class="keyword">const</span> std::string&amp; name, uint32_t vendorID, uint32_t driverVersion) {</div>
+<div class="foldopen" id="foldopen00097" data-start="{" data-end="}">
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a6dde2bf9b8884a3d0606fdff5a5dd397">   97</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a6dde2bf9b8884a3d0606fdff5a5dd397">HardwareInfo::SetGPUInfo</a>(<span class="keyword">const</span> std::string&amp; name, uint32_t vendorID, uint32_t driverVersion) {</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    GPUName = name;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    DriverVersion = DecodeDriverVersion(vendorID, driverVersion);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    DriverVersion = decodeDriverVersion(vendorID, driverVersion);</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>}</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>std::string HardwareInfo::GetGPUName() { <span class="keywordflow">return</span> GPUName; }</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>std::string HardwareInfo::GetDriverVersion() { <span class="keywordflow">return</span> DriverVersion; }</div>
+</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#ab340989b9816f09cff2faec9f0c73d4b">  101</a></span>std::string <a class="code hl_function" href="classvex_1_1HardwareInfo.html#ab340989b9816f09cff2faec9f0c73d4b">HardwareInfo::GetGPUName</a>() { <span class="keywordflow">return</span> GPUName; }</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#adb34133fa8b6346ad5b956ae1cd8804d">  102</a></span>std::string <a class="code hl_function" href="classvex_1_1HardwareInfo.html#adb34133fa8b6346ad5b956ae1cd8804d">HardwareInfo::GetDriverVersion</a>() { <span class="keywordflow">return</span> DriverVersion; }</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keywordtype">void</span> HardwareInfo::SetVulkanVersions(<span class="keyword">const</span> std::string&amp; deviceVer, <span class="keyword">const</span> std::string&amp; requestedVer) {</div>
+<div class="foldopen" id="foldopen00104" data-start="{" data-end="}">
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a459b3a176ca46f9a2deff7cb7819c069">  104</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a459b3a176ca46f9a2deff7cb7819c069">HardwareInfo::SetVulkanVersions</a>(<span class="keyword">const</span> std::string&amp; deviceVer, <span class="keyword">const</span> std::string&amp; requestedVer) {</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    VulkanDeviceVersion = deviceVer;</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    VulkanRequestedVersion = requestedVer;</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>}</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>std::string HardwareInfo::GetVulkanDeviceVersion() { <span class="keywordflow">return</span> VulkanDeviceVersion; }</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>std::string HardwareInfo::GetVulkanRequestedVersion() { <span class="keywordflow">return</span> VulkanRequestedVersion; }</div>
+</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a0192961ccafb82f82c57594198bf7cfe">  108</a></span>std::string <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a0192961ccafb82f82c57594198bf7cfe">HardwareInfo::GetVulkanDeviceVersion</a>() { <span class="keywordflow">return</span> VulkanDeviceVersion; }</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a5e72c7b6ffbdac9c2208edf85c00788c">  109</a></span>std::string <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a5e72c7b6ffbdac9c2208edf85c00788c">HardwareInfo::GetVulkanRequestedVersion</a>() { <span class="keywordflow">return</span> VulkanRequestedVersion; }</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="keywordtype">void</span> HardwareInfo::SetVulkanFeatures(<span class="keyword">const</span> <a class="code hl_struct" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a>&amp; features) {</div>
+<div class="foldopen" id="foldopen00111" data-start="{" data-end="}">
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a5ea57c7d1bbe24925421f28ea07a6ec3">  111</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a5ea57c7d1bbe24925421f28ea07a6ec3">HardwareInfo::SetVulkanFeatures</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a>&amp; features) {</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    GPUFeatures = features;</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>}</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><a class="code hl_struct" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a> HardwareInfo::GetVulkanFeatures() { <span class="keywordflow">return</span> GPUFeatures; }</div>
+</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#aa53122fe7349c00d9e97f44b9463506f">  114</a></span><a class="code hl_struct" href="structvex_1_1VulkanFeatures.html">VulkanFeatures</a> <a class="code hl_function" href="classvex_1_1HardwareInfo.html#aa53122fe7349c00d9e97f44b9463506f">HardwareInfo::GetVulkanFeatures</a>() { <span class="keywordflow">return</span> GPUFeatures; }</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>std::string HardwareInfo::GetCPUName() {</div>
+<div class="foldopen" id="foldopen00116" data-start="{" data-end="}">
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a0e8087d8f63cc83baccb936f98ca989c">  116</a></span>std::string <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a0e8087d8f63cc83baccb936f98ca989c">HardwareInfo::GetCPUName</a>() {</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordflow">if</span> (CPUName.empty()) DetectCPUName();</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="keywordflow">return</span> CPUName;</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>}</div>
+</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>std::string HardwareInfo::GetSystemMemory() {</div>
+<div class="foldopen" id="foldopen00121" data-start="{" data-end="}">
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#adef1626e3a86d084e024931ac8383039">  121</a></span>std::string <a class="code hl_function" href="classvex_1_1HardwareInfo.html#adef1626e3a86d084e024931ac8383039">HardwareInfo::GetSystemMemory</a>() {</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordflow">if</span> (SystemMemory.empty()) DetectSystemMemory();</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordflow">return</span> SystemMemory;</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>}</div>
+</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keywordtype">void</span> HardwareInfo::DetectCPUName() {</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordtype">int</span> info[4] = { -1 };</div>
@@ -262,8 +274,8 @@ $(function(){initNavTree('HardwareInfo_8cpp_source.html','',''); });
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    totalRam = status.ullTotalPhys;</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="preprocessor">#else</span></div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="keywordtype">long</span> pages = sysconf(_SC_PHYS_PAGES);</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="keywordtype">long</span> page_size = sysconf(_SC_PAGE_SIZE);</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    totalRam = pages * page_size;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="keywordtype">long</span> pageSize = sysconf(_SC_PAGE_SIZE);</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    totalRam = pages * pageSize;</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordtype">double</span> gb = <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(totalRam) / (1024.0 * 1024.0 * 1024.0);</div>
@@ -280,10 +292,10 @@ $(function(){initNavTree('HardwareInfo_8cpp_source.html','',''); });
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keywordtype">int</span> info[4];</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    CpuId(info, 1);</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    <span class="keywordtype">bool</span> osUsesXSAVE_XRSTORE = (info[2] &amp; (1 &lt;&lt; 27)) != 0;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    <span class="keywordtype">bool</span> osUsesXsaveXrstore = (info[2] &amp; (1 &lt;&lt; 27)) != 0;</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <span class="keywordtype">bool</span> cpuHasAVX = (info[2] &amp; (1 &lt;&lt; 28)) != 0;</div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keywordflow">if</span> (!osUsesXSAVE_XRSTORE || !cpuHasAVX) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keywordflow">if</span> (!osUsesXsaveXrstore || !cpuHasAVX) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> xcrFeatureMask = 0;</div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="preprocessor">    #ifdef _MSC_VER</span></div>
@@ -300,13 +312,27 @@ $(function(){initNavTree('HardwareInfo_8cpp_source.html','',''); });
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="keywordflow">return</span> cpuHasAVX2;</div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>}</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="keywordtype">bool</span> HardwareInfo::HasAVX2() {</div>
+<div class="foldopen" id="foldopen00200" data-start="{" data-end="}">
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno"><a class="line" href="classvex_1_1HardwareInfo.html#a4fd945bb6d2a3b03c4826231cb446c7a">  200</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="classvex_1_1HardwareInfo.html#a4fd945bb6d2a3b03c4826231cb446c7a">HardwareInfo::HasAVX2</a>() {</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> supported = CheckHardwareSupport();</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <span class="keywordflow">return</span> supported;</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>}</div>
+</div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>} <span class="comment">// namespace vex</span></div>
-<div class="ttc" id="astructvex_1_1VulkanFeatures_html"><div class="ttname"><a href="structvex_1_1VulkanFeatures.html">vex::VulkanFeatures</a></div><div class="ttdef"><b>Definition</b> <a href="HardwareInfo_8hpp_source.html#l00015">HardwareInfo.hpp:15</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a0192961ccafb82f82c57594198bf7cfe"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a0192961ccafb82f82c57594198bf7cfe">vex::HardwareInfo::GetVulkanDeviceVersion</a></div><div class="ttdeci">static std::string GetVulkanDeviceVersion()</div><div class="ttdoc">Retrieves the Vulkan version supported by the device.</div><div class="ttdef"><b>Definition</b> <a href="#l00108">HardwareInfo.cpp:108</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a0e8087d8f63cc83baccb936f98ca989c"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a0e8087d8f63cc83baccb936f98ca989c">vex::HardwareInfo::GetCPUName</a></div><div class="ttdeci">static std::string GetCPUName()</div><div class="ttdoc">Retrieves the name of the CPU.</div><div class="ttdef"><b>Definition</b> <a href="#l00116">HardwareInfo.cpp:116</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a459b3a176ca46f9a2deff7cb7819c069"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a459b3a176ca46f9a2deff7cb7819c069">vex::HardwareInfo::SetVulkanVersions</a></div><div class="ttdeci">static void SetVulkanVersions(const std::string &amp;deviceVer, const std::string &amp;requestedVer)</div><div class="ttdoc">Sets the Vulkan API versions.</div><div class="ttdef"><b>Definition</b> <a href="#l00104">HardwareInfo.cpp:104</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a4fd945bb6d2a3b03c4826231cb446c7a"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a4fd945bb6d2a3b03c4826231cb446c7a">vex::HardwareInfo::HasAVX2</a></div><div class="ttdeci">static bool HasAVX2()</div><div class="ttdoc">Checks if the CPU supports the AVX2 instruction set.</div><div class="ttdef"><b>Definition</b> <a href="#l00200">HardwareInfo.cpp:200</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a5e72c7b6ffbdac9c2208edf85c00788c"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a5e72c7b6ffbdac9c2208edf85c00788c">vex::HardwareInfo::GetVulkanRequestedVersion</a></div><div class="ttdeci">static std::string GetVulkanRequestedVersion()</div><div class="ttdoc">Retrieves the Vulkan version requested by the engine.</div><div class="ttdef"><b>Definition</b> <a href="#l00109">HardwareInfo.cpp:109</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a5ea57c7d1bbe24925421f28ea07a6ec3"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a5ea57c7d1bbe24925421f28ea07a6ec3">vex::HardwareInfo::SetVulkanFeatures</a></div><div class="ttdeci">static void SetVulkanFeatures(const VulkanFeatures &amp;features)</div><div class="ttdoc">Sets the active Vulkan features.</div><div class="ttdef"><b>Definition</b> <a href="#l00111">HardwareInfo.cpp:111</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a6dde2bf9b8884a3d0606fdff5a5dd397"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a6dde2bf9b8884a3d0606fdff5a5dd397">vex::HardwareInfo::SetGPUInfo</a></div><div class="ttdeci">static void SetGPUInfo(const std::string &amp;name, uint32_t vendorID, uint32_t driverVersion)</div><div class="ttdoc">Sets the stored GPU information.</div><div class="ttdef"><b>Definition</b> <a href="#l00097">HardwareInfo.cpp:97</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_a9e0756db34e8faa6fa7f5f02ec28fdb5"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#a9e0756db34e8faa6fa7f5f02ec28fdb5">vex::HardwareInfo::PrintCrashDump</a></div><div class="ttdeci">static void PrintCrashDump(int fd)</div><div class="ttdoc">Prints hardware information to a crash dump file descriptor.</div><div class="ttdef"><b>Definition</b> <a href="#l00030">HardwareInfo.cpp:30</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_aa53122fe7349c00d9e97f44b9463506f"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#aa53122fe7349c00d9e97f44b9463506f">vex::HardwareInfo::GetVulkanFeatures</a></div><div class="ttdeci">static VulkanFeatures GetVulkanFeatures()</div><div class="ttdoc">Retrieves the active Vulkan features.</div><div class="ttdef"><b>Definition</b> <a href="#l00114">HardwareInfo.cpp:114</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_ab340989b9816f09cff2faec9f0c73d4b"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#ab340989b9816f09cff2faec9f0c73d4b">vex::HardwareInfo::GetGPUName</a></div><div class="ttdeci">static std::string GetGPUName()</div><div class="ttdoc">Retrieves the name of the GPU.</div><div class="ttdef"><b>Definition</b> <a href="#l00101">HardwareInfo.cpp:101</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_adb34133fa8b6346ad5b956ae1cd8804d"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#adb34133fa8b6346ad5b956ae1cd8804d">vex::HardwareInfo::GetDriverVersion</a></div><div class="ttdeci">static std::string GetDriverVersion()</div><div class="ttdoc">Retrieves the GPU driver version.</div><div class="ttdef"><b>Definition</b> <a href="#l00102">HardwareInfo.cpp:102</a></div></div>
+<div class="ttc" id="aclassvex_1_1HardwareInfo_html_adef1626e3a86d084e024931ac8383039"><div class="ttname"><a href="classvex_1_1HardwareInfo.html#adef1626e3a86d084e024931ac8383039">vex::HardwareInfo::GetSystemMemory</a></div><div class="ttdeci">static std::string GetSystemMemory()</div><div class="ttdoc">Retrieves the total amount of system memory.</div><div class="ttdef"><b>Definition</b> <a href="#l00121">HardwareInfo.cpp:121</a></div></div>
+<div class="ttc" id="astructvex_1_1VulkanFeatures_html"><div class="ttname"><a href="structvex_1_1VulkanFeatures.html">vex::VulkanFeatures</a></div><div class="ttdoc">Holds the status of various Vulkan features.</div><div class="ttdef"><b>Definition</b> <a href="HardwareInfo_8hpp_source.html#l00016">HardwareInfo.hpp:16</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

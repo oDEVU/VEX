@@ -120,8 +120,8 @@ $(function(){initNavTree('EditorCamera_8cpp_source.html','',''); });
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="classEditorCameraObject.html#a80cfb28c03369d0a2b2b51de276476c0">   14</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classEditorCameraObject.html#a80cfb28c03369d0a2b2b51de276476c0">EditorCameraObject::processEvent</a>(<span class="keyword">const</span> SDL_Event&amp; event, <span class="keywordtype">float</span> deltaTime) {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordflow">if</span> (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP) {</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <span class="keywordtype">bool</span> isPressed = (<span class="keyword">event</span>.type == SDL_EVENT_KEY_DOWN);</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="keyword">const</span> SDL_KeyboardEvent&amp; key_event = <span class="keyword">event</span>.key;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        keyStates[key_event.scancode] = isPressed;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="keyword">const</span> SDL_KeyboardEvent&amp; keyEvent = <span class="keyword">event</span>.key;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        keyStates[keyEvent.scancode] = isPressed;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    }</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordflow">if</span> (event.type == SDL_EVENT_MOUSE_WHEEL &amp;&amp; m_isFlying) {</div>

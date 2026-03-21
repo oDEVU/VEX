@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ntfsartifacts_0',['ntfsArtifacts',['../structvex_1_1enviroment.html#a30d511632c871477abae3cdf7f028324',1,'vex::enviroment']]]
+  ['indirectdraw_0',['indirectDraw',['../structvex_1_1VulkanFeatures.html#a79dad0af811288caa22c7515ab01d9dc',1,'vex::VulkanFeatures']]]
 ];

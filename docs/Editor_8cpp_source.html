@@ -105,7 +105,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;<a class="code" href="EditorImGUIWrapper_8hpp.html">EditorImGUIWrapper.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="PropertiesMenu_8hpp.html">Tools/PropertiesMenu.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="worldSettingsMenu_8hpp.html">Tools/worldSettingsMenu.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;Tools/WorldSettingsMenu.hpp&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="SceneMenu_8hpp.html">Tools/SceneMenu.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;imgui.h&gt;</span></div>
@@ -118,7 +118,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;<a class="code" href="BasicComponents_8hpp.html">components/GameComponents/BasicComponents.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;<a class="code" href="ModelCreator_8hpp.html">components/GameObjects/Creators/ModelCreator.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;components/assetTypes.hpp&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;components/AssetTypes.hpp&quot;</span></div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &quot;ImReflect.hpp&quot;</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &quot;<a class="code" href="SceneManager_8hpp.html">../Core/include/components/SceneManager.hpp</a>&quot;</span></div>
@@ -126,7 +126,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;<a class="code" href="InputSystem_8hpp.html">../Core/include/components/InputSystem.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;<a class="code" href="Window_8hpp.html">../Core/src/components/Window.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;../Core/src/components/EngineCommands.hpp&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;components/EngineCommands.hpp&quot;</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;<a class="code" href="Interface_8hpp.html">../Core/src/components/backends/vulkan/Interface.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;<a class="code" href="Renderer_8hpp.html">../Core/src/components/backends/vulkan/Renderer.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanImGUIWrapper_8hpp.html">../Core/src/components/backends/vulkan/VulkanImGUIWrapper.hpp</a>&quot;</span></div>
@@ -135,14 +135,14 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
 <div class="foldopen" id="foldopen00033" data-start="{" data-end="}">
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classvex_1_1Editor.html#abf2f5ffc25db406eb6baf79e4a743ab0">   33</a></span>    <a class="code hl_function" href="classvex_1_1Editor.html#abf2f5ffc25db406eb6baf79e4a743ab0">Editor::Editor</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* title, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <a class="code hl_struct" href="structvex_1_1GameInfo.html">GameInfo</a> gInfo, <span class="keyword">const</span> std::string&amp; projectBinaryPath) : <a class="code hl_function" href="classvex_1_1Engine.html#ab9aa221f6146c728213c148cba72b245">Engine</a>(<a class="code hl_struct" href="structvex_1_1SkipInit.html">SkipInit</a>{}) {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        std::filesystem::current_path(<a class="code hl_function" href="pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2">GetExecutableDir</a>());</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <a class="code hl_function" href="pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99">SetAssetRoot</a>(projectBinaryPath);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        std::filesystem::current_path(GetExecutableDir());</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        SetAssetRoot(projectBinaryPath);</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        m_gameInfo = gInfo;</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keywordflow">if</span>(m_gameInfo.versionMajor == 0 &amp;&amp; m_gameInfo.versionMinor == 0 &amp;&amp; m_gameInfo.versionPatch == 0){</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Project version not set!&quot;</span>);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            log(<span class="stringliteral">&quot;Project version not set!&quot;</span>);</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        }</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating window..&quot;</span>);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        log(<span class="stringliteral">&quot;Creating window..&quot;</span>);</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        m_window = std::make_shared&lt;Window&gt;(title, width, height);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        m_resolutionManager = std::make_unique&lt;ResolutionManager&gt;(m_window-&gt;GetSDLWindow());</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
@@ -150,11 +150,11 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">const</span> <span class="keywordtype">char</span>* driver = SDL_GetCurrentVideoDriver();</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordflow">if</span> (driver &amp;&amp; std::string(driver) == <span class="stringliteral">&quot;wayland&quot;</span>) {</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            m_isWayland = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Wayland detected: Enforcing Software VSync strategy.&quot;</span>);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            log(<span class="stringliteral">&quot;Wayland detected: Enforcing Software VSync strategy.&quot;</span>);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        }</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">        #endif</span></div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initializing virtual file system..\nSwitching vfs path to: %s&quot;</span>, projectBinaryPath.c_str());</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        log(<span class="stringliteral">&quot;Initializing virtual file system..\nSwitching vfs path to: %s&quot;</span>, projectBinaryPath.c_str());</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        m_vfs = std::make_shared&lt;VirtualFileSystem&gt;();</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        m_vfs-&gt;initialize(projectBinaryPath);</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
@@ -162,14 +162,14 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        m_physicsSystem-&gt;init();</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keyword">auto</span> renderRes = m_resolutionManager-&gt;getRenderResolution();</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initializing Vulkan interface...&quot;</span>);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        log(<span class="stringliteral">&quot;Initializing Vulkan interface...&quot;</span>);</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        m_interface = std::make_unique&lt;Interface&gt;(m_window-&gt;GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        m_imgui = std::make_unique&lt;EditorImGUIWrapper&gt;(m_window-&gt;GetSDLWindow(), *m_interface-&gt;getContext());</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        m_imgui-&gt;init();</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        vex::DebugConsole::Get().Init();</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initializing engine components...&quot;</span>);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        log(<span class="stringliteral">&quot;Initializing engine components...&quot;</span>);</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        m_inputSystem = std::make_unique&lt;InputSystem&gt;(m_registry, m_window-&gt;GetSDLWindow());</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        m_sceneManager = std::make_unique&lt;SceneManager&gt;();</div>
@@ -179,7 +179,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        RegisterEngineCommands(<span class="keyword">this</span>);</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initializing editor components...&quot;</span>);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        log(<span class="stringliteral">&quot;Initializing editor components...&quot;</span>);</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        std::filesystem::path projectPath = projectBinaryPath;</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        std::filesystem::path assetsPath = projectPath / <span class="stringliteral">&quot;Assets&quot;</span>;</div>
@@ -198,11 +198,11 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <a class="code hl_function" href="classvex_1_1Engine.html#ac28c13617db5b1a651db2f359eac5b70">setVSync</a>(m_editorProperties.vsync);</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        std::filesystem::path projectConfigPath = projectPath / <span class="stringliteral">&quot;VexProject.json&quot;</span>;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Loading project configuration from: %s&quot;</span>, projectConfigPath.string().c_str());</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        log(<span class="stringliteral">&quot;Loading project configuration from: %s&quot;</span>, projectConfigPath.string().c_str());</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <a class="code hl_function" href="classvex_1_1Editor.html#a23b00ead29ed6c4630cc0387e34ded5b">LoadProjectConfig</a>(m_projectProperties, projectConfigPath.string());</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="comment">//m_SavedProjectProperties = m_projectProperties;</span></div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Editor initialized successfully&quot;</span>);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        log(<span class="stringliteral">&quot;Editor initialized successfully&quot;</span>);</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    }</div>
 </div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
@@ -218,9 +218,9 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            <span class="keywordflow">if</span> (ctrl &amp;&amp; ImGui::IsKeyPressed(ImGuiKey_S)) {</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>                <span class="keywordflow">if</span> (shift) m_editorMenuBar-&gt;SaveSceneAs();</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>                <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                    std::string sceneName = <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">vex::GetAssetPath</a>(<a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;getLastSceneName());</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                    std::string sceneName = vex::GetAssetPath(<a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;getLastSceneName());</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>                    <a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;<a class="code hl_function" href="classvex_1_1SceneManager.html#a5765f36b31f641df1690c1c76bfc1c89">GetScene</a>(sceneName)-&gt;<a class="code hl_function" href="classvex_1_1Scene.html#a6d7688bf98b127621167f95622a2aaf1">Save</a>(sceneName);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Quick Saved Scene.&quot;</span>);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>                    log(<span class="stringliteral">&quot;Quick Saved Scene.&quot;</span>);</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>                }</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            }</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
@@ -336,7 +336,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        std::filesystem::path projectPath = m_projectBinaryPath;</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        std::filesystem::path assetsPath = projectPath / <span class="stringliteral">&quot;Assets&quot;</span>;</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        <span class="keywordflow">if</span>(!<a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;getLastSceneName().contains(assetsPath.string())){</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>            <a class="code hl_function" href="classvex_1_1Editor.html#aeeb45e8bbfc0ffaae4b095e8883c7a44">requestSceneReload</a>(<a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(<a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;getLastSceneName()));</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>            <a class="code hl_function" href="classvex_1_1Editor.html#aeeb45e8bbfc0ffaae4b095e8883c7a44">requestSceneReload</a>(GetAssetPath(<a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;getLastSceneName()));</div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        }</div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        m_fps = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(1.0f / deltaTime);</div>
@@ -443,8 +443,8 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>            m_interface-&gt;getRenderer().endFrame(renderData);</div>
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Editor render failed&quot;</span>);</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">handle_critical_exception</a>(e);</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>            log(LogLevel::ERROR, <span class="stringliteral">&quot;Editor render failed&quot;</span>);</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>            handle_critical_exception(e);</div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>        }</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    }</div>
 </div>
@@ -463,7 +463,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        <span class="keyword">auto</span>* vfs = m_vfs.get();</div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>        <span class="keyword">auto</span>* vulkanGUI = <span class="keyword">static_cast&lt;</span><a class="code hl_class" href="classvex_1_1VulkanImGUIWrapper.html">VulkanImGUIWrapper</a>*<span class="keyword">&gt;</span>(m_imgui.get());</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>            <span class="keywordflow">if</span> (!vulkanGUI) {</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to cast ImGUI wrapper to VulkanImGUIWrapper&quot;</span>);</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to cast ImGUI wrapper to VulkanImGUIWrapper&quot;</span>);</div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>            }</div>
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>        std::vector&lt;std::pair&lt;std::string, ImTextureID*&gt;&gt; targets = {</div>
@@ -483,7 +483,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>            std::string name = <span class="stringliteral">&quot;editor_&quot;</span> + path;</div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
 <div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>            <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>                std::filesystem::path correctPath = <a class="code hl_function" href="pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2">GetExecutableDir</a>() / path;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>                std::filesystem::path correctPath = GetExecutableDir() / path;</div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>                resources-&gt;loadTexture(correctPath.string(), name);</div>
 <div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
 <div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>                VkDescriptorSet ds = vulkanGUI-&gt;addTexture(</div>
@@ -495,7 +495,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>                *targetPtr = (ImTextureID)ds;</div>
 <div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span> </div>
 <div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>            } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load icon: %s&quot;</span>, path.c_str());</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load icon: %s&quot;</span>, path.c_str());</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>                VkDescriptorSet ds = vulkanGUI-&gt;addTexture(</div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>                    sampler,</div>
 <div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>                    resources-&gt;getTextureView(<span class="stringliteral">&quot;default&quot;</span>),</div>
@@ -541,7 +541,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>        ImGui::SetCursorScreenPos(ImVec2(viewportPos.x + 10, viewportPos.y + 10));</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span> </div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        <span class="keyword">auto</span> GizmoButton = [&amp;](<span class="keyword">const</span> <span class="keywordtype">char</span>* label, ImGuizmo::OPERATION op) {</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>        <span class="keyword">auto</span> gizmoButton = [&amp;](<span class="keyword">const</span> <span class="keywordtype">char</span>* label, ImGuizmo::OPERATION op) {</div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>            <span class="keywordtype">bool</span> wasActive = (m_currentGizmoOperation == op);</div>
 <div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>            <span class="keywordflow">if</span> (wasActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.00f, 0.23f, 0.01f, 1.0f));</div>
 <div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>            <span class="keywordflow">if</span> (ImGui::Button(label)) m_currentGizmoOperation = op;</div>
@@ -550,9 +550,9 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>            ImGui::SameLine();</div>
 <div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        };</div>
 <div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span> </div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>        GizmoButton(<span class="stringliteral">&quot;T&quot;</span>, ImGuizmo::TRANSLATE);</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>        GizmoButton(<span class="stringliteral">&quot;R&quot;</span>, ImGuizmo::ROTATE);</div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>        GizmoButton(<span class="stringliteral">&quot;S&quot;</span>, ImGuizmo::SCALE);</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>        gizmoButton(<span class="stringliteral">&quot;T&quot;</span>, ImGuizmo::TRANSLATE);</div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>        gizmoButton(<span class="stringliteral">&quot;R&quot;</span>, ImGuizmo::ROTATE);</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>        gizmoButton(<span class="stringliteral">&quot;S&quot;</span>, ImGuizmo::SCALE);</div>
 <div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span> </div>
 <div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>        ImGui::Dummy(ImVec2(10, 0)); ImGui::SameLine();</div>
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span> </div>
@@ -631,10 +631,10 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span> </div>
 <div class="foldopen" id="foldopen00501" data-start="{" data-end="}">
 <div class="line"><a id="l00501" name="l00501"></a><span class="lineno"><a class="line" href="classvex_1_1Editor.html#a4f90130d799e6a79584a5f318ab26f41">  501</a></span>    <span class="keywordtype">float</span> <a class="code hl_function" href="classvex_1_1Editor.html#a4f90130d799e6a79584a5f318ab26f41">Editor::raySphereIntersect</a>(<span class="keyword">const</span> glm::vec3&amp; rayOrigin, <span class="keyword">const</span> glm::vec3&amp; rayDir, <span class="keyword">const</span> glm::vec3&amp; sphereCenter, <span class="keywordtype">float</span> sphereRadius) {</div>
-<div class="line"><a id="l00502" name="l00502"></a><span class="lineno">  502</span>        glm::vec3 L = sphereCenter - rayOrigin;</div>
-<div class="line"><a id="l00503" name="l00503"></a><span class="lineno">  503</span>        <span class="keywordtype">float</span> tca = glm::dot(L, rayDir);</div>
+<div class="line"><a id="l00502" name="l00502"></a><span class="lineno">  502</span>        glm::vec3 l = sphereCenter - rayOrigin;</div>
+<div class="line"><a id="l00503" name="l00503"></a><span class="lineno">  503</span>        <span class="keywordtype">float</span> tca = glm::dot(l, rayDir);</div>
 <div class="line"><a id="l00504" name="l00504"></a><span class="lineno">  504</span>        <span class="keywordflow">if</span> (tca &lt; 0) <span class="keywordflow">return</span> -1.0f;</div>
-<div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span>        <span class="keywordtype">float</span> d2 = glm::dot(L, L) - tca * tca;</div>
+<div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span>        <span class="keywordtype">float</span> d2 = glm::dot(l, l) - tca * tca;</div>
 <div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>        <span class="keywordtype">float</span> radius2 = sphereRadius * sphereRadius;</div>
 <div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span>        <span class="keywordflow">if</span> (d2 &gt; radius2) <span class="keywordflow">return</span> -1.0f;</div>
 <div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>        <span class="keywordtype">float</span> thc = sqrt(radius2 - d2);</div>
@@ -647,13 +647,13 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00513" name="l00513"></a><span class="lineno">  513</span>        <span class="keyword">const</span> glm::vec3&amp; rayOrigin, <span class="keyword">const</span> glm::vec3&amp; rayDir,</div>
 <div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span>        <span class="keyword">const</span> glm::vec3&amp; v0, <span class="keyword">const</span> glm::vec3&amp; v1, <span class="keyword">const</span> glm::vec3&amp; v2)</div>
 <div class="line"><a id="l00515" name="l00515"></a><span class="lineno">  515</span>    {</div>
-<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span>        <span class="keyword">const</span> <span class="keywordtype">float</span> EPSILON = 0.0000001f;</div>
+<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span>        <span class="keyword">const</span> <span class="keywordtype">float</span> epsilon = 0.0000001f;</div>
 <div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span>        glm::vec3 edge1 = v1 - v0;</div>
 <div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>        glm::vec3 edge2 = v2 - v0;</div>
 <div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span>        glm::vec3 h = glm::cross(rayDir, edge2);</div>
 <div class="line"><a id="l00520" name="l00520"></a><span class="lineno">  520</span>        <span class="keywordtype">float</span> a = glm::dot(edge1, h);</div>
 <div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span> </div>
-<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>        <span class="keywordflow">if</span> (a &gt; -EPSILON &amp;&amp; a &lt; EPSILON) <span class="keywordflow">return</span> -1.0f;</div>
+<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>        <span class="keywordflow">if</span> (a &gt; -epsilon &amp;&amp; a &lt; epsilon) <span class="keywordflow">return</span> -1.0f;</div>
 <div class="line"><a id="l00523" name="l00523"></a><span class="lineno">  523</span> </div>
 <div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>        <span class="keywordtype">float</span> f = 1.0f / a;</div>
 <div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span>        glm::vec3 s = rayOrigin - v0;</div>
@@ -665,7 +665,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>        <span class="keywordflow">if</span> (v &lt; 0.0f || u + v &gt; 1.0f) <span class="keywordflow">return</span> -1.0f;</div>
 <div class="line"><a id="l00532" name="l00532"></a><span class="lineno">  532</span> </div>
 <div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span>        <span class="keywordtype">float</span> t = f * glm::dot(edge2, q);</div>
-<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>        <span class="keywordflow">if</span> (t &gt; EPSILON) <span class="keywordflow">return</span> t;</div>
+<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>        <span class="keywordflow">if</span> (t &gt; epsilon) <span class="keywordflow">return</span> t;</div>
 <div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span>        <span class="keywordflow">else</span> <span class="keywordflow">return</span> -1.0f;</div>
 <div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span>    }</div>
 </div>
@@ -699,7 +699,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>        }</div>
 <div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span> </div>
 <div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>        std::filesystem::path absPath = filepath;</div>
-<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>        std::filesystem::path assetDir = <a class="code hl_function" href="pathUtils_8hpp.html#a0f7f70a0c306a3e9c987e4e32bc5fa8f">GetAssetDir</a>();</div>
+<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>        std::filesystem::path assetDir = GetAssetDir();</div>
 <div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span> </div>
 <div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>        std::filesystem::path relative = absPath.lexically_relative(assetDir);</div>
 <div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span> </div>
@@ -714,7 +714,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>        newObj-&gt;<a class="code hl_function" href="classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8">BeginPlay</a>();</div>
 <div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>        <a class="code hl_function" href="classvex_1_1Editor.html#a50ae38834c2d70ecd18a9433aef19136">refreshForObject</a>();</div>
 <div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span> </div>
-<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a>(<span class="stringliteral">&quot;Instantiated mesh from: %s&quot;</span>, filepath.c_str());</div>
+<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>        vex::log(<span class="stringliteral">&quot;Instantiated mesh from: %s&quot;</span>, filepath.c_str());</div>
 <div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>    }</div>
 </div>
 <div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span> </div>
@@ -725,7 +725,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>        ImGui::SetNextWindowSize(viewport-&gt;Size);</div>
 <div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span>        ImGui::SetNextWindowViewport(viewport-&gt;ID);</div>
 <div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span> </div>
-<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |</div>
+<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |</div>
 <div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>                                        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |</div>
 <div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span>                                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |</div>
 <div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span>                                        ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground |</div>
@@ -735,40 +735,40 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);</div>
 <div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));</div>
 <div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span> </div>
-<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>        ImGui::Begin(<span class="stringliteral">&quot;EditorDockSpace&quot;</span>, <span class="keyword">nullptr</span>, window_flags);</div>
+<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>        ImGui::Begin(<span class="stringliteral">&quot;EditorDockSpace&quot;</span>, <span class="keyword">nullptr</span>, windowFlags);</div>
 <div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span>        ImGui::PopStyleVar(3);</div>
 <div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span> </div>
 <div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>        m_editorMenuBar-&gt;DrawBar();</div>
 <div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span> </div>
-<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>        ImGuiID dockspace_id = ImGui::GetID(<span class="stringliteral">&quot;MyDockSpace&quot;</span>);</div>
+<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>        ImGuiID dockspaceId = ImGui::GetID(<span class="stringliteral">&quot;MyDockSpace&quot;</span>);</div>
 <div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span> </div>
 <div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>        ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;</div>
 <div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>        dockFlags |= ImGuiDockNodeFlags_NoUndocking;</div>
 <div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>        dockFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;</div>
 <div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span> </div>
-<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span>        <span class="keywordflow">if</span> (!ImGui::DockBuilderGetNode(dockspace_id)) {</div>
-<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>            ImGui::DockBuilderRemoveNode(dockspace_id);</div>
-<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);</div>
-<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>            ImGui::DockBuilderSetNodeSize(dockspace_id, viewport-&gt;Size);</div>
+<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span>        <span class="keywordflow">if</span> (!ImGui::DockBuilderGetNode(dockspaceId)) {</div>
+<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>            ImGui::DockBuilderRemoveNode(dockspaceId);</div>
+<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>            ImGui::DockBuilderAddNode(dockspaceId, ImGuiDockNodeFlags_DockSpace);</div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>            ImGui::DockBuilderSetNodeSize(dockspaceId, viewport-&gt;Size);</div>
 <div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span> </div>
-<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>            ImGuiID dock_main_id = dockspace_id;</div>
-<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>            ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.3f, <span class="keyword">nullptr</span>, &amp;dock_main_id);</div>
-<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>            ImGuiID dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.45f, <span class="keyword">nullptr</span>, &amp;dock_main_id);</div>
-<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>            ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, <span class="keyword">nullptr</span>, &amp;dock_main_id);</div>
-<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>            ImGuiID dock_right_top_id, dock_right_bottom_id;</div>
-<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>            ImGui::DockBuilderSplitNode(dock_right_id, ImGuiDir_Down, 0.5f, &amp;dock_right_bottom_id, &amp;dock_right_top_id);</div>
+<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>            ImGuiID dockMainId = dockspaceId;</div>
+<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>            ImGuiID dockRightId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Right, 0.3f, <span class="keyword">nullptr</span>, &amp;dockMainId);</div>
+<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>            ImGuiID dockBottomId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Down, 0.45f, <span class="keyword">nullptr</span>, &amp;dockMainId);</div>
+<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>            ImGuiID dockLeftId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Left, 0.2f, <span class="keyword">nullptr</span>, &amp;dockMainId);</div>
+<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>            ImGuiID dockRightTopId, dockRightBottomId;</div>
+<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>            ImGui::DockBuilderSplitNode(dockRightId, ImGuiDir_Down, 0.5f, &amp;dockRightBottomId, &amp;dockRightTopId);</div>
 <div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span> </div>
-<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Viewport&quot;</span>, dock_main_id);</div>
-<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Game Objects&quot;</span>, dock_left_id);</div>
-<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Assets&quot;</span>, dock_bottom_id);</div>
-<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Scene&quot;</span>, dock_right_top_id);</div>
-<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Properties&quot;</span>, dock_right_bottom_id);</div>
-<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;World Settings&quot;</span>, dock_right_bottom_id);</div>
+<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Viewport&quot;</span>, dockMainId);</div>
+<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Game Objects&quot;</span>, dockLeftId);</div>
+<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Assets&quot;</span>, dockBottomId);</div>
+<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Scene&quot;</span>, dockRightTopId);</div>
+<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;Properties&quot;</span>, dockRightBottomId);</div>
+<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>            ImGui::DockBuilderDockWindow(<span class="stringliteral">&quot;World Settings&quot;</span>, dockRightBottomId);</div>
 <div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span> </div>
-<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>            ImGui::DockBuilderFinish(dockspace_id);</div>
+<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>            ImGui::DockBuilderFinish(dockspaceId);</div>
 <div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span>        }</div>
 <div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span> </div>
-<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span>        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockFlags);</div>
+<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span>        ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockFlags);</div>
 <div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>        ImGui::End();</div>
 <div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span> </div>
 <div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>        ImGuiWindowFlags childFlags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;</div>
@@ -907,7 +907,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span>                <span class="keywordflow">if</span> (hitEntity != entt::null) {</div>
 <div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>                    <a class="code hl_function" href="classvex_1_1Editor.html#afe115fd399ec933947ec6de3b765678c">ExtractObjectByEntity</a>(hitEntity, m_selectedObject);</div>
 <div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span> </div>
-<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Selected Entity ID: %d&quot;</span>, (uint32_t)hitEntity);</div>
+<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>                    log(<span class="stringliteral">&quot;Selected Entity ID: %d&quot;</span>, (uint32_t)hitEntity);</div>
 <div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>                } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>                    m_selectedObject.first = <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>                    m_selectedObject.second = <span class="keyword">nullptr</span>;</div>
@@ -950,7 +950,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span>                                <a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;<a class="code hl_function" href="classvex_1_1SceneManager.html#a5765f36b31f641df1690c1c76bfc1c89">GetScene</a>(currentScene)-&gt;<a class="code hl_function" href="classvex_1_1Scene.html#a2a6c9df0947f18b5ce1421ecd586529d">AddEditorGameObject</a>(newObj);</div>
 <div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span>                            }</div>
 <div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>                        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00813" name="l00813"></a><span class="lineno">  813</span>                            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;No scene loaded. Cannot create object.&quot;</span>);</div>
+<div class="line"><a id="l00813" name="l00813"></a><span class="lineno">  813</span>                            log(LogLevel::ERROR, <span class="stringliteral">&quot;No scene loaded. Cannot create object.&quot;</span>);</div>
 <div class="line"><a id="l00814" name="l00814"></a><span class="lineno">  814</span>                        }</div>
 <div class="line"><a id="l00815" name="l00815"></a><span class="lineno">  815</span>                    }</div>
 <div class="line"><a id="l00816" name="l00816"></a><span class="lineno">  816</span>                }</div>
@@ -982,7 +982,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00842" name="l00842"></a><span class="lineno">  842</span>                                <a class="code hl_function" href="classvex_1_1Engine.html#a43a768746bf14be5e95cc3ed4c459f93">getSceneManager</a>()-&gt;<a class="code hl_function" href="classvex_1_1SceneManager.html#a5765f36b31f641df1690c1c76bfc1c89">GetScene</a>(currentScene)-&gt;<a class="code hl_function" href="classvex_1_1Scene.html#a2a6c9df0947f18b5ce1421ecd586529d">AddEditorGameObject</a>(newObj);</div>
 <div class="line"><a id="l00843" name="l00843"></a><span class="lineno">  843</span>                            }</div>
 <div class="line"><a id="l00844" name="l00844"></a><span class="lineno">  844</span>                        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00845" name="l00845"></a><span class="lineno">  845</span>                            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;No scene loaded. Cannot create object.&quot;</span>);</div>
+<div class="line"><a id="l00845" name="l00845"></a><span class="lineno">  845</span>                            log(LogLevel::ERROR, <span class="stringliteral">&quot;No scene loaded. Cannot create object.&quot;</span>);</div>
 <div class="line"><a id="l00846" name="l00846"></a><span class="lineno">  846</span>                        }</div>
 <div class="line"><a id="l00847" name="l00847"></a><span class="lineno">  847</span>                    }</div>
 <div class="line"><a id="l00848" name="l00848"></a><span class="lineno">  848</span>                }</div>
@@ -996,7 +996,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00856" name="l00856"></a><span class="lineno">  856</span>                std::string openedFile = m_assetBrowser-&gt;Draw(m_icons);</div>
 <div class="line"><a id="l00857" name="l00857"></a><span class="lineno">  857</span> </div>
 <div class="line"><a id="l00858" name="l00858"></a><span class="lineno">  858</span>                <span class="keywordflow">if</span> (!openedFile.empty()) {</div>
-<div class="line"><a id="l00859" name="l00859"></a><span class="lineno">  859</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Opening file: %s&quot;</span>, openedFile.c_str());</div>
+<div class="line"><a id="l00859" name="l00859"></a><span class="lineno">  859</span>                    log(<span class="stringliteral">&quot;Opening file: %s&quot;</span>, openedFile.c_str());</div>
 <div class="line"><a id="l00860" name="l00860"></a><span class="lineno">  860</span>                    <span class="keywordflow">if</span> (m_assetBrowser-&gt;GetExtension(openedFile) == <span class="stringliteral">&quot;.json&quot;</span>) {</div>
 <div class="line"><a id="l00861" name="l00861"></a><span class="lineno">  861</span>                        <span class="keywordflow">if</span> (m_assetBrowser-&gt;GetJSONAssetType(openedFile) == 1){</div>
 <div class="line"><a id="l00862" name="l00862"></a><span class="lineno">  862</span>                            <a class="code hl_function" href="classvex_1_1Editor.html#aeeb45e8bbfc0ffaae4b095e8883c7a44">requestSceneReload</a>(openedFile);</div>
@@ -1019,7 +1019,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00879" name="l00879"></a><span class="lineno">  879</span>        ImGui::End();</div>
 <div class="line"><a id="l00880" name="l00880"></a><span class="lineno">  880</span> </div>
 <div class="line"><a id="l00881" name="l00881"></a><span class="lineno">  881</span>        ImGui::Begin(<span class="stringliteral">&quot;World Settings&quot;</span>, <span class="keyword">nullptr</span>, childFlags);</div>
-<div class="line"><a id="l00882" name="l00882"></a><span class="lineno">  882</span>            <a class="code hl_function" href="worldSettingsMenu_8hpp.html#a7e48a1d9045a4f9560da9300e251db69">DrawWorldSettings</a>(*<span class="keyword">this</span>);</div>
+<div class="line"><a id="l00882" name="l00882"></a><span class="lineno">  882</span>            DrawWorldSettings(*<span class="keyword">this</span>);</div>
 <div class="line"><a id="l00883" name="l00883"></a><span class="lineno">  883</span>        ImGui::End();</div>
 <div class="line"><a id="l00884" name="l00884"></a><span class="lineno">  884</span> </div>
 <div class="line"><a id="l00885" name="l00885"></a><span class="lineno">  885</span>        <span class="keywordflow">if</span> (!m_pendingSceneToLoad.empty() || m_pendingSceneToLoad != <span class="stringliteral">&quot;&quot;</span>) {</div>
@@ -1034,7 +1034,7 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="line"><a id="l00893" name="l00893"></a><span class="lineno">  893</span> </div>
 <div class="foldopen" id="foldopen00894" data-start="{" data-end="}">
 <div class="line"><a id="l00894" name="l00894"></a><span class="lineno"><a class="line" href="classvex_1_1Editor.html#a606050564ebf6b2414b2a0da18c0a650">  894</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1Editor.html#a606050564ebf6b2414b2a0da18c0a650">Editor::OnHotReload</a>() {</div>
-<div class="line"><a id="l00895" name="l00895"></a><span class="lineno">  895</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Hot Reload detected: Deselecting objects and reloading scene...&quot;</span>);</div>
+<div class="line"><a id="l00895" name="l00895"></a><span class="lineno">  895</span>        log(<span class="stringliteral">&quot;Hot Reload detected: Deselecting objects and reloading scene...&quot;</span>);</div>
 <div class="line"><a id="l00896" name="l00896"></a><span class="lineno">  896</span> </div>
 <div class="line"><a id="l00897" name="l00897"></a><span class="lineno">  897</span>        m_selectedObject.first = <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00898" name="l00898"></a><span class="lineno">  898</span>        m_selectedObject.second = <span class="keyword">nullptr</span>;</div>
@@ -1118,12 +1118,6 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1Scene_html_a9e1119af8f263db062ed73d3d0bda269"><div class="ttname"><a href="classvex_1_1Scene.html#a9e1119af8f263db062ed73d3d0bda269">vex::Scene::DestroyGameObject</a></div><div class="ttdeci">void DestroyGameObject(GameObject *gameObject)</div><div class="ttdoc">Marks a game object for destruction.</div><div class="ttdef"><b>Definition</b> <a href="Scene_8cpp_source.html#l00265">Scene.cpp:265</a></div></div>
 <div class="ttc" id="aclassvex_1_1TransformCommand_html"><div class="ttname"><a href="classvex_1_1TransformCommand.html">vex::TransformCommand</a></div><div class="ttdoc">Gizmo Movement Command.</div><div class="ttdef"><b>Definition</b> <a href="EditorCommands_8hpp_source.html#l00028">EditorCommands.hpp:28</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanImGUIWrapper_html"><div class="ttname"><a href="classvex_1_1VulkanImGUIWrapper.html">vex::VulkanImGUIWrapper</a></div><div class="ttdoc">Class with Imgui for vulkan backend definition, inheriting from ImGUIWrapper.</div><div class="ttdef"><b>Definition</b> <a href="VulkanImGUIWrapper_8hpp_source.html#l00024">VulkanImGUIWrapper.hpp:24</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a98df6c0f2c25bb67d5d5852ff2744d48"><div class="ttname"><a href="errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48">vex::handle_critical_exception</a></div><div class="ttdeci">void VEX_EXPORT handle_critical_exception(const std::exception &amp;e)</div><div class="ttdoc">Handles a critical exception, forcing termination.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00525">errorUtils.cpp:525</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html_a0f7f70a0c306a3e9c987e4e32bc5fa8f"><div class="ttname"><a href="pathUtils_8hpp.html#a0f7f70a0c306a3e9c987e4e32bc5fa8f">vex::GetAssetDir</a></div><div class="ttdeci">std::string VEX_EXPORT GetAssetDir()</div><div class="ttdoc">Gets the current asset directory override.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00029">pathUtils.cpp:29</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html_a6012eb60cd3da12ce61a5175a7471ba2"><div class="ttname"><a href="pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2">vex::GetExecutableDir</a></div><div class="ttdeci">std::filesystem::path VEX_EXPORT GetExecutableDir()</div><div class="ttdoc">Retrieves the directory containing the current executable.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00037">pathUtils.cpp:37</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html_a6efde01ee2c1d1359dbf05958e014e99"><div class="ttname"><a href="pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99">vex::SetAssetRoot</a></div><div class="ttdeci">void VEX_EXPORT SetAssetRoot(const std::string &amp;projectPath)</div><div class="ttdoc">Overrides the default asset root directory.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00018">pathUtils.cpp:18</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html_aa19dc36f35689a3623a28fb816af93d2"><div class="ttname"><a href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">vex::GetAssetPath</a></div><div class="ttdeci">std::string VEX_EXPORT GetAssetPath(const std::string &amp;relativePath)</div><div class="ttdoc">Resolves the absolute path of an asset based on the current build configuration.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00073">pathUtils.cpp:73</a></div></div>
 <div class="ttc" id="astructvex_1_1CameraComponent_html"><div class="ttname"><a href="structvex_1_1CameraComponent.html">vex::CameraComponent</a></div><div class="ttdoc">Struct that contains camera properties. Used by build in CameraObject, but needed for any custom one ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00457">BasicComponents.hpp:457</a></div></div>
 <div class="ttc" id="astructvex_1_1GameInfo_html"><div class="ttname"><a href="structvex_1_1GameInfo.html">vex::GameInfo</a></div><div class="ttdoc">this struct contains information about the game. like project name and version.</div><div class="ttdef"><b>Definition</b> <a href="GameInfo_8hpp_source.html#l00015">GameInfo.hpp:15</a></div></div>
 <div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00400">BasicComponents.hpp:400</a></div></div>
@@ -1135,8 +1129,6 @@ $(function(){initNavTree('Editor_8cpp_source.html','',''); });
 <div class="ttc" id="astructvex_1_1TransformComponent_html_a8cb6295bdf09984a476b8dc7073f7478"><div class="ttname"><a href="structvex_1_1TransformComponent.html#a8cb6295bdf09984a476b8dc7073f7478">vex::TransformComponent::getParent</a></div><div class="ttdeci">entt::entity getParent() const</div><div class="ttdoc">Get the parent entity.</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00135">BasicComponents.hpp:135</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_aa54e044bf6353c93a19137c47bab694d"><div class="ttname"><a href="structvex_1_1TransformComponent.html#aa54e044bf6353c93a19137c47bab694d">vex::TransformComponent::getWorldPosition</a></div><div class="ttdeci">glm::vec3 getWorldPosition()</div><div class="ttdoc">Method to get world position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00239">BasicComponents.hpp:239</a></div></div>
 <div class="ttc" id="astructvex_1_1TransformComponent_html_af48e50f85921fb3464ff3ce2d4909086"><div class="ttname"><a href="structvex_1_1TransformComponent.html#af48e50f85921fb3464ff3ce2d4909086">vex::TransformComponent::setWorldPosition</a></div><div class="ttdeci">void setWorldPosition(glm::vec3 newPosition)</div><div class="ttdoc">Method to set world position, needed when object is parented as position parameter stores local posit...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00263">BasicComponents.hpp:263</a></div></div>
-<div class="ttc" id="aworldSettingsMenu_8hpp_html"><div class="ttname"><a href="worldSettingsMenu_8hpp.html">worldSettingsMenu.hpp</a></div><div class="ttdoc">Utility function for drawing the Environment/World Settings ImGUI menu.</div></div>
-<div class="ttc" id="aworldSettingsMenu_8hpp_html_a7e48a1d9045a4f9560da9300e251db69"><div class="ttname"><a href="worldSettingsMenu_8hpp.html#a7e48a1d9045a4f9560da9300e251db69">vex::DrawWorldSettings</a></div><div class="ttdeci">void DrawWorldSettings(Engine &amp;engine)</div><div class="ttdoc">Draws the world settings menu, allowing modification of environment parameters like shading,...</div><div class="ttdef"><b>Definition</b> <a href="worldSettingsMenu_8hpp_source.html#l00018">worldSettingsMenu.hpp:18</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

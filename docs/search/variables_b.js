@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vertexsnapping_0',['vertexSnapping',['../structvex_1_1enviroment.html#a7b0286a765e6fba844288bbf7bcd8380',1,'vex::enviroment']]],
-  ['view_1',['view',['../structvex_1_1SceneUBO.html#aff32b4ef5b2c8dc91b5657cda6b90470',1,'vex::SceneUBO']]]
+  ['texindex_0',['texIndex',['../structvex_1_1UIVertex.html#ac09c638d80b1e96dfe3876e57eee08ca',1,'vex::UIVertex']]],
+  ['texturequantization_1',['textureQuantization',['../structvex_1_1environment.html#a42a047febcbcb2bd7a103ff94e7d5c03',1,'vex::environment']]]
 ];

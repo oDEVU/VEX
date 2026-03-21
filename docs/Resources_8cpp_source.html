@@ -108,7 +108,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;SDL3/SDL_vulkan.h&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="uniforms_8hpp.html">components/backends/vulkan/uniforms.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="pathUtils_8hpp.html">components/pathUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;components/PathUtils.hpp&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="limits_8hpp.html">limits.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define STB_IMAGE_IMPLEMENTATION</span></div>
@@ -117,14 +117,14 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>vex {</div>
 <div class="foldopen" id="foldopen00016" data-start="{" data-end="};">
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="structvex_1_1BatchedTextureData.html">   16</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structvex_1_1BatchedTextureData.html">BatchedTextureData</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">int</span> w, h, channels;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    stbi_uc* pixels = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    std::string path;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    uint32_t assignedIndex = 0;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    VkBuffer stagingBuffer = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    VmaAllocation stagingAlloc = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    VkImage image = VK_NULL_HANDLE;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    VmaAllocation imageAlloc = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">int</span> m_w, m_h, m_channels;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    stbi_uc* m_pixels = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    std::string m_path;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    uint32_t m_assignedIndex = 0;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    VkBuffer m_stagingBuffer = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    VmaAllocation m_stagingAlloc = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    VkImage m_image = VK_NULL_HANDLE;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    VmaAllocation m_imageAlloc = VK_NULL_HANDLE;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>};</div>
 </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
@@ -202,7 +202,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="foldopen" id="foldopen00094" data-start="{" data-end="}">
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanResources.html#ac55a799b0723985d996d95cb51a462a4">   94</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanResources.html#ac55a799b0723985d996d95cb51a462a4">VulkanResources::createTextureFromRaw</a>(<span class="keyword">const</span> std::vector&lt;unsigned char&gt;&amp; <a class="code hl_struct" href="structvex_1_1rgba.html">rgba</a>, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keyword">const</span> std::string&amp; name) {</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordflow">if</span> (m_r_context.textureIndices.contains(name)) {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Texture &#39;%s&#39; already exists at index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            log(<span class="stringliteral">&quot;Texture &#39;%s&#39; already exists at index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        }</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
@@ -316,13 +316,13 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        viewInfo.subresourceRange.layerCount = 1;</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        VkImageView textureView;</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating vulkan texture view...&quot;</span>);</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        log(<span class="stringliteral">&quot;Creating vulkan texture view...&quot;</span>);</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <span class="keywordflow">if</span> (vkCreateImageView(m_r_context.device, &amp;viewInfo, <span class="keyword">nullptr</span>, &amp;textureView) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create texture image view!&quot;</span>);</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            throw_error(<span class="stringliteral">&quot;Failed to create texture image view!&quot;</span>);</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        }</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        m_r_context.textureIndices[name] = m_r_context.nextTextureIndex++;</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Assigned texture &#39;%s&#39; to index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        log(<span class="stringliteral">&quot;Assigned texture &#39;%s&#39; to index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        m_textures[name] = textureView;</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        m_textureImages[name] = textureImage;</div>
@@ -363,7 +363,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
 <div class="foldopen" id="foldopen00254" data-start="{" data-end="}">
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanResources.html#af6600e8f346f3d771113252bab2739af">  254</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanResources.html#af6600e8f346f3d771113252bab2739af">VulkanResources::createUniformBuffers</a>() {</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating uniform buffers...&quot;</span>);</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        log(<span class="stringliteral">&quot;Creating uniform buffers...&quot;</span>);</div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        m_sceneBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);</div>
 <div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>        m_sceneAllocs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);</div>
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        m_lightBuffers.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);</div>
@@ -390,7 +390,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
 <div class="foldopen" id="foldopen00279" data-start="{" data-end="}">
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanResources.html#ae9489dce1449d26980b44d213d77cddd">  279</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanResources.html#ae9489dce1449d26980b44d213d77cddd">VulkanResources::createDescriptorResources</a>() {</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Setting up VkDescriptorSetLayoutBinding...&quot;</span>);</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        log(<span class="stringliteral">&quot;Setting up VkDescriptorSetLayoutBinding...&quot;</span>);</div>
 <div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        std::array&lt;VkDescriptorSetLayoutBinding, 2&gt; uboBindings{};</div>
 <div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>        uboBindings[0].binding = 0;</div>
 <div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        uboBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;</div>
@@ -407,9 +407,9 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        uboLayoutInfo.bindingCount = <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(uboBindings.size());</div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        uboLayoutInfo.pBindings = uboBindings.data();</div>
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Uniform buffer bindings...&quot;</span>);</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>        log(<span class="stringliteral">&quot;Creating Uniform buffer bindings...&quot;</span>);</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        <span class="keywordflow">if</span> (vkCreateDescriptorSetLayout(m_r_context.device, &amp;uboLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_r_context.uboDescriptorSetLayout) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create UBO layout&quot;</span>);</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            throw_error(<span class="stringliteral">&quot;Failed to create UBO layout&quot;</span>);</div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        }</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>        VkDescriptorSetLayoutBinding texBinding{};</div>
@@ -423,11 +423,11 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>        texLayoutInfo.pBindings = &amp;texBinding;</div>
 <div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
 <div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        <span class="keywordflow">if</span> (vkCreateDescriptorSetLayout(m_r_context.device, &amp;texLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create legacy texture layout&quot;</span>);</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>            throw_error(<span class="stringliteral">&quot;Failed to create legacy texture layout&quot;</span>);</div>
 <div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        }</div>
 <div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span> </div>
 <div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        <span class="keywordflow">if</span> (m_r_context.supportsBindlessTextures) {</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initializing Texture System: BINDLESS (Global Array)&quot;</span>);</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>            log(<span class="stringliteral">&quot;Initializing Texture System: BINDLESS (Global Array)&quot;</span>);</div>
 <div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>            VkDescriptorBindingFlags bindlessFlags = VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;</div>
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
@@ -449,7 +449,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>            bindlessLayoutInfo.pNext = &amp;bindingFlagsInfo;</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>            <span class="keywordflow">if</span> (vkCreateDescriptorSetLayout(m_r_context.device, &amp;bindlessLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_r_context.bindlessDescriptorSetLayout) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create bindless layout&quot;</span>);</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>                throw_error(<span class="stringliteral">&quot;Failed to create bindless layout&quot;</span>);</div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>            }</div>
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
 <div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>            VkDescriptorPoolSize poolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a> };</div>
@@ -468,7 +468,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span> </div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>            vkAllocateDescriptorSets(m_r_context.device, &amp;allocInfo, &amp;m_r_context.bindlessDescriptorSet);</div>
 <div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initializing Texture System: LEGACY (One Set Per Texture)&quot;</span>);</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>            log(<span class="stringliteral">&quot;Initializing Texture System: LEGACY (One Set Per Texture)&quot;</span>);</div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
 <div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>            VkDescriptorSetLayoutBinding texBinding{};</div>
 <div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>            texBinding.binding = 0;</div>
@@ -481,7 +481,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>            texLayoutInfo.pBindings = &amp;texBinding;</div>
 <div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span> </div>
 <div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>            <span class="keywordflow">if</span> (vkCreateDescriptorSetLayout(m_r_context.device, &amp;texLayoutInfo, <span class="keyword">nullptr</span>, &amp;m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create legacy texture layout&quot;</span>);</div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>                throw_error(<span class="stringliteral">&quot;Failed to create legacy texture layout&quot;</span>);</div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>            }</div>
 <div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>        }</div>
 <div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span> </div>
@@ -505,9 +505,9 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        poolInfo.pPoolSizes = poolSizes.data();</div>
 <div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT * (3 + (m_r_context.supportsBindlessTextures ? 0 : <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>));</div>
 <div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span> </div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating descriptor pool with %d max sets&quot;</span>, poolInfo.maxSets);</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>        log(<span class="stringliteral">&quot;Creating descriptor pool with %d max sets&quot;</span>, poolInfo.maxSets);</div>
 <div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>        <span class="keywordflow">if</span> (vkCreateDescriptorPool(m_r_context.device, &amp;poolInfo, <span class="keyword">nullptr</span>, &amp;m_descriptorPool) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create general descriptor pool&quot;</span>);</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>            throw_error(<span class="stringliteral">&quot;Failed to create general descriptor pool&quot;</span>);</div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>        }</div>
 <div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
 <div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>        std::vector&lt;VkDescriptorSetLayout&gt; uboLayouts(m_r_context.MAX_FRAMES_IN_FLIGHT, m_r_context.uboDescriptorSetLayout);</div>
@@ -517,10 +517,10 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>        uboAllocInfo.descriptorSetCount = m_r_context.MAX_FRAMES_IN_FLIGHT;</div>
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        uboAllocInfo.pSetLayouts = uboLayouts.data();</div>
 <div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span> </div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Allocating %d UBO descriptor sets&quot;</span>, m_r_context.MAX_FRAMES_IN_FLIGHT);</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>        log(<span class="stringliteral">&quot;Allocating %d UBO descriptor sets&quot;</span>, m_r_context.MAX_FRAMES_IN_FLIGHT);</div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        m_descriptorSets.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);</div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>        <span class="keywordflow">if</span> (vkAllocateDescriptorSets(m_r_context.device, &amp;uboAllocInfo, m_descriptorSets.data()) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to allocate UBO descriptor sets&quot;</span>);</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>            throw_error(<span class="stringliteral">&quot;Failed to allocate UBO descriptor sets&quot;</span>);</div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>        }</div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span> </div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {</div>
@@ -644,9 +644,9 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span> </div>
 <div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>        VkImage image;</div>
 <div class="line"><a id="l00523" name="l00523"></a><span class="lineno">  523</span>        VmaAllocation allocation;</div>
-<div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating default texture image...&quot;</span>);</div>
+<div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>        log(<span class="stringliteral">&quot;Creating default texture image...&quot;</span>);</div>
 <div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span>        <span class="keywordflow">if</span> (vmaCreateImage(m_r_context.allocator, &amp;imageInfo, &amp;allocInfo, &amp;image, &amp;allocation, <span class="keyword">nullptr</span>) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create default texture image&quot;</span>);</div>
+<div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>            throw_error(<span class="stringliteral">&quot;Failed to create default texture image&quot;</span>);</div>
 <div class="line"><a id="l00527" name="l00527"></a><span class="lineno">  527</span>        }</div>
 <div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span> </div>
 <div class="line"><a id="l00529" name="l00529"></a><span class="lineno">  529</span>        VkCommandBuffer commandBuffer = m_r_context.beginSingleTimeCommands();</div>
@@ -688,10 +688,10 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>        viewInfo.subresourceRange.layerCount = 1;</div>
 <div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span> </div>
 <div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>        VkImageView imageView;</div>
-<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating default texture image view...&quot;</span>);</div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>        log(<span class="stringliteral">&quot;Creating default texture image view...&quot;</span>);</div>
 <div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>        <span class="keywordflow">if</span> (vkCreateImageView(m_r_context.device, &amp;viewInfo, <span class="keyword">nullptr</span>, &amp;imageView) != VK_SUCCESS) {</div>
 <div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>            vmaDestroyImage(m_r_context.allocator, image, allocation);</div>
-<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to create default texture image view&quot;</span>);</div>
+<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>            throw_error(<span class="stringliteral">&quot;Failed to create default texture image view&quot;</span>);</div>
 <div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>        }</div>
 <div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span> </div>
 <div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>        m_textures[<span class="stringliteral">&quot;default&quot;</span>] = imageView;</div>
@@ -701,13 +701,13 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span> </div>
 <div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>        m_r_context.textureIndices[<span class="stringliteral">&quot;default&quot;</span>] = 0;</div>
 <div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>        m_r_context.nextTextureIndex = 1;</div>
-<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Created default texture with index 0&quot;</span>);</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>        log(<span class="stringliteral">&quot;Created default texture with index 0&quot;</span>);</div>
 <div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>    }</div>
 </div>
 <div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span> </div>
 <div class="foldopen" id="foldopen00584" data-start="{" data-end="}">
 <div class="line"><a id="l00584" name="l00584"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanResources.html#a24b57ebdc8cf162323448e45674140c3">  584</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanResources.html#a24b57ebdc8cf162323448e45674140c3">VulkanResources::createPerMeshTextureSets</a>() {</div>
-<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating %d texture descriptor sets&quot;</span>, m_r_context.MAX_FRAMES_IN_FLIGHT * <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>        log(<span class="stringliteral">&quot;Creating %d texture descriptor sets&quot;</span>, m_r_context.MAX_FRAMES_IN_FLIGHT * <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
 <div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span> </div>
 <div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>        m_textureDescriptorSets.resize(m_r_context.MAX_FRAMES_IN_FLIGHT * <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
 <div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span> </div>
@@ -724,7 +724,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span> </div>
 <div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>        VkResult result = vkAllocateDescriptorSets(m_r_context.device, &amp;allocInfo, m_textureDescriptorSets.data());</div>
 <div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>        <span class="keywordflow">if</span> (result != VK_SUCCESS) {</div>
-<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">throw_error</a>(<span class="stringliteral">&quot;Failed to allocate texture descriptor sets: &quot;</span> + std::to_string(result));</div>
+<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>            throw_error(<span class="stringliteral">&quot;Failed to allocate texture descriptor sets: &quot;</span> + std::to_string(result));</div>
 <div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>        }</div>
 <div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span> </div>
 <div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>        VkDescriptorImageInfo defaultImageInfo{};</div>
@@ -746,7 +746,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>            }</div>
 <div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>        }</div>
 <div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>        vkUpdateDescriptorSets(m_r_context.device, writes.size(), writes.data(), 0, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Initialized %d texture descriptor sets with default texture&quot;</span>, writes.size());</div>
+<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>        log(<span class="stringliteral">&quot;Initialized %d texture descriptor sets with default texture&quot;</span>, writes.size());</div>
 <div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>    }</div>
 </div>
 <div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span> </div>
@@ -780,7 +780,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span>            samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;</div>
 <div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span>            samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;</div>
 <div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span> </div>
-<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating texture sampler...&quot;</span>);</div>
+<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span>            log(<span class="stringliteral">&quot;Creating texture sampler...&quot;</span>);</div>
 <div class="line"><a id="l00655" name="l00655"></a><span class="lineno">  655</span>            vkCreateSampler(m_r_context.device, &amp;samplerInfo, <span class="keyword">nullptr</span>, &amp;m_textureSampler);</div>
 <div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span>        }</div>
 </div>
@@ -795,7 +795,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span>                    <span class="keywordflow">return</span> <a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(name);</div>
 <div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>                }<span class="keywordflow">else</span>{</div>
 <div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span>                    m_ignoredTexturePaths.push_back(name);</div>
-<div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::WARNING, <span class="stringliteral">&quot;Texture &#39;%s&#39; could not be loaded!&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span>                    log(LogLevel::WARNING, <span class="stringliteral">&quot;Texture &#39;%s&#39; could not be loaded!&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>                }</div>
 <div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>            }</div>
 <div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>            <span class="keywordflow">return</span> 0;</div>
@@ -807,12 +807,12 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>            std::string fullPath = path;<span class="comment">//&quot;Assets/&quot; + std::string(path.c_str());</span></div>
 <div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span> </div>
 <div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>            <span class="keywordflow">if</span> (m_r_context.textureIndices.contains(name)) {</div>
-<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Texture &#39;%s&#39; already exists at index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
+<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>                log(<span class="stringliteral">&quot;Texture &#39;%s&#39; already exists at index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
 <div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>            }</div>
 <div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span> </div>
 <div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span>            <span class="keywordflow">if</span> (m_r_context.textureIndices.size() &gt;= <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>) {</div>
-<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Maximum texture count (%u) reached!&quot;</span>, <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
+<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Maximum texture count (%u) reached!&quot;</span>, <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
 <div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>            }</div>
 <div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span> </div>
@@ -822,17 +822,17 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>            <span class="keywordflow">try</span> {</div>
 <div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>                <span class="comment">// Use VFS to check if file exists and get data</span></div>
 <div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>                <span class="keywordflow">if</span> (!m_vfs-&gt;file_exists(fullPath)) {</div>
-<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Texture file not found in VFS: %s&quot;</span>, fullPath.c_str());</div>
+<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>                    log(LogLevel::ERROR, <span class="stringliteral">&quot;Texture file not found in VFS: %s&quot;</span>, fullPath.c_str());</div>
 <div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>                }</div>
 <div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span> </div>
-<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;VFS loading image...&quot;</span>);</div>
+<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>                log(<span class="stringliteral">&quot;VFS loading image...&quot;</span>);</div>
 <div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>                <span class="comment">//int texWidth, texHeight, texChannels;</span></div>
 <div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span> </div>
 <div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>                <span class="comment">// Load file data through VFS</span></div>
 <div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>                <span class="keyword">auto</span> fileData = m_vfs-&gt;load_file(fullPath);  <span class="comment">// This returns std::unique_ptr&lt;FileData&gt;</span></div>
 <div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span>                <span class="keywordflow">if</span> (!fileData) {</div>
-<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;VFS failed to load texture: %s&quot;</span>, fullPath.c_str());</div>
+<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>                    log(LogLevel::ERROR, <span class="stringliteral">&quot;VFS failed to load texture: %s&quot;</span>, fullPath.c_str());</div>
 <div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>                }</div>
 <div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span> </div>
@@ -844,41 +844,41 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>                );</div>
 <div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span> </div>
 <div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>                <span class="keywordflow">if</span> (!pixels) {</div>
-<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;STBI failed: %s&quot;</span>, stbi_failure_reason());</div>
+<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>                    log(LogLevel::ERROR, <span class="stringliteral">&quot;STBI failed: %s&quot;</span>, stbi_failure_reason());</div>
 <div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span>                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>                }</div>
 <div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span>            } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {</div>
-<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load image data for %s&quot;</span>, fullPath.c_str());</div>
+<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load image data for %s&quot;</span>, fullPath.c_str());</div>
 <div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>                <span class="keywordflow">if</span> (pixels) stbi_image_free(pixels);</div>
 <div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>            }</div>
 <div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span> </div>
-<div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Image loaded from VFS: %dx%d, %d channels&quot;</span>, texWidth, texHeight, texChannels);</div>
+<div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>            log(<span class="stringliteral">&quot;Image loaded from VFS: %dx%d, %d channels&quot;</span>, texWidth, texHeight, texChannels);</div>
 <div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span> </div>
 <div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>            uint32_t assignedIndex = 0;</div>
 <div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span> </div>
 <div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>            <span class="keywordflow">if</span> (!m_r_context.recycledTextureIndices.empty()) {</div>
 <div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>                assignedIndex = m_r_context.recycledTextureIndices.front();</div>
 <div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>                m_r_context.recycledTextureIndices.pop();</div>
-<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Recycling texture index: %u for &#39;%s&#39;&quot;</span>, assignedIndex, name.c_str());</div>
+<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>                log(<span class="stringliteral">&quot;Recycling texture index: %u for &#39;%s&#39;&quot;</span>, assignedIndex, name.c_str());</div>
 <div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span>            } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>                <span class="keywordflow">if</span> (m_r_context.nextTextureIndex &gt;= <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>) {</div>
-<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Maximum texture count (%u) reached!&quot;</span>, <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
+<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>                    log(LogLevel::ERROR, <span class="stringliteral">&quot;Maximum texture count (%u) reached!&quot;</span>, <a class="code hl_variable" href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a>);</div>
 <div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>                    <span class="keywordflow">if</span> (pixels) stbi_image_free(pixels);</div>
 <div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>                }</div>
 <div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>                assignedIndex = m_r_context.nextTextureIndex++;</div>
-<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Assigning new texture index: %u for &#39;%s&#39;&quot;</span>, assignedIndex, name.c_str());</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>                log(<span class="stringliteral">&quot;Assigning new texture index: %u for &#39;%s&#39;&quot;</span>, assignedIndex, name.c_str());</div>
 <div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>            }</div>
 <div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span> </div>
 <div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>            VkDeviceSize imageSize = texWidth * texHeight * 4;</div>
 <div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span> </div>
 <div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span>            <span class="keywordflow">if</span> (!pixels) {</div>
-<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load texture: %s&quot;</span>, fullPath.c_str());</div>
+<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to load texture: %s&quot;</span>, fullPath.c_str());</div>
 <div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span>            }</div>
 <div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span> </div>
-<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating staging buffer (%zu bytes)...&quot;</span>,</div>
+<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span>            log(<span class="stringliteral">&quot;Creating staging buffer (%zu bytes)...&quot;</span>,</div>
 <div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span>                  <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(texWidth * texHeight * 4));</div>
 <div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>            VkBuffer stagingBuffer;</div>
 <div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span>            VmaAllocation stagingAlloc;</div>
@@ -898,7 +898,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>            vmaUnmapMemory(m_r_context.allocator, stagingAlloc);</div>
 <div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>            stbi_image_free(pixels);</div>
 <div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span> </div>
-<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating Vulkan image...&quot;</span>);</div>
+<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>            log(<span class="stringliteral">&quot;Creating Vulkan image...&quot;</span>);</div>
 <div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>            VkImageCreateInfo imageInfo{};</div>
 <div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>            imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;</div>
 <div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>            imageInfo.imageType = VK_IMAGE_TYPE_2D;</div>
@@ -988,14 +988,14 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00855" name="l00855"></a><span class="lineno">  855</span>            viewInfo.subresourceRange.layerCount = 1;</div>
 <div class="line"><a id="l00856" name="l00856"></a><span class="lineno">  856</span> </div>
 <div class="line"><a id="l00857" name="l00857"></a><span class="lineno">  857</span>            VkImageView textureView;</div>
-<div class="line"><a id="l00858" name="l00858"></a><span class="lineno">  858</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Creating vulkan texture view...&quot;</span>);</div>
+<div class="line"><a id="l00858" name="l00858"></a><span class="lineno">  858</span>            log(<span class="stringliteral">&quot;Creating vulkan texture view...&quot;</span>);</div>
 <div class="line"><a id="l00859" name="l00859"></a><span class="lineno">  859</span>            <span class="keywordflow">if</span> (vkCreateImageView(m_r_context.device, &amp;viewInfo, <span class="keyword">nullptr</span>, &amp;textureView) != VK_SUCCESS) {</div>
-<div class="line"><a id="l00860" name="l00860"></a><span class="lineno">  860</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to create texture image view!&quot;</span>);</div>
+<div class="line"><a id="l00860" name="l00860"></a><span class="lineno">  860</span>                log(LogLevel::ERROR, <span class="stringliteral">&quot;Failed to create texture image view!&quot;</span>);</div>
 <div class="line"><a id="l00861" name="l00861"></a><span class="lineno">  861</span>                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00862" name="l00862"></a><span class="lineno">  862</span>            }</div>
 <div class="line"><a id="l00863" name="l00863"></a><span class="lineno">  863</span> </div>
 <div class="line"><a id="l00864" name="l00864"></a><span class="lineno">  864</span>            m_r_context.textureIndices[name] = assignedIndex;</div>
-<div class="line"><a id="l00865" name="l00865"></a><span class="lineno">  865</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Assigned texture &#39;%s&#39; to index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
+<div class="line"><a id="l00865" name="l00865"></a><span class="lineno">  865</span>            log(<span class="stringliteral">&quot;Assigned texture &#39;%s&#39; to index %u&quot;</span>, name.c_str(), m_r_context.textureIndices[name]);</div>
 <div class="line"><a id="l00866" name="l00866"></a><span class="lineno">  866</span> </div>
 <div class="line"><a id="l00867" name="l00867"></a><span class="lineno">  867</span>            m_textures[name] = textureView;</div>
 <div class="line"><a id="l00868" name="l00868"></a><span class="lineno">  868</span>            m_textureImages[name] = textureImage;</div>
@@ -1036,7 +1036,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00903" name="l00903"></a><span class="lineno">  903</span>                    vkUpdateDescriptorSets(m_r_context.device, 1, &amp;write, 0, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00904" name="l00904"></a><span class="lineno">  904</span>                }</div>
 <div class="line"><a id="l00905" name="l00905"></a><span class="lineno">  905</span>            }</div>
-<div class="line"><a id="l00906" name="l00906"></a><span class="lineno">  906</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Updated texture descriptors for &#39;%s&#39;&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l00906" name="l00906"></a><span class="lineno">  906</span>            log(<span class="stringliteral">&quot;Updated texture descriptors for &#39;%s&#39;&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l00907" name="l00907"></a><span class="lineno">  907</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00908" name="l00908"></a><span class="lineno">  908</span>        }</div>
 </div>
@@ -1059,13 +1059,13 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00924" name="l00924"></a><span class="lineno">  924</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; path : neededPaths) {</div>
 <div class="line"><a id="l00925" name="l00925"></a><span class="lineno">  925</span>                futures.push_back(GetThreadPool().enqueue([<span class="keyword">this</span>, path]() {</div>
 <div class="line"><a id="l00926" name="l00926"></a><span class="lineno">  926</span>                    <a class="code hl_struct" href="structvex_1_1BatchedTextureData.html">BatchedTextureData</a> data;</div>
-<div class="line"><a id="l00927" name="l00927"></a><span class="lineno">  927</span>                    data.path = path;</div>
+<div class="line"><a id="l00927" name="l00927"></a><span class="lineno">  927</span>                    data.m_path = path;</div>
 <div class="line"><a id="l00928" name="l00928"></a><span class="lineno">  928</span>                    <span class="keyword">auto</span> fileData = m_vfs-&gt;load_file(path);</div>
 <div class="line"><a id="l00929" name="l00929"></a><span class="lineno">  929</span>                    <span class="keywordflow">if</span> (fileData) {</div>
-<div class="line"><a id="l00930" name="l00930"></a><span class="lineno">  930</span>                        data.pixels = stbi_load_from_memory(</div>
+<div class="line"><a id="l00930" name="l00930"></a><span class="lineno">  930</span>                        data.m_pixels = stbi_load_from_memory(</div>
 <div class="line"><a id="l00931" name="l00931"></a><span class="lineno">  931</span>                            <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>stbi_uc*<span class="keyword">&gt;</span>(fileData-&gt;data.data()),</div>
 <div class="line"><a id="l00932" name="l00932"></a><span class="lineno">  932</span>                            <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(fileData-&gt;size),</div>
-<div class="line"><a id="l00933" name="l00933"></a><span class="lineno">  933</span>                            &amp;data.w, &amp;data.h, &amp;data.channels, STBI_rgb_alpha</div>
+<div class="line"><a id="l00933" name="l00933"></a><span class="lineno">  933</span>                            &amp;data.m_w, &amp;data.m_h, &amp;data.m_channels, STBI_rgb_alpha</div>
 <div class="line"><a id="l00934" name="l00934"></a><span class="lineno">  934</span>                        );</div>
 <div class="line"><a id="l00935" name="l00935"></a><span class="lineno">  935</span>                    }</div>
 <div class="line"><a id="l00936" name="l00936"></a><span class="lineno">  936</span>                    <span class="keywordflow">return</span> data;</div>
@@ -1075,40 +1075,40 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00940" name="l00940"></a><span class="lineno">  940</span>            std::vector&lt;BatchedTextureData&gt; validData;</div>
 <div class="line"><a id="l00941" name="l00941"></a><span class="lineno">  941</span>            <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f : futures) {</div>
 <div class="line"><a id="l00942" name="l00942"></a><span class="lineno">  942</span>                <span class="keyword">auto</span> data = f.get();</div>
-<div class="line"><a id="l00943" name="l00943"></a><span class="lineno">  943</span>                <span class="keywordflow">if</span> (data.pixels) {</div>
+<div class="line"><a id="l00943" name="l00943"></a><span class="lineno">  943</span>                <span class="keywordflow">if</span> (data.m_pixels) {</div>
 <div class="line"><a id="l00944" name="l00944"></a><span class="lineno">  944</span>                    <span class="keywordflow">if</span> (!m_r_context.recycledTextureIndices.empty()) {</div>
-<div class="line"><a id="l00945" name="l00945"></a><span class="lineno">  945</span>                        data.assignedIndex = m_r_context.recycledTextureIndices.front();</div>
+<div class="line"><a id="l00945" name="l00945"></a><span class="lineno">  945</span>                        data.m_assignedIndex = m_r_context.recycledTextureIndices.front();</div>
 <div class="line"><a id="l00946" name="l00946"></a><span class="lineno">  946</span>                        m_r_context.recycledTextureIndices.pop();</div>
 <div class="line"><a id="l00947" name="l00947"></a><span class="lineno">  947</span>                    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00948" name="l00948"></a><span class="lineno">  948</span>                        data.assignedIndex = m_r_context.nextTextureIndex++;</div>
+<div class="line"><a id="l00948" name="l00948"></a><span class="lineno">  948</span>                        data.m_assignedIndex = m_r_context.nextTextureIndex++;</div>
 <div class="line"><a id="l00949" name="l00949"></a><span class="lineno">  949</span>                    }</div>
 <div class="line"><a id="l00950" name="l00950"></a><span class="lineno">  950</span>                    validData.push_back(data);</div>
 <div class="line"><a id="l00951" name="l00951"></a><span class="lineno">  951</span>                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00952" name="l00952"></a><span class="lineno">  952</span>                    m_ignoredTexturePaths.push_back(data.path);</div>
-<div class="line"><a id="l00953" name="l00953"></a><span class="lineno">  953</span>                    <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::WARNING, <span class="stringliteral">&quot;Batched load failed for: %s&quot;</span>, data.path.c_str());</div>
+<div class="line"><a id="l00952" name="l00952"></a><span class="lineno">  952</span>                    m_ignoredTexturePaths.push_back(data.m_path);</div>
+<div class="line"><a id="l00953" name="l00953"></a><span class="lineno">  953</span>                    log(LogLevel::WARNING, <span class="stringliteral">&quot;Batched load failed for: %s&quot;</span>, data.m_path.c_str());</div>
 <div class="line"><a id="l00954" name="l00954"></a><span class="lineno">  954</span>                }</div>
 <div class="line"><a id="l00955" name="l00955"></a><span class="lineno">  955</span>            }</div>
 <div class="line"><a id="l00956" name="l00956"></a><span class="lineno">  956</span> </div>
 <div class="line"><a id="l00957" name="l00957"></a><span class="lineno">  957</span>            <span class="keywordflow">if</span> (validData.empty()) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00958" name="l00958"></a><span class="lineno">  958</span> </div>
 <div class="line"><a id="l00959" name="l00959"></a><span class="lineno">  959</span>            <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; data : validData) {</div>
-<div class="line"><a id="l00960" name="l00960"></a><span class="lineno">  960</span>                VkDeviceSize imageSize = data.w * data.h * 4;</div>
+<div class="line"><a id="l00960" name="l00960"></a><span class="lineno">  960</span>                VkDeviceSize imageSize = data.m_w * data.m_h * 4;</div>
 <div class="line"><a id="l00961" name="l00961"></a><span class="lineno">  961</span> </div>
 <div class="line"><a id="l00962" name="l00962"></a><span class="lineno">  962</span>                VkBufferCreateInfo bufferInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};</div>
 <div class="line"><a id="l00963" name="l00963"></a><span class="lineno">  963</span>                bufferInfo.size = imageSize;</div>
 <div class="line"><a id="l00964" name="l00964"></a><span class="lineno">  964</span>                bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;</div>
 <div class="line"><a id="l00965" name="l00965"></a><span class="lineno">  965</span>                VmaAllocationCreateInfo allocInfo{ .usage = VMA_MEMORY_USAGE_CPU_TO_GPU };</div>
-<div class="line"><a id="l00966" name="l00966"></a><span class="lineno">  966</span>                vmaCreateBuffer(m_r_context.allocator, &amp;bufferInfo, &amp;allocInfo, &amp;data.stagingBuffer, &amp;data.stagingAlloc, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00966" name="l00966"></a><span class="lineno">  966</span>                vmaCreateBuffer(m_r_context.allocator, &amp;bufferInfo, &amp;allocInfo, &amp;data.m_stagingBuffer, &amp;data.m_stagingAlloc, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00967" name="l00967"></a><span class="lineno">  967</span> </div>
 <div class="line"><a id="l00968" name="l00968"></a><span class="lineno">  968</span>                <span class="keywordtype">void</span>* mapped;</div>
-<div class="line"><a id="l00969" name="l00969"></a><span class="lineno">  969</span>                vmaMapMemory(m_r_context.allocator, data.stagingAlloc, &amp;mapped);</div>
-<div class="line"><a id="l00970" name="l00970"></a><span class="lineno">  970</span>                memcpy(mapped, data.pixels, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(imageSize));</div>
-<div class="line"><a id="l00971" name="l00971"></a><span class="lineno">  971</span>                vmaUnmapMemory(m_r_context.allocator, data.stagingAlloc);</div>
-<div class="line"><a id="l00972" name="l00972"></a><span class="lineno">  972</span>                stbi_image_free(data.pixels);</div>
+<div class="line"><a id="l00969" name="l00969"></a><span class="lineno">  969</span>                vmaMapMemory(m_r_context.allocator, data.m_stagingAlloc, &amp;mapped);</div>
+<div class="line"><a id="l00970" name="l00970"></a><span class="lineno">  970</span>                memcpy(mapped, data.m_pixels, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(imageSize));</div>
+<div class="line"><a id="l00971" name="l00971"></a><span class="lineno">  971</span>                vmaUnmapMemory(m_r_context.allocator, data.m_stagingAlloc);</div>
+<div class="line"><a id="l00972" name="l00972"></a><span class="lineno">  972</span>                stbi_image_free(data.m_pixels);</div>
 <div class="line"><a id="l00973" name="l00973"></a><span class="lineno">  973</span> </div>
 <div class="line"><a id="l00974" name="l00974"></a><span class="lineno">  974</span>                VkImageCreateInfo imageInfo{VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO};</div>
 <div class="line"><a id="l00975" name="l00975"></a><span class="lineno">  975</span>                imageInfo.imageType = VK_IMAGE_TYPE_2D;</div>
-<div class="line"><a id="l00976" name="l00976"></a><span class="lineno">  976</span>                imageInfo.extent = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.w), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.h), 1};</div>
+<div class="line"><a id="l00976" name="l00976"></a><span class="lineno">  976</span>                imageInfo.extent = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.m_w), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.m_h), 1};</div>
 <div class="line"><a id="l00977" name="l00977"></a><span class="lineno">  977</span>                imageInfo.mipLevels = 1;</div>
 <div class="line"><a id="l00978" name="l00978"></a><span class="lineno">  978</span>                imageInfo.arrayLayers = 1;</div>
 <div class="line"><a id="l00979" name="l00979"></a><span class="lineno">  979</span>                imageInfo.format = VK_FORMAT_R8G8B8A8_SRGB;</div>
@@ -1118,7 +1118,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00983" name="l00983"></a><span class="lineno">  983</span>                imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;</div>
 <div class="line"><a id="l00984" name="l00984"></a><span class="lineno">  984</span>                VmaAllocationCreateInfo imageAllocInfo{ .usage = VMA_MEMORY_USAGE_GPU_ONLY };</div>
 <div class="line"><a id="l00985" name="l00985"></a><span class="lineno">  985</span> </div>
-<div class="line"><a id="l00986" name="l00986"></a><span class="lineno">  986</span>                vmaCreateImage(m_r_context.allocator, &amp;imageInfo, &amp;imageAllocInfo, &amp;data.image, &amp;data.imageAlloc, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00986" name="l00986"></a><span class="lineno">  986</span>                vmaCreateImage(m_r_context.allocator, &amp;imageInfo, &amp;imageAllocInfo, &amp;data.m_image, &amp;data.m_imageAlloc, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00987" name="l00987"></a><span class="lineno">  987</span>            }</div>
 <div class="line"><a id="l00988" name="l00988"></a><span class="lineno">  988</span> </div>
 <div class="line"><a id="l00989" name="l00989"></a><span class="lineno">  989</span>            VkCommandBuffer cmd = m_r_context.beginSingleTimeCommands();</div>
@@ -1129,7 +1129,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l00994" name="l00994"></a><span class="lineno">  994</span>                barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;</div>
 <div class="line"><a id="l00995" name="l00995"></a><span class="lineno">  995</span>                barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;</div>
 <div class="line"><a id="l00996" name="l00996"></a><span class="lineno">  996</span>                barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;</div>
-<div class="line"><a id="l00997" name="l00997"></a><span class="lineno">  997</span>                barrier.image = data.image;</div>
+<div class="line"><a id="l00997" name="l00997"></a><span class="lineno">  997</span>                barrier.image = data.m_image;</div>
 <div class="line"><a id="l00998" name="l00998"></a><span class="lineno">  998</span>                barrier.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};</div>
 <div class="line"><a id="l00999" name="l00999"></a><span class="lineno">  999</span>                barrier.srcAccessMask = 0;</div>
 <div class="line"><a id="l01000" name="l01000"></a><span class="lineno"> 1000</span>                barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;</div>
@@ -1138,8 +1138,8 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l01003" name="l01003"></a><span class="lineno"> 1003</span> </div>
 <div class="line"><a id="l01004" name="l01004"></a><span class="lineno"> 1004</span>                VkBufferImageCopy region{};</div>
 <div class="line"><a id="l01005" name="l01005"></a><span class="lineno"> 1005</span>                region.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};</div>
-<div class="line"><a id="l01006" name="l01006"></a><span class="lineno"> 1006</span>                region.imageExtent = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.w), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.h), 1};</div>
-<div class="line"><a id="l01007" name="l01007"></a><span class="lineno"> 1007</span>                vkCmdCopyBufferToImage(cmd, data.stagingBuffer, data.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &amp;region);</div>
+<div class="line"><a id="l01006" name="l01006"></a><span class="lineno"> 1006</span>                region.imageExtent = {<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.m_w), <span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(data.m_h), 1};</div>
+<div class="line"><a id="l01007" name="l01007"></a><span class="lineno"> 1007</span>                vkCmdCopyBufferToImage(cmd, data.m_stagingBuffer, data.m_image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &amp;region);</div>
 <div class="line"><a id="l01008" name="l01008"></a><span class="lineno"> 1008</span> </div>
 <div class="line"><a id="l01009" name="l01009"></a><span class="lineno"> 1009</span>                barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;</div>
 <div class="line"><a id="l01010" name="l01010"></a><span class="lineno"> 1010</span>                barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;</div>
@@ -1152,10 +1152,10 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l01017" name="l01017"></a><span class="lineno"> 1017</span>            m_r_context.endSingleTimeCommands(cmd);</div>
 <div class="line"><a id="l01018" name="l01018"></a><span class="lineno"> 1018</span> </div>
 <div class="line"><a id="l01019" name="l01019"></a><span class="lineno"> 1019</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; data : validData) {</div>
-<div class="line"><a id="l01020" name="l01020"></a><span class="lineno"> 1020</span>                vmaDestroyBuffer(m_r_context.allocator, data.stagingBuffer, data.stagingAlloc);</div>
+<div class="line"><a id="l01020" name="l01020"></a><span class="lineno"> 1020</span>                vmaDestroyBuffer(m_r_context.allocator, data.m_stagingBuffer, data.m_stagingAlloc);</div>
 <div class="line"><a id="l01021" name="l01021"></a><span class="lineno"> 1021</span> </div>
 <div class="line"><a id="l01022" name="l01022"></a><span class="lineno"> 1022</span>                VkImageViewCreateInfo viewInfo{VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};</div>
-<div class="line"><a id="l01023" name="l01023"></a><span class="lineno"> 1023</span>                viewInfo.image = data.image;</div>
+<div class="line"><a id="l01023" name="l01023"></a><span class="lineno"> 1023</span>                viewInfo.image = data.m_image;</div>
 <div class="line"><a id="l01024" name="l01024"></a><span class="lineno"> 1024</span>                viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;</div>
 <div class="line"><a id="l01025" name="l01025"></a><span class="lineno"> 1025</span>                viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;</div>
 <div class="line"><a id="l01026" name="l01026"></a><span class="lineno"> 1026</span>                viewInfo.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};</div>
@@ -1163,11 +1163,11 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l01028" name="l01028"></a><span class="lineno"> 1028</span>                VkImageView textureView;</div>
 <div class="line"><a id="l01029" name="l01029"></a><span class="lineno"> 1029</span>                <span class="keywordflow">if</span> (vkCreateImageView(m_r_context.device, &amp;viewInfo, <span class="keyword">nullptr</span>, &amp;textureView) != VK_SUCCESS) <span class="keywordflow">continue</span>;</div>
 <div class="line"><a id="l01030" name="l01030"></a><span class="lineno"> 1030</span> </div>
-<div class="line"><a id="l01031" name="l01031"></a><span class="lineno"> 1031</span>                m_r_context.textureIndices[data.path] = data.assignedIndex;</div>
-<div class="line"><a id="l01032" name="l01032"></a><span class="lineno"> 1032</span>                m_textures[data.path] = textureView;</div>
-<div class="line"><a id="l01033" name="l01033"></a><span class="lineno"> 1033</span>                m_textureImages[data.path] = data.image;</div>
-<div class="line"><a id="l01034" name="l01034"></a><span class="lineno"> 1034</span>                m_textureAllocations[data.path] = data.imageAlloc;</div>
-<div class="line"><a id="l01035" name="l01035"></a><span class="lineno"> 1035</span>                m_textureViews[data.path] = textureView;</div>
+<div class="line"><a id="l01031" name="l01031"></a><span class="lineno"> 1031</span>                m_r_context.textureIndices[data.m_path] = data.m_assignedIndex;</div>
+<div class="line"><a id="l01032" name="l01032"></a><span class="lineno"> 1032</span>                m_textures[data.m_path] = textureView;</div>
+<div class="line"><a id="l01033" name="l01033"></a><span class="lineno"> 1033</span>                m_textureImages[data.m_path] = data.m_image;</div>
+<div class="line"><a id="l01034" name="l01034"></a><span class="lineno"> 1034</span>                m_textureAllocations[data.m_path] = data.m_imageAlloc;</div>
+<div class="line"><a id="l01035" name="l01035"></a><span class="lineno"> 1035</span>                m_textureViews[data.m_path] = textureView;</div>
 <div class="line"><a id="l01036" name="l01036"></a><span class="lineno"> 1036</span> </div>
 <div class="line"><a id="l01037" name="l01037"></a><span class="lineno"> 1037</span>                VkDescriptorImageInfo imageDescInfo{};</div>
 <div class="line"><a id="l01038" name="l01038"></a><span class="lineno"> 1038</span>                imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;</div>
@@ -1178,7 +1178,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l01043" name="l01043"></a><span class="lineno"> 1043</span>                    VkWriteDescriptorSet write{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};</div>
 <div class="line"><a id="l01044" name="l01044"></a><span class="lineno"> 1044</span>                    write.dstSet = m_r_context.bindlessDescriptorSet;</div>
 <div class="line"><a id="l01045" name="l01045"></a><span class="lineno"> 1045</span>                    write.dstBinding = 0;</div>
-<div class="line"><a id="l01046" name="l01046"></a><span class="lineno"> 1046</span>                    write.dstArrayElement = data.assignedIndex;</div>
+<div class="line"><a id="l01046" name="l01046"></a><span class="lineno"> 1046</span>                    write.dstArrayElement = data.m_assignedIndex;</div>
 <div class="line"><a id="l01047" name="l01047"></a><span class="lineno"> 1047</span>                    write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;</div>
 <div class="line"><a id="l01048" name="l01048"></a><span class="lineno"> 1048</span>                    write.descriptorCount = 1;</div>
 <div class="line"><a id="l01049" name="l01049"></a><span class="lineno"> 1049</span>                    write.pImageInfo = &amp;imageDescInfo;</div>
@@ -1186,7 +1186,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l01051" name="l01051"></a><span class="lineno"> 1051</span>                } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l01052" name="l01052"></a><span class="lineno"> 1052</span>                    <span class="keywordflow">for</span> (uint32_t frame = 0; frame &lt; m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {</div>
 <div class="line"><a id="l01053" name="l01053"></a><span class="lineno"> 1053</span>                        VkWriteDescriptorSet write{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};</div>
-<div class="line"><a id="l01054" name="l01054"></a><span class="lineno"> 1054</span>                        write.dstSet = <a class="code hl_function" href="classvex_1_1VulkanResources.html#ab7c1816ff613680e55a277249a653168">getTextureDescriptorSet</a>(frame, data.assignedIndex);</div>
+<div class="line"><a id="l01054" name="l01054"></a><span class="lineno"> 1054</span>                        write.dstSet = <a class="code hl_function" href="classvex_1_1VulkanResources.html#ab7c1816ff613680e55a277249a653168">getTextureDescriptorSet</a>(frame, data.m_assignedIndex);</div>
 <div class="line"><a id="l01055" name="l01055"></a><span class="lineno"> 1055</span>                        write.dstBinding = 0;</div>
 <div class="line"><a id="l01056" name="l01056"></a><span class="lineno"> 1056</span>                        write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;</div>
 <div class="line"><a id="l01057" name="l01057"></a><span class="lineno"> 1057</span>                        write.descriptorCount = 1;</div>
@@ -1204,7 +1204,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l01067" name="l01067"></a><span class="lineno"> 1067</span> </div>
 <div class="line"><a id="l01068" name="l01068"></a><span class="lineno"> 1068</span>            <span class="keyword">auto</span> it = m_textures.find(name);</div>
 <div class="line"><a id="l01069" name="l01069"></a><span class="lineno"> 1069</span>            <span class="keywordflow">if</span> (it == m_textures.end()){</div>
-<div class="line"><a id="l01070" name="l01070"></a><span class="lineno"> 1070</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Texture %s not loaded&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l01070" name="l01070"></a><span class="lineno"> 1070</span>                log(<span class="stringliteral">&quot;Texture %s not loaded&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l01071" name="l01071"></a><span class="lineno"> 1071</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l01072" name="l01072"></a><span class="lineno"> 1072</span>            }</div>
 <div class="line"><a id="l01073" name="l01073"></a><span class="lineno"> 1073</span> </div>
@@ -1262,7 +1262,7 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="line"><a id="l01125" name="l01125"></a><span class="lineno"> 1125</span>            m_r_context.textureIndices.erase(name);</div>
 <div class="line"><a id="l01126" name="l01126"></a><span class="lineno"> 1126</span>            m_r_context.recycledTextureIndices.push(textureIndex);</div>
 <div class="line"><a id="l01127" name="l01127"></a><span class="lineno"> 1127</span> </div>
-<div class="line"><a id="l01128" name="l01128"></a><span class="lineno"> 1128</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Texture %s unloaded&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l01128" name="l01128"></a><span class="lineno"> 1128</span>            log(<span class="stringliteral">&quot;Texture %s unloaded&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l01129" name="l01129"></a><span class="lineno"> 1129</span>        }</div>
 </div>
 <div class="line"><a id="l01130" name="l01130"></a><span class="lineno"> 1130</span> </div>
@@ -1294,16 +1294,13 @@ $(function(){initNavTree('Resources_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1VulkanResources_html_ae9489dce1449d26980b44d213d77cddd"><div class="ttname"><a href="classvex_1_1VulkanResources.html#ae9489dce1449d26980b44d213d77cddd">vex::VulkanResources::createDescriptorResources</a></div><div class="ttdeci">void createDescriptorResources()</div><div class="ttdoc">Internal function to create descriptor resources.</div><div class="ttdef"><b>Definition</b> <a href="#l00279">Resources.cpp:279</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanResources_html_af6600e8f346f3d771113252bab2739af"><div class="ttname"><a href="classvex_1_1VulkanResources.html#af6600e8f346f3d771113252bab2739af">vex::VulkanResources::createUniformBuffers</a></div><div class="ttdeci">void createUniformBuffers()</div><div class="ttdoc">Creates uniform buffers.</div><div class="ttdef"><b>Definition</b> <a href="#l00254">Resources.cpp:254</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanResources_html_afc98d19439dc53425270d0a302e30466"><div class="ttname"><a href="classvex_1_1VulkanResources.html#afc98d19439dc53425270d0a302e30466">vex::VulkanResources::getTextureView</a></div><div class="ttdeci">VkImageView getTextureView(const std::string &amp;name) const</div><div class="ttdoc">Returns the texture view for the given texture name.</div><div class="ttdef"><b>Definition</b> <a href="#l01131">Resources.cpp:1131</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a83677754024309fc36c4dd9cfc848a7f"><div class="ttname"><a href="errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f">vex::throw_error</a></div><div class="ttdeci">void VEX_EXPORT throw_error(const std::string &amp;msg)</div><div class="ttdoc">Throws an error or terminates the application.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00498">errorUtils.cpp:498</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
 <div class="ttc" id="alimits_8hpp_html"><div class="ttname"><a href="limits_8hpp.html">limits.hpp</a></div><div class="ttdoc">This files defines global variables defining vulkan limits.</div></div>
 <div class="ttc" id="alimits_8hpp_html_a2d8af3646b57b1d41ad37cc7a9596672"><div class="ttname"><a href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a></div><div class="ttdeci">const uint32_t MAX_TEXTURES</div><div class="ttdef"><b>Definition</b> <a href="limits_8hpp_source.html#l00013">limits.hpp:13</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html"><div class="ttname"><a href="pathUtils_8hpp.html">pathUtils.hpp</a></div><div class="ttdoc">This file implements path-related utilities.</div></div>
 <div class="ttc" id="astructvex_1_1BatchedTextureData_html"><div class="ttname"><a href="structvex_1_1BatchedTextureData.html">vex::BatchedTextureData</a></div><div class="ttdoc">Helper struct for batching texture loading.</div><div class="ttdef"><b>Definition</b> <a href="#l00016">Resources.cpp:16</a></div></div>
 <div class="ttc" id="astructvex_1_1SceneLightsUBO_html"><div class="ttname"><a href="structvex_1_1SceneLightsUBO.html">vex::SceneLightsUBO</a></div><div class="ttdoc">Scene lights uniform buffer object.</div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00047">uniforms.hpp:47</a></div></div>
 <div class="ttc" id="astructvex_1_1SceneUBO_html"><div class="ttname"><a href="structvex_1_1SceneUBO.html">vex::SceneUBO</a></div><div class="ttdoc">Scene uniform buffer object. Holds data that is bind once per scene.</div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00013">uniforms.hpp:13</a></div></div>
 <div class="ttc" id="astructvex_1_1VulkanContext_html"><div class="ttname"><a href="structvex_1_1VulkanContext.html">vex::VulkanContext</a></div><div class="ttdoc">Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.</div><div class="ttdef"><b>Definition</b> <a href="context_8hpp_source.html#l00026">context.hpp:26</a></div></div>
-<div class="ttc" id="astructvex_1_1rgba_html"><div class="ttname"><a href="structvex_1_1rgba.html">vex::rgba</a></div><div class="ttdoc">Represents an RGBA color value. Used mainly for fancy rendering in editor.</div><div class="ttdef"><b>Definition</b> <a href="colorTypes_8hpp_source.html#l00015">colorTypes.hpp:15</a></div></div>
+<div class="ttc" id="astructvex_1_1rgba_html"><div class="ttname"><a href="structvex_1_1rgba.html">vex::rgba</a></div><div class="ttdoc">Represents an RGBA color value. Used mainly for fancy rendering in editor.</div><div class="ttdef"><b>Definition</b> <a href="ColorTypes_8hpp_source.html#l00015">ColorTypes.hpp:15</a></div></div>
 <div class="ttc" id="auniforms_8hpp_html"><div class="ttname"><a href="uniforms_8hpp.html">uniforms.hpp</a></div><div class="ttdoc">This file defines uniforms and pushconstant for rendering meshes.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

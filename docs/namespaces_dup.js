@@ -25,7 +25,7 @@ var namespaces_dup =
       [ "DialogWindow", "classvex_1_1DialogWindow.html", "classvex_1_1DialogWindow" ],
       [ "Editor", "classvex_1_1Editor.html", "classvex_1_1Editor" ],
       [ "Engine", "classvex_1_1Engine.html", "classvex_1_1Engine" ],
-      [ "enviroment", "structvex_1_1enviroment.html", "structvex_1_1enviroment" ],
+      [ "environment", "structvex_1_1environment.html", "structvex_1_1environment" ],
       [ "FogComponent", "structvex_1_1FogComponent.html", null ],
       [ "FogObject", "classvex_1_1FogObject.html", null ],
       [ "FontAtlas", "structvex_1_1FontAtlas.html", null ],
@@ -95,7 +95,7 @@ var namespaces_dup =
       [ "VPKAssimpIOSystem", "classvex_1_1VPKAssimpIOSystem.html", null ],
       [ "VPKAssimpStream", "classvex_1_1VPKAssimpStream.html", null ],
       [ "VulkanContext", "structvex_1_1VulkanContext.html", "structvex_1_1VulkanContext" ],
-      [ "VulkanFeatures", "structvex_1_1VulkanFeatures.html", null ],
+      [ "VulkanFeatures", "structvex_1_1VulkanFeatures.html", "structvex_1_1VulkanFeatures" ],
       [ "VulkanImGUIWrapper", "classvex_1_1VulkanImGUIWrapper.html", "classvex_1_1VulkanImGUIWrapper" ],
       [ "VulkanMesh", "classvex_1_1VulkanMesh.html", "classvex_1_1VulkanMesh" ],
       [ "VulkanPipeline", "classvex_1_1VulkanPipeline.html", "classvex_1_1VulkanPipeline" ],
@@ -103,7 +103,6 @@ var namespaces_dup =
       [ "VulkanSwapchainManager", "classvex_1_1VulkanSwapchainManager.html", "classvex_1_1VulkanSwapchainManager" ],
       [ "Widget", "structvex_1_1Widget.html", null ],
       [ "Window", "classvex_1_1Window.html", "classvex_1_1Window" ],
-      [ "LogCallbackFn", "errorUtils_8hpp.html#a2664450bc0c062bee18cd0f5622ec0a4", null ],
       [ "BodyType", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36a", [
         [ "STATIC", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aafe6f99ef1ec99efbdc19a9786cf1facc", null ],
         [ "DYNAMIC", "PhysicsSystem_8hpp.html#a289b9087eda84617c50bd2c860f4a36aa0fcc90da4811c877ba9f9c12f7d60bc9", null ],
@@ -119,12 +118,6 @@ var namespaces_dup =
         [ "Game", "InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4a63d72051e901c069f8aa1b32aa0c43bb", null ],
         [ "UI", "InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4a71ff71526d15db86eb50fcac245d183b", null ],
         [ "GameAndUI", "InputSystem_8hpp.html#a814f1fff090d613f1d99c10566d4afc4a6e90e63a482ebbecc447a3dc3b9a7da7", null ]
-      ] ],
-      [ "LogLevel", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43e", [
-        [ "INFO", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea551b723eafd6a31d444fcb2f5920fbd3", null ],
-        [ "WARNING", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea059e9861e0400dfbe05c98a841f3f96b", null ],
-        [ "ERROR", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43eabb1ca97ec761fc37101737ba0aa2e7c5", null ],
-        [ "CRITICAL", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea99cd1c61610c76a57cb8d10d6df6b870", null ]
       ] ],
       [ "MouseAxis", "InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236", [
         [ "X", "InputComponent_8hpp.html#ac124416b4019bbc3469060d23628f236a02129bb861061d1a052c592e2dc6b383", null ],
@@ -162,24 +155,8 @@ var namespaces_dup =
         [ "Image", "VexUI_8hpp.html#a7f58754048eee9edc68ba1d810291ebaabe53a0541a6d36f6ecb879fa2c584b08", null ],
         [ "Button", "VexUI_8hpp.html#a7f58754048eee9edc68ba1d810291ebaa87b7760f14fbff78d8819291f36ab9a0", null ]
       ] ],
-      [ "AddLogCallback", "errorUtils_8hpp.html#a33945e720f6b36ffc50d7e4c10d4dbc0", null ],
       [ "createMeshFromPath", "ModelCreator_8hpp.html#a5dcb905f0645cba8da8ff1145f696231", null ],
       [ "createModelFromComponents", "ModelCreator_8hpp.html#a8d3069775766b45d22978b65d6f85586", null ],
-      [ "createModelFromPath", "ModelCreator_8hpp.html#a60c4f3c10a042909f8123a275a80b150", null ],
-      [ "DrawWorldSettings", "worldSettingsMenu_8hpp.html#a7e48a1d9045a4f9560da9300e251db69", null ],
-      [ "GetAssetDir", "pathUtils_8hpp.html#a0f7f70a0c306a3e9c987e4e32bc5fa8f", null ],
-      [ "GetAssetPath", "pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2", null ],
-      [ "GetExecutableDir", "pathUtils_8hpp.html#a6012eb60cd3da12ce61a5175a7471ba2", null ],
-      [ "GetLogDir", "pathUtils_8hpp.html#a82f8ac87aba16056ea7e7313c795f25f", null ],
-      [ "GetUserDataDir", "pathUtils_8hpp.html#acaefcdf7c62cae71b8ed30087e38d2e6", null ],
-      [ "GetUserDataPath", "pathUtils_8hpp.html#af6ff7df692852e53dd26e430bfe85023", null ],
-      [ "handle_critical_exception", "errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48", null ],
-      [ "handle_exception", "errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5", null ],
-      [ "InitCrashHandler", "errorUtils_8hpp.html#a3e538975c87c06bcaab5919e616677b0", null ],
-      [ "log", "errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a", null ],
-      [ "log", "errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1", null ],
-      [ "SetAssetRoot", "pathUtils_8hpp.html#a6efde01ee2c1d1359dbf05958e014e99", null ],
-      [ "SetUserDataDir", "pathUtils_8hpp.html#ae8969861f510356c5929d8a9a8e0fedf", null ],
-      [ "throw_error", "errorUtils_8hpp.html#a83677754024309fc36c4dd9cfc848a7f", null ]
+      [ "createModelFromPath", "ModelCreator_8hpp.html#a60c4f3c10a042909f8123a275a80b150", null ]
     ] ]
 ];

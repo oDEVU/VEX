@@ -103,7 +103,7 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="VulkanMesh_8hpp.html">VulkanMesh.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;<a class="code" href="Mesh_8hpp.html">components/Mesh.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="pathUtils_8hpp.html">components/pathUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;components/PathUtils.hpp&quot;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;glm/common.hpp&quot;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;glm/fwd.hpp&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
@@ -123,12 +123,12 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span>vex {</div>
 <div class="foldopen" id="foldopen00021" data-start="{" data-end="}">
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89">   21</a></span>    <a class="code hl_function" href="classvex_1_1VulkanMesh.html#a8f93f0aa79903bad35a77ae1dfd1ba89">VulkanMesh::VulkanMesh</a>(<a class="code hl_struct" href="structvex_1_1VulkanContext.html">VulkanContext</a>&amp; context) : m_r_context(context) {</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;VulkanMesh created&quot;</span>);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        log(<span class="stringliteral">&quot;VulkanMesh created&quot;</span>);</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    }</div>
 </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    VulkanMesh::~VulkanMesh() {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Destroying VulkanMesh&quot;</span>);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        log(<span class="stringliteral">&quot;Destroying VulkanMesh&quot;</span>);</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        vkDeviceWaitIdle(m_r_context.device);</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; submesh : m_submeshBuffers) {</div>
@@ -185,7 +185,7 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
 <div class="foldopen" id="foldopen00079" data-start="{" data-end="}">
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classvex_1_1VulkanMesh.html#ac8f9fc0c2c186c80b5085afd662ebd3f">   79</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1VulkanMesh.html#ac8f9fc0c2c186c80b5085afd662ebd3f">VulkanMesh::upload</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structvex_1_1MeshData.html">MeshData</a>&amp; meshData) {</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Uploading mesh with %zu submeshes&quot;</span>, meshData.submeshes.size());</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        log(<span class="stringliteral">&quot;Uploading mesh with %zu submeshes&quot;</span>, meshData.submeshes.size());</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        m_submeshBuffers.reserve(meshData.submeshes.size());</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        m_submeshTextures.reserve(meshData.submeshes.size());</div>
@@ -230,7 +230,7 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>                srcSubmesh.triangleCenters.push_back((p0 + p1 + p2) / 3.0f);</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            }</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Uploaded submesh: %zu vertices, %u indices, texture: &#39;%s&#39;&quot;</span>,</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            log(<span class="stringliteral">&quot;Uploaded submesh: %zu vertices, %u indices, texture: &#39;%s&#39;&quot;</span>,</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>                   srcSubmesh.vertices.size(), buffers.indexCount,</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                   srcSubmesh.texturePath.c_str());</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        }</div>
@@ -245,8 +245,8 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        entt::entity entity,</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        std::vector&lt;TransparentTriangle&gt;&amp; outTriangles</div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    ) {</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        glm::vec3 translation_vector = glm::vec3(modelMatrix[3]);</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        glm::mat3 rotationScaleMatrix = glm::mat3(modelMatrix);</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        glm::vec3 translationVector = glm::vec3(modelMatrix[3]);</div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="keywordflow">for</span> (uint32_t submeshIndex = 0; submeshIndex &lt; m_cpuSubmeshData.size(); ++submeshIndex) {</div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; submesh = m_cpuSubmeshData[submeshIndex];</div>
@@ -254,9 +254,9 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>            <span class="keyword">const</span> glm::vec3* centers = submesh.triangleCenters.data();</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>            <span class="keywordflow">for</span> (uint32_t i = 0; i &lt; indexCount; i += 3) {</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                glm::vec3 center_world = rotation_scale_matrix * centers[i/3] + translation_vector;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                glm::vec3 centerWorld = rotationScaleMatrix * centers[i/3] + translationVector;</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                glm::vec3 d = center_world - cameraPos;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                glm::vec3 d = centerWorld - cameraPos;</div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                <span class="keywordtype">float</span> distanceSq = glm::dot(d, d);</div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span> </div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                outTriangles.push_back({</div>
@@ -334,7 +334,7 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>            modelPush.textureID = textureIndex;</div>
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>            <span class="keywordflow">if</span> (!resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef">textureExists</a>(textureName) &amp;&amp; !textureName.empty()) {</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(LogLevel::WARNING, <span class="stringliteral">&quot;Missing texture...&quot;</span>);</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>                log(LogLevel::WARNING, <span class="stringliteral">&quot;Missing texture...&quot;</span>);</div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            }</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>            vkCmdPushConstants(</div>
@@ -380,7 +380,7 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            std::string textureName = <span class="stringliteral">&quot;&quot;</span>;</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>            uint32_t textureIndex = 0;</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>            <span class="keywordflow">if</span>(mc.textureOverrides.contains(i)){</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                textureName = <a class="code hl_function" href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">GetAssetPath</a>(mc.textureOverrides.at(i));</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                textureName = GetAssetPath(mc.textureOverrides.at(i));</div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                textureIndex = resources.<a class="code hl_function" href="classvex_1_1VulkanResources.html#a6882b8e45bb261744a6cd8fd03f5719a">getTextureIndex</a>(textureName);</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                <span class="keywordflow">if</span>(textureIndex == 0){</div>
@@ -461,10 +461,7 @@ $(function(){initNavTree('VulkanMesh_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1VulkanResources_html_aa0af5335969351df329557105c0a96ef"><div class="ttname"><a href="classvex_1_1VulkanResources.html#aa0af5335969351df329557105c0a96ef">vex::VulkanResources::textureExists</a></div><div class="ttdeci">bool textureExists(const std::string &amp;name) const</div><div class="ttdoc">Returns if a texture with the given name exists.</div><div class="ttdef"><b>Definition</b> <a href="Resources_8hpp_source.html#l00140">Resources.hpp:140</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanResources_html_ab7c1816ff613680e55a277249a653168"><div class="ttname"><a href="classvex_1_1VulkanResources.html#ab7c1816ff613680e55a277249a653168">vex::VulkanResources::getTextureDescriptorSet</a></div><div class="ttdeci">VkDescriptorSet getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) const</div><div class="ttdoc">Returns a descriptor set for the given frame index and texture index.</div><div class="ttdef"><b>Definition</b> <a href="Resources_8cpp_source.html#l00628">Resources.cpp:628</a></div></div>
 <div class="ttc" id="aclassvex_1_1VulkanResources_html_ac14d5b2f5f8102b54bcaa5328470dd22"><div class="ttname"><a href="classvex_1_1VulkanResources.html#ac14d5b2f5f8102b54bcaa5328470dd22">vex::VulkanResources::getDescriptorSet</a></div><div class="ttdeci">VkDescriptorSet getDescriptorSet(uint32_t frameIndex) const</div><div class="ttdoc">Returns the descriptor set for the given frame index.</div><div class="ttdef"><b>Definition</b> <a href="Resources_8hpp_source.html#l00104">Resources.hpp:104</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
 <div class="ttc" id="alimits_8hpp_html_a2d8af3646b57b1d41ad37cc7a9596672"><div class="ttname"><a href="limits_8hpp.html#a2d8af3646b57b1d41ad37cc7a9596672">MAX_TEXTURES</a></div><div class="ttdeci">const uint32_t MAX_TEXTURES</div><div class="ttdef"><b>Definition</b> <a href="limits_8hpp_source.html#l00013">limits.hpp:13</a></div></div>
-<div class="ttc" id="apathUtils_8hpp_html"><div class="ttname"><a href="pathUtils_8hpp.html">pathUtils.hpp</a></div><div class="ttdoc">This file implements path-related utilities.</div></div>
-<div class="ttc" id="apathUtils_8hpp_html_aa19dc36f35689a3623a28fb816af93d2"><div class="ttname"><a href="pathUtils_8hpp.html#aa19dc36f35689a3623a28fb816af93d2">vex::GetAssetPath</a></div><div class="ttdeci">std::string VEX_EXPORT GetAssetPath(const std::string &amp;relativePath)</div><div class="ttdoc">Resolves the absolute path of an asset based on the current build configuration.</div><div class="ttdef"><b>Definition</b> <a href="pathUtils_8cpp_source.html#l00073">pathUtils.cpp:73</a></div></div>
 <div class="ttc" id="astructvex_1_1MeshComponent_html"><div class="ttname"><a href="structvex_1_1MeshComponent.html">vex::MeshComponent</a></div><div class="ttdoc">Struct containing raw meshData, mesh id, texture paths and material properties. It just template and ...</div><div class="ttdef"><b>Definition</b> <a href="BasicComponents_8hpp_source.html#l00400">BasicComponents.hpp:400</a></div></div>
 <div class="ttc" id="astructvex_1_1MeshData_html"><div class="ttname"><a href="structvex_1_1MeshData.html">vex::MeshData</a></div><div class="ttdoc">Mesh data structure for loading and managing mesh data.</div><div class="ttdef"><b>Definition</b> <a href="Mesh_8hpp_source.html#l00041">Mesh.hpp:41</a></div></div>
 <div class="ttc" id="astructvex_1_1PushConstants_html"><div class="ttname"><a href="structvex_1_1PushConstants.html">vex::PushConstants</a></div><div class="ttdoc">Push constants, holds model information.</div><div class="ttdef"><b>Definition</b> <a href="uniforms_8hpp_source.html#l00053">uniforms.hpp:53</a></div></div>

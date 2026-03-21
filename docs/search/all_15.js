@@ -1,7 +1,7 @@
 var searchData=
 [
   ['vertex_0',['Vertex',['../structvex_1_1Vertex.html',1,'vex']]],
-  ['vertexsnapping_1',['vertexSnapping',['../structvex_1_1enviroment.html#a7b0286a765e6fba844288bbf7bcd8380',1,'vex::enviroment']]],
+  ['vertexsnapping_1',['vertexSnapping',['../structvex_1_1environment.html#aa3850938421ac5c61768fe89df072927',1,'vex::environment']]],
   ['vex_3a_3aps1effects_2',['PS1Effects',['../namespacevex_1_1PS1Effects.html',1,'vex']]],
   ['vex_5fcat_5fimpl_3',['VEX_CAT_IMPL',['../ComponentFactory_8hpp.html#ad9f2c6b0bb32254114e7b70a3b42c72a',1,'ComponentFactory.hpp']]],
   ['vexui_4',['VexUI',['../classvex_1_1VexUI.html',1,'vex::VexUI'],['../classvex_1_1VexUI.html#a5c081cf41b22e86604dd8016fbce0684',1,'vex::VexUI::VexUI()']]],

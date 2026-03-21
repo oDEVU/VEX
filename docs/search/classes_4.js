@@ -6,5 +6,5 @@ var searchData=
   ['editormenubar_3',['EditorMenuBar',['../classEditorMenuBar.html',1,'']]],
   ['editorproperties_4',['EditorProperties',['../structEditorProperties.html',1,'']]],
   ['engine_5',['Engine',['../classvex_1_1Engine.html',1,'vex']]],
-  ['enviroment_6',['enviroment',['../structvex_1_1enviroment.html',1,'vex']]]
+  ['environment_6',['environment',['../structvex_1_1environment.html',1,'vex']]]
 ];

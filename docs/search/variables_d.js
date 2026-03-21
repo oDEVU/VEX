@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['offer_0',['offer',['../structzwp__primary__selection__offer__v1__listener.html#a0e3418f8908807ae1a1d7aa55d383d67',1,'zwp_primary_selection_offer_v1_listener::offer'],['../structwl__data__offer__listener.html#a022cafec35840a7e1693bde07208ee40',1,'wl_data_offer_listener::offer']]],
-  ['opt_5ftype_1',['opt_type',['../structoption__extra.html#a2ec6897d880332312fd3177cbde97c98',1,'option_extra']]],
-  ['orientation_2',['orientation',['../structwl__touch__listener.html#a86aa5e12390cd1c32e3eb7e699d2c1ac',1,'wl_touch_listener']]]
+  ['vertexsnapping_0',['vertexSnapping',['../structvex_1_1environment.html#aa3850938421ac5c61768fe89df072927',1,'vex::environment']]],
+  ['view_1',['view',['../structvex_1_1SceneUBO.html#aff32b4ef5b2c8dc91b5657cda6b90470',1,'vex::SceneUBO']]]
 ];

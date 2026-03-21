@@ -25,6 +25,7 @@ var searchData=
   ['requestscenereload_22',['requestSceneReload',['../classvex_1_1Editor.html#aeeb45e8bbfc0ffaae4b095e8883c7a44',1,'vex::Editor']]],
   ['resolutionmanager_23',['ResolutionManager',['../classvex_1_1ResolutionManager.html#a3d09291c8dac471dc4dd889907988382',1,'vex::ResolutionManager']]],
   ['resolve_5frelative_5fpath_24',['resolve_relative_path',['../classvex_1_1VirtualFileSystem.html#a6cabffa3f598dde4e3d26340a5b3d0f9',1,'vex::VirtualFileSystem']]],
-  ['run_25',['run',['../classvex_1_1Engine.html#a1079bfa78b4a8a4b99eb778de1c57485',1,'vex::Engine']]],
-  ['runbuild_26',['RunBuild',['../classEditorMenuBar.html#a36b236b7d71c7219125ae05dbd33d398',1,'EditorMenuBar']]]
+  ['roundedbox_25',['RoundedBox',['../structvex_1_1PhysicsComponent.html#ae75419df8f5d5a7e9a6053f800e426ea',1,'vex::PhysicsComponent']]],
+  ['run_26',['run',['../classvex_1_1Engine.html#a1079bfa78b4a8a4b99eb778de1c57485',1,'vex::Engine']]],
+  ['runbuild_27',['RunBuild',['../classEditorMenuBar.html#a36b236b7d71c7219125ae05dbd33d398',1,'EditorMenuBar']]]
 ];

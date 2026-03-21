@@ -102,7 +102,7 @@ $(function(){initNavTree('ComponentFactory_8cpp_source.html','',''); });
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;<a class="code" href="ComponentFactory_8hpp.html">components/GameComponents/ComponentFactory.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;<a class="code" href="errorUtils_8hpp.html">components/errorUtils.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;components/ErrorUtils.hpp&quot;</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="keyword">namespace </span>vex {</div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
@@ -141,7 +141,7 @@ $(function(){initNavTree('ComponentFactory_8cpp_source.html','',''); });
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                registeredNames.erase(it, registeredNames.end());</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            }</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Component &#39;%s&#39; unregistered&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            log(<span class="stringliteral">&quot;Component &#39;%s&#39; unregistered&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        }</div>
 </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
@@ -149,7 +149,7 @@ $(function(){initNavTree('ComponentFactory_8cpp_source.html','',''); });
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classvex_1_1ComponentRegistry.html#a3acf42084e1d0db11ea49e8de38e85f3">   43</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classvex_1_1ComponentRegistry.html#a3acf42084e1d0db11ea49e8de38e85f3">ComponentRegistry::clearDynamicComponents</a>() {</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                <span class="keywordflow">if</span> (dynamicComponents.empty()) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Hot Reload: Clearing %zu game components...&quot;</span>, dynamicComponents.size());</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                log(<span class="stringliteral">&quot;Hot Reload: Clearing %zu game components...&quot;</span>, dynamicComponents.size());</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; name : dynamicComponents) {</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                    <span class="comment">// Manual unregister logic (copy of unregisterComponent but internal)</span></div>
@@ -176,7 +176,7 @@ $(function(){initNavTree('ComponentFactory_8cpp_source.html','',''); });
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            it-&gt;second(obj, json);</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        }</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Error: Component type &#39;%s&#39; not registered&quot;</span>, type.c_str());</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        log(<span class="stringliteral">&quot;Error: Component type &#39;%s&#39; not registered&quot;</span>, type.c_str());</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    }</div>
 </div>
@@ -213,7 +213,7 @@ $(function(){initNavTree('ComponentFactory_8cpp_source.html','',''); });
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">if</span> (creators.find(name) != creators.end()) {</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            creators[name](obj);</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            <a class="code hl_function" href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">log</a>(<span class="stringliteral">&quot;Error: Cannot create component &#39;%s&#39;, not registered.&quot;</span>, name.c_str());</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            log(<span class="stringliteral">&quot;Error: Cannot create component &#39;%s&#39;, not registered.&quot;</span>, name.c_str());</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        }</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    }</div>
 </div>
@@ -243,8 +243,6 @@ $(function(){initNavTree('ComponentFactory_8cpp_source.html','',''); });
 <div class="ttc" id="aclassvex_1_1ComponentRegistry_html_aa9bce26cfbe971ac29ddab3ac0bbb5a5"><div class="ttname"><a href="classvex_1_1ComponentRegistry.html#aa9bce26cfbe971ac29ddab3ac0bbb5a5">vex::ComponentRegistry::unregisterComponent</a></div><div class="ttdeci">void unregisterComponent(const std::string &amp;name)</div><div class="ttdoc">Unregisters a component type and removes all associated callbacks.</div><div class="ttdef"><b>Definition</b> <a href="#l00028">ComponentFactory.cpp:28</a></div></div>
 <div class="ttc" id="aclassvex_1_1ComponentRegistry_html_af362295b8118ca95e0766d7fb09be4e6"><div class="ttname"><a href="classvex_1_1ComponentRegistry.html#af362295b8118ca95e0766d7fb09be4e6">vex::ComponentRegistry::drawInspectorForObject</a></div><div class="ttdeci">void drawInspectorForObject(GameObject &amp;obj)</div><div class="ttdoc">Draws the ImGui inspector for all components on the object.</div><div class="ttdef"><b>Definition</b> <a href="#l00080">ComponentFactory.cpp:80</a></div></div>
 <div class="ttc" id="aclassvex_1_1GameObject_html"><div class="ttname"><a href="classvex_1_1GameObject.html">vex::GameObject</a></div><div class="ttdoc">Its base class for all game objects, eg. Player, Enemy, Weapon. Your Class needs to inherit from it.</div><div class="ttdef"><b>Definition</b> <a href="GameObject_8hpp_source.html#l00031">GameObject.hpp:31</a></div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html"><div class="ttname"><a href="errorUtils_8hpp.html">errorUtils.hpp</a></div><div class="ttdoc">This file defines functions for logging and throwing errors. It provides error tracing for debugging ...</div></div>
-<div class="ttc" id="aerrorUtils_8hpp_html_a96b5f80aadf7f282e8238912cbc9675a"><div class="ttname"><a href="errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a">vex::log</a></div><div class="ttdeci">void VEX_EXPORT log(const char *fmt,...)</div><div class="ttdoc">Logs a formatted message.</div><div class="ttdef"><b>Definition</b> <a href="errorUtils_8cpp_source.html#l00511">errorUtils.cpp:511</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
