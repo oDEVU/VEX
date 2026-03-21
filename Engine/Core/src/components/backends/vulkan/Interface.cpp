@@ -5,7 +5,7 @@
 
 #include "Interface.hpp"
 #include <vector>
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include <algorithm>
 #include <set>
 #include <fstream>
@@ -378,13 +378,13 @@ uint32_t Interface::GetBestDeviceVersion() {
             props2.pNext = &indexingProps;
             vkGetPhysicalDeviceProperties2(m_context.physicalDevice, &props2);
 
-            const uint32_t REQUIRED_BINDLESS_COUNT = MAX_TEXTURES;
+            const uint32_t requiredBindlessCount = MAX_TEXTURES;
             uint32_t samplerLimit = indexingProps.maxPerStageDescriptorUpdateAfterBindSamplers;
             uint32_t imageLimit = indexingProps.maxPerStageDescriptorUpdateAfterBindSampledImages;
 
-            log("Bindless Limits -> Samplers: %u | Images: %u (Req: %u)", samplerLimit, imageLimit, REQUIRED_BINDLESS_COUNT);
+            log("Bindless Limits -> Samplers: %u | Images: %u (Req: %u)", samplerLimit, imageLimit, requiredBindlessCount);
 
-            if (imageLimit < REQUIRED_BINDLESS_COUNT || samplerLimit < REQUIRED_BINDLESS_COUNT) {
+            if (imageLimit < requiredBindlessCount || samplerLimit < requiredBindlessCount) {
                 log(LogLevel::WARNING, "Device limits too low. Forcing Bindless OFF to prevent validation errors.");
                 m_context.supportsBindlessTextures = false;
             } else {
@@ -632,13 +632,13 @@ uint32_t Interface::GetBestDeviceVersion() {
         uiAttrs[3] = {3, 0, VK_FORMAT_R32_SFLOAT,         offsetof(UIVertex, texIndex)};
 
 
-        std::string UiFrag = m_context.supportsBindlessTextures
+        std::string uiFrag = m_context.supportsBindlessTextures
                                  ? "Engine/shaders/UiFragBindless.spv"
                                  : "Engine/shaders/UiFrag.spv";
 
         m_p_uiPipeline->createUIPipeline(
             "Engine/shaders/UiVert.spv",
-            UiFrag,
+            uiFrag,
             uiBinding,
             uiAttrs
         );

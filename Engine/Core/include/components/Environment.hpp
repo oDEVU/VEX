@@ -1,6 +1,6 @@
 /**
- *  @file   enviroment.hpp
- *  @brief  This file defines enviroment struct.
+ *  @file   environment.hpp
+ *  @brief  This file defines environment struct.
  *  @author Eryk Roszkowski
  ***********************************************/
 
@@ -9,8 +9,8 @@
 #include <glm/glm.hpp>
 
 namespace vex {
-    /// @brief This struct is used to hold all enviroment settings. eg. shading details or lighting setup.
-    struct enviroment{
+    /// @brief This struct is used to hold all environment settings. eg. shading details or lighting setup.
+    struct environment{
       /// @brief Enables Gouraud shading.
       bool gourardShading = true;
       /// @brief Enables passive vertex jittering. (PS1 style jitter when camera is not moving)

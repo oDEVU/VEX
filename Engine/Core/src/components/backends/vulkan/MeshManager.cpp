@@ -2,7 +2,7 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/PhysicsSystem.hpp"
 #include "components/Mesh.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/ThreadPool.hpp"
 #include "entt/entity/entity.hpp"
 #include "entt/entity/fwd.hpp"

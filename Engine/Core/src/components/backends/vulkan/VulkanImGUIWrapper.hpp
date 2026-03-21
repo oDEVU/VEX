@@ -7,7 +7,7 @@
 #pragma once
 
 #include "components/ImGUIWrapper.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "context.hpp"
 
 #include <SDL3/SDL.h>

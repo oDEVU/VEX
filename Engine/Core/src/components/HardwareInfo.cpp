@@ -30,7 +30,7 @@ VulkanFeatures HardwareInfo::GPUFeatures = {};
 void HardwareInfo::PrintCrashDump(int fd) {
     if (fd < 0) return;
 
-    auto safe_write = [fd](const char* label, const std::string& val) {
+    auto safeWrite = [fd](const char* label, const std::string& val) {
         if (!label) return;
         WRITE_FUNC(fd, label, strlen(label));
         if (!val.empty()) {
@@ -41,7 +41,7 @@ void HardwareInfo::PrintCrashDump(int fd) {
         WRITE_FUNC(fd, "\n", 1);
     };
 
-    auto safe_write_bool = [fd](const char* label, bool val) {
+    auto safeWriteBool = [fd](const char* label, bool val) {
         WRITE_FUNC(fd, label, strlen(label));
         if (val) WRITE_FUNC(fd, "YES\n", 4);
         else WRITE_FUNC(fd, "NO\n", 3);
@@ -53,22 +53,22 @@ void HardwareInfo::PrintCrashDump(int fd) {
     if(CPUName.empty()) DetectCPUName();
     if(SystemMemory.empty()) DetectSystemMemory();
 
-    safe_write("CPU:                 ", CPUName);
-    safe_write("RAM:                 ", SystemMemory);
-    safe_write_bool("AVX2:                ", HasAVX2());
+    safeWrite("CPU:                 ", CPUName);
+    safeWrite("RAM:                 ", SystemMemory);
+    safeWriteBool("AVX2:                ", HasAVX2());
 
-    safe_write("GPU:                 ", GPUName);
-    safe_write("Driver:              ", DriverVersion);
-    safe_write("Vulkan Device:       ", VulkanDeviceVersion);
-    safe_write("Vulkan Requested:    ", VulkanRequestedVersion);
+    safeWrite("GPU:                 ", GPUName);
+    safeWrite("Driver:              ", DriverVersion);
+    safeWrite("Vulkan Device:       ", VulkanDeviceVersion);
+    safeWrite("Vulkan Requested:    ", VulkanRequestedVersion);
 
-    safe_write_bool("Feat: MultiDraw:     ", GPUFeatures.multiDraw);
-    safe_write_bool("Feat: Indirect:      ", GPUFeatures.indirectDraw);
-    safe_write_bool("Feat: Bindless:      ", GPUFeatures.bindlessTextures);
-    safe_write_bool("Feat: Shader Params: ", GPUFeatures.shaderDrawParameters);
+    safeWriteBool("Feat: MultiDraw:     ", GPUFeatures.multiDraw);
+    safeWriteBool("Feat: Indirect:      ", GPUFeatures.indirectDraw);
+    safeWriteBool("Feat: Bindless:      ", GPUFeatures.bindlessTextures);
+    safeWriteBool("Feat: Shader Params: ", GPUFeatures.shaderDrawParameters);
 }
 
-static std::string DecodeDriverVersion(uint32_t vendorID, uint32_t v) {
+static std::string decodeDriverVersion(uint32_t vendorID, uint32_t v) {
     if (vendorID == 0x10DE) {
         int major = (v >> 22) & 0x3FF;
         int minor = (v >> 14) & 0xFF;
@@ -96,7 +96,7 @@ static std::string DecodeDriverVersion(uint32_t vendorID, uint32_t v) {
 
 void HardwareInfo::SetGPUInfo(const std::string& name, uint32_t vendorID, uint32_t driverVersion) {
     GPUName = name;
-    DriverVersion = DecodeDriverVersion(vendorID, driverVersion);
+    DriverVersion = decodeDriverVersion(vendorID, driverVersion);
 }
 std::string HardwareInfo::GetGPUName() { return GPUName; }
 std::string HardwareInfo::GetDriverVersion() { return DriverVersion; }
@@ -159,8 +159,8 @@ void HardwareInfo::DetectSystemMemory() {
     totalRam = status.ullTotalPhys;
 #else
     long pages = sysconf(_SC_PHYS_PAGES);
-    long page_size = sysconf(_SC_PAGE_SIZE);
-    totalRam = pages * page_size;
+    long pageSize = sysconf(_SC_PAGE_SIZE);
+    totalRam = pages * pageSize;
 #endif
 
     double gb = static_cast<double>(totalRam) / (1024.0 * 1024.0 * 1024.0);
@@ -177,10 +177,10 @@ bool HardwareInfo::CheckHardwareSupport() {
     int info[4];
     CpuId(info, 1);
 
-    bool osUsesXSAVE_XRSTORE = (info[2] & (1 << 27)) != 0;
+    bool osUsesXsaveXrstore = (info[2] & (1 << 27)) != 0;
     bool cpuHasAVX = (info[2] & (1 << 28)) != 0;
 
-    if (!osUsesXSAVE_XRSTORE || !cpuHasAVX) return false;
+    if (!osUsesXsaveXrstore || !cpuHasAVX) return false;
 
     unsigned long long xcrFeatureMask = 0;
     #ifdef _MSC_VER

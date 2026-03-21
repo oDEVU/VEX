@@ -3,13 +3,13 @@
 
 #include "../Editor.hpp"
 #include "../DialogWindow.hpp"
-#include "../editorProperties.hpp"
-#include "../projectProperties.hpp"
-#include "../execute.hpp"
+#include "../EditorProperties.hpp"
+#include "../ProjectProperties.hpp"
+#include "../Execute.hpp"
 
 #include "components/GameInfo.hpp"
-#include "components/errorUtils.hpp"
-#include "components/pathUtils.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "components/Scene.hpp"
 #include "components/SceneManager.hpp"
 #include "imgui.h"
@@ -399,10 +399,10 @@ std::string EditorMenuBar::GetProjectName() {
 
 void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
     struct BuildState {
-        std::string logs = "";
-        bool isFinished = false;
-        std::mutex logMutex;
-        bool autoScroll = true;
+        std::string m_logs = "";
+        bool m_isFinished = false;
+        std::mutex m_logMutex;
+        bool m_autoScroll = true;
     };
     auto state = std::make_shared<BuildState>();
 
@@ -428,27 +428,27 @@ void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
             ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
 
             std::string title = isDebug ? "Building Debug..." : "Building Release...";
-            if (state->isFinished) title += " (Finished)";
+            if (state->m_isFinished) title += " (Finished)";
 
             if (ImGui::Begin(title.c_str(), &window->isOpen)) {
 
                 if(ImGui::Button("Clear")) {
-                    std::lock_guard<std::mutex> lock(state->logMutex);
-                    state->logs.clear();
+                    std::lock_guard<std::mutex> lock(state->m_logMutex);
+                    state->m_logs.clear();
                 }
                 ImGui::SameLine();
-                ImGui::Checkbox("Auto-scroll", &state->autoScroll);
+                ImGui::Checkbox("Auto-scroll", &state->m_autoScroll);
 
                 ImGui::Separator();
 
                 ImGui::BeginChild("BuildLogRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
                 {
-                    std::lock_guard<std::mutex> lock(state->logMutex);
-                    ImGui::TextUnformatted(state->logs.c_str());
+                    std::lock_guard<std::mutex> lock(state->m_logMutex);
+                    ImGui::TextUnformatted(state->m_logs.c_str());
                 }
 
-                if (state->autoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+                if (state->m_autoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
                     ImGui::SetScrollHereY(1.0f);
                 }
 
@@ -464,16 +464,16 @@ void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
     std::thread([command, state, this, isDebug, runAfter]() {
         executeCommandRealTime(command,
             [state](const std::string& line) {
-                std::lock_guard<std::mutex> lock(state->logMutex);
-                state->logs += line;
+                std::lock_guard<std::mutex> lock(state->m_logMutex);
+                state->m_logs += line;
             }
         );
 
         if (runAfter) {
             std::string projectName = GetProjectName();
             if (projectName.empty()) {
-                std::lock_guard<std::mutex> lock(state->logMutex);
-                state->logs += "\n[Error] Could not retrieve Project Name from VexProject.json. Cannot run.\n";
+                std::lock_guard<std::mutex> lock(state->m_logMutex);
+                state->m_logs += "\n[Error] Could not retrieve Project Name from VexProject.json. Cannot run.\n";
             } else {
                 std::filesystem::path runPath(m_editor.getProjectBinaryPath());
                 runPath = runPath / "Build" / (isDebug ? "Debug" : "Release");
@@ -485,39 +485,39 @@ void EditorMenuBar::RunBuild(bool isDebug, bool runAfter) {
 
                 if (std::filesystem::exists(runPath)) {
                     {
-                        std::lock_guard<std::mutex> lock(state->logMutex);
-                        state->logs += "\n=== Build Complete. Launching: " + runPath.string() + " ===\n";
+                        std::lock_guard<std::mutex> lock(state->m_logMutex);
+                        state->m_logs += "\n=== Build Complete. Launching: " + runPath.string() + " ===\n";
                     }
 
                     std::string runCmd = "\"" + runPath.string() + "\"";
 
                     executeCommandRealTime(runCmd,
                         [state](const std::string& line) {
-                            std::lock_guard<std::mutex> lock(state->logMutex);
-                            state->logs += line;
+                            std::lock_guard<std::mutex> lock(state->m_logMutex);
+                            state->m_logs += line;
                         }
                     );
                 } else {
-                    std::lock_guard<std::mutex> lock(state->logMutex);
-                    state->logs += "\n[Error] Executable not found at: " + runPath.string() + "\n";
+                    std::lock_guard<std::mutex> lock(state->m_logMutex);
+                    state->m_logs += "\n[Error] Executable not found at: " + runPath.string() + "\n";
                 }
             }
         }
 
         {
-            std::lock_guard<std::mutex> lock(state->logMutex);
-            state->logs += "\n=== Build Finished ===\n";
-            state->isFinished = true;
+            std::lock_guard<std::mutex> lock(state->m_logMutex);
+            state->m_logs += "\n=== Build Finished ===\n";
+            state->m_isFinished = true;
         }
     }).detach();
 }
 
 void EditorMenuBar::BuildDist() {
     struct BuildState {
-        std::string logs = "";
-        bool isFinished = false;
-        std::mutex logMutex;
-        bool autoScroll = true;
+        std::string m_logs = "";
+        bool m_isFinished = false;
+        std::mutex m_logMutex;
+        bool m_autoScroll = true;
     };
     auto state = std::make_shared<BuildState>();
 
@@ -588,18 +588,18 @@ void EditorMenuBar::BuildDist() {
 
             if (ImGui::Begin("Distribution Build (Shipping)", &window->isOpen)) {
                 if(ImGui::Button("Clear")) {
-                    std::lock_guard<std::mutex> lock(state->logMutex);
-                    state->logs.clear();
+                    std::lock_guard<std::mutex> lock(state->m_logMutex);
+                    state->m_logs.clear();
                 }
                 ImGui::SameLine();
-                ImGui::Checkbox("Auto-scroll", &state->autoScroll);
+                ImGui::Checkbox("Auto-scroll", &state->m_autoScroll);
                 ImGui::Separator();
 
                 #ifndef _WIN32
                 ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f), "[Linux] Building in Special Container.");
                 #endif
 
-                if (state->isFinished) {
+                if (state->m_isFinished) {
                     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Status: Finished");
                 } else {
                     ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "Status: Working...");
@@ -607,10 +607,10 @@ void EditorMenuBar::BuildDist() {
 
                 ImGui::BeginChild("BuildLogRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
                 {
-                    std::lock_guard<std::mutex> lock(state->logMutex);
-                    ImGui::TextUnformatted(state->logs.c_str());
+                    std::lock_guard<std::mutex> lock(state->m_logMutex);
+                    ImGui::TextUnformatted(state->m_logs.c_str());
                 }
-                if (state->autoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+                if (state->m_autoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
                     ImGui::SetScrollHereY(1.0f);
                 }
                 ImGui::EndChild();
@@ -627,8 +627,8 @@ void EditorMenuBar::BuildDist() {
             executeCommandRealTime(command,
                 [state](const std::string& line) {
                     {
-                        std::lock_guard<std::mutex> lock(state->logMutex);
-                        state->logs += line;
+                        std::lock_guard<std::mutex> lock(state->m_logMutex);
+                        state->m_logs += line;
                     }
 
                     if (line.length() > 1) {
@@ -637,15 +637,15 @@ void EditorMenuBar::BuildDist() {
                 }
             );
         } catch (const std::exception& e) {
-             std::lock_guard<std::mutex> lock(state->logMutex);
-             state->logs += "\n[CRITICAL ERROR] Execution failed: ";
-             state->logs += e.what();
+             std::lock_guard<std::mutex> lock(state->m_logMutex);
+             state->m_logs += "\n[CRITICAL ERROR] Execution failed: ";
+             state->m_logs += e.what();
         }
 
         {
-            std::lock_guard<std::mutex> lock(state->logMutex);
-            state->logs += "\n=== Distribution Build Finished ===\n";
-            state->isFinished = true;
+            std::lock_guard<std::mutex> lock(state->m_logMutex);
+            state->m_logs += "\n=== Distribution Build Finished ===\n";
+            state->m_isFinished = true;
         }
     }).detach();
 }

@@ -7,13 +7,13 @@
 #include <glm/glm.hpp>
 #include <immintrin.h>
 
-#include <components/errorUtils.hpp>
-#include <components/pathUtils.hpp>
+#include <components/ErrorUtils.hpp>
+#include <components/PathUtils.hpp>
 #include "components/HardwareInfo.hpp"
 
 namespace vex {
 
-    void RotateQuad_Scalar(float* outVerts, float pivotX, float pivotY,
+    void rotateQuadScalar(float* outVerts, float pivotX, float pivotY,
                            float sinA, float cosA, float x0, float y0, float x1, float y1) {
         float px[] = {x0, x1, x0, x1};
         float py[] = {y0, y0, y1, y1};
@@ -27,7 +27,7 @@ namespace vex {
     }
 
     __attribute__((target("avx2")))
-    void RotateQuad_AVX2(float* outVerts, float pivotX, float pivotY,
+    void rotateQuadAvX2(float* outVerts, float pivotX, float pivotY,
                          float sinA, float cosA, float x0, float y0, float x1, float y1) {
 
         __m256 vPos = _mm256_setr_ps(x0, y0, x1, y0, x0, y1, x1, y1);
@@ -85,14 +85,14 @@ VexUI::~VexUI() {
 }
 
 bool VexUI::init() {
-    const size_t VB_BYTES = 2 * 1024 * 1024;
+    const size_t vbBytes = 2 * 1024 * 1024;
     VkBufferCreateInfo bi{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
-    bi.size = VB_BYTES;
+    bi.size = vbBytes;
     bi.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
     VmaAllocationCreateInfo ai{};
     ai.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
     vmaCreateBuffer(m_ctx.allocator, &bi, &ai, &m_vb, &m_vbAlloc, nullptr);
-    m_vbSize = VB_BYTES;
+    m_vbSize = vbBytes;
 
     VkSamplerCreateInfo si{VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
     si.magFilter = si.minFilter = VK_FILTER_NEAREST;
@@ -148,13 +148,13 @@ void VexUI::loadFonts(Widget* w) {
         atlas.descent = static_cast<float>(descent) * scale;
         atlas.scale = scale;
 
-        const int W = 512, H = 512;
-        std::vector<unsigned char> bitmap(W * H, 0);
+        const int texW = 512, texH = 512;
+        std::vector<unsigned char> bitmap(texW * texH, 0);
         atlas.cdata.resize(96);
-        stbtt_BakeFontBitmap((unsigned char*)data->data.data(), 0, w->style.fontSize, bitmap.data(), W, H, 32, 96, atlas.cdata.data());
+        stbtt_BakeFontBitmap((unsigned char*)data->data.data(), 0, w->style.fontSize, bitmap.data(), texW, texH, 32, 96, atlas.cdata.data());
 
-        std::vector<unsigned char> rgba(W * H * 4);
-        for (int i = 0; i < W * H; ++i) {
+        std::vector<unsigned char> rgba(texW * texH * 4);
+        for (int i = 0; i < texW * texH; ++i) {
             unsigned char v = bitmap[i];
             v = (v > 127) ? 255 : 0;
             rgba[i*4 + 0] = 255;
@@ -164,11 +164,11 @@ void VexUI::loadFonts(Widget* w) {
         }
 
         std::string texName = "ui_font_" + key;
-        m_res->createTextureFromRaw(rgba, W, H, texName);
+        m_res->createTextureFromRaw(rgba, texW, texH, texName);
 
         atlas.texIdx = m_res->getTextureIndex(texName);
-        atlas.width = W;
-        atlas.height = H;
+        atlas.width = texW;
+        atlas.height = texH;
         atlas.bakedSize = w->style.fontSize;
         m_fontAtlases[key] = atlas;
     }
@@ -564,9 +564,9 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) 
         static bool useAVX2 = HardwareInfo::HasAVX2();
 
         if (useAVX2) {
-            RotateQuad_AVX2(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
+            rotateQuadAvX2(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
         } else {
-            RotateQuad_Scalar(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
+            rotateQuadScalar(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
         }
 
         verts.insert(verts.end(), {rV[0], rV[1], u0, v0, col.r, col.g, col.b, col.a, texIdx});

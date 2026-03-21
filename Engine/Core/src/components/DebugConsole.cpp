@@ -2,7 +2,7 @@
 #include <sstream>
 
 namespace vex {
-    static std::vector<std::string> SplitString(const std::string& str) {
+    static std::vector<std::string> splitString(const std::string& str) {
         std::vector<std::string> tokens;
         std::stringstream ss(str);
         std::string token;
@@ -40,7 +40,7 @@ namespace vex {
         m_history.push_back(commandLine);
         m_historyPos = -1;
 
-        auto tokens = SplitString(commandLine);
+        auto tokens = splitString(commandLine);
         if (tokens.empty()) return;
 
         std::string cmdName = tokens[0];
@@ -67,7 +67,7 @@ namespace vex {
     int DebugConsole::TextEditCallback(ImGuiInputTextCallbackData* data) {
         switch (data->EventFlag) {
             case ImGuiInputTextFlags_CallbackHistory: {
-                const int prev_history_pos = m_historyPos;
+                const int prevHistoryPos = m_historyPos;
                 if (data->EventKey == ImGuiKey_UpArrow) {
                     if (m_historyPos == -1)
                         m_historyPos = m_history.size() - 1;
@@ -79,10 +79,10 @@ namespace vex {
                             m_historyPos = -1;
                 }
 
-                if (prev_history_pos != m_historyPos) {
-                    const char* history_str = (m_historyPos >= 0) ? m_history[m_historyPos].c_str() : "";
+                if (prevHistoryPos != m_historyPos) {
+                    const char* historyStr = (m_historyPos >= 0) ? m_history[m_historyPos].c_str() : "";
                     data->DeleteChars(0, data->BufTextLen);
-                    data->InsertChars(0, history_str);
+                    data->InsertChars(0, historyStr);
                 }
             }
         }
@@ -105,8 +105,8 @@ namespace vex {
 
         if (ImGui::Begin("Console", p_open, flags)) {
 
-            const float footer_height = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-            ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height), false, ImGuiWindowFlags_HorizontalScrollbar);
+            const float footerHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+            ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footerHeight), false, ImGuiWindowFlags_HorizontalScrollbar);
 
             {
                 std::lock_guard<std::mutex> lock(m_mutex);
@@ -127,7 +127,7 @@ namespace vex {
 
             ImGui::EndChild();
             ImGui::Separator();
-            bool reclaim_focus = false;
+            bool reclaimFocus = false;
 
             ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue |
                                              ImGuiInputTextFlags_CallbackHistory |
@@ -136,11 +136,11 @@ namespace vex {
             if (ImGui::InputText("##ConsoleInput", m_inputBuf, IM_ARRAYSIZE(m_inputBuf), inputFlags, &TextEditCallbackStub, (void*)this)) {
                 Execute(m_inputBuf);
                 strcpy(m_inputBuf, "");
-                reclaim_focus = true;
+                reclaimFocus = true;
             }
 
             ImGui::SetItemDefaultFocus();
-            if (reclaim_focus || (!isEditorMode && ImGui::IsWindowAppearing()))
+            if (reclaimFocus || (!isEditorMode && ImGui::IsWindowAppearing()))
                 ImGui::SetKeyboardFocusHere(-1);
         }
         ImGui::End();

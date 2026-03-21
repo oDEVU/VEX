@@ -9,8 +9,8 @@
 #include "EditorCamera.hpp"
 #include "EditorCommands.hpp"
 
-#include "editorProperties.hpp"
-#include "projectProperties.hpp"
+#include "EditorProperties.hpp"
+#include "ProjectProperties.hpp"
 
 #include "Tools/EditorMenuBar.hpp"
 #include "Tools/AssetBrowser.hpp"

@@ -87,16 +87,16 @@ set(public_header_files
     include/components/ResolutionManager.hpp
     include/components/Scene.hpp
     include/components/SceneManager.hpp
-    include/components/errorUtils.hpp
+    include/components/ErrorUtils.hpp
     include/components/DebugConsole.hpp
-    include/components/pathUtils.hpp
+    include/components/PathUtils.hpp
     include/components/VirtualFileSystem.hpp
     include/components/AudioSystem.hpp
     include/components/ImGUIWrapper.hpp
     include/components/InputSystem.hpp
     include/components/PhysicsSystem.hpp
     include/components/JoltSafe.hpp
-    include/components/types.hpp
+    include/components/Types.hpp
     include/components/UI/VexUI.hpp
     include/components/HardwareInfo.hpp
     include/components/ThreadPool.hpp
@@ -124,11 +124,11 @@ set(source_files
         src/components/ResolutionManager.cpp
         src/components/Scene.cpp
         src/components/SceneManager.cpp
-        src/components/errorUtils.cpp
+        src/components/ErrorUtils.cpp
         src/components/DebugConsole.cpp
-        src/components/EngineCommands.hpp
+        include/components/EngineCommands.hpp
         src/components/EngineCommands.cpp
-        src/components/pathUtils.cpp
+        src/components/PathUtils.cpp
         src/components/Window.cpp
         src/components/Window.hpp
         src/components/HardwareInfo.cpp

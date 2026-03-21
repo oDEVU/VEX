@@ -1,5 +1,5 @@
 #include "components/Mesh.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/VirtualFileSystem.hpp"
 
 #include <assimp/Importer.hpp>
@@ -14,29 +14,29 @@ namespace vex {
 // Custom Assimp IO stream for VPK files
 class VPKAssimpStream : public Assimp::IOStream {
 private:
-    std::vector<char> buffer_;
-    size_t position_;
+    std::vector<char> m_buffer;
+    size_t m_position;
 
 public:
     VPKAssimpStream(const char* data, size_t size)
-        : buffer_(data, data + size), position_(0) {}
+        : m_buffer(data, data + size), m_position(0) {}
 
     ~VPKAssimpStream() override = default;
 
     size_t Read(void* pvBuffer, size_t pSize, size_t pCount) override {
-        size_t bytes_to_read = pSize * pCount;
-        size_t bytes_available = buffer_.size() - position_;
+        size_t bytesToRead = pSize * pCount;
+        size_t bytesAvailable = m_buffer.size() - m_position;
 
-        if (bytes_to_read > bytes_available) {
-            bytes_to_read = bytes_available;
+        if (bytesToRead > bytesAvailable) {
+            bytesToRead = bytesAvailable;
         }
 
-        if (bytes_to_read > 0) {
-            memcpy(pvBuffer, buffer_.data() + position_, bytes_to_read);
-            position_ += bytes_to_read;
+        if (bytesToRead > 0) {
+            memcpy(pvBuffer, m_buffer.data() + m_position, bytesToRead);
+            m_position += bytesToRead;
         }
 
-        return bytes_to_read / pSize; // Return number of items read
+        return bytesToRead / pSize; // Return number of items read
     }
 
     size_t Write(const void* pvBuffer, size_t pSize, size_t pCount) override {
@@ -44,29 +44,29 @@ public:
     }
 
     aiReturn Seek(size_t pOffset, aiOrigin pOrigin) override {
-        size_t new_position = position_;
+        size_t newPosition = m_position;
 
         switch (pOrigin) {
-            case aiOrigin_SET: new_position = pOffset; break;
-            case aiOrigin_CUR: new_position = position_ + pOffset; break;
-            case aiOrigin_END: new_position = buffer_.size() + pOffset; break;
+            case aiOrigin_SET: newPosition = pOffset; break;
+            case aiOrigin_CUR: newPosition = m_position + pOffset; break;
+            case aiOrigin_END: newPosition = m_buffer.size() + pOffset; break;
             default: return aiReturn_FAILURE;
         }
 
-        if (new_position > buffer_.size()) {
+        if (newPosition > m_buffer.size()) {
             return aiReturn_FAILURE;
         }
 
-        position_ = new_position;
+        m_position = newPosition;
         return aiReturn_SUCCESS;
     }
 
     size_t Tell() const override {
-        return position_;
+        return m_position;
     }
 
     size_t FileSize() const override {
-        return buffer_.size();
+        return m_buffer.size();
     }
 
     void Flush() override {}
@@ -75,50 +75,50 @@ public:
 // Custom Assimp IO system for VPK files
 class VPKAssimpIOSystem : public Assimp::IOSystem {
 private:
-    VirtualFileSystem* vfs_;
-    std::string base_path_;
-    std::string base_dir_;
+    VirtualFileSystem* m_vfs;
+    std::string m_basePath;
+    std::string m_baseDir;
 
 public:
     VPKAssimpIOSystem(VirtualFileSystem* vfs, const std::string& base_path)
-        : vfs_(vfs), base_path_(base_path) {
+        : m_vfs(vfs), m_basePath(base_path) {
         // Extract directory from base path
-        std::filesystem::path path_obj(base_path);
-        base_dir_ = path_obj.parent_path().string();
-        if (!base_dir_.empty() && base_dir_.back() != '/') {
-            base_dir_ += '/';
+        std::filesystem::path pathObj(base_path);
+        m_baseDir = pathObj.parent_path().string();
+        if (!m_baseDir.empty() && m_baseDir.back() != '/') {
+            m_baseDir += '/';
         }
     }
 
     ~VPKAssimpIOSystem() override = default;
 
     bool Exists(const char* pFile) const override {
-        std::string file_path(pFile);
+        std::string filePath(pFile);
 
-        log("Assimp checking if file exists: '%s'", file_path.c_str());
+        log("Assimp checking if file exists: '%s'", filePath.c_str());
 
         // First try the path as-is
-        if (vfs_->file_exists(file_path)) {
-            log("File exists as-is: '%s'", file_path.c_str());
+        if (m_vfs->file_exists(filePath)) {
+            log("File exists as-is: '%s'", filePath.c_str());
             return true;
         }
 
         // Try relative to the base directory
-        std::string relative_path = base_dir_ + file_path;
-        if (vfs_->file_exists(relative_path)) {
-            log("File exists relative to base: '%s'", relative_path.c_str());
+        std::string relativePath = m_baseDir + filePath;
+        if (m_vfs->file_exists(relativePath)) {
+            log("File exists relative to base: '%s'", relativePath.c_str());
             return true;
         }
 
         // Try just the filename (for cases like "scene.bin")
-        std::filesystem::path path_obj(file_path);
-        std::string just_filename = path_obj.filename().string();
-        if (vfs_->file_exists(just_filename)) {
-            log("File exists as filename only: '%s'", just_filename.c_str());
+        std::filesystem::path pathObj(filePath);
+        std::string justFilename = pathObj.filename().string();
+        if (m_vfs->file_exists(justFilename)) {
+            log("File exists as filename only: '%s'", justFilename.c_str());
             return true;
         }
 
-        log(LogLevel::WARNING, "File not found: '%s'", file_path.c_str());
+        log(LogLevel::WARNING, "File not found: '%s'", filePath.c_str());
         return false;
     }
 
@@ -132,47 +132,47 @@ public:
             return nullptr;
         }
 
-        std::string file_path(pFile);
-        log("Assimp trying to open: '%s'", file_path.c_str());
+        std::string filePath(pFile);
+        log("Assimp trying to open: '%s'", filePath.c_str());
 
-        std::string final_path;
+        std::string finalPath;
 
         // Try different path resolutions in order:
 
         // 1. Try as-is
-        if (vfs_->file_exists(file_path)) {
-            final_path = file_path;
-            log("Opening file as-is: '%s'", final_path.c_str());
+        if (m_vfs->file_exists(filePath)) {
+            finalPath = filePath;
+            log("Opening file as-is: '%s'", finalPath.c_str());
         }
         // 2. Try relative to base directory
-        else if (vfs_->file_exists(base_dir_ + file_path)) {
-            final_path = base_dir_ + file_path;
-            log("Opening file relative to base: '%s'", final_path.c_str());
+        else if (m_vfs->file_exists(m_baseDir + filePath)) {
+            finalPath = m_baseDir + filePath;
+            log("Opening file relative to base: '%s'", finalPath.c_str());
         }
         // 3. Try just the filename
         else {
-            std::filesystem::path path_obj(file_path);
-            std::string just_filename = path_obj.filename().string();
-            if (vfs_->file_exists(just_filename)) {
-                final_path = just_filename;
-                log("Opening file as filename only: '%s'", final_path.c_str());
+            std::filesystem::path pathObj(filePath);
+            std::string justFilename = pathObj.filename().string();
+            if (m_vfs->file_exists(justFilename)) {
+                finalPath = justFilename;
+                log("Opening file as filename only: '%s'", finalPath.c_str());
             } else {
-                log(LogLevel::ERROR, "Failed to find file: '%s'", file_path.c_str());
+                log(LogLevel::ERROR, "Failed to find file: '%s'", filePath.c_str());
                 return nullptr;
             }
         }
 
         // Read the file data into memory first
-        auto file_data = vfs_->load_file(final_path);
-        if (!file_data) {
-            log("Failed to load file data: '%s'", final_path.c_str());
+        auto fileData = m_vfs->load_file(finalPath);
+        if (!fileData) {
+            log("Failed to load file data: '%s'", finalPath.c_str());
             return nullptr;
         }
 
-        log("Successfully loaded file: '%s' (%zu bytes)", final_path.c_str(), file_data->size);
+        log("Successfully loaded file: '%s' (%zu bytes)", finalPath.c_str(), fileData->size);
 
         // Create stream from memory buffer
-        return new VPKAssimpStream(reinterpret_cast<const char*>(file_data->data.data()), file_data->size);
+        return new VPKAssimpStream(reinterpret_cast<const char*>(fileData->data.data()), fileData->size);
     }
 
     void Close(Assimp::IOStream* pFile) override {

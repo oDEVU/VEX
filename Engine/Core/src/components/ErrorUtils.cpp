@@ -1,5 +1,5 @@
-#include "components/errorUtils.hpp"
-#include "components/pathUtils.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "components/HardwareInfo.hpp"
 
 #include <iostream>
@@ -51,15 +51,15 @@
 #endif
 
 namespace vex {
-    static std::vector<LogCallbackFn> g_LogCallbacks;
-    static std::mutex g_CallbackMutex;
+    static std::vector<LogCallbackFn> gLogCallbacks;
+    static std::mutex gCallbackMutex;
 
     void AddLogCallback(LogCallbackFn callback) {
-        std::lock_guard<std::mutex> lock(g_CallbackMutex);
-        g_LogCallbacks.push_back(callback);
+        std::lock_guard<std::mutex> lock(gCallbackMutex);
+        gLogCallbacks.push_back(callback);
     }
 
-    static void ShowCrashDialog(const std::string& logPath) {
+    static void showCrashDialog(const std::string& logPath) {
     #if defined(_WIN32)
         char tempPath[MAX_PATH];
         GetTempPathA(MAX_PATH, tempPath);
@@ -136,27 +136,27 @@ namespace vex {
     }
 
     struct LogEntry {
-        char time[16];
-        char level[8];
-        char msg[256];
+        char m_time[16];
+        char m_level[8];
+        char m_msg[256];
     };
 
-    static std::array<LogEntry, 200> g_RingBuffer;
-    static size_t g_RingHead = 0;
-    static std::mutex g_RingMutex;
+    static std::array<LogEntry, 200> gRingBuffer;
+    static size_t gRingHead = 0;
+    static std::mutex gRingMutex;
 
-    static std::atomic<bool> g_IsCrashing(false);
-    static int g_CrashLogFD = -1;
+    static std::atomic<bool> gIsCrashing(false);
+    static int gCrashLogFd = -1;
 
-    static std::string get_time_str() {
+    static std::string getTimeStr() {
         auto now = std::chrono::system_clock::now();
-        auto in_time_t = std::chrono::system_clock::to_time_t(now);
+        auto inTimeT = std::chrono::system_clock::to_time_t(now);
         std::stringstream ss;
-        ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
+        ss << std::put_time(std::localtime(&inTimeT), "%Y-%m-%d %X");
         return ss.str();
     }
 
-    static const char* get_level_str(LogLevel level) {
+    static const char* getLevelStr(LogLevel level) {
         switch (level) {
             case LogLevel::INFO:     return "INFO";
             case LogLevel::WARNING:  return "WARNING";
@@ -166,27 +166,27 @@ namespace vex {
         }
     }
 
-    static void push_to_ring(LogLevel level, const char* msg) {
-        if(g_IsCrashing) return;
+    static void pushToRing(LogLevel level, const char* msg) {
+        if(gIsCrashing) return;
 
-        std::unique_lock<std::mutex> lock(g_RingMutex, std::defer_lock);
+        std::unique_lock<std::mutex> lock(gRingMutex, std::defer_lock);
         if(!lock.try_lock()) return;
 
-        LogEntry& entry = g_RingBuffer[g_RingHead];
+        LogEntry& entry = gRingBuffer[gRingHead];
 
         time_t rawtime;
         time(&rawtime);
         struct tm* timeinfo = localtime(&rawtime);
-        strftime(entry.time, sizeof(entry.time), "%H:%M:%S", timeinfo);
+        strftime(entry.m_time, sizeof(entry.m_time), "%H:%M:%S", timeinfo);
 
-        const char* lvl = get_level_str(level);
-        strncpy(entry.level, lvl, 7); entry.level[7] = '\0';
-        strncpy(entry.msg, msg, 255); entry.msg[255] = '\0';
+        const char* lvl = getLevelStr(level);
+        strncpy(entry.m_level, lvl, 7); entry.m_level[7] = '\0';
+        strncpy(entry.m_msg, msg, 255); entry.m_msg[255] = '\0';
 
-        g_RingHead = (g_RingHead + 1) % g_RingBuffer.size();
+        gRingHead = (gRingHead + 1) % gRingBuffer.size();
     }
 
-    static void SafeWriteStr(int fd, const char* s) {
+    static void safeWriteStr(int fd, const char* s) {
         if (!s || fd < 0) return;
 
         for (size_t i = 0; s[i] != '\0'; ++i) {
@@ -200,14 +200,14 @@ namespace vex {
         }
     }
 
-    static void SafeWriteHex(int fd, uintptr_t val) {
+    static void safeWriteHex(int fd, uintptr_t val) {
         if (fd < 0) return;
         char buf[32];
         int i = 30;
         buf[31] = '\n';
 
         if (val == 0) {
-            SafeWriteStr(fd, "0x0\n");
+            safeWriteStr(fd, "0x0\n");
             return;
         }
 
@@ -222,8 +222,8 @@ namespace vex {
         WRITE_FUNC(fd, &buf[i-1], 32 - (i-1));
     }
 
-    static void DumpProcessMap(int outFd) {
-        SafeWriteStr(outFd, "\n--- MEMORY MAP (Base Addresses) ---\n");
+    static void dumpProcessMap(int outFd) {
+        safeWriteStr(outFd, "\n--- MEMORY MAP (Base Addresses) ---\n");
         #ifdef __linux__
         int mapFd = OPEN_FUNC("/proc/self/maps", O_RDONLY, 0);
         if (mapFd >= 0) {
@@ -254,23 +254,23 @@ namespace vex {
             }
         }
         #endif
-        SafeWriteStr(outFd, "-----------------------------------\n");
+        safeWriteStr(outFd, "-----------------------------------\n");
     }
 
-    static void DumpRegisters(int fd, void* context) {
+    static void dumpRegisters(int fd, void* context) {
         if (!context) return;
-        SafeWriteStr(fd, "\n--- CPU REGISTERS ---\n");
+        safeWriteStr(fd, "\n--- CPU REGISTERS ---\n");
         #if defined(__linux__) && defined(__x86_64__)
             ucontext_t* uc = (ucontext_t*)context;
-            SafeWriteStr(fd, "RAX: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RAX]);
-            SafeWriteStr(fd, "RBX: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RBX]);
-            SafeWriteStr(fd, "RCX: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RCX]);
-            SafeWriteStr(fd, "RDX: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RDX]);
-            SafeWriteStr(fd, "RSI: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RSI]);
-            SafeWriteStr(fd, "RDI: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RDI]);
-            SafeWriteStr(fd, "RBP: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RBP]);
-            SafeWriteStr(fd, "RSP: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RSP]);
-            SafeWriteStr(fd, "RIP: "); SafeWriteHex(fd, uc->uc_mcontext.gregs[REG_RIP]);
+            safeWriteStr(fd, "RAX: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RAX]);
+            safeWriteStr(fd, "RBX: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RBX]);
+            safeWriteStr(fd, "RCX: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RCX]);
+            safeWriteStr(fd, "RDX: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RDX]);
+            safeWriteStr(fd, "RSI: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RSI]);
+            safeWriteStr(fd, "RDI: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RDI]);
+            safeWriteStr(fd, "RBP: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RBP]);
+            safeWriteStr(fd, "RSP: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RSP]);
+            safeWriteStr(fd, "RIP: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RIP]);
         #elif defined(_WIN32)
             PCONTEXT ctx = ((PEXCEPTION_POINTERS)context)->ContextRecord;
             SafeWriteStr(fd, "RAX: "); SafeWriteHex(fd, ctx->Rax);
@@ -289,11 +289,11 @@ namespace vex {
         #endif
     }
 
-    static void WriteCrashReport(const char* reason, void* context, uintptr_t manualAddr = 0) {
+    static void writeCrashReport(const char* reason, void* context, uintptr_t manualAddr = 0) {
         bool expected = false;
-        if (!g_IsCrashing.compare_exchange_strong(expected, true)) return;
+        if (!gIsCrashing.compare_exchange_strong(expected, true)) return;
 
-        int fd = g_CrashLogFD;
+        int fd = gCrashLogFd;
         uintptr_t crashAddr = manualAddr;
 
         #if defined(__linux__) && defined(__x86_64__)
@@ -303,31 +303,31 @@ namespace vex {
         #endif
 
         if (fd >= 0) {
-            SafeWriteStr(fd, "\n========== CRASH OCCURRED ==========\nReason: ");
-            SafeWriteStr(fd, reason);
-            SafeWriteStr(fd, "\n");
+            safeWriteStr(fd, "\n========== CRASH OCCURRED ==========\nReason: ");
+            safeWriteStr(fd, reason);
+            safeWriteStr(fd, "\n");
 
             if (crashAddr != 0) {
-                SafeWriteStr(fd, "Absolute Crash Address: ");
-                SafeWriteHex(fd, crashAddr);
+                safeWriteStr(fd, "Absolute Crash Address: ");
+                safeWriteHex(fd, crashAddr);
             }
 
-            DumpRegisters(fd, context);
+            dumpRegisters(fd, context);
 
             HardwareInfo::PrintCrashDump(fd);
 
-            DumpProcessMap(fd);
+            dumpProcessMap(fd);
 
-            SafeWriteStr(fd, "\n--- RECENT LOGS ---\n");
-            size_t idx = g_RingHead;
-            for(size_t k=0; k<g_RingBuffer.size(); ++k) {
-                const auto& e = g_RingBuffer[idx];
-                if(e.msg[0] != '\0') {
-                    SafeWriteStr(fd, "["); SafeWriteStr(fd, e.time); SafeWriteStr(fd, "] ");
-                    SafeWriteStr(fd, "["); SafeWriteStr(fd, e.level); SafeWriteStr(fd, "] ");
-                    SafeWriteStr(fd, e.msg); SafeWriteStr(fd, "\n");
+            safeWriteStr(fd, "\n--- RECENT LOGS ---\n");
+            size_t idx = gRingHead;
+            for(size_t k=0; k<gRingBuffer.size(); ++k) {
+                const auto& e = gRingBuffer[idx];
+                if(e.m_msg[0] != '\0') {
+                    safeWriteStr(fd, "["); safeWriteStr(fd, e.m_time); safeWriteStr(fd, "] ");
+                    safeWriteStr(fd, "["); safeWriteStr(fd, e.m_level); safeWriteStr(fd, "] ");
+                    safeWriteStr(fd, e.m_msg); safeWriteStr(fd, "\n");
                 }
-                idx = (idx + 1) % g_RingBuffer.size();
+                idx = (idx + 1) % gRingBuffer.size();
             }
 
             const char* msg = "\n[CRITICAL] CRASH DUMP SAVED TO LOG.\n";
@@ -338,7 +338,7 @@ namespace vex {
             std::this_thread::sleep_for(std::chrono::seconds(1));
 
             std::filesystem::path logPath = GetLogDir() / "game_session.log";
-            ShowCrashDialog(logPath.string());
+            showCrashDialog(logPath.string());
         } else {
             const char* msg = "\n[CRITICAL] NO CRASH FILE OPEN.\n";
             WRITE_FUNC(2, msg, 31);
@@ -347,7 +347,7 @@ namespace vex {
 
 #if defined(_WIN32)
     LONG WINAPI WindowsCrashHandler(EXCEPTION_POINTERS* p) {
-        WriteCrashReport("Exception (Windows)", p);
+        writeCrashReport("Exception (Windows)", p);
         #if DEBUG
             std::string trace_str = cpptrace::generate_trace().to_string();
             log(LogLevel::CRITICAL, "\n--- VEX ENGINE STACKTRACE ---\n%s\n",
@@ -356,7 +356,7 @@ namespace vex {
         return EXCEPTION_EXECUTE_HANDLER;
     }
 #else
-    void PosixSignalHandler(int sig, siginfo_t* info, void* context) {
+    void posixSignalHandler(int sig, siginfo_t* info, void* context) {
         const char* name = "Unknown";
         if(sig == SIGSEGV) {
             if (info && info->si_code == SEGV_MAPERR) name = "SIGSEGV (Address not mapped)";
@@ -367,7 +367,7 @@ namespace vex {
         else if(sig == SIGILL) name = "SIGILL";
         else if(sig == SIGFPE) name = "SIGFPE";
 
-        WriteCrashReport(name, context);
+        writeCrashReport(name, context);
 
         #if DEBUG
             cpptrace::generate_trace().print();
@@ -384,15 +384,15 @@ namespace vex {
 #endif
 
     void InitCrashHandler() {
-        if(g_CrashLogFD >= 0) return;
+        if(gCrashLogFd >= 0) return;
 
         std::filesystem::path logPath = GetLogDir() / "game_session.log";
         std::string pathStr = logPath.string();
 
-        g_CrashLogFD = OPEN_FUNC(pathStr.c_str(), O_FLAGS, S_FLAGS);
+        gCrashLogFd = OPEN_FUNC(pathStr.c_str(), O_FLAGS, S_FLAGS);
 
-        if (g_CrashLogFD >= 0) {
-            SafeWriteStr(g_CrashLogFD, "=== VEX ENGINE SESSION START ===\n");
+        if (gCrashLogFd >= 0) {
+            safeWriteStr(gCrashLogFd, "=== VEX ENGINE SESSION START ===\n");
             const char* msg = "[SYSTEM] Crash Handler Initialized.\n";
             WRITE_FUNC(2, msg, 32);
         } else {
@@ -405,7 +405,7 @@ namespace vex {
         struct sigaction sa;
         memset(&sa, 0, sizeof(sa));
         sa.sa_flags = SA_SIGINFO | SA_RESETHAND;
-        sa.sa_sigaction = PosixSignalHandler;
+        sa.sa_sigaction = posixSignalHandler;
         sigaction(SIGSEGV, &sa, nullptr);
         sigaction(SIGABRT, &sa, nullptr);
         sigaction(SIGILL, &sa, nullptr);
@@ -413,54 +413,54 @@ namespace vex {
 #endif
     }
 
-    static void log_internal(LogLevel level, const char* fmt, va_list args) {
-        va_list args_copy;
-        va_copy(args_copy, args);
-        int len = vsnprintf(nullptr, 0, fmt, args_copy);
-        va_end(args_copy);
+    static void logInternal(LogLevel level, const char* fmt, va_list args) {
+        va_list argsCopy;
+        va_copy(argsCopy, args);
+        int len = vsnprintf(nullptr, 0, fmt, argsCopy);
+        va_end(argsCopy);
 
         if (len < 0) return;
 
         std::vector<char> buffer(len + 1);
         vsnprintf(buffer.data(), buffer.size(), fmt, args);
 
-        push_to_ring(level, buffer.data());
+        pushToRing(level, buffer.data());
 
         {
-            std::lock_guard<std::mutex> lock(g_CallbackMutex);
-            for (auto& callback : g_LogCallbacks) {
+            std::lock_guard<std::mutex> lock(gCallbackMutex);
+            for (auto& callback : gLogCallbacks) {
                 callback(level, buffer.data());
             }
         }
 
-        bool quiet_terminal = false;
-        bool skip_file = false;
+        bool quietTerminal = false;
+        bool skipFile = false;
 
         #if !DEBUG
             if (level == LogLevel::INFO) {
-                skip_file = true;
+                skipFile = true;
             }
 
             if (level == LogLevel::INFO || level == LogLevel::WARNING) {
-                quiet_terminal = true;
+                quietTerminal = true;
             }
 
             #ifdef DIST_BUILD
-                quiet_terminal = true;
+                quietTerminal = true;
             #endif
         #endif
 
-        if (g_CrashLogFD >= 0 && !skip_file) {
-            std::string timeStr = get_time_str();
-            const char* levelStr = get_level_str(level);
-            SafeWriteStr(g_CrashLogFD, "["); SafeWriteStr(g_CrashLogFD, timeStr.c_str()); SafeWriteStr(g_CrashLogFD, "] ");
-            SafeWriteStr(g_CrashLogFD, "["); SafeWriteStr(g_CrashLogFD, levelStr); SafeWriteStr(g_CrashLogFD, "] ");
-            SafeWriteStr(g_CrashLogFD, buffer.data()); SafeWriteStr(g_CrashLogFD, "\n");
+        if (gCrashLogFd >= 0 && !skipFile) {
+            std::string timeStr = getTimeStr();
+            const char* levelStr = getLevelStr(level);
+            safeWriteStr(gCrashLogFd, "["); safeWriteStr(gCrashLogFd, timeStr.c_str()); safeWriteStr(gCrashLogFd, "] ");
+            safeWriteStr(gCrashLogFd, "["); safeWriteStr(gCrashLogFd, levelStr); safeWriteStr(gCrashLogFd, "] ");
+            safeWriteStr(gCrashLogFd, buffer.data()); safeWriteStr(gCrashLogFd, "\n");
         }
 
-        if (!quiet_terminal) {
-            std::string timeStr = get_time_str();
-            const char* levelStr = get_level_str(level);
+        if (!quietTerminal) {
+            std::string timeStr = getTimeStr();
+            const char* levelStr = getLevelStr(level);
             SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO,
                                "%s [%s] %s", timeStr.c_str(), levelStr, buffer.data());
         }
@@ -472,11 +472,11 @@ namespace vex {
     }
     void log(const char* fmt, ...) {
         va_list args; va_start(args, fmt);
-        log_internal(LogLevel::INFO, fmt, args); va_end(args);
+        logInternal(LogLevel::INFO, fmt, args); va_end(args);
     }
     void log(LogLevel level, const char* fmt, ...) {
         va_list args; va_start(args, fmt);
-        log_internal(level, fmt, args); va_end(args);
+        logInternal(level, fmt, args); va_end(args);
     }
     void handle_exception(const std::exception& e) {
         if(auto* cpptr = dynamic_cast<const cpptrace::exception*>(&e)) {
@@ -504,20 +504,20 @@ namespace vex {
             callerAddress = (uintptr_t)__builtin_return_address(0);
         #endif
 
-        WriteCrashReport(msg.c_str(), nullptr, callerAddress);
-        if (g_CrashLogFD >= 0) CLOSE_FUNC(g_CrashLogFD);
+        writeCrashReport(msg.c_str(), nullptr, callerAddress);
+        if (gCrashLogFd >= 0) CLOSE_FUNC(gCrashLogFd);
         _exit(1);
     }
     void log(const char* fmt, ...) {
         va_list args; va_start(args, fmt);
-        log_internal(LogLevel::INFO, fmt, args); va_end(args);
+        logInternal(LogLevel::INFO, fmt, args); va_end(args);
     }
     void log(LogLevel level, const char* fmt, ...) {
         va_list args; va_start(args, fmt);
-        log_internal(level, fmt, args); va_end(args);
+        logInternal(level, fmt, args); va_end(args);
     }
     void handle_exception(const std::exception& e) {
-        push_to_ring(LogLevel::ERROR, e.what());
+        pushToRing(LogLevel::ERROR, e.what());
         #ifndef DIST_BUILD
         SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());
         #endif
@@ -530,8 +530,8 @@ namespace vex {
             callerAddress = (uintptr_t)__builtin_return_address(0);
         #endif
 
-        WriteCrashReport(e.what(), nullptr, callerAddress);
-        if (g_CrashLogFD >= 0) CLOSE_FUNC(g_CrashLogFD);
+        writeCrashReport(e.what(), nullptr, callerAddress);
+        if (gCrashLogFd >= 0) CLOSE_FUNC(gCrashLogFd);
         #ifndef DIST_BUILD
         SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "%s", e.what());
         #endif

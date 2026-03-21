@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <iostream>
 #include "Engine.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/GameInfo.hpp"
 
 extern "C" void VexGame_Init(vex::Engine* engine);

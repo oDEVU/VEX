@@ -7,7 +7,7 @@
 #pragma once
 #include "GameObject.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 
 namespace vex {

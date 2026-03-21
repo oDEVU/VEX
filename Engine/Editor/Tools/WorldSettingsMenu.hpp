@@ -8,7 +8,7 @@
 
 #include <imgui.h>
 #include "Engine.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 
 namespace vex {
     /**

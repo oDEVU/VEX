@@ -7,7 +7,7 @@
 #pragma once
 #include "context.hpp"
 #include "components/Mesh.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "Resources.hpp"
 
 #include "components/GameComponents/BasicComponents.hpp"

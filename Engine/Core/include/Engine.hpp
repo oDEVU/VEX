@@ -21,7 +21,7 @@
 #include "components/ImGUIWrapper.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/InputSystem.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 #include "components/UI/VexUI.hpp"
 #include "components/PhysicsSystem.hpp"
 #include "components/AudioSystem.hpp"
@@ -119,12 +119,12 @@ public:
     InputMode getInputMode() const { return m_inputSystem->getInputMode(); }
 
     /// @brief Applies new global environment settings (lighting, shading) to the interface.
-    /// @param enviroment settings - The new environment configuration struct.
-    void setEnvironmentSettings(enviroment settings);
+    /// @param environment settings - The new environment configuration struct.
+    void setEnvironmentSettings(environment settings);
 
     /// @brief Returns the current environment settings.
-    /// @return enviroment - Current environment settings.
-    enviroment getEnvironmentSettings();
+    /// @return environment - Current environment settings.
+    environment getEnvironmentSettings();
 
     /// @brief Returns Interface, used internally.
     Interface* getInterface();

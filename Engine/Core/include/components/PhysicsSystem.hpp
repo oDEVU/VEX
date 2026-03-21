@@ -136,12 +136,12 @@ namespace vex {
 
         explicit PhysicsComponent(ShapeType s) : shape(s) {}
 
-        // @brief Creates a box-shaped physics component.
-        // @param glm::vec3 halfExtents The half-extents of the box.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the box.
-        // @param float friction The friction coefficient of the box.
-        // @param float bounce The bounce coefficient of the box.
+        /// @brief Creates a box-shaped physics component.
+        /// @param glm::vec3 halfExtents The half-extents of the box.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the box.
+        /// @param float friction The friction coefficient of the box.
+        /// @param float bounce The bounce coefficient of the box.
         static PhysicsComponent Box(glm::vec3 halfExtents = {0.5f, 0.5f, 0.5f}, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::BOX;
@@ -153,13 +153,13 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a rounded box
-        // @param glm::vec3 halfExtents The half-extents of the rounded box.
-        // @param float radius The radius of the rounded corners.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the rounded box.
-        // @param float friction The friction coefficient of the rounded box.
-        // @param float bounce The bounce coefficient of the rounded box.
+        /// @brief Creates a rounded box
+        /// @param glm::vec3 halfExtents The half-extents of the rounded box.
+        /// @param float radius The radius of the rounded corners.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the rounded box.
+        /// @param float friction The friction coefficient of the rounded box.
+        /// @param float bounce The bounce coefficient of the rounded box.
             static PhysicsComponent RoundedBox(glm::vec3 halfExtents, float radius = 0.05f, BodyType bodyType = BodyType::DYNAMIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
                 PhysicsComponent pc;
                 pc.shape = ShapeType::ROUNDED_BOX;
@@ -172,12 +172,12 @@ namespace vex {
                 return pc;
             }
 
-        // @brief Creates a sphere-shaped physics component.
-        // @param float radius The radius of the sphere.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the sphere.
-        // @param float friction The friction coefficient of the sphere.
-        // @param float bounce The bounce coefficient of the sphere.
+        /// @brief Creates a sphere-shaped physics component.
+        /// @param float radius The radius of the sphere.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the sphere.
+        /// @param float friction The friction coefficient of the sphere.
+        /// @param float bounce The bounce coefficient of the sphere.
         static PhysicsComponent Sphere(float radius = 0.5f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::SPHERE;
@@ -189,13 +189,13 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a capsule-shaped physics component.
-        // @param float radius The radius of the capsule.
-        // @param float height The height of the capsule.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the capsule.
-        // @param float friction The friction coefficient of the capsule.
-        // @param float bounce The bounce coefficient of the capsule.
+        /// @brief Creates a capsule-shaped physics component.
+        /// @param float radius The radius of the capsule.
+        /// @param float height The height of the capsule.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the capsule.
+        /// @param float friction The friction coefficient of the capsule.
+        /// @param float bounce The bounce coefficient of the capsule.
         static PhysicsComponent Capsule(float radius = 0.5f, float height = 1.0f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::CAPSULE;
@@ -208,13 +208,13 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a cylinder-shaped physics component.
-        // @param float radius The radius of the cylinder.
-        // @param float height The height of the cylinder.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the cylinder.
-        // @param float friction The friction coefficient of the cylinder.
-        // @param float bounce The bounce coefficient of the cylinder.
+        /// @brief Creates a cylinder-shaped physics component.
+        /// @param float radius The radius of the cylinder.
+        /// @param float height The height of the cylinder.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the cylinder.
+        /// @param float friction The friction coefficient of the cylinder.
+        /// @param float bounce The bounce coefficient of the cylinder.
         static PhysicsComponent Cylinder(float radius = 0.5f, float height = 1.0f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::CYLINDER;
@@ -227,12 +227,12 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a convex hull-shaped physics component.
-        // @param std::vector<JPH::Vec3> points The points defining the convex hull.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the convex hull.
-        // @param float friction The friction coefficient of the convex hull.
-        // @param float bounce The bounce coefficient of the convex hull.
+        /// @brief Creates a convex hull-shaped physics component.
+        /// @param std::vector<JPH::Vec3> points The points defining the convex hull.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the convex hull.
+        /// @param float friction The friction coefficient of the convex hull.
+        /// @param float bounce The bounce coefficient of the convex hull.
         static PhysicsComponent ConvexHull(std::vector<JPH::Vec3> points, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::CONVEX_HULL;
@@ -244,12 +244,12 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a mesh-shaped physics component.
-        // @param MeshComponent& mesh The mesh component to create the physics component from.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the mesh.
-        // @param float friction The friction coefficient of the mesh.
-        // @param float bounce The bounce coefficient of the mesh.
+        /// @brief Creates a mesh-shaped physics component.
+        /// @param MeshComponent& mesh The mesh component to create the physics component from.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the mesh.
+        /// @param float friction The friction coefficient of the mesh.
+        /// @param float bounce The bounce coefficient of the mesh.
         static PhysicsComponent Mesh(MeshComponent& mesh, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::MESH;
@@ -276,20 +276,20 @@ namespace vex {
             return pc;
         }
 
-        // @brief Binds a callback for collision enter events.
-        // @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
+        /// @brief Binds a callback for collision enter events.
+        /// @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
         void addCollisionEnterBinding(std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback) {
             onCollisionEnter = callback;
         }
 
-        // @brief Binds a callback for collision stay events.
-        // @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
+        /// @brief Binds a callback for collision stay events.
+        /// @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
         void addCollisionStayBinding(std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback) {
             onCollisionStay = callback;
         }
 
-        // @brief Binds a callback for collision exit events.
-        // @param std::function<void(entt::entity, entt::entity)> callback The callback function to bind.
+        /// @brief Binds a callback for collision exit events.
+        /// @param std::function<void(entt::entity, entt::entity)> callback The callback function to bind.
         void addCollisionExitBinding(std::function<void(entt::entity, entt::entity)> callback) {
             onCollisionExit = callback;
         }

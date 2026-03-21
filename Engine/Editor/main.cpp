@@ -21,13 +21,13 @@
 #include "Engine.hpp"
 #include "Editor.hpp"
 #include "DialogWindow.hpp"
-#include "basicDialog.hpp"
-#include "execute.hpp"
+#include "BasicDialog.hpp"
+#include "Execute.hpp"
 
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/GameInfo.hpp"
 
-std::filesystem::path GetSelfPath() {
+std::filesystem::path getSelfPath() {
 #ifdef _WIN32
     char path[MAX_PATH];
     if (GetModuleFileNameA(NULL, path, MAX_PATH) == 0) return "";
@@ -40,9 +40,9 @@ std::filesystem::path GetSelfPath() {
 #endif
 }
 
-void RestartApplication(int argc, char* argv[]) {
+void restartApplication(int argc, char* argv[]) {
     vex::log(">> Restarting Application...");
-    std::filesystem::path exePath = GetSelfPath();
+    std::filesystem::path exePath = getSelfPath();
     if (exePath.empty()) exit(1);
 
 #ifdef _WIN32
@@ -56,7 +56,7 @@ void RestartApplication(int argc, char* argv[]) {
 #endif
 }
 
-void CheckHashAndExit(const std::string& path) {
+void checkHashAndExit(const std::string& path) {
     std::string hash = "0";
 #ifdef _WIN32
     HMODULE lib = LoadLibraryExA(path.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
@@ -88,8 +88,8 @@ void CheckHashAndExit(const std::string& path) {
     std::quick_exit(0);
 }
 
-std::string GetModuleHash(const std::string& libPath) {
-    std::filesystem::path exe = GetSelfPath();
+std::string getModuleHash(const std::string& libPath) {
+    std::filesystem::path exe = getSelfPath();
     if (exe.empty()) return "0";
 
     #ifdef _WIN32
@@ -126,7 +126,7 @@ std::string GetModuleHash(const std::string& libPath) {
     return result;
 }
 
-void RebuildProject(const std::filesystem::path& projectPath, vex::GameInfo& info, bool clean) {
+void rebuildProject(const std::filesystem::path& projectPath, vex::GameInfo& info, bool clean) {
     vex::DialogWindow dialogWindow(clean ? "Engine Updated - Clean Rebuilding..." : "Building Project...", info);
 
     std::string command;
@@ -138,7 +138,7 @@ void RebuildProject(const std::filesystem::path& projectPath, vex::GameInfo& inf
         command = "../../BuildTools/build/ProjectBuilder \"" + projectPath.string() + "\" -d" + cleanFlag;
     #endif
 
-    std::thread build_thread([&]() {
+    std::thread buildThread([&]() {
         std::string outputLog;
         executeCommandRealTime(command, [&](const std::string& line) {
             outputLog += line;
@@ -150,12 +150,12 @@ void RebuildProject(const std::filesystem::path& projectPath, vex::GameInfo& inf
     });
 
     dialogWindow.run();
-    build_thread.join();
+    buildThread.join();
 }
 
 int main(int argc, char* argv[]) {
     if (argc == 3 && std::string(argv[1]) == "--check-hash") {
-        CheckHashAndExit(argv[2]);
+        checkHashAndExit(argv[2]);
         return 0;
     }
 
@@ -186,19 +186,19 @@ int main(int argc, char* argv[]) {
 
     if (!std::filesystem::exists(libPath)) {
         vex::log("Game Module missing. Building...");
-        RebuildProject(projectPath, dialogGameInfo, false);
+        rebuildProject(projectPath, dialogGameInfo, false);
     }
 
     std::string engineHash = vex::Engine::GetBuildHash();
-    std::string moduleHash = GetModuleHash(libPath);
+    std::string moduleHash = getModuleHash(libPath);
 
     if (moduleHash.empty() || moduleHash == "0" || moduleHash != engineHash) {
         vex::log(">> ABI Mismatch Detected!");
         vex::log("   Engine Hash: %s", engineHash.c_str());
         vex::log("   Module Hash: %s", moduleHash.c_str());
 
-        RebuildProject(projectPath, dialogGameInfo, true);
-        RestartApplication(argc, argv);
+        rebuildProject(projectPath, dialogGameInfo, true);
+        restartApplication(argc, argv);
         return 0;
     }
 

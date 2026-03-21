@@ -1,6 +1,6 @@
 #include "VulkanMesh.hpp"
 #include "components/Mesh.hpp"
-#include "components/pathUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "glm/common.hpp"
 #include "glm/fwd.hpp"
 
@@ -136,8 +136,8 @@ namespace vex {
         entt::entity entity,
         std::vector<TransparentTriangle>& outTriangles
     ) {
-        glm::mat3 rotation_scale_matrix = glm::mat3(modelMatrix);
-        glm::vec3 translation_vector = glm::vec3(modelMatrix[3]);
+        glm::mat3 rotationScaleMatrix = glm::mat3(modelMatrix);
+        glm::vec3 translationVector = glm::vec3(modelMatrix[3]);
 
         for (uint32_t submeshIndex = 0; submeshIndex < m_cpuSubmeshData.size(); ++submeshIndex) {
             const auto& submesh = m_cpuSubmeshData[submeshIndex];
@@ -145,9 +145,9 @@ namespace vex {
             const glm::vec3* centers = submesh.triangleCenters.data();
 
             for (uint32_t i = 0; i < indexCount; i += 3) {
-                glm::vec3 center_world = rotation_scale_matrix * centers[i/3] + translation_vector;
+                glm::vec3 centerWorld = rotationScaleMatrix * centers[i/3] + translationVector;
 
-                glm::vec3 d = center_world - cameraPos;
+                glm::vec3 d = centerWorld - cameraPos;
                 float distanceSq = glm::dot(d, d);
 
                 outTriangles.push_back({

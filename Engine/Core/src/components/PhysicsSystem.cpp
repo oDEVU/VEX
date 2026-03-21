@@ -5,7 +5,7 @@
 #include <components/PhysicsSystem.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
-#include <components/errorUtils.hpp>
+#include <components/ErrorUtils.hpp>
 #include <thread>
 
 #if defined(__cpp_lib_execution) && defined(__cpp_lib_parallel_algorithm)
@@ -24,7 +24,7 @@
 
 namespace vex {
 
-    inline void FastSyncTransform(const glm::vec3& pos, const glm::quat& rot,
+    inline void fastSyncTransform(const glm::vec3& pos, const glm::quat& rot,
                                       JPH::BodyInterface& bi, const JPH::BodyID& id) {
         JPH::RVec3 jPos(pos.x, pos.y, pos.z);
         JPH::Quat jRot(rot.x, rot.y, rot.z, rot.w);
@@ -134,7 +134,7 @@ namespace vex {
             #endif
     }
 
-    JPH::Quat GlmToJph(const glm::quat& q) {
+    JPH::Quat glmToJph(const glm::quat& q) {
         return JPH::Quat(q.x, q.y, q.z, q.w);
     }
 
@@ -157,7 +157,7 @@ namespace vex {
                     continue;
                 }
 
-                FastSyncTransform(tc.getWorldPosition(), tc.getWorldQuaternion(), bodyInterface, pc.bodyId);
+                fastSyncTransform(tc.getWorldPosition(), tc.getWorldQuaternion(), bodyInterface, pc.bodyId);
             }
             #else
             log("This method is meant for debug builds only");
@@ -179,7 +179,7 @@ namespace vex {
             settings.mMass = cc.mass;
 
             JPH::RVec3 pos(tc.getWorldPosition().x, tc.getWorldPosition().y, tc.getWorldPosition().z);
-            JPH::Quat rot = GlmToJph(tc.getWorldQuaternion());
+            JPH::Quat rot = glmToJph(tc.getWorldQuaternion());
 
             cc.character = new JPH::CharacterVirtual(&settings, pos, rot, 0, m_physicsSystem);
         }
@@ -211,7 +211,7 @@ namespace vex {
                     bodyInterface.SetPositionAndRotation(
                         pc.bodyId,
                         JPH::RVec3(vexPos.x, vexPos.y, vexPos.z),
-                        GlmToJph(vexRot),
+                        glmToJph(vexRot),
                         JPH::EActivation::Activate
                     );
 
@@ -318,11 +318,11 @@ namespace vex {
                       JPH::VertexList& outVerts, JPH::IndexedTriangleList& outTris) {
 
         struct Vec3Key {
-            glm::vec3 v;
+            glm::vec3 m_v;
             bool operator<(const Vec3Key& other) const {
-                if (v.x != other.v.x) return v.x < other.v.x;
-                if (v.y != other.v.y) return v.y < other.v.y;
-                return v.z < other.v.z;
+                if (m_v.x != other.m_v.x) return m_v.x < other.m_v.x;
+                if (m_v.y != other.m_v.y) return m_v.y < other.m_v.y;
+                return m_v.z < other.m_v.z;
             }
         };
 
@@ -362,7 +362,7 @@ namespace vex {
 
         auto& t = r.get<TransformComponent>(e);
         JPH::RVec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
-        JPH::Quat rot = GlmToJph(t.getWorldQuaternion());
+        JPH::Quat rot = glmToJph(t.getWorldQuaternion());
 
         JPH::ShapeRefC shape;
         switch (pc.shape) {
@@ -563,9 +563,9 @@ namespace vex {
         glm::quat jRotGlm(cache.lastVisualRot.w, cache.lastVisualRot.x, cache.lastVisualRot.y, cache.lastVisualRot.z);
         float rotDiff = 1.0f - std::abs(glm::dot(vexRot, jRotGlm));
 
-        const float EPSILON = 0.0001f;
+        const float epsilon = 0.0001f;
 
-        if (posDiff > EPSILON || rotDiff > EPSILON) {
+        if (posDiff > epsilon || rotDiff > epsilon) {
             glm::vec3 deltaPos = vexPos - cache.lastVisualPos;
             glm::quat deltaRot = vexRot * glm::inverse(cache.lastVisualRot);
 

@@ -19,12 +19,12 @@
 #include <entt/entt.hpp>
 
 #include "components/Mesh.hpp"
-#include "components/errorUtils.hpp"
-#include "components/colorTypes.hpp"
-#include "components/assetTypes.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/ColorTypes.hpp"
+#include "components/AssetTypes.hpp"
 #include "entt/entity/fwd.hpp"
 
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 namespace vex{
 

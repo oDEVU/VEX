@@ -9,7 +9,7 @@
   //#include <nlohmann/json.hpp>
 
   #include "Engine.hpp"
-  #include "components/errorUtils.hpp"
+  #include "components/ErrorUtils.hpp"
 
   #include "components/GameComponents/BasicComponents.hpp"
   #include "../../../thirdparty/uuid/UUID.hpp"

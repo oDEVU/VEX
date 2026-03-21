@@ -10,12 +10,12 @@ namespace vex {
 
     /// @brief Helper to parse booleans
     /// @details accepts "1", "true", "on"
-    static bool ParseBool(const std::string& arg) {
+    static bool parseBool(const std::string& arg) {
         return arg == "1" || arg == "true" || arg == "on";
     }
 
     /// @brief Helper to parse Vec3
-    static glm::vec3 ParseVec3(const std::vector<std::string>& args, size_t startIndex) {
+    static glm::vec3 parseVec3(const std::vector<std::string>& args, size_t startIndex) {
         if (args.size() < startIndex + 3) return glm::vec3(0.0f);
         return glm::vec3(std::stof(args[startIndex]), std::stof(args[startIndex+1]), std::stof(args[startIndex+2]));
     }
@@ -62,7 +62,7 @@ namespace vex {
             if (args.empty()) {
                 vex::log(LogLevel::INFO, "VSync is %s", engine->getVSync() ? "ON" : "OFF");
             } else {
-                bool enable = ParseBool(args[0]);
+                bool enable = parseBool(args[0]);
                 engine->setVSync(enable);
                 vex::log(LogLevel::INFO, "VSync set to %s", enable ? "ON" : "OFF");
             }
@@ -101,40 +101,40 @@ namespace vex {
         });
 
         // render commands
-        auto ModifyEnv = [engine](std::function<void(enviroment&)> modFunc) {
-            enviroment env = engine->getEnvironmentSettings();
+        auto modifyEnv = [engine](std::function<void(environment&)> modFunc) {
+            environment env = engine->getEnvironmentSettings();
             modFunc(env);
             engine->setEnvironmentSettings(env);
         };
 
-        console.RegisterCommand("r_ps1_jitter", [ModifyEnv](auto args) {
+        console.RegisterCommand("r_ps1_jitter", [modifyEnv](auto args) {
             if (args.empty()) return;
-            bool val = ParseBool(args[0]);
-            ModifyEnv([val](enviroment& e) {
+            bool val = parseBool(args[0]);
+            modifyEnv([val](environment& e) {
                 e.passiveVertexJitter = val;
                 e.vertexSnapping = val;
             });
             vex::log(LogLevel::INFO, "PS1 Jitter/Snapping: %s", val ? "ON" : "OFF");
         });
 
-        console.RegisterCommand("r_ps1_warp", [ModifyEnv](auto args) {
+        console.RegisterCommand("r_ps1_warp", [modifyEnv](auto args) {
             if (args.empty()) return;
-            bool val = ParseBool(args[0]);
-            ModifyEnv([val](enviroment& e) { e.affineWarping = val; });
+            bool val = parseBool(args[0]);
+            modifyEnv([val](environment& e) { e.affineWarping = val; });
             vex::log(LogLevel::INFO, "Affine Warping: %s", val ? "ON" : "OFF");
         });
 
-        console.RegisterCommand("r_dither", [ModifyEnv](auto args) {
+        console.RegisterCommand("r_dither", [modifyEnv](auto args) {
             if (args.empty()) return;
-            bool val = ParseBool(args[0]);
-            ModifyEnv([val](enviroment& e) { e.screenDither = val; });
+            bool val = parseBool(args[0]);
+            modifyEnv([val](environment& e) { e.screenDither = val; });
             vex::log(LogLevel::INFO, "Screen Dither: %s", val ? "ON" : "OFF");
         });
 
-        console.RegisterCommand("r_crt", [ModifyEnv](auto args) {
+        console.RegisterCommand("r_crt", [modifyEnv](auto args) {
             if (args.empty()) return;
-            bool val = ParseBool(args[0]);
-            ModifyEnv([val](enviroment& e) { e.ntfsArtifacts = val; });
+            bool val = parseBool(args[0]);
+            modifyEnv([val](environment& e) { e.ntfsArtifacts = val; });
             vex::log(LogLevel::INFO, "CRT Artifacts: %s", val ? "ON" : "OFF");
         });
 
@@ -145,14 +145,14 @@ namespace vex {
             vex::log(LogLevel::INFO, "Resolution Mode set to: %d", mode);
         });
 
-        console.RegisterCommand("r_ambient", [ModifyEnv](auto args) {
+        console.RegisterCommand("r_ambient", [modifyEnv](auto args) {
             if (args.size() < 4) {
                 vex::log(LogLevel::ERROR, "Usage: r_ambient <r> <g> <b> <strength>");
                 return;
             }
-            glm::vec3 color = ParseVec3(args, 0);
+            glm::vec3 color = parseVec3(args, 0);
             float strength = std::stof(args[3]);
-            ModifyEnv([color, strength](enviroment& e) {
+            modifyEnv([color, strength](environment& e) {
                 e.ambientLight = color;
                 e.ambientLightStrength = strength;
             });
@@ -162,7 +162,7 @@ namespace vex {
         // physics commands
         console.RegisterCommand("phys_debug", [engine](auto args) {
             if (args.empty()) return;
-            bool val = ParseBool(args[0]);
+            bool val = parseBool(args[0]);
             engine->setRenderPhysicsDebug(val);
             vex::log(LogLevel::INFO, "Physics Debug Draw: %s", val ? "ON" : "OFF");
         });
@@ -172,7 +172,7 @@ namespace vex {
                 vex::log(LogLevel::ERROR, "Usage: phys_gravity <x> <y> <z>");
                 return;
             }
-            glm::vec3 grav = ParseVec3(args, 0);
+            glm::vec3 grav = parseVec3(args, 0);
             if (auto* phys = engine->getPhysicsSystem()) {
                 phys->SetGravityVector(grav);
                 vex::log(LogLevel::INFO, "Gravity set to [%.2f, %.2f, %.2f]", grav.x, grav.y, grav.z);

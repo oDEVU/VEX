@@ -1,6 +1,6 @@
 #include <cr.h>
 #include "Engine.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"

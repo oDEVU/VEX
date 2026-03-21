@@ -6,10 +6,10 @@
 
 #pragma once
 #include "components/GameComponents/BasicComponents.hpp"
-#include "components/errorUtils.hpp"
-#include "components/pathUtils.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "components/GameObjects/GameObject.hpp"
-#include "components/colorTypes.hpp"
+#include "components/ColorTypes.hpp"
 #include "SerializationUtils.hpp"
 #include <nlohmann/json.hpp>
 #include <functional>

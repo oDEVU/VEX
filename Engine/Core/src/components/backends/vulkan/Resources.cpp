@@ -5,7 +5,7 @@
 #include <SDL3/SDL_vulkan.h>
 #include <algorithm>
 #include "components/backends/vulkan/uniforms.hpp"
-#include "components/pathUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "limits.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -14,14 +14,14 @@
 namespace vex {
 /// @brief Helper struct for batching texture loading.
 struct BatchedTextureData {
-    int w, h, channels;
-    stbi_uc* pixels = nullptr;
-    std::string path;
-    uint32_t assignedIndex = 0;
-    VkBuffer stagingBuffer = VK_NULL_HANDLE;
-    VmaAllocation stagingAlloc = VK_NULL_HANDLE;
-    VkImage image = VK_NULL_HANDLE;
-    VmaAllocation imageAlloc = VK_NULL_HANDLE;
+    int m_w, m_h, m_channels;
+    stbi_uc* m_pixels = nullptr;
+    std::string m_path;
+    uint32_t m_assignedIndex = 0;
+    VkBuffer m_stagingBuffer = VK_NULL_HANDLE;
+    VmaAllocation m_stagingAlloc = VK_NULL_HANDLE;
+    VkImage m_image = VK_NULL_HANDLE;
+    VmaAllocation m_imageAlloc = VK_NULL_HANDLE;
 };
 
     VulkanResources::VulkanResources(VulkanContext& context, VirtualFileSystem* vfs) : m_r_context(context), m_vfs(vfs) {
@@ -924,13 +924,13 @@ struct BatchedTextureData {
             for (const auto& path : neededPaths) {
                 futures.push_back(GetThreadPool().enqueue([this, path]() {
                     BatchedTextureData data;
-                    data.path = path;
+                    data.m_path = path;
                     auto fileData = m_vfs->load_file(path);
                     if (fileData) {
-                        data.pixels = stbi_load_from_memory(
+                        data.m_pixels = stbi_load_from_memory(
                             reinterpret_cast<const stbi_uc*>(fileData->data.data()),
                             static_cast<int>(fileData->size),
-                            &data.w, &data.h, &data.channels, STBI_rgb_alpha
+                            &data.m_w, &data.m_h, &data.m_channels, STBI_rgb_alpha
                         );
                     }
                     return data;
@@ -940,40 +940,40 @@ struct BatchedTextureData {
             std::vector<BatchedTextureData> validData;
             for (auto& f : futures) {
                 auto data = f.get();
-                if (data.pixels) {
+                if (data.m_pixels) {
                     if (!m_r_context.recycledTextureIndices.empty()) {
-                        data.assignedIndex = m_r_context.recycledTextureIndices.front();
+                        data.m_assignedIndex = m_r_context.recycledTextureIndices.front();
                         m_r_context.recycledTextureIndices.pop();
                     } else {
-                        data.assignedIndex = m_r_context.nextTextureIndex++;
+                        data.m_assignedIndex = m_r_context.nextTextureIndex++;
                     }
                     validData.push_back(data);
                 } else {
-                    m_ignoredTexturePaths.push_back(data.path);
-                    log(LogLevel::WARNING, "Batched load failed for: %s", data.path.c_str());
+                    m_ignoredTexturePaths.push_back(data.m_path);
+                    log(LogLevel::WARNING, "Batched load failed for: %s", data.m_path.c_str());
                 }
             }
 
             if (validData.empty()) return;
 
             for (auto& data : validData) {
-                VkDeviceSize imageSize = data.w * data.h * 4;
+                VkDeviceSize imageSize = data.m_w * data.m_h * 4;
 
                 VkBufferCreateInfo bufferInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
                 bufferInfo.size = imageSize;
                 bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
                 VmaAllocationCreateInfo allocInfo{ .usage = VMA_MEMORY_USAGE_CPU_TO_GPU };
-                vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo, &data.stagingBuffer, &data.stagingAlloc, nullptr);
+                vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo, &data.m_stagingBuffer, &data.m_stagingAlloc, nullptr);
 
                 void* mapped;
-                vmaMapMemory(m_r_context.allocator, data.stagingAlloc, &mapped);
-                memcpy(mapped, data.pixels, static_cast<size_t>(imageSize));
-                vmaUnmapMemory(m_r_context.allocator, data.stagingAlloc);
-                stbi_image_free(data.pixels);
+                vmaMapMemory(m_r_context.allocator, data.m_stagingAlloc, &mapped);
+                memcpy(mapped, data.m_pixels, static_cast<size_t>(imageSize));
+                vmaUnmapMemory(m_r_context.allocator, data.m_stagingAlloc);
+                stbi_image_free(data.m_pixels);
 
                 VkImageCreateInfo imageInfo{VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO};
                 imageInfo.imageType = VK_IMAGE_TYPE_2D;
-                imageInfo.extent = {static_cast<uint32_t>(data.w), static_cast<uint32_t>(data.h), 1};
+                imageInfo.extent = {static_cast<uint32_t>(data.m_w), static_cast<uint32_t>(data.m_h), 1};
                 imageInfo.mipLevels = 1;
                 imageInfo.arrayLayers = 1;
                 imageInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
@@ -983,7 +983,7 @@ struct BatchedTextureData {
                 imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
                 VmaAllocationCreateInfo imageAllocInfo{ .usage = VMA_MEMORY_USAGE_GPU_ONLY };
 
-                vmaCreateImage(m_r_context.allocator, &imageInfo, &imageAllocInfo, &data.image, &data.imageAlloc, nullptr);
+                vmaCreateImage(m_r_context.allocator, &imageInfo, &imageAllocInfo, &data.m_image, &data.m_imageAlloc, nullptr);
             }
 
             VkCommandBuffer cmd = m_r_context.beginSingleTimeCommands();
@@ -994,7 +994,7 @@ struct BatchedTextureData {
                 barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
                 barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
                 barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-                barrier.image = data.image;
+                barrier.image = data.m_image;
                 barrier.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
                 barrier.srcAccessMask = 0;
                 barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
@@ -1003,8 +1003,8 @@ struct BatchedTextureData {
 
                 VkBufferImageCopy region{};
                 region.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
-                region.imageExtent = {static_cast<uint32_t>(data.w), static_cast<uint32_t>(data.h), 1};
-                vkCmdCopyBufferToImage(cmd, data.stagingBuffer, data.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+                region.imageExtent = {static_cast<uint32_t>(data.m_w), static_cast<uint32_t>(data.m_h), 1};
+                vkCmdCopyBufferToImage(cmd, data.m_stagingBuffer, data.m_image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
                 barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
                 barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -1017,10 +1017,10 @@ struct BatchedTextureData {
             m_r_context.endSingleTimeCommands(cmd);
 
             for (const auto& data : validData) {
-                vmaDestroyBuffer(m_r_context.allocator, data.stagingBuffer, data.stagingAlloc);
+                vmaDestroyBuffer(m_r_context.allocator, data.m_stagingBuffer, data.m_stagingAlloc);
 
                 VkImageViewCreateInfo viewInfo{VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
-                viewInfo.image = data.image;
+                viewInfo.image = data.m_image;
                 viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
                 viewInfo.format = VK_FORMAT_R8G8B8A8_SRGB;
                 viewInfo.subresourceRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
@@ -1028,11 +1028,11 @@ struct BatchedTextureData {
                 VkImageView textureView;
                 if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &textureView) != VK_SUCCESS) continue;
 
-                m_r_context.textureIndices[data.path] = data.assignedIndex;
-                m_textures[data.path] = textureView;
-                m_textureImages[data.path] = data.image;
-                m_textureAllocations[data.path] = data.imageAlloc;
-                m_textureViews[data.path] = textureView;
+                m_r_context.textureIndices[data.m_path] = data.m_assignedIndex;
+                m_textures[data.m_path] = textureView;
+                m_textureImages[data.m_path] = data.m_image;
+                m_textureAllocations[data.m_path] = data.m_imageAlloc;
+                m_textureViews[data.m_path] = textureView;
 
                 VkDescriptorImageInfo imageDescInfo{};
                 imageDescInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -1043,7 +1043,7 @@ struct BatchedTextureData {
                     VkWriteDescriptorSet write{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
                     write.dstSet = m_r_context.bindlessDescriptorSet;
                     write.dstBinding = 0;
-                    write.dstArrayElement = data.assignedIndex;
+                    write.dstArrayElement = data.m_assignedIndex;
                     write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                     write.descriptorCount = 1;
                     write.pImageInfo = &imageDescInfo;
@@ -1051,7 +1051,7 @@ struct BatchedTextureData {
                 } else {
                     for (uint32_t frame = 0; frame < m_r_context.MAX_FRAMES_IN_FLIGHT; ++frame) {
                         VkWriteDescriptorSet write{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
-                        write.dstSet = getTextureDescriptorSet(frame, data.assignedIndex);
+                        write.dstSet = getTextureDescriptorSet(frame, data.m_assignedIndex);
                         write.dstBinding = 0;
                         write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                         write.descriptorCount = 1;

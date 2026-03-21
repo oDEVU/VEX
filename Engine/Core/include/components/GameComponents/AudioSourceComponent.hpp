@@ -7,8 +7,8 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include "SDL3/SDL_audio.h"
-#include "components/errorUtils.hpp"
-#include "components/assetTypes.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/AssetTypes.hpp"
 #include <string>
 #include "components/VirtualFileSystem.hpp"
 

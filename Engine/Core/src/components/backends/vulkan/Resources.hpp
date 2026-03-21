@@ -7,11 +7,11 @@
 #pragma once
 #include "uniforms.hpp"
 #include "context.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/VirtualFileSystem.hpp"
 #include "components/ThreadPool.hpp"
 
-#include <components/types.hpp>
+#include <components/Types.hpp>
 #include <string>
 #include <array>
 #include <vector>

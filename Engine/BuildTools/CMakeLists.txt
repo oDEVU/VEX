@@ -6,12 +6,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # VPAK Packer executable
 add_executable(VPAK_Packer
-    vpakPacker.cpp
+    VpakPacker.cpp
 )
 
 # Project Builder executable
 add_executable(ProjectBuilder
-    projectBuilder.cpp
+    ProjectBuilder.cpp
 )
 
 add_executable(VexCrashDecoder

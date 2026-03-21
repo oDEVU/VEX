@@ -9,9 +9,9 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <array>
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
-#include "components/pathUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "components/UI/UIVertex.hpp"
 #include <filesystem>
 

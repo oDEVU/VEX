@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include "SDL3/SDL_mouse.h"
 #include "components/GameComponents/InputComponent.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 
 namespace vex {

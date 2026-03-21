@@ -2,7 +2,7 @@
 #include "EditorImGUIWrapper.hpp"
 
 #include "Tools/PropertiesMenu.hpp"
-#include "Tools/worldSettingsMenu.hpp"
+#include "Tools/WorldSettingsMenu.hpp"
 #include "Tools/SceneMenu.hpp"
 
 #include <imgui.h>
@@ -15,7 +15,7 @@
 
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
-#include "components/assetTypes.hpp"
+#include "components/AssetTypes.hpp"
 #include "ImReflect.hpp"
 
 #include "../Core/include/components/SceneManager.hpp"
@@ -23,7 +23,7 @@
 #include "../Core/include/components/InputSystem.hpp"
 
 #include "../Core/src/components/Window.hpp"
-#include "../Core/src/components/EngineCommands.hpp"
+#include "components/EngineCommands.hpp"
 #include "../Core/src/components/backends/vulkan/Interface.hpp"
 #include "../Core/src/components/backends/vulkan/Renderer.hpp"
 #include "../Core/src/components/backends/vulkan/VulkanImGUIWrapper.hpp"
@@ -411,7 +411,7 @@ namespace vex {
 
         ImGui::SetCursorScreenPos(ImVec2(viewportPos.x + 10, viewportPos.y + 10));
 
-        auto GizmoButton = [&](const char* label, ImGuizmo::OPERATION op) {
+        auto gizmoButton = [&](const char* label, ImGuizmo::OPERATION op) {
             bool wasActive = (m_currentGizmoOperation == op);
             if (wasActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.00f, 0.23f, 0.01f, 1.0f));
             if (ImGui::Button(label)) m_currentGizmoOperation = op;
@@ -420,9 +420,9 @@ namespace vex {
             ImGui::SameLine();
         };
 
-        GizmoButton("T", ImGuizmo::TRANSLATE);
-        GizmoButton("R", ImGuizmo::ROTATE);
-        GizmoButton("S", ImGuizmo::SCALE);
+        gizmoButton("T", ImGuizmo::TRANSLATE);
+        gizmoButton("R", ImGuizmo::ROTATE);
+        gizmoButton("S", ImGuizmo::SCALE);
 
         ImGui::Dummy(ImVec2(10, 0)); ImGui::SameLine();
 
@@ -499,10 +499,10 @@ namespace vex {
     }
 
     float Editor::raySphereIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& sphereCenter, float sphereRadius) {
-        glm::vec3 L = sphereCenter - rayOrigin;
-        float tca = glm::dot(L, rayDir);
+        glm::vec3 l = sphereCenter - rayOrigin;
+        float tca = glm::dot(l, rayDir);
         if (tca < 0) return -1.0f;
-        float d2 = glm::dot(L, L) - tca * tca;
+        float d2 = glm::dot(l, l) - tca * tca;
         float radius2 = sphereRadius * sphereRadius;
         if (d2 > radius2) return -1.0f;
         float thc = sqrt(radius2 - d2);
@@ -513,13 +513,13 @@ namespace vex {
         const glm::vec3& rayOrigin, const glm::vec3& rayDir,
         const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2)
     {
-        const float EPSILON = 0.0000001f;
+        const float epsilon = 0.0000001f;
         glm::vec3 edge1 = v1 - v0;
         glm::vec3 edge2 = v2 - v0;
         glm::vec3 h = glm::cross(rayDir, edge2);
         float a = glm::dot(edge1, h);
 
-        if (a > -EPSILON && a < EPSILON) return -1.0f;
+        if (a > -epsilon && a < epsilon) return -1.0f;
 
         float f = 1.0f / a;
         glm::vec3 s = rayOrigin - v0;
@@ -531,7 +531,7 @@ namespace vex {
         if (v < 0.0f || u + v > 1.0f) return -1.0f;
 
         float t = f * glm::dot(edge2, q);
-        if (t > EPSILON) return t;
+        if (t > epsilon) return t;
         else return -1.0f;
     }
 
@@ -585,7 +585,7 @@ namespace vex {
         ImGui::SetNextWindowSize(viewport->Size);
         ImGui::SetNextWindowViewport(viewport->ID);
 
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                                         ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
                                         ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground |
@@ -595,40 +595,40 @@ namespace vex {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-        ImGui::Begin("EditorDockSpace", nullptr, window_flags);
+        ImGui::Begin("EditorDockSpace", nullptr, windowFlags);
         ImGui::PopStyleVar(3);
 
         m_editorMenuBar->DrawBar();
 
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
 
         ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;
         dockFlags |= ImGuiDockNodeFlags_NoUndocking;
         dockFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
 
-        if (!ImGui::DockBuilderGetNode(dockspace_id)) {
-            ImGui::DockBuilderRemoveNode(dockspace_id);
-            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-            ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+        if (!ImGui::DockBuilderGetNode(dockspaceId)) {
+            ImGui::DockBuilderRemoveNode(dockspaceId);
+            ImGui::DockBuilderAddNode(dockspaceId, ImGuiDockNodeFlags_DockSpace);
+            ImGui::DockBuilderSetNodeSize(dockspaceId, viewport->Size);
 
-            ImGuiID dock_main_id = dockspace_id;
-            ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.3f, nullptr, &dock_main_id);
-            ImGuiID dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.45f, nullptr, &dock_main_id);
-            ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
-            ImGuiID dock_right_top_id, dock_right_bottom_id;
-            ImGui::DockBuilderSplitNode(dock_right_id, ImGuiDir_Down, 0.5f, &dock_right_bottom_id, &dock_right_top_id);
+            ImGuiID dockMainId = dockspaceId;
+            ImGuiID dockRightId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Right, 0.3f, nullptr, &dockMainId);
+            ImGuiID dockBottomId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Down, 0.45f, nullptr, &dockMainId);
+            ImGuiID dockLeftId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Left, 0.2f, nullptr, &dockMainId);
+            ImGuiID dockRightTopId, dockRightBottomId;
+            ImGui::DockBuilderSplitNode(dockRightId, ImGuiDir_Down, 0.5f, &dockRightBottomId, &dockRightTopId);
 
-            ImGui::DockBuilderDockWindow("Viewport", dock_main_id);
-            ImGui::DockBuilderDockWindow("Game Objects", dock_left_id);
-            ImGui::DockBuilderDockWindow("Assets", dock_bottom_id);
-            ImGui::DockBuilderDockWindow("Scene", dock_right_top_id);
-            ImGui::DockBuilderDockWindow("Properties", dock_right_bottom_id);
-            ImGui::DockBuilderDockWindow("World Settings", dock_right_bottom_id);
+            ImGui::DockBuilderDockWindow("Viewport", dockMainId);
+            ImGui::DockBuilderDockWindow("Game Objects", dockLeftId);
+            ImGui::DockBuilderDockWindow("Assets", dockBottomId);
+            ImGui::DockBuilderDockWindow("Scene", dockRightTopId);
+            ImGui::DockBuilderDockWindow("Properties", dockRightBottomId);
+            ImGui::DockBuilderDockWindow("World Settings", dockRightBottomId);
 
-            ImGui::DockBuilderFinish(dockspace_id);
+            ImGui::DockBuilderFinish(dockspaceId);
         }
 
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockFlags);
+        ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockFlags);
         ImGui::End();
 
         ImGuiWindowFlags childFlags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;

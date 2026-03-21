@@ -10,7 +10,7 @@
 #include "components/GameObjects/FogObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/PhysicsSystem.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 #include "components/VirtualFileSystem.hpp"
 #include "backends/vulkan/MeshManager.hpp"
 #include "backends/vulkan/Interface.hpp"

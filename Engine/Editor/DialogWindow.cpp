@@ -63,7 +63,7 @@ namespace vex {
         ImGui::SetNextWindowSize(viewport->Size);
         ImGui::SetNextWindowViewport(viewport->ID);
 
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                                         ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
                                         ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
@@ -72,31 +72,31 @@ namespace vex {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-        ImGui::Begin("DialogWindowkSpace", nullptr, window_flags);
+        ImGui::Begin("DialogWindowkSpace", nullptr, windowFlags);
         ImGui::PopStyleVar(3);
 
-        ImGuiID dockspace_id = ImGui::GetID("MyDialogDockSpace");
+        ImGuiID dockspaceId = ImGui::GetID("MyDialogDockSpace");
 
         ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;
         dockFlags |= ImGuiDockNodeFlags_NoUndocking;
 
-        if (!ImGui::DockBuilderGetNode(dockspace_id)) {
-            ImGui::DockBuilderRemoveNode(dockspace_id);
-            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-            ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+        if (!ImGui::DockBuilderGetNode(dockspaceId)) {
+            ImGui::DockBuilderRemoveNode(dockspaceId);
+            ImGui::DockBuilderAddNode(dockspaceId, ImGuiDockNodeFlags_DockSpace);
+            ImGui::DockBuilderSetNodeSize(dockspaceId, viewport->Size);
 
-            ImGuiID dock_main_id = dockspace_id;
-            ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
+            ImGuiID dockMainId = dockspaceId;
+            ImGuiID dockRightId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Right, 0.2f, nullptr, &dockMainId);
 
-            ImGui::DockBuilderDockWindow("Dialog", dock_main_id);
+            ImGui::DockBuilderDockWindow("Dialog", dockMainId);
 
-            ImGui::DockBuilderFinish(dockspace_id);
+            ImGui::DockBuilderFinish(dockspaceId);
         }
 
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockFlags);
+        ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockFlags);
         ImGui::End();
 
-        ImGuiDockNode* node = ImGui::DockBuilderGetNode(dockspace_id);
+        ImGuiDockNode* node = ImGui::DockBuilderGetNode(dockspaceId);
         if (node) {
             node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
         }

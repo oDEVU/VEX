@@ -9,7 +9,7 @@
 #include "Engine.hpp"
 
 #include <unordered_map>
-#include <components/types.hpp>
+#include <components/Types.hpp>
 #include <vector>
 #include <memory>
 #include <entt/entt.hpp>

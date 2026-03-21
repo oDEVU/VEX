@@ -11,7 +11,7 @@
 #include <SDL3/SDL_main.h>
 #include <iostream>
 
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 namespace vex {
     /// @brief This class esentially abstracts SDL_Window

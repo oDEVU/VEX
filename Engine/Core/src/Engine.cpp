@@ -4,7 +4,7 @@
 
 #include "components/VirtualFileSystem.hpp"
 #include "components/Window.hpp"
-#include "components/pathUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "components/EngineCommands.hpp"
 
 #include "components/GameComponents/BasicComponents.hpp"
@@ -242,11 +242,11 @@ void Engine::setResolutionMode(ResolutionMode mode) {
     //m_interface->setRenderResolution(renderRes);
 }
 
-void Engine::setEnvironmentSettings(enviroment settings) {
+void Engine::setEnvironmentSettings(environment settings) {
     m_interface->setEnvironment(settings);
 }
 
-enviroment Engine::getEnvironmentSettings() {
+environment Engine::getEnvironmentSettings() {
     return m_interface->getEnvironment();
 }
 

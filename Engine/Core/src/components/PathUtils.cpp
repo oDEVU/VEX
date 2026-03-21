@@ -1,5 +1,5 @@
-#include "components/pathUtils.hpp"
-#include "components/errorUtils.hpp"
+#include "components/PathUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -12,26 +12,26 @@
 
 namespace vex {
 
-static std::string g_AssetRootOverride = "";
-static std::string g_UserDataDir = "";
+static std::string gAssetRootOverride = "";
+static std::string gUserDataDir = "";
 
 void SetAssetRoot(const std::string& projectPath) {
-    g_AssetRootOverride = projectPath;
+    gAssetRootOverride = projectPath;
 }
 
 void SetUserDataDir(const std::string& userDataDir) {
     if (!std::filesystem::exists(userDataDir)) {
         std::filesystem::create_directories(userDataDir);
     }
-    g_UserDataDir = userDataDir;
+    gUserDataDir = userDataDir;
 }
 
 std::string GetAssetDir() {
-    return g_AssetRootOverride;
+    return gAssetRootOverride;
 }
 
 std::string GetUserDataDir() {
-    return g_UserDataDir;
+    return gUserDataDir;
 }
 
 std::filesystem::path GetExecutableDir() {
@@ -72,7 +72,7 @@ std::filesystem::path GetExecutableDir() {
 
 std::string GetAssetPath(const std::string& relativePath) {
 
-    const std::string& overridePath = g_AssetRootOverride;
+    const std::string& overridePath = gAssetRootOverride;
     if (!overridePath.empty()) {
         if(relativePath.contains(overridePath)){
             return relativePath;
@@ -89,7 +89,7 @@ std::string GetAssetPath(const std::string& relativePath) {
 }
 
 std::string GetUserDataPath(const std::string& relativePath) {
-    return (std::filesystem::path(g_UserDataDir) / relativePath).string();
+    return (std::filesystem::path(gUserDataDir) / relativePath).string();
 }
 
 std::filesystem::path GetLogDir() {

@@ -15,10 +15,10 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <unordered_map>
-#include <components/types.hpp>
+#include <components/Types.hpp>
 #include <string>
 #include <queue>
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 
 namespace vex {
     /// @brief Struct holding all vulkan data, like device, surface, swapchain, images, views, and more.
@@ -113,7 +113,7 @@ namespace vex {
 
         glm::uvec2 currentRenderResolution;
 
-        enviroment m_enviroment;
+        environment m_environment;
 
         bool supportsMultiDraw = false;
         bool supportsIndirectDraw = false;

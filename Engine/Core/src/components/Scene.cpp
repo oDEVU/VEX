@@ -4,7 +4,7 @@
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 #include "components/VirtualFileSystem.hpp"
 
 #include <thread>
@@ -65,7 +65,7 @@ void Scene::load(){
     //json = nlohmann::json::
     //file.close();
 
-    enviroment env;
+    environment env;
     if (json.contains("environment") && json["environment"].contains("shading")) {
         log("Loading shading settings from scene");
         const auto& shading = json["environment"]["shading"];

@@ -19,13 +19,13 @@
 
 namespace vex {
     struct FrustumSoA {
-        __m256 nx, ny, nz, dist;
+        __m256 m_nx, m_ny, m_nz, m_dist;
 
         void init(const vex::Frustum& f) {
-            nx = _mm256_setr_ps(f.planes[0].normal.x, f.planes[1].normal.x, f.planes[2].normal.x, f.planes[3].normal.x, f.planes[4].normal.x, f.planes[5].normal.x, 0.0f, 0.0f);
-            ny = _mm256_setr_ps(f.planes[0].normal.y, f.planes[1].normal.y, f.planes[2].normal.y, f.planes[3].normal.y, f.planes[4].normal.y, f.planes[5].normal.y, 0.0f, 0.0f);
-            nz = _mm256_setr_ps(f.planes[0].normal.z, f.planes[1].normal.z, f.planes[2].normal.z, f.planes[3].normal.z, f.planes[4].normal.z, f.planes[5].normal.z, 0.0f, 0.0f);
-            dist = _mm256_setr_ps(f.planes[0].distance, f.planes[1].distance, f.planes[2].distance, f.planes[3].distance, f.planes[4].distance, f.planes[5].distance, 0.0f, 0.0f);
+            m_nx = _mm256_setr_ps(f.planes[0].normal.x, f.planes[1].normal.x, f.planes[2].normal.x, f.planes[3].normal.x, f.planes[4].normal.x, f.planes[5].normal.x, 0.0f, 0.0f);
+            m_ny = _mm256_setr_ps(f.planes[0].normal.y, f.planes[1].normal.y, f.planes[2].normal.y, f.planes[3].normal.y, f.planes[4].normal.y, f.planes[5].normal.y, 0.0f, 0.0f);
+            m_nz = _mm256_setr_ps(f.planes[0].normal.z, f.planes[1].normal.z, f.planes[2].normal.z, f.planes[3].normal.z, f.planes[4].normal.z, f.planes[5].normal.z, 0.0f, 0.0f);
+            m_dist = _mm256_setr_ps(f.planes[0].distance, f.planes[1].distance, f.planes[2].distance, f.planes[3].distance, f.planes[4].distance, f.planes[5].distance, 0.0f, 0.0f);
         }
 
         __attribute__((target("avx2")))
@@ -35,9 +35,9 @@ namespace vex {
             __m256 cz = _mm256_set1_ps(center.z);
             __m256 r  = _mm256_set1_ps(-radius);
 
-            __m256 dot = _mm256_fmadd_ps(nx, cx, dist);
-            dot = _mm256_fmadd_ps(ny, cy, dot);
-            dot = _mm256_fmadd_ps(nz, cz, dot);
+            __m256 dot = _mm256_fmadd_ps(m_nx, cx, m_dist);
+            dot = _mm256_fmadd_ps(m_ny, cy, dot);
+            dot = _mm256_fmadd_ps(m_nz, cz, dot);
             __m256 mask = _mm256_cmp_ps(dot, r, _CMP_LT_OQ);
 
             int res = _mm256_movemask_ps(mask);
@@ -272,7 +272,7 @@ namespace vex {
                 m_lastUsedView = m_r_context.lowResColorView;
             }
 
-            glm::vec3 finalClearColor = m_r_context.m_enviroment.clearColor;
+            glm::vec3 finalClearColor = m_r_context.m_environment.clearColor;
             auto fogView = registry.view<FogComponent>();
 
             for (auto entity : fogView) {
@@ -397,35 +397,35 @@ namespace vex {
 
             m_sceneUBO.enablePS1Effects = 0;
 
-            if(m_r_context.m_enviroment.vertexSnapping){
+            if(m_r_context.m_environment.vertexSnapping){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_SNAPPING;
             }
 
-            if(m_r_context.m_enviroment.passiveVertexJitter){
+            if(m_r_context.m_environment.passiveVertexJitter){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::VERTEX_JITTER;
             }
 
-            if(m_r_context.m_enviroment.affineWarping){
+            if(m_r_context.m_environment.affineWarping){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::AFFINE_WARPING;
             }
 
-            if(m_r_context.m_enviroment.screenQuantization){
+            if(m_r_context.m_environment.screenQuantization){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::SCREEN_QUANTIZATION;
             }
 
-            if(m_r_context.m_enviroment.ntfsArtifacts){
+            if(m_r_context.m_environment.ntfsArtifacts){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::NTSC_ARTIFACTS;
             }
 
-            if(m_r_context.m_enviroment.gourardShading){
+            if(m_r_context.m_environment.gourardShading){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::GOURAUD_SHADING;
             }
 
-            if(m_r_context.m_enviroment.textureQuantization){
+            if(m_r_context.m_environment.textureQuantization){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::TEXTURE_QUANTIZATION;
             }
 
-            if(m_r_context.m_enviroment.screenDither){
+            if(m_r_context.m_environment.screenDither){
                 m_sceneUBO.enablePS1Effects |= PS1Effects::SCREEN_DITHER;
             }
 
@@ -435,10 +435,10 @@ namespace vex {
             m_sceneUBO.frame = frame;
             m_sceneUBO.upscaleRatio = m_r_context.swapchainExtent.height / static_cast<float>(m_r_context.currentRenderResolution.y);
 
-            m_sceneUBO.ambientLight = glm::vec4(m_r_context.m_enviroment.ambientLight,1.0f);
-            m_sceneUBO.ambientLightStrength = m_r_context.m_enviroment.ambientLightStrength;
-            m_sceneUBO.sunLight = glm::vec4(m_r_context.m_enviroment.sunLight,1.0f);
-            m_sceneUBO.sunDirection = glm::vec4(m_r_context.m_enviroment.sunDirection,1.0f);
+            m_sceneUBO.ambientLight = glm::vec4(m_r_context.m_environment.ambientLight,1.0f);
+            m_sceneUBO.ambientLightStrength = m_r_context.m_environment.ambientLightStrength;
+            m_sceneUBO.sunLight = glm::vec4(m_r_context.m_environment.sunLight,1.0f);
+            m_sceneUBO.sunDirection = glm::vec4(m_r_context.m_environment.sunDirection,1.0f);
 
             m_p_resources->updateSceneUBO(m_sceneUBO);
 

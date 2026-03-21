@@ -14,8 +14,8 @@ EditorCameraObject::EditorCameraObject(vex::Engine& engine, const std::string& n
 void EditorCameraObject::processEvent(const SDL_Event& event, float deltaTime) {
     if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP) {
         bool isPressed = (event.type == SDL_EVENT_KEY_DOWN);
-        const SDL_KeyboardEvent& key_event = event.key;
-        keyStates[key_event.scancode] = isPressed;
+        const SDL_KeyboardEvent& keyEvent = event.key;
+        keyStates[keyEvent.scancode] = isPressed;
     }
 
     if (event.type == SDL_EVENT_MOUSE_WHEEL && m_isFlying) {

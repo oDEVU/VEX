@@ -3,9 +3,9 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 
-#include "components/errorUtils.hpp"
-#include "components/pathUtils.hpp"
-#include "components/assetTypes.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/PathUtils.hpp"
+#include "components/AssetTypes.hpp"
 
 namespace vex {
 

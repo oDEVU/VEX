@@ -1,5 +1,5 @@
 #include "components/AudioSystem.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 namespace vex {
 

@@ -87,23 +87,23 @@ namespace vex {
 
             createDescriptorPool();
 
-            ImGui_ImplVulkan_InitInfo init_info = {};
-            init_info.Instance = m_r_context.instance;
-            init_info.PhysicalDevice = m_r_context.physicalDevice;
-            init_info.Device = m_r_context.device;
-            init_info.QueueFamily = m_r_context.graphicsQueueFamily;
-            init_info.Queue = m_r_context.graphicsQueue;
-            init_info.PipelineCache = VK_NULL_HANDLE;
-            init_info.MinImageCount = m_r_context.swapchainImages.size();
-            init_info.ImageCount = m_r_context.swapchainImages.size();
-            init_info.CheckVkResultFn = [](VkResult err) {
+            ImGui_ImplVulkan_InitInfo initInfo = {};
+            initInfo.Instance = m_r_context.instance;
+            initInfo.PhysicalDevice = m_r_context.physicalDevice;
+            initInfo.Device = m_r_context.device;
+            initInfo.QueueFamily = m_r_context.graphicsQueueFamily;
+            initInfo.Queue = m_r_context.graphicsQueue;
+            initInfo.PipelineCache = VK_NULL_HANDLE;
+            initInfo.MinImageCount = m_r_context.swapchainImages.size();
+            initInfo.ImageCount = m_r_context.swapchainImages.size();
+            initInfo.CheckVkResultFn = [](VkResult err) {
                 if (err != VK_SUCCESS) {
                     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "ImGui Vulkan error: %d", err);
                 }
             };
-            init_info.Allocator = nullptr;
-            init_info.DescriptorPool = m_imguiPool;
-            init_info.UseDynamicRendering = true;
+            initInfo.Allocator = nullptr;
+            initInfo.DescriptorPool = m_imguiPool;
+            initInfo.UseDynamicRendering = true;
 
             // Setup for dynamic rendering
             VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo = {};
@@ -116,10 +116,10 @@ namespace vex {
             pipelineInfoMain.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
             pipelineInfoMain.PipelineRenderingCreateInfo = pipelineRenderingCreateInfo;
 
-            init_info.PipelineInfoMain = pipelineInfoMain;
+            initInfo.PipelineInfoMain = pipelineInfoMain;
 
             log("Initing ImGui Vulkan backend");
-            if (!ImGui_ImplVulkan_Init(&init_info)) {
+            if (!ImGui_ImplVulkan_Init(&initInfo)) {
                 throw_error("Failed to initialize ImGui Vulkan backend");
             }
 
@@ -202,7 +202,7 @@ namespace vex {
     void VulkanImGUIWrapper::createDescriptorPool() {
         log("Creating ImGUI DescriptorPools");
 
-        VkDescriptorPoolSize pool_sizes[] = {
+        VkDescriptorPoolSize poolSizes[] = {
             { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
             { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
             { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
@@ -216,14 +216,14 @@ namespace vex {
             { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
         };
 
-        VkDescriptorPoolCreateInfo pool_info = {};
-        pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-        pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
-        pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
-        pool_info.pPoolSizes = pool_sizes;
+        VkDescriptorPoolCreateInfo poolInfo = {};
+        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+        poolInfo.maxSets = 1000 * IM_ARRAYSIZE(poolSizes);
+        poolInfo.poolSizeCount = (uint32_t)IM_ARRAYSIZE(poolSizes);
+        poolInfo.pPoolSizes = poolSizes;
 
-        if (vkCreateDescriptorPool(m_r_context.device, &pool_info, nullptr, &m_imguiPool) != VK_SUCCESS) {
+        if (vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_imguiPool) != VK_SUCCESS) {
             throw_error("Failed to create descriptor pool for ImGui");
         }
     }
@@ -252,87 +252,87 @@ namespace vex {
             ImVec4* colors = style.Colors;
 
             // Used ai (Gemini Pro) to generate these colors from palette I found online
-            const ImVec4 col_text_white   = ImVec4(0.94f, 0.85f, 0.85f, 1.00f);
-            const ImVec4 col_orange_base  = ImVec4(1.00f, 0.23f, 0.01f, 1.00f);
-            const ImVec4 col_red_base     = ImVec4(0.47f, 0.05f, 0.05f, 1.00f);
-            const ImVec4 col_bg_base      = ImVec4(0.015f, 0.015f, 0.019f, 1.00f);
-            const ImVec4 col_bg_dark      = ImVec4(0.012f, 0.012f, 0.014f, 1.00f);
-            const ImVec4 col_bg_light     = ImVec4(0.02f, 0.02f, 0.024f, 1.00f);
+            const ImVec4 colTextWhite   = ImVec4(0.94f, 0.85f, 0.85f, 1.00f);
+            const ImVec4 colOrangeBase  = ImVec4(1.00f, 0.23f, 0.01f, 1.00f);
+            const ImVec4 colRedBase     = ImVec4(0.47f, 0.05f, 0.05f, 1.00f);
+            const ImVec4 colBgBase      = ImVec4(0.015f, 0.015f, 0.019f, 1.00f);
+            const ImVec4 colBgDark      = ImVec4(0.012f, 0.012f, 0.014f, 1.00f);
+            const ImVec4 colBgLight     = ImVec4(0.02f, 0.02f, 0.024f, 1.00f);
 
             // Text
-            colors[ImGuiCol_Text]                   = col_text_white;
+            colors[ImGuiCol_Text]                   = colTextWhite;
             colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
 
             // Windows & Backgrounds
-            colors[ImGuiCol_WindowBg]               = col_bg_base;
+            colors[ImGuiCol_WindowBg]               = colBgBase;
             colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-            colors[ImGuiCol_PopupBg]                = col_bg_light;
-            colors[ImGuiCol_MenuBarBg]              = col_bg_dark;
+            colors[ImGuiCol_PopupBg]                = colBgLight;
+            colors[ImGuiCol_MenuBarBg]              = colBgDark;
 
             // Borders - Subtle Red
             colors[ImGuiCol_Border]                 = ImVec4(0.47f, 0.05f, 0.05f, 0.40f);
             colors[ImGuiCol_BorderShadow]           = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 
             // Inputs
-            colors[ImGuiCol_FrameBg]                = col_bg_dark;
-            colors[ImGuiCol_FrameBgHovered]         = col_bg_base;
+            colors[ImGuiCol_FrameBg]                = colBgDark;
+            colors[ImGuiCol_FrameBgHovered]         = colBgBase;
             colors[ImGuiCol_FrameBgActive]          = ImVec4(0.47f, 0.05f, 0.05f, 0.50f);
 
             // Title Bars
-            colors[ImGuiCol_TitleBg]                = col_bg_dark;
-            colors[ImGuiCol_TitleBgActive]          = col_bg_base;
-            colors[ImGuiCol_TitleBgCollapsed]       = col_bg_dark;
+            colors[ImGuiCol_TitleBg]                = colBgDark;
+            colors[ImGuiCol_TitleBgActive]          = colBgBase;
+            colors[ImGuiCol_TitleBgCollapsed]       = colBgDark;
 
             // Scrollbars
-            colors[ImGuiCol_ScrollbarBg]            = col_bg_dark;
+            colors[ImGuiCol_ScrollbarBg]            = colBgDark;
             colors[ImGuiCol_ScrollbarGrab]          = ImVec4(1.00f, 0.23f, 0.01f, 0.40f);
             colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4(1.00f, 0.23f, 0.01f, 0.70f);
-            colors[ImGuiCol_ScrollbarGrabActive]    = col_orange_base;
+            colors[ImGuiCol_ScrollbarGrabActive]    = colOrangeBase;
 
             // Interactive Elements
-            colors[ImGuiCol_CheckMark]              = col_orange_base;
-            colors[ImGuiCol_SliderGrab]             = col_orange_base;
-            colors[ImGuiCol_SliderGrabActive]       = col_orange_base;
+            colors[ImGuiCol_CheckMark]              = colOrangeBase;
+            colors[ImGuiCol_SliderGrab]             = colOrangeBase;
+            colors[ImGuiCol_SliderGrabActive]       = colOrangeBase;
 
             // Buttons
-            colors[ImGuiCol_Button]                 = col_bg_light;
+            colors[ImGuiCol_Button]                 = colBgLight;
             colors[ImGuiCol_ButtonHovered]          = ImVec4(1.00f, 0.23f, 0.01f, 0.20f);
             colors[ImGuiCol_ButtonActive]           = ImVec4(1.00f, 0.23f, 0.01f, 0.40f);
 
             // Headers
-            colors[ImGuiCol_Header]                 = col_bg_light;
+            colors[ImGuiCol_Header]                 = colBgLight;
             colors[ImGuiCol_HeaderHovered]          = ImVec4(1.00f, 0.23f, 0.01f, 0.30f);
             colors[ImGuiCol_HeaderActive]           = ImVec4(1.00f, 0.23f, 0.01f, 0.50f);
 
             // Separators
             colors[ImGuiCol_Separator]              = ImVec4(0.47f, 0.05f, 0.05f, 0.40f);
             colors[ImGuiCol_SeparatorHovered]       = ImVec4(0.47f, 0.05f, 0.05f, 0.70f);
-            colors[ImGuiCol_SeparatorActive]        = col_red_base;
+            colors[ImGuiCol_SeparatorActive]        = colRedBase;
 
             // Resize
             colors[ImGuiCol_ResizeGrip]             = ImVec4(1.00f, 0.23f, 0.01f, 0.25f);
             colors[ImGuiCol_ResizeGripHovered]      = ImVec4(1.00f, 0.23f, 0.01f, 0.67f);
-            colors[ImGuiCol_ResizeGripActive]       = col_orange_base;
+            colors[ImGuiCol_ResizeGripActive]       = colOrangeBase;
 
             // Tabs
-            colors[ImGuiCol_Tab]                    = col_bg_dark;
+            colors[ImGuiCol_Tab]                    = colBgDark;
             colors[ImGuiCol_TabHovered]             = ImVec4(1.00f, 0.23f, 0.01f, 0.40f);
-            colors[ImGuiCol_TabActive]              = col_bg_base;
-            colors[ImGuiCol_TabUnfocused]           = col_bg_dark;
-            colors[ImGuiCol_TabUnfocusedActive]     = col_bg_base;
+            colors[ImGuiCol_TabActive]              = colBgBase;
+            colors[ImGuiCol_TabUnfocused]           = colBgDark;
+            colors[ImGuiCol_TabUnfocusedActive]     = colBgBase;
 
             // Docking
             colors[ImGuiCol_DockingPreview]         = ImVec4(1.00f, 0.23f, 0.01f, 0.30f);
-            colors[ImGuiCol_DockingEmptyBg]         = col_bg_base;
+            colors[ImGuiCol_DockingEmptyBg]         = colBgBase;
 
             // Misc
-            colors[ImGuiCol_PlotLines]              = col_text_white;
-            colors[ImGuiCol_PlotLinesHovered]       = col_orange_base;
-            colors[ImGuiCol_PlotHistogram]          = col_orange_base;
-            colors[ImGuiCol_PlotHistogramHovered]   = col_orange_base;
+            colors[ImGuiCol_PlotLines]              = colTextWhite;
+            colors[ImGuiCol_PlotLinesHovered]       = colOrangeBase;
+            colors[ImGuiCol_PlotHistogram]          = colOrangeBase;
+            colors[ImGuiCol_PlotHistogramHovered]   = colOrangeBase;
             colors[ImGuiCol_TextSelectedBg]         = ImVec4(1.00f, 0.23f, 0.01f, 0.35f);
-            colors[ImGuiCol_DragDropTarget]         = col_orange_base;
-            colors[ImGuiCol_NavHighlight]           = col_orange_base;
+            colors[ImGuiCol_DragDropTarget]         = colOrangeBase;
+            colors[ImGuiCol_NavHighlight]           = colOrangeBase;
 
             colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.5f);
         }
