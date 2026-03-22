@@ -48,6 +48,18 @@ namespace vex {
         VkImageView lowResColorView = VK_NULL_HANDLE;
         VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;
 
+        VkImage accumImage = VK_NULL_HANDLE;
+        VmaAllocation accumAlloc = VK_NULL_HANDLE;
+        VkImageView accumView = VK_NULL_HANDLE;
+
+        VkImage revealImage = VK_NULL_HANDLE;
+        VmaAllocation revealAlloc = VK_NULL_HANDLE;
+        VkImageView revealView = VK_NULL_HANDLE;
+
+        VkImage gameViewImage = VK_NULL_HANDLE;
+        VmaAllocation gameViewAlloc = VK_NULL_HANDLE;
+        VkImageView gameViewView = VK_NULL_HANDLE;
+
         VkPipelineLayout pipelineLayout;
 
         std::vector<VkCommandPool> commandPools;
@@ -105,6 +117,7 @@ namespace vex {
         VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
         VkDescriptorSetLayout uboDescriptorSetLayout = VK_NULL_HANDLE;
         VkDescriptorSetLayout textureDescriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorSetLayout screenDescriptorSetLayout = VK_NULL_HANDLE;
 
         vex_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;

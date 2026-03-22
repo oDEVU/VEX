@@ -308,7 +308,7 @@ namespace vex {
         rasterizer.rasterizerDiscardEnable = VK_FALSE;
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
         rasterizer.lineWidth = 1.0f;
-        rasterizer.cullMode = VK_CULL_MODE_NONE;
+        rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
         rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
 
@@ -318,25 +318,33 @@ namespace vex {
         multisampling.sampleShadingEnable = VK_FALSE;
         multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
-        VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-        colorBlendAttachment.colorWriteMask =
-            VK_COLOR_COMPONENT_R_BIT |
-            VK_COLOR_COMPONENT_G_BIT |
-            VK_COLOR_COMPONENT_B_BIT |
-            VK_COLOR_COMPONENT_A_BIT;
-        colorBlendAttachment.blendEnable = VK_TRUE;
-        colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-        colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-        colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-        colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-        colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-        colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+        VkPipelineColorBlendAttachmentState accumBlend{};
+        accumBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        accumBlend.blendEnable = VK_TRUE;
+        accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.colorBlendOp = VK_BLEND_OP_ADD;
+        accumBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+        VkPipelineColorBlendAttachmentState revealBlend{};
+        revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
+        revealBlend.blendEnable = VK_TRUE;
+        revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+        revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+        revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
+        revealBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+        revealBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        revealBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+        VkPipelineColorBlendAttachmentState colorBlendAttachments[] = { accumBlend, revealBlend };
 
         VkPipelineColorBlendStateCreateInfo colorBlending{};
         colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         colorBlending.logicOpEnable = VK_FALSE;
-        colorBlending.attachmentCount = 1;
-        colorBlending.pAttachments = &colorBlendAttachment;
+        colorBlending.attachmentCount = 2;
+        colorBlending.pAttachments = colorBlendAttachments;
 
             log("Creating Pipeline layout...");
             VkPushConstantRange pushConstantRange{};
@@ -385,10 +393,11 @@ namespace vex {
         dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
         dynamicState.pDynamicStates = dynamicStates.data();
 
+        VkFormat transFormats[] = { VK_FORMAT_R16G16B16A16_SFLOAT, VK_FORMAT_R8_UNORM };
         VkPipelineRenderingCreateInfo renderingCreateInfo{};
         renderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-        renderingCreateInfo.colorAttachmentCount = 1;
-        renderingCreateInfo.pColorAttachmentFormats = &m_r_context.swapchainImageFormat;
+        renderingCreateInfo.colorAttachmentCount = 2;
+        renderingCreateInfo.pColorAttachmentFormats = transFormats;
         renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;
 
         log("Creating Graphics pipeline...");
@@ -828,7 +837,7 @@ namespace vex {
 
         std::array<VkDescriptorSetLayout, 2> setLayouts = {
             m_r_context.uboDescriptorSetLayout,
-            m_r_context.textureDescriptorSetLayout
+            m_r_context.screenDescriptorSetLayout
         };
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};

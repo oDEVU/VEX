@@ -1,5 +1,4 @@
 import depends.uniforms;
-
 import effects.Crt;
 
 struct VSOutput {
@@ -10,6 +9,10 @@ struct VSOutput {
 
 [[vk::binding(0, 1)]]
 Sampler2D<float4> screenTexture;
+[[vk::binding(1, 1)]]
+Sampler2D<float4> accumTexture;
+[[vk::binding(2, 1)]]
+Sampler2D<float> revealTexture;
 
 [shader("vertex")]
 VSOutput vertMain(uint vertexID: SV_VertexID) {
@@ -21,13 +24,23 @@ VSOutput vertMain(uint vertexID: SV_VertexID) {
 
 [shader("fragment")]
 float4 fragMain(VSOutput input) : SV_Target {
-  float4 finalColor;
+  float4 opaqueColor;
 
   if (isEnabled(NTSC_ARTIFACTS)) {
     float3 crtColor = ApplyCRT(input.uv, input.position.xy, screenTexture);
-    finalColor = float4(crtColor, 1.0);
+    opaqueColor = float4(crtColor, 1.0);
   } else {
-    finalColor = screenTexture.Sample(input.uv);
+    opaqueColor = screenTexture.Sample(input.uv);
+  }
+
+  float4 accum = accumTexture.Sample(input.uv);
+  float reveal = revealTexture.Sample(input.uv);
+
+  float4 finalColor = opaqueColor;
+
+  if (accum.a > 0.00001) {
+    float3 averageColor = accum.rgb / max(accum.a, 0.00001);
+    finalColor.rgb = opaqueColor.rgb * reveal + averageColor * (1.0 - reveal);
   }
 
   return finalColor;

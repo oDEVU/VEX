@@ -372,6 +372,58 @@ namespace vex {
             return;
         }
 
+        VkImageCreateInfo accumInfo = imageInfo;
+        accumInfo.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        if(vmaCreateImage(m_r_context.allocator, &accumInfo, &allocInfo, &m_r_context.accumImage, &m_r_context.accumAlloc, nullptr) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create accum image");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
+            m_r_context.accumImage = VK_NULL_HANDLE;
+            m_r_context.accumAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageViewCreateInfo accumViewInfo = viewInfo;
+        accumViewInfo.image = m_r_context.accumImage;
+        accumViewInfo.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        if(vkCreateImageView(m_r_context.device, &accumViewInfo, nullptr, &m_r_context.accumView) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create accum image view");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
+            m_r_context.accumImage = VK_NULL_HANDLE;
+            m_r_context.accumAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageCreateInfo revealInfo = imageInfo;
+        revealInfo.format = VK_FORMAT_R8_UNORM;
+        if(vmaCreateImage(m_r_context.allocator, &revealInfo, &allocInfo, &m_r_context.revealImage, &m_r_context.revealAlloc, nullptr) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create reveal image");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
+            m_r_context.revealImage = VK_NULL_HANDLE;
+            m_r_context.revealAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageViewCreateInfo revealViewInfo = viewInfo;
+        revealViewInfo.image = m_r_context.revealImage;
+        revealViewInfo.format = VK_FORMAT_R8_UNORM;
+        if(vkCreateImageView(m_r_context.device, &revealViewInfo, nullptr, &m_r_context.revealView) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create reveal image view");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
+            m_r_context.revealImage = VK_NULL_HANDLE;
+            m_r_context.revealAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageCreateInfo gameViewInfo = imageInfo;
+        gameViewInfo.format = m_r_context.swapchainImageFormat;
+        gameViewInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+        vmaCreateImage(m_r_context.allocator, &gameViewInfo, &allocInfo, &m_r_context.gameViewImage, &m_r_context.gameViewAlloc, nullptr);
+
+        VkImageViewCreateInfo gameViewViewInfo = viewInfo;
+        gameViewViewInfo.image = m_r_context.gameViewImage;
+        gameViewViewInfo.format = m_r_context.swapchainImageFormat;
+        vkCreateImageView(m_r_context.device, &gameViewViewInfo, nullptr, &m_r_context.gameViewView);
+
         m_r_context.lowResColorFormat = m_r_context.swapchainImageFormat;
     }
 
@@ -385,6 +437,36 @@ namespace vex {
             vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
             m_r_context.lowResColorImage = VK_NULL_HANDLE;
             m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
+        }
+
+        if(m_r_context.accumView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.accumView, nullptr);
+            m_r_context.accumView = VK_NULL_HANDLE;
+        }
+        if(m_r_context.accumImage != VK_NULL_HANDLE && m_r_context.accumAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
+            m_r_context.accumImage = VK_NULL_HANDLE;
+            m_r_context.accumAlloc = VK_NULL_HANDLE;
+        }
+
+        if(m_r_context.revealView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.revealView, nullptr);
+            m_r_context.revealView = VK_NULL_HANDLE;
+        }
+        if(m_r_context.revealImage != VK_NULL_HANDLE && m_r_context.revealAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
+            m_r_context.revealImage = VK_NULL_HANDLE;
+            m_r_context.revealAlloc = VK_NULL_HANDLE;
+        }
+
+        if(m_r_context.gameViewView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.gameViewView, nullptr);
+            m_r_context.gameViewView = VK_NULL_HANDLE;
+        }
+        if(m_r_context.gameViewImage != VK_NULL_HANDLE && m_r_context.gameViewAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.gameViewImage, m_r_context.gameViewAlloc);
+            m_r_context.gameViewImage = VK_NULL_HANDLE;
+            m_r_context.gameViewAlloc = VK_NULL_HANDLE;
         }
     }
 

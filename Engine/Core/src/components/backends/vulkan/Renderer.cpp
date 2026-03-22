@@ -88,7 +88,7 @@ namespace vex {
                 VkDescriptorSetAllocateInfo allocInfo{};
                 allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 
-                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 };
+                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3 };
                 VkDescriptorPoolCreateInfo poolInfo = {};
                 poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
                 poolInfo.poolSizeCount = 1;
@@ -99,7 +99,7 @@ namespace vex {
 
                 allocInfo.descriptorPool = m_localPool;
                 allocInfo.descriptorSetCount = 1;
-                allocInfo.pSetLayouts = &m_r_context.textureDescriptorSetLayout;
+                allocInfo.pSetLayouts = &m_r_context.screenDescriptorSetLayout;
 
                 vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_screenDescriptorSet);
 
@@ -454,6 +454,7 @@ namespace vex {
 
             opaqueQueue.clear();
             maskedQueue.clear();
+            transparentQueue.clear();
 
             FrustumSoA frustumSimd;
             static bool useAVX = HardwareInfo::HasAVX2();
@@ -563,19 +564,7 @@ namespace vex {
                         vulkanMesh->draw(cmd, m_p_maskPipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
                     } */
                 } else if (mesh.renderType == RenderType::TRANSPARENT) {
-                     auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
-
-                     if (vulkanMesh) {
-                         vulkanMesh->extractTransparentTriangles(
-                             modelMatrix,
-                             cameraPos,
-                             modelIndex,
-                             m_r_context.currentFrame,
-                             entity,
-                             m_transparentTriangles
-                         );
-                         trnasMatrixes[modelIndex] = modelMatrix;
-                     }
+                    transparentQueue.push_back({entity, modelIndex});
                 }
                 modelIndex++;
                 if(mesh.getIsFresh()) mesh.setRendered();
@@ -629,96 +618,76 @@ namespace vex {
                 }
             }
 
-            if (!m_transparentTriangles.empty()) {
-                std::sort(m_transparentTriangles.begin(), m_transparentTriangles.end(),
-                          [](const auto& a, const auto& b) {
-                              if (a.distanceToCamera != b.distanceToCamera) {
-                                  return a.distanceToCamera > b.distanceToCamera;
-                              }
+                vkCmdEndRendering(cmd);
 
-                              if (a.modelIndex != b.modelIndex) {
-                                  return a.modelIndex < b.modelIndex;
-                              }
+                transitionImageLayout(cmd, m_r_context.accumImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+                transitionImageLayout(cmd, m_r_context.revealImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
-                              return a.submeshIndex < b.submeshIndex;
-                          });
+                VkRenderingAttachmentInfo transAttachments[2]{};
 
+                transAttachments[0].sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+                transAttachments[0].imageView = m_r_context.accumView;
+                transAttachments[0].imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                transAttachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                transAttachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                transAttachments[0].clearValue.color = {{0.0f, 0.0f, 0.0f, 0.0f}};
+
+                transAttachments[1].sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+                transAttachments[1].imageView = m_r_context.revealView;
+                transAttachments[1].imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                transAttachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                transAttachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                transAttachments[1].clearValue.color = {{1.0f, 0.0f, 0.0f, 0.0f}};
+
+                VkRenderingAttachmentInfo transDepthAttachment{};
+                transDepthAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+                transDepthAttachment.imageView = m_r_context.depthImageView;
+                transDepthAttachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+                transDepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+                transDepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_NONE;
+
+                VkRenderingInfo transRenderingInfo{};
+                transRenderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+                transRenderingInfo.renderArea.offset = {0, 0};
+                transRenderingInfo.renderArea.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y};
+                transRenderingInfo.layerCount = 1;
+                transRenderingInfo.colorAttachmentCount = 2;
+                transRenderingInfo.pColorAttachments = transAttachments;
+                transRenderingInfo.pDepthAttachment = &transDepthAttachment;
+
+                vkCmdBeginRendering(cmd, &transRenderingInfo);
+
+            if (!transparentQueue.empty()) {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_transPipeline->get());
 
-                VulkanMesh* batchMesh = nullptr;
-                uint32_t batchSubmeshIndex = UINT32_MAX;
-                uint32_t batchModelIndex = UINT32_MAX;
-                const auto& [key, value] = *trnasMatrixes.begin();
-                glm::mat4 batchModelMatrix = value;
+                for (const auto& item : transparentQueue) {
+                    auto& mesh = registry.get<MeshComponent>(item.entity);
+                    auto& transform = registry.get<TransformComponent>(item.entity);
+                    auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
 
-                entt::entity batchEntity = entt::null;
-
-                for (const auto& tri : m_transparentTriangles) {
-                    bool stateChange = (tri.mesh != batchMesh ||
-                                        tri.submeshIndex != batchSubmeshIndex ||
-                                        tri.modelIndex != batchModelIndex);
-
-                    if (stateChange && !m_multiDrawInfos.empty()) {
-                        batchMesh->bindAndDrawBatched(
-                            cmd,
-                            m_p_transPipeline->layout(),
-                            *m_p_resources,
-                            m_r_context.currentFrame,
-                            batchModelIndex,
-                            batchSubmeshIndex,
-                            batchModelMatrix,
-                            true,
-                            tri.submeshIndex != batchSubmeshIndex,
-                            registry.get<MeshComponent>(batchEntity)
-
-                        );
-
-                        issueMultiDrawIndexed(cmd, m_multiDrawInfos);
-                        m_multiDrawInfos.clear();
+                    if (vulkanMesh) {
+                        vulkanMesh->draw(cmd, m_p_transPipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(), mesh);
                     }
-
-                    if (stateChange) {
-                        batchMesh = tri.mesh;
-                        batchSubmeshIndex = tri.submeshIndex;
-                        batchModelIndex = tri.modelIndex;
-                        batchModelMatrix = trnasMatrixes[tri.modelIndex];
-                        batchEntity = tri.entity;
-                    }
-
-                    bool canMerge = !m_multiDrawInfos.empty() && !stateChange;
-                    if (canMerge) {
-                        auto& lastDraw = m_multiDrawInfos.back();
-                        if (tri.firstIndex == (lastDraw.firstIndex + lastDraw.indexCount)) {
-                            lastDraw.indexCount += 3;
-                            continue;
-                        }
-                    }
-
-                    VkMultiDrawIndexedInfoEXT drawInfo{};
-                    drawInfo.firstIndex = tri.firstIndex;
-                    drawInfo.indexCount = 3;
-                    drawInfo.vertexOffset = 0;
-                    m_multiDrawInfos.push_back(drawInfo);
                 }
-
-                if (!m_multiDrawInfos.empty() && batchMesh != nullptr) {
-                    batchMesh->bindAndDrawBatched(
-                        cmd,
-                        m_p_transPipeline->layout(),
-                        *m_p_resources,
-                        m_r_context.currentFrame,
-                        batchModelIndex,
-                        batchSubmeshIndex,
-                        batchModelMatrix,
-                        true,
-                        true,
-                        registry.get<MeshComponent>(batchEntity)
-                    );
-                    issueMultiDrawIndexed(cmd, m_multiDrawInfos);
-                }
-
-                m_multiDrawInfos.clear();
             }
+
+            vkCmdEndRendering(cmd);
+
+            transitionImageLayout(cmd, m_r_context.accumImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+            transitionImageLayout(cmd, m_r_context.revealImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+            VkRenderingAttachmentInfo uiColorAttachment = colorAttachment;
+            uiColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+
+            VkRenderingAttachmentInfo uiDepthAttachment = depthAttachment;
+            uiDepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+            uiDepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_NONE;
+
+            VkRenderingInfo uiRenderingInfo = renderingInfo;
+            uiRenderingInfo.pColorAttachments = &uiColorAttachment;
+            uiRenderingInfo.pDepthAttachment = &uiDepthAttachment;
+
+            vkCmdBeginRendering(cmd, &uiRenderingInfo);
 
             if (frame != 0) {
                 m_uiObjects.clear();
@@ -770,7 +739,7 @@ namespace vex {
                 if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
                     m_cachedImGuiDescriptor = vkUI.addTexture(
                         m_screenSampler,
-                        m_r_context.lowResColorView,
+                        m_r_context.gameViewView,
                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
                     );
                 }
@@ -781,13 +750,38 @@ namespace vex {
         void Renderer::composeFrame(SceneRenderData& data, ImGUIWrapper& ui, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
 
-            transitionImageLayout(cmd, m_r_context.swapchainImages[data.imageIndex],
-                                 VK_IMAGE_LAYOUT_UNDEFINED,
-                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                                 0,
-                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+            if (isEditorMode) [[unlikely]] {
+                transitionImageLayout(cmd, m_r_context.gameViewImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+
+                VkRenderingAttachmentInfo compAtt{};
+                compAtt.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+                compAtt.imageView = m_r_context.gameViewView;
+                compAtt.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                compAtt.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+                compAtt.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+                compAtt.clearValue.color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+
+                VkRenderingInfo compInfo{};
+                compInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+                compInfo.renderArea.offset = {0, 0};
+                compInfo.renderArea.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y};
+                compInfo.layerCount = 1;
+                compInfo.colorAttachmentCount = 1;
+                compInfo.pColorAttachments = &compAtt;
+
+                vkCmdBeginRendering(cmd, &compInfo);
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->get());
+                VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                uint32_t dynamicOffset = 0;
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 0, 1, &sceneSet, 1, &dynamicOffset);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 1, 1, &m_screenDescriptorSet, 0, nullptr);
+                vkCmdDraw(cmd, 3, 1, 0, 0);
+                vkCmdEndRendering(cmd);
+
+                transitionImageLayout(cmd, m_r_context.gameViewImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+            }
+
+            transitionImageLayout(cmd, m_r_context.swapchainImages[data.imageIndex], VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
             VkRenderingAttachmentInfo colorAttachment{};
             colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
@@ -805,65 +799,39 @@ namespace vex {
             renderingInfo.colorAttachmentCount = 1;
             renderingInfo.pColorAttachments = &colorAttachment;
 
-
-            try {
-                vkCmdBeginRendering(cmd, &renderingInfo);
-            } catch (const std::exception& e) {
-                handle_critical_exception(e);
-                return;
-            }
-
-            VkViewport viewport{};
-            viewport.width = (float)m_r_context.swapchainExtent.width;
-            viewport.height = (float)m_r_context.swapchainExtent.height;
-            viewport.minDepth = 0.0f; viewport.maxDepth = 1.0f;
-            vkCmdSetViewport(cmd, 0, 1, &viewport);
-
-            VkRect2D scissor{};
-            scissor.extent = m_r_context.swapchainExtent;
-            vkCmdSetScissor(cmd, 0, 1, &scissor);
+            vkCmdBeginRendering(cmd, &renderingInfo);
 
             if (isEditorMode) [[unlikely]] {
-                    VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
-
-                    if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) {
-                        getImGuiTextureID(ui);
-                    }
-                    data.imguiTextureID = m_cachedImGuiDescriptor;
-
-                    vkUI.draw(cmd);
+                VulkanImGUIWrapper& vkUI = static_cast<VulkanImGUIWrapper&>(ui);
+                if (m_cachedImGuiDescriptor == VK_NULL_HANDLE) getImGuiTextureID(ui);
+                data.imguiTextureID = m_cachedImGuiDescriptor;
+                vkUI.draw(cmd);
             } else [[likely]] {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->get());
 
+                VkViewport viewport{};
+                viewport.x = 0.0f;
+                viewport.y = 0.0f;
+                viewport.width = static_cast<float>(m_r_context.swapchainExtent.width);
+                viewport.height = static_cast<float>(m_r_context.swapchainExtent.height);
+                viewport.minDepth = 0.0f;
+                viewport.maxDepth = 1.0f;
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+                VkRect2D scissor{};
+                scissor.offset = {0, 0};
+                scissor.extent = m_r_context.swapchainExtent;
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+
                 VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
                 uint32_t dynamicOffset = 0;
-
-                vkCmdBindDescriptorSets(
-                        cmd,
-                        VK_PIPELINE_BIND_POINT_GRAPHICS,
-                        m_p_fullscreenPipeline->layout(),
-                        0,
-                        1,
-                        &sceneSet,//&m_r_context.descriptorSets[data.frameIndex],
-                        1,
-                        &dynamicOffset
-                    );
-
-                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(),
-                                        1, 1, &m_screenDescriptorSet, 0, nullptr);
-
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 0, 1, &sceneSet, 1, &dynamicOffset);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 1, 1, &m_screenDescriptorSet, 0, nullptr);
                 vkCmdDraw(cmd, 3, 1, 0, 0);
             }
 
             vkCmdEndRendering(cmd);
-
-            transitionImageLayout(cmd, m_r_context.swapchainImages[data.imageIndex],
-                                 VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                                 VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                                 0,
-                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                 VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
+            transitionImageLayout(cmd, m_r_context.swapchainImages[data.imageIndex], VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
         }
 
         void Renderer::endFrame(SceneRenderData& data) {
@@ -920,20 +888,45 @@ namespace vex {
         }
 
         void Renderer::updateScreenDescriptor(VkImageView view) {
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            imageInfo.imageView = view;
-            imageInfo.sampler = m_screenSampler;
+            VkDescriptorImageInfo opaqueInfo{};
+            opaqueInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            opaqueInfo.imageView = view;
+            opaqueInfo.sampler = m_screenSampler;
 
-            VkWriteDescriptorSet write{};
-            write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            write.dstSet = m_screenDescriptorSet;
-            write.dstBinding = 0;
-            write.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            write.descriptorCount = 1;
-            write.pImageInfo = &imageInfo;
+            VkDescriptorImageInfo accumInfo{};
+            accumInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            accumInfo.imageView = m_r_context.accumView;
+            accumInfo.sampler = m_screenSampler;
 
-            vkUpdateDescriptorSets(m_r_context.device, 1, &write, 0, nullptr);
+            VkDescriptorImageInfo revealInfo{};
+            revealInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            revealInfo.imageView = m_r_context.revealView;
+            revealInfo.sampler = m_screenSampler;
+
+            std::array<VkWriteDescriptorSet, 3> writes{};
+
+            writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writes[0].dstSet = m_screenDescriptorSet;
+            writes[0].dstBinding = 0;
+            writes[0].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            writes[0].descriptorCount = 1;
+            writes[0].pImageInfo = &opaqueInfo;
+
+            writes[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writes[1].dstSet = m_screenDescriptorSet;
+            writes[1].dstBinding = 1;
+            writes[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            writes[1].descriptorCount = 1;
+            writes[1].pImageInfo = &accumInfo;
+
+            writes[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writes[2].dstSet = m_screenDescriptorSet;
+            writes[2].dstBinding = 2;
+            writes[2].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            writes[2].descriptorCount = 1;
+            writes[2].pImageInfo = &revealInfo;
+
+            vkUpdateDescriptorSets(m_r_context.device, 3, writes.data(), 0, nullptr);
         }
 
     void Renderer::transitionImageLayout(VkCommandBuffer cmd, VkImage image,

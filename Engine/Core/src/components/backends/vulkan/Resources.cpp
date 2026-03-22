@@ -89,6 +89,11 @@ struct BatchedTextureData {
             vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.textureDescriptorSetLayout, nullptr);
             m_r_context.textureDescriptorSetLayout = VK_NULL_HANDLE;
         }
+
+        if (m_r_context.screenDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.screenDescriptorSetLayout, nullptr);
+            m_r_context.screenDescriptorSetLayout = VK_NULL_HANDLE;
+        }
     }
 
     void VulkanResources::createTextureFromRaw(const std::vector<unsigned char>& rgba, int w, int h, const std::string& name) {
@@ -370,6 +375,20 @@ struct BatchedTextureData {
             if (vkCreateDescriptorSetLayout(m_r_context.device, &texLayoutInfo, nullptr, &m_r_context.textureDescriptorSetLayout) != VK_SUCCESS) {
                 throw_error("Failed to create legacy texture layout");
             }
+        }
+
+        std::array<VkDescriptorSetLayoutBinding, 3> screenBindings{};
+        for(int i = 0; i < 3; i++) {
+            screenBindings[i].binding = i;
+            screenBindings[i].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            screenBindings[i].descriptorCount = 1;
+            screenBindings[i].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        }
+        VkDescriptorSetLayoutCreateInfo screenLayoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+        screenLayoutInfo.bindingCount = 3;
+        screenLayoutInfo.pBindings = screenBindings.data();
+        if(vkCreateDescriptorSetLayout(m_r_context.device, &screenLayoutInfo, nullptr, &m_r_context.screenDescriptorSetLayout) != VK_SUCCESS) {
+            throw_error("Failed to create screen descriptor set layout");
         }
 
         std::array<VkDescriptorPoolSize, 3> poolSizes{};
