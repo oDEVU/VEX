@@ -15,6 +15,7 @@
 #include "components/backends/vulkan/PhysicsDebug.hpp"
 
 #include "components/SceneManager.hpp"
+#include "components/UtilitySystem.hpp"
 #include "components/backends/vulkan/context.hpp"
 #include "entt/entity/fwd.hpp"
 
@@ -289,6 +290,7 @@ void Engine::update(float deltaTime) {
         }
 
         if(!(m_paused || m_internally_paused)){
+            ProcessUtilityComponents(m_registry, deltaTime, *this);
             m_sceneManager->scenesUpdate(deltaTime);
             m_physicsSystem->update(deltaTime);
         }

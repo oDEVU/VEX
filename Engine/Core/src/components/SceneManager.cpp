@@ -3,6 +3,7 @@
 #include "components/GameComponents/CharacterComponent.hpp"
 #include "components/GameComponents/AudioSourceComponent.hpp"
 #include "components/GameComponents/EngineUtility.hpp"
+#include "components/GameComponents/UtilityComponents.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
@@ -163,6 +164,10 @@ REGISTER_COMPONENT(vex::LightComponent, color, intensity, radius);
 REGISTER_COMPONENT(vex::FogComponent, color, density, start, end);
 REGISTER_COMPONENT(vex::CharacterComponent, standingHeight, standingRadius, mass, maxSlopeAngle);
 REGISTER_COMPONENT(vex::AudioSourceComponent, audioFilePath, loop, is3D, autoPlay, volume, pitch, distance);
+
+REGISTER_COMPONENT(vex::LifetimeComponent, lifespan);
+REGISTER_COMPONENT(vex::OscillatorComponent, axis, amplitude, frequency, timeOffset);
+REGISTER_COMPONENT(vex::TweenComponent, targetLocalOffset, duration, pingPong);
 
 //REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
 
