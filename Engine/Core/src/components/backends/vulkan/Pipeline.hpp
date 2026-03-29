@@ -63,6 +63,20 @@ namespace vex {
             const std::vector<VkVertexInputAttributeDescription>& attributeDescriptions
         );
 
+        /// @brief Creates a Sprite Graphics Pipeline (used for Billboards and Particles).
+        /// @details Configures a pipeline optimized for rendering 2D sprites in a 3D environment.
+        /// It handles both transparent and masked blending modes, and supports instanced rendering for particles.
+        /// @param const std::string& vertPath - Path to the vertex shader.
+        /// @param const std::string& fragPath - Path to the fragment shader.
+        /// @param bool isTransparent - If true, enables alpha blending. If false, uses alpha-cutout (masked).
+        /// @param bool isInstanced - If true, sets up the pipeline for instanced rendering (used by particles).
+        void createSpritePipeline(
+            const std::string& vertPath,
+            const std::string& fragPath,
+            bool isTransparent,
+            bool isInstanced
+        );
+
         /// @brief Creates a UI Pipeline.
         /// @details Sets up blending for UI elements and ignores Depth Test/Write.
         /// @param const std::string& vertShaderPath - Vertex shader path.

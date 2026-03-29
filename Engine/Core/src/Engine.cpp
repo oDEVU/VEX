@@ -289,6 +289,9 @@ void Engine::update(float deltaTime) {
             }
         }
 
+        
+        if (m_paused && deltaTime == 0.0f) deltaTime = 0.016f;
+        ProcessParticles(m_registry, deltaTime);
         if(!(m_paused || m_internally_paused)){
             ProcessUtilityComponents(m_registry, deltaTime, *this);
             m_sceneManager->scenesUpdate(deltaTime);

@@ -10,6 +10,7 @@
 #include "components/ErrorUtils.hpp"
 #include "components/VirtualFileSystem.hpp"
 #include "components/ThreadPool.hpp"
+#include "components/GameComponents/ParticleEmitterComponent.hpp"
 
 #include <components/Types.hpp>
 #include <string>
@@ -159,6 +160,15 @@ namespace vex {
         /// @return VkDescriptorSetLayout - The bindless descriptor set layout.
         VkDescriptorSetLayout getBindlessLayout() const { return m_r_context.bindlessDescriptorSetLayout; }
 
+        /// @brief Returns the particle descriptor set for the given frame index.
+        /// @param frameIndex - The frame index.
+        /// @return VkDescriptorSet - The particle descriptor set.
+        VkDescriptorSet getParticleDescriptorSet(uint32_t frameIndex) const { return m_particleDescriptorSets[frameIndex]; }
+
+        /// @brief Returns the mapped data for the particle SSBO for the given frame index.
+        /// @param frameIndex - The frame index.
+        /// @return void* - The mapped data.
+        void* getParticleMappedData(uint32_t frameIndex) const { return m_particleMappedData[frameIndex]; }
     private:
         const std::string defaultTextureName = "default";
 
@@ -169,6 +179,12 @@ namespace vex {
         std::vector<VkBuffer> m_lightBuffers;
         std::vector<VmaAllocation> m_sceneAllocs;
         std::vector<VmaAllocation> m_lightAllocs;
+
+        std::vector<VkBuffer> m_particleSSBOs;
+        std::vector<VmaAllocation> m_particleAllocs;
+        std::vector<void*> m_particleMappedData;
+        VkDescriptorPool m_particleDescriptorPool = VK_NULL_HANDLE;
+        std::vector<VkDescriptorSet> m_particleDescriptorSets;
 
         VkDescriptorSetLayout m_descriptorSetLayout;
         std::vector<VkDescriptorSet> m_descriptorSets;
@@ -190,5 +206,7 @@ namespace vex {
         void createTextureSampler();
         /// @brief Internal function to create per-mesh texture sets.
         void createPerMeshTextureSets();
+        /// @brief Internal function to create particle SSBOs.
+        void createParticleSSBOs();
     };
 }

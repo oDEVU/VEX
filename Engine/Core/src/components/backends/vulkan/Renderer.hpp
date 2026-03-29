@@ -20,12 +20,31 @@
 #include <glm/glm.hpp>
 #include <chrono>
 #include <components/GameComponents/UiComponent.hpp>
+#include "components/GameComponents/BillboardComponent.hpp"
+#include "components/GameComponents/ParticleEmitterComponent.hpp"
 
 namespace vex {
     /// @brief Struct to hold information about a render item.
     struct RenderItem {
         entt::entity entity;
         uint32_t modelIndex;
+    };
+
+    /// @brief Struct to hold information about a billboard render item.
+    struct BillboardItem {
+        entt::entity entity;
+        uint32_t texID;
+    };
+
+    /// @brief Struct to hold push data for billboard rendering.
+    struct BillboardPushData {
+        glm::vec3 pos;    ///< World position of the billboard.
+        float sx;         ///< Horizontal scale.
+        float sy;         ///< Vertical scale.
+        uint32_t tID;     ///< Texture ID for bindless access.
+        uint32_t unlit;   ///< Flag determining if the billboard is unlit.
+        float pad;        ///< Padding for 16-byte alignment.
+        glm::vec4 col;    ///< Tint color of the billboard.
     };
 
     /// @brief Data structure to pass state between render stages
@@ -47,6 +66,10 @@ namespace vex {
         /// @param std::unique_ptr<VulkanPipeline>& pipeline - Standard Opaque pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& transPipeline - Transparent pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& maskPipeline - Masked pipeline (alpha cutout).
+        /// @param std::unique_ptr<VulkanPipeline>& billboardTransPipeline - Transparent billboard pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& billboardMaskedPipeline - Masked billboard pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& particleTransPipeline - Transparent particle pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& particleMaskedPipeline - Masked particle pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& uiPipeline - User Interface pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& fullscreenPipeline - Fullscreen/Post-process pipeline.
         /// @param std::unique_ptr<VulkanSwapchainManager>& swapchainManager - Swapchain manager.
@@ -56,6 +79,10 @@ namespace vex {
                  std::unique_ptr<VulkanPipeline>& pipeline,
                  std::unique_ptr<VulkanPipeline>& transPipeline,
                  std::unique_ptr<VulkanPipeline>& maskPipeline,
+                 std::unique_ptr<VulkanPipeline>& billboardTransPipeline,
+                 std::unique_ptr<VulkanPipeline>& billboardMaskedPipeline,
+                 std::unique_ptr<VulkanPipeline>& particleTransPipeline,
+                 std::unique_ptr<VulkanPipeline>& particleMaskedPipeline,
                  std::unique_ptr<VulkanPipeline>& uiPipeline,
                  std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
                  std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
@@ -156,8 +183,12 @@ namespace vex {
         VulkanContext& m_r_context;
         std::unique_ptr<VulkanResources>& m_p_resources;
         std::unique_ptr<VulkanPipeline>& m_p_pipeline;
-        std::unique_ptr<VulkanPipeline>& m_p_transPipeline;
-        std::unique_ptr<VulkanPipeline>& m_p_maskPipeline;
+        std::unique_ptr<VulkanPipeline>& m_p_transPipeline; ///< Standard transparent geometry pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_maskPipeline; ///< Standard masked geometry pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_billboardTransPipeline; ///< Transparent billboard rendering pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_billboardMaskedPipeline; ///< Masked billboard rendering pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_particleTransPipeline; ///< Transparent particle rendering pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_particleMaskedPipeline; ///< Masked particle rendering pipeline.
         std::unique_ptr<VulkanPipeline>& m_p_uiPipeline;
         std::unique_ptr<VulkanPipeline>& m_p_fullscreenPipeline;
         std::unique_ptr<VulkanSwapchainManager>& m_p_swapchainManager;
@@ -183,9 +214,13 @@ namespace vex {
         std::vector<std::vector<VkDescriptorSet>> m_garbageDescriptors;
         VkDescriptorPool m_localPool = VK_NULL_HANDLE;
 
-        std::vector<RenderItem> opaqueQueue;
-        std::vector<RenderItem> maskedQueue;
-        std::vector<RenderItem> transparentQueue;
+        std::vector<RenderItem> opaqueQueue;      ///< Queue of opaque 3D objects to render.
+        std::vector<RenderItem> maskedQueue;      ///< Queue of masked (alpha-cutout) 3D objects to render.
+        std::vector<RenderItem> transparentQueue; ///< Queue of transparent 3D objects to render.
+        std::vector<BillboardItem> bMaskedQueue;  ///< Queue of masked billboards to render.
+        std::vector<BillboardItem> bTransQueue;   ///< Queue of transparent billboards to render.
+        std::vector<entt::entity> pMaskedQueue;   ///< Queue of entities with masked particle emitters.
+        std::vector<entt::entity> pTransQueue;    ///< Queue of entities with transparent particle emitters.
 
         std::vector<VkBuffer> m_indirectBuffers;
         std::vector<VmaAllocation> m_indirectAllocations;

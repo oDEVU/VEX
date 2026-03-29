@@ -52,23 +52,29 @@ namespace vex {
     }
 
     Renderer::Renderer(VulkanContext& context,
-                           std::unique_ptr<VulkanResources>& resources,
-                           std::unique_ptr<VulkanPipeline>& pipeline,
-                           std::unique_ptr<VulkanPipeline>& transPipeline,
-                           std::unique_ptr<VulkanPipeline>& maskPipeline,
-                           std::unique_ptr<VulkanPipeline>& uiPipeline,
-                           std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
-                           std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
-                           std::unique_ptr<MeshManager>& meshManager)
-            : m_r_context(context),
-              m_p_resources(resources),
-              m_p_pipeline(pipeline),
-              m_p_transPipeline(transPipeline),
-              m_p_maskPipeline(maskPipeline),
-              m_p_uiPipeline(uiPipeline),
-              m_p_fullscreenPipeline(fullscreenPipeline),
-              m_p_swapchainManager(swapchainManager),
-              m_p_meshManager(meshManager) {
+             std::unique_ptr<VulkanResources>& resources,
+             std::unique_ptr<VulkanPipeline>& pipeline,
+             std::unique_ptr<VulkanPipeline>& transPipeline,
+             std::unique_ptr<VulkanPipeline>& maskPipeline,
+             std::unique_ptr<VulkanPipeline>& billboardTransPipeline,
+             std::unique_ptr<VulkanPipeline>& billboardMaskedPipeline,
+             std::unique_ptr<VulkanPipeline>& particleTransPipeline,
+             std::unique_ptr<VulkanPipeline>& particleMaskedPipeline,
+             std::unique_ptr<VulkanPipeline>& uiPipeline,
+             std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
+             std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
+             std::unique_ptr<MeshManager>& meshManager)
+        : m_r_context(context), m_p_resources(resources),
+          m_p_pipeline(pipeline), m_p_transPipeline(transPipeline),
+          m_p_maskPipeline(maskPipeline),
+          m_p_billboardTransPipeline(billboardTransPipeline),
+          m_p_billboardMaskedPipeline(billboardMaskedPipeline),
+          m_p_particleTransPipeline(particleTransPipeline),
+          m_p_particleMaskedPipeline(particleMaskedPipeline),
+          m_p_uiPipeline(uiPipeline),
+          m_p_fullscreenPipeline(fullscreenPipeline),
+          m_p_swapchainManager(swapchainManager),
+          m_p_meshManager(meshManager) {
         startTime = std::chrono::high_resolution_clock::now();
 
                 VkSamplerCreateInfo samplerInfo{};
@@ -455,6 +461,10 @@ namespace vex {
             opaqueQueue.clear();
             maskedQueue.clear();
             transparentQueue.clear();
+            bMaskedQueue.clear();
+            bTransQueue.clear();
+            pMaskedQueue.clear();
+            pTransQueue.clear();
 
             FrustumSoA frustumSimd;
             static bool useAVX = HardwareInfo::HasAVX2();
@@ -570,6 +580,25 @@ namespace vex {
                 if(mesh.getIsFresh()) mesh.setRendered();
             }
 
+            auto bView = registry.view<TransformComponent, BillboardComponent>();
+            for (auto entity : bView) {
+                auto& bill = bView.get<BillboardComponent>(entity);
+                uint32_t tIndex = m_p_resources->getTextureIndex(GetAssetPath(bill.texturePath));
+                if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
+
+                if (bill.isTransparent) bTransQueue.push_back({entity, tIndex});
+                else bMaskedQueue.push_back({entity, tIndex});
+            }
+
+            auto pView = registry.view<ParticleEmitterComponent>();
+            for (auto entity : pView) {
+                auto& emit = pView.get<ParticleEmitterComponent>(entity);
+                if (emit.activeParticles.empty()) continue;
+
+                if (emit.isTransparent) pTransQueue.push_back(entity);
+                else pMaskedQueue.push_back(entity);
+            }
+
             for (const auto& item : opaqueQueue) {
                 auto& mesh = registry.get<MeshComponent>(item.entity);
                 auto& transform = registry.get<TransformComponent>(item.entity);
@@ -618,7 +647,100 @@ namespace vex {
                 }
             }
 
-                vkCmdEndRendering(cmd);
+            uint32_t currentParticleOffset = 0;
+            ParticleGPUData* particleMappedData = static_cast<ParticleGPUData*>(m_p_resources->getParticleMappedData(data.frameIndex));
+            VkDescriptorSet particleSSBODescriptorSet = m_p_resources->getParticleDescriptorSet(data.frameIndex);
+
+            if (!bMaskedQueue.empty()) {
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->get());
+                VkViewport viewport{0.0f, 0.0f, (float)m_r_context.currentRenderResolution.x, (float)m_r_context.currentRenderResolution.y, 0.0f, 1.0f};
+                VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+                VkDescriptorSet globalSet_bMaskedQueue = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                uint32_t dynamicOffset_bMaskedQueue = 0;
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 0, 1, &globalSet_bMaskedQueue, 1, &dynamicOffset_bMaskedQueue);
+                if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
+                }
+                for (const auto& item : bMaskedQueue) {
+                    auto& trans = registry.get<TransformComponent>(item.entity);
+                    auto& bill = registry.get<BillboardComponent>(item.entity);
+
+                    BillboardPushData push{};
+                    push.pos = trans.getWorldPosition();
+                    push.sx = bill.size.x;
+                    push.sy = bill.size.y;
+                    push.tID = item.texID;
+                    push.unlit = bill.isUnlit ? 1 : 0;
+                    push.col = glm::vec4(bill.color.r, bill.color.g, bill.color.b, bill.color.a);
+
+                    vkCmdPushConstants(cmd, m_p_billboardMaskedPipeline->layout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(BillboardPushData), &push);
+
+                    VkDescriptorSet globalSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                    uint32_t dynamicOffset = 0;
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 0, 1, &globalSet, 1, &dynamicOffset);
+
+                    if (m_r_context.supportsBindlessTextures) {
+                        VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
+                    } else {
+                        VkDescriptorSet texSet = m_p_resources->getTextureDescriptorSet(data.frameIndex, item.texID);
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 1, 1, &texSet, 0, nullptr);
+                    }
+
+                    vkCmdDraw(cmd, 6, 1, 0, 0);
+                }
+            }
+
+            if (!pMaskedQueue.empty()) {
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->get());
+                VkViewport viewport{0.0f, 0.0f, (float)m_r_context.currentRenderResolution.x, (float)m_r_context.currentRenderResolution.y, 0.0f, 1.0f};
+                VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+                
+                VkDescriptorSet globalSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                uint32_t dynamicOffset = 0;
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->layout(), 0, 1, &globalSet, 1, &dynamicOffset);
+                
+                if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
+                }
+                
+                for (auto e : pMaskedQueue) {
+                    auto& emit = registry.get<ParticleEmitterComponent>(e);
+                    uint32_t pCount = static_cast<uint32_t>(emit.activeParticles.size());
+
+                    if (currentParticleOffset + pCount > 100000) {
+                        vex::log(LogLevel::WARNING, "Max particle limit reached! Skipping further particles.");
+                        continue;
+                    }
+                    
+                    
+
+                    
+                    uint32_t tIndex = m_p_resources->getTextureIndex(GetAssetPath(emit.texturePath));
+                    if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
+                    for(auto& p : emit.activeParticles) p.textureID = tIndex;
+                    
+                    memcpy(particleMappedData + currentParticleOffset, emit.activeParticles.data(), pCount * sizeof(ParticleGPUData));
+
+                    if (!m_r_context.supportsBindlessTextures) {
+                        VkDescriptorSet texSet = m_p_resources->getTextureDescriptorSet(data.frameIndex, tIndex);
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->layout(), 1, 1, &texSet, 0, nullptr);
+                    }
+
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->layout(), 2, 1, &particleSSBODescriptorSet, 0, nullptr);
+
+                    vkCmdDraw(cmd, 6, pCount, 0, currentParticleOffset);
+                    currentParticleOffset += pCount;
+                }
+            }
+
+            vkCmdEndRendering(cmd);
 
                 transitionImageLayout(cmd, m_r_context.accumImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
                 transitionImageLayout(cmd, m_r_context.revealImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
@@ -668,6 +790,90 @@ namespace vex {
                     if (vulkanMesh) {
                         vulkanMesh->draw(cmd, m_p_transPipeline->layout(), *m_p_resources, data.frameIndex, item.modelIndex, transform.matrix(), mesh);
                     }
+                }
+            }
+
+            if (!bTransQueue.empty()) {
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardTransPipeline->get());
+                VkViewport viewport{0.0f, 0.0f, (float)m_r_context.currentRenderResolution.x, (float)m_r_context.currentRenderResolution.y, 0.0f, 1.0f};
+                VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+                VkDescriptorSet globalSet_bTransQueue = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                uint32_t dynamicOffset_bTransQueue = 0;
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardTransPipeline->layout(), 0, 1, &globalSet_bTransQueue, 1, &dynamicOffset_bTransQueue);
+                if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardTransPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
+                }
+                for (const auto& item : bTransQueue) {
+                    auto& trans = registry.get<TransformComponent>(item.entity);
+                    auto& bill = registry.get<BillboardComponent>(item.entity);
+
+                    BillboardPushData push{};
+                    push.pos = trans.getWorldPosition();
+                    push.sx = bill.size.x;
+                    push.sy = bill.size.y;
+                    push.tID = item.texID;
+                    push.unlit = bill.isUnlit ? 1 : 0;
+                    push.col = glm::vec4(bill.color.r, bill.color.g, bill.color.b, bill.color.a);
+
+                    vkCmdPushConstants(cmd, m_p_billboardTransPipeline->layout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(BillboardPushData), &push);
+
+
+
+                    if (!m_r_context.supportsBindlessTextures) {
+                        VkDescriptorSet texSet = m_p_resources->getTextureDescriptorSet(data.frameIndex, item.texID);
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardTransPipeline->layout(), 1, 1, &texSet, 0, nullptr);
+                    }
+
+                    vkCmdDraw(cmd, 6, 1, 0, 0);
+                }
+            }
+
+            if (!pTransQueue.empty()) {
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleTransPipeline->get());
+                VkViewport viewport{0.0f, 0.0f, (float)m_r_context.currentRenderResolution.x, (float)m_r_context.currentRenderResolution.y, 0.0f, 1.0f};
+                VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+                
+                VkDescriptorSet globalSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                uint32_t dynamicOffset = 0;
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleTransPipeline->layout(), 0, 1, &globalSet, 1, &dynamicOffset);
+                
+                if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleTransPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
+                }
+                
+                for (auto e : pTransQueue) {
+                    auto& emit = registry.get<ParticleEmitterComponent>(e);
+                    uint32_t pCount = static_cast<uint32_t>(emit.activeParticles.size());
+
+                    if (currentParticleOffset + pCount > 100000) {
+                        vex::log(LogLevel::WARNING, "Max particle limit reached! Skipping further particles.");
+                        continue;
+                    }
+                    
+                    
+
+                    
+                    uint32_t tIndex = m_p_resources->getTextureIndex(GetAssetPath(emit.texturePath));
+                    if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
+                    for(auto& p : emit.activeParticles) p.textureID = tIndex;
+                    
+                    memcpy(particleMappedData + currentParticleOffset, emit.activeParticles.data(), pCount * sizeof(ParticleGPUData));
+
+                    if (!m_r_context.supportsBindlessTextures) {
+                        VkDescriptorSet texSet = m_p_resources->getTextureDescriptorSet(data.frameIndex, tIndex);
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleTransPipeline->layout(), 1, 1, &texSet, 0, nullptr);
+                    }
+
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleTransPipeline->layout(), 2, 1, &particleSSBODescriptorSet, 0, nullptr);
+
+                    vkCmdDraw(cmd, 6, pCount, 0, currentParticleOffset);
+                    currentParticleOffset += pCount;
                 }
             }
 

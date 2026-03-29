@@ -222,6 +222,8 @@ set(BINDLESS_ELIGIBLE_SHADERS
     "Masked"
     "Transparent"
     "Ui"
+    "SpriteOpaqueFrag"
+    "SpriteTransFrag"
 )
 
 set(SPV_SHADERS "")
@@ -279,6 +281,16 @@ foreach(source IN LISTS SLANG_SHADERS)
         )
         list(APPEND SPV_SHADERS ${OUTPUT_FILE})
 
+        if(FILENAME IN_LIST BINDLESS_ELIGIBLE_SHADERS)
+            set(BINDLESS_OUTPUT_SPV ${SHADER_BINARY_DIR}/${FILENAME}Bindless.spv)
+            add_custom_command(
+                OUTPUT ${BINDLESS_OUTPUT_SPV}
+                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_5_0 -o ${BINDLESS_OUTPUT_SPV} ${source}
+                DEPENDS ${source} ${SLANG_DEPENDENCIES}
+                COMMENT "Compiling Bindless Fragment Shader: ${FILENAME}"
+            )
+            list(APPEND SPV_SHADERS ${BINDLESS_OUTPUT_SPV})
+        endif()
         # Case 3: unified shader → compile both vertMain + fragMain
     else()
         set(VERT_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Vert.spv)

@@ -1,4 +1,5 @@
 #include "Editor.hpp"
+#include "components/UtilitySystem.hpp"
 #include "EditorImGUIWrapper.hpp"
 
 #include "Tools/PropertiesMenu.hpp"
@@ -255,6 +256,8 @@ namespace vex {
 
         m_camera->Update(deltaTime);
         m_physicsSystem->SyncBodies();
+
+        vex::ProcessParticles(m_registry, deltaTime);
 
         render();
         if(!m_refresh){

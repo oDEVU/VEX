@@ -1,7 +1,85 @@
+#include "components/GameComponents/ParticleEmitterComponent.hpp"
 #include "components/GameComponents/UtilityComponents.hpp"
 #include <cmath>
 
 namespace vex {
+
+/// @brief Processes CPU-side particle simulation and prepares GPU data.
+/// @details Spawns new particles based on spawn rate, updates their physics (gravity, velocity),
+/// scales and colors over their lifetime, and removes dead particles. Maps the remaining active
+/// particles to a structure suitable for the GPU (ParticleGPUData).
+/// @param entt::registry& registry - The ECS registry to fetch emitters and transforms.
+/// @param float deltaTime - Time elapsed since the last frame.
+void ProcessParticles(entt::registry& registry, float deltaTime) {
+
+
+    
+    
+    auto particleView = registry.view<TransformComponent, ParticleEmitterComponent>();
+    for (auto entity : particleView) {
+        auto& trans = particleView.get<TransformComponent>(entity);
+        auto& emit = particleView.get<ParticleEmitterComponent>(entity);
+
+        // 1. Spawning Logic
+        emit.spawnTimer += deltaTime;
+        static int frame = 0;
+        if (frame++ % 60 == 0) vex::log(LogLevel::INFO, "ProcessParticles running... CPU count: %d, spawnTimer: %f", (int)emit.cpuParticles.size(), emit.spawnTimer);
+        if (emit.spawnTimer >= emit.spawnRate) {
+            emit.spawnTimer = 0.0f;
+            Particle p;
+            p.position = trans.getWorldPosition();
+            
+            // Random variation between -1 and 1
+            float rx = ((rand() % 200) / 100.0f) - 1.0f;
+            float ry = ((rand() % 200) / 100.0f) - 1.0f;
+            float rz = ((rand() % 200) / 100.0f) - 1.0f;
+            
+            p.velocity = emit.initialVelocity + (emit.velocityVariation * glm::vec3(rx, ry, rz));
+            
+            float rLife = ((rand() % 200) / 100.0f) - 1.0f;
+            p.life = p.startingLife = emit.particleLife + (emit.particleLifeVariation * rLife);
+            
+            p.startSize = emit.startSize;
+            p.endSize = emit.endSize;
+            p.startColor = emit.startColor;
+            p.endColor = emit.endColor;
+            
+            emit.cpuParticles.push_back(p);
+        }
+
+        // 2. Update Physics & Map to GPU
+        emit.activeParticles.clear();
+        for (auto it = emit.cpuParticles.begin(); it != emit.cpuParticles.end(); ) {
+            it->life -= deltaTime;
+            if (it->life <= 0.0f) {
+                it = emit.cpuParticles.erase(it);
+            } else {
+                it->velocity += emit.gravity * deltaTime;
+                it->position += it->velocity * deltaTime;
+
+                float t = 1.0f - (it->life / it->startingLife); // 0.0 to 1.0
+                float currentSize = glm::mix(it->startSize, it->endSize, t);
+                
+                glm::vec4 sColor(it->startColor.r, it->startColor.g, it->startColor.b, it->startColor.a);
+                glm::vec4 eColor(it->endColor.r, it->endColor.g, it->endColor.b, it->endColor.a);
+                glm::vec4 currentColor = glm::mix(sColor, eColor, t);
+
+                // Map to GPU struct
+                ParticleGPUData gpuData{};
+                gpuData.position = glm::vec4(it->position, 1.0f);
+                gpuData.scaleX = currentSize;
+                gpuData.scaleY = currentSize;
+                gpuData.color = currentColor;
+                gpuData.isUnlit = emit.isUnlit ? 1 : 0;
+                // gpuData.textureID will be set in Renderer
+
+                emit.activeParticles.push_back(gpuData);
+                ++it;
+            }
+        }
+    }
+}
+
 
 void ProcessUtilityComponents(entt::registry& registry, float deltaTime, Engine& engine) {
     auto oscView = registry.view<OscillatorComponent, TransformComponent>();
@@ -47,6 +125,7 @@ void ProcessUtilityComponents(entt::registry& registry, float deltaTime, Engine&
             }
         }
     }
+
 
     auto lifetimeView = registry.view<LifetimeComponent>();
     for (auto entity : lifetimeView) {

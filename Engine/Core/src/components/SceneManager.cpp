@@ -1,10 +1,12 @@
 #include "components/SceneManager.hpp"
+#include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameComponents/CharacterComponent.hpp"
 #include "components/GameComponents/AudioSourceComponent.hpp"
 #include "components/GameComponents/EngineUtility.hpp"
 #include "components/GameComponents/UtilityComponents.hpp"
-#include "components/GameComponents/ComponentFactory.hpp"
+#include "components/GameComponents/BillboardComponent.hpp"
+#include "components/GameComponents/ParticleEmitterComponent.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/LightObject.hpp"
@@ -168,6 +170,8 @@ REGISTER_COMPONENT(vex::AudioSourceComponent, audioFilePath, loop, is3D, autoPla
 REGISTER_COMPONENT(vex::LifetimeComponent, lifespan);
 REGISTER_COMPONENT(vex::OscillatorComponent, axis, amplitude, frequency, timeOffset);
 REGISTER_COMPONENT(vex::TweenComponent, targetLocalOffset, duration, pingPong);
+REGISTER_COMPONENT(vex::BillboardComponent, texturePath, size, color, isTransparent, isUnlit);
+REGISTER_COMPONENT(vex::ParticleEmitterComponent, texturePath, isTransparent, isUnlit, spawnRate, spawnTimer, gravity, initialVelocity, velocityVariation, particleLife, particleLifeVariation, startSize, endSize, startColor, endColor);
 
 //REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
 

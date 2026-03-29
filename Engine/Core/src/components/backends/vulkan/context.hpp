@@ -118,6 +118,7 @@ namespace vex {
         VkDescriptorSetLayout uboDescriptorSetLayout = VK_NULL_HANDLE;
         VkDescriptorSetLayout textureDescriptorSetLayout = VK_NULL_HANDLE;
         VkDescriptorSetLayout screenDescriptorSetLayout = VK_NULL_HANDLE;
+        VkDescriptorSetLayout particleDescriptorSetLayout = VK_NULL_HANDLE;
 
         vex_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;

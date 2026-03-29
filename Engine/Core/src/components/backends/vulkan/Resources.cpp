@@ -29,6 +29,7 @@ struct BatchedTextureData {
         createTextureSampler();
         createUniformBuffers();
         createDescriptorResources();
+        createParticleSSBOs();
     }
 
     VulkanResources::~VulkanResources() {
@@ -93,6 +94,22 @@ struct BatchedTextureData {
         if (m_r_context.screenDescriptorSetLayout != VK_NULL_HANDLE) {
             vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.screenDescriptorSetLayout, nullptr);
             m_r_context.screenDescriptorSetLayout = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.particleDescriptorSetLayout != VK_NULL_HANDLE) {
+            vkDestroyDescriptorSetLayout(m_r_context.device, m_r_context.particleDescriptorSetLayout, nullptr);
+            m_r_context.particleDescriptorSetLayout = VK_NULL_HANDLE;
+        }
+        if (m_particleDescriptorPool != VK_NULL_HANDLE) {
+            vkDestroyDescriptorPool(m_r_context.device, m_particleDescriptorPool, nullptr);
+            m_particleDescriptorPool = VK_NULL_HANDLE;
+        }
+        for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            if (m_particleSSBOs[i] != VK_NULL_HANDLE) {
+                vmaUnmapMemory(m_r_context.allocator, m_particleAllocs[i]);
+                vmaDestroyBuffer(m_r_context.allocator, m_particleSSBOs[i], m_particleAllocs[i]);
+                m_particleSSBOs[i] = VK_NULL_HANDLE;
+            }
         }
     }
 
@@ -278,6 +295,75 @@ struct BatchedTextureData {
             bufferInfo.size = sizeof(SceneLightsUBO) * MAX_MODELS;
             vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo,
                             &m_lightBuffers[i], &m_lightAllocs[i], nullptr);
+        }
+    }
+
+    void VulkanResources::createParticleSSBOs() {
+        VkDescriptorSetLayoutBinding ssboBinding{};
+        ssboBinding.binding = 0;
+        ssboBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        ssboBinding.descriptorCount = 1;
+        ssboBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+        VkDescriptorSetLayoutCreateInfo layoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+        layoutInfo.bindingCount = 1;
+        layoutInfo.pBindings = &ssboBinding;
+
+        if (vkCreateDescriptorSetLayout(m_r_context.device, &layoutInfo, nullptr, &m_r_context.particleDescriptorSetLayout) != VK_SUCCESS) {
+            throw_error("Failed to create particle SSBO layout");
+        }
+
+        m_particleSSBOs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_particleAllocs.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_particleMappedData.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+        m_particleDescriptorSets.resize(m_r_context.MAX_FRAMES_IN_FLIGHT);
+
+        VkBufferCreateInfo bufferInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+        bufferInfo.size = sizeof(ParticleGPUData) * 100000;
+        bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+
+        VmaAllocationCreateInfo allocInfo{};
+        allocInfo.usage = VMA_MEMORY_USAGE_CPU_TO_GPU;
+        allocInfo.flags = VMA_ALLOCATION_CREATE_MAPPED_BIT;
+
+        for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo, &m_particleSSBOs[i], &m_particleAllocs[i], nullptr);
+            vmaMapMemory(m_r_context.allocator, m_particleAllocs[i], &m_particleMappedData[i]);
+        }
+
+        VkDescriptorPoolSize poolSize{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, m_r_context.MAX_FRAMES_IN_FLIGHT};
+        VkDescriptorPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO};
+        poolInfo.poolSizeCount = 1;
+        poolInfo.pPoolSizes = &poolSize;
+        poolInfo.maxSets = m_r_context.MAX_FRAMES_IN_FLIGHT;
+
+        if (vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_particleDescriptorPool) != VK_SUCCESS) {
+            throw_error("Failed to create particle descriptor pool");
+        }
+
+        std::vector<VkDescriptorSetLayout> layouts(m_r_context.MAX_FRAMES_IN_FLIGHT, m_r_context.particleDescriptorSetLayout);
+        VkDescriptorSetAllocateInfo allocSetInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO};
+        allocSetInfo.descriptorPool = m_particleDescriptorPool;
+        allocSetInfo.descriptorSetCount = m_r_context.MAX_FRAMES_IN_FLIGHT;
+        allocSetInfo.pSetLayouts = layouts.data();
+
+        if (vkAllocateDescriptorSets(m_r_context.device, &allocSetInfo, m_particleDescriptorSets.data()) != VK_SUCCESS) {
+            throw_error("Failed to allocate particle descriptor sets");
+        }
+
+        for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
+            VkDescriptorBufferInfo bInfo{};
+            bInfo.buffer = m_particleSSBOs[i];
+            bInfo.offset = 0;
+            bInfo.range = VK_WHOLE_SIZE;
+
+            VkWriteDescriptorSet writeDesc{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+            writeDesc.dstSet = m_particleDescriptorSets[i];
+            writeDesc.dstBinding = 0;
+            writeDesc.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+            writeDesc.descriptorCount = 1;
+            writeDesc.pBufferInfo = &bInfo;
+            vkUpdateDescriptorSets(m_r_context.device, 1, &writeDesc, 0, nullptr);
         }
     }
 

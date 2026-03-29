@@ -617,6 +617,20 @@ uint32_t Interface::GetBestDeviceVersion() {
             attributes
         );
 
+        log("Initializing Billboard and Particle Pipelines...");
+        m_p_billboardMaskedPipeline = std::make_unique<VulkanPipeline>(m_context);
+        m_p_billboardTransPipeline = std::make_unique<VulkanPipeline>(m_context);
+        m_p_particleMaskedPipeline = std::make_unique<VulkanPipeline>(m_context);
+        m_p_particleTransPipeline = std::make_unique<VulkanPipeline>(m_context);
+
+        std::string spriteOpaqueFrag = m_context.supportsBindlessTextures ? "Engine/shaders/SpriteOpaqueFragBindless.spv" : "Engine/shaders/SpriteOpaqueFrag.spv";
+        std::string spriteTransFrag = m_context.supportsBindlessTextures ? "Engine/shaders/SpriteTransFragBindless.spv" : "Engine/shaders/SpriteTransFrag.spv";
+
+        m_p_billboardMaskedPipeline->createSpritePipeline("Engine/shaders/BillboardVert.spv", spriteOpaqueFrag, false, false);
+        m_p_billboardTransPipeline->createSpritePipeline("Engine/shaders/BillboardVert.spv", spriteTransFrag, true, false);
+        m_p_particleMaskedPipeline->createSpritePipeline("Engine/shaders/ParticleVert.spv", spriteOpaqueFrag, false, true);
+        m_p_particleTransPipeline->createSpritePipeline("Engine/shaders/ParticleVert.spv", spriteTransFrag, true, true);
+
         log("Initializing UI Pipeline...");
         m_p_uiPipeline = std::make_unique<VulkanPipeline>(m_context);
 
@@ -669,6 +683,10 @@ uint32_t Interface::GetBestDeviceVersion() {
             m_p_pipeline,
             m_p_transPipeline,
             m_p_maskPipeline,
+            m_p_billboardTransPipeline,
+            m_p_billboardMaskedPipeline,
+            m_p_particleTransPipeline,
+            m_p_particleMaskedPipeline,
             m_p_uiPipeline,
             m_p_fullscreenPipeline,
             m_p_swapchainManager,
@@ -695,6 +713,10 @@ uint32_t Interface::GetBestDeviceVersion() {
         m_p_pipeline.reset();
         m_p_transPipeline.reset();
         m_p_maskPipeline.reset();
+        m_p_billboardMaskedPipeline.reset();
+        m_p_billboardTransPipeline.reset();
+        m_p_particleMaskedPipeline.reset();
+        m_p_particleTransPipeline.reset();
         m_p_uiPipeline.reset();
         m_p_fullscreenPipeline.reset();
         #if DEBUG

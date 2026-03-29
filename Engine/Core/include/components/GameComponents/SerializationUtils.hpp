@@ -10,6 +10,15 @@
 #include <glm/gtc/quaternion.hpp>
 
 namespace glm {
+    inline void to_json(nlohmann::json& j, const glm::vec2& v) {
+            j = nlohmann::json{{"x", v.x}, {"y", v.y}};
+        }
+        inline void from_json(const nlohmann::json& j, glm::vec2& v) {
+            if (j.contains("x")) j.at("x").get_to(v.x);
+            if (j.contains("y")) j.at("y").get_to(v.y);
+        }
+
+
     // Serialize vec3
     inline void to_json(nlohmann::json& j, const vec3& v) {
         j = nlohmann::json::array({v.x, v.y, v.z});
