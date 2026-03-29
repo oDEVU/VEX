@@ -13,6 +13,8 @@
 #include <entt/entt.hpp>
 
 #include <string>
+#include <algorithm>
+#include <cctype>
 
 #include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameObjects/GameObject.hpp"
@@ -33,11 +35,14 @@ inline void DrawPropertiesOfAnObject(vex::GameObject* object, bool temporary){
         ImGui::PopStyleColor();
     }
 
-    char buffer[256];
-    strncpy(buffer, object->GetComponent<vex::NameComponent>().name.c_str(), sizeof(buffer));
-    if (ImGui::InputText("Name", buffer, sizeof(buffer))) {
-        // Add name vallidation
-        object->GetComponent<vex::NameComponent>().name = std::string(buffer);
+    char buffer[256] = "";
+    if (object->HasComponent<vex::NameComponent>()) {
+        strncpy(buffer, object->GetComponent<vex::NameComponent>().name.c_str(), sizeof(buffer));
+        if (ImGui::InputText("Name", buffer, sizeof(buffer))) {
+            object->GetComponent<vex::NameComponent>().name = std::string(buffer);
+        }
+    } else {
+        ImGui::TextDisabled("No NameComponent");
     }
 
     ImGui::Separator();
@@ -67,13 +72,28 @@ inline void DrawPropertiesOfAnObject(vex::GameObject* object, bool temporary){
             if (availableComponents.empty()) {
                 ImGui::TextDisabled("No more components available");
             } else {
+                static char searchBuffer[256] = "";
+                ImGui::InputTextWithHint("##SearchComponent", "Search...", searchBuffer, sizeof(searchBuffer));
+                ImGui::Separator();
+
                 ImGui::TextDisabled("Available Components");
                 ImGui::Separator();
 
                 for (const auto& compName : availableComponents) {
+                    if (searchBuffer[0] != '\0') {
+                        std::string lowerName = compName;
+                        std::string lowerSearch = searchBuffer;
+                        std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), [](unsigned char c){ return std::tolower(c); });
+                        std::transform(lowerSearch.begin(), lowerSearch.end(), lowerSearch.begin(), [](unsigned char c){ return std::tolower(c); });
+                        if (lowerName.find(lowerSearch) == std::string::npos) {
+                            continue;
+                        }
+                    }
+
                     if (ImGui::Selectable(compName.c_str())) {
                         vex::ComponentRegistry::getInstance().createComponent(*object, compName);
                         ImGui::CloseCurrentPopup();
+                        searchBuffer[0] = '\0';
                     }
                 }
             }

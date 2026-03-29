@@ -270,7 +270,7 @@ void EditorMenuBar::OpenScene(){
             ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
 
             if (ImGui::Begin("Open Scene File", &window->isOpen)) {
-                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
+                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons(), m_editor.getEditorProperties()->assetBrowserThumbnailSize);
                 if (!selectedFile.empty() && !dialogBrowser->GetExtension(selectedFile).empty()) {
 
                     if (dialogBrowser->GetExtension(selectedFile) == ".json") {
@@ -332,7 +332,7 @@ void EditorMenuBar::SaveSceneAs() {
 
             if (ImGui::Begin("Save Scene As", &window->isOpen)) {
 
-                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
+                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons(), m_editor.getEditorProperties()->assetBrowserThumbnailSize);
 
                 if (!selectedFile.empty()) {
                     std::filesystem::path p(selectedFile);
@@ -666,7 +666,7 @@ void EditorMenuBar::NewScene() {
 
             if (ImGui::Begin("Create New Scene", &window->isOpen)) {
 
-                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons());
+                std::string selectedFile = dialogBrowser->Draw(m_editor.GetEditorIcons(), m_editor.getEditorProperties()->assetBrowserThumbnailSize);
 
                 if (!selectedFile.empty()) {
                     std::filesystem::path p(selectedFile);

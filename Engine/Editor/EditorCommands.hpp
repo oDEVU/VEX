@@ -45,7 +45,7 @@ namespace vex {
 
         /// @brief Does the transform changes.
         void Execute() override {
-            if (!m_valid || !m_object) return;
+            if (!m_valid || !m_object || !m_object->HasComponent<vex::TransformComponent>()) return;
             auto& tc = m_object->GetComponent<vex::TransformComponent>();
             tc.setLocalPosition(m_newPos);
             tc.rotation = m_newRot;
@@ -56,7 +56,7 @@ namespace vex {
 
         /// @brief Undoes the transfom changes.
         void Undo() override {
-            if (!m_valid || !m_object) return;
+            if (!m_valid || !m_object || !m_object->HasComponent<vex::TransformComponent>()) return;
             auto& tc = m_object->GetComponent<vex::TransformComponent>();
             tc.setLocalPosition(m_oldPos);
             tc.rotation = m_oldRot;
@@ -117,7 +117,11 @@ namespace vex {
 
             for (auto* obj : allObjects) {
                 SerializedObject data;
-                data.name = obj->GetComponent<vex::NameComponent>().name;
+                if (obj->HasComponent<vex::NameComponent>()) {
+                    data.name = obj->GetComponent<vex::NameComponent>().name;
+                } else {
+                    data.name = "Unnamed";
+                }
                 data.type = obj->getObjectType();
                 data.originalID = obj->GetEntity();
 

@@ -37,9 +37,12 @@ namespace vex {
         /**
                  * @brief Draws the Asset Browser UI and handles interaction.
                  * @param const BrowserIcons& icons - The set of icons to use for drawing assets.
+                 * @param float& thumbnailSize - Reference to the thumbnail size from editor properties.
+                 * @param bool showBottomBar - Whether to show the bottom slider bar. Set to false in file dialogs.
+                 * @param float height - The height of the asset browser. If 0, uses available space.
                  * @return std::string - The path of the asset that was double-clicked/selected for action, or empty string otherwise.
                  */
-        std::string Draw(const BrowserIcons& icons);
+        std::string Draw(const BrowserIcons& icons, float& thumbnailSize, bool showBottomBar = true, float height = 0.0f);
 
         /**
                  * @brief Determines the type of a JSON asset (e.g., scene, material, etc.).
@@ -55,10 +58,6 @@ namespace vex {
                  */
         std::string GetExtension(const std::string path);
 
-        /// @brief Sets the size for asset thumbnails in the browser.
-                /// @param float size - The new thumbnail size in pixels.
-        void setThumbnailSize(float size) { m_thumbnailSize = size; }
-
         /// @brief Sets the padding between asset icons in the browser.
                 /// @param float padding - The new padding value.
         void setPadding(float padding) { m_padding = padding; }
@@ -71,7 +70,6 @@ namespace vex {
         std::filesystem::path m_rootPath;
         std::filesystem::path m_currentPath;
 
-        float m_thumbnailSize = 64.0f;
         float m_padding = 16.0f;
 
         std::filesystem::path m_copiedPath;
@@ -80,6 +78,8 @@ namespace vex {
         bool m_renaming = false;
         std::filesystem::path m_renamePath;
         char m_renameBuffer[256] = "";
+
+        char m_searchBuffer[256] = "";
 
         /**
                  * @brief Gets the appropriate icon texture ID for a given directory entry.

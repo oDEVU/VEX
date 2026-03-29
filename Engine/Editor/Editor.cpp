@@ -127,7 +127,7 @@ namespace vex {
             if (shift && ImGui::IsKeyPressed(ImGuiKey_R)) m_currentGizmoOperation = ImGuizmo::SCALE;
 
             if (shift && ImGui::IsKeyPressed(ImGuiKey_F)) {
-                if (m_selectedObject.second && m_camera) {
+                if (m_selectedObject.second && m_camera && m_selectedObject.second->HasComponent<TransformComponent>()) {
                     auto& targetTC = m_selectedObject.second->GetComponent<TransformComponent>();
                     auto& camTC = m_camera->GetComponent<TransformComponent>();
                     glm::vec3 targetPos = targetTC.getWorldPosition();
@@ -154,7 +154,11 @@ namespace vex {
         void Editor::CopySelectedObject() {
             if (!m_selectedObject.second) return;
             m_clipboard.hasData = true;
-            m_clipboard.name = m_selectedObject.second->GetComponent<NameComponent>().name;
+            if (m_selectedObject.second->HasComponent<NameComponent>()) {
+                m_clipboard.name = m_selectedObject.second->GetComponent<NameComponent>().name;
+            } else {
+                m_clipboard.name = "Unnamed";
+            }
             m_clipboard.type = m_selectedObject.second->getObjectType();
             m_clipboard.components.clear();
 
@@ -224,8 +228,6 @@ namespace vex {
         if(m_SavedEditorProperties != m_editorProperties || m_frame == 0){
             SaveConfig(m_editorProperties, "editor_config.json");
             m_SavedEditorProperties = m_editorProperties;
-
-            m_assetBrowser->setThumbnailSize(m_editorProperties.assetBrowserThumbnailSize);
 
             if (m_editorProperties.editorCameraFov < 10.0f) m_editorProperties.editorCameraFov = 10.0f;
             if (m_editorProperties.editorCameraFov > 170.0f) m_editorProperties.editorCameraFov = 170.0f;
@@ -538,7 +540,7 @@ namespace vex {
     void Editor::ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
         auto* obj = getSceneManager()->GetScene(getSceneManager()->getLastSceneName())->GetGameObjectByEntity(entity);
         if(obj){
-            if (obj->GetComponent<TransformComponent>().getParent() != entt::null) {
+            if (obj->HasComponent<TransformComponent>() && obj->GetComponent<TransformComponent>().getParent() != entt::null) {
                 ExtractObjectByEntity(obj->GetComponent<TransformComponent>().getParent(), selectedObject);
             }else{
                 selectedObject.first = false;
@@ -853,7 +855,7 @@ namespace vex {
         m_isAssetBrowserFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
         if (m_assetBrowser) {
-                std::string openedFile = m_assetBrowser->Draw(m_icons);
+                std::string openedFile = m_assetBrowser->Draw(m_icons, m_editorProperties.assetBrowserThumbnailSize);
 
                 if (!openedFile.empty()) {
                     log("Opening file: %s", openedFile.c_str());

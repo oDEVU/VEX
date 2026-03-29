@@ -60,6 +60,7 @@ inline std::string Demangle(const char* name) {
 /// @param vex::GameObject* parent - The parent GameObject to reparent to.
 inline void ReparentObject(vex::GameObject* child, vex::GameObject* parent) {
     if (!child || !parent || child == parent) return;
+    if (!child->HasComponent<vex::TransformComponent>() || !parent->HasComponent<vex::TransformComponent>()) return;
 
     auto& childTc = child->GetComponent<vex::TransformComponent>();
 
@@ -102,7 +103,8 @@ inline void DrawEntityNode(
     std::pair<bool, vex::GameObject*>& selectedObject,
     const std::unordered_map<entt::entity, std::vector<vex::GameObject*>>& childrenMap,
     const std::unordered_set<entt::entity>& runtimeSet,
-    SceneAction& outAction
+    SceneAction& outAction,
+    const char* filter = ""
 ) {
     if (!obj) return;
 
@@ -114,19 +116,27 @@ inline void DrawEntityNode(
     if (obj->HasComponent<vex::NameComponent>()) {
         name = obj->GetComponent<vex::NameComponent>().name;
     }
+    bool matchesFilter = true;
+    if (filter && filter[0] != '\0') {
+        std::string lowerName = name;
+        std::string lowerFilter = filter;
+        std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(), [](unsigned char c){ return std::tolower(c); });
+        std::transform(lowerFilter.begin(), lowerFilter.end(), lowerFilter.begin(), [](unsigned char c){ return std::tolower(c); });
+        if (lowerName.find(lowerFilter) == std::string::npos) {
+            matchesFilter = false;
+        }
+    }
+
     std::string label = name + "##" + std::to_string((uint32_t)entityID);
 
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+    if (filter && filter[0] != '\0' && matchesFilter) {
+        flags |= ImGuiTreeNodeFlags_DefaultOpen;
+    }
 
     bool isSelected = (selectedObject.second == obj);
 
     if (isSelected) {
-        flags |= ImGuiTreeNodeFlags_Selected;
-        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(1.00f, 0.23f, 0.01f, 0.30f));
-        ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.00f, 0.23f, 0.01f, 0.40f));
-    }
-
-    if (selectedObject.second == obj) {
         flags |= ImGuiTreeNodeFlags_Selected;
     }
 
@@ -135,20 +145,32 @@ inline void DrawEntityNode(
         flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
     }
 
-    if (isRuntime) {
-        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 59, 3, 255));
+    bool shouldDraw = matchesFilter || (filter && filter[0] == '\0');
+    bool isOpen = false;
+    
+    if (shouldDraw) {
+        if (isSelected) {
+            ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(1.00f, 0.23f, 0.01f, 0.30f));
+            ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(1.00f, 0.23f, 0.01f, 0.40f));
+        }
+
+        if (isRuntime) {
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 59, 3, 255));
+        }
+
+        isOpen = ImGui::TreeNodeEx((void*)(uint64_t)entityID, flags, "%s", name.c_str());
+    } else {
+        isOpen = true;
     }
 
-    bool isOpen = ImGui::TreeNodeEx((void*)(uint64_t)entityID, flags, "%s", name.c_str());
-
-    if (ImGui::BeginDragDropSource()) {
+    if (shouldDraw && ImGui::BeginDragDropSource()) {
         ImGui::SetDragDropPayload("SCENE_HIERARCHY_NODE", &obj, sizeof(vex::GameObject*));
 
         ImGui::Text("Moving %s", name.c_str());
         ImGui::EndDragDropSource();
     }
 
-    if (ImGui::BeginDragDropTarget()) {
+    if (shouldDraw && ImGui::BeginDragDropTarget()) {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SCENE_HIERARCHY_NODE")) {
             vex::GameObject* droppedObject = *(vex::GameObject**)payload->Data;
 
@@ -159,20 +181,21 @@ inline void DrawEntityNode(
         ImGui::EndDragDropTarget();
     }
 
-    if (isRuntime) {
-        ImGui::PopStyleColor();
-    }
+    if (shouldDraw) {
+        if (isRuntime) {
+            ImGui::PopStyleColor();
+        }
 
-    if (isSelected) {
-        ImGui::PopStyleColor(2);
-    }
+        if (isSelected) {
+            ImGui::PopStyleColor(2);
+        }
 
-    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-        selectedObject.second = obj;
-        selectedObject.first = isRuntime;
-    }
+        if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+            selectedObject.second = obj;
+            selectedObject.first = isRuntime;
+        }
 
-    if (ImGui::BeginPopupContextItem()) {
+        if (ImGui::BeginPopupContextItem()) {
             if (ImGui::MenuItem("Rename")) {
                 outAction.type = SceneAction::RENAME_START;
                 outAction.target = obj;
@@ -198,31 +221,34 @@ inline void DrawEntityNode(
                 outAction.target = obj;
             }
 
-            ImGui::EndPopup();
-        }
+                ImGui::EndPopup();
+            }
 
-    if (ImGui::IsItemHovered()) {
-        vex::GameObject* raw = obj;
-        const char* rawName = typeid(*raw).name();
-        std::string className = Demangle(rawName);
+        if (ImGui::IsItemHovered()) {
+            vex::GameObject* raw = obj;
+            const char* rawName = typeid(*raw).name();
+            std::string className = Demangle(rawName);
 
-        ImGui::BeginTooltip();
-        ImGui::TextColored(ImVec4(1.00f, 0.23f, 0.01f, 1.0f), "Object Details");
-        ImGui::Separator();
-        ImGui::Text("C++ Class: %s", className.c_str());
-        ImGui::Text("Entity ID: %u", (uint32_t)entityID);
-        if (isRuntime) {
-            ImGui::TextColored(ImVec4(0.47f, 0.05f, 0.05f, 1.0f), "Warning: Object created at runtime\n(Won't be saved)");
+            ImGui::BeginTooltip();
+            ImGui::TextColored(ImVec4(1.00f, 0.23f, 0.01f, 1.0f), "Object Details");
+            ImGui::Separator();
+            ImGui::Text("C++ Class: %s", className.c_str());
+            ImGui::Text("Entity ID: %u", (uint32_t)entityID);
+            if (isRuntime) {
+                ImGui::TextColored(ImVec4(0.47f, 0.05f, 0.05f, 1.0f), "Warning: Object created at runtime\n(Won't be saved)");
+            }
+            ImGui::EndTooltip();
         }
-        ImGui::EndTooltip();
     }
 
     if (isOpen && hasChildren) {
         const auto& children = childrenMap.at(entityID);
         for (auto* child : children) {
-            DrawEntityNode(child, selectedObject, childrenMap, runtimeSet, outAction);
+            DrawEntityNode(child, selectedObject, childrenMap, runtimeSet, outAction, filter);
         }
-        ImGui::TreePop();
+        if (shouldDraw) {
+            ImGui::TreePop();
+        }
     }
 }
 
@@ -233,6 +259,10 @@ inline void DrawEntityNode(
  * @param std::pair<bool, vex::GameObject*>& selectedObject - The currently selected object pair (runtime status, object pointer).
  */
 inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObject*>& selectedObject) {
+    static char searchBuffer[256] = "";
+    ImGui::InputTextWithHint("##SearchHierarchy", "Search...", searchBuffer, sizeof(searchBuffer));
+    ImGui::Separator();
+
     std::string sceneName = engine.getSceneManager()->getLastSceneName();
 
     const auto& objects = engine.getSceneManager()->GetAllObjects(sceneName);
@@ -280,7 +310,7 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
     SceneAction action;
 
     for (auto* root : rootNodes) {
-        DrawEntityNode(root, selectedObject, childrenMap, runtimeSet, action);
+        DrawEntityNode(root, selectedObject, childrenMap, runtimeSet, action, searchBuffer);
     }
 
     static bool showRenameModal = false;
@@ -289,7 +319,10 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
 
         if (action.type == SceneAction::RENAME_START) {
             objectToRename = action.target;
-            std::string currentName = objectToRename->GetComponent<vex::NameComponent>().name;
+            std::string currentName = "Unnamed";
+            if (objectToRename->HasComponent<vex::NameComponent>()) {
+                currentName = objectToRename->GetComponent<vex::NameComponent>().name;
+            }
             strncpy(renameBuffer, currentName.c_str(), sizeof(renameBuffer));
             showRenameModal = true;
             ImGui::OpenPopup("Rename Object");
@@ -300,7 +333,9 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
                 ImGui::InputText("New Name", renameBuffer, sizeof(renameBuffer));
 
                 if (ImGui::Button("Save") || ImGui::IsKeyPressed(ImGuiKey_Enter)) {
-                    objectToRename->GetComponent<vex::NameComponent>().name = std::string(renameBuffer);
+                    if (objectToRename->HasComponent<vex::NameComponent>()) {
+                        objectToRename->GetComponent<vex::NameComponent>().name = std::string(renameBuffer);
+                    }
                     showRenameModal = false;
                     ImGui::CloseCurrentPopup();
                 }
@@ -320,7 +355,10 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
                 std::function<void(vex::GameObject*, entt::entity)> recursiveCopy =
                     [&](vex::GameObject* src, entt::entity parentEntity) {
 
-                    std::string newName = src->GetComponent<vex::NameComponent>().name + " (Copy)";
+                    std::string newName = "Unnamed (Copy)";
+                    if (src->HasComponent<vex::NameComponent>()) {
+                         newName = src->GetComponent<vex::NameComponent>().name + " (Copy)";
+                    }
                     vex::GameObject* newObj = vex::GameObjectFactory::getInstance().create(src->getObjectType(), engine, newName);
 
                     if (!newObj) return;
@@ -359,14 +397,21 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
                     }
                 };
 
-                std::string rootNewName = action.target->GetComponent<vex::NameComponent>().name;
+                std::string rootNewName = "Unnamed";
+                if (action.target->HasComponent<vex::NameComponent>()) {
+                     rootNewName = action.target->GetComponent<vex::NameComponent>().name;
+                }
 
-                std::string originalName = action.target->GetComponent<vex::NameComponent>().name;
-                action.target->GetComponent<vex::NameComponent>().name = rootNewName;
+                std::string originalName = rootNewName;
+                if (action.target->HasComponent<vex::NameComponent>()) {
+                     action.target->GetComponent<vex::NameComponent>().name = rootNewName;
+                }
 
                 recursiveCopy(action.target, entt::null);
 
-                action.target->GetComponent<vex::NameComponent>().name = originalName;
+                if (action.target->HasComponent<vex::NameComponent>()) {
+                     action.target->GetComponent<vex::NameComponent>().name = originalName;
+                }
 
                 engine.refreshForObject();
             }
