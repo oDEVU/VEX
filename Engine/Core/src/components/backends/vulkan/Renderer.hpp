@@ -85,6 +85,7 @@ namespace vex {
                  std::unique_ptr<VulkanPipeline>& particleMaskedPipeline,
                  std::unique_ptr<VulkanPipeline>& uiPipeline,
                  std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
+                 std::unique_ptr<VulkanPipeline>& compositePipeline,
                  std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
                  std::unique_ptr<MeshManager>& meshManager);
 
@@ -191,6 +192,7 @@ namespace vex {
         std::unique_ptr<VulkanPipeline>& m_p_particleMaskedPipeline; ///< Masked particle rendering pipeline.
         std::unique_ptr<VulkanPipeline>& m_p_uiPipeline;
         std::unique_ptr<VulkanPipeline>& m_p_fullscreenPipeline;
+        std::unique_ptr<VulkanPipeline>& m_p_compositePipeline;
         std::unique_ptr<VulkanSwapchainManager>& m_p_swapchainManager;
         std::unique_ptr<MeshManager>& m_p_meshManager;
 
@@ -208,6 +210,7 @@ namespace vex {
         SceneUBO m_sceneUBO;
 
         VkDescriptorSet m_screenDescriptorSet = VK_NULL_HANDLE;
+        VkDescriptorSet m_crtDescriptorSet = VK_NULL_HANDLE;
         VkSampler m_screenSampler = VK_NULL_HANDLE;
         VkImageView m_lastUsedView = VK_NULL_HANDLE;
         VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;

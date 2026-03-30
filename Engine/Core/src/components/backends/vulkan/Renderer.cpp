@@ -62,6 +62,7 @@ namespace vex {
              std::unique_ptr<VulkanPipeline>& particleMaskedPipeline,
              std::unique_ptr<VulkanPipeline>& uiPipeline,
              std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
+             std::unique_ptr<VulkanPipeline>& compositePipeline,
              std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
              std::unique_ptr<MeshManager>& meshManager)
         : m_r_context(context), m_p_resources(resources),
@@ -73,6 +74,7 @@ namespace vex {
           m_p_particleMaskedPipeline(particleMaskedPipeline),
           m_p_uiPipeline(uiPipeline),
           m_p_fullscreenPipeline(fullscreenPipeline),
+          m_p_compositePipeline(compositePipeline),
           m_p_swapchainManager(swapchainManager),
           m_p_meshManager(meshManager) {
         startTime = std::chrono::high_resolution_clock::now();
@@ -94,12 +96,12 @@ namespace vex {
                 VkDescriptorSetAllocateInfo allocInfo{};
                 allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 
-                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4 };
+                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 8 };
                 VkDescriptorPoolCreateInfo poolInfo = {};
                 poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
                 poolInfo.poolSizeCount = 1;
                 poolInfo.pPoolSizes = &poolSize;
-                poolInfo.maxSets = 1;
+                poolInfo.maxSets = 2;
 
                 vkCreateDescriptorPool(m_r_context.device, &poolInfo, nullptr, &m_localPool);
 
@@ -108,6 +110,8 @@ namespace vex {
                 allocInfo.pSetLayouts = &m_r_context.screenDescriptorSetLayout;
 
                 vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_screenDescriptorSet);
+                allocInfo.pSetLayouts = &m_r_context.screenDescriptorSetLayout;
+                vkAllocateDescriptorSets(m_r_context.device, &allocInfo, &m_crtDescriptorSet);
 
                 #if DEBUG
                     m_editorCameraVulkanMesh = std::make_unique<VulkanMesh>(m_r_context);
@@ -710,16 +714,16 @@ namespace vex {
                 VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
                 vkCmdSetViewport(cmd, 0, 1, &viewport);
                 vkCmdSetScissor(cmd, 0, 1, &scissor);
-                
+
                 VkDescriptorSet globalSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
                 uint32_t dynamicOffset = 0;
                 vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->layout(), 0, 1, &globalSet, 1, &dynamicOffset);
-                
+
                 if (m_r_context.supportsBindlessTextures) {
                     VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
                     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
                 }
-                
+
                 for (auto e : pMaskedQueue) {
                     auto& emit = registry.get<ParticleEmitterComponent>(e);
                     uint32_t pCount = static_cast<uint32_t>(emit.activeParticles.size());
@@ -728,14 +732,14 @@ namespace vex {
                         vex::log(LogLevel::WARNING, "Max particle limit reached! Skipping further particles.");
                         continue;
                     }
-                    
-                    
 
-                    
+
+
+
                     uint32_t tIndex = m_p_resources->getTextureIndex(GetAssetPath(emit.texturePath));
                     if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
                     for(auto& p : emit.activeParticles) p.textureID = tIndex;
-                    
+
                     memcpy(particleMappedData + currentParticleOffset, emit.activeParticles.data(), pCount * sizeof(ParticleGPUData));
 
                     if (!m_r_context.supportsBindlessTextures) {
@@ -847,16 +851,16 @@ namespace vex {
                 VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
                 vkCmdSetViewport(cmd, 0, 1, &viewport);
                 vkCmdSetScissor(cmd, 0, 1, &scissor);
-                
+
                 VkDescriptorSet globalSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
                 uint32_t dynamicOffset = 0;
                 vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleTransPipeline->layout(), 0, 1, &globalSet, 1, &dynamicOffset);
-                
+
                 if (m_r_context.supportsBindlessTextures) {
                     VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
                     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleTransPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
                 }
-                
+
                 for (auto e : pTransQueue) {
                     auto& emit = registry.get<ParticleEmitterComponent>(e);
                     uint32_t pCount = static_cast<uint32_t>(emit.activeParticles.size());
@@ -865,14 +869,14 @@ namespace vex {
                         vex::log(LogLevel::WARNING, "Max particle limit reached! Skipping further particles.");
                         continue;
                     }
-                    
-                    
 
-                    
+
+
+
                     uint32_t tIndex = m_p_resources->getTextureIndex(GetAssetPath(emit.texturePath));
                     if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
                     for(auto& p : emit.activeParticles) p.textureID = tIndex;
-                    
+
                     memcpy(particleMappedData + currentParticleOffset, emit.activeParticles.data(), pCount * sizeof(ParticleGPUData));
 
                     if (!m_r_context.supportsBindlessTextures) {
@@ -978,6 +982,45 @@ namespace vex {
         void Renderer::composeFrame(SceneRenderData& data, ImGUIWrapper& ui, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
 
+            transitionImageLayout(cmd, m_r_context.compositeImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+
+            VkRenderingAttachmentInfo preCompAtt{};
+            preCompAtt.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+            preCompAtt.imageView = m_r_context.compositeView;
+            preCompAtt.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            preCompAtt.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            preCompAtt.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            preCompAtt.clearValue.color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+
+            VkRenderingInfo preCompInfo{};
+            preCompInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
+            preCompInfo.renderArea.offset = {0, 0};
+            preCompInfo.renderArea.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y};
+            preCompInfo.layerCount = 1;
+            preCompInfo.colorAttachmentCount = 1;
+            preCompInfo.pColorAttachments = &preCompAtt;
+
+            vkCmdBeginRendering(cmd, &preCompInfo);
+            vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_compositePipeline->get());
+            VkViewport compViewport{};
+            compViewport.x = 0.0f;
+            compViewport.y = 0.0f;
+            compViewport.width = static_cast<float>(m_r_context.currentRenderResolution.x);
+            compViewport.height = static_cast<float>(m_r_context.currentRenderResolution.y);
+            compViewport.minDepth = 0.0f;
+            compViewport.maxDepth = 1.0f;
+            vkCmdSetViewport(cmd, 0, 1, &compViewport);
+            VkRect2D compScissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+            vkCmdSetScissor(cmd, 0, 1, &compScissor);
+            VkDescriptorSet compSceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
+            uint32_t compDynamicOffset = 0;
+            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_compositePipeline->layout(), 0, 1, &compSceneSet, 1, &compDynamicOffset);
+            vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_compositePipeline->layout(), 1, 1, &m_screenDescriptorSet, 0, nullptr);
+            vkCmdDraw(cmd, 3, 1, 0, 0);
+            vkCmdEndRendering(cmd);
+
+            transitionImageLayout(cmd, m_r_context.compositeImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
             if (isEditorMode) [[unlikely]] {
                 transitionImageLayout(cmd, m_r_context.gameViewImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
 
@@ -1012,7 +1055,7 @@ namespace vex {
                 VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
                 uint32_t dynamicOffset = 0;
                 vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 0, 1, &sceneSet, 1, &dynamicOffset);
-                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 1, 1, &m_screenDescriptorSet, 0, nullptr);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 1, 1, &m_crtDescriptorSet, 0, nullptr);
                 vkCmdDraw(cmd, 3, 1, 0, 0);
                 vkCmdEndRendering(cmd);
 
@@ -1064,7 +1107,7 @@ namespace vex {
                 VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
                 uint32_t dynamicOffset = 0;
                 vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 0, 1, &sceneSet, 1, &dynamicOffset);
-                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 1, 1, &m_screenDescriptorSet, 0, nullptr);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 1, 1, &m_crtDescriptorSet, 0, nullptr);
                 vkCmdDraw(cmd, 3, 1, 0, 0);
             }
 
@@ -1177,6 +1220,28 @@ namespace vex {
             writes[3].pImageInfo = &uiInfo;
 
             vkUpdateDescriptorSets(m_r_context.device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
+
+            VkDescriptorImageInfo compInfo{};
+            compInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            if (m_r_context.compositeView != VK_NULL_HANDLE) {
+                compInfo.imageView = m_r_context.compositeView;
+            } else {
+                compInfo.imageView = view; // fallback
+            }
+            compInfo.sampler = m_screenSampler;
+
+            VkWriteDescriptorSet compWrite[4] = {};
+            for(int i = 0; i < 4; i++) {
+                compWrite[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                compWrite[i].dstSet = m_crtDescriptorSet;
+                compWrite[i].dstBinding = i;
+                compWrite[i].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                compWrite[i].descriptorCount = 1;
+                compWrite[i].pImageInfo = &compInfo;
+            }
+
+            vkUpdateDescriptorSets(m_r_context.device, 4, compWrite, 0, nullptr);
+
         }
 
     void Renderer::transitionImageLayout(VkCommandBuffer cmd, VkImage image,

@@ -431,6 +431,20 @@ namespace vex {
             return;
         }
 
+        
+        VkImageCreateInfo compositeInfo = imageInfo;
+        if(vmaCreateImage(m_r_context.allocator, &compositeInfo, &allocInfo, &m_r_context.compositeImage, &m_r_context.compositeAlloc, nullptr) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create composite image");
+            return;
+        }
+
+        VkImageViewCreateInfo compositeViewInfo = viewInfo;
+        compositeViewInfo.image = m_r_context.compositeImage;
+        if(vkCreateImageView(m_r_context.device, &compositeViewInfo, nullptr, &m_r_context.compositeView) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create composite image view");
+            return;
+        }
+
         VkImageCreateInfo gameViewInfo = imageInfo;
         gameViewInfo.format = m_r_context.swapchainImageFormat;
         gameViewInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
@@ -445,7 +459,17 @@ namespace vex {
     }
 
     void VulkanSwapchainManager::cleanupLowResResources() {
-        if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
+        
+        if (m_r_context.compositeView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.compositeView, nullptr);
+            m_r_context.compositeView = VK_NULL_HANDLE;
+        }
+        if (m_r_context.compositeImage != VK_NULL_HANDLE && m_r_context.compositeAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.compositeImage, m_r_context.compositeAlloc);
+            m_r_context.compositeImage = VK_NULL_HANDLE;
+            m_r_context.compositeAlloc = VK_NULL_HANDLE;
+        }
+if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
             vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
             m_r_context.lowResColorView = VK_NULL_HANDLE;
         }

@@ -657,6 +657,14 @@ uint32_t Interface::GetBestDeviceVersion() {
             uiAttrs
         );
 
+        
+        log("Initializing Composite Pipeline...");
+        m_p_compositePipeline = std::make_unique<VulkanPipeline>(m_context);
+        m_p_compositePipeline->createFullscreenPipeline(
+            "Engine/shaders/CompositeVert.spv",
+            "Engine/shaders/CompositeFrag.spv"
+        );
+
         log("Initializing Fullscreen Pipeline...");
         m_p_fullscreenPipeline = std::make_unique<VulkanPipeline>(m_context);
 
@@ -689,6 +697,7 @@ uint32_t Interface::GetBestDeviceVersion() {
             m_p_particleMaskedPipeline,
             m_p_uiPipeline,
             m_p_fullscreenPipeline,
+            m_p_compositePipeline,
             m_p_swapchainManager,
             m_p_meshManager
         );
@@ -719,6 +728,7 @@ uint32_t Interface::GetBestDeviceVersion() {
         m_p_particleTransPipeline.reset();
         m_p_uiPipeline.reset();
         m_p_fullscreenPipeline.reset();
+        m_p_compositePipeline.reset();
         #if DEBUG
         m_p_debugPipeline.reset();
         m_p_physicsDebug.reset();

@@ -27,28 +27,12 @@ static const float2 halation_offsets[12] = {
 
 float luma(float3 c) { return dot(c, float3(0.299, 0.587, 0.114)); }
 
-float3 SampleComposite(Sampler2D<float4> tex, Sampler2D<float4> accumTexture,
-                       Sampler2D<float> revealTexture,
-                       Sampler2D<float4> uiTexture, float2 uv) {
-  float4 opaqueColor = tex.Sample(uv);
-  float4 accum = accumTexture.Sample(uv);
-  float reveal = revealTexture.Sample(uv);
-
-  float4 finalColor = opaqueColor;
-
-  if (accum.a > 0.00001) {
-    float3 averageColor = accum.rgb / max(accum.a, 0.00001);
-    finalColor.rgb = opaqueColor.rgb * reveal + averageColor * (1.0 - reveal);
-  }
-
-  float4 uiColor = uiTexture.Sample(uv);
-  finalColor.rgb = lerp(finalColor.rgb, uiColor.rgb, uiColor.a);
-  return finalColor.rgb;
+float3 SampleComposite(Sampler2D<float4> tex, float2 uv) {
+  return tex.Sample(uv).rgb;
 }
 
-float3 SampleSignal(Sampler2D<float4> tex, Sampler2D<float4> accumTexture,
-                    Sampler2D<float> revealTexture, Sampler2D<float4> uiTexture,
-                    float2 uv, float2 oneTexel, float2 onePixel) {
+float3 SampleSignal(Sampler2D<float4> tex, float2 uv, float2 oneTexel,
+                    float2 onePixel) {
   float3 sum = float3(0.0);
   float totalWeight = 0.0;
 
@@ -56,10 +40,8 @@ float3 SampleSignal(Sampler2D<float4> tex, Sampler2D<float4> accumTexture,
   float2 shiftR = float2(-shiftVal, 0.0);
   float2 shiftB = float2(shiftVal, 0.0);
 
-  float3 centerCol =
-      SampleComposite(tex, accumTexture, revealTexture, uiTexture, uv);
-  float3 neighborCol = SampleComposite(tex, accumTexture, revealTexture,
-                                       uiTexture, uv + float2(oneTexel.x, 0.0));
+  float3 centerCol = SampleComposite(tex, uv);
+  float3 neighborCol = SampleComposite(tex, uv + float2(oneTexel.x, 0.0));
   float edge = luma(centerCol) - luma(neighborCol);
   bool hasEdge = abs(edge) > 0.05;
 
@@ -78,14 +60,9 @@ float3 SampleSignal(Sampler2D<float4> tex, Sampler2D<float4> accumTexture,
     float2 tapUV = uv + float2(offsets[i] * BLUR_WIDTH, 0.0) * onePixel;
     float w = weights[i];
 
-    float valR = SampleComposite(tex, accumTexture, revealTexture, uiTexture,
-                                 tapUV + shiftR)
-                     .r;
-    float valG =
-        SampleComposite(tex, accumTexture, revealTexture, uiTexture, tapUV).g;
-    float valB = SampleComposite(tex, accumTexture, revealTexture, uiTexture,
-                                 tapUV + shiftB)
-                     .b;
+    float valR = SampleComposite(tex, tapUV + shiftR).r;
+    float valG = SampleComposite(tex, tapUV).g;
+    float valB = SampleComposite(tex, tapUV + shiftB).b;
 
     float3 signal = float3(valR, valG, valB);
 
@@ -115,26 +92,20 @@ float3 SampleSignal(Sampler2D<float4> tex, Sampler2D<float4> accumTexture,
   return sum / totalWeight;
 }
 
-float3 SampleHalation(Sampler2D<float4> tex, Sampler2D<float4> accumTexture,
-                      Sampler2D<float> revealTexture,
-                      Sampler2D<float4> uiTexture, float2 uv, float2 oneTexel) {
+float3 SampleHalation(Sampler2D<float4> tex, float2 uv, float2 oneTexel) {
   float3 glow = float3(0.0);
   float radius = 2.5;
 
   [unroll]
   for (int i = 0; i < 12; i++) {
     float2 offset = halation_offsets[i] * radius * oneTexel;
-    glow += SampleComposite(tex, accumTexture, revealTexture, uiTexture,
-                            uv + offset);
+    glow += SampleComposite(tex, uv + offset);
   }
 
   return max((glow / 12.0) - HALATION_THRESHOLD, 0.0);
 }
 
-public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex,
-                       Sampler2D<float4> accumTexture,
-                       Sampler2D<float> revealTexture,
-                       Sampler2D<float4> uiTexture) {
+public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex) {
   float2 renderRes = scene.renderResolution;
   if (renderRes.x < 1.0)
     renderRes = float2(320.0, 240.0);
@@ -142,12 +113,10 @@ public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex,
   float2 oneTexel = 1.0 / renderRes;
   float2 onePixel = 1.0 / scene.windowResolution;
 
-  float3 color = SampleSignal(tex, accumTexture, revealTexture, uiTexture, uv,
-                              oneTexel, onePixel);
+  float3 color = SampleSignal(tex, uv, oneTexel, onePixel);
 
   if (HALATION_INTENSITY > 0.0) {
-    float3 bloom = SampleHalation(tex, accumTexture, revealTexture, uiTexture,
-                                  uv, oneTexel);
+    float3 bloom = SampleHalation(tex, uv, oneTexel);
     color += bloom * HALATION_INTENSITY;
   }
 
