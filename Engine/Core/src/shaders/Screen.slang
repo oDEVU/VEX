@@ -9,6 +9,8 @@ struct VSOutput {
 
 [[vk::binding(0, 1)]]
 Sampler2D<float4> screenTexture;
+[[vk::binding(1, 1)]]
+Sampler2D<float4> screenTextureLinear;
 
 [shader("vertex")]
 VSOutput vertMain(uint vertexID: SV_VertexID) {
@@ -23,7 +25,7 @@ float4 fragMain(VSOutput input) : SV_Target {
   float4 opaqueColor;
 
   if (isEnabled(NTSC_ARTIFACTS)) {
-    float3 crtColor = ApplyCRT(input.uv, input.position.xy, screenTexture);
+    float3 crtColor = ApplyCRT(input.uv, input.position.xy, screenTexture, screenTextureLinear);
     opaqueColor = float4(crtColor, 1.0);
     return opaqueColor;
   } else {

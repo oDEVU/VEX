@@ -212,6 +212,7 @@ namespace vex {
         VkDescriptorSet m_screenDescriptorSet = VK_NULL_HANDLE;
         VkDescriptorSet m_crtDescriptorSet = VK_NULL_HANDLE;
         VkSampler m_screenSampler = VK_NULL_HANDLE;
+        VkSampler m_linearSampler = VK_NULL_HANDLE;
         VkImageView m_lastUsedView = VK_NULL_HANDLE;
         VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;
         std::vector<std::vector<VkDescriptorSet>> m_garbageDescriptors;

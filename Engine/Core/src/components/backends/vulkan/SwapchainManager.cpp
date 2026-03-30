@@ -162,7 +162,7 @@ namespace vex {
         VkImageCreateInfo imageInfo{};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
-        imageInfo.extent = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height, 1};
+        imageInfo.extent = {std::max(m_r_context.swapchainExtent.width, m_r_context.currentRenderResolution.x), std::max(m_r_context.swapchainExtent.height, m_r_context.currentRenderResolution.y), 1};
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
         imageInfo.format = depthFormat;
@@ -433,6 +433,8 @@ namespace vex {
 
         
         VkImageCreateInfo compositeInfo = imageInfo;
+        compositeInfo.mipLevels = 3;
+        compositeInfo.usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         if(vmaCreateImage(m_r_context.allocator, &compositeInfo, &allocInfo, &m_r_context.compositeImage, &m_r_context.compositeAlloc, nullptr) != VK_SUCCESS) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create composite image");
             return;
@@ -440,6 +442,7 @@ namespace vex {
 
         VkImageViewCreateInfo compositeViewInfo = viewInfo;
         compositeViewInfo.image = m_r_context.compositeImage;
+        compositeViewInfo.subresourceRange.levelCount = 3;
         if(vkCreateImageView(m_r_context.device, &compositeViewInfo, nullptr, &m_r_context.compositeView) != VK_SUCCESS) {
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create composite image view");
             return;

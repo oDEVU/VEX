@@ -7,8 +7,8 @@ static const float BLUR_WIDTH = 1.0;
 static const float CONVERGENCE_OFFSET = 0.5;
 
 // --- BLOOM SETTINGS ---
-static const float HALATION_INTENSITY = 0.5;
-static const float HALATION_THRESHOLD = 0.1;
+static const float HALATION_INTENSITY = 0.6;
+static const float HALATION_THRESHOLD = 0.2;
 
 static const float NTSC_ARTIFACT_STR = 0.6;
 static const float MASK_INTENSITY = 0.3;
@@ -92,20 +92,23 @@ float3 SampleSignal(Sampler2D<float4> tex, float2 uv, float2 oneTexel,
   return sum / totalWeight;
 }
 
-float3 SampleHalation(Sampler2D<float4> tex, float2 uv, float2 oneTexel) {
+float3 SampleHalation(Sampler2D<float4> texLinear, float2 uv, float2 oneTexel) {
   float3 glow = float3(0.0);
-  float radius = 2.5;
+  float radius = 1.0;
+  float2 off = oneTexel * radius;
 
-  [unroll]
-  for (int i = 0; i < 12; i++) {
-    float2 offset = halation_offsets[i] * radius * oneTexel;
-    glow += SampleComposite(tex, uv + offset);
-  }
+  glow += texLinear.SampleLevel(uv, 1.0).rgb * 4.0;
+  glow += texLinear.SampleLevel(uv + float2(off.x, off.y), 1.0).rgb;
+  glow += texLinear.SampleLevel(uv + float2(-off.x, off.y), 1.0).rgb;
+  glow += texLinear.SampleLevel(uv + float2(off.x, -off.y), 1.0).rgb;
+  glow += texLinear.SampleLevel(uv + float2(-off.x, -off.y), 1.0).rgb;
+  glow /= 8.0;
 
-  return max((glow / 12.0) - HALATION_THRESHOLD, 0.0);
+  return max(glow - HALATION_THRESHOLD, 0.0);
 }
 
-public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex) {
+public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex,
+                       Sampler2D<float4> texLinear) {
   float2 renderRes = scene.renderResolution;
   if (renderRes.x < 1.0)
     renderRes = float2(320.0, 240.0);
@@ -116,7 +119,7 @@ public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex) {
   float3 color = SampleSignal(tex, uv, oneTexel, onePixel);
 
   if (HALATION_INTENSITY > 0.0) {
-    float3 bloom = SampleHalation(tex, uv, oneTexel);
+    float3 bloom = SampleHalation(texLinear, uv, oneTexel);
     color += bloom * HALATION_INTENSITY;
   }
 
