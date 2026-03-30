@@ -120,14 +120,12 @@ Argument | Description
 
 ## TODO:
 ### Must haves to create games:
-- Billboard rendering
-- Particle system
 - Support for animated 3D models
 ### Should be implemented but can make games without:
-- Vertex colors for models (for AO or fog effects)
+- Vertex colors for models (for AO or better model detail)
 ### Things that will make me happy but wont help me do games:
 - offscreen rendering (to a texture for example, with support for multiple render targets)
-- Better shader pipeline
+- Better shader pipeline (like custom user programamble shaders / custom materials)
 
 ## Libraries used by engine:
 All libraries are included as git submodules. Their respective licenses may differ from engine license but all of them are on some sort of opensource license.
