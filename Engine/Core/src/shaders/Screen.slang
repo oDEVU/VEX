@@ -13,6 +13,8 @@ Sampler2D<float4> screenTexture;
 Sampler2D<float4> accumTexture;
 [[vk::binding(2, 1)]]
 Sampler2D<float> revealTexture;
+[[vk::binding(3, 1)]]
+Sampler2D<float4> uiTexture;
 
 [shader("vertex")]
 VSOutput vertMain(uint vertexID: SV_VertexID) {
@@ -27,21 +29,25 @@ float4 fragMain(VSOutput input) : SV_Target {
   float4 opaqueColor;
 
   if (isEnabled(NTSC_ARTIFACTS)) {
-    float3 crtColor = ApplyCRT(input.uv, input.position.xy, screenTexture);
+    float3 crtColor = ApplyCRT(input.uv, input.position.xy, screenTexture,
+                               accumTexture, revealTexture, uiTexture);
     opaqueColor = float4(crtColor, 1.0);
+    return opaqueColor;
   } else {
     opaqueColor = screenTexture.Sample(input.uv);
+    float4 accum = accumTexture.Sample(input.uv);
+    float reveal = revealTexture.Sample(input.uv);
+
+    float4 finalColor = opaqueColor;
+
+    if (accum.a > 0.00001) {
+      float3 averageColor = accum.rgb / max(accum.a, 0.00001);
+      finalColor.rgb = opaqueColor.rgb * reveal + averageColor * (1.0 - reveal);
+    }
+
+    float4 uiColor = uiTexture.Sample(input.uv);
+    finalColor.rgb = lerp(finalColor.rgb, uiColor.rgb, uiColor.a);
+
+    return finalColor;
   }
-
-  float4 accum = accumTexture.Sample(input.uv);
-  float reveal = revealTexture.Sample(input.uv);
-
-  float4 finalColor = opaqueColor;
-
-  if (accum.a > 0.00001) {
-    float3 averageColor = accum.rgb / max(accum.a, 0.00001);
-    finalColor.rgb = opaqueColor.rgb * reveal + averageColor * (1.0 - reveal);
-  }
-
-  return finalColor;
 }

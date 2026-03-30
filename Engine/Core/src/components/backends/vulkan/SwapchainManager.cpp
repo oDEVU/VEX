@@ -372,6 +372,23 @@ namespace vex {
             return;
         }
 
+        if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo,
+                          &m_r_context.uiImage, &m_r_context.uiAlloc, nullptr) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create ui image");
+            return;
+        }
+
+        VkImageViewCreateInfo uiViewInfo = viewInfo;
+        uiViewInfo.image = m_r_context.uiImage;
+
+        if (vkCreateImageView(m_r_context.device, &uiViewInfo, nullptr, &m_r_context.uiView) != VK_SUCCESS) {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create ui image view");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.uiImage, m_r_context.uiAlloc);
+            m_r_context.uiImage = VK_NULL_HANDLE;
+            m_r_context.uiAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
         VkImageCreateInfo accumInfo = imageInfo;
         accumInfo.format = VK_FORMAT_R16G16B16A16_SFLOAT;
         if(vmaCreateImage(m_r_context.allocator, &accumInfo, &allocInfo, &m_r_context.accumImage, &m_r_context.accumAlloc, nullptr) != VK_SUCCESS) {
@@ -437,6 +454,17 @@ namespace vex {
             vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
             m_r_context.lowResColorImage = VK_NULL_HANDLE;
             m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.uiView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.uiView, nullptr);
+            m_r_context.uiView = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.uiImage != VK_NULL_HANDLE && m_r_context.uiAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.uiImage, m_r_context.uiAlloc);
+            m_r_context.uiImage = VK_NULL_HANDLE;
+            m_r_context.uiAlloc = VK_NULL_HANDLE;
         }
 
         if(m_r_context.accumView != VK_NULL_HANDLE) {

@@ -94,7 +94,7 @@ namespace vex {
                 VkDescriptorSetAllocateInfo allocInfo{};
                 allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 
-                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3 };
+                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4 };
                 VkDescriptorPoolCreateInfo poolInfo = {};
                 poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
                 poolInfo.poolSizeCount = 1;
@@ -182,6 +182,16 @@ namespace vex {
         vmaUnmapMemory(m_r_context.allocator, m_debugAllocations[frameIndex]);
 
         vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, (*m_pp_debugPipeline)->get());
+        VkViewport viewport{};
+        viewport.x = 0.0f;
+        viewport.y = 0.0f;
+        viewport.width = static_cast<float>(m_r_context.currentRenderResolution.x);
+        viewport.height = static_cast<float>(m_r_context.currentRenderResolution.y);
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+        vkCmdSetViewport(cmd, 0, 1, &viewport);
+        VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+        vkCmdSetScissor(cmd, 0, 1, &scissor);
 
         VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(frameIndex);
 
@@ -882,8 +892,12 @@ namespace vex {
             transitionImageLayout(cmd, m_r_context.accumImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
             transitionImageLayout(cmd, m_r_context.revealImage, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
 
+            transitionImageLayout(cmd, m_r_context.uiImage, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+
             VkRenderingAttachmentInfo uiColorAttachment = colorAttachment;
-            uiColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+            uiColorAttachment.imageView = m_r_context.uiView;
+            uiColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            uiColorAttachment.clearValue.color = {{0.0f, 0.0f, 0.0f, 0.0f}};
 
             VkRenderingAttachmentInfo uiDepthAttachment = depthAttachment;
             uiDepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
@@ -920,6 +934,14 @@ namespace vex {
             vkCmdEndRendering(cmd);
 
             transitionImageLayout(cmd, m_r_context.lowResColorImage,
+                                         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                         VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                         VK_ACCESS_SHADER_READ_BIT,
+                                         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                         VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
+
+            transitionImageLayout(cmd, m_r_context.uiImage,
                                          VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
                                          VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                                          VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
@@ -977,6 +999,16 @@ namespace vex {
 
                 vkCmdBeginRendering(cmd, &compInfo);
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->get());
+                VkViewport viewport{};
+                viewport.x = 0.0f;
+                viewport.y = 0.0f;
+                viewport.width = static_cast<float>(m_r_context.currentRenderResolution.x);
+                viewport.height = static_cast<float>(m_r_context.currentRenderResolution.y);
+                viewport.minDepth = 0.0f;
+                viewport.maxDepth = 1.0f;
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+                VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
                 VkDescriptorSet sceneSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
                 uint32_t dynamicOffset = 0;
                 vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_fullscreenPipeline->layout(), 0, 1, &sceneSet, 1, &dynamicOffset);
@@ -1109,7 +1141,7 @@ namespace vex {
             revealInfo.imageView = m_r_context.revealView;
             revealInfo.sampler = m_screenSampler;
 
-            std::array<VkWriteDescriptorSet, 3> writes{};
+            std::array<VkWriteDescriptorSet, 4> writes{};
 
             writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             writes[0].dstSet = m_screenDescriptorSet;
@@ -1132,7 +1164,19 @@ namespace vex {
             writes[2].descriptorCount = 1;
             writes[2].pImageInfo = &revealInfo;
 
-            vkUpdateDescriptorSets(m_r_context.device, 3, writes.data(), 0, nullptr);
+            VkDescriptorImageInfo uiInfo{};
+            uiInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            uiInfo.imageView = m_r_context.uiView;
+            uiInfo.sampler = m_screenSampler;
+
+            writes[3].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writes[3].dstSet = m_screenDescriptorSet;
+            writes[3].dstBinding = 3;
+            writes[3].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            writes[3].descriptorCount = 1;
+            writes[3].pImageInfo = &uiInfo;
+
+            vkUpdateDescriptorSets(m_r_context.device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
         }
 
     void Renderer::transitionImageLayout(VkCommandBuffer cmd, VkImage image,

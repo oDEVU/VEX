@@ -46,6 +46,10 @@ namespace vex {
         VkImage lowResColorImage = VK_NULL_HANDLE;
         VmaAllocation lowResColorAlloc = VK_NULL_HANDLE;
         VkImageView lowResColorView = VK_NULL_HANDLE;
+
+        VkImage uiImage = VK_NULL_HANDLE;
+        VmaAllocation uiAlloc = VK_NULL_HANDLE;
+        VkImageView uiView = VK_NULL_HANDLE;
         VkFormat lowResColorFormat = VK_FORMAT_UNDEFINED;
 
         VkImage accumImage = VK_NULL_HANDLE;
