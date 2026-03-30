@@ -24,8 +24,9 @@ void ProcessParticles(entt::registry& registry, float deltaTime) {
         emit.spawnTimer += deltaTime;
         static int frame = 0;
         if (frame++ % 60 == 0) vex::log(LogLevel::INFO, "ProcessParticles running... CPU count: %d, spawnTimer: %f", (int)emit.cpuParticles.size(), emit.spawnTimer);
-        if (emit.spawnTimer >= emit.spawnRate) {
-            emit.spawnTimer = 0.0f;
+        if (emit.spawnRate <= 0.001f) emit.spawnRate = 0.001f;
+        while (emit.spawnTimer >= emit.spawnRate) {
+            emit.spawnTimer -= emit.spawnRate;
             Particle p;
             p.position = trans.getWorldPosition();
             

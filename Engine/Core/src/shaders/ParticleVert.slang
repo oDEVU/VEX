@@ -40,10 +40,10 @@ struct VSOutput {
 };
 
 [shader("vertex")]
-VSOutput main(uint vertexID: SV_VertexID, uint instanceID: SV_InstanceID) {
+VSOutput main(uint vertexID: SV_VertexID, uint instanceID: SV_InstanceID, uint baseInstance: SV_StartInstanceLocation) {
   VSOutput output;
 
-  SpriteData data = particleBuffer[instanceID];
+  SpriteData data = particleBuffer[instanceID + baseInstance];
 
   float2 positions[6] = { float2(-0.5, -0.5), float2(0.5, -0.5),
                           float2(0.5, 0.5),   float2(0.5, 0.5),
