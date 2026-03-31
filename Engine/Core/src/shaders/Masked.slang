@@ -134,7 +134,6 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
                                    : (texColor * float4(lighting, 1.0));
 
-
   float fogIntensity = scene.fogColorAndIntensity.w;
 
   if (fogIntensity > 0.0) {
@@ -151,18 +150,18 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
 
     finalColor.rgb = lerp(fogColor, finalColor.rgb, fogFactor);
   }
+  /*
+    if (isEnabled(COLOR_QUANTIZATION)) {
+      float4 c = finalColor;
+      c = applyQuantization(c, pixelCoord, true);
+      finalColor = c;
+    }
 
-  if (isEnabled(COLOR_QUANTIZATION)) {
-    float4 c = finalColor;
-    c = applyQuantization(c, pixelCoord, true);
-    finalColor = c;
-  }
-
-  if (isEnabled(SCREEN_DITHER)) {
-    float3 c = finalColor.rgb;
-    c = applyDither(c, pixelCoord);
-    finalColor.rgb = c;
-  }
-
+    if (isEnabled(SCREEN_DITHER)) {
+      float3 c = finalColor.rgb;
+      c = applyDither(c, pixelCoord);
+      finalColor.rgb = c;
+    }
+  */
   return finalColor;
 }

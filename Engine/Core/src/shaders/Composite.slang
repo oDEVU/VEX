@@ -1,4 +1,5 @@
 import depends.uniforms;
+import effects.ColorQuantization;
 
 struct VSOutput {
   float4 position : SV_POSITION;
@@ -14,6 +15,8 @@ Sampler2D<float4> accumTexture;
 Sampler2D<float> revealTexture;
 [[vk::binding(3, 1)]]
 Sampler2D<float4> uiTexture;
+[[vk::binding(4, 1)]]
+Sampler3D<float4> colorLUT;
 
 [shader("vertex")]
 VSOutput vertMain(uint vertexID: SV_VertexID) {
@@ -34,6 +37,14 @@ float4 fragMain(VSOutput input) : SV_Target {
   if (accum.a > 0.00001) {
     float3 averageColor = accum.rgb / max(accum.a, 0.00001);
     finalColor.rgb = opaqueColor.rgb * reveal + averageColor * (1.0 - reveal);
+  }
+
+  if (isEnabled(COLOR_QUANTIZATION)) {
+    finalColor.rgb = colorLUT.Sample(finalColor.rgb).rgb;
+  }
+
+  if (isEnabled(SCREEN_DITHER)) {
+    finalColor.rgb = applyDither(finalColor.rgb, input.position.xy);
   }
 
   float4 uiColor = uiTexture.Sample(input.uv);

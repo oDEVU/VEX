@@ -68,6 +68,10 @@ namespace vex {
         VmaAllocation gameViewAlloc = VK_NULL_HANDLE;
         VkImageView gameViewView = VK_NULL_HANDLE;
 
+        VkImage colorLutImage = VK_NULL_HANDLE;
+        VmaAllocation colorLutAllocation = VK_NULL_HANDLE;
+        VkImageView colorLutView = VK_NULL_HANDLE;
+
         VkPipelineLayout pipelineLayout;
 
         std::vector<VkCommandPool> commandPools;

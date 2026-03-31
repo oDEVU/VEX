@@ -18,59 +18,50 @@ static const float SATURATION = 1.1;
 static const float weights[3] = { 0.28, 0.44, 0.28 };
 static const float offsets[3] = { -1.0, 0.0, 1.0 };
 
-static const float2 halation_offsets[12] = {
-  float2(0.35, 0.0),      float2(0.0, 0.35),     float2(-0.35, 0.0),
-  float2(0.0, -0.35),     float2(0.707, 0.707),  float2(-0.707, 0.707),
-  float2(-0.707, -0.707), float2(0.707, -0.707), float2(1.0, 0.0),
-  float2(0.0, 1.0),       float2(-1.0, 0.0),     float2(0.0, -1.0)
-};
-
 float luma(float3 c) { return dot(c, float3(0.299, 0.587, 0.114)); }
 
-float3 SampleComposite(Sampler2D<float4> tex, float2 uv) {
-  return tex.Sample(uv).rgb;
+float3 SampleHalation(Sampler2D<float4> texLinear, float2 uv) {
+  float3 glow = texLinear.SampleLevel(uv, 2.0).rgb;
+  return max(glow - HALATION_THRESHOLD, 0.0);
 }
 
 float3 SampleSignal(Sampler2D<float4> tex, float2 uv, float2 oneTexel,
                     float2 onePixel) {
-  float3 sum = float3(0.0);
-  float totalWeight = 0.0;
-
   float shiftVal = CONVERGENCE_OFFSET * oneTexel.x;
   float2 shiftR = float2(-shiftVal, 0.0);
   float2 shiftB = float2(shiftVal, 0.0);
 
-  float3 centerCol = SampleComposite(tex, uv);
-  float3 neighborCol = SampleComposite(tex, uv + float2(oneTexel.x, 0.0));
+  float3 centerCol = tex.Sample(uv).rgb;
+  float3 neighborCol = tex.Sample(uv + float2(oneTexel.x, 0.0)).rgb;
   float edge = luma(centerCol) - luma(neighborCol);
   bool hasEdge = abs(edge) > 0.05;
 
-  float phaseBase = (float(scene.frame) * 0.5);
-  float phaseScale = scene.renderResolution.x * 0.5;
+  float i_raw = hasEdge ? edge * NTSC_ARTIFACT_STR : 0.0;
+  float q_raw = i_raw;
 
-  float i_raw = 0.0;
-  float q_raw = 0.0;
-  if (hasEdge) {
-    i_raw = edge * NTSC_ARTIFACT_STR;
-    q_raw = i_raw;
-  }
+  float phaseScale = scene.renderResolution.x * 0.5;
+  float phaseBase = float(scene.frame) * 0.5;
+
+  float currentPhase =
+      ((uv.x + offsets[0] * BLUR_WIDTH * onePixel.x) * phaseScale) + phaseBase;
+  float phaseStep = BLUR_WIDTH * onePixel.x * phaseScale;
+
+  float3 sum = float3(0.0);
+  float totalWeight = 0.0;
 
   [unroll]
   for (int i = 0; i < 3; i++) {
     float2 tapUV = uv + float2(offsets[i] * BLUR_WIDTH, 0.0) * onePixel;
     float w = weights[i];
 
-    float valR = SampleComposite(tex, tapUV + shiftR).r;
-    float valG = SampleComposite(tex, tapUV).g;
-    float valB = SampleComposite(tex, tapUV + shiftB).b;
-
+    float valR = tex.Sample(tapUV + shiftR).r;
+    float valG = tex.Sample(tapUV).g;
+    float valB = tex.Sample(tapUV + shiftB).b;
     float3 signal = float3(valR, valG, valB);
 
     if (hasEdge) {
-      float phase = (tapUV.x * phaseScale) + phaseBase;
-
-      float carrier_c = cos(phase * 6.28318);
-      float sin_c = sin(phase * 6.28318);
+      float sin_c, carrier_c;
+      sincos(currentPhase * 6.28318, sin_c, carrier_c);
 
       float i_r = i_raw * sin_c;
       float q_r = q_raw * -carrier_c;
@@ -87,24 +78,10 @@ float3 SampleSignal(Sampler2D<float4> tex, float2 uv, float2 oneTexel,
 
     sum += signal * w;
     totalWeight += w;
+    currentPhase += phaseStep;
   }
 
   return sum / totalWeight;
-}
-
-float3 SampleHalation(Sampler2D<float4> texLinear, float2 uv, float2 oneTexel) {
-  float3 glow = float3(0.0);
-  float radius = 1.0;
-  float2 off = oneTexel * radius;
-
-  glow += texLinear.SampleLevel(uv, 1.0).rgb * 4.0;
-  glow += texLinear.SampleLevel(uv + float2(off.x, off.y), 1.0).rgb;
-  glow += texLinear.SampleLevel(uv + float2(-off.x, off.y), 1.0).rgb;
-  glow += texLinear.SampleLevel(uv + float2(off.x, -off.y), 1.0).rgb;
-  glow += texLinear.SampleLevel(uv + float2(-off.x, -off.y), 1.0).rgb;
-  glow /= 8.0;
-
-  return max(glow - HALATION_THRESHOLD, 0.0);
 }
 
 public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex,
@@ -119,7 +96,7 @@ public float3 ApplyCRT(float2 uv, float2 screenPos, Sampler2D<float4> tex,
   float3 color = SampleSignal(tex, uv, oneTexel, onePixel);
 
   if (HALATION_INTENSITY > 0.0) {
-    float3 bloom = SampleHalation(texLinear, uv, oneTexel);
+    float3 bloom = SampleHalation(texLinear, uv);
     color += bloom * HALATION_INTENSITY;
   }
 

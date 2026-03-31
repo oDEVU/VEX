@@ -141,21 +141,22 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
     fogFactor = lerp(1.0, fogFactor, fogIntensity);
 
     finalColor.rgb = lerp(fogColor, finalColor.rgb, fogFactor);
-}
-
-finalColor.a = 1.0;
-
-  if (isEnabled(COLOR_QUANTIZATION)) {
-    float4 c = finalColor;
-    c = applyQuantization(c, pixelCoord, true);
-    finalColor = c;
   }
 
-  if (isEnabled(SCREEN_DITHER)) {
-    float3 c = finalColor.rgb;
-    c = applyDither(c, pixelCoord);
-    finalColor.rgb = c;
-  }
+  finalColor.a = 1.0;
 
+  /*
+    if (isEnabled(COLOR_QUANTIZATION)) {
+      float4 c = finalColor;
+      c = applyQuantization(c, pixelCoord, true);
+      finalColor = c;
+    }
+
+    if (isEnabled(SCREEN_DITHER)) {
+      float3 c = finalColor.rgb;
+      c = applyDither(c, pixelCoord);
+      finalColor.rgb = c;
+    }
+  */
   return finalColor;
 }

@@ -107,7 +107,7 @@ namespace vex {
                 VkDescriptorSetAllocateInfo allocInfo{};
                 allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 
-                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 8 };
+                VkDescriptorPoolSize poolSize = { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 12 };
                 VkDescriptorPoolCreateInfo poolInfo = {};
                 poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
                 poolInfo.poolSizeCount = 1;
@@ -1276,7 +1276,17 @@ namespace vex {
             revealInfo.imageView = m_r_context.revealView;
             revealInfo.sampler = m_screenSampler;
 
-            std::array<VkWriteDescriptorSet, 4> writes{};
+            VkDescriptorImageInfo uiInfo{};
+            uiInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            uiInfo.imageView = m_r_context.uiView;
+            uiInfo.sampler = m_screenSampler;
+
+            VkDescriptorImageInfo lutInfo{};
+            lutInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            lutInfo.imageView = m_r_context.colorLutView;
+            lutInfo.sampler = m_linearSampler;
+
+            std::array<VkWriteDescriptorSet, 5> writes{};
 
             writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             writes[0].dstSet = m_screenDescriptorSet;
@@ -1299,17 +1309,19 @@ namespace vex {
             writes[2].descriptorCount = 1;
             writes[2].pImageInfo = &revealInfo;
 
-            VkDescriptorImageInfo uiInfo{};
-            uiInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            uiInfo.imageView = m_r_context.uiView;
-            uiInfo.sampler = m_screenSampler;
-
             writes[3].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             writes[3].dstSet = m_screenDescriptorSet;
             writes[3].dstBinding = 3;
             writes[3].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             writes[3].descriptorCount = 1;
             writes[3].pImageInfo = &uiInfo;
+
+            writes[4].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writes[4].dstSet = m_screenDescriptorSet;
+            writes[4].dstBinding = 4;
+            writes[4].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            writes[4].descriptorCount = 1;
+            writes[4].pImageInfo = &lutInfo;
 
             vkUpdateDescriptorSets(m_r_context.device, static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
 

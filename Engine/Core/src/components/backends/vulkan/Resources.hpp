@@ -169,6 +169,13 @@ namespace vex {
         /// @param frameIndex - The frame index.
         /// @return void* - The mapped data.
         void* getParticleMappedData(uint32_t frameIndex) const { return m_particleMappedData[frameIndex]; }
+
+        /// @brief Generates and uploads a 32x32x32 3D Lookup Texture (LUT) to the GPU.
+        /// Bakes PS1 5-bit color quantization, saturation, and brightness boost into a 3D texture.
+        /// The data is transferred via a staging buffer to a VK_IMAGE_TYPE_3D image stored in the
+        /// VulkanContext. This allows the composite shader to replace heavy color math with a
+        /// single hardware-accelerated trilinear texture fetch.
+        void createColorLUT();
     private:
         const std::string defaultTextureName = "default";
 

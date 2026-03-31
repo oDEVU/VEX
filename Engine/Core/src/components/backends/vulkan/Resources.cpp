@@ -30,6 +30,7 @@ struct BatchedTextureData {
         createUniformBuffers();
         createDescriptorResources();
         createParticleSSBOs();
+        createColorLUT();
     }
 
     VulkanResources::~VulkanResources() {
@@ -111,6 +112,160 @@ struct BatchedTextureData {
                 m_particleSSBOs[i] = VK_NULL_HANDLE;
             }
         }
+
+        if (m_r_context.colorLutImage != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.colorLutView, nullptr);
+            vmaDestroyImage(m_r_context.allocator, m_r_context.colorLutImage, m_r_context.colorLutAllocation);
+            m_r_context.colorLutImage = VK_NULL_HANDLE;
+            m_r_context.colorLutView = VK_NULL_HANDLE;
+            m_r_context.colorLutAllocation = VK_NULL_HANDLE;
+        }
+    }
+
+    void VulkanResources::createColorLUT() {
+        const uint32_t LUT_SIZE = 32;
+        VkDeviceSize imageSize = LUT_SIZE * LUT_SIZE * LUT_SIZE * 4;
+        std::vector<uint8_t> lutData(imageSize);
+
+        const float SATURATION = 1.1f;
+        const float BRIGHTNESS_BOOST = 1.4f;
+        const float textureBpc = 32.0f;
+
+        auto luma = [](const glm::vec3& c) {
+            return glm::dot(c, glm::vec3(0.299f, 0.587f, 0.114f));
+        };
+
+        for (uint32_t z = 0; z < LUT_SIZE; z++) {
+            for (uint32_t y = 0; y < LUT_SIZE; y++) {
+                for (uint32_t x = 0; x < LUT_SIZE; x++) {
+                    glm::vec3 color(
+                        (float)x / (LUT_SIZE - 1),
+                        (float)y / (LUT_SIZE - 1),
+                        (float)z / (LUT_SIZE - 1)
+                    );
+
+                    color = glm::round(color * textureBpc) / textureBpc;
+
+                    float gray = luma(color);
+                    color = glm::mix(glm::vec3(gray), color, SATURATION);
+                    color *= BRIGHTNESS_BOOST;
+
+                    color = glm::clamp(color, 0.0f, 1.0f);
+
+                    uint32_t index = (z * LUT_SIZE * LUT_SIZE + y * LUT_SIZE + x) * 4;
+                    lutData[index + 0] = static_cast<uint8_t>(color.r * 255.0f);
+                    lutData[index + 1] = static_cast<uint8_t>(color.g * 255.0f);
+                    lutData[index + 2] = static_cast<uint8_t>(color.b * 255.0f);
+                    lutData[index + 3] = 255;
+                }
+            }
+        }
+
+        VkBuffer stagingBuffer;
+        VmaAllocation stagingAlloc;
+        VkBufferCreateInfo bufferInfo{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+        bufferInfo.size = imageSize;
+        bufferInfo.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+
+        VmaAllocationCreateInfo allocInfo{};
+        allocInfo.usage = VMA_MEMORY_USAGE_CPU_ONLY;
+        vmaCreateBuffer(m_r_context.allocator, &bufferInfo, &allocInfo, &stagingBuffer, &stagingAlloc, nullptr);
+
+        void* data;
+        vmaMapMemory(m_r_context.allocator, stagingAlloc, &data);
+        memcpy(data, lutData.data(), static_cast<size_t>(imageSize));
+        vmaUnmapMemory(m_r_context.allocator, stagingAlloc);
+
+        VkImageCreateInfo imageInfo{VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO};
+        imageInfo.imageType = VK_IMAGE_TYPE_3D;
+        imageInfo.extent = { LUT_SIZE, LUT_SIZE, LUT_SIZE };
+        imageInfo.mipLevels = 1;
+        imageInfo.arrayLayers = 1;
+        imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+        imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+        imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        imageInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+        imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+
+        VmaAllocationCreateInfo imgAllocInfo{};
+        imgAllocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+        vmaCreateImage(m_r_context.allocator, &imageInfo, &imgAllocInfo, &m_r_context.colorLutImage, &m_r_context.colorLutAllocation, nullptr);
+
+        VkCommandPoolCreateInfo poolInfo{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
+        poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+        poolInfo.queueFamilyIndex = m_r_context.graphicsQueueFamily;
+        VkCommandPool tempPool;
+        vkCreateCommandPool(m_r_context.device, &poolInfo, nullptr, &tempPool);
+
+        VkCommandBufferAllocateInfo cmdAllocInfo{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
+        cmdAllocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        cmdAllocInfo.commandPool = tempPool;
+        cmdAllocInfo.commandBufferCount = 1;
+        VkCommandBuffer cmd;
+        vkAllocateCommandBuffers(m_r_context.device, &cmdAllocInfo, &cmd);
+
+        VkCommandBufferBeginInfo beginInfo{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
+        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        vkBeginCommandBuffer(cmd, &beginInfo);
+
+        VkImageMemoryBarrier barrier{VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
+        barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        barrier.image = m_r_context.colorLutImage;
+        barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        barrier.subresourceRange.baseMipLevel = 0;
+        barrier.subresourceRange.levelCount = 1;
+        barrier.subresourceRange.baseArrayLayer = 0;
+        barrier.subresourceRange.layerCount = 1;
+        barrier.srcAccessMask = 0;
+        barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+        vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+
+        VkBufferImageCopy region{};
+        region.bufferOffset = 0;
+        region.bufferRowLength = 0;
+        region.bufferImageHeight = 0;
+        region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.imageSubresource.mipLevel = 0;
+        region.imageSubresource.baseArrayLayer = 0;
+        region.imageSubresource.layerCount = 1;
+        region.imageOffset = {0, 0, 0};
+        region.imageExtent = {LUT_SIZE, LUT_SIZE, LUT_SIZE};
+
+        vkCmdCopyBufferToImage(cmd, stagingBuffer, m_r_context.colorLutImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+        barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+        vkCmdPipelineBarrier(cmd, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+
+        vkEndCommandBuffer(cmd);
+
+        VkSubmitInfo submitInfo{VK_STRUCTURE_TYPE_SUBMIT_INFO};
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &cmd;
+        vkQueueSubmit(m_r_context.graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(m_r_context.graphicsQueue);
+
+        vkDestroyCommandPool(m_r_context.device, tempPool, nullptr);
+        vmaDestroyBuffer(m_r_context.allocator, stagingBuffer, stagingAlloc);
+
+        VkImageViewCreateInfo viewInfo{VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
+        viewInfo.image = m_r_context.colorLutImage;
+        viewInfo.viewType = VK_IMAGE_VIEW_TYPE_3D;
+        viewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+        viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        viewInfo.subresourceRange.baseMipLevel = 0;
+        viewInfo.subresourceRange.levelCount = 1;
+        viewInfo.subresourceRange.baseArrayLayer = 0;
+        viewInfo.subresourceRange.layerCount = 1;
+
+        vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &m_r_context.colorLutView);
     }
 
     void VulkanResources::createTextureFromRaw(const std::vector<unsigned char>& rgba, int w, int h, const std::string& name) {
@@ -463,15 +618,17 @@ struct BatchedTextureData {
             }
         }
 
-        std::array<VkDescriptorSetLayoutBinding, 4> screenBindings{};
-        for(int i = 0; i < 4; i++) {
+        std::array<VkDescriptorSetLayoutBinding, 5> screenBindings{};
+
+        for(int i = 0; i < 5; i++) {
             screenBindings[i].binding = i;
             screenBindings[i].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             screenBindings[i].descriptorCount = 1;
             screenBindings[i].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
         }
+
         VkDescriptorSetLayoutCreateInfo screenLayoutInfo{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
-        screenLayoutInfo.bindingCount = 4;
+        screenLayoutInfo.bindingCount = 5;
         screenLayoutInfo.pBindings = screenBindings.data();
         if(vkCreateDescriptorSetLayout(m_r_context.device, &screenLayoutInfo, nullptr, &m_r_context.screenDescriptorSetLayout) != VK_SUCCESS) {
             throw_error("Failed to create screen descriptor set layout");

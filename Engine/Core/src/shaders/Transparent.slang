@@ -159,18 +159,19 @@ WBOITOutput fragMain(VSOutput input, float4 fragCoord: SV_Position) {
   }
   // finalColor.a = 1.0;
 
-  if (isEnabled(COLOR_QUANTIZATION)) {
-    float4 c = finalColor;
-    c = applyQuantization(c, pixelCoord, true);
-    finalColor = c;
-  }
+  /*
+    if (isEnabled(COLOR_QUANTIZATION)) {
+      float4 c = finalColor;
+      c = applyQuantization(c, pixelCoord, true);
+      finalColor = c;
+    }
 
-  if (isEnabled(SCREEN_DITHER)) {
-    float3 c = finalColor.rgb;
-    c = applyDither(c, pixelCoord);
-    finalColor.rgb = c;
-  }
-
+    if (isEnabled(SCREEN_DITHER)) {
+      float3 c = finalColor.rgb;
+      c = applyDither(c, pixelCoord);
+      finalColor.rgb = c;
+    }
+  */
   float a = finalColor.a;
   float z = fragCoord.z;
   float weight = clamp(

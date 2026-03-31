@@ -47,11 +47,18 @@ float4 main(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
 
   float4 finalColor = texColor * float4(lighting, 1.0);
 
-  if (isEnabled(COLOR_QUANTIZATION))
-    finalColor = applyQuantization(finalColor, fragCoord.xy, true);
-  if (isEnabled(NTSC_ARTIFACTS))
-    finalColor.rgb = applyNTSC(finalColor.rgb, input.fragUV, fragCoord.xy, true,
-                               input.texID);
+  /*
+    if (isEnabled(COLOR_QUANTIZATION)) {
+      float4 c = finalColor;
+      c = applyQuantization(c, pixelCoord, true);
+      finalColor = c;
+    }
 
+    if (isEnabled(SCREEN_DITHER)) {
+      float3 c = finalColor.rgb;
+      c = applyDither(c, pixelCoord);
+      finalColor.rgb = c;
+    }
+  */
   return finalColor;
 }
