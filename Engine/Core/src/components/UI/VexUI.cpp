@@ -329,6 +329,7 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
     if (j.contains("children") && j["children"].is_array()) {
         for (const auto& c : j["children"]) {
             Widget* child = parseNode(c);
+            child->parent = w;
             auto childYoga = child->yoga;
             if (c.contains("size") && c["size"].is_array() && c["size"].size() == 2) {
                 YGNodeStyleSetWidth(childYoga, child->size.x);
@@ -364,6 +365,7 @@ void VexUI::load(const std::string& path) {
 
         freeTree(m_root);
         m_root = nullptr;
+        m_focusedWidget = nullptr;
         if (json.contains("root")) {
             m_root = parseNode(json["root"]);
             if (json["root"].contains("zindex")){
@@ -467,7 +469,7 @@ void VexUI::processEvent(const SDL_Event& ev) {
     }
     else if (ev.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
         SDL_GamepadButton button = (SDL_GamepadButton)ev.gbutton.button;
-        
+
         if (button == SDL_GAMEPAD_BUTTON_SOUTH) {
             if (m_focusedWidget && m_focusedWidget->onClick) {
                 m_focusedWidget->onClick();
@@ -489,22 +491,29 @@ void VexUI::processEvent(const SDL_Event& ev) {
     else if (ev.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {
         SDL_GamepadAxis axis = (SDL_GamepadAxis)ev.gaxis.axis;
         float value = ev.gaxis.value / 32767.0f;
-        
-        if (m_gamepadNavigationCooldown <= 0.0f) {
-            if (axis == SDL_GAMEPAD_AXIS_LEFTX && std::abs(value) > GAMEPAD_AXIS_THRESHOLD) {
+
+        if (axis == SDL_GAMEPAD_AXIS_LEFTX) {
+            bool wasAbove = std::abs(m_gamepadAxisX) > GAMEPAD_AXIS_THRESHOLD;
+            bool isAbove = std::abs(value) > GAMEPAD_AXIS_THRESHOLD;
+
+            if (!wasAbove && isAbove) {
                 float dirX = (value > 0.0f) ? 1.0f : -1.0f;
                 navigateToWidget(dirX, 0.0f);
-                m_gamepadNavigationCooldown = GAMEPAD_NAV_COOLDOWN;
             }
-            else if (axis == SDL_GAMEPAD_AXIS_LEFTY && std::abs(value) > GAMEPAD_AXIS_THRESHOLD) {
+            m_gamepadAxisX = value;
+        }
+        else if (axis == SDL_GAMEPAD_AXIS_LEFTY) {
+            bool wasAbove = std::abs(m_gamepadAxisY) > GAMEPAD_AXIS_THRESHOLD;
+            bool isAbove = std::abs(value) > GAMEPAD_AXIS_THRESHOLD;
+
+            if (!wasAbove && isAbove) {
                 float dirY = (value > 0.0f) ? 1.0f : -1.0f;
                 navigateToWidget(0.0f, dirY);
-                m_gamepadNavigationCooldown = GAMEPAD_NAV_COOLDOWN;
             }
+            m_gamepadAxisY = value;
         }
-    }
 }
-
+}
 void VexUI::navigateToWidget(float dirX, float dirY) {
     std::vector<Widget*> navigable;
     getNavigableWidgets(navigable);
@@ -513,7 +522,17 @@ void VexUI::navigateToWidget(float dirX, float dirY) {
         return;
     }
 
-    if (!m_focusedWidget) {
+    bool focusedIsValid = false;
+    if (m_focusedWidget) {
+        for (Widget* w : navigable) {
+            if (w == m_focusedWidget) {
+                focusedIsValid = true;
+                break;
+            }
+        }
+    }
+
+    if (!focusedIsValid) {
         setFocusedWidget(navigable.front());
         return;
     }
@@ -560,13 +579,23 @@ glm::vec2 VexUI::getWidgetCenter(Widget* w) {
     float width = YGNodeLayoutGetWidth(w->yoga);
     float height = YGNodeLayoutGetHeight(w->yoga);
 
+    Widget* parent = w->parent;
+    while (parent) {
+        x += YGNodeLayoutGetLeft(parent->yoga);
+        y += YGNodeLayoutGetTop(parent->yoga);
+        parent = parent->parent;
+    }
+
     return {x + width * 0.5f, y + height * 0.5f};
 }
 
 Widget* VexUI::findClosestNavigableWidget(const glm::vec2& fromPos, const glm::vec2& direction, const std::vector<Widget*>& candidates) {
     Widget* closest = nullptr;
-    float closestDot = -2.0f;
-    float closestDistance = FLT_MAX;
+    float closestScore = -FLT_MAX;
+
+    float absX = std::abs(direction.x);
+    float absY = std::abs(direction.y);
+    bool isHorizontalNav = absX > absY;
 
     for (Widget* candidate : candidates) {
         if (candidate == m_focusedWidget) {
@@ -585,11 +614,22 @@ Widget* VexUI::findClosestNavigableWidget(const glm::vec2& fromPos, const glm::v
 
         float dot = glm::dot(normDir, normToCandidate);
 
-        if (dot > 0.3f) {
-            if (dot > closestDot || (dot == closestDot && distance < closestDistance)) {
+        float crossAlignment = 1.0f;
+
+        if (isHorizontalNav) {
+            float yDiff = std::abs(toCandidate.y);
+            crossAlignment = std::max(0.0f, 1.0f - (yDiff / 500.0f));
+        } else {
+            float xDiff = std::abs(toCandidate.x);
+            crossAlignment = std::max(0.0f, 1.0f - (xDiff / 500.0f));
+        }
+
+        if (dot > -0.2f) {
+            float score = dot * 3.0f + crossAlignment * 0.5f - (distance / 800.0f);
+
+            if (score > closestScore) {
+                closestScore = score;
                 closest = candidate;
-                closestDot = dot;
-                closestDistance = distance;
             }
         }
     }
@@ -598,6 +638,10 @@ Widget* VexUI::findClosestNavigableWidget(const glm::vec2& fromPos, const glm::v
 }
 
 void VexUI::setFocusedWidget(Widget* w) {
+    if (w && !isWidgetNavigable(w)) {
+        return;
+    }
+
     if (w == m_focusedWidget) {
         return;
     }
@@ -612,7 +656,6 @@ void VexUI::setFocusedWidget(Widget* w) {
         m_focusedWidget->onFocusEnter();
     }
 }
-
 YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
     std::string key = w->style.font + "_" + std::to_string(static_cast<int>(w->style.fontSize));
     auto it = m_fontAtlases.find(key);

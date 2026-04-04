@@ -81,6 +81,7 @@ struct Widget {
     UIStyle style;
     YGNodeRef yoga = nullptr;
     std::vector<Widget*> children;
+    Widget* parent = nullptr;
     std::function<void()> onClick = nullptr;
     std::function<void()> onFocusEnter = nullptr;
     std::function<void()> onFocusLost = nullptr;
@@ -323,6 +324,8 @@ private:
 
     // Gamepad navigation state
     Widget* m_focusedWidget = nullptr;
+    float m_gamepadAxisX = 0.0f;
+    float m_gamepadAxisY = 0.0f;
     Widget* m_previousFocusedWidget = nullptr;
     float m_gamepadNavigationCooldown = 0.0f;
     static constexpr float GAMEPAD_NAV_COOLDOWN = 0.2f;
