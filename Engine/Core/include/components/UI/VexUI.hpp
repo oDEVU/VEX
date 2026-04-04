@@ -82,6 +82,8 @@ struct Widget {
     YGNodeRef yoga = nullptr;
     std::vector<Widget*> children;
     std::function<void()> onClick = nullptr;
+    std::function<void()> onFocusEnter = nullptr;
+    std::function<void()> onFocusLost = nullptr;
     VexUI* ui = nullptr;
     TextAlign textAlign = TextAlign::Left;
 
@@ -117,6 +119,12 @@ public:
     /// @brief Process mouse and keyboard events.
     /// @param const SDL_Event& ev - SDL event.
     void processEvent(const SDL_Event& ev);
+
+    /// @brief Get the currently focused widget.
+    /// @return Widget* - Pointer to focused widget, or nullptr if none focused.
+    Widget* getFocusedWidget() const {
+        return m_focusedWidget;
+    }
 
     /// @brief Set text of a UI element.
     /// @param const std::string& id - ID of the UI element.
@@ -274,8 +282,12 @@ public:
     /// @code
     /// m_vexUI->update();
     /// @endcode
-    void update() {
+    void update(float deltaTime = 0.016f) {
         if (initialized) {
+            if (m_gamepadNavigationCooldown > 0.0f) {
+                m_gamepadNavigationCooldown -= deltaTime;
+            }
+            
             if (loadPending) {
                 loadPending = false;
                 load(loadPath);
@@ -308,6 +320,13 @@ private:
     VmaAllocation m_vbAlloc = VK_NULL_HANDLE;
     size_t m_vbSize = 0;
     VkSampler m_uiSampler = VK_NULL_HANDLE;
+
+    // Gamepad navigation state
+    Widget* m_focusedWidget = nullptr;
+    Widget* m_previousFocusedWidget = nullptr;
+    float m_gamepadNavigationCooldown = 0.0f;
+    static constexpr float GAMEPAD_NAV_COOLDOWN = 0.2f;
+    static constexpr float GAMEPAD_AXIS_THRESHOLD = 0.5f;
 
     /// @brief Loads fonts for the UI.
     /// @param Widget* w The widget to load fonts for.
@@ -372,6 +391,30 @@ private:
     /// @param const std::string& id The id of the widget to update.
     /// @param std::function<void(Widget*)> action The action to perform on the widget.
     void safeUpdate(const std::string& id, std::function<void(Widget*)> action);
+
+    /// @brief Navigate to widget in a given direction.
+    /// @param float dirX Direction X component (-1, 0, or 1).
+    /// @param float dirY Direction Y component (-1, 0, or 1).
+    void navigateToWidget(float dirX, float dirY);
+
+    /// @brief Get all navigable widgets (buttons).
+    void getNavigableWidgets(std::vector<Widget*>& out);
+
+    /// @brief Recursively collect navigable widgets.
+    void collectNavigableWidgets(Widget* w, std::vector<Widget*>& out);
+
+    /// @brief Check if widget is navigable (button type).
+    bool isWidgetNavigable(Widget* w) const;
+
+    /// @brief Get widget center position in screen space.
+    glm::vec2 getWidgetCenter(Widget* w);
+
+    /// @brief Find closest navigable widget in a direction.
+    Widget* findClosestNavigableWidget(const glm::vec2& fromPos, const glm::vec2& direction, const std::vector<Widget*>& candidates);
+
+    /// @brief Set focus to a widget and trigger focus callbacks.
+    /// @param Widget* w - Widget to focus.
+    void setFocusedWidget(Widget* w);
 
 };
 }

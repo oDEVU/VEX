@@ -285,7 +285,7 @@ void Engine::update(float deltaTime) {
             if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
                 //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
                 uiView.get<UiComponent>(entity).m_vexUI->init();
-                uiView.get<UiComponent>(entity).m_vexUI->update();
+                uiView.get<UiComponent>(entity).m_vexUI->update(deltaTime);
             }
         }
 
@@ -304,7 +304,7 @@ void Engine::update(float deltaTime) {
         for (auto entity : uiView) {
             if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
                 uiView.get<UiComponent>(entity).m_vexUI->init();
-                uiView.get<UiComponent>(entity).m_vexUI->update();
+                uiView.get<UiComponent>(entity).m_vexUI->update(deltaTime);
             }
         }
 

@@ -465,6 +465,152 @@ void VexUI::processEvent(const SDL_Event& ev) {
         if (Widget* w = findWidgetAt(m_root, mouse, {0, 0}); w && w->type == WidgetType::Button && w->onClick)
             w->onClick();
     }
+    else if (ev.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN) {
+        SDL_GamepadButton button = (SDL_GamepadButton)ev.gbutton.button;
+        
+        if (button == SDL_GAMEPAD_BUTTON_SOUTH) {
+            if (m_focusedWidget && m_focusedWidget->onClick) {
+                m_focusedWidget->onClick();
+            }
+        }
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_LEFT) {
+            navigateToWidget(-1.0f, 0.0f);
+        }
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_RIGHT) {
+            navigateToWidget(1.0f, 0.0f);
+        }
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_UP) {
+            navigateToWidget(0.0f, -1.0f);
+        }
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_DOWN) {
+            navigateToWidget(0.0f, 1.0f);
+        }
+    }
+    else if (ev.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {
+        SDL_GamepadAxis axis = (SDL_GamepadAxis)ev.gaxis.axis;
+        float value = ev.gaxis.value / 32767.0f;
+        
+        if (m_gamepadNavigationCooldown <= 0.0f) {
+            if (axis == SDL_GAMEPAD_AXIS_LEFTX && std::abs(value) > GAMEPAD_AXIS_THRESHOLD) {
+                float dirX = (value > 0.0f) ? 1.0f : -1.0f;
+                navigateToWidget(dirX, 0.0f);
+                m_gamepadNavigationCooldown = GAMEPAD_NAV_COOLDOWN;
+            }
+            else if (axis == SDL_GAMEPAD_AXIS_LEFTY && std::abs(value) > GAMEPAD_AXIS_THRESHOLD) {
+                float dirY = (value > 0.0f) ? 1.0f : -1.0f;
+                navigateToWidget(0.0f, dirY);
+                m_gamepadNavigationCooldown = GAMEPAD_NAV_COOLDOWN;
+            }
+        }
+    }
+}
+
+void VexUI::navigateToWidget(float dirX, float dirY) {
+    std::vector<Widget*> navigable;
+    getNavigableWidgets(navigable);
+
+    if (navigable.empty()) {
+        return;
+    }
+
+    if (!m_focusedWidget) {
+        setFocusedWidget(navigable.front());
+        return;
+    }
+
+    glm::vec2 fromPos = getWidgetCenter(m_focusedWidget);
+    glm::vec2 direction{dirX, dirY};
+
+    Widget* nextWidget = findClosestNavigableWidget(fromPos, direction, navigable);
+    if (nextWidget) {
+        setFocusedWidget(nextWidget);
+    }
+}
+
+void VexUI::getNavigableWidgets(std::vector<Widget*>& out) {
+    if (m_root) {
+        collectNavigableWidgets(m_root, out);
+    }
+}
+
+void VexUI::collectNavigableWidgets(Widget* w, std::vector<Widget*>& out) {
+    if (!w) return;
+
+    if (isWidgetNavigable(w)) {
+        out.push_back(w);
+    }
+
+    for (Widget* child : w->children) {
+        collectNavigableWidgets(child, out);
+    }
+}
+
+bool VexUI::isWidgetNavigable(Widget* w) const {
+    if (!w) return false;
+    return w->type == WidgetType::Button;
+}
+
+glm::vec2 VexUI::getWidgetCenter(Widget* w) {
+    if (!w || !w->yoga) {
+        return {0.0f, 0.0f};
+    }
+
+    float x = YGNodeLayoutGetLeft(w->yoga);
+    float y = YGNodeLayoutGetTop(w->yoga);
+    float width = YGNodeLayoutGetWidth(w->yoga);
+    float height = YGNodeLayoutGetHeight(w->yoga);
+
+    return {x + width * 0.5f, y + height * 0.5f};
+}
+
+Widget* VexUI::findClosestNavigableWidget(const glm::vec2& fromPos, const glm::vec2& direction, const std::vector<Widget*>& candidates) {
+    Widget* closest = nullptr;
+    float closestDot = -2.0f;
+    float closestDistance = FLT_MAX;
+
+    for (Widget* candidate : candidates) {
+        if (candidate == m_focusedWidget) {
+            continue;
+        }
+
+        glm::vec2 toCandidate = getWidgetCenter(candidate) - fromPos;
+        float distance = glm::length(toCandidate);
+
+        if (distance < 1.0f) {
+            continue;
+        }
+
+        glm::vec2 normDir = glm::normalize(direction);
+        glm::vec2 normToCandidate = glm::normalize(toCandidate);
+
+        float dot = glm::dot(normDir, normToCandidate);
+
+        if (dot > 0.3f) {
+            if (dot > closestDot || (dot == closestDot && distance < closestDistance)) {
+                closest = candidate;
+                closestDot = dot;
+                closestDistance = distance;
+            }
+        }
+    }
+
+    return closest;
+}
+
+void VexUI::setFocusedWidget(Widget* w) {
+    if (w == m_focusedWidget) {
+        return;
+    }
+
+    if (m_focusedWidget && m_focusedWidget->onFocusLost) {
+        m_focusedWidget->onFocusLost();
+    }
+
+    m_focusedWidget = w;
+
+    if (m_focusedWidget && m_focusedWidget->onFocusEnter) {
+        m_focusedWidget->onFocusEnter();
+    }
 }
 
 YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
