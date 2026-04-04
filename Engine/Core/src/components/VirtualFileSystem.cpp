@@ -132,7 +132,7 @@ std::unique_ptr<VirtualFileSystem::FileData> VirtualFileSystem::load_file(const 
         std::string fullPath;
 
     #ifdef _WIN32
-        full_path = clean_virtual_path;
+        fullPath = cleanVirtualPath;
     #else
         fullPath = "/" + cleanVirtualPath;
     #endif
@@ -185,7 +185,7 @@ std::unique_ptr<std::istream> VirtualFileSystem::open_file_stream(const std::str
         std::string fullPath;
 
     #ifdef _WIN32
-        full_path = clean_virtual_path;
+        fullPath = cleanVirtualPath;
     #else
         fullPath = "/" + cleanVirtualPath;
     #endif
@@ -205,7 +205,7 @@ bool VirtualFileSystem::file_exists(const std::string& virtual_path) {
         std::string fullPath;
 
     #ifdef _WIN32
-        full_path = clean_virtual_path;
+        fullPath = cleanVirtualPath;
     #else
         fullPath = "/" + cleanVirtualPath;
     #endif
@@ -224,7 +224,7 @@ size_t VirtualFileSystem::get_file_size(const std::string& virtual_path) {
         std::string fullPath;
 
     #ifdef _WIN32
-        full_path = clean_virtual_path;
+        fullPath = cleanVirtualPath;
     #else
         fullPath = "/" + cleanVirtualPath;
     #endif

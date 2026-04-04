@@ -244,11 +244,11 @@ namespace vex {
                 if (GetModuleFileNameA(hMods[i], szModName, sizeof(szModName))) {
                     MODULEINFO modInfo;
                     if(GetModuleInformation(hProcess, hMods[i], &modInfo, sizeof(modInfo))) {
-                        SafeWriteStr(outFd, "Base: ");
-                        SafeWriteHex(outFd, (uintptr_t)modInfo.lpBaseOfDll);
-                        SafeWriteStr(outFd, " | ");
-                        SafeWriteStr(outFd, szModName);
-                        SafeWriteStr(outFd, "\n");
+                        safeWriteStr(outFd, "Base: ");
+                        safeWriteHex(outFd, (uintptr_t)modInfo.lpBaseOfDll);
+                        safeWriteStr(outFd, " | ");
+                        safeWriteStr(outFd, szModName);
+                        safeWriteStr(outFd, "\n");
                     }
                 }
             }
@@ -273,19 +273,19 @@ namespace vex {
             safeWriteStr(fd, "RIP: "); safeWriteHex(fd, uc->uc_mcontext.gregs[REG_RIP]);
         #elif defined(_WIN32)
             PCONTEXT ctx = ((PEXCEPTION_POINTERS)context)->ContextRecord;
-            SafeWriteStr(fd, "RAX: "); SafeWriteHex(fd, ctx->Rax);
-            SafeWriteStr(fd, "RBX: "); SafeWriteHex(fd, ctx->Rbx);
-            SafeWriteStr(fd, "RCX: "); SafeWriteHex(fd, ctx->Rcx);
-            SafeWriteStr(fd, "RDX: "); SafeWriteHex(fd, ctx->Rdx);
-            SafeWriteStr(fd, "RSI: "); SafeWriteHex(fd, ctx->Rsi);
-            SafeWriteStr(fd, "RDI: "); SafeWriteHex(fd, ctx->Rdi);
-            SafeWriteStr(fd, "RBP: "); SafeWriteHex(fd, ctx->Rbp);
-            SafeWriteStr(fd, "RSP: "); SafeWriteHex(fd, ctx->Rsp);
-            SafeWriteStr(fd, "RIP: "); SafeWriteHex(fd, ctx->Rip);
-            SafeWriteStr(fd, "R8:  "); SafeWriteHex(fd, ctx->R8);
-            SafeWriteStr(fd, "R9:  "); SafeWriteHex(fd, ctx->R9);
-            SafeWriteStr(fd, "R10: "); SafeWriteHex(fd, ctx->R10);
-            SafeWriteStr(fd, "R11: "); SafeWriteHex(fd, ctx->R11);
+            safeWriteStr(fd, "RAX: "); safeWriteHex(fd, ctx->Rax);
+            safeWriteStr(fd, "RBX: "); safeWriteHex(fd, ctx->Rbx);
+            safeWriteStr(fd, "RCX: "); safeWriteHex(fd, ctx->Rcx);
+            safeWriteStr(fd, "RDX: "); safeWriteHex(fd, ctx->Rdx);
+            safeWriteStr(fd, "RSI: "); safeWriteHex(fd, ctx->Rsi);
+            safeWriteStr(fd, "RDI: "); safeWriteHex(fd, ctx->Rdi);
+            safeWriteStr(fd, "RBP: "); safeWriteHex(fd, ctx->Rbp);
+            safeWriteStr(fd, "RSP: "); safeWriteHex(fd, ctx->Rsp);
+            safeWriteStr(fd, "RIP: "); safeWriteHex(fd, ctx->Rip);
+            safeWriteStr(fd, "R8:  "); safeWriteHex(fd, ctx->R8);
+            safeWriteStr(fd, "R9:  "); safeWriteHex(fd, ctx->R9);
+            safeWriteStr(fd, "R10: "); safeWriteHex(fd, ctx->R10);
+            safeWriteStr(fd, "R11: "); safeWriteHex(fd, ctx->R11);
         #endif
     }
 
