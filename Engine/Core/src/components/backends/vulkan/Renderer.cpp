@@ -243,7 +243,58 @@ namespace vex {
                 updateScreenDescriptor(m_r_context.lowResColorView);
             }
 
-            vkWaitForFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame], VK_TRUE, UINT64_MAX);
+            if (!m_r_context.isValidFrameIndex(m_r_context.currentFrame)) {
+                log(LogLevel::ERROR,
+                           "beginFrame: currentFrame %u is out of bounds",
+                           m_r_context.currentFrame);
+                outData.isSwapchainValid = false;
+                return false;
+            }
+            
+            if (m_r_context.inFlightFences.size() <= m_r_context.currentFrame) {
+                log(LogLevel::ERROR,
+                           "beginFrame: inFlightFences not properly sized (size: %zu, currentFrame: %u)",
+                           m_r_context.inFlightFences.size(), m_r_context.currentFrame);
+                outData.isSwapchainValid = false;
+                return false;
+            }
+            
+            if (m_r_context.imageAvailableSemaphores.size() <= m_r_context.currentFrame) {
+                log(LogLevel::ERROR,
+                           "beginFrame: imageAvailableSemaphores not properly sized (size: %zu, currentFrame: %u)",
+                           m_r_context.imageAvailableSemaphores.size(), m_r_context.currentFrame);
+                outData.isSwapchainValid = false;
+                return false;
+            }
+            
+            if (m_r_context.commandPools.size() <= m_r_context.currentFrame) {
+                log(LogLevel::ERROR,
+                           "beginFrame: commandPools not properly sized (size: %zu, currentFrame: %u)",
+                           m_r_context.commandPools.size(), m_r_context.currentFrame);
+                outData.isSwapchainValid = false;
+                return false;
+            }
+            
+            if (m_r_context.commandBuffers.size() <= m_r_context.currentFrame) {
+                log(LogLevel::ERROR,
+                           "beginFrame: commandBuffers not properly sized (size: %zu, currentFrame: %u)",
+                           m_r_context.commandBuffers.size(), m_r_context.currentFrame);
+                outData.isSwapchainValid = false;
+                return false;
+            }
+
+            const uint64_t FENCE_TIMEOUT_NS = 1000000000;
+            VkResult fenceResult = vkWaitForFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame], VK_TRUE, FENCE_TIMEOUT_NS);
+            
+            if (fenceResult == VK_TIMEOUT) {
+                log(LogLevel::ERROR, "GPU fence timeout - GPU may be hung or driver unresponsive. Requesting swapchain recreation.");
+                m_r_context.requestSwapchainRecreation = true;
+                outData.isSwapchainValid = false;
+                return false;
+            } else if (fenceResult != VK_SUCCESS) {
+                log(LogLevel::ERROR, "vkWaitForFences failed with result:", static_cast<int>(fenceResult));
+                throw_error("Failed to wait for GPU fence");
+            }
 
             VkResult result = vkAcquireNextImageKHR(
                 m_r_context.device,
@@ -405,8 +456,6 @@ namespace vex {
             viewport.minDepth = 0.0f; viewport.maxDepth = 1.0f;
             vkCmdSetViewport(cmd, 0, 1, &viewport);
 
-            //std::cout << "textureView x:" << viewport.width << ", y:" << viewport.height << std::endl;
-
             VkRect2D scissor{};
             scissor.extent = {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y};
             vkCmdSetScissor(cmd, 0, 1, &scissor);
@@ -426,7 +475,6 @@ namespace vex {
             proj = glm::perspective(glm::radians(camera.fov), (float)m_r_context.currentRenderResolution.x / (float)m_r_context.currentRenderResolution.y, camera.nearPlane, camera.farPlane);
             proj[1][1] *= -1;
 
-            //log("Updating scene UBO...");
             m_sceneUBO.view = view;
             m_sceneUBO.proj = proj;
 
@@ -504,7 +552,6 @@ namespace vex {
                 frustumSimd.init(camFrustum);
             }
 
-            //auto modelView = registry.view<TransformComponent, MeshComponent>();
             auto it = modelView.begin();
             auto end = modelView.end();
 
@@ -1214,12 +1261,44 @@ namespace vex {
         }
 
         void Renderer::endFrame(SceneRenderData& data) {
-            //std::cout << "currentRes x:" << m_r_context.currentRenderResolution.x << ", y:" << m_r_context.currentRenderResolution.y << std::endl;
-            //std::cout << "swapchainExtent x:" << m_r_context.swapchainExtent.width << ", y:" << m_r_context.swapchainExtent.height << std::endl;
-            //std::cout << "IsValid: " << data.isSwapchainValid << std::endl;
             if (!data.isSwapchainValid) return;
 
             vkEndCommandBuffer(data.commandBuffer);
+
+            if (!m_r_context.isValidFrameIndex(data.frameIndex)) {
+                log(LogLevel::ERROR,
+                           "endFrame: frameIndex %u exceeds MAX_FRAMES_IN_FLIGHT (%u)",
+                           data.frameIndex, m_r_context.MAX_FRAMES_IN_FLIGHT);
+                return;
+            }
+            
+            if (!m_r_context.isValidImageIndex(data.imageIndex)) {
+                log(LogLevel::ERROR,
+                           "endFrame: imageIndex %u exceeds swapchain image count (%zu)",
+                           data.imageIndex, m_r_context.swapchainImages.size());
+                return;
+            }
+            
+            if (m_r_context.imageAvailableSemaphores.size() <= data.frameIndex) {
+                log(LogLevel::ERROR,
+                           "endFrame: imageAvailableSemaphores not properly sized (size: %zu, frameIndex: %u)",
+                           m_r_context.imageAvailableSemaphores.size(), data.frameIndex);
+                return;
+            }
+            
+            if (m_r_context.renderFinishedSemaphores.size() <= data.imageIndex) {
+                log(LogLevel::ERROR,
+                           "endFrame: renderFinishedSemaphores not properly sized (size: %zu, imageIndex: %u)",
+                           m_r_context.renderFinishedSemaphores.size(), data.imageIndex);
+                return;
+            }
+            
+            if (m_r_context.inFlightFences.size() <= m_r_context.currentFrame) {
+                log(LogLevel::ERROR,
+                           "endFrame: inFlightFences not properly sized (size: %zu, currentFrame: %u)",
+                           m_r_context.inFlightFences.size(), m_r_context.currentFrame);
+                return;
+            }
 
             VkSubmitInfo submitInfo{};
             submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;

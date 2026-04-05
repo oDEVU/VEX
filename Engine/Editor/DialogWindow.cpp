@@ -7,6 +7,7 @@
 #include "../Core/include/components/SceneManager.hpp"
 #include "../Core/include/components/ResolutionManager.hpp"
 #include "../Core/include/components/InputSystem.hpp"
+#include "components/ErrorUtils.hpp"
 
 #include "../Core/src/components/Window.hpp"
 #include "../Core/src/components/backends/vulkan/Interface.hpp"
@@ -16,8 +17,6 @@
 namespace vex {
 
     DialogWindow::DialogWindow(const char* title, GameInfo gInfo) : Engine(title, 800, 600, gInfo) {
-        //dummyCamera = std::make_unique<CameraObject>(*this, "DummyCamera");
-        //run();
     }
 
     DialogWindow::~DialogWindow() {
@@ -40,7 +39,6 @@ namespace vex {
                 return;
             }
             renderData.imguiTextureID = m_interface->getRenderer().getImGuiTextureID(*m_imgui);
-            //m_interface->getRenderer().renderScene(renderData, cameraEntity, m_registry, m_frame);
             m_imgui->beginFrame();
             m_imgui->executeUIFunctions();
 
@@ -52,7 +50,7 @@ namespace vex {
             m_interface->getRenderer().endFrame(renderData);
 
         } catch (const std::exception& e) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Dialogwindow render failed");
+            log(LogLevel::ERROR, "Dialogwindow render failed");
             handle_critical_exception(e);
         }
     }
@@ -100,8 +98,6 @@ namespace vex {
         if (node) {
             node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
         }
-
-        //ImGuiViewport* viewport = ImGui::GetMainViewport();
 
         ImGui::SetNextWindowPos(viewport->Pos);
         ImGui::SetNextWindowSize(viewport->Size);

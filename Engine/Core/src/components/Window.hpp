@@ -19,6 +19,15 @@ namespace vex {
         private:
             SDL_Window *window;
             bool done = false;
+            
+            /// @brief Cached fullscreen state to prevent redundant SDL calls
+            bool m_cachedFullscreenState = false;
+            /// @brief Cached exclusive mode setting
+            bool m_cachedExclusiveMode = false;
+            /// @brief Timestamp of last fullscreen state change (in SDL performance counter units)
+            Uint64 m_lastFullscreenChangeTime = 0;
+            /// @brief Debounce interval in milliseconds to prevent rapid fullscreen toggles
+            static constexpr Uint64 FULLSCREEN_DEBOUNCE_MS = 100;
         public:
             /// @brief Constructor for Window class.
             /// @details Initializes SDL with Video and Gamepad subsystems.
@@ -37,10 +46,13 @@ namespace vex {
 
             /// @brief Setter for fullscreen mode.
             /// @details
+            /// - Only performs mode change if state differs from cached state.
+            /// - Includes debounce mechanism to prevent rapid consecutive toggles.
             /// - **Exclusive**: Queries the current display mode and sets `SDL_SetWindowFullscreenMode` before entering fullscreen.
             /// - **Borderless**: Sets the mode to NULL (desktop fullscreen) before entering fullscreen.
             /// @param bool enabled - True to enable fullscreen, false to disable.
             /// @param bool exclusive - True for exclusive fullscreen (changes video mode), false for borderless windowed
+            /// @warning DO NOT call this function every frame. Use only when user initiates a display mode change.
             void setFullscreen(bool enabled, bool exclusive = false);
 
             /// @brief Getter for fullscreen mode.

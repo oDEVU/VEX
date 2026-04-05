@@ -65,7 +65,6 @@ namespace vex {
         createInfo.imageExtent = extent;
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-        //createInfo.oldSwapchain = oldSwapchain;
 
         uint32_t queueFamilyIndices[] = {m_r_context.graphicsQueueFamily, m_r_context.presentQueueFamily};
         if (m_r_context.graphicsQueueFamily != m_r_context.presentQueueFamily) {
@@ -321,14 +320,14 @@ namespace vex {
         if (m_r_context.depthImageView) {
             createLowResResources();
         } else {
-            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
+            log(LogLevel::WARNING,
                        "Deferring low-res resource creation - depth image not ready");
         }
     }
 
     void VulkanSwapchainManager::createLowResResources() {
         if (m_r_context.currentRenderResolution.x == 0 || m_r_context.currentRenderResolution.y == 0) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Invalid render resolution for low-res resources");
+            log(LogLevel::ERROR, "Invalid render resolution for low-res resources");
             return;
         }
 
@@ -351,7 +350,7 @@ namespace vex {
 
         if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo,
                           &m_r_context.lowResColorImage, &m_r_context.lowResColorAlloc, nullptr) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image");
+            log(LogLevel::ERROR, "Failed to create low-res color image");
             return;
         }
 
@@ -365,7 +364,7 @@ namespace vex {
         viewInfo.subresourceRange.layerCount = 1;
 
         if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &m_r_context.lowResColorView) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image view");
+            log(LogLevel::ERROR, "Failed to create low-res color image view");
             vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
             m_r_context.lowResColorImage = VK_NULL_HANDLE;
             m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
@@ -374,7 +373,7 @@ namespace vex {
 
         if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo,
                           &m_r_context.uiImage, &m_r_context.uiAlloc, nullptr) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create ui image");
+            log(LogLevel::ERROR, "Failed to create ui image");
             return;
         }
 
@@ -382,7 +381,7 @@ namespace vex {
         uiViewInfo.image = m_r_context.uiImage;
 
         if (vkCreateImageView(m_r_context.device, &uiViewInfo, nullptr, &m_r_context.uiView) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create ui image view");
+            log(LogLevel::ERROR, "Failed to create ui image view");
             vmaDestroyImage(m_r_context.allocator, m_r_context.uiImage, m_r_context.uiAlloc);
             m_r_context.uiImage = VK_NULL_HANDLE;
             m_r_context.uiAlloc = VK_NULL_HANDLE;
@@ -392,7 +391,7 @@ namespace vex {
         VkImageCreateInfo accumInfo = imageInfo;
         accumInfo.format = VK_FORMAT_R16G16B16A16_SFLOAT;
         if(vmaCreateImage(m_r_context.allocator, &accumInfo, &allocInfo, &m_r_context.accumImage, &m_r_context.accumAlloc, nullptr) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create accum image");
+            log(LogLevel::ERROR, "Failed to create accum image");
             vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
             m_r_context.accumImage = VK_NULL_HANDLE;
             m_r_context.accumAlloc = VK_NULL_HANDLE;
@@ -403,7 +402,7 @@ namespace vex {
         accumViewInfo.image = m_r_context.accumImage;
         accumViewInfo.format = VK_FORMAT_R16G16B16A16_SFLOAT;
         if(vkCreateImageView(m_r_context.device, &accumViewInfo, nullptr, &m_r_context.accumView) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create accum image view");
+            log(LogLevel::ERROR, "Failed to create accum image view");
             vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
             m_r_context.accumImage = VK_NULL_HANDLE;
             m_r_context.accumAlloc = VK_NULL_HANDLE;
@@ -413,7 +412,7 @@ namespace vex {
         VkImageCreateInfo revealInfo = imageInfo;
         revealInfo.format = VK_FORMAT_R8_UNORM;
         if(vmaCreateImage(m_r_context.allocator, &revealInfo, &allocInfo, &m_r_context.revealImage, &m_r_context.revealAlloc, nullptr) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create reveal image");
+            log(LogLevel::ERROR, "Failed to create reveal image");
             vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
             m_r_context.revealImage = VK_NULL_HANDLE;
             m_r_context.revealAlloc = VK_NULL_HANDLE;
@@ -424,7 +423,7 @@ namespace vex {
         revealViewInfo.image = m_r_context.revealImage;
         revealViewInfo.format = VK_FORMAT_R8_UNORM;
         if(vkCreateImageView(m_r_context.device, &revealViewInfo, nullptr, &m_r_context.revealView) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create reveal image view");
+            log(LogLevel::ERROR, "Failed to create reveal image view");
             vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
             m_r_context.revealImage = VK_NULL_HANDLE;
             m_r_context.revealAlloc = VK_NULL_HANDLE;
@@ -436,7 +435,7 @@ namespace vex {
         compositeInfo.mipLevels = 3;
         compositeInfo.usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         if(vmaCreateImage(m_r_context.allocator, &compositeInfo, &allocInfo, &m_r_context.compositeImage, &m_r_context.compositeAlloc, nullptr) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create composite image");
+            log(LogLevel::ERROR, "Failed to create composite image");
             return;
         }
 
@@ -444,7 +443,7 @@ namespace vex {
         compositeViewInfo.image = m_r_context.compositeImage;
         compositeViewInfo.subresourceRange.levelCount = 3;
         if(vkCreateImageView(m_r_context.device, &compositeViewInfo, nullptr, &m_r_context.compositeView) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create composite image view");
+            log(LogLevel::ERROR, "Failed to create composite image view");
             return;
         }
 
@@ -603,13 +602,6 @@ if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
         createSwapchain();
         createLowResResources();
         createSyncObjects();
-        //log("createImageViews");
-        //createImageViews();
-        //log("createCommandBuffers");
-        //createCommandPool();
-        //log("createLowResResources");
-        //createLowResResources();
-        //
         m_r_context.requestSwapchainRecreation = false;
     }
 

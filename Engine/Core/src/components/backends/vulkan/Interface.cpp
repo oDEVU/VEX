@@ -1,4 +1,3 @@
-//#include <vulkan/vulkan_core.h>
 #define VMA_IMPLEMENTATION
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 1
@@ -104,6 +103,8 @@ uint32_t Interface::GetBestDeviceVersion() {
 
         m_context.vulkanVersion = apiVersion;
         m_context.currentRenderResolution = initialResolution;
+        m_context.graphicsQueueFamily = UINT32_MAX;
+        m_context.presentQueueFamily = UINT32_MAX;
 
         log("Creating Vulkan instance...");
         uint32_t sdlExtensionCount = 0;
@@ -263,7 +264,6 @@ uint32_t Interface::GetBestDeviceVersion() {
         {
             vkGetPhysicalDeviceProperties(selectedDevice, &deviceProperties);
             log("Selected GPU: %s", deviceProperties.deviceName);
-            //HardwareInfo::SetGPUName(deviceProperties.deviceName);
 
             HardwareInfo::SetGPUInfo(
                 deviceProperties.deviceName,
@@ -276,6 +276,13 @@ uint32_t Interface::GetBestDeviceVersion() {
 
         if (m_context.physicalDevice == VK_NULL_HANDLE) {
             throw_error("Failed to find a suitable GPU");
+        }
+
+        if (m_context.graphicsQueueFamily == UINT32_MAX) {
+            throw_error("Failed to find graphics queue family - GPU may not support graphics operations");
+        }
+        if (m_context.presentQueueFamily == UINT32_MAX) {
+            throw_error("Failed to find present queue family - GPU may not support presentation");
         }
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
@@ -522,6 +529,13 @@ uint32_t Interface::GetBestDeviceVersion() {
 
         vkGetDeviceQueue(m_context.device, m_context.graphicsQueueFamily, 0, &m_context.graphicsQueue);
         vkGetDeviceQueue(m_context.device, m_context.presentQueueFamily, 0, &m_context.presentQueue);
+
+        if (m_context.graphicsQueue == VK_NULL_HANDLE) {
+            throw_error("Failed to retrieve graphics queue - device creation corrupted or driver issue");
+        }
+        if (m_context.presentQueue == VK_NULL_HANDLE) {
+            throw_error("Failed to retrieve present queue - device creation corrupted or driver issue");
+        }
 
         VmaVulkanFunctions vmaFuncs = {};
         vmaFuncs.vkGetInstanceProcAddr = vkGetInstanceProcAddr;
@@ -780,7 +794,6 @@ uint32_t Interface::GetBestDeviceVersion() {
         m_p_swapchainManager->setVSync(enabled);
         vkDeviceWaitIdle(m_context.device);
         m_context.requestSwapchainRecreation = true;
-        //m_p_swapchainManager->recreateSwapchain();
     }
 
     void Interface::bindWindow(SDL_Window *m_p_window) {

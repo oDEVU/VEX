@@ -636,15 +636,12 @@ struct BatchedTextureData {
 
         std::array<VkDescriptorPoolSize, 3> poolSizes{};
 
-        // Scene UBO (static)
         poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         poolSizes[0].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT;
 
-        // Light UBO (dynamic)
         poolSizes[1].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         poolSizes[1].descriptorCount = m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_MODELS;
 
-        // Textures
         poolSizes[2].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         poolSizes[2].descriptorCount = m_r_context.supportsBindlessTextures ? 1 : (m_r_context.MAX_FRAMES_IN_FLIGHT * MAX_TEXTURES);
 
@@ -675,7 +672,6 @@ struct BatchedTextureData {
         for (size_t i = 0; i < m_r_context.MAX_FRAMES_IN_FLIGHT; i++) {
             std::array<VkWriteDescriptorSet, 2> uboWrites{};
 
-            // Scene UBO
             VkDescriptorBufferInfo sceneBufferInfo{};
             sceneBufferInfo.buffer = m_sceneBuffers[i];
             sceneBufferInfo.range = sizeof(SceneUBO);
@@ -687,7 +683,6 @@ struct BatchedTextureData {
             uboWrites[0].descriptorCount = 1;
             uboWrites[0].pBufferInfo = &sceneBufferInfo;
 
-            // Light UBO
             VkDescriptorBufferInfo lightInfo{};
             lightInfo.buffer = m_lightBuffers[i];
             lightInfo.range = sizeof(SceneLightsUBO);
@@ -713,13 +708,26 @@ struct BatchedTextureData {
     }
 
     void VulkanResources::updateTextureDescriptor(uint32_t frameIndex, VkImageView textureView, uint32_t textureIndex) {
+        if (frameIndex >= m_r_context.MAX_FRAMES_IN_FLIGHT) {
+            log(LogLevel::ERROR,
+                       "updateTextureDescriptor: Frame index %u exceeds MAX_FRAMES_IN_FLIGHT (%u)",
+                       frameIndex, m_r_context.MAX_FRAMES_IN_FLIGHT);
+            return;
+        }
+        
+        if (textureIndex >= MAX_TEXTURES) {
+            log(LogLevel::ERROR,
+                       "updateTextureDescriptor: Texture index %u exceeds MAX_TEXTURES (%u)",
+                       textureIndex, MAX_TEXTURES);
+            return;
+        }
+
         VkDescriptorImageInfo imageInfo{};
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         imageInfo.imageView = textureView;
         imageInfo.sampler = m_textureSampler;
 
         if (m_r_context.supportsBindlessTextures) {
-            // Path A: Update the global array
             VkWriteDescriptorSet bindlessWrite{VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
             bindlessWrite.dstSet = m_r_context.bindlessDescriptorSet;
             bindlessWrite.dstBinding = 0;
@@ -742,6 +750,20 @@ struct BatchedTextureData {
     }
 
     void VulkanResources::updateSceneUBO(const SceneUBO& data) {
+        if (m_r_context.currentFrame >= m_sceneAllocs.size()) {
+            log(LogLevel::ERROR,
+                       "updateSceneUBO: Current frame %u exceeds scene allocations size (%zu)",
+                       m_r_context.currentFrame, m_sceneAllocs.size());
+            return;
+        }
+        
+        if (m_r_context.currentFrame >= m_sceneBuffers.size()) {
+            log(LogLevel::ERROR,
+                       "updateSceneUBO: Current frame %u exceeds scene buffers size (%zu)",
+                       m_r_context.currentFrame, m_sceneBuffers.size());
+            return;
+        }
+        
         void* mapped;
         vmaMapMemory(m_r_context.allocator, m_sceneAllocs[m_r_context.currentFrame], &mapped);
         memcpy(mapped, &data, sizeof(data));
@@ -749,12 +771,27 @@ struct BatchedTextureData {
     }
 
     void VulkanResources::updateLightUBO(uint32_t frameIndex, uint32_t modelIndex, const SceneLightsUBO& data) {
+        if (frameIndex >= m_lightAllocs.size()) {
+            log(LogLevel::ERROR,
+                       "updateLightUBO: Frame index %u exceeds light allocations size (%zu)",
+                       frameIndex, m_lightAllocs.size());
+            return;
+        }
+        
+        if (frameIndex >= m_lightBuffers.size()) {
+            log(LogLevel::ERROR,
+                       "updateLightUBO: Frame index %u exceeds light buffers size (%zu)",
+                       frameIndex, m_lightBuffers.size());
+            return;
+        }
+        
         if (modelIndex >= MAX_MODELS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                         "Model index %u exceeds MAX_MODELS (%u)",
+            log(LogLevel::ERROR,
+                         "updateLightUBO: Model index %u exceeds MAX_MODELS (%u)",
                          modelIndex, MAX_MODELS);
             return;
         }
+        
         void* mapped;
         vmaMapMemory(m_r_context.allocator, m_lightAllocs[frameIndex], &mapped);
         char* lightData = static_cast<char*>(mapped) + modelIndex * sizeof(SceneLightsUBO);
@@ -763,7 +800,6 @@ struct BatchedTextureData {
     }
 
     void VulkanResources::createDefaultTexture() {
-        // Create a 1x1 white pixel texture
         const unsigned char pixels[] = {255, 255, 255, 255};
 
         VkImageCreateInfo imageInfo{};
@@ -890,7 +926,7 @@ struct BatchedTextureData {
     VkDescriptorSet VulkanResources::getTextureDescriptorSet(uint32_t frameIndex, uint32_t textureIndex) const {
         const uint32_t index = frameIndex * MAX_TEXTURES + textureIndex;
         if (index >= m_textureDescriptorSets.size()) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+            log(LogLevel::ERROR,
                        "Texture index out of bounds (Frame: %u, TexIndex: %u, Max: %u)",
                        frameIndex, textureIndex, MAX_TEXTURES);
             return VK_NULL_HANDLE;
@@ -949,23 +985,19 @@ struct BatchedTextureData {
             int texWidth, texHeight, texChannels;
 
             try {
-                // Use VFS to check if file exists and get data
                 if (!m_vfs->file_exists(fullPath)) {
                     log(LogLevel::ERROR, "Texture file not found in VFS: %s", fullPath.c_str());
                     return false;
                 }
 
                 log("VFS loading image...");
-                //int texWidth, texHeight, texChannels;
 
-                // Load file data through VFS
                 auto fileData = m_vfs->load_file(fullPath);  // This returns std::unique_ptr<FileData>
                 if (!fileData) {
                     log(LogLevel::ERROR, "VFS failed to load texture: %s", fullPath.c_str());
                     return false;
                 }
 
-                // Use stbi_load_from_memory instead of stbi_load
                 pixels = stbi_load_from_memory(
                     reinterpret_cast<const stbi_uc*>(fileData->data.data()),  // fileData is a pointer
                     static_cast<int>(fileData->size),                         // fileData->size is member
