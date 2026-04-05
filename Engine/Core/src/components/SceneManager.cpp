@@ -229,6 +229,7 @@ void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& eng
 }
 
 void SceneManager::clearScenes(Engine& engine) {
+    engine.getInterface()->WaitForGPUToFinish();
     m_scenes.clear();
 
     auto& registry = engine.getRegistry();

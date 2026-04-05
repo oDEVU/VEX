@@ -248,11 +248,17 @@ namespace vex {
             VkResult result = vkAcquireNextImageKHR(
                 m_r_context.device,
                 m_r_context.swapchain,
-                UINT64_MAX,
+                1000000000,
                 m_r_context.imageAvailableSemaphores[m_r_context.currentFrame],
                 VK_NULL_HANDLE,
                 &m_r_context.currentImageIndex
             );
+
+            if (result == VK_TIMEOUT) {
+                m_r_context.requestSwapchainRecreation = true;
+                outData.isSwapchainValid = false;
+                return false;
+            }
 
             if (result == VK_ERROR_OUT_OF_DATE_KHR) {
                 m_p_swapchainManager->recreateSwapchain();
