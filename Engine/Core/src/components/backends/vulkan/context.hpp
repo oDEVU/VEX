@@ -118,12 +118,30 @@ namespace vex {
         uint32_t graphicsQueueFamily;
         uint32_t presentQueueFamily;
 
+        /// @brief Current frame index for triple-buffering
+        /// @details This wraps around at MAX_FRAMES_IN_FLIGHT. Always validate bounds
+        /// before using it to index into frame-dependent arrays.
         uint32_t currentFrame = 0;
+        
+        /// @brief Current swapchain image index (acquired from vkAcquireNextImageKHR)
+        /// @details Should be validated against swapchainImages.size() before use
         uint32_t currentImageIndex = 0;
+        
+        /// @brief Maximum frames in flight (triple-buffering)
+        /// @details This is set dynamically during swapchain creation.
+        /// Always use for bounds checking: index < MAX_FRAMES_IN_FLIGHT
         uint32_t MAX_FRAMES_IN_FLIGHT = 3;
 
+        /// @brief Synchronization semaphores - must be sized to MAX_FRAMES_IN_FLIGHT
+        /// @details Array size must equal MAX_FRAMES_IN_FLIGHT. Validate index bounds before access.
         std::vector<VkSemaphore> imageAvailableSemaphores;
+        
+        /// @brief Render finished semaphores - must be sized to MAX_FRAMES_IN_FLIGHT
+        /// @details Array size must equal MAX_FRAMES_IN_FLIGHT. Validate index bounds before access.
         std::vector<VkSemaphore> renderFinishedSemaphores;
+        
+        /// @brief In-flight fences - must be sized to MAX_FRAMES_IN_FLIGHT
+        /// @details Array size must equal MAX_FRAMES_IN_FLIGHT. Validate index bounds before access.
         std::vector<VkFence> inFlightFences;
 
         VkDescriptorSetLayout descriptorSetLayout = VK_NULL_HANDLE;
@@ -131,6 +149,47 @@ namespace vex {
         VkDescriptorSetLayout textureDescriptorSetLayout = VK_NULL_HANDLE;
         VkDescriptorSetLayout screenDescriptorSetLayout = VK_NULL_HANDLE;
         VkDescriptorSetLayout particleDescriptorSetLayout = VK_NULL_HANDLE;
+
+        /// @brief Validates a frame index against MAX_FRAMES_IN_FLIGHT
+        /// @param frameIndex - The frame index to validate
+        /// @return true if frameIndex is valid (< MAX_FRAMES_IN_FLIGHT), false otherwise
+        bool isValidFrameIndex(uint32_t frameIndex) const {
+            if (frameIndex >= MAX_FRAMES_IN_FLIGHT) {
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                           "Invalid frame index %u (MAX_FRAMES_IN_FLIGHT: %u)",
+                           frameIndex, MAX_FRAMES_IN_FLIGHT);
+                return false;
+            }
+            return true;
+        }
+
+        /// @brief Validates an image index against swapchain image count
+        /// @param imageIndex - The image index to validate
+        /// @return true if imageIndex is valid (< swapchainImages.size()), false otherwise
+        bool isValidImageIndex(uint32_t imageIndex) const {
+            if (imageIndex >= swapchainImages.size()) {
+                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                           "Invalid image index %u (swapchain image count: %zu)",
+                           imageIndex, swapchainImages.size());
+                return false;
+            }
+            return true;
+        }
+
+        /// @brief Asserts that all frame-dependent synchronization vectors are properly sized
+        /// @details Should be called after swapchain creation to verify consistency
+        void validateSyncObjectSizes() const {
+            assert(imageAvailableSemaphores.size() == MAX_FRAMES_IN_FLIGHT &&
+                   "imageAvailableSemaphores size mismatch");
+            assert(renderFinishedSemaphores.size() == MAX_FRAMES_IN_FLIGHT &&
+                   "renderFinishedSemaphores size mismatch");
+            assert(inFlightFences.size() == MAX_FRAMES_IN_FLIGHT &&
+                   "inFlightFences size mismatch");
+            assert(commandPools.size() == MAX_FRAMES_IN_FLIGHT &&
+                   "commandPools size mismatch");
+            assert(commandBuffers.size() == MAX_FRAMES_IN_FLIGHT &&
+                   "commandBuffers size mismatch");
+        }
 
         vex_map<std::string, uint32_t> textureIndices;
         uint32_t nextTextureIndex = 0;
