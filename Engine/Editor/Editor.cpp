@@ -65,6 +65,8 @@ namespace vex {
         m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
         m_imgui = std::make_unique<EditorImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
         m_imgui->init();
+        
+        ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_ViewportsEnable;
 
         vex::DebugConsole::Get().Init();
 
@@ -624,7 +626,6 @@ namespace vex {
         ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
 
         ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;
-        dockFlags |= ImGuiDockNodeFlags_NoUndocking;
         dockFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
 
         if (!ImGui::DockBuilderGetNode(dockspaceId)) {
@@ -652,7 +653,7 @@ namespace vex {
         ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockFlags);
         ImGui::End();
 
-        ImGuiWindowFlags childFlags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+        ImGuiWindowFlags childFlags = ImGuiWindowFlags_NoCollapse;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
         ImGui::Begin("Viewport", nullptr, childFlags);

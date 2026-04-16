@@ -76,7 +76,6 @@ namespace vex {
         ImGuiID dockspaceId = ImGui::GetID("MyDialogDockSpace");
 
         ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;
-        dockFlags |= ImGuiDockNodeFlags_NoUndocking;
 
         if (!ImGui::DockBuilderGetNode(dockspaceId)) {
             ImGui::DockBuilderRemoveNode(dockspaceId);
