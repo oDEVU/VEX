@@ -8,7 +8,9 @@
 #include <SDL3/SDL.h>
 #include <entt/entt.hpp>
 #include <components/GameComponents/BasicComponents.hpp>
+#include <components/GameComponents/EditorBillboardComponent.hpp>
 #include "frustum.hpp"
+#include "components/PathUtils.hpp"
 #include "limits.hpp"
 #include "components/HardwareInfo.hpp"
 #include <immintrin.h>
@@ -250,7 +252,7 @@ namespace vex {
                 outData.isSwapchainValid = false;
                 return false;
             }
-            
+
             if (m_r_context.inFlightFences.size() <= m_r_context.currentFrame) {
                 log(LogLevel::ERROR,
                            "beginFrame: inFlightFences not properly sized (size: %zu, currentFrame: %u)",
@@ -258,7 +260,7 @@ namespace vex {
                 outData.isSwapchainValid = false;
                 return false;
             }
-            
+
             if (m_r_context.imageAvailableSemaphores.size() <= m_r_context.currentFrame) {
                 log(LogLevel::ERROR,
                            "beginFrame: imageAvailableSemaphores not properly sized (size: %zu, currentFrame: %u)",
@@ -266,7 +268,7 @@ namespace vex {
                 outData.isSwapchainValid = false;
                 return false;
             }
-            
+
             if (m_r_context.commandPools.size() <= m_r_context.currentFrame) {
                 log(LogLevel::ERROR,
                            "beginFrame: commandPools not properly sized (size: %zu, currentFrame: %u)",
@@ -274,7 +276,7 @@ namespace vex {
                 outData.isSwapchainValid = false;
                 return false;
             }
-            
+
             if (m_r_context.commandBuffers.size() <= m_r_context.currentFrame) {
                 log(LogLevel::ERROR,
                            "beginFrame: commandBuffers not properly sized (size: %zu, currentFrame: %u)",
@@ -285,7 +287,7 @@ namespace vex {
 
             const uint64_t FENCE_TIMEOUT_NS = 1000000000;
             VkResult fenceResult = vkWaitForFences(m_r_context.device, 1, &m_r_context.inFlightFences[m_r_context.currentFrame], VK_TRUE, FENCE_TIMEOUT_NS);
-            
+
             if (fenceResult == VK_TIMEOUT) {
                 log(LogLevel::ERROR, "GPU fence timeout - GPU may be hung or driver unresponsive. Requesting swapchain recreation.");
                 m_r_context.requestSwapchainRecreation = true;
@@ -543,6 +545,7 @@ namespace vex {
             transparentQueue.clear();
             bMaskedQueue.clear();
             bTransQueue.clear();
+            bEditorQueue.clear();
             pMaskedQueue.clear();
             pTransQueue.clear();
 
@@ -678,6 +681,32 @@ namespace vex {
                 else pMaskedQueue.push_back(entity);
             }
 
+#if DEBUG
+            if(isEditorMode){
+                auto bView = registry.view<EditorBillboardComponent>();
+                for (auto entity : bView) {
+                    auto& bill = bView.get<EditorBillboardComponent>(entity);
+                    
+                    float offsetStep = 1.2f;
+                    float currentOffset = -((bill.texturePaths.size() - 1) * offsetStep) / 2.0f;
+                    
+                    for (const auto& path : bill.texturePaths) {
+                        std::string correctPath = (GetExecutableDir() / path.c_str()).string();
+                        uint32_t tIndex = m_p_resources->getTextureIndex(correctPath);
+                        if (tIndex == 0) {
+                            if (m_p_resources->loadTexture(correctPath, correctPath)) {
+                                tIndex = m_p_resources->getTextureIndex(correctPath);
+                            }
+                        }
+                        if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
+                        
+                        bEditorQueue.push_back({entity, tIndex, currentOffset});
+                        currentOffset += offsetStep;
+                    }
+                }
+            }
+#endif
+
             for (const auto& item : opaqueQueue) {
                 auto& mesh = registry.get<MeshComponent>(item.entity);
                 auto& transform = registry.get<TransformComponent>(item.entity);
@@ -772,6 +801,53 @@ namespace vex {
                     vkCmdDraw(cmd, 6, 1, 0, 0);
                 }
             }
+
+#if DEBUG
+            if (!bEditorQueue.empty()) {
+                vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->get());
+                VkViewport viewport{0.0f, 0.0f, (float)m_r_context.currentRenderResolution.x, (float)m_r_context.currentRenderResolution.y, 0.0f, 1.0f};
+                VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+                vkCmdSetViewport(cmd, 0, 1, &viewport);
+                vkCmdSetScissor(cmd, 0, 1, &scissor);
+                VkDescriptorSet globalSet_bMaskedQueue = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                uint32_t dynamicOffset_bMaskedQueue = 0;
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 0, 1, &globalSet_bMaskedQueue, 1, &dynamicOffset_bMaskedQueue);
+                if (m_r_context.supportsBindlessTextures) {
+                    VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
+                }
+                for (const auto& item : bEditorQueue) {
+                    if (!registry.valid(item.entity)) continue;
+                    auto* trans = registry.try_get<TransformComponent>(item.entity);
+
+                    BillboardPushData push{};
+                    glm::vec3 cameraRight = glm::vec3(view[0][0], view[1][0], view[2][0]);
+                    glm::vec3 basePos = trans ? trans->getWorldPosition() : glm::vec3(0.0f);
+                    push.pos = basePos + (cameraRight * item.offsetX);
+                    push.sx = 1.0f;
+                    push.sy = 1.0f;
+                    push.tID = item.texID;
+                    push.unlit = 1;
+                    push.col = glm::vec4(1,1,1,1);
+
+                    vkCmdPushConstants(cmd, m_p_billboardMaskedPipeline->layout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(BillboardPushData), &push);
+
+                    VkDescriptorSet globalSet = m_p_resources->getUBODescriptorSet(data.frameIndex);
+                    uint32_t dynamicOffset = 0;
+                    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 0, 1, &globalSet, 1, &dynamicOffset);
+
+                    if (m_r_context.supportsBindlessTextures) {
+                        VkDescriptorSet bindlessSet = m_p_resources->getBindlessDescriptorSet();
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
+                    } else {
+                        VkDescriptorSet texSet = m_p_resources->getTextureDescriptorSet(data.frameIndex, item.texID);
+                        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 1, 1, &texSet, 0, nullptr);
+                    }
+
+                    vkCmdDraw(cmd, 6, 1, 0, 0);
+                }
+            }
+#endif
 
             if (!pMaskedQueue.empty()) {
                 vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_particleMaskedPipeline->get());
@@ -1271,28 +1347,28 @@ namespace vex {
                            data.frameIndex, m_r_context.MAX_FRAMES_IN_FLIGHT);
                 return;
             }
-            
+
             if (!m_r_context.isValidImageIndex(data.imageIndex)) {
                 log(LogLevel::ERROR,
                            "endFrame: imageIndex %u exceeds swapchain image count (%zu)",
                            data.imageIndex, m_r_context.swapchainImages.size());
                 return;
             }
-            
+
             if (m_r_context.imageAvailableSemaphores.size() <= data.frameIndex) {
                 log(LogLevel::ERROR,
                            "endFrame: imageAvailableSemaphores not properly sized (size: %zu, frameIndex: %u)",
                            m_r_context.imageAvailableSemaphores.size(), data.frameIndex);
                 return;
             }
-            
+
             if (m_r_context.renderFinishedSemaphores.size() <= data.imageIndex) {
                 log(LogLevel::ERROR,
                            "endFrame: renderFinishedSemaphores not properly sized (size: %zu, imageIndex: %u)",
                            m_r_context.renderFinishedSemaphores.size(), data.imageIndex);
                 return;
             }
-            
+
             if (m_r_context.inFlightFences.size() <= m_r_context.currentFrame) {
                 log(LogLevel::ERROR,
                            "endFrame: inFlightFences not properly sized (size: %zu, currentFrame: %u)",

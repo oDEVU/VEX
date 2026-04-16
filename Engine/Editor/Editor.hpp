@@ -41,8 +41,7 @@ namespace vex {
         * @param const std::string& projectBinaryPath - Path to the project's binary directory.
         */
         Editor(const char* title, int width, int height, GameInfo gInfo, const std::string& projectBinaryPath);
-        ~Editor(){
-        }
+        ~Editor(){}
 
         /// @brief Overrides the Engine's render function to inject the Editor UI logic (dockspace, viewport, tools).
         void render() override;

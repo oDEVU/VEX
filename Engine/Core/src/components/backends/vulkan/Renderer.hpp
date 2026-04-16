@@ -36,6 +36,12 @@ namespace vex {
         uint32_t texID;
     };
 
+    struct EditorBillboardItem {
+        entt::entity entity;
+        uint32_t texID;
+        float offsetX;
+    };
+
     /// @brief Struct to hold push data for billboard rendering.
     struct BillboardPushData {
         glm::vec3 pos;    ///< World position of the billboard.
@@ -223,6 +229,7 @@ namespace vex {
         std::vector<RenderItem> transparentQueue; ///< Queue of transparent 3D objects to render.
         std::vector<BillboardItem> bMaskedQueue;  ///< Queue of masked billboards to render.
         std::vector<BillboardItem> bTransQueue;   ///< Queue of transparent billboards to render.
+        std::vector<EditorBillboardItem> bEditorQueue;  ///< Queue of editor billboards to render.
         std::vector<entt::entity> pMaskedQueue;   ///< Queue of entities with masked particle emitters.
         std::vector<entt::entity> pTransQueue;    ///< Queue of entities with transparent particle emitters.
 

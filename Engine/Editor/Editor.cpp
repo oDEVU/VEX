@@ -1,3 +1,5 @@
+#include <components/GameComponents/AudioSourceComponent.hpp>
+#include <components/GameComponents/EditorBillboardComponent.hpp>
 #include "Editor.hpp"
 #include "components/UtilitySystem.hpp"
 #include "EditorImGUIWrapper.hpp"
@@ -254,6 +256,20 @@ namespace vex {
             scene->FlushDestructionQueue();
         }
 
+        auto billboardView = m_registry.view<vex::EditorBillboardComponent>();
+        for (auto entity : billboardView) {
+            m_registry.remove<vex::EditorBillboardComponent>(entity);
+        }
+
+        auto addIcon = [&](entt::entity entity, const char* path) {
+            auto& comp = m_registry.get_or_emplace<vex::EditorBillboardComponent>(entity);
+            comp.texturePaths.emplace_back(path);
+        };
+
+        for(auto entity : m_registry.view<vex::LightComponent>()) addIcon(entity, "../Assets/icons/lightbulb-fill.png");
+        for(auto entity : m_registry.view<vex::ParticleEmitterComponent>()) addIcon(entity, "../Assets/icons/sparkling-fill.png");
+        for(auto entity : m_registry.view<vex::FogComponent>()) addIcon(entity, "../Assets/icons/foggy-fill.png");
+        for(auto entity : m_registry.view<vex::AudioSourceComponent>()) addIcon(entity, "../Assets/icons/file-music-fill.png");
         m_camera->Update(deltaTime);
         m_physicsSystem->SyncBodies();
 
@@ -414,7 +430,7 @@ namespace vex {
         auto& tc = m_registry.get<TransformComponent>(selectedEntity);
         glm::mat4 transformMatrix = tc.matrix();
 
-        ImGui::SetCursorScreenPos(ImVec2(viewportPos.x + 10, viewportPos.y + 10));
+        ImGui::SetCursorScreenPos(ImVec2(viewportPos.x + 10, viewportPos.y + 32));
 
         auto gizmoButton = [&](const char* label, ImGuizmo::OPERATION op) {
             bool wasActive = (m_currentGizmoOperation == op);
@@ -654,6 +670,7 @@ namespace vex {
         if (data.imguiTextureID) {
             ImGui::Image((ImTextureID)data.imguiTextureID, viewportPanelSize);
             bool isViewportHovered = ImGui::IsItemHovered();
+            auto* drawList = ImGui::GetWindowDrawList();
 
             if(m_editorProperties.showFPS) {
                 char fpsText[32];
@@ -668,11 +685,39 @@ namespace vex {
                     fpsColor = IM_COL32(255, 0, 0, 255);
                 }
 
-                ImVec2 textPos = ImVec2(cursorScreenPos.x + 10.0f, cursorScreenPos.y + 50.0f);
-                auto* drawList = ImGui::GetWindowDrawList();
+                ImVec2 textPos = ImVec2(cursorScreenPos.x + 10.0f, cursorScreenPos.y + 64.0f);
                 drawList->AddText(ImVec2(textPos.x + 1.0f, textPos.y + 1.0f), IM_COL32(0, 0, 0, 255), fpsText);
                 drawList->AddText(textPos, fpsColor, fpsText);
             }
+
+            std::string currentScenePath = getSceneManager()->getLastSceneName();
+            std::string sceneName = std::filesystem::path(currentScenePath).stem().string();
+
+            if (sceneName.empty()) sceneName = "Unnamed Scene";
+
+            ImVec2 iconSize = ImVec2(16.0f, 16.0f);
+            ImVec2 padding = ImVec2(8.0f, 6.0f);
+            float iconTextSpacing = 6.0f;
+
+            ImVec2 textSize = ImGui::CalcTextSize(sceneName.c_str());
+            float rectWidth = padding.x + iconSize.x + iconTextSpacing + textSize.x + padding.x;
+            float rectHeight = padding.y + std::max(iconSize.y, textSize.y) + padding.y;
+
+            ImVec2 rectMin = cursorScreenPos;
+            ImVec2 rectMax = ImVec2(rectMin.x + rectWidth, rectMin.y + rectHeight);
+
+            ImU32 bgColor = IM_COL32(20, 20, 20, 220);
+            drawList->AddRectFilled(rectMin, rectMax, bgColor, 12.0f, ImDrawFlags_RoundCornersBottomRight);
+
+            ImVec2 iconMin = ImVec2(rectMin.x + padding.x, rectMin.y + padding.y + std::max(0.0f, (textSize.y - iconSize.y) / 2.0f));
+            ImVec2 iconMax = ImVec2(iconMin.x + iconSize.x, iconMin.y + iconSize.y);
+
+            if (m_icons.scene) {
+                drawList->AddImage(m_icons.scene, iconMin, iconMax);
+            }
+
+            ImVec2 textPos = ImVec2(iconMax.x + iconTextSpacing, rectMin.y + padding.y + std::max(0.0f, (iconSize.y - textSize.y) / 2.0f));
+            drawList->AddText(textPos, IM_COL32(255, 255, 255, 255), sceneName.c_str());
 
             if (ImGui::BeginDragDropTarget()) {
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
