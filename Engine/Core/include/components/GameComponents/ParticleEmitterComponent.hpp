@@ -43,6 +43,7 @@ namespace vex {
         vex::texture_asset_path texturePath; ///< Path to the texture applied to particles.
         bool isTransparent = true;  ///< Indicates if the particles should be rendered in the transparent pass.
         bool isUnlit = true;        ///< Indicates if the particles should ignore lighting.
+        bool active = true;         ///< Indicates if the emitter is active and emitting particles.
         float spawnRate = 0.1f;     ///< Time in seconds between particle spawns.
         float spawnTimer = 0.0f;    ///< Internal timer to track time since last spawn.
         glm::vec3 gravity = glm::vec3(0.0f, -9.81f, 0.0f); ///< Gravity applied to particles.

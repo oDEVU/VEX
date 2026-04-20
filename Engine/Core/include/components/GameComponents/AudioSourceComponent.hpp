@@ -64,7 +64,7 @@ public:
     bool stateDirty = false;
 
     void setAudioClip(AudioClip* newClip) {
-        if (clip) delete clip;
+        //if (clip) delete clip;
         clip = newClip;
     }
 
