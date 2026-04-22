@@ -101,10 +101,17 @@ set(public_header_files
     include/components/HardwareInfo.hpp
     include/components/ThreadPool.hpp
     include/components/GameComponents/BasicComponents.hpp
+    include/components/GameComponents/EditorBillboardComponent.hpp
     include/components/GameComponents/UiComponent.hpp
     include/components/GameComponents/ComponentFactory.hpp
     include/components/GameComponents/InputComponent.hpp
     include/components/GameComponents/AudioSourceComponent.hpp
+    include/components/GameComponents/BillboardComponent.hpp
+    include/components/GameComponents/CharacterComponent.hpp
+    include/components/GameComponents/EngineUtility.hpp
+    include/components/GameComponents/ParticleEmitterComponent.hpp
+    include/components/GameComponents/SerializationUtils.hpp
+    include/components/GameComponents/UtilityComponents.hpp
     include/components/GameObjects/GameObject.hpp
     include/components/GameObjects/ModelObject.hpp
     include/components/GameObjects/CameraObject.hpp

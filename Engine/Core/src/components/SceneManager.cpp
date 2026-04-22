@@ -171,7 +171,7 @@ REGISTER_COMPONENT(vex::LifetimeComponent, lifespan);
 REGISTER_COMPONENT(vex::OscillatorComponent, axis, amplitude, frequency, timeOffset);
 REGISTER_COMPONENT(vex::TweenComponent, targetLocalOffset, duration, pingPong);
 REGISTER_COMPONENT(vex::BillboardComponent, texturePath, size, color, isTransparent, isUnlit);
-REGISTER_COMPONENT(vex::ParticleEmitterComponent, texturePath, isTransparent, isUnlit, spawnRate, spawnTimer, gravity, initialVelocity, velocityVariation, particleLife, particleLifeVariation, startSize, endSize, startColor, endColor);
+REGISTER_COMPONENT(vex::ParticleEmitterComponent, texturePath, isTransparent, isUnlit, active, spawnRate, spawnTimer, gravity, initialVelocity, velocityVariation, particleLife, particleLifeVariation, startSize, endSize, startColor, endColor);
 
 //REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
 
