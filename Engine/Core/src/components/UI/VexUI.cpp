@@ -335,7 +335,7 @@ Widget* VexUI::parseNode(const nlohmann::json& j) {
                 YGNodeStyleSetWidth(childYoga, child->size.x);
                 YGNodeStyleSetHeight(childYoga, child->size.y);
             }
-            else if ((child->type == WidgetType::Label || child->type == WidgetType::Button) && !child->text.empty()) {
+            else if ((child->type == WidgetType::Label || child->type == WidgetType::Button)) {
                 YGNodeSetMeasureFunc(childYoga, VexUI::measureTextNode);
             }
 
@@ -435,11 +435,25 @@ Widget* VexUI::findById(Widget* w, const std::string& id) {
 }
 
 void VexUI::setText(const std::string& id, const std::string& txt) {
-    if (initialized){
-        if (Widget* w = findById(m_root, id)) w->text = txt;
-    }else{
+    if (initialized) {
+        if (Widget* w = findById(m_root, id)) {
+            if (w->text != txt) {
+                w->text = txt;
+                if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) {
+                    YGNodeMarkDirty(w->yoga);
+                }
+            }
+        }
+    } else {
         pendingSetters.push_back([this, id, txt]() {
-            if (Widget* w = findById(m_root, id)) w->text = txt;
+            if (Widget* w = findById(m_root, id)) {
+                if (w->text != txt) {
+                    w->text = txt;
+                    if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) {
+                        YGNodeMarkDirty(w->yoga);
+                    }
+                }
+            }
         });
     }
 }
@@ -1023,6 +1037,10 @@ void VexUI::setFont(const std::string& id, const std::string& fontPath, float fo
         w->style.font = fontPath;
         w->style.fontSize = fontSize;
         this->loadFonts(w);
+
+        if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) {
+            YGNodeMarkDirty(w->yoga);
+        }
     };
     safeUpdate(id, action);
 }
