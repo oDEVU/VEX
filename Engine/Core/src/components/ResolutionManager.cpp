@@ -16,30 +16,30 @@ void ResolutionManager::setMode(ResolutionMode mode) {
 void ResolutionManager::update() {
     int width, height;
     SDL_GetWindowSizeInPixels(m_p_window, &width, &height);
-    
+
     static constexpr uint32_t MIN_DIMENSION = 64;
     static constexpr uint32_t MAX_DIMENSION = 32768;
-    
+
     if (width <= 0 || height <= 0) {
         log(LogLevel::WARNING, "ResolutionManager::update() called with invalid window dimensions: %dx%d. Skipping update.",
             width, height);
         return;
     }
-    
+
     if (width < MIN_DIMENSION || height < MIN_DIMENSION) {
         log(LogLevel::WARNING, "Window resolution %dx%d is below minimum %u. Clamping.",
             width, height, MIN_DIMENSION);
         width = std::max(width, (int)MIN_DIMENSION);
         height = std::max(height, (int)MIN_DIMENSION);
     }
-    
+
     if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
         log(LogLevel::WARNING, "Window resolution %dx%d exceeds maximum %u. Clamping.",
             width, height, MAX_DIMENSION);
         width = std::min(width, (int)MAX_DIMENSION);
         height = std::min(height, (int)MAX_DIMENSION);
     }
-    
+
     m_windowResolution = {static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
 
     switch(m_currentMode) {
@@ -89,6 +89,21 @@ void ResolutionManager::update() {
            m_upscaleRatio);
 }
 
+float ResolutionManager::getPotencialUpscaleRatio(){
+    if (m_windowResolution.x == 0 || m_windowResolution.y == 0) {
+        log(LogLevel::ERROR, "getPotencialUpscaleRatio() called with invalid window resolution: %ux%u",
+            m_windowResolution.x, m_windowResolution.y);
+        m_renderResolution = m_windowResolution;
+        m_upscaleRatio = 1.0f;
+        return 1.0f;
+    }
+
+    int yscale = static_cast<int>(floor(m_windowResolution.y / 240.0f));
+    int maxScale = std::max(1, yscale);
+
+    return std::floor(maxScale);
+}
+
 void ResolutionManager::calculatePS1SharpResolution() {
     if (m_windowResolution.x == 0 || m_windowResolution.y == 0) {
         log(LogLevel::ERROR, "calculatePS1SharpResolution() called with invalid window resolution: %ux%u. Using native resolution.",
@@ -98,13 +113,10 @@ void ResolutionManager::calculatePS1SharpResolution() {
         return;
     }
 
-    int yscale = static_cast<int>(floor(m_windowResolution.y / 240.0f));
-    int maxScale = std::max(1, yscale);
-
-    maxScale = std::clamp(maxScale, 1, 4);
+    float maxScale = getPotencialUpscaleRatio();
 
     m_renderResolution = m_windowResolution / static_cast<unsigned int>(maxScale);
-    m_upscaleRatio = static_cast<float>(maxScale);
+    m_upscaleRatio = maxScale;
 
     if (m_renderResolution.y < 240) {
         if (m_windowResolution.y <= 0) {
@@ -113,7 +125,7 @@ void ResolutionManager::calculatePS1SharpResolution() {
             m_upscaleRatio = 1.0f;
             return;
         }
-        
+
         float aspect = m_windowResolution.x / static_cast<float>(m_windowResolution.y);
         m_renderResolution.y = 240;
         uint32_t calculatedWidth = static_cast<uint32_t>(240 * aspect);

@@ -1,7 +1,7 @@
 /**
- *  @file   VexUI.hpp
- *  @brief  This file defines vex ui class, very basic ui system
- *  @author Eryk Roszkowski
+ * @file   VexUI.hpp
+ * @brief  This file defines vex ui class, very basic ui system
+ * @author Eryk Roszkowski
  ***********************************************/
 
 #pragma once
@@ -26,12 +26,51 @@
 #include "../../../src/components/backends/vulkan/context.hpp"
 #include "../../../src/components/backends/vulkan/Resources.hpp"
 #include "components/VirtualFileSystem.hpp"
+#include "components/ResolutionManager.hpp"
 
 #include "../../../thirdparty/stb/stb_truetype.h"
 
 namespace vex {
 
 class VexUI;
+
+/// @brief Supported responsive UI unit types.
+enum class UIUnitType { Auto, Px, Psp, Vw, Vh, Percent };
+
+/// @brief Struct storing unit value logic natively.
+struct UIUnitValue {
+    float value = 0.f;
+    UIUnitType type = UIUnitType::Psp;
+
+    UIUnitValue() = default;
+    UIUnitValue(float v) : value(v), type(UIUnitType::Psp) {}
+    UIUnitValue(float v, UIUnitType t) : value(v), type(t) {}
+
+    // Allows backward compatibility.
+    UIUnitValue& operator=(float v) {
+        value = v;
+        return *this;
+    }
+
+    /// @brief Parses a json value into the unit struct.
+    void parse(const nlohmann::json& jval);
+
+    static UIUnitValue parseJson(const nlohmann::json& jval) {
+        UIUnitValue v; v.parse(jval); return v;
+    }
+
+    /// @brief Converts the unit back to a json-compatible format (preserves strings like "px", "%").
+    nlohmann::json toJson() const;
+
+    /// @brief Dynamically calculates the raw pixel representation required for rendering.
+    float getPixels(const VexUI* ui) const;
+};
+
+/// @brief 2D representation of UIUnitValue to replace glm::vec2 size safely.
+struct UIUnitVec2 {
+    UIUnitValue x{0.f, UIUnitType::Auto};
+    UIUnitValue y{0.f, UIUnitType::Auto};
+};
 
 /// @brief Font atlas structure
 struct FontAtlas {
@@ -54,8 +93,8 @@ struct UIStyle {
     glm::vec4 bgColor{-1,-1,-1,-1};
     glm::vec4 borderColor = {0,0,0,0};
     std::string font;
-    float fontSize = 16.f;
-    float borderWidth = 0.f;
+    UIUnitValue fontSize{16.f, UIUnitType::Psp};
+    UIUnitValue borderWidth{0.f, UIUnitType::Psp};
 };
 
 /// @brief Allows for text aligment.
@@ -76,9 +115,13 @@ struct Widget {
     std::string id;
     std::string text;
     std::string image;
-    glm::vec2 size{0,0};
+
+    UIUnitVec2 size;
     float rotation = 0.f;
     UIStyle style;
+
+    nlohmann::json nodeJson;
+
     YGNodeRef yoga = nullptr;
     std::vector<Widget*> children;
     Widget* parent = nullptr;
@@ -89,7 +132,7 @@ struct Widget {
     TextAlign textAlign = TextAlign::Left;
 
     ~Widget();
-    void applyJson(const nlohmann::json& j);
+    void applyLayout(VexUI* uiManager);
 };
 
 /// @brief Class defining VexUI, it initializes the UI system, loads, renders, converts ui data, essentially managing ui from file to reneering.
@@ -99,17 +142,14 @@ public:
     /// @param VulkanContext& ctx - Vulkan context.
     /// @param VirtualFileSystem* vfs - Virtual file system.
     /// @param VulkanResources* res -Vulkan resources.
-    VexUI(VulkanContext& ctx, VirtualFileSystem* vfs, VulkanResources* res);
+    /// @param ResolutionManager* resMgr - Resolution manager.
+    VexUI(VulkanContext& ctx, VirtualFileSystem* vfs, VulkanResources* res, ResolutionManager* resMgr);
     ~VexUI();
 
     /// @brief Initialize the UI system, components needed later on.
     bool init();
     /// @brief Load UI data from a JSON file.
     /// @param const std::string& path - Path to the JSON file.
-    /// @details Example usage:
-    /// @code
-    /// m_vexUI->load("Assets/ui/example.json");
-    /// @endcode
     void load(const std::string& path);
     /// @brief Render the UI. It is called by main rendering function.
     /// @param VkCommandBuffer cmd - Command buffer.
@@ -123,50 +163,30 @@ public:
 
     /// @brief Get the currently focused widget.
     /// @return Widget* - Pointer to focused widget, or nullptr if none focused.
-    Widget* getFocusedWidget() const {
-        return m_focusedWidget;
-    }
+    Widget* getFocusedWidget() const { return m_focusedWidget; }
 
     /// @brief Set text of a UI element.
     /// @param const std::string& id - ID of the UI element.
     /// @param const std::string& txt - Text to set.
-    /// @details Example usage:
-    /// @code
-    /// m_vexUI->setText("score", "FPS: " + std::to_string(fps));
-    /// @endcode
     void setText(const std::string& id, const std::string& txt);
+
     /// @brief Set on-click callback of a UI element.
     /// @param const std::string& id - ID of the UI element.
     /// @param std::function<void()> cb - Callback function.
-    /// @details Example usage:
-    /// @code
-    /// m_vexUI->setOnClick("pause", []() {
-    ///     log("Pause button clicked");
-    /// });
-    /// @endcode
     void setOnClick(const std::string& id, std::function<void()> cb);
 
     /// @brief Get a UI element.
     /// @param const std::string& id - ID of the UI element.
-    /// @return Widget& - Reference to the UI element.
-    /// @details Example usage:
-    /// @code
-    /// Widget& scoreWidget = m_vexUI->getWidget("score");
-    /// @endcode
+    /// @return Widget* - Pointer to the UI element.
     Widget* getWidget(const std::string& id) {
         if (Widget* w = findById(m_root, id)) return w;
-
         log("Widget not found");
         return nullptr;
     }
 
     /// @brief Get a UI element's style.
     /// @param const std::string& id - ID of the UI element.
-    /// @return UIStyle& - Reference to the UI element's style.
-    /// @details Example usage:
-    /// @code
-    /// UIStyle& scoreStyle = m_vexUI->getStyle("score");
-    /// @endcode
+    /// @return UIStyle* - Pointer to the UI element's style.
     UIStyle* getStyle(const std::string& id) {
         if (Widget* w = findById(m_root, id)) return &w->style;
         log("Widget not found");
@@ -176,23 +196,12 @@ public:
     /// @brief Set a UI element's style.
     /// @param const std::string& id - ID of the UI element.
     /// @param const UIStyle& style - New style for the UI element.
-    /// @details Example usage:
-    /// @code
-    /// UIStyle& scoreStyle = m_vexUI->getStyle("score");
-    /// scoreStyle.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    /// m_vexUI->setStyle("score", scoreStyle);
-    /// @endcode
     void setStyle(const std::string& id, const UIStyle& style) {
         if (initialized) {
             if (Widget* w = findById(m_root, id)) w->style = style;
-            log("Widget not found");
-        }else{
+        } else {
             pendingSetters.push_back([this, id, style]() {
-                if (Widget* w = findById(m_root, id)) {
-                    w->style = style;
-                } else {
-                    printf("Widget not found: %s", id.c_str());
-                }
+                if (Widget* w = findById(m_root, id)) w->style = style;
             });
         }
     }
@@ -204,15 +213,15 @@ public:
 
     /// @brief Move a widget (sets Left/Top yoga properties). Works best with position: absolute, or relative offsets.
     /// @param const std::string& id The id of widget to Move
-    /// @param float x The x-coordinate of the widget's new position.
-    /// @param float y The y-coordinate of the widget's new position.
-    void setPosition(const std::string& id, float x, float y);
+    /// @param UIUnitValue x The x-coordinate of the widget's new position.
+    /// @param UIUnitValue y The y-coordinate of the widget's new position.
+    void setPosition(const std::string& id, UIUnitValue x, UIUnitValue y);
 
     /// @brief Resize a widget.
     /// @param const std::string& id The id of the widget to resize.
-    /// @param float w The new width of the widget.
-    /// @param float h The new height of the widget.
-    void setSize(const std::string& id, float w, float h);
+    /// @param UIUnitValue w The new width of the widget.
+    /// @param UIUnitValue h The new height of the widget.
+    void setSize(const std::string& id, UIUnitValue w, UIUnitValue h);
 
     /// @brief Change the image of an image widget.
     /// @param const std::string& id The id of the widget to change the image of.
@@ -222,8 +231,8 @@ public:
     /// @brief Change font properties.
     /// @param const std::string& id The id of the widget to change the font of.
     /// @param const std::string& fontPath The path to the new font.
-    /// @param float fontSize The new font size.
-    void setFont(const std::string& id, const std::string& fontPath, float fontSize);
+    /// @param UIUnitValue fontSize The new font size.
+    void setFont(const std::string& id, const std::string& fontPath, UIUnitValue fontSize);
 
     /// @brief Set text/tint color.
     /// @param const std::string& id The id of the widget to change the color of.
@@ -237,78 +246,59 @@ public:
 
     /// @brief Set border properties.
     /// @param const std::string& id The id of the widget to change the border of.
-    /// @param float width The new border width.
+    /// @param UIUnitValue width The new border width.
     /// @param glm::vec4 color The new border color.
-    void setBorder(const std::string& id, float width, glm::vec4 color);
+    void setBorder(const std::string& id, UIUnitValue width, glm::vec4 color);
 
     /// @brief Check if the UI system is initialized.
     /// @return bool - True if initialized, false otherwise.
-    /// @details Example usage:
-    /// @code
-    /// if (m_vexUI->isInitialized()) {
-    ///     // UI system is ready for use
-    /// }
-    /// @endcode
-    bool isInitialized() {
-        return initialized;
-    }
+    bool isInitialized() { return initialized; }
 
     /// @brief Get the current z-index of the UI system.
     /// @return int - Current z-index.
-    /// @details Example usage:
-    /// @code
-    /// int zIndex = m_vexUI->getZIndex();
-    /// @endcode
-    int getZIndex() {
-        return zIndex;
-    }
+    int getZIndex() { return zIndex; }
 
     /// @brief Set the z-index of the UI system.
     /// @param zIndex - New z-index value.
-    /// @details Example usage:
-    /// @code
-    /// m_vexUI->setZIndex(10);
-    /// @endcode
     void setZIndex(int zIndex) {
-        if(initialized){
-            this->zIndex = zIndex;
-        }else{
-            pendingSetters.push_back([this, zIndex]() {
-                this->zIndex = zIndex;
-            });
-        }
+        if(initialized) { this->zIndex = zIndex; }
+        else { pendingSetters.push_back([this, zIndex]() { this->zIndex = zIndex; }); }
     }
+
     /// @brief Update the UI system.
     /// @details This function should not be called directly. Its called every frame by the engine right before rendering to update pending operations.
-    /// @code
-    /// m_vexUI->update();
-    /// @endcode
     void update(float deltaTime = 0.016f) {
         if (initialized) {
-            if (m_gamepadNavigationCooldown > 0.0f) {
-                m_gamepadNavigationCooldown -= deltaTime;
-            }
-            
+            if (m_gamepadNavigationCooldown > 0.0f) m_gamepadNavigationCooldown -= deltaTime;
             if (loadPending) {
                 loadPending = false;
                 load(loadPath);
             }
-            for (auto& setter : pendingSetters) {
-                setter();
-            }
+            for (auto& setter : pendingSetters) setter();
             pendingSetters.clear();
         }
-
     }
+
+    float getPspMultiplier() const;
+    glm::uvec2 getRenderResolution() const { return m_ctx.currentRenderResolution; }
+
+    void applyYogaDimension(YGNodeRef yoga, const UIUnitValue& val, void(*setPx)(YGNodeRef, float), void(*setPct)(YGNodeRef, float), void(*setAuto)(YGNodeRef) = nullptr) const;
+    void applyYogaMargin(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const;
+    void applyYogaPadding(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const;
+    void applyYogaPosition(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const;
 
 private:
     VulkanContext& m_ctx;
     VirtualFileSystem* m_vfs;
     VulkanResources* m_res;
+    ResolutionManager* m_resMgr;
 
     Widget* m_root = nullptr;
     bool initialized = false;
     int zIndex = 0;
+
+    glm::uvec2 m_lastRenderRes{0, 0};
+    float m_lastPspMult = 0.f;
 
     std::vector<std::function<void()>> pendingSetters;
 
@@ -322,7 +312,6 @@ private:
     size_t m_vbSize = 0;
     VkSampler m_uiSampler = VK_NULL_HANDLE;
 
-    // Gamepad navigation state
     Widget* m_focusedWidget = nullptr;
     float m_gamepadAxisX = 0.0f;
     float m_gamepadAxisY = 0.0f;
@@ -418,6 +407,6 @@ private:
     /// @brief Set focus to a widget and trigger focus callbacks.
     /// @param Widget* w - Widget to focus.
     void setFocusedWidget(Widget* w);
-
 };
-}
+
+} // namespace vex

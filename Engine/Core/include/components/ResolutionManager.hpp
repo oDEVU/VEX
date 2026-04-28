@@ -75,6 +75,11 @@ public:
     /// - **PS1_SHARP**: Calls `calculatePS1SharpResolution()` to find an integer scale factor.
     void update();
 
+    /// @brief Calculates the potential upscale ratio for a given height.
+    /// @description allows you to create consistant sizing in both native and ps1 sharp modes.
+    /// @return float - The potential upscale ratio.
+    float getPotencialUpscaleRatio();
+
 private:
     /// @brief Internal helper to calculate integer-scaled resolutions for the PS1_SHARP mode.
     /// @details Determines the maximum integer scale factor (clamped between 1 and 4) that fits within the current window height.

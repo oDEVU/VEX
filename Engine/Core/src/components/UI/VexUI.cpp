@@ -44,22 +44,86 @@ namespace vex {
         _mm256_storeu_ps(outVerts, vResult);
     }
 
+void UIUnitValue::parse(const nlohmann::json& jval) {
+    if (jval.is_number()) {
+        value = jval.get<float>();
+        type = UIUnitType::Psp;
+    } else if (jval.is_string()) {
+        std::string s = jval.get<std::string>();
+        if (s == "auto") { value = 0.f; type = UIUnitType::Auto; return; }
+
+        size_t pos = 0;
+        try { value = std::stof(s, &pos); } catch(...) { value = 0.f; type = UIUnitType::Auto; return; }
+
+        if (pos >= s.length()) { type = UIUnitType::Psp; return; }
+
+        std::string unit = s.substr(pos);
+        unit.erase(0, unit.find_first_not_of(" \t"));
+        unit.erase(unit.find_last_not_of(" \t") + 1);
+
+        if (unit == "px") type = UIUnitType::Px;
+        else if (unit == "%") type = UIUnitType::Percent;
+        else if (unit == "vw") type = UIUnitType::Vw;
+        else if (unit == "vh") type = UIUnitType::Vh;
+        else type = UIUnitType::Psp;
+    }
+}
+
+nlohmann::json UIUnitValue::toJson() const {
+    if (type == UIUnitType::Auto) return "auto";
+    if (type == UIUnitType::Psp) return value;
+
+    std::string s = std::to_string(value);
+    s.erase(s.find_last_not_of('0') + 1, std::string::npos);
+    if (s.back() == '.') s.pop_back();
+
+    if (type == UIUnitType::Px) return s + "px";
+    if (type == UIUnitType::Percent) return s + "%";
+    if (type == UIUnitType::Vw) return s + "vw";
+    if (type == UIUnitType::Vh) return s + "vh";
+    return value;
+}
+
+float UIUnitValue::getPixels(const VexUI* ui) const {
+    if (!ui) return value;
+    switch (type) {
+        case UIUnitType::Px: return value;
+        case UIUnitType::Psp: return value * ui->getPspMultiplier();
+        case UIUnitType::Vw: return value * (ui->getRenderResolution().x / 100.0f);
+        case UIUnitType::Vh: return value * (ui->getRenderResolution().y / 100.0f);
+        case UIUnitType::Percent: return value;
+        case UIUnitType::Auto: return 0.f;
+    }
+    return 0.f;
+}
+
 Widget::~Widget() {
     if (yoga) YGNodeFree(yoga);
 }
 
-void Widget::applyJson(const nlohmann::json& j) {
-    if (j.contains("id"))      id = j["id"].get<std::string>();
-    if (j.contains("text"))    text = j["text"].get<std::string>();
-    if (j.contains("image"))   image = j["image"].get<std::string>();
+void Widget::applyLayout(VexUI* uiManager) {
+    if (!uiManager || !yoga) return;
 
-    if (j.contains("size") && j["size"].is_array() && j["size"].size() == 2) {
-        size.x = j["size"][0].get<float>();
-        size.y = j["size"][1].get<float>();
+    if (nodeJson.contains("type")) {
+        std::string t = nodeJson["type"].get<std::string>();
+        if (t == "label") type = WidgetType::Label;
+        else if (t == "image") type = WidgetType::Image;
+        else if (t == "button") type = WidgetType::Button;
     }
 
-    if (j.contains("style")) {
-        const auto& s = j["style"];
+    if (nodeJson.contains("id"))      id = nodeJson["id"].get<std::string>();
+    if (nodeJson.contains("text"))    text = nodeJson["text"].get<std::string>();
+    if (nodeJson.contains("image"))   image = nodeJson["image"].get<std::string>();
+
+    if (nodeJson.contains("size") && nodeJson["size"].is_array() && nodeJson["size"].size() == 2) {
+        size.x = UIUnitValue::parseJson(nodeJson["size"][0]);
+        size.y = UIUnitValue::parseJson(nodeJson["size"][1]);
+        uiManager->applyYogaDimension(yoga, size.x, YGNodeStyleSetWidth, YGNodeStyleSetWidthPercent, YGNodeStyleSetWidthAuto);
+        uiManager->applyYogaDimension(yoga, size.y, YGNodeStyleSetHeight, YGNodeStyleSetHeightPercent, YGNodeStyleSetHeightAuto);
+    }
+
+    if (nodeJson.contains("style")) {
+        const auto& s = nodeJson["style"];
         if (s.contains("color") && s["color"].is_array() && s["color"].size() == 4) {
             style.color = glm::vec4(s["color"][0].get<float>(), s["color"][1].get<float>(), s["color"][2].get<float>(), s["color"][3].get<float>());
         }
@@ -67,12 +131,105 @@ void Widget::applyJson(const nlohmann::json& j) {
             style.bgColor = glm::vec4(s["bgColor"][0].get<float>(), s["bgColor"][1].get<float>(), s["bgColor"][2].get<float>(), s["bgColor"][3].get<float>());
         }
         if (s.contains("font")) style.font = s["font"].get<std::string>();
-        if (s.contains("size")) style.fontSize = s["size"].get<float>();
+        if (s.contains("size")) style.fontSize = UIUnitValue::parseJson(s["size"]);
+    }
+
+    if (nodeJson.contains("layout")) {
+        std::string l = nodeJson["layout"].get<std::string>();
+        if (l == "row") YGNodeStyleSetFlexDirection(yoga, YGFlexDirectionRow);
+        else if (l == "column") YGNodeStyleSetFlexDirection(yoga, YGFlexDirectionColumn);
+    }
+
+    if (nodeJson.contains("justify")) {
+        std::string jst = nodeJson["justify"].get<std::string>();
+        if (jst == "space-between") YGNodeStyleSetJustifyContent(yoga, YGJustifySpaceBetween);
+        else if (jst == "center") YGNodeStyleSetJustifyContent(yoga, YGJustifyCenter);
+        else if (jst == "space-evenly") YGNodeStyleSetJustifyContent(yoga, YGJustifySpaceEvenly);
+        else if (jst == "space-around") YGNodeStyleSetJustifyContent(yoga, YGJustifySpaceAround);
+        else if (jst == "flex-end") YGNodeStyleSetJustifyContent(yoga, YGJustifyFlexEnd);
+        else if (jst == "flex-start") YGNodeStyleSetJustifyContent(yoga, YGJustifyFlexStart);
+    }
+
+    if (nodeJson.contains("align")) {
+        std::string al = nodeJson["align"].get<std::string>();
+        if (al == "center") YGNodeStyleSetAlignItems(yoga, YGAlignCenter);
+        else if (al == "auto") YGNodeStyleSetAlignItems(yoga, YGAlignAuto);
+        else if (al == "flex-start") YGNodeStyleSetAlignItems(yoga, YGAlignFlexStart);
+        else if (al == "flex-end") YGNodeStyleSetAlignItems(yoga, YGAlignFlexEnd);
+        else if (al == "stretch") YGNodeStyleSetAlignItems(yoga, YGAlignStretch);
+        else if (al == "baseline") YGNodeStyleSetAlignItems(yoga, YGAlignBaseline);
+    }
+
+    if (nodeJson.contains("padding")) uiManager->applyYogaPadding(yoga, YGEdgeAll, UIUnitValue::parseJson(nodeJson["padding"]));
+    if (nodeJson.contains("margin")) uiManager->applyYogaMargin(yoga, YGEdgeAll, UIUnitValue::parseJson(nodeJson["margin"]));
+
+    if (nodeJson.contains("rotation")) rotation = nodeJson["rotation"].get<float>();
+
+    if (nodeJson.contains("flexGrow")) YGNodeStyleSetFlexGrow(yoga, nodeJson["flexGrow"].get<float>());
+    if (nodeJson.contains("flexShrink")) YGNodeStyleSetFlexShrink(yoga, nodeJson["flexShrink"].get<float>());
+    if (nodeJson.contains("flexBasis")) {
+        uiManager->applyYogaDimension(yoga, UIUnitValue::parseJson(nodeJson["flexBasis"]), YGNodeStyleSetFlexBasis, YGNodeStyleSetFlexBasisPercent, YGNodeStyleSetFlexBasisAuto);
+    }
+
+    if (nodeJson.contains("position")) {
+        std::string pos = nodeJson["position"].get<std::string>();
+        if (pos == "absolute"){
+            YGNodeStyleSetPositionType(yoga, YGPositionTypeAbsolute);
+            if (nodeJson.contains("left")) uiManager->applyYogaPosition(yoga, YGEdgeLeft, UIUnitValue::parseJson(nodeJson["left"]));
+            if (nodeJson.contains("right")) uiManager->applyYogaPosition(yoga, YGEdgeRight, UIUnitValue::parseJson(nodeJson["right"]));
+            if (nodeJson.contains("top")) uiManager->applyYogaPosition(yoga, YGEdgeTop, UIUnitValue::parseJson(nodeJson["top"]));
+            if (nodeJson.contains("bottom")) uiManager->applyYogaPosition(yoga, YGEdgeBottom, UIUnitValue::parseJson(nodeJson["bottom"]));
+        } else if (pos == "relative") {
+            YGNodeStyleSetPositionType(yoga, YGPositionTypeRelative);
+        }
+    }
+
+    if (nodeJson.contains("wrap")) {
+        std::string wr = nodeJson["wrap"].get<std::string>();
+        if (wr == "wrap") YGNodeStyleSetFlexWrap(yoga, YGWrapWrap);
+        else if (wr == "no-wrap") YGNodeStyleSetFlexWrap(yoga, YGWrapNoWrap);
+        else if (wr == "wrap-reverse") YGNodeStyleSetFlexWrap(yoga, YGWrapWrapReverse);
+    }
+
+    if (nodeJson.contains("alignSelf")) {
+        std::string as = nodeJson["alignSelf"].get<std::string>();
+        if (as == "center") YGNodeStyleSetAlignSelf(yoga, YGAlignCenter);
+        else if (as == "auto") YGNodeStyleSetAlignSelf(yoga, YGAlignAuto);
+        else if (as == "flex-start") YGNodeStyleSetAlignSelf(yoga, YGAlignFlexStart);
+        else if (as == "flex-end") YGNodeStyleSetAlignSelf(yoga, YGAlignFlexEnd);
+        else if (as == "stretch") YGNodeStyleSetAlignSelf(yoga, YGAlignStretch);
+        else if (as == "baseline") YGNodeStyleSetAlignSelf(yoga, YGAlignBaseline);
+    }
+
+    if (nodeJson.contains("paddingLeft")) uiManager->applyYogaPadding(yoga, YGEdgeLeft, UIUnitValue::parseJson(nodeJson["paddingLeft"]));
+    if (nodeJson.contains("paddingRight")) uiManager->applyYogaPadding(yoga, YGEdgeRight, UIUnitValue::parseJson(nodeJson["paddingRight"]));
+    if (nodeJson.contains("paddingTop")) uiManager->applyYogaPadding(yoga, YGEdgeTop, UIUnitValue::parseJson(nodeJson["paddingTop"]));
+    if (nodeJson.contains("paddingBottom")) uiManager->applyYogaPadding(yoga, YGEdgeBottom, UIUnitValue::parseJson(nodeJson["paddingBottom"]));
+
+    if (nodeJson.contains("marginLeft")) uiManager->applyYogaMargin(yoga, YGEdgeLeft, UIUnitValue::parseJson(nodeJson["marginLeft"]));
+    if (nodeJson.contains("marginRight")) uiManager->applyYogaMargin(yoga, YGEdgeRight, UIUnitValue::parseJson(nodeJson["marginRight"]));
+    if (nodeJson.contains("marginTop")) uiManager->applyYogaMargin(yoga, YGEdgeTop, UIUnitValue::parseJson(nodeJson["marginTop"]));
+    if (nodeJson.contains("marginBottom")) uiManager->applyYogaMargin(yoga, YGEdgeBottom, UIUnitValue::parseJson(nodeJson["marginBottom"]));
+
+    if (nodeJson.contains("borderWidth")) {
+        style.borderWidth = UIUnitValue::parseJson(nodeJson["borderWidth"]);
+        YGNodeStyleSetBorder(yoga, YGEdgeAll, style.borderWidth.getPixels(uiManager));
+    }
+
+    if (nodeJson.contains("borderColor") && nodeJson["borderColor"].is_array() && nodeJson["borderColor"].size() == 4) {
+        style.borderColor = glm::vec4(nodeJson["borderColor"][0].get<float>(), nodeJson["borderColor"][1].get<float>(),
+                                      nodeJson["borderColor"][2].get<float>(), nodeJson["borderColor"][3].get<float>());
+    }
+
+    if (nodeJson.contains("textAlign")) {
+        std::string ta = nodeJson["textAlign"].get<std::string>();
+        if (ta == "center") textAlign = TextAlign::Center;
+        else if (ta == "right") textAlign = TextAlign::Right;
     }
 }
 
-VexUI::VexUI(VulkanContext& ctx, VirtualFileSystem* vfs, VulkanResources* res)
-    : m_ctx(ctx), m_vfs(vfs), m_res(res) {}
+VexUI::VexUI(VulkanContext& ctx, VirtualFileSystem* vfs, VulkanResources* res, ResolutionManager* resMgr)
+    : m_ctx(ctx), m_vfs(vfs), m_res(res), m_resMgr(resMgr) {}
 
 VexUI::~VexUI() {
     freeTree(m_root);
@@ -102,6 +259,39 @@ bool VexUI::init() {
     return true;
 }
 
+float VexUI::getPspMultiplier() const {
+    if (!m_resMgr) return 1.0f;
+    float current = m_resMgr->getUpscaleRatio();
+    if (current <= 0.0f) return 1.0f;
+    return m_resMgr->getPotencialUpscaleRatio() / current;
+}
+
+void VexUI::applyYogaDimension(YGNodeRef yoga, const UIUnitValue& val, void(*setPx)(YGNodeRef, float), void(*setPct)(YGNodeRef, float), void(*setAuto)(YGNodeRef)) const {
+    if (val.type == UIUnitType::Auto) {
+        if (setAuto) setAuto(yoga); else setPx(yoga, 0.f);
+    } else if (val.type == UIUnitType::Percent) {
+        if (setPct) setPct(yoga, val.value); else setPx(yoga, val.value);
+    } else {
+        setPx(yoga, val.getPixels(this));
+    }
+}
+
+void VexUI::applyYogaMargin(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const {
+    if (val.type == UIUnitType::Auto) YGNodeStyleSetMarginAuto(yoga, edge);
+    else if (val.type == UIUnitType::Percent) YGNodeStyleSetMarginPercent(yoga, edge, val.value);
+    else YGNodeStyleSetMargin(yoga, edge, val.getPixels(this));
+}
+
+void VexUI::applyYogaPadding(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const {
+    if (val.type == UIUnitType::Percent) YGNodeStyleSetPaddingPercent(yoga, edge, val.value);
+    else YGNodeStyleSetPadding(yoga, edge, val.getPixels(this));
+}
+
+void VexUI::applyYogaPosition(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const {
+    if (val.type == UIUnitType::Percent) YGNodeStyleSetPositionPercent(yoga, edge, val.value);
+    else YGNodeStyleSetPosition(yoga, edge, val.getPixels(this));
+}
+
 void VexUI::safeUpdate(const std::string& id, std::function<void(Widget*)> action) {
     if (initialized) {
         if (Widget* w = findById(m_root, id)) {
@@ -121,8 +311,10 @@ void VexUI::safeUpdate(const std::string& id, std::function<void(Widget*)> actio
 void VexUI::loadFonts(Widget* w) {
     if (!w) return;
 
-    if (!w->style.font.empty() && w->style.fontSize > 0.f) {
-        std::string key = w->style.font + "_" + std::to_string(static_cast<int>(w->style.fontSize));
+    float pxSize = w->style.fontSize.getPixels(this);
+
+    if (!w->style.font.empty() && pxSize > 0.f) {
+        std::string key = w->style.font + "_" + std::to_string(static_cast<int>(pxSize));
         if (m_fontAtlases.count(key) > 0) goto recurse;
 
         auto data = m_vfs->load_file(GetAssetPath(w->style.font));
@@ -138,20 +330,23 @@ void VexUI::loadFonts(Widget* w) {
         }
 
         int ascent, descent, lineGap;
-        stbtt_GetFontVMetrics(&atlas.info, &ascent, &descent, &lineGap); // Get metrics
-        log("UI: font %s metrics: ascent=%d, descent=%d, lineGap=%d", w->style.font.c_str(), ascent, descent, lineGap);
+        stbtt_GetFontVMetrics(&atlas.info, &ascent, &descent, &lineGap);
 
-        float scale = stbtt_ScaleForPixelHeight(&atlas.info, w->style.fontSize); // Get scale
-        log("UI: font %s scale=%f", w->style.font.c_str(), scale);
+        float scale = stbtt_ScaleForPixelHeight(&atlas.info, pxSize);
 
         atlas.ascent = static_cast<float>(ascent) * scale;
         atlas.descent = static_cast<float>(descent) * scale;
         atlas.scale = scale;
 
-        const int texW = 512, texH = 512;
+        int texDim = 512;
+        while (texDim < pxSize * 12 && texDim < 8192) {
+            texDim *= 2;
+        }
+
+        const int texW = texDim, texH = texDim;
         std::vector<unsigned char> bitmap(texW * texH, 0);
         atlas.cdata.resize(96);
-        stbtt_BakeFontBitmap((unsigned char*)data->data.data(), 0, w->style.fontSize, bitmap.data(), texW, texH, 32, 96, atlas.cdata.data());
+        stbtt_BakeFontBitmap((unsigned char*)data->data.data(), 0, pxSize, bitmap.data(), texW, texH, 32, 96, atlas.cdata.data());
 
         std::vector<unsigned char> rgba(texW * texH * 4);
         for (int i = 0; i < texW * texH; ++i) {
@@ -169,7 +364,7 @@ void VexUI::loadFonts(Widget* w) {
         atlas.texIdx = m_res->getTextureIndex(texName);
         atlas.width = texW;
         atlas.height = texH;
-        atlas.bakedSize = w->style.fontSize;
+        atlas.bakedSize = pxSize;
         m_fontAtlases[key] = atlas;
     }
 
@@ -204,138 +399,22 @@ void VexUI::loadImages(Widget* w) {
     }
 }
 
-// @todo Implement more of yogas features like margin, flexes?, aligments.
 Widget* VexUI::parseNode(const nlohmann::json& j) {
     Widget* w = new Widget();
-    w->type = WidgetType::Container;
-
-    if (j.contains("type")) {
-        std::string t = j["type"].get<std::string>();
-        if (t == "label") w->type = WidgetType::Label;
-        else if (t == "image") w->type = WidgetType::Image;
-        else if (t == "button") w->type = WidgetType::Button;
-    }
-
-    w->applyJson(j);
-
     w->ui = this;
     w->yoga = YGNodeNew();
     YGNodeSetContext(w->yoga, w);
 
-    if (j.contains("layout")) {
-        std::string l = j["layout"].get<std::string>();
-        if (l == "row") YGNodeStyleSetFlexDirection(w->yoga, YGFlexDirectionRow);
-        else if (l == "column") YGNodeStyleSetFlexDirection(w->yoga, YGFlexDirectionColumn);
-    }
-    if (j.contains("justify")) {
-        std::string jst = j["justify"].get<std::string>();
-        if (jst == "space-between") YGNodeStyleSetJustifyContent(w->yoga, YGJustifySpaceBetween);
-        else if (jst == "center") YGNodeStyleSetJustifyContent(w->yoga, YGJustifyCenter);
-        else if (jst == "space-evenly") YGNodeStyleSetJustifyContent(w->yoga, YGJustifySpaceEvenly);
-        else if (jst == "space-around") YGNodeStyleSetJustifyContent(w->yoga, YGJustifySpaceAround);
-        else if (jst == "flex-end") YGNodeStyleSetJustifyContent(w->yoga, YGJustifyFlexEnd);
-        else if (jst == "flex-start") YGNodeStyleSetJustifyContent(w->yoga, YGJustifyFlexStart);
-    }
-    if (j.contains("align")) {
-        std::string al = j["align"].get<std::string>();
-        if (al == "center") YGNodeStyleSetAlignItems(w->yoga, YGAlignCenter);
-        else if (al == "auto") YGNodeStyleSetAlignItems(w->yoga, YGAlignAuto);
-        else if (al == "flex-start") YGNodeStyleSetAlignItems(w->yoga, YGAlignFlexStart);
-        else if (al == "flex-end") YGNodeStyleSetAlignItems(w->yoga, YGAlignFlexEnd);
-        else if (al == "stretch") YGNodeStyleSetAlignItems(w->yoga, YGAlignStretch);
-        else if (al == "baseline") YGNodeStyleSetAlignItems(w->yoga, YGAlignBaseline);
-        else if (al == "space-around") YGNodeStyleSetAlignItems(w->yoga, YGAlignSpaceAround);
-        else if (al == "space-between") YGNodeStyleSetAlignItems(w->yoga, YGAlignSpaceBetween);
-        else if (al == "space-evenly") YGNodeStyleSetAlignItems(w->yoga, YGAlignSpaceEvenly);
-    }
-
-    if (j.contains("padding")) YGNodeStyleSetPadding(w->yoga, YGEdgeAll, j["padding"].get<float>());
-
-    if (j.contains("size")) {
-            YGNodeStyleSetWidth(w->yoga, w->size.x);
-            YGNodeStyleSetHeight(w->yoga, w->size.y);
-        }
-
-    if (j.contains("rotation")) {
-            w->rotation = j["rotation"].get<float>();
-        }
-
-    if (j.contains("margin")) {
-            YGNodeStyleSetMargin(w->yoga, YGEdgeAll, j["margin"].get<float>());
-        }
-
-    if (j.contains("flexGrow")) YGNodeStyleSetFlexGrow(w->yoga, j["flexGrow"].get<float>());
-    if (j.contains("flexShrink")) YGNodeStyleSetFlexShrink(w->yoga, j["flexShrink"].get<float>());
-    if (j.contains("flexBasis")) YGNodeStyleSetFlexBasis(w->yoga, j["flexBasis"].get<float>());
-
-    if (j.contains("position")) {
-        std::string pos = j["position"].get<std::string>();
-        if (pos == "absolute"){
-            YGNodeStyleSetPositionType(w->yoga, YGPositionTypeAbsolute);
-
-            if (j.contains("left")) YGNodeStyleSetPosition(w->yoga, YGEdgeLeft, j["left"].get<float>());
-            if (j.contains("right")) YGNodeStyleSetPosition(w->yoga, YGEdgeRight, j["right"].get<float>());
-            if (j.contains("top")) YGNodeStyleSetPosition(w->yoga, YGEdgeTop, j["top"].get<float>());
-            if (j.contains("bottom")) YGNodeStyleSetPosition(w->yoga, YGEdgeBottom, j["bottom"].get<float>());
-        }
-        else if (pos == "relative") YGNodeStyleSetPositionType(w->yoga, YGPositionTypeRelative);
-    }
-
-    if (j.contains("wrap")) {
-        std::string wr = j["wrap"].get<std::string>();
-        if (wr == "wrap") YGNodeStyleSetFlexWrap(w->yoga, YGWrapWrap);
-        else if (wr == "no-wrap") YGNodeStyleSetFlexWrap(w->yoga, YGWrapNoWrap);
-        else if (wr == "wrap-reverse") YGNodeStyleSetFlexWrap(w->yoga, YGWrapWrapReverse);
-    }
-
-    if (j.contains("alignSelf")) {
-        std::string as = j["alignSelf"].get<std::string>();
-        if (as == "center") YGNodeStyleSetAlignSelf(w->yoga, YGAlignCenter);
-        else if (as == "auto") YGNodeStyleSetAlignSelf(w->yoga, YGAlignAuto);
-        else if (as == "flex-start") YGNodeStyleSetAlignSelf(w->yoga, YGAlignFlexStart);
-        else if (as == "flex-end") YGNodeStyleSetAlignSelf(w->yoga, YGAlignFlexEnd);
-        else if (as == "stretch") YGNodeStyleSetAlignSelf(w->yoga, YGAlignStretch);
-        else if (as == "baseline") YGNodeStyleSetAlignSelf(w->yoga, YGAlignBaseline);
-        else if (as == "space-around") YGNodeStyleSetAlignSelf(w->yoga, YGAlignSpaceAround);
-        else if (as == "space-between") YGNodeStyleSetAlignSelf(w->yoga, YGAlignSpaceBetween);
-        else if (as == "space-evenly") YGNodeStyleSetAlignSelf(w->yoga, YGAlignSpaceEvenly);
-    }
-
-    if (j.contains("paddingLeft")) YGNodeStyleSetPadding(w->yoga, YGEdgeLeft, j["paddingLeft"].get<float>());
-    if (j.contains("paddingRight")) YGNodeStyleSetPadding(w->yoga, YGEdgeRight, j["paddingRight"].get<float>());
-    if (j.contains("paddingTop")) YGNodeStyleSetPadding(w->yoga, YGEdgeTop, j["paddingTop"].get<float>());
-    if (j.contains("paddingBottom")) YGNodeStyleSetPadding(w->yoga, YGEdgeBottom, j["paddingBottom"].get<float>());
-
-    if (j.contains("marginLeft")) YGNodeStyleSetMargin(w->yoga, YGEdgeLeft, j["marginLeft"].get<float>());
-    if (j.contains("marginRight")) YGNodeStyleSetMargin(w->yoga, YGEdgeRight, j["marginRight"].get<float>());
-    if (j.contains("marginTop")) YGNodeStyleSetMargin(w->yoga, YGEdgeTop, j["marginTop"].get<float>());
-    if (j.contains("marginBottom")) YGNodeStyleSetMargin(w->yoga, YGEdgeBottom, j["marginBottom"].get<float>());
-
-    if (j.contains("borderWidth")) {
-        w->style.borderWidth = j["borderWidth"].get<float>();
-        YGNodeStyleSetBorder(w->yoga, YGEdgeAll, w->style.borderWidth);  // Affects layout space
-    }
-    if (j.contains("borderColor") && j["borderColor"].is_array() && j["borderColor"].size() == 4) {
-        w->style.borderColor = glm::vec4(j["borderColor"][0].get<float>(), j["borderColor"][1].get<float>(),
-                                         j["borderColor"][2].get<float>(), j["borderColor"][3].get<float>());
-    }
-
-    if (j.contains("textAlign")) {
-        std::string ta = j["textAlign"].get<std::string>();
-        if (ta == "center") w->textAlign = TextAlign::Center;
-        else if (ta == "right") w->textAlign = TextAlign::Right;
-    }
+    w->nodeJson = j;
+    w->applyLayout(this);
 
     if (j.contains("children") && j["children"].is_array()) {
         for (const auto& c : j["children"]) {
             Widget* child = parseNode(c);
             child->parent = w;
             auto childYoga = child->yoga;
-            if (c.contains("size") && c["size"].is_array() && c["size"].size() == 2) {
-                YGNodeStyleSetWidth(childYoga, child->size.x);
-                YGNodeStyleSetHeight(childYoga, child->size.y);
-            }
-            else if ((child->type == WidgetType::Label || child->type == WidgetType::Button)) {
+
+            if ((child->type == WidgetType::Label || child->type == WidgetType::Button)) {
                 YGNodeSetMeasureFunc(childYoga, VexUI::measureTextNode);
             }
 
@@ -435,39 +514,21 @@ Widget* VexUI::findById(Widget* w, const std::string& id) {
 }
 
 void VexUI::setText(const std::string& id, const std::string& txt) {
-    if (initialized) {
-        if (Widget* w = findById(m_root, id)) {
-            if (w->text != txt) {
-                w->text = txt;
-                if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) {
-                    YGNodeMarkDirty(w->yoga);
-                }
+    safeUpdate(id, [txt](Widget* w) {
+        if (w->text != txt) {
+            w->text = txt;
+            w->nodeJson["text"] = txt;
+            if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) {
+                YGNodeMarkDirty(w->yoga);
             }
         }
-    } else {
-        pendingSetters.push_back([this, id, txt]() {
-            if (Widget* w = findById(m_root, id)) {
-                if (w->text != txt) {
-                    w->text = txt;
-                    if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) {
-                        YGNodeMarkDirty(w->yoga);
-                    }
-                }
-            }
-        });
-    }
+    });
 }
 
 void VexUI::setOnClick(const std::string& id, std::function<void()> cb) {
-    if (initialized){
-        if (Widget* w = findById(m_root, id); w && w->type == WidgetType::Button)
-            w->onClick = std::move(cb);
-    }else{
-        pendingSetters.push_back([this, id, cb]() {
-            if (Widget* w = findById(m_root, id); w && w->type == WidgetType::Button)
-                w->onClick = std::move(cb);
-        });
-    }
+    safeUpdate(id, [cb](Widget* w) {
+        if (w->type == WidgetType::Button) w->onClick = std::move(cb);
+    });
 }
 
 void VexUI::processEvent(const SDL_Event& ev) {
@@ -489,18 +550,10 @@ void VexUI::processEvent(const SDL_Event& ev) {
                 m_focusedWidget->onClick();
             }
         }
-        else if (button == SDL_GAMEPAD_BUTTON_DPAD_LEFT) {
-            navigateToWidget(-1.0f, 0.0f);
-        }
-        else if (button == SDL_GAMEPAD_BUTTON_DPAD_RIGHT) {
-            navigateToWidget(1.0f, 0.0f);
-        }
-        else if (button == SDL_GAMEPAD_BUTTON_DPAD_UP) {
-            navigateToWidget(0.0f, -1.0f);
-        }
-        else if (button == SDL_GAMEPAD_BUTTON_DPAD_DOWN) {
-            navigateToWidget(0.0f, 1.0f);
-        }
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_LEFT) navigateToWidget(-1.0f, 0.0f);
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_RIGHT) navigateToWidget(1.0f, 0.0f);
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_UP) navigateToWidget(0.0f, -1.0f);
+        else if (button == SDL_GAMEPAD_BUTTON_DPAD_DOWN) navigateToWidget(0.0f, 1.0f);
     }
     else if (ev.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {
         SDL_GamepadAxis axis = (SDL_GamepadAxis)ev.gaxis.axis;
@@ -526,23 +579,18 @@ void VexUI::processEvent(const SDL_Event& ev) {
             }
             m_gamepadAxisY = value;
         }
-}
+    }
 }
 void VexUI::navigateToWidget(float dirX, float dirY) {
     std::vector<Widget*> navigable;
     getNavigableWidgets(navigable);
 
-    if (navigable.empty()) {
-        return;
-    }
+    if (navigable.empty()) return;
 
     bool focusedIsValid = false;
     if (m_focusedWidget) {
         for (Widget* w : navigable) {
-            if (w == m_focusedWidget) {
-                focusedIsValid = true;
-                break;
-            }
+            if (w == m_focusedWidget) { focusedIsValid = true; break; }
         }
     }
 
@@ -555,27 +603,15 @@ void VexUI::navigateToWidget(float dirX, float dirY) {
     glm::vec2 direction{dirX, dirY};
 
     Widget* nextWidget = findClosestNavigableWidget(fromPos, direction, navigable);
-    if (nextWidget) {
-        setFocusedWidget(nextWidget);
-    }
+    if (nextWidget) setFocusedWidget(nextWidget);
 }
 
-void VexUI::getNavigableWidgets(std::vector<Widget*>& out) {
-    if (m_root) {
-        collectNavigableWidgets(m_root, out);
-    }
-}
+void VexUI::getNavigableWidgets(std::vector<Widget*>& out) { if (m_root) collectNavigableWidgets(m_root, out); }
 
 void VexUI::collectNavigableWidgets(Widget* w, std::vector<Widget*>& out) {
     if (!w) return;
-
-    if (isWidgetNavigable(w)) {
-        out.push_back(w);
-    }
-
-    for (Widget* child : w->children) {
-        collectNavigableWidgets(child, out);
-    }
+    if (isWidgetNavigable(w)) out.push_back(w);
+    for (Widget* child : w->children) collectNavigableWidgets(child, out);
 }
 
 bool VexUI::isWidgetNavigable(Widget* w) const {
@@ -584,9 +620,7 @@ bool VexUI::isWidgetNavigable(Widget* w) const {
 }
 
 glm::vec2 VexUI::getWidgetCenter(Widget* w) {
-    if (!w || !w->yoga) {
-        return {0.0f, 0.0f};
-    }
+    if (!w || !w->yoga) return {0.0f, 0.0f};
 
     float x = YGNodeLayoutGetLeft(w->yoga);
     float y = YGNodeLayoutGetTop(w->yoga);
@@ -599,83 +633,56 @@ glm::vec2 VexUI::getWidgetCenter(Widget* w) {
         y += YGNodeLayoutGetTop(parent->yoga);
         parent = parent->parent;
     }
-
     return {x + width * 0.5f, y + height * 0.5f};
 }
 
 Widget* VexUI::findClosestNavigableWidget(const glm::vec2& fromPos, const glm::vec2& direction, const std::vector<Widget*>& candidates) {
     Widget* closest = nullptr;
     float closestScore = -FLT_MAX;
-
-    float absX = std::abs(direction.x);
-    float absY = std::abs(direction.y);
-    bool isHorizontalNav = absX > absY;
+    bool isHorizontalNav = std::abs(direction.x) > std::abs(direction.y);
 
     for (Widget* candidate : candidates) {
-        if (candidate == m_focusedWidget) {
-            continue;
-        }
+        if (candidate == m_focusedWidget) continue;
 
         glm::vec2 toCandidate = getWidgetCenter(candidate) - fromPos;
         float distance = glm::length(toCandidate);
+        if (distance < 1.0f) continue;
 
-        if (distance < 1.0f) {
-            continue;
-        }
-
-        glm::vec2 normDir = glm::normalize(direction);
-        glm::vec2 normToCandidate = glm::normalize(toCandidate);
-
-        float dot = glm::dot(normDir, normToCandidate);
-
+        float dot = glm::dot(glm::normalize(direction), glm::normalize(toCandidate));
         float crossAlignment = 1.0f;
 
         if (isHorizontalNav) {
-            float yDiff = std::abs(toCandidate.y);
-            crossAlignment = std::max(0.0f, 1.0f - (yDiff / 500.0f));
+            crossAlignment = std::max(0.0f, 1.0f - (std::abs(toCandidate.y) / 500.0f));
         } else {
-            float xDiff = std::abs(toCandidate.x);
-            crossAlignment = std::max(0.0f, 1.0f - (xDiff / 500.0f));
+            crossAlignment = std::max(0.0f, 1.0f - (std::abs(toCandidate.x) / 500.0f));
         }
 
         if (dot > -0.2f) {
             float score = dot * 3.0f + crossAlignment * 0.5f - (distance / 800.0f);
-
             if (score > closestScore) {
                 closestScore = score;
                 closest = candidate;
             }
         }
     }
-
     return closest;
 }
 
 void VexUI::setFocusedWidget(Widget* w) {
-    if (w && !isWidgetNavigable(w)) {
-        return;
-    }
+    if (w && !isWidgetNavigable(w)) return;
+    if (w == m_focusedWidget) return;
 
-    if (w == m_focusedWidget) {
-        return;
-    }
-
-    if (m_focusedWidget && m_focusedWidget->onFocusLost) {
-        m_focusedWidget->onFocusLost();
-    }
-
+    if (m_focusedWidget && m_focusedWidget->onFocusLost) m_focusedWidget->onFocusLost();
     m_focusedWidget = w;
-
-    if (m_focusedWidget && m_focusedWidget->onFocusEnter) {
-        m_focusedWidget->onFocusEnter();
-    }
+    if (m_focusedWidget && m_focusedWidget->onFocusEnter) m_focusedWidget->onFocusEnter();
 }
+
 YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
-    std::string key = w->style.font + "_" + std::to_string(static_cast<int>(w->style.fontSize));
+    float pxSize = w->style.fontSize.getPixels(this);
+    std::string key = w->style.font + "_" + std::to_string(static_cast<int>(pxSize));
     auto it = m_fontAtlases.find(key);
-    if (it == m_fontAtlases.end() || w->text.empty()) {
-        return {0, 0};
-    }
+    if (it == m_fontAtlases.end() || w->text.empty()) return {0, 0};
+
     const FontAtlas& a = it->second;
 
     std::vector<std::string> lines;
@@ -698,19 +705,20 @@ YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
         currentLine += ch;
         currentWidth += cd.xadvance;
     }
-    if (!currentLine.empty()) lines.push_back(currentLine);float lineHeight = a.ascent - a.descent;
-        float totalHeight = lines.size() * lineHeight;
-        float totalWidth = 0.f;
-        for (const auto& line : lines) {
-            float lineWidth = 0.f;
-            for (char ch : line) {
-                if (ch < 32 || ch > 127) continue;
-                const stbtt_bakedchar& cd = a.cdata[ch - 32];
-                lineWidth += cd.xadvance;
-            }
-            totalWidth = std::max(totalWidth, lineWidth);
+    if (!currentLine.empty()) lines.push_back(currentLine);
+
+    float lineHeight = a.ascent - a.descent;
+    float totalHeight = lines.size() * lineHeight;
+    float totalWidth = 0.f;
+    for (const auto& line : lines) {
+        float lineWidth = 0.f;
+        for (char ch : line) {
+            if (ch < 32 || ch > 127) continue;
+            lineWidth += a.cdata[ch - 32].xadvance;
         }
-return {totalWidth, totalHeight};
+        totalWidth = std::max(totalWidth, lineWidth);
+    }
+    return {totalWidth, totalHeight};
 }
 
 YGSize VexUI::measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode) {
@@ -718,28 +726,18 @@ YGSize VexUI::measureTextNode(const YGNode* node, float width, YGMeasureMode wid
     if (!w || !w->ui) return {0, 0};
 
     float maxW = FLT_MAX;
-    if (widthMode == YGMeasureModeExactly || widthMode == YGMeasureModeAtMost) {
-        maxW = width;
-    }
+    if (widthMode == YGMeasureModeExactly || widthMode == YGMeasureModeAtMost) maxW = width;
 
     YGSize naturalSize = w->ui->calculateTextSize(w, maxW);
     YGSize measuredSize;
 
-    if (widthMode == YGMeasureModeExactly) {
-        measuredSize.width = width;
-    } else if (widthMode == YGMeasureModeAtMost) {
-        measuredSize.width = std::min(width, naturalSize.width);
-    } else {
-        measuredSize.width = naturalSize.width;
-    }
+    if (widthMode == YGMeasureModeExactly) measuredSize.width = width;
+    else if (widthMode == YGMeasureModeAtMost) measuredSize.width = std::min(width, naturalSize.width);
+    else measuredSize.width = naturalSize.width;
 
-    if (heightMode == YGMeasureModeExactly) {
-        measuredSize.height = height;
-    } else if (heightMode == YGMeasureModeAtMost) {
-        measuredSize.height = std::min(height, naturalSize.height);
-    } else {
-        measuredSize.height = naturalSize.height;
-    }
+    if (heightMode == YGMeasureModeExactly) measuredSize.height = height;
+    else if (heightMode == YGMeasureModeAtMost) measuredSize.height = std::min(height, naturalSize.height);
+    else measuredSize.height = naturalSize.height;
 
     return measuredSize;
 }
@@ -766,11 +764,8 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) 
 
         static bool useAVX2 = HardwareInfo::HasAVX2();
 
-        if (useAVX2) {
-            rotateQuadAvX2(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
-        } else {
-            rotateQuadScalar(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
-        }
+        if (useAVX2) rotateQuadAvX2(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
+        else rotateQuadScalar(rV, pivot.x, pivot.y, sinA, cosA, x0, y0, x1, y1);
 
         verts.insert(verts.end(), {rV[0], rV[1], u0, v0, col.r, col.g, col.b, col.a, texIdx});
         verts.insert(verts.end(), {rV[2], rV[3], u1, v0, col.r, col.g, col.b, col.a, texIdx});
@@ -785,95 +780,76 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) 
         pushQuad(x, y, 0, 0, x + width, y + height, 1, 1, w->style.bgColor, -1.f);
     }
 
-    if (w->style.borderWidth > 0.f && w->style.borderColor.a > 0.f) {
-        // Top
-        pushQuad(x, y, 0, 0, x + width, y + w->style.borderWidth, 1, 1, w->style.borderColor, -1.f);
-        // Bottom
-        pushQuad(x, y + height - w->style.borderWidth, 0, 0, x + width, y + height, 1, 1, w->style.borderColor, -1.f);
-        // Left
-        pushQuad(x, y, 0, 0, x + w->style.borderWidth, y + height, 1, 1, w->style.borderColor, -1.f);
-        // Right
-        pushQuad(x + width - w->style.borderWidth, y, 0, 0, x + width, y + height, 1, 1, w->style.borderColor, -1.f);
+    float bw = w->style.borderWidth.getPixels(this);
+    if (bw > 0.f && w->style.borderColor.a > 0.f) {
+        pushQuad(x, y, 0, 0, x + width, y + bw, 1, 1, w->style.borderColor, -1.f);
+        pushQuad(x, y + height - bw, 0, 0, x + width, y + height, 1, 1, w->style.borderColor, -1.f);
+        pushQuad(x, y, 0, 0, x + bw, y + height, 1, 1, w->style.borderColor, -1.f);
+        pushQuad(x + width - bw, y, 0, 0, x + width, y + height, 1, 1, w->style.borderColor, -1.f);
     }
 
     if ((w->type == WidgetType::Label || w->type == WidgetType::Button) && !w->text.empty() && !w->style.font.empty()) {
-        std::string key = w->style.font + "_" + std::to_string(static_cast<int>(w->style.fontSize));
+        float pxSize = w->style.fontSize.getPixels(this);
+        std::string key = w->style.font + "_" + std::to_string(static_cast<int>(pxSize));
         auto it = m_fontAtlases.find(key);
         if (it != m_fontAtlases.end()) {
             const FontAtlas& a = it->second;
 
             std::vector<std::string> lines;
-                    std::string currentLine;
-                    float currentWidth = 0.f;
-                    for (char ch : w->text) {
-                        if (ch == '\n') {
-                            lines.push_back(currentLine);
-                            currentLine.clear();
-                            currentWidth = 0.f;
-                            continue;
-                        }
-                        if (ch < 32 || ch > 127) continue;
-                        const stbtt_bakedchar& cd = a.cdata[ch - 32];
-                        if (currentWidth + cd.xadvance > width && !currentLine.empty()) {
-                            lines.push_back(currentLine);
-                            currentLine.clear();
-                            currentWidth = 0.f;
-                        }
-                        currentLine += ch;
-                        currentWidth += cd.xadvance;
-                    }
-                    if (!currentLine.empty()) lines.push_back(currentLine);
+            std::string currentLine;
+            float currentWidth = 0.f;
+            for (char ch : w->text) {
+                if (ch == '\n') {
+                    lines.push_back(currentLine);
+                    currentLine.clear();
+                    currentWidth = 0.f;
+                    continue;
+                }
+                if (ch < 32 || ch > 127) continue;
+                const stbtt_bakedchar& cd = a.cdata[ch - 32];
+                if (currentWidth + cd.xadvance > width && !currentLine.empty()) {
+                    lines.push_back(currentLine);
+                    currentLine.clear();
+                    currentWidth = 0.f;
+                }
+                currentLine += ch;
+                currentWidth += cd.xadvance;
+            }
+            if (!currentLine.empty()) lines.push_back(currentLine);
 
-                    float lineHeight = a.ascent - a.descent;
-                    float cy = y + a.ascent;
+            float cy = y + a.ascent;
 
-                    for (const auto& line : lines) {
-                        float lineWidth = 0.f;
-                        for (char ch : line) {
-                            if (ch < 32 || ch > 127) continue;
-                            const stbtt_bakedchar& cd = a.cdata[ch - 32];
-                            lineWidth += cd.xadvance;
-                        }
+            for (const auto& line : lines) {
+                float lineWidth = 0.f;
+                for (char ch : line) {
+                    if (ch < 32 || ch > 127) continue;
+                    lineWidth += a.cdata[ch - 32].xadvance;
+                }
 
-                        float startX = x;
-                        if (w->textAlign == TextAlign::Center) {
-                            startX = x + (width - lineWidth) / 2.f;
-                        } else if (w->textAlign == TextAlign::Right) {
-                            startX = x + (width - lineWidth);
-                        }
+                float startX = x;
+                if (w->textAlign == TextAlign::Center) startX = x + (width - lineWidth) / 2.f;
+                else if (w->textAlign == TextAlign::Right) startX = x + (width - lineWidth);
 
-                        float cx = startX;
-                        for (char ch : line) {
-                            if (ch < 32 || ch > 127) continue;
-                            const stbtt_bakedchar& cd = a.cdata[ch - 32];
+                float cx = startX;
+                for (char ch : line) {
+                    if (ch < 32 || ch > 127) continue;
+                    const stbtt_bakedchar& cd = a.cdata[ch - 32];
 
-                            float px = cx + cd.xoff;
-                            float py = cy + cd.yoff;
-
-                            float u0 = cd.x0 / float(a.width);
-                            float v0 = cd.y0 / float(a.height);
-                            float u1 = cd.x1 / float(a.width);
-                            float v1 = cd.y1 / float(a.height);
-
-                            pushQuad(px, py, u0, v0,
-                                     px + (cd.x1 - cd.x0), py + (cd.y1 - cd.y0), u1, v1,
-                                     w->style.color, static_cast<float>(a.texIdx));
-                            cx += cd.xadvance;
-                        }
-                        cy += lineHeight;
+                    pushQuad(cx + cd.xoff, cy + cd.yoff, cd.x0 / float(a.width), cd.y0 / float(a.height),
+                             cx + cd.xoff + (cd.x1 - cd.x0), cy + cd.yoff + (cd.y1 - cd.y0),
+                             cd.x1 / float(a.width), cd.y1 / float(a.height),
+                             w->style.color, static_cast<float>(a.texIdx));
+                    cx += cd.xadvance;
+                }
+                cy += (a.ascent - a.descent);
             }
         }
     }
 
     if (w->type == WidgetType::Image && !w->image.empty()) {
         uint32_t idx = m_res->getTextureIndex(GetAssetPath(w->image));
-        if (idx != UINT32_MAX) {
-            pushQuad(x, y, 0, 0, x + width, y + height, 1, 1, {1,1,1,1}, static_cast<float>(idx));
-        }else{
-            log("Failed to find image: %s", w->image.c_str());
-        }
+        if (idx != UINT32_MAX) pushQuad(x, y, 0, 0, x + width, y + height, 1, 1, {1,1,1,1}, static_cast<float>(idx));
     }
-
 
     const auto& children = w->children;
     size_t count = children.size();
@@ -889,8 +865,30 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) 
 
 void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pipelineLayout, int currentFrame) {
     if (!m_root) return;
-    layout(m_ctx.currentRenderResolution);
 
+    glm::uvec2 currentRes = m_ctx.currentRenderResolution;
+    float currentPspMult = getPspMultiplier();
+
+    if (m_lastRenderRes != currentRes || m_lastPspMult != currentPspMult) {
+        m_lastRenderRes = currentRes;
+        m_lastPspMult = currentPspMult;
+
+        std::function<void(Widget*)> syncTree = [&](Widget* w) {
+            if (!w) return;
+            w->applyLayout(this);
+            for (auto* c : w->children) syncTree(c);
+        };
+        syncTree(m_root);
+
+        for (auto& [k, a] : m_fontAtlases) {
+            if (a.view) vkDestroyImageView(m_ctx.device, a.view, nullptr);
+            if (a.image) vmaDestroyImage(m_ctx.allocator, a.image, a.alloc);
+        }
+        m_fontAtlases.clear();
+        loadFonts(m_root);
+    }
+
+    layout(m_ctx.currentRenderResolution);
     vkDeviceWaitIdle(m_ctx.device);
 
     std::vector<float> verts;
@@ -902,78 +900,30 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
 
     vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
-    VkDescriptorSet globalUBO = m_res->getUBODescriptorSet(currentFrame);
-        if (globalUBO != VK_NULL_HANDLE) {
-            uint32_t dynamicOffset = 0;
+    if (VkDescriptorSet globalUBO = m_res->getUBODescriptorSet(currentFrame); globalUBO != VK_NULL_HANDLE) {
+        uint32_t dynamicOffset = 0;
+        vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &globalUBO, 1, &dynamicOffset);
+    }
 
-            vkCmdBindDescriptorSets(
-                cmd,
-                VK_PIPELINE_BIND_POINT_GRAPHICS,
-                pipelineLayout,
-                0,
-                1, &globalUBO,
-                1, &dynamicOffset
-            );
-        }
-
-    glm::mat4 ortho = glm::ortho(
-        0.0f, static_cast<float>(m_ctx.currentRenderResolution.x),
-        0.0f, static_cast<float>(m_ctx.currentRenderResolution.y),
-        -1.0f, 1.0f
-    );
-
-    UIPushConstants uiPC{ ortho };
-
-    vkCmdPushConstants(
-        cmd,
-        pipelineLayout,
-        VK_SHADER_STAGE_VERTEX_BIT,
-        0,
-        sizeof(UIPushConstants),
-        &uiPC);
+    UIPushConstants uiPC{ glm::ortho(0.0f, static_cast<float>(m_ctx.currentRenderResolution.x), 0.0f, static_cast<float>(m_ctx.currentRenderResolution.y), -1.0f, 1.0f) };
+    vkCmdPushConstants(cmd, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(UIPushConstants), &uiPC);
 
     VkDeviceSize offset = 0;
     vkCmdBindVertexBuffers(cmd, 0, 1, &m_vb, &offset);
 
-    const uint32_t verticesPerQuad = 6;
-    const uint32_t floatsPerVertex = 9;
-    const uint32_t floatsPerQuad = verticesPerQuad * floatsPerVertex;
-
-    uint32_t totalVertices = verts.size() / floatsPerVertex;
+    uint32_t totalVertices = verts.size() / 9;
     uint32_t currentVertex = 0;
-
     int currentTexIndex = INT_MIN;
-    VkDescriptorSet currentTexSet = VK_NULL_HANDLE;
-
-    bool useBindless = m_ctx.supportsBindlessTextures;
 
     while (currentVertex < totalVertices) {
-        uint32_t quadStart = currentVertex * floatsPerVertex;
-        float texIndexFloat = verts[quadStart + 8];
-
-        int texIndex = static_cast<int>(texIndexFloat);
-
+        int texIndex = static_cast<int>(verts[currentVertex * 9 + 8]);
         if (texIndex != currentTexIndex) {
             currentTexIndex = texIndex;
-
-            if (!useBindless) {
-                if (texIndex >= 0) {
-                    currentTexSet = m_res->getTextureDescriptorSet(currentFrame, texIndex);
-                } else {
-                    currentTexSet = m_res->getTextureDescriptorSet(currentFrame, 0);
-                }
-
-                vkCmdBindDescriptorSets(
-                    cmd,
-                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                    pipelineLayout,
-                    1,
-                    1, &currentTexSet,
-                    0, nullptr
-                );
+            if (!m_ctx.supportsBindlessTextures) {
+                VkDescriptorSet currentTexSet = m_res->getTextureDescriptorSet(currentFrame, texIndex >= 0 ? texIndex : 0);
+                vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 1, 1, &currentTexSet, 0, nullptr);
             }
         }
-
         vkCmdDraw(cmd, 6, 1, currentVertex, 0);
         currentVertex += 6;
     }
@@ -982,8 +932,6 @@ void VexUI::render(VkCommandBuffer cmd, VkPipeline pipeline, VkPipelineLayout pi
 void VexUI::uploadVerts(const std::vector<float>& verts) {
     if (verts.empty()) return;
     size_t bytes = verts.size() * sizeof(float);
-    if (bytes > m_vbSize) throw_error("UI VB overflow");
-
     void* dst; vmaMapMemory(m_ctx.allocator, m_vbAlloc, &dst);
     memcpy(dst, verts.data(), bytes);
     vmaUnmapMemory(m_ctx.allocator, m_vbAlloc);
@@ -996,73 +944,66 @@ void VexUI::freeTree(Widget* w) {
 }
 
 void VexUI::setRotation(const std::string& id, float degrees) {
-    safeUpdate(id, [degrees](Widget* w) {
-        w->rotation = degrees;
+    safeUpdate(id, [this, degrees](Widget* w) {
+        w->nodeJson["rotation"] = degrees;
+        w->applyLayout(this);
     });
 }
 
-void VexUI::setPosition(const std::string& id, float x, float y) {
-    safeUpdate(id, [x, y](Widget* w) {
-        YGNodeStyleSetPosition(w->yoga, YGEdgeLeft, x);
-        YGNodeStyleSetPosition(w->yoga, YGEdgeTop, y);
+void VexUI::setPosition(const std::string& id, UIUnitValue x, UIUnitValue y) {
+    safeUpdate(id, [this, x, y](Widget* w) {
+        w->nodeJson["position"] = "absolute";
+        w->nodeJson["left"] = x.toJson();
+        w->nodeJson["top"] = y.toJson();
+        w->applyLayout(this);
     });
 }
 
-void VexUI::setSize(const std::string& id, float width, float height) {
-    safeUpdate(id, [width, height](Widget* w) {
-        w->size = {width, height};
-        YGNodeStyleSetWidth(w->yoga, width);
-        YGNodeStyleSetHeight(w->yoga, height);
+void VexUI::setSize(const std::string& id, UIUnitValue width, UIUnitValue height) {
+    safeUpdate(id, [this, width, height](Widget* w) {
+        w->nodeJson["size"] = {width.toJson(), height.toJson()};
+        w->applyLayout(this);
     });
 }
 
 void VexUI::setImage(const std::string& id, const std::string& path) {
-    if (initialized) {
-        if (Widget* w = findById(m_root, id)) {
-            w->image = path;
-            m_res->loadTexture(GetAssetPath(path), GetAssetPath(path));
-        }
-    } else {
-        pendingSetters.push_back([this, id, path]() {
-            if (Widget* w = findById(m_root, id)) {
-                w->image = path;
-                m_res->loadTexture(GetAssetPath(path), GetAssetPath(path));
-            }
-        });
-    }
+    safeUpdate(id, [this, path](Widget* w) {
+        w->image = path;
+        w->nodeJson["image"] = path;
+        m_res->loadTexture(GetAssetPath(path), GetAssetPath(path));
+    });
 }
 
-void VexUI::setFont(const std::string& id, const std::string& fontPath, float fontSize) {
-    auto action = [this, fontPath, fontSize](Widget* w) {
-        w->style.font = fontPath;
-        w->style.fontSize = fontSize;
+void VexUI::setFont(const std::string& id, const std::string& fontPath, UIUnitValue fontSize) {
+    safeUpdate(id, [this, fontPath, fontSize](Widget* w) {
+        w->nodeJson["style"]["font"] = fontPath;
+        w->nodeJson["style"]["size"] = fontSize.toJson();
+        w->applyLayout(this);
         this->loadFonts(w);
-
-        if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) {
-            YGNodeMarkDirty(w->yoga);
-        }
-    };
-    safeUpdate(id, action);
+        if (w->yoga && YGNodeHasMeasureFunc(w->yoga)) YGNodeMarkDirty(w->yoga);
+    });
 }
 
 void VexUI::setColor(const std::string& id, glm::vec4 color) {
-    safeUpdate(id, [color](Widget* w) {
-        w->style.color = color;
+    safeUpdate(id, [this, color](Widget* w) {
+        w->nodeJson["style"]["color"] = {color.r, color.g, color.b, color.a};
+        w->applyLayout(this);
     });
 }
 
 void VexUI::setBackgroundColor(const std::string& id, glm::vec4 color) {
-    safeUpdate(id, [color](Widget* w) {
-        w->style.bgColor = color;
+    safeUpdate(id, [this, color](Widget* w) {
+        w->nodeJson["style"]["bgColor"] = {color.r, color.g, color.b, color.a};
+        w->applyLayout(this);
     });
 }
 
-void VexUI::setBorder(const std::string& id, float width, glm::vec4 color) {
-    safeUpdate(id, [width, color](Widget* w) {
-        w->style.borderWidth = width;
-        w->style.borderColor = color;
-        YGNodeStyleSetBorder(w->yoga, YGEdgeAll, width);
+void VexUI::setBorder(const std::string& id, UIUnitValue width, glm::vec4 color) {
+    safeUpdate(id, [this, width, color](Widget* w) {
+        w->nodeJson["borderWidth"] = width.toJson();
+        w->nodeJson["borderColor"] = {color.r, color.g, color.b, color.a};
+        w->applyLayout(this);
     });
 }
 
-}
+} // namespace vex
