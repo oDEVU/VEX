@@ -207,6 +207,23 @@ struct TransformComponent {
                 dirty = true;
             }
 
+            /// @brief Get the local rotation as a quaternion directly.
+                glm::quat getLocalQuaternion() const {
+                    return m_rotationQuat;
+                }
+
+                /// @brief Set the local rotation using a quaternion directly.
+                void setLocalQuaternion(glm::quat newRotation) {
+                    dirty = true;
+                    m_rotationQuat = glm::normalize(newRotation);
+                }
+
+                /// @brief Multiply a delta quaternion into the current local rotation.
+                void addLocalQuaternion(glm::quat deltaRotation) {
+                    dirty = true;
+                    m_rotationQuat = glm::normalize(m_rotationQuat * deltaRotation);
+                }
+
     // --------------------------------------------------
 
     glm::mat4 recalculateMatrix(){
