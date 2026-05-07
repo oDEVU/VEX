@@ -605,6 +605,26 @@ namespace vex {
         return it != m_bodyToEntity.end() ? it->second : entt::null;
     }
 
+    class IgnoreSensorFilter : public JPH::BodyFilter {
+    public:
+        IgnoreSensorFilter(const JPH::BodyLockInterface& lockInterface) : m_lockInterface(lockInterface) {}
+
+        bool ShouldCollide(const JPH::BodyID& inBodyID) const override {
+            JPH::BodyLockRead lock(m_lockInterface, inBodyID);
+            if (lock.Succeeded()) {
+                return !lock.GetBody().IsSensor();
+            }
+            return false;
+        }
+
+        bool ShouldCollideLocked(const JPH::Body& inBody) const override {
+            return !inBody.IsSensor();
+        }
+
+    private:
+        const JPH::BodyLockInterface& m_lockInterface;
+    };
+
     bool PhysicsSystem::raycast(const glm::vec3& origin, const glm::vec3& direction, float maxDistance, RaycastHit& hit) {
         if (!m_physicsSystem) return false;
 
@@ -612,7 +632,10 @@ namespace vex {
         JPH::Vec3 dir(direction.x, direction.y, direction.z);
         JPH::RRayCast ray(start, dir * maxDistance);
         JPH::RayCastResult result;
-        if (m_physicsSystem->GetNarrowPhaseQuery().CastRay(ray, result)) {
+
+        IgnoreSensorFilter filter(m_physicsSystem->GetBodyLockInterface());
+
+        if (m_physicsSystem->GetNarrowPhaseQuery().CastRay(ray, result, { }, { }, filter)) {
             hit.bodyId = result.mBodyID;
             hit.distance = result.mFraction * maxDistance;
             hit.position = origin + direction * hit.distance;
