@@ -16,6 +16,24 @@
 /// @brief Window Mode Enum
 enum class WindowType { Windowed = 0, Borderless = 1, ExclusiveFullscreen = 2 };
 
+/// @brief Distribution Compression Level Enum
+enum class DistributionCompressionLevel { VeryLow = 0, Low = 1, Medium = 2, High = 3, VeryHigh = 4, Extreme = 5 };
+
+// <store-level> - <asset archive size> / <launch time on ryzen 5 4650U>
+// raw - 1024MB / 1s | very low - 948MB / 3s | medium (default) - 933MB / 4s | extreme - 919MB / 6s
+
+inline void to_json(nlohmann::json& j, const DistributionCompressionLevel& level) {
+    j = static_cast<int>(level);
+}
+
+inline void from_json(const nlohmann::json& j, DistributionCompressionLevel& level) {
+    int value = 2;
+    if (j.is_number()) {
+        value = j.get<int>();
+    }
+    level = static_cast<DistributionCompressionLevel>(value);
+}
+
 struct ProjectVersion {
     int major = 1;
     int minor = 0;
@@ -61,9 +79,10 @@ struct ProjectProperties {
     WindowType window_type = WindowType::Windowed;
     vex::ResolutionMode resolution_mode = vex::ResolutionMode::NATIVE;
     bool vsync = true;
+    DistributionCompressionLevel distribution_compression = DistributionCompressionLevel::High;
 
     auto operator<=>(const ProjectProperties&) const = default;
 };
 
-IMGUI_REFLECT(ProjectProperties, project_name, main_scene, icon_path, version, window_type, resolution_mode, vsync);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ProjectProperties, project_name, main_scene, icon_path, version, window_type, resolution_mode, vsync);
+IMGUI_REFLECT(ProjectProperties, project_name, main_scene, icon_path, version, window_type, resolution_mode, vsync, distribution_compression);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ProjectProperties, project_name, main_scene, icon_path, version, window_type, resolution_mode, vsync, distribution_compression);

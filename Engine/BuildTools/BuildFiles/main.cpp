@@ -5,10 +5,16 @@
 #include "Engine.hpp"
 #include "components/ErrorUtils.hpp"
 #include "components/GameInfo.hpp"
+#include "components/VirtualFileSystem.hpp"
+
+#ifndef VEX_VPAK_KEY
+#define VEX_VPAK_KEY "FALLBACK_VPAK_KEY_0000"
+#endif
 
 extern "C" void VexGame_Init(vex::Engine* engine);
 
 int main(int argc, char* argv[]) {
+    vex::VirtualFileSystem::SetVpakKey(VEX_VPAK_KEY);
     SDL_SetAppMetadata(VEX_PROJECT_TITLE, VEX_GAME_VERSION_STRING, VEX_PROJECT_TITLE);
     vex::GameInfo gInfo{VEX_PROJECT_TITLE, VEX_GAME_VERSION_MAJOR, VEX_GAME_VERSION_MINOR, VEX_GAME_VERSION_PATCH};
     vex::Engine engine(VEX_PROJECT_TITLE, 1280, 720, gInfo);
@@ -57,7 +63,6 @@ int main(int argc, char* argv[]) {
         }
     });
 #endif
-    //cr_plugin_close(ctx);
     std::quick_exit(0);
     return 0;
 }

@@ -4,6 +4,7 @@
 #include "components/SceneManager.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameComponents/ComponentFactory.hpp"
+#include "components/VirtualFileSystem.hpp"
 #include <VexBuildVersion.hpp>
 
 #ifndef VEX_MAIN_SCENE
@@ -14,6 +15,9 @@
 #endif
 #ifndef VEX_RESOLUTION_MODE
 #define VEX_RESOLUTION_MODE 0
+#endif
+#ifndef VEX_VPAK_KEY
+#define VEX_VPAK_KEY "FALLBACK_VPAK_KEY_0000"
 #endif
 #ifdef VEX_VSYNC
     #define ON 1
@@ -69,6 +73,7 @@ extern "C" {
     __attribute__((visibility("default")))
     #endif
     void VexGame_Init(vex::Engine* engine) {
+        vex::VirtualFileSystem::SetVpakKey(VEX_VPAK_KEY);
         if (!engine) return;
 
         if (!engine->getSceneManager()) {
@@ -107,6 +112,7 @@ extern "C" __declspec(dllexport) int cr_main(struct cr_plugin *ctx, enum cr_op o
     switch (operation) {
         case CR_LOAD:
                     try {
+                        vex::VirtualFileSystem::SetVpakKey(VEX_VPAK_KEY);
                         vex::log(vex::LogLevel::INFO, "[DEBUG] Entering CR_LOAD...");
                         fflush(stdout);
 

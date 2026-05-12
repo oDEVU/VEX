@@ -42,3 +42,7 @@
 [submodule "Engine/Core/thirdparty/ImGuizmo"]
 	path = Engine/Core/thirdparty/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "Engine/Core/thirdparty/zstd"]
+	path = Engine/Core/thirdparty/zstd
+	url = https://github.com/facebook/zstd.git
+	branch = release
