@@ -57,6 +57,16 @@ public:
      */
     void Shutdown();
 
+    /**
+     * @brief Quickly plays a 2D sound without requiring an entity or AudioSourceComponent.
+     * @details Creates Standalone stream for the sound, plays it, and automatically cleans up when playback completes.
+     * @param const std::string& filePath - Path to the audio file to play.
+     * @param float volume - Volume level (default 1.0f). Range: 0.0 - 1.0+
+     * @param float pitch - Pitch/speed multiplier (default 1.0f). Range: > 0.0
+     * @param bool loop - Whether the sound should loop (default false).
+     */
+    void PlaySound2D(const std::string& filePath, float volume = 1.0f, float pitch = 1.0f, bool loop = false);
+
 private:
     SDL_AudioDeviceID deviceID;
     VirtualFileSystem* vfs = nullptr;
@@ -75,6 +85,13 @@ private:
      * @param entt::entity entity - The entity that was destroyed or had the component removed.
      */
     void OnAudioComponentDestroyed(entt::registry& registry, entt::entity entity);
+
+    struct StandaloneAudio {
+        SDL_AudioStream* stream;
+        AudioClip* clip;
+        bool loop;
+    };
+    std::vector<StandaloneAudio> standaloneStreams;
 };
 
 }

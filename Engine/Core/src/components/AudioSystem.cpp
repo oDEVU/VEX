@@ -112,9 +112,30 @@ void AudioSystem::Update(entt::entity cameraEntity) {
         SDL_SetAudioStreamGain(stream, finalVolume);
         SDL_SetAudioStreamFrequencyRatio(stream, comp.pitch);
     }
+
+    for (auto it = standaloneStreams.begin(); it != standaloneStreams.end(); ) {
+        SDL_AudioStream* stream = it->stream;
+
+        if (it->loop && SDL_GetAudioStreamAvailable(stream) < it->clip->length / 2) {
+            SDL_PutAudioStreamData(stream, it->clip->buffer, it->clip->length);
+            ++it;
+        }
+        else if (!it->loop && SDL_GetAudioStreamAvailable(stream) == 0) {
+            SDL_DestroyAudioStream(stream);
+            it = standaloneStreams.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 }
 
 void AudioSystem::Shutdown() {
+    for (auto& sa : standaloneStreams) {
+        SDL_DestroyAudioStream(sa.stream);
+    }
+    standaloneStreams.clear();
+
     for (auto& [entity, stream] : streamMap) {
         SDL_DestroyAudioStream(stream);
     }
@@ -129,6 +150,31 @@ void AudioSystem::OnAudioComponentDestroyed(entt::registry& registry, entt::enti
         SDL_DestroyAudioStream(it->second);
         streamMap.erase(it);
     }
+}
+
+void AudioSystem::PlaySound2D(const std::string& filePath, float volume, float pitch, bool loop) {
+    if (clipCache.find(filePath) == clipCache.end()) {
+        auto newClip = std::make_unique<AudioClip>(filePath, vfs);
+        if (newClip->valid) {
+            clipCache[filePath] = std::move(newClip);
+        } else {
+            log(LogLevel::ERROR, "PlaySound2D: Failed to load audio clip - %s", filePath.c_str());
+            return;
+        }
+    }
+
+    AudioClip* clip = clipCache[filePath].get();
+
+    SDL_AudioStream* stream = SDL_CreateAudioStream(&clip->spec, NULL);
+    if (!stream) return;
+
+    SDL_SetAudioStreamGain(stream, volume);
+    SDL_SetAudioStreamFrequencyRatio(stream, pitch);
+
+    SDL_BindAudioStream(deviceID, stream);
+    SDL_PutAudioStreamData(stream, clip->buffer, clip->length);
+
+    standaloneStreams.push_back({stream, clip, loop});
 }
 
 }
