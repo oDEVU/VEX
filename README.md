@@ -53,7 +53,7 @@ You must install all the following dependencies for your specific operating syst
 | **LLVM (Clang)** | [GitHub Releases](https://github.com/llvm/llvm-project/releases) | Download the `LLVM-xx.x.x-win64.exe` <br><br>**Important:** Select *"Add LLVM to the system PATH"* during installation. |
 | **Ninja Build** | [GitHub Releases](https://github.com/ninja-build/ninja/releases) | Download `ninja-win.zip`. <br><br>**Action Required:** Extract `ninja.exe` to a folder (e.g., `C:\Program Files\Ninja\`) and manually add that folder to your System `PATH`. |
 | **Vulkan SDK** | [LunarG Website](https://vulkan.lunarg.com/sdk/home) | **Must include:** <br>• Validation Layers<br>• SlangC |
-| **ImageMagick** | [Official Installer](https://imagemagick.org/script/download.php%23windows) | Download the `Q16-HDRI-x64-dll.exe`. <br><br>**Important:** Check *"Add application directory to your system path"*. |
+| **ImageMagick** | [Official Installer](https://imagemagick.org/download/#gsc.tab=0) | Download the `Q16-HDRI-x64-dll.exe`. <br><br>**Important:** Check *"Add application directory to your system path"*. |
 
 ---
 
