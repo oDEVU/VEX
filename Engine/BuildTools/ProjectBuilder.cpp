@@ -440,6 +440,9 @@ int main(int argc, char* argv[]) {
                 path != std::filesystem::weakly_canonical(yoga_bin) &&
                 path != std::filesystem::weakly_canonical(yoga_lib) &&
                 path != std::filesystem::weakly_canonical(yoga_tests) &&
+                path.extension() != ".lib" &&
+                path.extension() != ".rc" &&
+                filename != "game_icon.ico" &&
                 filename.find("cmake") == std::string::npos) {
                 std::filesystem::path dest_path = output_dir / filename;
                 if (std::filesystem::exists(dest_path)) {
@@ -486,7 +489,7 @@ int main(int argc, char* argv[]) {
                     if (src_path.string().find(".so") != std::string::npos ||
                         ext == ".dll" || ext == ".lib" || ext == ".pdb" || ext == ".dylib") {
                         std::filesystem::path dest_file = output_dir / src_path.filename();
-                        if ((is_dist || config_name == "Release") && (ext == ".pdb" || ext == ".debug" || ext == ".ilk" || ext == ".exp")) {
+                        if ((is_dist || config_name == "Release") && (ext == ".pdb" || ext == ".debug" || ext == ".ilk" || ext == ".exp" || ext == ".lib")) {
                             continue;
                         }
                         std::filesystem::copy_file(src_path, dest_file, std::filesystem::copy_options::overwrite_existing);

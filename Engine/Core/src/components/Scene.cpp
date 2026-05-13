@@ -198,10 +198,10 @@ void Scene::sceneBegin(){
 
     if(useParallel){
         #ifdef VEX_USE_PARALLEL_EXECUTION
-        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_objects.begin(), m_objects.end(), [&](auto& obj){
             try{ obj->BeginPlay(); } catch(const std::exception& e){ handle_exception(e); }
         });
-        std::for_each(std::execution::par_unseq, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
             try{ obj->BeginPlay(); } catch(const std::exception& e){ handle_exception(e); }
         });
         #endif
@@ -228,10 +228,10 @@ void Scene::sceneUpdate(float deltaTime){
 
     if(useParallel){
         #ifdef VEX_USE_PARALLEL_EXECUTION
-        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_objects.begin(), m_objects.end(), [&](auto& obj){
             try{ obj->Update(deltaTime); } catch(const std::exception& e){ log("Error: %s", e.what()); }
         });
-        std::for_each(std::execution::par_unseq, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
             try{ obj->Update(deltaTime); } catch(const std::exception& e){ log("Error: %s", e.what()); }
         });
         #endif

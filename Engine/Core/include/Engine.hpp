@@ -4,6 +4,11 @@
  *  @author Eryk Roszkowski
  ***********************************************/
 
+// Windows specific bugs (why they are there? because i visit this file unlike ErrorUtils or other stuff):
+// @todo (Windows only) Fix building in editor fails but succeds with cli ProjectBuilder.exe
+// @todo (Windows only) Fix console doubling every line
+// @todo (Windows only) Fix editor being vsynced despite vsync disabled but only when app started with vsync i think LMAO
+
 #pragma once
 
 #if defined(_WIN32)

@@ -12,16 +12,16 @@ set(DST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/include/VexBuildVersion.hpp")
 
 if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (NOT EXISTS "${DST_FILE}"))
 
-    message(STATUS ">> [BuildID] Generating new VEX Build ID (Config: ${CMAKE_BUILD_TYPE})...")
+  message(STATUS ">> [BuildID] Generating new VEX Build ID (Config: ${CMAKE_BUILD_TYPE})...")
 
-    include(cmake/GenerateVersion.cmake OPTIONAL RESULT_VARIABLE VERSION_GEN_RESULT)
-    if(NOT VERSION_GEN_RESULT)
-        string(TIMESTAMP VEX_BUILD_ID "%Y%m%d%H%M%S")
-        configure_file(${SRC_FILE} ${DST_FILE} @ONLY)
-    endif()
+  include(cmake/GenerateVersion.cmake OPTIONAL RESULT_VARIABLE VERSION_GEN_RESULT)
+  if(NOT VERSION_GEN_RESULT)
+    string(TIMESTAMP VEX_BUILD_ID "%Y%m%d%H%M%S")
+    configure_file(${SRC_FILE} ${DST_FILE} @ONLY)
+  endif()
 
 else()
-    message(STATUS ">> [BuildID] Skipping generation for ${CMAKE_BUILD_TYPE} (Using existing header).")
+  message(STATUS ">> [BuildID] Skipping generation for ${CMAKE_BUILD_TYPE} (Using existing header).")
 endif()
 
 list(APPEND public_header_files include/VexBuildVersion.hpp)
@@ -33,16 +33,16 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 option(VEX_DIST_BUILD "Build for distribution (Shipping)" OFF)
 
 if(VEX_DIST_BUILD)
-    add_compile_definitions(DIST_BUILD=1)
+  add_compile_definitions(DIST_BUILD=1)
 endif()
 
 if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
-        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
-        add_link_options("-Wl,/nodefaultlib:msvcrt" "-Wl,/defaultlib:msvcrtd")
-    endif()
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(_DEBUG _ITERATOR_DEBUG_LEVEL=2)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -D_MT -D_DLL -Xclang --dependent-lib=msvcrtd")
+    add_link_options("-Wl,/nodefaultlib:msvcrt" "-Wl,/defaultlib:msvcrtd")
+  endif()
 endif()
 
 include(GNUInstallDirs)
@@ -67,9 +67,9 @@ target_compile_definitions(VEX PRIVATE
 message(STATUS "VEX build type: ${CMAKE_BUILD_TYPE}")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(VEX PUBLIC DEBUG=1)
+  target_compile_definitions(VEX PUBLIC DEBUG=1)
 else()
-    target_compile_definitions(VEX PUBLIC DEBUG=0)
+  target_compile_definitions(VEX PUBLIC DEBUG=0)
 endif()
 
 get_target_property(defs VEX COMPILE_DEFINITIONS)
@@ -199,7 +199,7 @@ set(SHADER_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/shaders)
 # Find slangc (prefer Vulkan SDK, fallback to PATH or env var)
 find_program(SLANGC slangc HINTS $ENV{VULKAN_SDK}/Bin $ENV{SLANGC} ENV PATH)
 if(NOT SLANGC)
-    message(FATAL_ERROR "slangc not found, make sure you have installed it.")
+  message(FATAL_ERROR "slangc not found, make sure you have installed it.")
 endif()
 
 file(GLOB GLSL_SHADERS
@@ -243,8 +243,8 @@ add_custom_command(
 )
 
 foreach(source IN LISTS GLSL_SHADERS)
-    get_filename_component(FILENAME ${source} NAME)
-    add_custom_command(
+  get_filename_component(FILENAME ${source} NAME)
+  add_custom_command(
     COMMAND
       ${glslc_executable}
       -o ${SHADER_BINARY_DIR}/${FILENAME}.spv
@@ -253,83 +253,83 @@ foreach(source IN LISTS GLSL_SHADERS)
     DEPENDS ${source} ${SHADER_BINARY_DIR}
     COMMENT "Compiling ${FILENAME}"
   )
-    list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+  list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
 endforeach()
 
 foreach(source IN LISTS SLANG_SHADERS)
-    get_filename_component(FILENAME ${source} NAME_WE)
+  get_filename_component(FILENAME ${source} NAME_WE)
 
-    set(SLANG_FLAGS "-I${SHADER_SOURCE_DIR}")
-    list(APPEND SLANG_FLAGS "-emit-spirv-via-glsl")
-    if(CMAKE_BUILD_TYPE STREQUAL "Release")
-        list(APPEND SLANG_FLAGS "-O3")
-        #list(APPEND SLANG_FLAGS "-O2") Rewert to this if O3 is too aggresive C:
-    endif()
+  set(SLANG_FLAGS "-I${SHADER_SOURCE_DIR}")
+  list(APPEND SLANG_FLAGS "-emit-spirv-via-glsl")
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    list(APPEND SLANG_FLAGS "-O3")
+    #list(APPEND SLANG_FLAGS "-O2") Rewert to this if O3 is too aggresive C:
+  endif()
 
-    # Case 1: ends with Vert → only vertex shader
-    if(FILENAME MATCHES ".*Vert$")
-        set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
-        add_custom_command(
+  # Case 1: ends with Vert → only vertex shader
+  if(FILENAME MATCHES ".*Vert$")
+    set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+    add_custom_command(
             OUTPUT ${OUTPUT_FILE}
             COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_5_0 -o ${OUTPUT_FILE} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling vertex shader ${FILENAME}"
         )
-        list(APPEND SPV_SHADERS ${OUTPUT_FILE})
+    list(APPEND SPV_SHADERS ${OUTPUT_FILE})
 
-        # Case 2: ends with Frag → only fragment shader
-    elseif(FILENAME MATCHES ".*Frag$")
-        set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
-        add_custom_command(
+    # Case 2: ends with Frag → only fragment shader
+  elseif(FILENAME MATCHES ".*Frag$")
+    set(OUTPUT_FILE ${SHADER_BINARY_DIR}/${FILENAME}.spv)
+    add_custom_command(
             OUTPUT ${OUTPUT_FILE}
             COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_5_0 -o ${OUTPUT_FILE} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling fragment shader ${FILENAME}"
         )
-        list(APPEND SPV_SHADERS ${OUTPUT_FILE})
+    list(APPEND SPV_SHADERS ${OUTPUT_FILE})
 
-        if(FILENAME IN_LIST BINDLESS_ELIGIBLE_SHADERS)
-            set(BINDLESS_OUTPUT_SPV ${SHADER_BINARY_DIR}/${FILENAME}Bindless.spv)
-            add_custom_command(
+    if(FILENAME IN_LIST BINDLESS_ELIGIBLE_SHADERS)
+      set(BINDLESS_OUTPUT_SPV ${SHADER_BINARY_DIR}/${FILENAME}Bindless.spv)
+      add_custom_command(
                 OUTPUT ${BINDLESS_OUTPUT_SPV}
-                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_5_0 -o ${BINDLESS_OUTPUT_SPV} ${source}
+                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_6_0 -o ${BINDLESS_OUTPUT_SPV} ${source}
                 DEPENDS ${source} ${SLANG_DEPENDENCIES}
                 COMMENT "Compiling Bindless Fragment Shader: ${FILENAME}"
             )
-            list(APPEND SPV_SHADERS ${BINDLESS_OUTPUT_SPV})
-        endif()
-        # Case 3: unified shader → compile both vertMain + fragMain
-    else()
-        set(VERT_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Vert.spv)
-        set(FRAG_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Frag.spv)
+      list(APPEND SPV_SHADERS ${BINDLESS_OUTPUT_SPV})
+    endif()
+    # Case 3: unified shader → compile both vertMain + fragMain
+  else()
+    set(VERT_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Vert.spv)
+    set(FRAG_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}Frag.spv)
 
-        add_custom_command(
+    add_custom_command(
             OUTPUT ${VERT_OUTPUT}
             COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile vs_5_0 -entry vertMain -o ${VERT_OUTPUT} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling combined shader vertex entry 'vertMain' from ${FILENAME}.slang"
         )
 
-        add_custom_command(
+    add_custom_command(
             OUTPUT ${FRAG_OUTPUT}
             COMMAND ${SLANGC} ${SLANG_FLAGS} -target spirv -profile ps_5_0 -entry fragMain -o ${FRAG_OUTPUT} ${source}
             DEPENDS ${source} ${SLANG_DEPENDENCIES}
             COMMENT "Compiling combined shader fragment entry 'fragMain' from ${FILENAME}.slang"
         )
 
-        list(APPEND SPV_SHADERS ${VERT_OUTPUT} ${FRAG_OUTPUT})
+    list(APPEND SPV_SHADERS ${VERT_OUTPUT} ${FRAG_OUTPUT})
 
-        if(FILENAME IN_LIST BINDLESS_ELIGIBLE_SHADERS)
-            set(FRAG_BINDLESS_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}FragBindless.spv)
-            add_custom_command(
+    if(FILENAME IN_LIST BINDLESS_ELIGIBLE_SHADERS)
+      set(FRAG_BINDLESS_OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}FragBindless.spv)
+      add_custom_command(
                 OUTPUT ${FRAG_BINDLESS_OUTPUT}
-                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_5_0 -entry fragMain -o ${FRAG_BINDLESS_OUTPUT} ${source}
+                COMMAND ${SLANGC} ${SLANG_FLAGS} -DBINDLESS -target spirv -profile ps_6_0 -entry fragMain -o ${FRAG_BINDLESS_OUTPUT} ${source}
                 DEPENDS ${source} ${SLANG_DEPENDENCIES}
                 COMMENT "Compiling ${FILENAME} (Fragment Bindless)"
             )
-            list(APPEND SPV_SHADERS ${FRAG_BINDLESS_OUTPUT})
-        endif()
+      list(APPEND SPV_SHADERS ${FRAG_BINDLESS_OUTPUT})
     endif()
+  endif()
 endforeach()
 
 add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})
@@ -337,66 +337,117 @@ add_custom_target(compile_shaders ALL DEPENDS ${SPV_SHADERS})
 target_link_libraries(${PROJECT_NAME} PUBLIC thirdparty_engine)
 
 if(DIST_BUILD AND UNIX AND NOT APPLE)
-    set_target_properties(${PROJECT_NAME} PROPERTIES
+  set_target_properties(${PROJECT_NAME} PROPERTIES
         INSTALL_RPATH "$ORIGIN"
         BUILD_WITH_INSTALL_RPATH TRUE
     )
 endif()
 
-if(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetWindowRelativeMouseMode")
-    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_LogError")
-    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetAppMetadata")
+#if(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+#    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetWindowRelativeMouseMode")
+#    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_LogError")
+#    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/EXPORT:SDL_SetAppMetadata")
+#endif()
+
+if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+  message(STATUS ">> VEX: Generating SDL3 Module-Definition (.def) file...")
+
+  file(GLOB_RECURSE SDL_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include/SDL3/*.h")
+
+  set(DEF_FILE_CONTENT "EXPORTS\n")
+  set(EXPORT_COUNT 0)
+
+  foreach(HEADER IN LISTS SDL_HEADERS)
+    if(HEADER MATCHES "SDL_gpu\\.h$" OR
+       HEADER MATCHES "SDL_render\\.h$" OR
+       HEADER MATCHES "SDL_vulkan\\.h$" OR
+       HEADER MATCHES "SDL_metal\\.h$" OR
+       HEADER MATCHES "SDL_opengl.*\\.h$" OR
+       HEADER MATCHES "SDL_egl\\.h$" OR
+       HEADER MATCHES "SDL_test.*\\.h$" OR
+       HEADER MATCHES "SDL_camera\\.h$" OR
+       HEADER MATCHES "SDL_dialog\\.h$" OR
+       HEADER MATCHES "SDL_tray\\.h$" OR
+       HEADER MATCHES "SDL_process\\.h$")
+      continue()
+    endif()
+
+    file(READ "${HEADER}" HEADER_CONTENT)
+    string(REGEX MATCHALL "SDLCALL[ \t]+SDL_[a-zA-Z0-9_]+" RAW_MATCHES "${HEADER_CONTENT}")
+
+    foreach(MATCH IN LISTS RAW_MATCHES)
+      string(REGEX MATCH "SDL_[a-zA-Z0-9_]+" FUNC_NAME "${MATCH}")
+
+      if(FUNC_NAME)
+        if(FUNC_NAME MATCHES "^SDL_App" OR
+                     FUNC_NAME STREQUAL "SDL_main" OR
+                     FUNC_NAME STREQUAL "SDL_CreateThread" OR
+                     FUNC_NAME STREQUAL "SDL_CreateThreadWithProperties")
+          continue()
+        endif()
+
+        string(APPEND DEF_FILE_CONTENT "    ${FUNC_NAME}\n")
+        math(EXPR EXPORT_COUNT "${EXPORT_COUNT} + 1")
+      endif()
+    endforeach()
+  endforeach()
+
+  set(DEF_FILE_PATH "${CMAKE_CURRENT_BINARY_DIR}/VEX_SDL_Exports.def")
+  file(WRITE "${DEF_FILE_PATH}" "${DEF_FILE_CONTENT}")
+
+  target_sources(${PROJECT_NAME} PRIVATE "${DEF_FILE_PATH}")
+
+  message(STATUS ">> VEX: Successfully wrote ${EXPORT_COUNT} filtered SDL3 functions to ${DEF_FILE_PATH}")
 endif()
 
 if(TARGET ImGui)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        target_link_libraries(${PROJECT_NAME} PRIVATE -Wl,--whole-archive ImGui -Wl,--no-whole-archive)
-    elseif(MSVC)
-        target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:ImGui")
-        target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:SDL3-static")
-    elseif(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:ImGui>")
-        target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:SDL3-static>")
-    endif()
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_libraries(${PROJECT_NAME} PRIVATE -Wl,--whole-archive ImGui -Wl,--no-whole-archive)
+  elseif(MSVC)
+    target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:ImGui")
+    target_link_options(${PROJECT_NAME} PRIVATE "/WHOLEARCHIVE:SDL3-static")
+  elseif(WIN32 AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:ImGui>")
+    target_link_options(${PROJECT_NAME} PRIVATE "-Wl,/WHOLEARCHIVE:$<TARGET_FILE:SDL3-static>")
+  endif()
 endif()
 
 set(TP_RESOLVED_INCLUDES "")
 set(TP_RESOLVED_DEFINITIONS "")
 
 macro(extract_properties INPUT_TARGET)
-    if(TARGET ${INPUT_TARGET})
-        set(_REAL_TARGET ${INPUT_TARGET})
+  if(TARGET ${INPUT_TARGET})
+    set(_REAL_TARGET ${INPUT_TARGET})
 
-        get_target_property(_ALIASED ${INPUT_TARGET} ALIASED_TARGET)
-        if(_ALIASED)
-            set(_REAL_TARGET ${_ALIASED})
-        endif()
-
-        get_target_property(_INCS ${_REAL_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
-        if(_INCS AND NOT "${_INCS}" MATCHES "NOTFOUND")
-            list(APPEND TP_RESOLVED_INCLUDES ${_INCS})
-        endif()
-
-        get_target_property(_SYS_INCS ${_REAL_TARGET} INTERFACE_SYSTEM_INCLUDE_DIRECTORIES)
-        if(_SYS_INCS AND NOT "${_SYS_INCS}" MATCHES "NOTFOUND")
-            list(APPEND TP_RESOLVED_INCLUDES ${_SYS_INCS})
-        endif()
-
-        get_target_property(_DEFS ${_REAL_TARGET} INTERFACE_COMPILE_DEFINITIONS)
-        if(_DEFS AND NOT "${_DEFS}" MATCHES "NOTFOUND")
-            list(APPEND TP_RESOLVED_DEFINITIONS ${_DEFS})
-        endif()
+    get_target_property(_ALIASED ${INPUT_TARGET} ALIASED_TARGET)
+    if(_ALIASED)
+      set(_REAL_TARGET ${_ALIASED})
     endif()
+
+    get_target_property(_INCS ${_REAL_TARGET} INTERFACE_INCLUDE_DIRECTORIES)
+    if(_INCS AND NOT "${_INCS}" MATCHES "NOTFOUND")
+      list(APPEND TP_RESOLVED_INCLUDES ${_INCS})
+    endif()
+
+    get_target_property(_SYS_INCS ${_REAL_TARGET} INTERFACE_SYSTEM_INCLUDE_DIRECTORIES)
+    if(_SYS_INCS AND NOT "${_SYS_INCS}" MATCHES "NOTFOUND")
+      list(APPEND TP_RESOLVED_INCLUDES ${_SYS_INCS})
+    endif()
+
+    get_target_property(_DEFS ${_REAL_TARGET} INTERFACE_COMPILE_DEFINITIONS)
+    if(_DEFS AND NOT "${_DEFS}" MATCHES "NOTFOUND")
+      list(APPEND TP_RESOLVED_DEFINITIONS ${_DEFS})
+    endif()
+  endif()
 endmacro()
 
 extract_properties(thirdparty_engine)
 
 get_target_property(TP_DEPS thirdparty_engine INTERFACE_LINK_LIBRARIES)
 if(TP_DEPS)
-    foreach(LIB ${TP_DEPS})
-        extract_properties(${LIB})
-    endforeach()
+  foreach(LIB ${TP_DEPS})
+    extract_properties(${LIB})
+  endforeach()
 endif()
 
 extract_properties(SDL3::SDL3)
@@ -404,9 +455,9 @@ extract_properties(SDL3-static)
 extract_properties(SDL3-shared)
 
 if(DEFINED SDL3_SOURCE_DIR)
-    list(APPEND TP_RESOLVED_INCLUDES "${SDL3_SOURCE_DIR}/include")
+  list(APPEND TP_RESOLVED_INCLUDES "${SDL3_SOURCE_DIR}/include")
 elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include")
-    list(APPEND TP_RESOLVED_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include")
+  list(APPEND TP_RESOLVED_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/SDL/include")
 endif()
 
 list(REMOVE_DUPLICATES TP_RESOLVED_INCLUDES)
@@ -425,11 +476,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 foreach(DIR ${TP_RESOLVED_INCLUDES})
-    if(DIR)
-        target_include_directories(${PROJECT_NAME} PUBLIC
+  if(DIR)
+    target_include_directories(${PROJECT_NAME} PUBLIC
             $<BUILD_INTERFACE:${DIR}>
         )
-    endif()
+  endif()
 endforeach()
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
@@ -437,7 +488,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
 )
 
 if(WIN32)
-    target_compile_definitions(${PROJECT_NAME} INTERFACE "IMGUI_API=__declspec(dllimport)")
+  target_compile_definitions(${PROJECT_NAME} INTERFACE "IMGUI_API=__declspec(dllimport)")
 endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES INTERFACE_LINK_LIBRARIES "")
@@ -448,27 +499,27 @@ export(TARGETS VEX
 )
 
 if(CMAKE_BUILD_TYPE MATCHES "Release|RelWithDebInfo|MinSizeRel")
-    if(MSVC)
-        target_compile_options(${PROJECT_NAME} PRIVATE /Zi)
-        target_link_options(${PROJECT_NAME} PRIVATE /DEBUG /OPT:REF /OPT:ICF)
-    else()
-        target_compile_options(${PROJECT_NAME} PRIVATE -g)
-        target_link_options(${PROJECT_NAME} PRIVATE -g)
-    endif()
+  if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /Zi)
+    target_link_options(${PROJECT_NAME} PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+  else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -g)
+    target_link_options(${PROJECT_NAME} PRIVATE -g)
+  endif()
 
-    if(UNIX AND NOT APPLE)
-        set(ENGINE_LIB "$<TARGET_FILE:${PROJECT_NAME}>")
-        set(ENGINE_DEBUG_FILE "${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so.debug")
+  if(UNIX AND NOT APPLE)
+    set(ENGINE_LIB "$<TARGET_FILE:${PROJECT_NAME}>")
+    set(ENGINE_DEBUG_FILE "${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so.debug")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND objcopy --only-keep-debug ${ENGINE_LIB} ${ENGINE_DEBUG_FILE}
             COMMAND strip --strip-debug --strip-unneeded ${ENGINE_LIB}
             COMMAND objcopy --add-gnu-debuglink=${ENGINE_DEBUG_FILE} ${ENGINE_LIB}
             COMMENT "Generating debug symbols for VEX Engine: ${ENGINE_DEBUG_FILE}"
         )
-    elseif(MSVC)
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  elseif(MSVC)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo ">> Engine PDB Generated: $<TARGET_PDB_FILE:${PROJECT_NAME}>"
         )
-    endif()
+  endif()
 endif()
