@@ -14,33 +14,25 @@
 
 namespace vex {
 
-struct AudioClip {
-    Uint8* buffer = nullptr;
-    Uint32 length = 0;
-    SDL_AudioSpec spec;
-    bool valid = false;
+    struct AudioClip {
+        Uint8* buffer = nullptr;
+        Uint32 length = 0;
+        SDL_AudioSpec spec;
+        bool valid = false;
+        bool isVorbisAllocated = false;
 
-    AudioClip(const std::string& path, vex::VirtualFileSystem* vfs) {
-        if (!vfs) return;
+        AudioClip(const std::string& path, vex::VirtualFileSystem* vfs);
 
-        auto fileData = vfs->load_file(path);
-        if (!fileData) {
-            vex::log(vex::LogLevel::ERROR, "AudioClip: VFS failed to load path: %s", path.c_str());
-            return;
+        ~AudioClip() {
+            if (buffer) {
+                if (isVorbisAllocated) {
+                    free(buffer);
+                } else {
+                    SDL_free(buffer);
+                }
+            }
         }
-
-        SDL_IOStream* io = SDL_IOFromConstMem(fileData->data.data(), fileData->size);
-        if (SDL_LoadWAV_IO(io, true, &spec, &buffer, &length)) {
-            valid = true;
-        } else {
-            vex::log(vex::LogLevel::ERROR, "AudioClip: SDL_LoadWAV failed for %s. SDL Error: %s", path.c_str(), SDL_GetError());
-        }
-    }
-
-    ~AudioClip() {
-        if (buffer) SDL_free(buffer);
-    }
-};
+    };
 
 enum class AudioState {
     STOPPED,

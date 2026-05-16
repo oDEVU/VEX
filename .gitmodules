@@ -46,3 +46,6 @@
 	path = Engine/Core/thirdparty/zstd
 	url = https://github.com/facebook/zstd.git
 	branch = release
+[submodule "Engine/Core/thirdparty/stb"]
+	path = Engine/Core/thirdparty/stb
+	url = https://github.com/nothings/stb.git

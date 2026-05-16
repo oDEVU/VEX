@@ -19,7 +19,7 @@ namespace vex {
         };
 
         inline const std::vector<std::string> Audio   = {
-            ".wav"
+            ".wav", ".ogg"
         };
 
         /// @brief Checks if the given extension is valid for the specified asset type.

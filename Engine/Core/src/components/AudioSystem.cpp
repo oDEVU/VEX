@@ -1,7 +1,56 @@
 #include "components/AudioSystem.hpp"
 #include "components/ErrorUtils.hpp"
+#include "../../../thirdparty/stb/stb_vorbis.c"
 
 namespace vex {
+
+    AudioClip::AudioClip(const std::string& path, vex::VirtualFileSystem* vfs) {
+        if (!vfs) return;
+
+        auto fileData = vfs->load_file(path);
+        if (!fileData) {
+            vex::log(vex::LogLevel::ERROR, "AudioClip: VFS failed to load path: %s", path.c_str());
+            return;
+        }
+
+        bool isOgg = (path.length() >= 4 && path.substr(path.length() - 4) == ".ogg");
+
+        if (isOgg) {
+            int channels, sampleRate;
+            short* decodedData;
+
+            int samplesPerChannel = stb_vorbis_decode_memory(
+                reinterpret_cast<const unsigned char*>(fileData->data.data()),
+                fileData->size,
+                &channels,
+                &sampleRate,
+                &decodedData
+            );
+
+            if (samplesPerChannel >= 0) {
+                SDL_zero(spec);
+                spec.freq = sampleRate;
+                spec.format = SDL_AUDIO_S16;
+                spec.channels = channels;
+
+                buffer = reinterpret_cast<Uint8*>(decodedData);
+                length = samplesPerChannel * channels * sizeof(short);
+
+                valid = true;
+                isVorbisAllocated = true;
+            } else {
+                vex::log(vex::LogLevel::ERROR, "AudioClip: stb_vorbis failed to decode: %s", path.c_str());
+            }
+        }
+        else {
+            SDL_IOStream* io = SDL_IOFromConstMem(fileData->data.data(), fileData->size);
+            if (SDL_LoadWAV_IO(io, true, &spec, &buffer, &length)) {
+                valid = true;
+            } else {
+                vex::log(vex::LogLevel::ERROR, "AudioClip: SDL_LoadWAV failed for %s. SDL Error: %s", path.c_str(), SDL_GetError());
+            }
+        }
+    }
 
 AudioSystem::AudioSystem(entt::registry& reg) : registry(reg) {
 }
@@ -153,6 +202,7 @@ void AudioSystem::OnAudioComponentDestroyed(entt::registry& registry, entt::enti
 }
 
 void AudioSystem::PlaySound2D(const std::string& filePath, float volume, float pitch, bool loop) {
+    try{
     if (clipCache.find(filePath) == clipCache.end()) {
         auto newClip = std::make_unique<AudioClip>(filePath, vfs);
         if (newClip->valid) {
@@ -175,6 +225,9 @@ void AudioSystem::PlaySound2D(const std::string& filePath, float volume, float p
     SDL_PutAudioStreamData(stream, clip->buffer, clip->length);
 
     standaloneStreams.push_back({stream, clip, loop});
+    } catch (const std::exception& e) {
+        log(LogLevel::ERROR, "PlaySound2D: Failed to play sound - %s", e.what());
+    }
 }
 
 }
