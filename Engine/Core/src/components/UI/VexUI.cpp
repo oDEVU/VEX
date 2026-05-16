@@ -13,7 +13,63 @@
 
 namespace vex {
 
-    void rotateQuadScalar(float* outVerts, float pivotX, float pivotY,
+std::vector<std::string> VexUI::wrapText(const std::string& text, const FontAtlas& a, float maxWidth) {
+    std::vector<std::string> lines;
+    std::string currentLine;
+    float currentWidth = 0.f;
+    size_t lastSpacePos = std::string::npos;
+
+    for (char ch : text) {
+        if (ch == '\n') {
+            lines.push_back(currentLine);
+            currentLine.clear();
+            currentWidth = 0.f;
+            lastSpacePos = std::string::npos;
+            continue;
+        }
+
+        if (ch < 32 || ch > 127) continue;
+
+        const stbtt_bakedchar& cd = a.cdata[ch - 32];
+        float advance = cd.xadvance;
+
+        if (currentWidth + advance > maxWidth && !currentLine.empty()) {
+            if (ch == ' ') {
+                lines.push_back(currentLine);
+                currentLine.clear();
+                currentWidth = 0.f;
+                lastSpacePos = std::string::npos;
+            } else if (lastSpacePos != std::string::npos) {
+                lines.push_back(currentLine.substr(0, lastSpacePos));
+
+                std::string remainder = currentLine.substr(lastSpacePos + 1);
+                currentLine = remainder + ch;
+
+                currentWidth = 0.f;
+                for (char r : currentLine) {
+                    currentWidth += a.cdata[r - 32].xadvance;
+                }
+                lastSpacePos = std::string::npos;
+            } else {
+                lines.push_back(currentLine);
+                currentLine = std::string(1, ch);
+                currentWidth = advance;
+                lastSpacePos = std::string::npos;
+            }
+        } else {
+            if (ch == ' ') {
+                lastSpacePos = currentLine.length();
+            }
+            currentLine += ch;
+            currentWidth += advance;
+        }
+    }
+    if (!currentLine.empty()) lines.push_back(currentLine);
+
+    return lines;
+}
+
+    static void rotateQuadScalar(float* outVerts, float pivotX, float pivotY,
                            float sinA, float cosA, float x0, float y0, float x1, float y1) {
         float px[] = {x0, x1, x0, x1};
         float py[] = {y0, y0, y1, y1};
@@ -27,7 +83,7 @@ namespace vex {
     }
 
     __attribute__((target("avx2")))
-    void rotateQuadAvX2(float* outVerts, float pivotX, float pivotY,
+    static void rotateQuadAvX2(float* outVerts, float pivotX, float pivotY,
                          float sinA, float cosA, float x0, float y0, float x1, float y1) {
 
         __m256 vPos = _mm256_setr_ps(x0, y0, x1, y0, x0, y1, x1, y1);
@@ -685,31 +741,12 @@ YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
 
     const FontAtlas& a = it->second;
 
-    std::vector<std::string> lines;
-    std::string currentLine;
-    float currentWidth = 0.f;
-    for (char ch : w->text) {
-        if (ch == '\n') {
-            lines.push_back(currentLine);
-            currentLine.clear();
-            currentWidth = 0.f;
-            continue;
-        }
-        if (ch < 32 || ch > 127) continue;
-        const stbtt_bakedchar& cd = a.cdata[ch - 32];
-        if (currentWidth + cd.xadvance > maxWidth && !currentLine.empty()) {
-            lines.push_back(currentLine);
-            currentLine.clear();
-            currentWidth = 0.f;
-        }
-        currentLine += ch;
-        currentWidth += cd.xadvance;
-    }
-    if (!currentLine.empty()) lines.push_back(currentLine);
+    std::vector<std::string> lines = wrapText(w->text, a, maxWidth);
 
     float lineHeight = a.ascent - a.descent;
     float totalHeight = lines.size() * lineHeight;
     float totalWidth = 0.f;
+
     for (const auto& line : lines) {
         float lineWidth = 0.f;
         for (char ch : line) {
@@ -718,6 +755,7 @@ YGSize VexUI::calculateTextSize(Widget* w, float maxWidth) {
         }
         totalWidth = std::max(totalWidth, lineWidth);
     }
+
     return {totalWidth, totalHeight};
 }
 
@@ -795,27 +833,7 @@ void VexUI::batch(Widget* w, std::vector<float>& verts, glm::vec2 parentOffset) 
         if (it != m_fontAtlases.end()) {
             const FontAtlas& a = it->second;
 
-            std::vector<std::string> lines;
-            std::string currentLine;
-            float currentWidth = 0.f;
-            for (char ch : w->text) {
-                if (ch == '\n') {
-                    lines.push_back(currentLine);
-                    currentLine.clear();
-                    currentWidth = 0.f;
-                    continue;
-                }
-                if (ch < 32 || ch > 127) continue;
-                const stbtt_bakedchar& cd = a.cdata[ch - 32];
-                if (currentWidth + cd.xadvance > width && !currentLine.empty()) {
-                    lines.push_back(currentLine);
-                    currentLine.clear();
-                    currentWidth = 0.f;
-                }
-                currentLine += ch;
-                currentWidth += cd.xadvance;
-            }
-            if (!currentLine.empty()) lines.push_back(currentLine);
+            std::vector<std::string> lines = wrapText(w->text, a, width);
 
             float cy = y + a.ascent;
 

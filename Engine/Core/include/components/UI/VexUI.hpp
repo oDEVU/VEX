@@ -364,6 +364,13 @@ private:
     /// @return The widget with the id.
     Widget* findById(Widget* w, const std::string& id);
 
+    /// @brief Wraps text to fit within a given width.
+    /// @param const std::string& text The text to wrap.
+    /// @param const FontAtlas& a The font atlas to use.
+    /// @param float maxWidth The maximum width of the text.
+    /// @return A vector of wrapped lines of text.
+    std::vector<std::string> wrapText(const std::string& text, const FontAtlas& a, float maxWidth);
+
     /// @brief Calculates the size of the text.
     /// @param Widget* w The widget to calculate the size of.
     /// @param float maxWidth The maximum width of the text.
