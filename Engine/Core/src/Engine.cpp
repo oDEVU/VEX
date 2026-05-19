@@ -17,7 +17,7 @@
 #include "components/SceneManager.hpp"
 #include "components/UtilitySystem.hpp"
 #include "components/backends/vulkan/context.hpp"
-#include "entt/entity/fwd.hpp"
+
 
 #include <cstdint>
 #include <filesystem>
@@ -122,13 +122,12 @@ void Engine::run(std::function<void()> onUpdateLoop) {
         while (SDL_PollEvent(&event)) {
             processEvent(event, m_deltaTime);
             m_imgui->processEvent(&event);
-            auto uiView = m_registry.view<UiComponent>();
-            std::vector<UiComponent> uiObjects;
-            for (auto entity : uiView) {
-                if(uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                    uiView.get<UiComponent>(entity).m_vexUI->processEvent(event);
+            vex::View<UiComponent> uiView(m_registry);
+            uiView.each([&event](vex::Entity entity, UiComponent& uiComp) {
+                if(uiComp.m_vexUI->isInitialized()){
+                    uiComp.m_vexUI->processEvent(event);
                 }
-            }
+            });
             switch (event.type) {
                 case SDL_EVENT_GAMEPAD_ADDED:
                     SDL_OpenGamepad(event.gdevice.which);
@@ -156,12 +155,12 @@ void Engine::run(std::function<void()> onUpdateLoop) {
 
         if (!m_running) break;
 
-        auto transformView = m_registry.view<TransformComponent>();
-        for (auto entity : transformView) {
-            if(!transformView.get<TransformComponent>(entity).isReady()){
-                transformView.get<TransformComponent>(entity).setRegistry(m_registry);
+        vex::View<TransformComponent> transformView(m_registry);
+        transformView.each([this](vex::Entity entity, TransformComponent& transform) {
+            if(!transform.isReady()){
+                transform.setRegistry(m_registry);
             }
-        }
+        });
 
         update(m_deltaTime);
 
@@ -273,21 +272,19 @@ void Engine::update(float deltaTime) {
     m_inputSystem->update(deltaTime);
 
     auto cameraEntity = getCamera();
-    if (cameraEntity != entt::null) {
+    if (cameraEntity != vex::NULL_ENTITY) {
         m_audioSystem->Update(cameraEntity);
     }
 
     if(m_frame > 0){
 
-        auto uiView = m_registry.view<UiComponent>();
-        std::vector<UiComponent> uiObjects;
-        for (auto entity : uiView) {
-            if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
-                uiView.get<UiComponent>(entity).m_vexUI->init();
-                uiView.get<UiComponent>(entity).m_vexUI->update(deltaTime);
+        vex::View<UiComponent> uiView(m_registry);
+        uiView.each([this, deltaTime](vex::Entity entity, UiComponent& uiComp) {
+            if(!uiComp.m_vexUI->isInitialized()){
+                uiComp.m_vexUI->init();
+                uiComp.m_vexUI->update(deltaTime);
             }
-        }
+        });
 
 
         if (m_paused && deltaTime == 0.0f) deltaTime = 0.016f;
@@ -299,14 +296,13 @@ void Engine::update(float deltaTime) {
         }
     }else{
 
-        auto uiView = m_registry.view<UiComponent>();
-        std::vector<UiComponent> uiObjects;
-        for (auto entity : uiView) {
-            if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                uiView.get<UiComponent>(entity).m_vexUI->init();
-                uiView.get<UiComponent>(entity).m_vexUI->update(deltaTime);
+        vex::View<UiComponent> uiView(m_registry);
+        uiView.each([this, deltaTime](vex::Entity entity, UiComponent& uiComp) {
+            if(!uiComp.m_vexUI->isInitialized()){
+                uiComp.m_vexUI->init();
+                uiComp.m_vexUI->update(deltaTime);
             }
-        }
+        });
 
         beginGame();
     }
@@ -323,7 +319,7 @@ void Engine::render() {
     auto renderRes = m_resolutionManager->getRenderResolution();
     auto cameraEntity = getCamera();
 
-    if (cameraEntity == entt::null) {
+    if (cameraEntity == vex::NULL_ENTITY) {
         return;
     }
 

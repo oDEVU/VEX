@@ -16,10 +16,6 @@
 	path = Engine/Core/thirdparty/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
-[submodule "Engine/Core/thirdparty/entt"]
-	path = Engine/Core/thirdparty/entt
-	url = https://github.com/skypjack/entt.git
-	branch = v3.13.x
 [submodule "Engine/Core/thirdparty/VulkanMemoryAllocator"]
 	path = Engine/Core/thirdparty/VulkanMemoryAllocator
 	url = https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git

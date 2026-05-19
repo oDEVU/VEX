@@ -16,13 +16,13 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <vector>
 #include <string>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 
 #include "components/Mesh.hpp"
 #include "components/ErrorUtils.hpp"
 #include "components/ColorTypes.hpp"
 #include "components/AssetTypes.hpp"
-#include "entt/entity/fwd.hpp"
+
 
 #include "components/ErrorUtils.hpp"
 
@@ -36,8 +36,8 @@ struct TransformComponent {
     glm::vec3 rotation = {0.0f, 0.0f, 0.0f};
     glm::vec3 scale = {1.0f, 1.0f, 1.0f};
     glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    entt::entity parent = entt::null;
-    entt::registry* m_registry = nullptr;
+    vex::Entity parent = vex::NULL_ENTITY;
+    vex::Registry* m_registry = nullptr;
     glm::mat4 cachedMatrix = glm::mat4(1.0f);
     bool dirty = true;
     #else
@@ -45,9 +45,9 @@ struct TransformComponent {
     glm::vec3 position = {0.0f, 0.0f, 0.0f};
     glm::quat m_rotationQuat = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
     glm::vec3 scale = {1.0f, 1.0f, 1.0f};
-    entt::entity parent = entt::null;
+    vex::Entity parent = vex::NULL_ENTITY;
     bool lastTransformed = true;
-    entt::registry* m_registry = nullptr;
+    vex::Registry* m_registry = nullptr;
     bool physicsAffected = false;
     glm::mat4 cachedMatrix = glm::mat4(1.0f);
     bool dirty = true;
@@ -74,23 +74,23 @@ struct TransformComponent {
     }
 
     /// @brief Constructor 1: Registry only
-    TransformComponent(entt::registry& registry)
+    TransformComponent(vex::Registry& registry)
         : m_registry(&registry) {}
 
     /// @brief Constructor 2: Registry, Position, (optional Parent)
-    TransformComponent(entt::registry& registry, glm::vec3 pos, entt::entity p = entt::null)
+    TransformComponent(vex::Registry& registry, glm::vec3 pos, vex::Entity p = vex::NULL_ENTITY)
         : m_registry(&registry), position(pos), parent(p) {}
 
     /// @brief Constructor 3: Registry, Position, Rotation (Euler degrees), (optional Parent)
-    TransformComponent(entt::registry& registry, glm::vec3 pos, glm::vec3 rot, entt::entity p = entt::null)
+    TransformComponent(vex::Registry& registry, glm::vec3 pos, glm::vec3 rot, vex::Entity p = vex::NULL_ENTITY)
         : m_registry(&registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), parent(p) {}
 
     /// @brief Constructor 4: Registry, Position, Rotation (Euler degrees), Scale, (optional Parent)
-    TransformComponent(entt::registry& registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, entt::entity p = entt::null)
+    TransformComponent(vex::Registry& registry, glm::vec3 pos, glm::vec3 rot, glm::vec3 s, vex::Entity p = vex::NULL_ENTITY)
         : m_registry(&registry), position(pos), m_rotationQuat(glm::normalize(glm::quat(glm::radians(rot)))), scale(s), parent(p) {}
 
     /// @brief Constructor 5: Registry, Parent only (useful for empty child objects)
-    TransformComponent(entt::registry& registry, entt::entity p)
+    TransformComponent(vex::Registry& registry, vex::Entity p)
         : m_registry(&registry), parent(p) {}
 
     /// @brief Default constructor is deleted since registry is required
@@ -104,13 +104,13 @@ struct TransformComponent {
             return false;
         }
 
-        if (parent != entt::null && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+        if (parent != vex::NULL_ENTITY && m_registry->has<TransformComponent>(parent)) {
             result = m_registry->get<TransformComponent>(parent).isDirty();
         }
         return (dirty || result);
     }
 
-    void setRegistry(entt::registry& reg) {
+    void setRegistry(vex::Registry& reg) {
         dirty = true;
         m_registry = &reg;
     }
@@ -127,12 +127,12 @@ struct TransformComponent {
     #endif
 
     /// @brief Set the parent entity.
-    void setParent(entt::entity newParent) {
+    void setParent(vex::Entity newParent) {
         parent = newParent;
     }
 
     /// @brief Get the parent entity.
-    entt::entity getParent() const {
+    vex::Entity getParent() const {
         return parent;
     }
 
@@ -173,7 +173,7 @@ struct TransformComponent {
 
         /// @brief Method to get the world rotation as a quaternion.
         glm::quat getWorldQuaternion() const {
-            if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+            if (parent != vex::NULL_ENTITY && m_registry && m_registry->has<TransformComponent>(parent)) {
                 return m_registry->get<TransformComponent>(parent).getWorldQuaternion() * m_rotationQuat;
             }
             return m_rotationQuat;
@@ -183,7 +183,7 @@ struct TransformComponent {
         /// @param targetWorldQuat glm::quat The desired world rotation quaternion.
         void setWorldQuaternion(glm::quat targetWorldQuat) {
                 dirty = true;
-                if (parent != entt::null && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+                if (parent != vex::NULL_ENTITY && m_registry->has<TransformComponent>(parent)) {
                     glm::quat parentWorldQuat = m_registry->get<TransformComponent>(parent).getWorldQuaternion();
                     glm::quat parentInverse = glm::inverse(parentWorldQuat);
                     m_rotationQuat = parentInverse * targetWorldQuat;
@@ -196,7 +196,7 @@ struct TransformComponent {
             /// @brief Method to set world rotation using a quaternion (for physics systems).
             /// @param targetWorldQuat glm::quat The desired world rotation quaternion.
             void setWorldQuaternionPhys(glm::quat targetWorldQuat) {
-                if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+                if (parent != vex::NULL_ENTITY && m_registry && m_registry->has<TransformComponent>(parent)) {
                     glm::quat parentWorldQuat = m_registry->get<TransformComponent>(parent).getWorldQuaternion();
                     glm::quat parentInverse = glm::inverse(parentWorldQuat);
                     m_rotationQuat = parentInverse * targetWorldQuat;
@@ -232,7 +232,7 @@ struct TransformComponent {
         local *= glm::mat4_cast(m_rotationQuat);
         local = glm::scale(local, scale);
 
-        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+        if (parent != vex::NULL_ENTITY && m_registry && m_registry->has<TransformComponent>(parent)) {
             cachedMatrix = m_registry->get<TransformComponent>(parent).recalculateMatrix() * local;
         }else{
             cachedMatrix = local;
@@ -266,20 +266,20 @@ struct TransformComponent {
     /// @brief Method to get world scale, needed when object is parented as scale parameter stores local scale.
     /// @return glm::vec3
     glm::vec3 getWorldScale() {
-        glm::vec3 worldScale = scale;
-        entt::entity current = parent;
-        while (current != entt::null && m_registry && m_registry->valid(current) && m_registry->all_of<TransformComponent>(current)) {
-            worldScale *= m_registry->get<TransformComponent>(current).scale;
-            current = m_registry->get<TransformComponent>(current).parent;
-        }
-        return worldScale;
+    glm::vec3 worldScale = scale;
+    vex::Entity current = parent;
+    while (current != vex::NULL_ENTITY && m_registry && m_registry->has<TransformComponent>(current)) {
+        worldScale *= m_registry->get<TransformComponent>(current).scale;
+        current = m_registry->get<TransformComponent>(current).parent;
     }
+    return worldScale;
+}
 
     /// @brief Method to set world position, needed when object is parented as position parameter stores local position.
     /// @param newPosition glm::vec3
     void setWorldPosition(glm::vec3 newPosition) {
         dirty = true;
-        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+        if (parent != vex::NULL_ENTITY && m_registry && m_registry->has<TransformComponent>(parent)) {
             glm::mat4 parentWorldMatrix = m_registry->get<TransformComponent>(parent).matrix();
             glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
             glm::vec4 newLocalPos4 = inverseParentMatrix * glm::vec4(newPosition, 1.0f);
@@ -292,7 +292,7 @@ struct TransformComponent {
     /// @brief Method to set world position by physics component.
     /// @param newPosition glm::vec3
     void setWorldPositionPhys(glm::vec3 newPosition) {
-        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+        if (parent != vex::NULL_ENTITY && m_registry && m_registry->has<TransformComponent>(parent)) {
             glm::mat4 parentWorldMatrix = m_registry->get<TransformComponent>(parent).matrix();
             glm::mat4 inverseParentMatrix = glm::inverse(parentWorldMatrix);
             glm::vec4 newLocalPos4 = inverseParentMatrix * glm::vec4(newPosition, 1.0f);
@@ -314,7 +314,7 @@ struct TransformComponent {
     /// @param newScale glm::vec3
     void setWorldScale(glm::vec3 newScale) {
         dirty = true;
-        if (parent != entt::null && m_registry && m_registry->valid(parent) && m_registry->all_of<TransformComponent>(parent)) {
+        if (parent != vex::NULL_ENTITY && m_registry && m_registry->has<TransformComponent>(parent)) {
             glm::vec3 parentWorldScale = m_registry->get<TransformComponent>(parent).getWorldScale();
             scale = newScale / parentWorldScale;
         } else {

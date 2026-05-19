@@ -19,7 +19,7 @@
 #include <memory>
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 
 #include "components/ResolutionManager.hpp"
 #include "components/GameInfo.hpp"
@@ -89,10 +89,16 @@ public:
     void run(std::function<void()> onUpdateLoop = nullptr);
 
     /// @brief Function returning the entity of the camera.
-    /// @return entt::entity - Entity of the camera.
-    entt::entity getCamera() {
-        auto view = m_registry.view<CameraComponent>();
-        return view.empty() ? entt::null : view.front();
+    /// @return vex::Entity - Entity of the camera.
+    vex::Entity getCamera() {
+        vex::Entity cameraEntity = vex::NULL_ENTITY;
+        vex::View<CameraComponent> view(m_registry);
+        view.each([&cameraEntity](vex::Entity e, CameraComponent&) {
+            if (cameraEntity == vex::NULL_ENTITY) {
+                cameraEntity = e;
+            }
+        });
+        return cameraEntity;
     }
 
     /// @brief Sets the resolution mode and updates the resolution manager.
@@ -137,8 +143,8 @@ public:
     /// @brief Returns  std::shared_ptr of VirtualFileSystem.
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
 
-    /// @brief Returns a reference to entt::registry.
-    entt::registry& getRegistry() { return m_registry; }
+    /// @brief Returns a reference to vex::Registry.
+    vex::Registry& getRegistry() { return m_registry; }
 
     /// @brief Returns pointer to PhysicsSystem.
     PhysicsSystem* getPhysicsSystem() { return m_physicsSystem.get(); }
@@ -244,7 +250,7 @@ protected:
     std::unique_ptr<PhysicsSystem> m_physicsSystem;
     std::unique_ptr<SceneManager> m_sceneManager;
 
-    entt::registry m_registry;
+    vex::Registry m_registry;
 
     bool m_running = true;
     bool m_paused = false;

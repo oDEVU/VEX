@@ -64,15 +64,15 @@ inline void ReparentObject(vex::GameObject* child, vex::GameObject* parent) {
 
     auto& childTc = child->GetComponent<vex::TransformComponent>();
 
-    entt::entity parentCheck = parent->GetEntity();
-    auto* registry = &child->GetEngine().getRegistry();
+    vex::Entity parentCheck = parent->GetEntity();
+    auto& registry = child->GetEngine().getRegistry();
 
-    while(parentCheck != entt::null && registry->valid(parentCheck)) {
+    while(parentCheck != vex::NULL_ENTITY && registry.has<vex::TransformComponent>(parentCheck)) {
         if(parentCheck == child->GetEntity()) {
             return;
         }
-        if(registry->all_of<vex::TransformComponent>(parentCheck)) {
-            parentCheck = registry->get<vex::TransformComponent>(parentCheck).getParent();
+        if(registry.has<vex::TransformComponent>(parentCheck)) {
+            parentCheck = registry.get<vex::TransformComponent>(parentCheck).getParent();
         } else {
             break;
         }
@@ -94,21 +94,21 @@ inline void ReparentObject(vex::GameObject* child, vex::GameObject* parent) {
  *
  * @param vex::GameObject* obj - The GameObject to draw.
  * @param std::pair<bool, vex::GameObject*>& selectedObject - The currently selected object pair (runtime status, object pointer).
- * @param const std::unordered_map<entt::entity, std::vector<vex::GameObject*>>& childrenMap - Map of parent entity to its children.
- * @param const std::unordered_set<entt::entity>& runtimeSet - Set of entities created at runtime (won't be saved).
+ * @param const std::unordered_map<vex::Entity, std::vector<vex::GameObject*>>& childrenMap - Map of parent entity to its children.
+ * @param const std::unordered_set<vex::Entity>& runtimeSet - Set of entities created at runtime (won't be saved).
  * @param SceneAction& outAction - Output parameter to store any pending action triggered by the user (rename, delete, duplicate).
  */
 inline void DrawEntityNode(
     vex::GameObject* obj,
     std::pair<bool, vex::GameObject*>& selectedObject,
-    const std::unordered_map<entt::entity, std::vector<vex::GameObject*>>& childrenMap,
-    const std::unordered_set<entt::entity>& runtimeSet,
+    const std::unordered_map<vex::Entity, std::vector<vex::GameObject*>>& childrenMap,
+    const std::unordered_set<vex::Entity>& runtimeSet,
     SceneAction& outAction,
     const char* filter = ""
 ) {
     if (!obj) return;
 
-    entt::entity entityID = obj->GetEntity();
+    vex::Entity entityID = obj->GetEntity();
 
     bool isRuntime = runtimeSet.find(entityID) != runtimeSet.end();
 
@@ -209,9 +209,9 @@ inline void DrawEntityNode(
             ImGui::Separator();
 
             if (obj->HasComponent<vex::TransformComponent>()) {
-                if (obj->GetComponent<vex::TransformComponent>().getParent() != entt::null) {
+                if (obj->GetComponent<vex::TransformComponent>().getParent() != vex::NULL_ENTITY) {
                     if (ImGui::MenuItem("Unparent")) {
-                        obj->GetComponent<vex::TransformComponent>().setParent(entt::null);
+                        obj->GetComponent<vex::TransformComponent>().setParent(vex::NULL_ENTITY);
                     }
                 }
             }
@@ -273,15 +273,15 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
         return;
     }
 
-    std::unordered_map<entt::entity, std::vector<vex::GameObject*>> childrenMap;
+    std::unordered_map<vex::Entity, std::vector<vex::GameObject*>> childrenMap;
     std::vector<vex::GameObject*> rootNodes;
-    std::unordered_set<entt::entity> runtimeSet;
+    std::unordered_set<vex::Entity> runtimeSet;
 
     auto processObjects = [&](const auto& sourceList, bool isRuntimeList) {
         for (const auto& objPtr : sourceList) {
             if (!objPtr) continue;
             vex::GameObject* obj = objPtr.get();
-            entt::entity entity = obj->GetEntity();
+            vex::Entity entity = obj->GetEntity();
 
             if (isRuntimeList) {
                 runtimeSet.insert(entity);
@@ -290,9 +290,9 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
             bool hasParent = false;
             if (obj->HasComponent<vex::TransformComponent>()) {
                 auto& tc = obj->GetComponent<vex::TransformComponent>();
-                entt::entity parentID = tc.getParent();
+                vex::Entity parentID = tc.getParent();
 
-                if (parentID != entt::null && engine.getRegistry().valid(parentID)) {
+                if (parentID != vex::NULL_ENTITY) {
                     childrenMap[parentID].push_back(obj);
                     hasParent = true;
                 }
@@ -352,8 +352,8 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
 
         if (action.type == SceneAction::DUPLICATE && action.target) {
 
-                std::function<void(vex::GameObject*, entt::entity)> recursiveCopy =
-                    [&](vex::GameObject* src, entt::entity parentEntity) {
+                std::function<void(vex::GameObject*, vex::Entity)> recursiveCopy =
+                    [&](vex::GameObject* src, vex::Entity parentEntity) {
 
                     std::string newName = "Unnamed (Copy)";
                     if (src->HasComponent<vex::NameComponent>()) {
@@ -376,11 +376,11 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
                     }
 
                     if (newObj->HasComponent<vex::TransformComponent>()) {
-                        if (parentEntity != entt::null) {
+                        if (parentEntity != vex::NULL_ENTITY) {
                              newObj->GetComponent<vex::TransformComponent>().setParent(parentEntity);
                         } else if (src->HasComponent<vex::TransformComponent>()) {
-                             entt::entity originalParent = src->GetComponent<vex::TransformComponent>().getParent();
-                             if (originalParent != entt::null) {
+                             vex::Entity originalParent = src->GetComponent<vex::TransformComponent>().getParent();
+                             if (originalParent != vex::NULL_ENTITY) {
                                  newObj->GetComponent<vex::TransformComponent>().setParent(originalParent);
                              }
                         }
@@ -407,7 +407,7 @@ inline void DrawSceneHierarchy(vex::Engine& engine, std::pair<bool, vex::GameObj
                      action.target->GetComponent<vex::NameComponent>().name = rootNewName;
                 }
 
-                recursiveCopy(action.target, entt::null);
+                recursiveCopy(action.target, vex::NULL_ENTITY);
 
                 if (action.target->HasComponent<vex::NameComponent>()) {
                      action.target->GetComponent<vex::NameComponent>().name = originalName;

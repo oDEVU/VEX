@@ -10,7 +10,7 @@
 #include "components/GameObjects/GameObjectFactory.hpp"
 
 #include "Engine.hpp"
-#include "entt/entity/fwd.hpp"
+
 
 #include "VEX/VEX_export.h"
 #include <algorithm>
@@ -63,9 +63,9 @@ std::vector<GameObject*> GetAllGameObjectsByName(const std::string& name);
 std::vector<GameObject*> GetAllGameObjectsByClassName(const std::string& classname);
 
 /// @brief Function to get a game object by its entity ID.
-/// @param entt::entity& entity - Entity of the game object to get.
+/// @param vex::Entity& entity - Entity of the game object to get.
 /// @return GameObject* - Pointer to the game object, or nullptr if not found.
-GameObject* GetGameObjectByEntity(entt::entity& entity);
+GameObject* GetGameObjectByEntity(vex::Entity& entity);
 
 /// @brief Registers a game object into the scene's internal storage.
 /// @details Places the object into `m_objects` if loading from a scene file, or `m_addedObjects` if created at runtime.

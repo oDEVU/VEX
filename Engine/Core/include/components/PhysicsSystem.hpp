@@ -9,7 +9,7 @@
 #ifndef GLM_ENABLE_EXPERIMENTAL
     #define GLM_ENABLE_EXPERIMENTAL 1
 #endif
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -123,9 +123,9 @@ namespace vex {
         std::vector<uint32_t> meshIndices;
 
         // Collision callbacks
-        std::function<void(entt::entity self, entt::entity other, const CollisionHit& hit)> onCollisionEnter;
-        std::function<void(entt::entity self, entt::entity other, const CollisionHit& hit)> onCollisionStay;
-        std::function<void(entt::entity self, entt::entity other)> onCollisionExit;
+        std::function<void(vex::Entity self, vex::Entity other, const CollisionHit& hit)> onCollisionEnter;
+        std::function<void(vex::Entity self, vex::Entity other, const CollisionHit& hit)> onCollisionStay;
+        std::function<void(vex::Entity self, vex::Entity other)> onCollisionExit;
 
         #if DEBUG
         bool updated = false;
@@ -277,20 +277,20 @@ namespace vex {
         }
 
         /// @brief Binds a callback for collision enter events.
-        /// @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
-        void addCollisionEnterBinding(std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback) {
+        /// @param std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback The callback function to bind.
+        void addCollisionEnterBinding(std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback) {
             onCollisionEnter = callback;
         }
 
         /// @brief Binds a callback for collision stay events.
-        /// @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
-        void addCollisionStayBinding(std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback) {
+        /// @param std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback The callback function to bind.
+        void addCollisionStayBinding(std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback) {
             onCollisionStay = callback;
         }
 
         /// @brief Binds a callback for collision exit events.
-        /// @param std::function<void(entt::entity, entt::entity)> callback The callback function to bind.
-        void addCollisionExitBinding(std::function<void(entt::entity, entt::entity)> callback) {
+        /// @param std::function<void(vex::Entity, vex::Entity)> callback The callback function to bind.
+        void addCollisionExitBinding(std::function<void(vex::Entity, vex::Entity)> callback) {
             onCollisionExit = callback;
         }
     };
@@ -299,8 +299,8 @@ namespace vex {
     class PhysicsSystem {
     public:
         /// @brief Constructor, initializes physics system.
-        /// @param entt::registry& registry The registry to use for entity-component system.
-        PhysicsSystem(entt::registry& registry) : m_registry(registry) {}
+        /// @param vex::Registry& registry The registry to use for entity-component system.
+        PhysicsSystem(vex::Registry& registry) : m_registry(registry) {}
 
         /// @brief Destructor, simply calls shutdown()
         ~PhysicsSystem();
@@ -435,17 +435,17 @@ namespace vex {
         bool GetBodyActive(JPH::BodyID bodyId);
 
         /// @brief Allows to recreate physics body at runtime.
-        /// @param entt::entity e The entity to create the body for.
-        /// @param entt::registry& r The registry to get the entity data from.
+        /// @param vex::Entity e The entity to create the body for.
+        /// @param vex::Registry& r The registry to get the entity data from.
         /// @param PhysicsComponent& pc The physics component to update.
         /// @return std::optional<JPH::BodyID> The ID of the created body.
-        std::optional<JPH::BodyID> CreateBodyForEntity(entt::entity e, entt::registry& r, PhysicsComponent& pc);
+        std::optional<JPH::BodyID> CreateBodyForEntity(vex::Entity e, vex::Registry& r, PhysicsComponent& pc);
 
         /// @brief Allows to recreate physics body at runtime.
-        /// @param entt::entity e The entity to create the body for.
+        /// @param vex::Entity e The entity to create the body for.
         /// @param PhysicsComponent& pc The physics component to update.
         /// @return std::optional<JPH::BodyID> The ID of the created body.
-        std::optional<JPH::BodyID> RecreateBodyForEntity(entt::entity e, PhysicsComponent& pc);
+        std::optional<JPH::BodyID> RecreateBodyForEntity(vex::Entity e, PhysicsComponent& pc);
 
         /// @brief Destroys a physics body.
         /// @param PhysicsComponent& pc The physics component to update.
@@ -488,8 +488,8 @@ namespace vex {
 
         // @brief Retrieves the entity associated with a body ID.
         // @param JPH::BodyID id - the body ID to retrieve the entity for
-        // @return entt::entity - the entity associated with the body ID
-        entt::entity getEntityByBodyId(JPH::BodyID id);
+        // @return vex::Entity - the entity associated with the body ID
+        vex::Entity getEntityByBodyId(JPH::BodyID id);
 
     private:
         friend class MyContactListener;
@@ -502,7 +502,7 @@ namespace vex {
         JPH::PhysicsSystem* m_physicsSystem = nullptr;
         JPH::DebugRenderer* m_debugRenderer = nullptr;
 
-        entt::registry& m_registry;
+        vex::Registry& m_registry;
 
         BPLayerInterfaceImpl m_bpInterface;
         ObjectVsBroadPhaseLayerFilterImpl m_objVsBpFilter;
@@ -510,7 +510,7 @@ namespace vex {
         std::unique_ptr<MyActivationListener> m_activationListener;
         std::unique_ptr<JPH::ContactListener> m_contactListener;
 
-        std::unordered_map<JPH::BodyID, entt::entity, BodyIDHasher> m_bodyToEntity;
+        std::unordered_map<JPH::BodyID, vex::Entity, BodyIDHasher> m_bodyToEntity;
 
         struct InterpCache {
                 glm::vec3 prevPos = {0.0f, 0.0f, 0.0f};
@@ -522,8 +522,6 @@ namespace vex {
                 bool desynced = false;
         };
         std::unordered_map<JPH::BodyID, InterpCache, BodyIDHasher> m_interpCache;
-
-        entt::scoped_connection m_destroyConnection;
 
         float m_fixedDt = 1.0f / 60.0f;
         float m_accumulator = 0.0f;
@@ -537,21 +535,21 @@ namespace vex {
         // @return glm::vec3 - the resulting Euler angles in degrees
         static glm::vec3 QuatToEuler(const JPH::Quat& q);
         // @brief Synchronizes a body's transform with its entity's transform.
-        // @param entt::entity e - the entity to synchronize
-        // @param entt::registry& r - the registry containing the entity
+        // @param vex::Entity e - the entity to synchronize
+        // @param vex::Registry& r - the registry containing the entity
         // @param const JPH::BodyID& id - the ID of the body to synchronize
         // @param float alpha - the interpolation factor (0.0f = no interpolation, 1.0f = full interpolation)
-        void SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id, float alpha = 1.0f);
+        void SyncBodyToTransform(vex::Entity e, vex::Registry& r, const JPH::BodyID& id, float alpha = 1.0f);
 
         // @brief Handles physics component destruction.
-        // @param entt::registry& reg - the registry containing the entity
-        // @param entt::entity e - the entity to destroy
-        void onPhysicsComponentDestroy(entt::registry& reg, entt::entity e);
+        // @param vex::Registry& reg - the registry containing the entity
+        // @param vex::Entity e - the entity to destroy
+        void onPhysicsComponentDestroy(vex::Registry& reg, vex::Entity e);
 
         // @brief Initializes a character component.
-        // @param entt::entity e - the entity to initialize
+        // @param vex::Entity e - the entity to initialize
         // @param CharacterComponent& cc - the character component to initialize
-        void InitializeCharacter(entt::entity e, CharacterComponent& cc);
+        void InitializeCharacter(vex::Entity e, CharacterComponent& cc);
 
         #include <map>
 

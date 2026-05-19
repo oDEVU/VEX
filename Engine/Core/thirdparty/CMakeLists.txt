@@ -163,10 +163,6 @@ endforeach()
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-Wno-character-conversion" COMPILER_HAS_CHAR_CONV_WARNING)
 
-#entt
-add_subdirectory(entt SYSTEM)
-target_compile_definitions(EnTT INTERFACE ENTT_NOEXCEPTION)
-
 #jolt
 set(DOUBLE_PRECISION OFF)
 set(INTERPROCEDURAL_OPTIMIZATION OFF)
@@ -319,7 +315,6 @@ target_link_libraries(thirdparty_engine INTERFACE
     VulkanMemoryAllocator
     assimp
     thirdparty_glm
-    EnTT::EnTT
     nlohmann_json
     Jolt
     ${YOGA_TARGET}

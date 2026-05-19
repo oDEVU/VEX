@@ -7,13 +7,13 @@
 #include "components/backends/vulkan/MeshManager.hpp"
 
 namespace vex {
-    ModelObject* createModelFromComponents(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent){
+    ModelObject* createModelFromComponents(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, vex::Entity parent){
         return engine.getInterface()->getMeshManager().createModel(name, meshComponent, transformComponent, parent);
     }
     MeshComponent createMeshFromPath(const std::string& path, Engine& engine){
         return engine.getInterface()->getMeshManager().loadMesh(path);
     }
-    ModelObject* createModelFromPath(const std::string& path, const std::string& name, Engine& engine, entt::entity parent){
+    ModelObject* createModelFromPath(const std::string& path, const std::string& name, Engine& engine, vex::Entity parent){
         MeshComponent meshComponent = createMeshFromPath(path, engine);
         TransformComponent transformComponent(engine.getRegistry());
         return createModelFromComponents(name, meshComponent, transformComponent, engine, parent);

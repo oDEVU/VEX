@@ -70,8 +70,8 @@ namespace vex {
     struct SerializedObject {
         std::string name;
         std::string type;
-        entt::entity originalID;
-        entt::entity originalParentID;
+        vex::Entity originalID;
+        vex::Entity originalParentID;
         std::unordered_map<std::string, nlohmann::json> components;
     };
 
@@ -82,7 +82,7 @@ namespace vex {
 
         std::vector<SerializedObject> m_serializedData;
 
-        std::vector<entt::entity> m_runtimeIDs;
+        std::vector<vex::Entity> m_runtimeIDs;
 
         /// @brief Gather scene hierarhy for later rebuild.
         void GatherHierarchy(vex::GameObject* obj, std::vector<vex::GameObject*>& outList) {
@@ -90,17 +90,16 @@ namespace vex {
             outList.push_back(obj);
 
             auto& registry = m_engine.getRegistry();
-            auto view = registry.view<vex::TransformComponent>();
-            entt::entity parentID = obj->GetEntity();
+            vex::Entity parentID = obj->GetEntity();
 
-            for (auto entity : view) {
-                if (view.get<vex::TransformComponent>(entity).getParent() == parentID) {
+            vex::View<vex::TransformComponent>(registry).each([&](vex::Entity entity, vex::TransformComponent& tc) {
+                if (tc.getParent() == parentID) {
                     auto* childObj = m_engine.getSceneManager()->GetScene(m_sceneName)->GetGameObjectByEntity(entity);
                     if (childObj) {
                         GatherHierarchy(childObj, outList);
                     }
                 }
-            }
+            });
         }
 
     public:
@@ -128,7 +127,7 @@ namespace vex {
                 if (obj->HasComponent<vex::TransformComponent>()) {
                     data.originalParentID = obj->GetComponent<vex::TransformComponent>().getParent();
                 } else {
-                    data.originalParentID = entt::null;
+                    data.originalParentID = vex::NULL_ENTITY;
                 }
 
                 const auto& regNames = vex::ComponentRegistry::getInstance().getRegisteredNames();
@@ -151,8 +150,8 @@ namespace vex {
 
             m_engine.WaitForGpu();
 
-            for (entt::entity entity : m_runtimeIDs) {
-                if (m_engine.getRegistry().valid(entity)) {
+            for (vex::Entity entity : m_runtimeIDs) {
+                if (m_engine.getRegistry().has<vex::TransformComponent>(entity)) {
                     auto* obj = scene->GetGameObjectByEntity(entity);
                     if (obj) {
                         scene->DestroyGameObject(obj);
@@ -171,7 +170,7 @@ namespace vex {
             auto* scene = m_engine.getSceneManager()->GetScene(m_sceneName);
             if (!scene) return;
 
-            std::unordered_map<entt::entity, entt::entity> oldToNewIDMap;
+            std::unordered_map<vex::Entity, vex::Entity> oldToNewIDMap;
             m_runtimeIDs.clear();
 
             for (const auto& data : m_serializedData) {
@@ -184,7 +183,7 @@ namespace vex {
 
                 scene->AddEditorGameObject(newObj);
 
-                entt::entity newID = newObj->GetEntity();
+                vex::Entity newID = newObj->GetEntity();
                 oldToNewIDMap[data.originalID] = newID;
                 m_runtimeIDs.push_back(newID);
             }
@@ -194,11 +193,11 @@ namespace vex {
             for (const auto& data : m_serializedData) {
                 if (!oldToNewIDMap.contains(data.originalID)) continue;
 
-                entt::entity newEntityID = oldToNewIDMap[data.originalID];
+                vex::Entity newEntityID = oldToNewIDMap[data.originalID];
 
-                if (registry.all_of<vex::TransformComponent>(newEntityID)) {
+                if (registry.has<vex::TransformComponent>(newEntityID)) {
                     auto& tc = registry.get<vex::TransformComponent>(newEntityID);
-                    entt::entity oldParent = data.originalParentID;
+                    vex::Entity oldParent = data.originalParentID;
 
                     if (oldToNewIDMap.contains(oldParent)) {
                         tc.setParent(oldToNewIDMap[oldParent]);

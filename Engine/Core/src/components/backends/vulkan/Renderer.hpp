@@ -16,7 +16,7 @@
 #include "components/UI/VexUI.hpp"
 #include "MeshManager.hpp"
 #include "PhysicsDebug.hpp"
-#include "entt/entity/fwd.hpp"
+
 #include <glm/glm.hpp>
 #include <chrono>
 #include <components/GameComponents/UiComponent.hpp>
@@ -26,18 +26,18 @@
 namespace vex {
     /// @brief Struct to hold information about a render item.
     struct RenderItem {
-        entt::entity entity;
+        vex::Entity entity;
         uint32_t modelIndex;
     };
 
     /// @brief Struct to hold information about a billboard render item.
     struct BillboardItem {
-        entt::entity entity;
+        vex::Entity entity;
         uint32_t texID;
     };
 
     struct EditorBillboardItem {
-        entt::entity entity;
+        vex::Entity entity;
         uint32_t texID;
         float offsetX;
     };
@@ -115,14 +115,14 @@ namespace vex {
         /// 5. Executes draw calls (using MultiDraw for transparency if supported).
         /// 6. Renders UI components on top.
         /// @param SceneRenderData& data - Frame context data.
-        /// @param const entt::entity cameraEntity - The active camera entity.
-        /// @param entt::registry& registry - ECS registry to query objects.
+        /// @param const vex::Entity cameraEntity - The active camera entity.
+        /// @param vex::Registry& registry - ECS registry to query objects.
         /// @param int frame - Current frame number (used for animations/logic).
         /// @param const std::vector<DebugVertex>* debugLines - Optional debug lines to draw.
         /// @param bool isEditorMode - If true, applies editor-specific logic (e.g. gizmos, override camera).
         void renderScene(SceneRenderData& data,
-                         const entt::entity cameraEntity,
-                         entt::registry& registry,
+                         const vex::Entity cameraEntity,
+                         vex::Registry& registry,
                          int frame,
                          const std::vector<DebugVertex>* debugLines = nullptr,
                          bool isEditorMode = false);
@@ -230,8 +230,8 @@ namespace vex {
         std::vector<BillboardItem> bMaskedQueue;  ///< Queue of masked billboards to render.
         std::vector<BillboardItem> bTransQueue;   ///< Queue of transparent billboards to render.
         std::vector<EditorBillboardItem> bEditorQueue;  ///< Queue of editor billboards to render.
-        std::vector<entt::entity> pMaskedQueue;   ///< Queue of entities with masked particle emitters.
-        std::vector<entt::entity> pTransQueue;    ///< Queue of entities with transparent particle emitters.
+        std::vector<vex::Entity> pMaskedQueue;   ///< Queue of entities with masked particle emitters.
+        std::vector<vex::Entity> pTransQueue;    ///< Queue of entities with transparent particle emitters.
 
         std::vector<VkBuffer> m_indirectBuffers;
         std::vector<VmaAllocation> m_indirectAllocations;

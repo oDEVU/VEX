@@ -8,14 +8,11 @@ namespace vex {
 /// @details Spawns new particles based on spawn rate, updates their physics (gravity, velocity),
 /// scales and colors over their lifetime, and removes dead particles. Maps the remaining active
 /// particles to a structure suitable for the GPU (ParticleGPUData).
-/// @param entt::registry& registry - The ECS registry to fetch emitters and transforms.
+/// @param vex::Registry& registry - The ECS registry to fetch emitters and transforms.
 /// @param float deltaTime - Time elapsed since the last frame.
-void ProcessParticles(entt::registry& registry, float deltaTime) {
-    auto particleView = registry.view<TransformComponent, ParticleEmitterComponent>();
-    for (auto entity : particleView) {
-        auto& trans = particleView.get<TransformComponent>(entity);
-        auto& emit = particleView.get<ParticleEmitterComponent>(entity);
-
+void ProcessParticles(vex::Registry& registry, float deltaTime) {
+    vex::View<TransformComponent, ParticleEmitterComponent> particleView(registry);
+    particleView.each([&](vex::Entity entity, TransformComponent& trans, ParticleEmitterComponent& emit) {
         trans.recalculateMatrix();
 
         emit.spawnTimer += deltaTime;
@@ -72,16 +69,13 @@ void ProcessParticles(entt::registry& registry, float deltaTime) {
                 ++it;
             }
         }
-    }
+    });
 }
 
 
-void ProcessUtilityComponents(entt::registry& registry, float deltaTime, Engine& engine) {
-    auto oscView = registry.view<OscillatorComponent, TransformComponent>();
-    for (auto entity : oscView) {
-        auto& osc = oscView.get<OscillatorComponent>(entity);
-        auto& transform = oscView.get<TransformComponent>(entity);
-
+void ProcessUtilityComponents(vex::Registry& registry, float deltaTime, Engine& engine) {
+    vex::View<OscillatorComponent, TransformComponent> oscView(registry);
+    oscView.each([&](vex::Entity entity, OscillatorComponent& osc, TransformComponent& transform) {
         if (!osc.initialized) {
             osc.startPosition = transform.getLocalPosition();
             osc.initialized = true;
@@ -91,13 +85,10 @@ void ProcessUtilityComponents(entt::registry& registry, float deltaTime, Engine&
         float wave = std::sin((osc.currentTime + osc.timeOffset) * osc.frequency) * osc.amplitude;
 
         transform.setLocalPosition(osc.startPosition + (osc.axis * wave));
-    }
+    });
 
-    auto tweenView = registry.view<TweenComponent, TransformComponent>();
-    for (auto entity : tweenView) {
-        auto& tween = tweenView.get<TweenComponent>(entity);
-        auto& transform = tweenView.get<TransformComponent>(entity);
-
+    vex::View<TweenComponent, TransformComponent> tweenView(registry);
+    tweenView.each([&](vex::Entity entity, TweenComponent& tween, TransformComponent& transform) {
         if (!tween.initialized) {
             tween.startPosition = transform.getLocalPosition();
             tween.initialized = true;
@@ -119,12 +110,10 @@ void ProcessUtilityComponents(entt::registry& registry, float deltaTime, Engine&
                 tween.timeElapsed = 0.0f;
             }
         }
-    }
+    });
 
-
-    auto lifetimeView = registry.view<LifetimeComponent>();
-    for (auto entity : lifetimeView) {
-        auto& lifetime = lifetimeView.get<LifetimeComponent>(entity);
+    vex::View<LifetimeComponent> lifetimeView(registry);
+    lifetimeView.each([&](vex::Entity entity, LifetimeComponent& lifetime) {
         lifetime.timeElapsed += deltaTime;
 
         if (lifetime.timeElapsed >= lifetime.lifespan) {
@@ -139,7 +128,7 @@ void ProcessUtilityComponents(entt::registry& registry, float deltaTime, Engine&
                 }
             }
         }
-    }
+    });
 }
 
 } // namespace vex

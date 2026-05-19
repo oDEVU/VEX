@@ -63,8 +63,12 @@ namespace vex {
         #if DEBUG
         template<>
             void vex::GenericComponentInspector<vex::PhysicsComponent>(GameObject& obj) {
-                std::string name = entt::type_id<vex::PhysicsComponent>().name().data();
-                std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+                std::string name = typeid(vex::PhysicsComponent).name();
+                size_t lastColon = name.rfind("::");
+                size_t lastBracket = name.find(']');
+                std::string extracted = (lastColon != std::string::npos)
+                    ? name.substr(lastColon + 2, (lastBracket != std::string::npos ? lastBracket : name.length()) - (lastColon + 2))
+                    : name;
 
                 ImGui::PushID(name.c_str());
                 if (obj.HasComponent<vex::PhysicsComponent>()) {
@@ -122,8 +126,12 @@ namespace vex {
                     #if DEBUG
                     template<>
                         void vex::GenericComponentInspector<vex::TransformComponent>(GameObject& obj) {
-                            std::string name = entt::type_id<vex::TransformComponent>().name().data();
-                            std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+                            std::string name = typeid(vex::TransformComponent).name();
+                            size_t lastColon = name.rfind("::");
+                            size_t lastBracket = name.find(']');
+                            std::string extracted = (lastColon != std::string::npos)
+                                ? name.substr(lastColon + 2, (lastBracket != std::string::npos ? lastBracket : name.length()) - (lastColon + 2))
+                                : name;
 
                             ImGui::PushID(name.c_str());
                             if (obj.HasComponent<vex::TransformComponent>()) {
@@ -233,13 +241,13 @@ void SceneManager::clearScenes(Engine& engine) {
     m_scenes.clear();
 
     auto& registry = engine.getRegistry();
-    std::vector<entt::entity> toDestroy;
+    std::vector<vex::Entity> toDestroy;
 
-    for (auto entity : registry.storage<entt::entity>()) {
-        if (!registry.all_of<PersistentTag>(entity)) {
+    vex::View<NameComponent>(registry).each([&](vex::Entity entity, NameComponent& comp) {
+        if (!registry.has<PersistentTag>(entity)) {
             toDestroy.push_back(entity);
         }
-    }
+    });
 
     for (auto entity : toDestroy) {
         registry.destroy(entity);

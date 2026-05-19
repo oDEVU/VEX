@@ -10,7 +10,7 @@
 #include <imgui_internal.h>
 #include <ImReflect.hpp>
 #include <glm/glm.hpp>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 
 #include <string>
 #include <algorithm>

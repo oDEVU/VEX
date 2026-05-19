@@ -118,6 +118,11 @@ set(public_header_files
     include/components/GameObjects/LightObject.hpp
     include/components/GameObjects/Creators/ModelCreator.hpp
     include/components/GameObjects/GameObjectFactory.hpp
+    include/components/ECS/ComponentStorage.hpp
+    include/components/ECS/ECS.hpp
+    include/components/ECS/Registry.hpp
+    include/components/ECS/Types.hpp
+    include/components/ECS/View.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}_export.h
 )
 

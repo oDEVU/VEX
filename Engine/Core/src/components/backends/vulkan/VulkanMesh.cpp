@@ -133,7 +133,7 @@ namespace vex {
         const glm::vec3& cameraPos,
         uint32_t modelIndex,
         uint32_t frameIndex,
-        entt::entity entity,
+        vex::Entity entity,
         std::vector<TransparentTriangle>& outTriangles
     ) {
         glm::mat3 rotationScaleMatrix = glm::mat3(modelMatrix);

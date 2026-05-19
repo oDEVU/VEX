@@ -1,7 +1,6 @@
 #ifndef GLM_ENABLE_EXPERIMENTAL
     #define GLM_ENABLE_EXPERIMENTAL 1
 #endif
-#include <entt/entity/fwd.hpp>
 #include <components/PhysicsSystem.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
@@ -69,7 +68,9 @@ namespace vex {
         m_contactListener = std::make_unique<MyContactListener>(*this);
         m_physicsSystem->SetContactListener(m_contactListener.get());
 
-        m_destroyConnection = m_registry.on_destroy<PhysicsComponent>().connect<&PhysicsSystem::onPhysicsComponentDestroy>(*this);
+        m_registry.on_destroy<PhysicsComponent>([this](vex::Entity entity, PhysicsComponent& pc) {
+            this->onPhysicsComponentDestroy(m_registry, entity);
+        });
 
         return true;
     }
@@ -83,11 +84,9 @@ namespace vex {
 
         try {
             if (m_physicsSystem) {
-                auto view = m_registry.view<PhysicsComponent>();
-                for (auto e : view) {
-                    auto& pc = view.get<PhysicsComponent>(e);
+                vex::View<PhysicsComponent>(m_registry).each([&](vex::Entity e, PhysicsComponent& pc) {
                     DestroyBodyForEntity(pc);
-                }
+                });
             }
         } catch (const std::exception& e) {
             handle_exception(e);
@@ -144,28 +143,25 @@ namespace vex {
 
             auto& bodyInterface = m_physicsSystem->GetBodyInterface();
 
-            auto view = m_registry.view<PhysicsComponent, TransformComponent>();
-            for (auto e : view) {
-                auto& tc = view.get<TransformComponent>(e);
-                auto& pc = view.get<PhysicsComponent>(e);
-
+            vex::View<PhysicsComponent, TransformComponent>(m_registry).each([&, this](vex::Entity e, PhysicsComponent& pc, TransformComponent& tc) {
                 if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) [[unlikely]] {
                     CreateBodyForEntity(e, m_registry, pc);
-                    continue;
-                }else if(pc.updated){
+                    return;
+                }
+                else if(pc.updated){
                     RecreateBodyForEntity(e, pc);
-                    continue;
+                    return;
                 }
 
                 fastSyncTransform(tc.getWorldPosition(), tc.getWorldQuaternion(), bodyInterface, pc.bodyId);
-            }
+            });
             #else
             log("This method is meant for debug builds only");
             #endif
-        }
+    }
 
-        void PhysicsSystem::InitializeCharacter(entt::entity e, CharacterComponent& cc) {
-            if (!m_registry.all_of<TransformComponent>(e)) return;
+        void PhysicsSystem::InitializeCharacter(vex::Entity e, CharacterComponent& cc) {
+            if (!m_registry.has<TransformComponent>(e)) return;
             auto& tc = m_registry.get<TransformComponent>(e);
 
             JPH::Ref<JPH::Shape> shape = new JPH::CapsuleShape(
@@ -187,131 +183,105 @@ namespace vex {
     void PhysicsSystem::update(float deltaTime) {
         if (!m_physicsSystem) return;
 
-        // 1. Sync PhysicsComponents to Jolt (Your existing lines 179-195)
-            auto& bodyInterface = m_physicsSystem->GetBodyInterface();
-            auto view = m_registry.view<PhysicsComponent, TransformComponent>();
-            for (auto e : view) {
-                auto& tc = view.get<TransformComponent>(e);
-                auto& pc = view.get<PhysicsComponent>(e);
-                if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) {
-                    CreateBodyForEntity(e, m_registry, pc);
-                    continue;
-                }
+        auto& bodyInterface = m_physicsSystem->GetBodyInterface();
 
+        vex::View<PhysicsComponent, TransformComponent>(m_registry).each([&, this](vex::Entity e, PhysicsComponent& pc, TransformComponent& tc) {
+            if (pc.bodyId.GetIndexAndSequenceNumber() == JPH::BodyID::cInvalidBodyID) {
+                CreateBodyForEntity(e, m_registry, pc);
+                return;
+            }
+
+            auto& cache = m_interpCache[pc.bodyId];
+
+            glm::vec3 vexPos = tc.getWorldPosition();
+            glm::quat vexRot = tc.getWorldQuaternion();
+
+            float posDiff = glm::distance(vexPos, cache.lastVisualPos);
+            glm::quat jRotGlm(cache.lastVisualRot.w, cache.lastVisualRot.x, cache.lastVisualRot.y, cache.lastVisualRot.z);
+            float rotDiff = 1.0f - std::abs(glm::dot(vexRot, jRotGlm));
+
+            if (posDiff > 0.0001f || rotDiff > 0.0001f || cache.desynced) {
+                bodyInterface.SetPositionAndRotation(
+                    pc.bodyId,
+                    JPH::RVec3(vexPos.x, vexPos.y, vexPos.z),
+                    glmToJph(vexRot),
+                    JPH::EActivation::Activate
+                );
+
+                cache.prevPos = cache.currPos = cache.lastVisualPos = vexPos;
+                cache.prevRot = cache.currRot = cache.lastVisualRot = vexRot;
+                cache.desynced = false;
+            }
+        });
+
+        m_accumulator += deltaTime;
+
+        while (m_accumulator >= m_fixedDt) {
+            vex::View<PhysicsComponent, TransformComponent>(m_registry).each([&, this](vex::Entity e, PhysicsComponent& pc, TransformComponent& tc) {
                 auto& cache = m_interpCache[pc.bodyId];
+                cache.prevPos = cache.currPos;
+                cache.prevRot = cache.currRot;
+            });
+
+            vex::View<CharacterComponent, TransformComponent>(m_registry).each([&, this](vex::Entity e, CharacterComponent& cc, TransformComponent& tc) {
+                if (!cc.isInitialized()) InitializeCharacter(e, cc);
 
                 glm::vec3 vexPos = tc.getWorldPosition();
-                glm::quat vexRot = tc.getWorldQuaternion();
-
-                float posDiff = glm::distance(vexPos, cache.lastVisualPos);
-                glm::quat jRotGlm(cache.lastVisualRot.w, cache.lastVisualRot.x, cache.lastVisualRot.y, cache.lastVisualRot.z);
-                float rotDiff = 1.0f - std::abs(glm::dot(vexRot, jRotGlm));
-
-                if (posDiff > 0.0001f || rotDiff > 0.0001f || cache.desynced) {
-                    bodyInterface.SetPositionAndRotation(
-                        pc.bodyId,
-                        JPH::RVec3(vexPos.x, vexPos.y, vexPos.z),
-                        glmToJph(vexRot),
-                        JPH::EActivation::Activate
-                    );
-
-                    cache.prevPos = cache.currPos = cache.lastVisualPos = vexPos;
-                    cache.prevRot = cache.currRot = cache.lastVisualRot = vexRot;
-                    cache.desynced = false;
-                }
-            }
-
-            m_accumulator += deltaTime;
-
-            auto charView = m_registry.view<CharacterComponent, TransformComponent>();
-
-            while (m_accumulator >= m_fixedDt) {
-                for (auto e : view) {
-                    auto& pc = view.get<PhysicsComponent>(e);
-                    auto& cache = m_interpCache[pc.bodyId];
-                    cache.prevPos = cache.currPos;
-                    cache.prevRot = cache.currRot;
+                JPH::RVec3 charPos = cc.character->GetPosition();
+                if (glm::distance(vexPos, glm::vec3(charPos.GetX(), charPos.GetY(), charPos.GetZ())) > 0.0001f) {
+                    cc.character->SetPosition(JPH::RVec3(vexPos.x, vexPos.y, vexPos.z));
                 }
 
-                for (auto e : charView) {
-                    auto& cc = charView.get<CharacterComponent>(e);
-                    auto& tc = charView.get<TransformComponent>(e);
+                JPH::Vec3 currentVelocity = cc.character->GetLinearVelocity();
 
-                    if (!cc.isInitialized()) InitializeCharacter(e, cc);
-
-                    glm::vec3 vexPos = tc.getWorldPosition();
-                    JPH::RVec3 charPos = cc.character->GetPosition();
-                    if (glm::distance(vexPos, glm::vec3(charPos.GetX(), charPos.GetY(), charPos.GetZ())) > 0.0001f) {
-                        cc.character->SetPosition(JPH::RVec3(vexPos.x, vexPos.y, vexPos.z));
-                    }
-
-                    JPH::Vec3 currentVelocity = cc.character->GetLinearVelocity();
-
-                    float newVerticalVel = currentVelocity.GetY() + m_physicsSystem->GetGravity().GetY() * m_fixedDt;
-                    if (cc.character->IsSupported()) {
-                        newVerticalVel = std::max(0.0f, newVerticalVel);
-                    }
-
-                    JPH::Vec3 finalVelocity(cc.controlInput.x, (newVerticalVel + cc.controlInput.y), cc.controlInput.z);
-                    cc.character->SetLinearVelocity(finalVelocity);
-
-                    JPH::CharacterVirtual::ExtendedUpdateSettings updateSettings;
-                    JPH::ObjectLayer charLayer = 0;
-
-                    cc.character->ExtendedUpdate(
-                        m_fixedDt,
-                        m_physicsSystem->GetGravity(),
-                        updateSettings,
-                        m_physicsSystem->GetDefaultBroadPhaseLayerFilter(charLayer),
-                        m_physicsSystem->GetDefaultLayerFilter(charLayer),
-                        {}, {}, *m_tempAllocator
-                    );
-
-                    JPH::RVec3 newPos = cc.character->GetPosition();
-                    tc.setWorldPositionPhys(glm::vec3(newPos.GetX(), newPos.GetY(), newPos.GetZ()));
+                float newVerticalVel = currentVelocity.GetY() + m_physicsSystem->GetGravity().GetY() * m_fixedDt;
+                if (cc.character->IsSupported()) {
+                    newVerticalVel = std::max(0.0f, newVerticalVel);
                 }
 
-                m_physicsSystem->Update(m_fixedDt, collisionSteps, m_tempAllocator, m_jobSystem);
+                JPH::Vec3 finalVelocity(cc.controlInput.x, (newVerticalVel + cc.controlInput.y), cc.controlInput.z);
+                cc.character->SetLinearVelocity(finalVelocity);
 
-                for (auto e : view) {
-                    auto& pc = view.get<PhysicsComponent>(e);
-                    auto& cache = m_interpCache[pc.bodyId];
-                    JPH::RVec3 pos = bodyInterface.GetCenterOfMassPosition(pc.bodyId);
-                    JPH::Quat rot = bodyInterface.GetRotation(pc.bodyId);
-                    cache.currPos = glm::vec3(pos.GetX(), pos.GetY(), pos.GetZ());
-                    cache.currRot = glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ());
-                }
+                JPH::CharacterVirtual::ExtendedUpdateSettings updateSettings;
+                JPH::ObjectLayer charLayer = 0;
 
-                m_accumulator -= m_fixedDt;
-            }
+                cc.character->ExtendedUpdate(
+                    m_fixedDt,
+                    m_physicsSystem->GetGravity(),
+                    updateSettings,
+                    m_physicsSystem->GetDefaultBroadPhaseLayerFilter(charLayer),
+                    m_physicsSystem->GetDefaultLayerFilter(charLayer),
+                    {}, {}, *m_tempAllocator
+                );
 
-            for (auto e : charView) {
-                auto& cc = charView.get<CharacterComponent>(e);
-                cc.controlInput = glm::vec3(0.0f);
-            }
+                JPH::RVec3 newPos = cc.character->GetPosition();
+                tc.setWorldPositionPhys(glm::vec3(newPos.GetX(), newPos.GetY(), newPos.GetZ()));
+            });
 
-            float alpha = m_accumulator / m_fixedDt;
+            m_physicsSystem->Update(m_fixedDt, 1, m_tempAllocator, m_jobSystem);
 
-        #ifdef VEX_HAS_PARALLEL_EXECUTION
-            if(view.size_hint() > 64){
-                //log("--- mt ---");
-                std::for_each(std::execution::par_unseq, view.begin(), view.end(), [&](auto e) {
-                    auto& pc = view.get<PhysicsComponent>(e);
-                    if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
-                        SyncBodyToTransform(e, m_registry, pc.bodyId, alpha);
-                    }
-                });
-            }else
-        #endif
-        {
-            //log("--- st ---");
-            for (auto e : view) {
-                auto& pc = view.get<PhysicsComponent>(e);
-                if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
-                    SyncBodyToTransform(e, m_registry, pc.bodyId, alpha);
-                }
-            }
+            vex::View<PhysicsComponent, TransformComponent>(m_registry).each([&, this](vex::Entity e, PhysicsComponent& pc, TransformComponent& tc) {
+                auto& cache = m_interpCache[pc.bodyId];
+                JPH::RVec3 pos = bodyInterface.GetCenterOfMassPosition(pc.bodyId);
+                JPH::Quat rot = bodyInterface.GetRotation(pc.bodyId);
+                cache.currPos = glm::vec3(pos.GetX(), pos.GetY(), pos.GetZ());
+                cache.currRot = glm::quat(rot.GetW(), rot.GetX(), rot.GetY(), rot.GetZ());
+            });
+
+            m_accumulator -= m_fixedDt;
         }
+
+        vex::View<CharacterComponent, TransformComponent>(m_registry).each([&, this](vex::Entity e, CharacterComponent& cc, TransformComponent& tc) {
+            cc.controlInput = glm::vec3(0.0f);
+        });
+
+        float alpha = m_accumulator / m_fixedDt;
+
+        vex::View<PhysicsComponent, TransformComponent>(m_registry).each([&, this](vex::Entity e, PhysicsComponent& pc, TransformComponent& tc) {
+            if (pc.bodyId.GetIndexAndSequenceNumber() != JPH::BodyID::cInvalidBodyID) {
+                SyncBodyToTransform(e, m_registry, pc.bodyId, alpha);
+            }
+        });
     }
 
     void PhysicsSystem::WeldVertices(const std::vector<glm::vec3>& inVerts, const std::vector<uint32_t>& inIndices,
@@ -357,8 +327,8 @@ namespace vex {
         }
     }
 
-    std::optional<JPH::BodyID> PhysicsSystem::CreateBodyForEntity(entt::entity e, entt::registry& r, PhysicsComponent& pc) {
-        if (!m_physicsSystem || !r.all_of<TransformComponent>(e)) return std::nullopt;
+    std::optional<JPH::BodyID> PhysicsSystem::CreateBodyForEntity(vex::Entity e, vex::Registry& r, PhysicsComponent& pc) {
+        if (!m_physicsSystem || !r.has<TransformComponent>(e)) return std::nullopt;
 
         auto& t = r.get<TransformComponent>(e);
         JPH::RVec3 pos(t.getWorldPosition().x, t.getWorldPosition().y, t.getWorldPosition().z);
@@ -409,7 +379,7 @@ namespace vex {
             if (pc.meshVertices.empty() || pc.meshIndices.empty()) {
                 log(LogLevel::ERROR, "Mesh shape has no vertices or indices");
 
-                if(r.any_of<MeshComponent>(e)){
+                if (r.has<MeshComponent>(e)) {
                     auto& mc = r.get<MeshComponent>(e);
 
                     if (!mc.meshData.submeshes.empty()) {
@@ -517,7 +487,7 @@ namespace vex {
         return bodyId;
     }
 
-    std::optional<JPH::BodyID> PhysicsSystem::RecreateBodyForEntity(entt::entity e, PhysicsComponent& pc) {
+    std::optional<JPH::BodyID> PhysicsSystem::RecreateBodyForEntity(vex::Entity e, PhysicsComponent& pc) {
         DestroyBodyForEntity(pc);
         return CreateBodyForEntity(e, m_registry, pc);
     }
@@ -532,8 +502,8 @@ namespace vex {
         pc.bodyId = JPH::BodyID(JPH::BodyID::cInvalidBodyID);
     }
 
-    void PhysicsSystem::onPhysicsComponentDestroy(entt::registry& reg, entt::entity e) {
-        if (reg.all_of<PhysicsComponent>(e)) {
+    void PhysicsSystem::onPhysicsComponentDestroy(vex::Registry& reg, vex::Entity e) {
+        if (reg.has<PhysicsComponent>(e)) {
             auto& pc = reg.get<PhysicsComponent>(e);
             DestroyBodyForEntity(pc);
         }
@@ -550,7 +520,7 @@ namespace vex {
         return glm::degrees(glm::eulerAngles(gq));
     }
 
-    void PhysicsSystem::SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id, float alpha) {
+    void PhysicsSystem::SyncBodyToTransform(vex::Entity e, vex::Registry& r, const JPH::BodyID& id, float alpha) {
         if(!enableSmoothing) alpha = 1.f;
 
         auto& t = r.get<TransformComponent>(e);
@@ -600,9 +570,9 @@ namespace vex {
         return dummy;
     }
 
-    entt::entity PhysicsSystem::getEntityByBodyId(JPH::BodyID id) {
+    vex::Entity PhysicsSystem::getEntityByBodyId(JPH::BodyID id) {
         auto it = m_bodyToEntity.find(id);
-        return it != m_bodyToEntity.end() ? it->second : entt::null;
+        return it != m_bodyToEntity.end() ? it->second : vex::NULL_ENTITY;
     }
 
     class IgnoreSensorFilter : public JPH::BodyFilter {
@@ -747,36 +717,36 @@ namespace vex {
     }
 
     void MyContactListener::OnContactAdded(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings) {
-        entt::entity e1 = m_system.getEntityByBodyId(inBody1.GetID());
-        entt::entity e2 = m_system.getEntityByBodyId(inBody2.GetID());
+        vex::Entity e1 = m_system.getEntityByBodyId(inBody1.GetID());
+        vex::Entity e2 = m_system.getEntityByBodyId(inBody2.GetID());
         CollisionHit hit;
         hit.position = glm::vec3(inManifold.mWorldSpaceNormal.GetX(), inManifold.mWorldSpaceNormal.GetY(), inManifold.mWorldSpaceNormal.GetZ());
         hit.normal = hit.position;
         hit.impulse = ioSettings.mCombinedRestitution;
 
-        if (e1 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e1)) {
+        if (e1 != vex::NULL_ENTITY && m_system.m_registry.has<PhysicsComponent>(e1)) {
             auto& pc = m_system.m_registry.get<PhysicsComponent>(e1);
             if (pc.onCollisionEnter) pc.onCollisionEnter(e1, e2, hit);
         }
-        if (e2 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e2)) {
+        if (e2 != vex::NULL_ENTITY && m_system.m_registry.has<PhysicsComponent>(e2)) {
             auto& pc = m_system.m_registry.get<PhysicsComponent>(e2);
             if (pc.onCollisionEnter) pc.onCollisionEnter(e2, e1, hit);
         }
     }
 
     void MyContactListener::OnContactPersisted(const JPH::Body& inBody1, const JPH::Body& inBody2, const JPH::ContactManifold& inManifold, JPH::ContactSettings& ioSettings) {
-        entt::entity e1 = m_system.getEntityByBodyId(inBody1.GetID());
-        entt::entity e2 = m_system.getEntityByBodyId(inBody2.GetID());
+        vex::Entity e1 = m_system.getEntityByBodyId(inBody1.GetID());
+        vex::Entity e2 = m_system.getEntityByBodyId(inBody2.GetID());
         CollisionHit hit;
         hit.position = glm::vec3(inManifold.mWorldSpaceNormal.GetX(), inManifold.mWorldSpaceNormal.GetY(), inManifold.mWorldSpaceNormal.GetZ());
         hit.normal = hit.position;
         hit.impulse = ioSettings.mCombinedRestitution;
 
-        if (e1 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e1)) {
+        if (e1 != vex::NULL_ENTITY && m_system.m_registry.has<PhysicsComponent>(e1)) {
             auto& pc = m_system.m_registry.get<PhysicsComponent>(e1);
             if (pc.onCollisionStay) pc.onCollisionStay(e1, e2, hit);
         }
-        if (e2 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e2)) {
+        if (e2 != vex::NULL_ENTITY && m_system.m_registry.has<PhysicsComponent>(e2)) {
             auto& pc = m_system.m_registry.get<PhysicsComponent>(e2);
             if (pc.onCollisionStay) pc.onCollisionStay(e2, e1, hit);
         }
@@ -785,14 +755,14 @@ namespace vex {
     void MyContactListener::OnContactRemoved(const JPH::SubShapeIDPair& inSubShapePair) {
         JPH::BodyID id1 = inSubShapePair.GetBody1ID();
         JPH::BodyID id2 = inSubShapePair.GetBody2ID();
-        entt::entity e1 = m_system.getEntityByBodyId(id1);
-        entt::entity e2 = m_system.getEntityByBodyId(id2);
+        vex::Entity e1 = m_system.getEntityByBodyId(id1);
+        vex::Entity e2 = m_system.getEntityByBodyId(id2);
 
-        if (e1 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e1)) {
+        if (e1 != vex::NULL_ENTITY && m_system.m_registry.has<PhysicsComponent>(e1)) {
             auto& pc = m_system.m_registry.get<PhysicsComponent>(e1);
             if (pc.onCollisionExit) pc.onCollisionExit(e1, e2);
         }
-        if (e2 != entt::null && m_system.m_registry.all_of<PhysicsComponent>(e2)) {
+        if (e2 != vex::NULL_ENTITY && m_system.m_registry.has<PhysicsComponent>(e2)) {
             auto& pc = m_system.m_registry.get<PhysicsComponent>(e2);
             if (pc.onCollisionExit) pc.onCollisionExit(e2, e1);
         }

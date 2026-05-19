@@ -52,13 +52,15 @@ namespace vex {
         }
     }
 
-AudioSystem::AudioSystem(entt::registry& reg) : registry(reg) {
+AudioSystem::AudioSystem(vex::Registry& reg) : registry(reg) {
 }
 
 void AudioSystem::Init(vex::VirtualFileSystem* vfs) {
     this->vfs = vfs;
 
-    registry.on_destroy<AudioSourceComponent>().connect<&AudioSystem::OnAudioComponentDestroyed>(this);
+    registry.on_destroy<AudioSourceComponent>([this](vex::Entity entity, AudioSourceComponent&) {
+        OnAudioComponentDestroyed(registry, entity);
+    });
 
     if (!SDL_InitSubSystem(SDL_INIT_AUDIO)) {
         throw_error("Failed to initialize audio subsystem");
@@ -67,19 +69,15 @@ void AudioSystem::Init(vex::VirtualFileSystem* vfs) {
     deviceID = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
 }
 
-void AudioSystem::Update(entt::entity cameraEntity) {
-    auto view = registry.view<AudioSourceComponent>();
-
+void AudioSystem::Update(vex::Entity cameraEntity) {
     glm::vec3 listenerPos = glm::vec3(0.0f);
-    if (registry.valid(cameraEntity) && registry.all_of<TransformComponent>(cameraEntity)) {
+    if (registry.has<TransformComponent>(cameraEntity)) {
         listenerPos = registry.get<TransformComponent>(cameraEntity).getWorldPosition();
     }else{
         log(LogLevel::ERROR, "No valid camera entity found");
     }
 
-    for (auto entity : view) {
-        auto& comp = view.get<AudioSourceComponent>(entity);
-
+    vex::View<AudioSourceComponent>(registry).each([&, this, listenerPos](vex::Entity entity, AudioSourceComponent& comp) {
         if (comp.autoPlay) {
             comp.Play();
             comp.autoPlay = false;
@@ -93,7 +91,7 @@ void AudioSystem::Update(entt::entity cameraEntity) {
                 } else {
                     comp.Stop();
                     comp.stateDirty = false;
-                    continue;
+                    return;
                 }
             }
             comp.setAudioClip(clipCache[comp.audioFilePath].get());
@@ -127,10 +125,14 @@ void AudioSystem::Update(entt::entity cameraEntity) {
             comp.stateDirty = false;
         }
 
-        if (streamMap.find(entity) == streamMap.end()) continue;
+        if (streamMap.find(entity) == streamMap.end()) {
+            return;
+        }
         SDL_AudioStream* stream = streamMap[entity];
 
-        if (!stream) continue;
+        if (!stream) {
+            return;
+        }
 
         if (comp.loop && SDL_GetAudioStreamAvailable(stream) < comp.getAudioClip()->length / 2) {
             SDL_PutAudioStreamData(stream, comp.getAudioClip()->buffer, comp.getAudioClip()->length);
@@ -141,12 +143,12 @@ void AudioSystem::Update(entt::entity cameraEntity) {
             streamMap.erase(entity);
             comp.Stop();
             comp.stateDirty = false;
-            continue;
+            return;
         }
 
         float finalVolume = comp.volume;
         if (comp.is3D) {
-            if (registry.all_of<TransformComponent>(entity)) {
+            if (registry.has<TransformComponent>(entity)) {
                 auto& transform = registry.get<TransformComponent>(entity);
                 float dist = glm::distance(listenerPos, transform.getWorldPosition());
 
@@ -160,7 +162,7 @@ void AudioSystem::Update(entt::entity cameraEntity) {
 
         SDL_SetAudioStreamGain(stream, finalVolume);
         SDL_SetAudioStreamFrequencyRatio(stream, comp.pitch);
-    }
+    });
 
     for (auto it = standaloneStreams.begin(); it != standaloneStreams.end(); ) {
         SDL_AudioStream* stream = it->stream;
@@ -193,7 +195,7 @@ void AudioSystem::Shutdown() {
     SDL_CloseAudioDevice(deviceID);
 }
 
-void AudioSystem::OnAudioComponentDestroyed(entt::registry& registry, entt::entity entity) {
+void AudioSystem::OnAudioComponentDestroyed(vex::Registry& registry, vex::Entity entity) {
     auto it = streamMap.find(entity);
     if (it != streamMap.end()) {
         SDL_DestroyAudioStream(it->second);

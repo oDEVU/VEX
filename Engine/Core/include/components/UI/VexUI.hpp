@@ -19,7 +19,7 @@
 #include <glm/glm.hpp>
 #include <nlohmann/json.hpp>
 #include <yoga/Yoga.h>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 #include <SDL3/SDL.h>
 #include <volk.h>
 

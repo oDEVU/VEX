@@ -6,7 +6,6 @@
 #include <cstdlib>
 
 #include "components/PhysicsSystem.hpp"
-#include "entt/entity/entity.hpp"
 
 #ifdef _WIN32
     #include <windows.h>

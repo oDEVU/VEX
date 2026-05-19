@@ -84,8 +84,8 @@ namespace vex {
 
         /// @brief Handles the dropping of a mesh asset.
         /// @param const std::string& filepath - Path to the dropped mesh asset.
-        /// @param entt::entity parent - Optional parent entity for the instantiated mesh.
-        void HandleMeshDrop(const std::string& filepath, entt::entity parent = entt::null);
+        /// @param vex::Entity parent - Optional parent entity for the instantiated mesh.
+        void HandleMeshDrop(const std::string& filepath, vex::Entity parent = vex::NULL_ENTITY);
 
         /// @brief Handler for post-hot-reload operations.
         void OnHotReload();
@@ -165,10 +165,10 @@ namespace vex {
 
         /**
                  * @brief Retrieves the GameObject corresponding to a given entity ID and updates the selected object pair.
-                 * @param entt::entity entity - The entity ID to look up.
+                 * @param vex::Entity entity - The entity ID to look up.
                  * @param std::pair<bool, vex::GameObject*>& selectedObject - The pair to update with the selection status and pointer.
                  */
-        void ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject);
+        void ExtractObjectByEntity(vex::Entity entity, std::pair<bool, vex::GameObject*>& selectedObject);
 
         /**
                  * @brief Saves the current EditorProperties configuration to a JSON file.

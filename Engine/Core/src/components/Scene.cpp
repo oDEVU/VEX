@@ -171,7 +171,7 @@ void Scene::load(){
         auto it = objectDirectory.find(parentName);
         if (it != objectDirectory.end()) {
             GameObject* parentObj = it->second;
-            if (parentObj->isValid() && m_engine->getRegistry().valid(parentObj->GetEntity())) {
+            if (parentObj->isValid()) {
                 child->ParentTo(parentObj->GetEntity()); //
                 log("Parented object '%s' to '%s'", child->GetComponent<NameComponent>().name.c_str(), parentName.c_str());
             }
@@ -327,7 +327,7 @@ std::vector<GameObject*> Scene::GetAllGameObjectsByClassName(const std::string& 
     return returnVector;
 }
 
-GameObject* Scene::GetGameObjectByEntity(entt::entity& entity){
+GameObject* Scene::GetGameObjectByEntity(vex::Entity& entity){
     for(const auto& obj : m_objects){
         if(obj->GetEntity() == entity){
             return obj.get();
@@ -364,20 +364,20 @@ void Scene::Save(const std::string& path) {
         {"ntfsArtifacts", env.ntfsArtifacts}
     };
 
-    std::unordered_map<entt::entity, std::vector<GameObject*>> hierarchyMap;
+    std::unordered_map<vex::Entity, std::vector<GameObject*>> hierarchyMap;
     std::vector<GameObject*> rootObjects;
 
     for (const auto& objPtr : m_objects) {
         if (!objPtr || !objPtr->isValid()) continue;
 
         GameObject* obj = objPtr.get();
-        entt::entity parentEntity = entt::null;
+        vex::Entity parentEntity = vex::NULL_ENTITY;
 
         if (obj->HasComponent<TransformComponent>()) {
             parentEntity = obj->GetComponent<TransformComponent>().getParent();
         }
 
-        if (parentEntity != entt::null && m_engine->getRegistry().valid(parentEntity)) {
+        if (parentEntity != vex::NULL_ENTITY) {
             hierarchyMap[parentEntity].push_back(obj);
         } else {
             rootObjects.push_back(obj);
@@ -397,7 +397,7 @@ void Scene::Save(const std::string& path) {
 
         sortedObjects.push_back(currentObj);
 
-        entt::entity currentEntity = currentObj->GetEntity();
+        vex::Entity currentEntity = currentObj->GetEntity();
 
         if (hierarchyMap.find(currentEntity) != hierarchyMap.end()) {
             for (auto* child : hierarchyMap[currentEntity]) {
@@ -416,8 +416,8 @@ void Scene::Save(const std::string& path) {
         objJson["type"] = obj->getObjectType();
 
         if (obj->HasComponent<TransformComponent>()) {
-            entt::entity parentEntity = obj->GetComponent<TransformComponent>().getParent();
-            if (parentEntity != entt::null && m_engine->getRegistry().valid(parentEntity)) {
+            vex::Entity parentEntity = obj->GetComponent<TransformComponent>().getParent();
+            if (parentEntity != vex::NULL_ENTITY) {
                 GameObject* parentObj = GetGameObjectByEntity(parentEntity);
                 if (parentObj) {
                     objJson["parent"] = parentObj->GetComponent<NameComponent>().name;

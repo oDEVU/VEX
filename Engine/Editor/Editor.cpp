@@ -258,20 +258,19 @@ namespace vex {
             scene->FlushDestructionQueue();
         }
 
-        auto billboardView = m_registry.view<vex::EditorBillboardComponent>();
-        for (auto entity : billboardView) {
+        vex::View<vex::EditorBillboardComponent>(m_registry).each([&](vex::Entity entity, vex::EditorBillboardComponent& comp) {
             m_registry.remove<vex::EditorBillboardComponent>(entity);
-        }
+        });
 
-        auto addIcon = [&](entt::entity entity, const char* path) {
-            auto& comp = m_registry.get_or_emplace<vex::EditorBillboardComponent>(entity);
+        auto addIcon = [&](vex::Entity entity, const char* path) {
+            auto& comp = m_registry.add_or_replace<vex::EditorBillboardComponent>(entity);
             comp.texturePaths.emplace_back(path);
         };
 
-        for(auto entity : m_registry.view<vex::LightComponent>()) addIcon(entity, "../Assets/icons/lightbulb-fill.png");
-        for(auto entity : m_registry.view<vex::ParticleEmitterComponent>()) addIcon(entity, "../Assets/icons/sparkling-fill.png");
-        for(auto entity : m_registry.view<vex::FogComponent>()) addIcon(entity, "../Assets/icons/foggy-fill.png");
-        for(auto entity : m_registry.view<vex::AudioSourceComponent>()) addIcon(entity, "../Assets/icons/file-music-fill.png");
+        vex::View<vex::LightComponent>(m_registry).each([&](vex::Entity entity, vex::LightComponent& comp) { addIcon(entity, "../Assets/icons/lightbulb-fill.png"); });
+        vex::View<vex::ParticleEmitterComponent>(m_registry).each([&](vex::Entity entity, vex::ParticleEmitterComponent& comp) { addIcon(entity, "../Assets/icons/sparkling-fill.png"); });
+        vex::View<vex::FogComponent>(m_registry).each([&](vex::Entity entity, vex::FogComponent& comp) { addIcon(entity, "../Assets/icons/foggy-fill.png"); });
+        vex::View<vex::AudioSourceComponent>(m_registry).each([&](vex::Entity entity, vex::AudioSourceComponent& comp) { addIcon(entity, "../Assets/icons/file-music-fill.png"); });
         m_camera->Update(deltaTime);
         m_physicsSystem->SyncBodies();
 
@@ -291,7 +290,7 @@ namespace vex {
 
     void Editor::render() {
         auto cameraEntity = m_camera->GetEntity();
-        if (cameraEntity == entt::null) return;
+        if (cameraEntity == vex::NULL_ENTITY) return;
 
         if(getResolutionMode() != ResolutionMode::NATIVE){
             setResolutionMode(ResolutionMode::NATIVE);
@@ -409,8 +408,8 @@ namespace vex {
     void Editor::drawGizmo(const glm::vec2& viewportPos, const glm::vec2& viewportSize) {
         m_isHoveringGizmoUI = false;
 
-        auto selectedEntity = m_selectedObject.second ? m_selectedObject.second->GetEntity() : entt::null;
-        if (selectedEntity == entt::null || !m_registry.all_of<TransformComponent>(selectedEntity)) return;
+        auto selectedEntity = m_selectedObject.second ? m_selectedObject.second->GetEntity() : vex::NULL_ENTITY;
+        if (selectedEntity == vex::NULL_ENTITY || !m_registry.has<TransformComponent>(selectedEntity)) return;
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();
@@ -500,8 +499,8 @@ namespace vex {
         if (manipulated) {
             glm::mat4 localMatrix = transformMatrix;
 
-            entt::entity parent = tc.getParent();
-            if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+            vex::Entity parent = tc.getParent();
+            if (parent != vex::NULL_ENTITY && m_registry.has<vex::TransformComponent>(parent) && m_registry.has<TransformComponent>(parent)) {
                 glm::mat4 parentMatrix = m_registry.get<TransformComponent>(parent).matrix();
                 localMatrix = glm::inverse(parentMatrix) * transformMatrix;
             }
@@ -558,10 +557,10 @@ namespace vex {
         else return -1.0f;
     }
 
-    void Editor::ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
+    void Editor::ExtractObjectByEntity(vex::Entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
         auto* obj = getSceneManager()->GetScene(getSceneManager()->getLastSceneName())->GetGameObjectByEntity(entity);
         if(obj){
-            if (obj->HasComponent<TransformComponent>() && obj->GetComponent<TransformComponent>().getParent() != entt::null) {
+            if (obj->HasComponent<TransformComponent>() && obj->GetComponent<TransformComponent>().getParent() != vex::NULL_ENTITY) {
                 ExtractObjectByEntity(obj->GetComponent<TransformComponent>().getParent(), selectedObject);
             }else{
                 selectedObject.first = false;
@@ -570,7 +569,7 @@ namespace vex {
         }
     }
 
-    void Editor::HandleMeshDrop(const std::string& filepath, entt::entity parent) {
+    void Editor::HandleMeshDrop(const std::string& filepath, vex::Entity parent) {
         std::filesystem::path path(filepath);
         std::string filename = path.stem().string();
 
@@ -579,7 +578,7 @@ namespace vex {
 
         newObj->AddComponent(TransformComponent{});
 
-        if (parent != entt::null) {
+        if (parent != vex::NULL_ENTITY) {
             newObj->GetComponent<vex::TransformComponent>().setParent(parent);
         }
 
@@ -727,7 +726,7 @@ namespace vex {
                     std::string ext = path.extension().string();
 
                     if (AssetExtensions::IsValid(ext, AssetExtensions::Mesh)) {
-                        HandleMeshDrop(filepath, entt::null);
+                        HandleMeshDrop(filepath, vex::NULL_ENTITY);
                     }
                 }
                 ImGui::EndDragDropTarget();
@@ -765,16 +764,11 @@ namespace vex {
                 glm::vec3 rayOrigin = glm::vec3(rayStartWorld);
 
                 float closestDist = std::numeric_limits<float>::max();
-                entt::entity hitEntity = entt::null;
+                vex::Entity hitEntity = vex::NULL_ENTITY;
 
-                auto viewGroup = m_registry.view<TransformComponent, MeshComponent>();
-
-                for (auto entity : viewGroup) {
-                    auto& mesh = viewGroup.get<MeshComponent>(entity);
-                    auto& transform = viewGroup.get<TransformComponent>(entity);
-
+                vex::View<TransformComponent, MeshComponent>(m_registry).each([&](vex::Entity entity, TransformComponent& transform, MeshComponent& mesh) {
                     if (raySphereIntersect(rayOrigin, rayDir, mesh.worldCenter, mesh.worldRadius) < 0.0f) {
-                        continue;
+                        return;
                     }
 
                     glm::mat4 modelMat = transform.matrix();
@@ -814,8 +808,8 @@ namespace vex {
                             hitEntity = entity;
                         }
                     }
-                }
-                if (hitEntity != entt::null) {
+                });
+                if (hitEntity != vex::NULL_ENTITY) {
                     ExtractObjectByEntity(hitEntity, m_selectedObject);
 
                     log("Selected Entity ID: %d", (uint32_t)hitEntity);

@@ -4,8 +4,7 @@
 #include "components/Mesh.hpp"
 #include "components/ErrorUtils.hpp"
 #include "components/ThreadPool.hpp"
-#include "entt/entity/entity.hpp"
-#include "entt/entity/fwd.hpp"
+
 #include <fstream>
 #include <iterator>
 #include <unordered_set>
@@ -26,7 +25,7 @@ namespace vex {
         log("MeshManager destroyed");
     }
 
-    ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, entt::entity parent = entt::null){
+    ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, vex::Entity parent = vex::NULL_ENTITY){
         log("Constructing model: %s...", name.c_str());
 
         std::string tempName = name;
@@ -68,7 +67,7 @@ namespace vex {
             handle_exception(e);
         }
 
-        //entt::entity modelEntity = m_p_engine->getRegistry().create();
+        //vex::Entity modelEntity = m_p_engine->getRegistry()->.create();
         ModelObject* modelObject = new ModelObject(*m_p_engine, tempName, meshComponent, transformComponent);
         //modelObject->cleanup = [this](std::string& tempName, const MeshComponent& meshComponent) { destroyModel(tempName, meshComponent); };
         return modelObject;
@@ -290,7 +289,7 @@ namespace vex {
         m_meshBoundsCache.clear();
     }
 
-    void MeshManager::onMeshComponentConstruct(entt::registry& registry, entt::entity entity) {
+    void MeshManager::onMeshComponentConstruct(vex::Registry& registry, vex::Entity entity) {
         auto& meshComponent = registry.get<MeshComponent>(entity);
 
         if (!m_freeModelIds.empty()) {
@@ -311,17 +310,17 @@ namespace vex {
             m_vulkanMeshes.at(path)->addInstance();
         }
 
-        if(registry.any_of<PhysicsComponent>(entity)) {
+        if(registry.has<PhysicsComponent>(entity)) {
             auto& oldPC = registry.get<PhysicsComponent>(entity);
             if(oldPC.shape == ShapeType::MESH){
                 PhysicsComponent newPC = PhysicsComponent::Mesh(meshComponent, oldPC.bodyType, oldPC.mass, oldPC.friction, oldPC.bounce);
-                registry.replace<PhysicsComponent>(entity, newPC);
+                registry.add_or_replace<PhysicsComponent>(entity, newPC);
             }
 
         }
     }
 
-    void MeshManager::onMeshComponentDestroy(entt::registry& registry, entt::entity entity) {
+    void MeshManager::onMeshComponentDestroy(vex::Registry& registry, vex::Entity entity) {
         auto& meshComponent = registry.get<MeshComponent>(entity);
 
         m_freeModelIds.push_back(meshComponent.id);

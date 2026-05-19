@@ -7,7 +7,7 @@
 #pragma once
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 #include <unordered_map>
 #include "SDL3/SDL_mouse.h"
 #include "components/GameComponents/InputComponent.hpp"
@@ -30,9 +30,9 @@ enum class InputMode {
 class InputSystem {
 public:
     /// @brief Constructor for InputSystem.
-    /// @param entt::registry& registry Reference to the entity registry.
+    /// @param vex::Registry& registry Reference to the entity registry.
     /// @param SDL_Window* window Pointer to the SDL window.
-    InputSystem(entt::registry& registry, SDL_Window* window);
+    InputSystem(vex::Registry& registry, SDL_Window* window);
 
     /// @brief Sets the input processing mode.
     /// @details
@@ -66,7 +66,7 @@ private:
         bool wasProcessedAsPressed = false;
     };
 
-    entt::registry& m_registry;
+    vex::Registry& m_registry;
     SDL_Window* m_window;
     InputMode m_inputMode;
     std::unordered_map<SDL_Scancode, KeyState> keyStates;

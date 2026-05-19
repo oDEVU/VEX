@@ -1,12 +1,12 @@
 #include "Renderer.hpp"
 #include "components/backends/vulkan/Pipeline.hpp"
 #include "components/backends/vulkan/uniforms.hpp"
-#include "entt/entity/fwd.hpp"
+
 #include <cstdint>
 #include <memory>
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 #include <components/GameComponents/BasicComponents.hpp>
 #include <components/GameComponents/EditorBillboardComponent.hpp>
 #include "frustum.hpp"
@@ -342,7 +342,7 @@ namespace vex {
         }
     }
 
-        void Renderer::renderScene(SceneRenderData& data, const entt::entity cameraEntity, entt::registry& registry, int frame, const std::vector<DebugVertex>* debugLines, bool isEditorMode) {
+        void Renderer::renderScene(SceneRenderData& data, const vex::Entity cameraEntity, vex::Registry& registry, int frame, const std::vector<DebugVertex>* debugLines, bool isEditorMode) {
             VkCommandBuffer cmd = data.commandBuffer;
 
             auto now = std::chrono::high_resolution_clock::now();
@@ -364,26 +364,26 @@ namespace vex {
             }
 
             glm::vec3 finalClearColor = m_r_context.m_environment.clearColor;
-            auto fogView = registry.view<FogComponent>();
+            bool fogHandled = false;
+            vex::View<FogComponent> fogView(registry);
 
-            for (auto entity : fogView) {
-                auto& fc = fogView.get<FogComponent>(entity);
+            fogView.each([&](vex::Entity entity, FogComponent& fc) {
+                if (fogHandled) return;
+
                 m_sceneUBO.fogColor = glm::vec4(fc.color, fc.density);
                 m_sceneUBO.fogDistances = glm::vec2(fc.start, fc.end);
 
                 float skyMixFactor = glm::clamp(fc.density, 0.0f, 1.0f);
                 finalClearColor = glm::mix(finalClearColor, fc.color, skyMixFactor);
 
-                break;
-            }
+                fogHandled = true;
+            });
 
-            auto modelView = registry.view<TransformComponent, MeshComponent>();
             std::vector<MeshComponent*> pendingMeshes;
+            vex::View<TransformComponent, MeshComponent> preModelView(registry);
 
-            for (auto entity : modelView) {
-                auto& mesh = modelView.get<MeshComponent>(entity);
+            preModelView.each([&](vex::Entity entity, TransformComponent& tc, MeshComponent& mesh) {
                 const std::string& path = mesh.meshData.meshPath;
-
                 if (!path.empty() && !m_p_meshManager->isMeshLoaded(path)) {
                     bool found = false;
                     for (auto* m : pendingMeshes) {
@@ -396,7 +396,7 @@ namespace vex {
                         pendingMeshes.push_back(&mesh);
                     }
                 }
-            }
+            });
 
             if (!pendingMeshes.empty()) {
                 m_p_meshManager->loadMeshesAsync(pendingMeshes);
@@ -555,26 +555,8 @@ namespace vex {
                 frustumSimd.init(camFrustum);
             }
 
-            auto it = modelView.begin();
-            auto end = modelView.end();
-
-            for (; it != end; ++it) {
-                const auto entity = *it;
-
-                auto nextIt = it;
-                ++nextIt;
-                if (nextIt != end) {
-                    const auto nextEntity = *nextIt;
-                    if(const auto* nextMesh = registry.try_get<MeshComponent>(nextEntity)) {
-                        _mm_prefetch(reinterpret_cast<const char*>(nextMesh), _MM_HINT_T0);
-                    }
-                    if(const auto* nextTrans = registry.try_get<TransformComponent>(nextEntity)) {
-                        _mm_prefetch(reinterpret_cast<const char*>(nextTrans), _MM_HINT_T0);
-                    }
-                }
-
-                auto& transform = modelView.get<TransformComponent>(entity);
-                auto& mesh = modelView.get<MeshComponent>(entity);
+            vex::View<TransformComponent, MeshComponent> modelView(registry);
+            modelView.each([&](vex::Entity entity, TransformComponent& transform, MeshComponent& mesh) {
                 bool boundsNeedUpdate = transform.isDirty() || mesh.getIsFresh() || isEditorMode || mesh.worldRadius <= 0.0f;
                 glm::mat4 modelMatrix = transform.matrix();
 
@@ -610,37 +592,35 @@ namespace vex {
                         visible = camFrustum.testSphere(mesh.worldCenter, mesh.worldRadius);
                     }
 
-                    if (!visible) continue;
+                    if (!visible) return;
                 }
 
-                auto lightView = registry.view<TransformComponent, LightComponent>();
-
+                vex::View<TransformComponent, LightComponent> lightView(registry);
                 SceneLightsUBO lightUBO;
                 lightUBO.lightCount = 0;
 
-                for(auto lightEntity : lightView){
-
+                lightView.each([&](vex::Entity lightEntity, TransformComponent& lightTransform, LightComponent& light) {
                     if (lightUBO.lightCount >= MAX_DYNAMIC_LIGHTS) {
-                        lightUBO.lightCount = MAX_DYNAMIC_LIGHTS;
-                        log(LogLevel::WARNING, "Limit reached of per object dynamic lights, rest of the light wont affect this mesh.");
-                        break;
+                        return;
                     }
 
-                    auto& light = lightView.get<LightComponent>(lightEntity);
-                    auto& transform = lightView.get<TransformComponent>(lightEntity);
-
-                    if(!transform.isReady()){
-                        transform.setRegistry(registry);
+                    if(!lightTransform.isReady()){
+                        lightTransform.setRegistry(registry);
                     }
 
-                    float dist = glm::distance(transform.getWorldPosition(), mesh.worldCenter);
+                    float dist = glm::distance(lightTransform.getWorldPosition(), mesh.worldCenter);
                     if (dist < (light.radius + mesh.worldRadius)) {
                         auto& targetLight = lightUBO.lights[lightUBO.lightCount];
-                        targetLight.position = glm::vec4(transform.getWorldPosition(), light.radius);
+                        targetLight.position = glm::vec4(lightTransform.getWorldPosition(), light.radius);
                         targetLight.color = glm::vec4(light.color, light.intensity);
                         lightUBO.lightCount++;
+
+                        if (lightUBO.lightCount == MAX_DYNAMIC_LIGHTS) {
+                            log(LogLevel::WARNING, "Limit reached of per object dynamic lights, rest of the light wont affect this mesh.");
+                        }
                     }
-                }
+                });
+
                 m_p_resources->updateLightUBO(m_r_context.currentFrame, modelIndex, lightUBO);
 
                 if (mesh.renderType == RenderType::OPAQUE) {
@@ -648,63 +628,57 @@ namespace vex {
                     /* auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
                     if (vulkanMesh) {
                         vulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
-                    } */
+                    }
+                    */
                 } else if (mesh.renderType == RenderType::MASKED) {
                     maskedQueue.push_back({entity, modelIndex});
-                    /* auto& vulkanMesh = m_p_meshManager->getVulkanMeshByMesh(mesh);
-                    if (vulkanMesh) {
-                        vulkanMesh->draw(cmd, m_p_maskPipeline->layout(), *m_p_resources, data.frameIndex, modelIndex, modelMatrix, mesh.color);
-                    } */
                 } else if (mesh.renderType == RenderType::TRANSPARENT) {
                     transparentQueue.push_back({entity, modelIndex});
                 }
+
                 modelIndex++;
                 if(mesh.getIsFresh()) mesh.setRendered();
-            }
+            });
 
-            auto bView = registry.view<TransformComponent, BillboardComponent>();
-            for (auto entity : bView) {
-                auto& bill = bView.get<BillboardComponent>(entity);
+            vex::View<TransformComponent, BillboardComponent> bView(registry);
+            bView.each([&](vex::Entity entity, TransformComponent& tc, BillboardComponent& bill) {
                 uint32_t tIndex = m_p_resources->getTextureIndex(GetAssetPath(bill.texturePath));
                 if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
 
                 if (bill.isTransparent) bTransQueue.push_back({entity, tIndex});
                 else bMaskedQueue.push_back({entity, tIndex});
-            }
+            });
 
-            auto pView = registry.view<ParticleEmitterComponent>();
-            for (auto entity : pView) {
-                auto& emit = pView.get<ParticleEmitterComponent>(entity);
-                if (emit.activeParticles.empty()) continue;
+            vex::View<ParticleEmitterComponent> pView(registry);
+            pView.each([&](vex::Entity entity, ParticleEmitterComponent& emit) {
+                if (emit.activeParticles.empty()) return;
 
                 if (emit.isTransparent) pTransQueue.push_back(entity);
                 else pMaskedQueue.push_back(entity);
-            }
+            });
 
 #if DEBUG
-            if(isEditorMode){
-                auto bView = registry.view<EditorBillboardComponent>();
-                for (auto entity : bView) {
-                    auto& bill = bView.get<EditorBillboardComponent>(entity);
+if(isEditorMode){
+    vex::View<EditorBillboardComponent> bEditorView(registry);
+    bEditorView.each([&](vex::Entity entity, EditorBillboardComponent& bill) {
+        float offsetStep = 1.2f;
+        float currentOffset = -((bill.texturePaths.size() - 1) * offsetStep) / 2.0f;
 
-                    float offsetStep = 1.2f;
-                    float currentOffset = -((bill.texturePaths.size() - 1) * offsetStep) / 2.0f;
-
-                    for (const auto& path : bill.texturePaths) {
-                        std::string correctPath = (GetExecutableDir() / path.c_str()).string();
-                        uint32_t tIndex = m_p_resources->getTextureIndex(correctPath);
-                        if (tIndex == 0) {
-                            if (m_p_resources->loadTexture(correctPath, correctPath)) {
-                                tIndex = m_p_resources->getTextureIndex(correctPath);
-                            }
-                        }
-                        if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
-
-                        bEditorQueue.push_back({entity, tIndex, currentOffset});
-                        currentOffset += offsetStep;
-                    }
+        for (const auto& path : bill.texturePaths) {
+            std::string correctPath = (GetExecutableDir() / path.c_str()).string();
+            uint32_t tIndex = m_p_resources->getTextureIndex(correctPath);
+            if (tIndex == 0) {
+                if (m_p_resources->loadTexture(correctPath, correctPath)) {
+                    tIndex = m_p_resources->getTextureIndex(correctPath);
                 }
             }
+            if (tIndex == 0) tIndex = m_p_resources->getTextureIndex("default");
+
+            bEditorQueue.push_back({entity, tIndex, currentOffset});
+            currentOffset += offsetStep;
+        }
+    });
+}
 #endif
 
             for (const auto& item : opaqueQueue) {
@@ -719,14 +693,15 @@ namespace vex {
 
             #if DEBUG
             if(isEditorMode){
-                auto modelView = registry.view<TransformComponent, CameraComponent>();
-                for (auto entity : modelView) {
-                    if(cameraEntity == entity){
-                        break;
+                vex::View<TransformComponent, CameraComponent> camView(registry);
+                camView.each([&](vex::Entity entity, TransformComponent& transform, CameraComponent& cam) {
+                    if(cameraEntity == entity) {
+                        return;
                     }
-                    auto& transform = modelView.get<TransformComponent>(entity);
+
                     glm::vec3 worldScale = transform.getWorldScale();
                     transform.setWorldScale(glm::vec3(1.f));
+
                     if(m_editorCameraVulkanMesh->getNumOfInstances() <= 0){
                         m_editorCameraMesh.loadFromRawFile("../Assets/meshes/editorCamera.obj");
                         m_editorCameraVulkanMesh->upload(m_editorCameraMesh);
@@ -737,7 +712,7 @@ namespace vex {
                         m_editorCameraVulkanMesh->draw(cmd, m_p_pipeline->layout(), *m_p_resources, data.frameIndex, 0, transform.matrix(), mc);
                     }
                     transform.setWorldScale(worldScale);
-                }
+                });
             }
             #endif
 
@@ -817,7 +792,6 @@ namespace vex {
                     vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_p_billboardMaskedPipeline->layout(), 1, 1, &bindlessSet, 0, nullptr);
                 }
                 for (const auto& item : bEditorQueue) {
-                    if (!registry.valid(item.entity)) continue;
                     auto* trans = registry.try_get<TransformComponent>(item.entity);
 
                     BillboardPushData push{};
@@ -1056,11 +1030,12 @@ namespace vex {
 
             if (frame != 0) {
                 m_uiObjects.clear();
-                auto uiView = registry.view<UiComponent>();
-                for (auto entity : uiView) {
-                    if(uiView.get<UiComponent>(entity).m_vexUI->isInitialized())
-                        m_uiObjects.emplace_back(uiView.get<UiComponent>(entity));
-                }
+                vex::View<UiComponent> uiView(registry);
+                uiView.each([&](vex::Entity entity, UiComponent& uiComp) {
+                    if(uiComp.m_vexUI->isInitialized()) {
+                        m_uiObjects.emplace_back(uiComp);
+                    }
+                });
                 std::sort(m_uiObjects.begin(), m_uiObjects.end(), [](const UiComponent &f, const UiComponent &s) { return f.m_vexUI->getZIndex() < s.m_vexUI->getZIndex(); });
 
                 for(const auto& uiObject : m_uiObjects) {

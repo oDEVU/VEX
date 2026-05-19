@@ -261,8 +261,12 @@ namespace vex {
     void GenericComponentInspector(GameObject& obj) {
     #if DEBUG
         if (obj.HasComponent<T>()) {
-            std::string name = entt::type_id<T>().name().data();
-            std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+            std::string name = typeid(T).name();
+            size_t lastColon = name.rfind("::");
+            size_t lastBracket = name.find(']');
+            std::string extracted = (lastColon != std::string::npos)
+                ? name.substr(lastColon + 2, (lastBracket != std::string::npos ? lastBracket : name.length()) - (lastColon + 2))
+                : name;
 
             ImGui::PushID(name.c_str());
             if (ImGui::CollapsingHeader(extracted.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {

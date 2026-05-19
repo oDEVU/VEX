@@ -138,7 +138,6 @@ All libraries are included as git submodules. Their respective licenses may diff
 - [assimp](https://github.com/assimp/assimp)
 - [cpptrace](https://github.com/jeremy-rifkin/cpptrace)
 - [cr](https://github.com/fungos/cr)
-- [entt](https://github.com/skypjack/entt)
 - [Dear ImGui](https://github.com/ocornut/imgui)
 - [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)
 - [ImReflect](https://github.com/Sven-vh/ImReflect)
