@@ -1,7 +1,7 @@
 var classvex_1_1PhysicsSystem =
 [
     [ "InterpCache", "structvex_1_1PhysicsSystem_1_1InterpCache.html", null ],
-    [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html#a9328d456cb41c2082006ba2d660b2dd5", null ],
+    [ "PhysicsSystem", "classvex_1_1PhysicsSystem.html#a43fa4f717f63897b0c602bdfe53372ab", null ],
     [ "~PhysicsSystem", "classvex_1_1PhysicsSystem.html#af0162eccb2cfdc2c320a435797de3e92", null ],
     [ "AddAngularImpulse", "classvex_1_1PhysicsSystem.html#a67b9f41f4fdc25640083de847a1b8e5d", null ],
     [ "AddAngularVelocity", "classvex_1_1PhysicsSystem.html#a7f45399f103dad5feaa1e343f3751478", null ],
@@ -11,7 +11,7 @@ var classvex_1_1PhysicsSystem =
     [ "AddImpulseAtPosition", "classvex_1_1PhysicsSystem.html#abf95555e3924c98e90dc6c4c08bb7bae", null ],
     [ "AddLinearVelocity", "classvex_1_1PhysicsSystem.html#a48af0298212c041d3578f70069839bfe", null ],
     [ "AddTorque", "classvex_1_1PhysicsSystem.html#a7cd9dc0e143969c4e5fee105226cd390", null ],
-    [ "CreateBodyForEntity", "classvex_1_1PhysicsSystem.html#a98485e6ee768d3c2b885d458baa59ee6", null ],
+    [ "CreateBodyForEntity", "classvex_1_1PhysicsSystem.html#aa8c65920ae144a26045958e40300446a", null ],
     [ "DestroyBodyForEntity", "classvex_1_1PhysicsSystem.html#ad40784cfa9e958d41b8ff8e4558b63da", null ],
     [ "drawDebug", "classvex_1_1PhysicsSystem.html#ac2f6f572c8ad730ff72b0ff421ca66b6", null ],
     [ "GetAngularVelocity", "classvex_1_1PhysicsSystem.html#adb4338ca5ac52b1b0cb9e658552aa8b3", null ],
@@ -25,7 +25,7 @@ var classvex_1_1PhysicsSystem =
     [ "GetVelocityAtPosition", "classvex_1_1PhysicsSystem.html#aed7dc72997f969a1a95c26fdbdd8e0f6", null ],
     [ "init", "classvex_1_1PhysicsSystem.html#ab4d41b9237df55089fa519ab4c183e50", null ],
     [ "raycast", "classvex_1_1PhysicsSystem.html#a59d757e1969612b26616c3664e8ac2dd", null ],
-    [ "RecreateBodyForEntity", "classvex_1_1PhysicsSystem.html#ad8cf78240326360124c832b53a5be7e7", null ],
+    [ "RecreateBodyForEntity", "classvex_1_1PhysicsSystem.html#ab203c755a8747fcd8a1b73e6a146853b", null ],
     [ "SetAngularVelocity", "classvex_1_1PhysicsSystem.html#a95b9900ed10ab1a6fce037c0fddf3d6b", null ],
     [ "SetBodyActive", "classvex_1_1PhysicsSystem.html#a2ab950196c8daac7fcc56c7d611a77a3", null ],
     [ "SetBounciness", "classvex_1_1PhysicsSystem.html#ad4f1da12c3866c9777ffa73a8ba7f505", null ],

@@ -26,8 +26,16 @@ var NAVTREE =
 [
   [ "VEX Engine", "index.html", [
     [ "Todo List", "todo.html", null ],
+    [ "Topics", "topics.html", "topics" ],
     [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
+        [ "Typedefs", "namespacemembers_type.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ]
+      ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -47,19 +55,21 @@ var NAVTREE =
         [ "Variables", "globals_vars.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
 "AssetBrowser_8cpp_source.html",
-"classEditorMenuBar.html#a03a4c974246f5ad0c4494fe09db48f7f",
-"classvex_1_1Engine.html#ac28c13617db5b1a651db2f359eac5b70",
-"classvex_1_1ProjectSelector.html#a28af76a2a88a82b1485c7fa247929401",
-"classvex_1_1VulkanImGUIWrapper.html#a7c0b22d1f94824f59b9d1c5b043d6461",
-"structvex_1_1BatchedTextureData.html",
-"structvex_1_1Widget.html"
+"classvex_1_1ComponentRegistry.html",
+"classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8",
+"classvex_1_1ProjectSelector.html#aca1b6e034e42319b09c02e176c97d74b",
+"classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795",
+"dir_79d06d028994328d57ce2d43853ace3c.html",
+"structvex_1_1LayoutNode.html#a2426587f25a9d9abe94e3d50b4a58149",
+"structvex_1_1TransformComponent.html#a85a0fc06aef396499546f95d2da419fb"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

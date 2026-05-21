@@ -5,5 +5,7 @@ var searchData=
   ['charactercomponent_2',['CharacterComponent',['../structvex_1_1CharacterComponent.html',1,'vex']]],
   ['collisionhit_3',['CollisionHit',['../structvex_1_1CollisionHit.html',1,'vex']]],
   ['componentregistry_4',['ComponentRegistry',['../classvex_1_1ComponentRegistry.html',1,'vex']]],
-  ['copiedobjectdata_5',['CopiedObjectData',['../structvex_1_1Editor_1_1CopiedObjectData.html',1,'vex::Editor']]]
+  ['componentstorage_5',['ComponentStorage',['../classvex_1_1ComponentStorage.html',1,'vex']]],
+  ['componenttype_6',['ComponentType',['../classvex_1_1ComponentType.html',1,'vex']]],
+  ['copiedobjectdata_7',['CopiedObjectData',['../structvex_1_1Editor_1_1CopiedObjectData.html',1,'vex::Editor']]]
 ];

@@ -17,6 +17,7 @@ var dir_08299eacb9396cb3f34cee2e653f299e =
     [ "SwapchainManager.cpp", "SwapchainManager_8cpp_source.html", null ],
     [ "SwapchainManager.hpp", "SwapchainManager_8hpp.html", "SwapchainManager_8hpp" ],
     [ "uniforms.hpp", "uniforms_8hpp.html", "uniforms_8hpp" ],
+    [ "VulkanBoundsChecking.hpp", "VulkanBoundsChecking_8hpp.html", "VulkanBoundsChecking_8hpp" ],
     [ "VulkanImGUIWrapper.cpp", "VulkanImGUIWrapper_8cpp_source.html", null ],
     [ "VulkanImGUIWrapper.hpp", "VulkanImGUIWrapper_8hpp.html", "VulkanImGUIWrapper_8hpp" ],
     [ "VulkanMesh.cpp", "VulkanMesh_8cpp_source.html", null ],

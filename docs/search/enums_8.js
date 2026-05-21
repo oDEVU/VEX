@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['shapetype_0',['ShapeType',['../PhysicsSystem_8hpp.html#a6e60c194c597809af12d22fb3962249e',1,'vex']]]
+  ['widgettype_0',['WidgetType',['../namespacevex.html#a7f58754048eee9edc68ba1d810291eba',1,'vex']]]
 ];

@@ -35,7 +35,7 @@ Custom packing system that differentiates between development and deployment. De
 - **Transform Hierarchy:** Robust object parenting with a hierarchical transformation system.
 - **Object/ECS Hybrid:** A pragmatic architecture similar to Unreal's Actor system; you create Object C++ classes that hold ECS components.
 - **Scene System:** JSON-based serialization with the ability to load custom user classes (Player, Enemy, Gun) via a registration system.
-- **UI System:** JSON-based UI layout engine powered by **Facebook Yoga** for responsive design.
+- **UI System:** JSON-based UI layout engine.
 
 ---
 
@@ -142,7 +142,6 @@ All libraries are included as git submodules. Their respective licenses may diff
 - [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)
 - [ImReflect](https://github.com/Sven-vh/ImReflect)
 - [nlohmann/json](https://github.com/nlohmann/json/)
-- [yoga](https://github.com/facebook/yoga)
 - [JoltPhysics](https://github.com/jrouwe/JoltPhysics)
 - [ZSTD](https://github.com/facebook/zstd)
 

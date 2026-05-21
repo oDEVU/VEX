@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logcallbackfn_0',['LogCallbackFn',['../errorUtils_8hpp.html#a2664450bc0c062bee18cd0f5622ec0a4',1,'vex']]]
+  ['entity_0',['Entity',['../namespacevex.html#a246a9e8be51d73212cfcaff8002cdefc',1,'vex']]]
 ];

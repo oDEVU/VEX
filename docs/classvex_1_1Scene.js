@@ -10,7 +10,7 @@ var classvex_1_1Scene =
     [ "GetAllGameObjectsByClassName", "classvex_1_1Scene.html#a434fc5bac20a90e6913bccbebf4fcfaa", null ],
     [ "GetAllGameObjectsByName", "classvex_1_1Scene.html#aa5988260d27459478a9b53c0c69663da", null ],
     [ "GetAllObjects", "classvex_1_1Scene.html#af775310eae79fd851885b1353554da00", null ],
-    [ "GetGameObjectByEntity", "classvex_1_1Scene.html#a74f005d7a8fa9943f1192408e51814e4", null ],
+    [ "GetGameObjectByEntity", "classvex_1_1Scene.html#a263d4e1dff36f7e2e15a4816ca493439", null ],
     [ "load", "classvex_1_1Scene.html#aacb1d984fb8c3e00330d35b52e75ebed", null ],
     [ "RegisterGameObject", "classvex_1_1Scene.html#a3bdeb626c666621adfcbe6a0b5b21d47", null ],
     [ "Save", "classvex_1_1Scene.html#a6d7688bf98b127621167f95622a2aaf1", null ],
