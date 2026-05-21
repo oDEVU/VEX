@@ -18,7 +18,7 @@
 #include <functional>
 #include <glm/glm.hpp>
 #include <nlohmann/json.hpp>
-#include <yoga/Yoga.h>
+#include "Layout.hpp"
 #include "components/ECS/ECS.hpp"
 #include <SDL3/SDL.h>
 #include <volk.h>
@@ -122,7 +122,7 @@ struct Widget {
 
     nlohmann::json nodeJson;
 
-    YGNodeRef yoga = nullptr;
+    LayoutNode* layoutNode = nullptr;
     std::vector<Widget*> children;
     Widget* parent = nullptr;
     std::function<void()> onClick = nullptr;
@@ -282,11 +282,6 @@ public:
     float getPspMultiplier() const;
     glm::uvec2 getRenderResolution() const { return m_ctx.currentRenderResolution; }
 
-    void applyYogaDimension(YGNodeRef yoga, const UIUnitValue& val, void(*setPx)(YGNodeRef, float), void(*setPct)(YGNodeRef, float), void(*setAuto)(YGNodeRef) = nullptr) const;
-    void applyYogaMargin(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const;
-    void applyYogaPadding(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const;
-    void applyYogaPosition(YGNodeRef yoga, YGEdge edge, const UIUnitValue& val) const;
-
 private:
     VulkanContext& m_ctx;
     VirtualFileSystem* m_vfs;
@@ -375,16 +370,13 @@ private:
     /// @param Widget* w The widget to calculate the size of.
     /// @param float maxWidth The maximum width of the text.
     /// @return The size of the text.
-    YGSize calculateTextSize(Widget* w, float maxWidth = FLT_MAX);
+    glm::vec2 calculateTextSize(Widget* w, float maxWidth = FLT_MAX);
 
     /// @brief Measures a text node.
-    /// @param const YGNode* node The node to measure.
+    /// @param LayoutNode* node The node to measure.
     /// @param float width The width of the node.
-    /// @param YGMeasureMode widthMode The width mode of the node.
     /// @param float height The height of the node.
-    /// @param YGMeasureMode heightMode The height mode of the node.
-    /// @return The size of the text.
-    static YGSize measureTextNode(const YGNode* node, float width, YGMeasureMode widthMode, float height, YGMeasureMode heightMode);
+    static void measureTextNode(LayoutNode* node, float width, float height);
 
     /// @brief Updates a widget safely.
     /// @param const std::string& id The id of the widget to update.

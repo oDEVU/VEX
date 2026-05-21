@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include <yoga/Yoga.h>
 #include <SDL3/SDL.h>
 
 #if defined(None)

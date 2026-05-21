@@ -16,6 +16,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <vector>
 #include <string>
+#include <map>
 #include "components/ECS/ECS.hpp"
 
 #include "components/Mesh.hpp"

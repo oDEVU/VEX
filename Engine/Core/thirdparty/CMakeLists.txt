@@ -109,33 +109,6 @@ add_subdirectory(volk SYSTEM)
 # cr
 add_subdirectory(cr SYSTEM)
 
-#yoga
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  add_compile_options(-Wno-array-bounds)
-endif()
-set(YOGA_ENABLE_TESTS OFF CACHE BOOL "Disable Yoga tests" FORCE)
-set(YOGA_ENABLE_BENCHMARKS OFF CACHE BOOL "Disable Yoga benchmarks" FORCE)
-set(YOGA_SKIP_TESTS TRUE CACHE INTERNAL "Skip Yoga tests" FORCE)
-set(YOGA_SKIP_BENCHMARKS TRUE CACHE INTERNAL "Skip Yoga benchmarks" FORCE)
-set(YOGA_BUILD_TESTS OFF CACHE BOOL "Disable Yoga test builds" FORCE)
-add_subdirectory(yoga SYSTEM)
-
-foreach(BAD_TARGET yogatest yogatests tests yogabench yogabenchmarks)
-  if(TARGET ${BAD_TARGET})
-    message(STATUS "Target '${BAD_TARGET}' detected. Forcefully excluding from build.")
-    set_target_properties(${BAD_TARGET} PROPERTIES EXCLUDE_FROM_ALL TRUE)
-  endif()
-endforeach()
-
-# Check what Yoga target is available
-if(TARGET yoga)
-  set(YOGA_TARGET yoga)
-elseif(TARGET Yoga)
-  set(YOGA_TARGET Yoga)
-elseif(TARGET yogacore)
-  set(YOGA_TARGET yogacore)
-endif()
-
 # VMA
 set(VMA_STATIC_VULKAN_FUNCTIONS OFF)
 set(VMA_DYNAMIC_VULKAN_FUNCTIONS ON)
@@ -317,12 +290,7 @@ target_link_libraries(thirdparty_engine INTERFACE
     thirdparty_glm
     nlohmann_json
     Jolt
-    ${YOGA_TARGET}
     libzstd_static
-)
-
-target_include_directories(thirdparty_engine INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/yoga
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
