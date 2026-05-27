@@ -4,18 +4,20 @@
 #include <functional>
 #include "Types.hpp"
 #include "ComponentStorage.hpp"
+#include "VEX/VEX_export.h"
 
 namespace vex {
 
 /// @brief Manages unique type IDs for component types in the ECS system.
 /// @details Uses a static counter to assign unique identifiers to each component type
 /// at compile-time, enabling type-safe component management throughout the registry.
-class ComponentType {
-    static inline uint32_t next_type_id = 0;
+class VEX_EXPORT ComponentType {
 public:
+    static uint32_t get_id_by_name(const char* name);
+
     template <typename T>
     static uint32_t get_id() {
-        static const uint32_t id = next_type_id++;
+        static const uint32_t id = get_id_by_name(typeid(T).name());
         return id;
     }
 };

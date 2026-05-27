@@ -172,6 +172,7 @@ set(source_files
         src/components/GameObjects/GameObject.cpp
         src/components/GameObjects/GameObjectFactory.cpp
         src/components/GameComponents/ComponentFactory.cpp
+        src/components/ECS/Registry.cpp
     )
 
 #if(CMAKE_BUILD_TYPE STREQUAL "Debug")

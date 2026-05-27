@@ -43,7 +43,14 @@ public:
         auto* leadArray = m_registry.try_get_storage_internal<FirstT>();
         if (!leadArray) return;
 
-        for (Entity e : leadArray->get_entities()) {
+        auto& entities = leadArray->get_entities();
+
+        for (ptrdiff_t i = static_cast<ptrdiff_t>(entities.size()) - 1; i >= 0; --i) {
+
+            if (i >= static_cast<ptrdiff_t>(entities.size())) continue;
+
+            Entity e = entities[i];
+
             if ((m_registry.has<Components>(e) && ...)) {
                 func(e, m_registry.get<Components>(e)...);
             }
