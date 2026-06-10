@@ -193,7 +193,8 @@ void Scene::sceneBegin(){
 
     bool useParallel = false;
     #ifdef VEX_USE_PARALLEL_EXECUTION
-        if(size > 50) useParallel = true;
+    // TEMPORARILY DISABLED:
+    // if(size > 50) useParallel = true;
     #endif
 
     if(useParallel){
@@ -223,7 +224,8 @@ void Scene::sceneUpdate(float deltaTime){
 
     bool useParallel = false;
     #ifdef VEX_USE_PARALLEL_EXECUTION
-        if(size > 50) useParallel = true;
+    // TEMPORARILY DISABLED:
+    // if(size > 50) useParallel = true;
     #endif
 
     if(useParallel){
