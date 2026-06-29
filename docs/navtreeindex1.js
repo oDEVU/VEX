@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classvex_1_1ComponentRegistry.html":[2,0,0,25],
 "classvex_1_1ComponentRegistry.html":[3,0,0,24],
 "classvex_1_1ComponentRegistry.html#a0e0ddf666b509fe51d3f17deff0d6221":[2,0,0,25,8],
 "classvex_1_1ComponentRegistry.html#a0e0ddf666b509fe51d3f17deff0d6221":[3,0,0,24,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classvex_1_1GameObject.html#a1ba0e5c35f4bfc561f7b2862667eef1a":[2,0,0,43,4],
 "classvex_1_1GameObject.html#a1ba0e5c35f4bfc561f7b2862667eef1a":[3,0,0,42,4],
 "classvex_1_1GameObject.html#a304595cedfd573f51c783947086f55e1":[2,0,0,43,7],
-"classvex_1_1GameObject.html#a304595cedfd573f51c783947086f55e1":[3,0,0,42,7],
-"classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8":[2,0,0,43,3]
+"classvex_1_1GameObject.html#a304595cedfd573f51c783947086f55e1":[3,0,0,42,7]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classvex_1_1ProjectSelector.html#aca1b6e034e42319b09c02e176c97d74b":[2,0,0,120,9],
 "classvex_1_1ProjectSelector.html#aca1b6e034e42319b09c02e176c97d74b":[3,0,0,119,9],
 "classvex_1_1ProjectSelector.html#aceebef03d1b87b280ef35725ce415492":[2,0,0,120,14],
 "classvex_1_1ProjectSelector.html#aceebef03d1b87b280ef35725ce415492":[3,0,0,119,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classvex_1_1VexUI.html#ad26f921ee4272ed14b260db6fb67e23d":[2,0,0,79,41],
 "classvex_1_1VexUI.html#ad26f921ee4272ed14b260db6fb67e23d":[3,0,0,78,41],
 "classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455":[2,0,0,79,31],
-"classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455":[3,0,0,78,31],
-"classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795":[2,0,0,79,18]
+"classvex_1_1VexUI.html#ad424591e2eacf6de0481e338d5658455":[3,0,0,78,31]
 };

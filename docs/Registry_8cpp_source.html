@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.16.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VEX Engine: Member List</title>
+<title>VEX Engine: Core/src/components/ECS/Registry.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -72,7 +72,7 @@ $(function() { codefold.init(); });
   </div>
 </div>
 <script type="text/javascript">
-$(function(){initNavTree('classvex_1_1ComponentType.html','',''); });
+$(function(){initNavTree('Registry_8cpp_source.html','',''); });
 </script>
 <div id="container">
 <div id="doc-content">
@@ -98,20 +98,40 @@ $(function(){initNavTree('classvex_1_1ComponentType.html','',''); });
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">vex::ComponentType Member List</div></div>
+  <div class="headertitle"><div class="title">Registry.cpp</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p>This is the complete list of members for <a class="el" href="classvex_1_1ComponentType.html">vex::ComponentType</a>, including all inherited members.</p>
-<table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>get_id</b>() (defined in <a class="el" href="classvex_1_1ComponentType.html">vex::ComponentType</a>)</td><td class="entry"><a class="el" href="classvex_1_1ComponentType.html">vex::ComponentType</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>get_id_by_name</b>(const char *name) (defined in <a class="el" href="classvex_1_1ComponentType.html">vex::ComponentType</a>)</td><td class="entry"><a class="el" href="classvex_1_1ComponentType.html">vex::ComponentType</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-</table></div><!-- contents -->
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &quot;components/ECS/Registry.hpp&quot;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacevex.html">vex</a> {</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>uint32_t ComponentType::get_id_by_name(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    <span class="keyword">static</span> std::unordered_map&lt;std::string, uint32_t&gt; type_map;</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>    <span class="keyword">static</span> uint32_t next_type_id = 0;</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    std::string typeName(name);</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">auto</span> it = type_map.find(typeName);</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordflow">if</span> (it != type_map.end()) {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <span class="keywordflow">return</span> it-&gt;second;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    }</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    uint32_t <span class="keywordtype">id</span> = next_type_id++;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    type_map[typeName] = id;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordflow">return</span> id;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>}</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>}</div>
+<div class="ttc" id="anamespacevex_html"><div class="ttname"><a href="namespacevex.html">vex</a></div><div class="ttdef"><b>Definition</b> <a href="AssetTypes_8hpp_source.html#l00010">AssetTypes.hpp:10</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
+    <li class="navelem"><b>Core</b></li><li class="navelem"><b>src</b></li><li class="navelem"><b>components</b></li><li class="navelem"><b>ECS</b></li><li class="navelem"><b>Registry.cpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1 </li>
   </ul>
 </div>

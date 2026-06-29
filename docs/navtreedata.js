@@ -67,9 +67,9 @@ var NAVTREEINDEX =
 "classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8",
 "classvex_1_1ProjectSelector.html#aca1b6e034e42319b09c02e176c97d74b",
 "classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795",
-"dir_79d06d028994328d57ce2d43853ace3c.html",
-"structvex_1_1LayoutNode.html#a2426587f25a9d9abe94e3d50b4a58149",
-"structvex_1_1TransformComponent.html#a85a0fc06aef396499546f95d2da419fb"
+"dir_6b5c82f257008dd22d69d25c0d4f8c0c.html",
+"structvex_1_1LayoutNode.html#a1142241d86d601e1ce4b4258829f3fe0",
+"structvex_1_1TransformComponent.html#a820deaf69184d0c2050694e9721e1487"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795":[2,0,0,79,18],
 "classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795":[3,0,0,78,18],
 "classvex_1_1VexUI.html#ad4832f9e16e910d12407d40ed6bb0f23":[2,0,0,79,6],
 "classvex_1_1VexUI.html#ad4832f9e16e910d12407d40ed6bb0f23":[3,0,0,78,6],
@@ -247,7 +248,6 @@ var NAVTREEINDEX4 =
 "dir_43f58e953be9dbd8f46679184aa78f8b.html":[4,0,1,2],
 "dir_49181ad7d96d10212df86a8df3b851fa.html":[4,0,0,0,0,2,0],
 "dir_4cd4c13d01dc4f9c94211f072e8c6dd9.html":[4,0,0,0],
-"dir_5b9be2d21b48b043279b41f8de146acf.html":[4,0,0,1,0,3],
-"dir_6635075fd29d94b1e79ef2060fed20a6.html":[4,0,0,1],
-"dir_6c789f2e3bcfd95a433961cf08486fcd.html":[4,0,0,0,0,2]
+"dir_5b9be2d21b48b043279b41f8de146acf.html":[4,0,0,1,0,4],
+"dir_6635075fd29d94b1e79ef2060fed20a6.html":[4,0,0,1]
 };

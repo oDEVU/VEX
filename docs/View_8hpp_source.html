@@ -126,18 +126,25 @@ $(function(){initNavTree('View_8hpp_source.html','',''); });
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keyword">auto</span>* leadArray = <a class="code hl_variable" href="classvex_1_1View.html#a18d35af5b7760e34759c2cb154140ec1">m_registry</a>.try_get_storage_internal&lt;FirstT&gt;();</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keywordflow">if</span> (!leadArray) <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordflow">for</span> (<a class="code hl_typedef" href="namespacevex.html#a246a9e8be51d73212cfcaff8002cdefc">Entity</a> e : leadArray-&gt;get_entities()) {</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <span class="keywordflow">if</span> ((<a class="code hl_variable" href="classvex_1_1View.html#a18d35af5b7760e34759c2cb154140ec1">m_registry</a>.has&lt;Components&gt;(e) &amp;&amp; ...)) {</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                func(e, <a class="code hl_variable" href="classvex_1_1View.html#a18d35af5b7760e34759c2cb154140ec1">m_registry</a>.get&lt;Components&gt;(e)...);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            }</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        }</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
-</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>};</div>
-</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">auto</span>&amp; entities = leadArray-&gt;get_entities();</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">for</span> (ptrdiff_t i = <span class="keyword">static_cast&lt;</span>ptrdiff_t<span class="keyword">&gt;</span>(entities.size()) - 1; i &gt;= 0; --i) {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            <span class="keywordflow">if</span> (i &gt;= <span class="keyword">static_cast&lt;</span>ptrdiff_t<span class="keyword">&gt;</span>(entities.size())) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>            <a class="code hl_typedef" href="namespacevex.html#a246a9e8be51d73212cfcaff8002cdefc">Entity</a> e = entities[i];</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>}</div>
-<div class="ttc" id="aclassvex_1_1Registry_html"><div class="ttname"><a href="classvex_1_1Registry.html">vex::Registry</a></div><div class="ttdoc">Central registry for managing entities and their components in the ECS system.</div><div class="ttdef"><b>Definition</b> <a href="Registry_8hpp_source.html#l00027">Registry.hpp:27</a></div></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            <span class="keywordflow">if</span> ((<a class="code hl_variable" href="classvex_1_1View.html#a18d35af5b7760e34759c2cb154140ec1">m_registry</a>.has&lt;Components&gt;(e) &amp;&amp; ...)) {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                func(e, <a class="code hl_variable" href="classvex_1_1View.html#a18d35af5b7760e34759c2cb154140ec1">m_registry</a>.get&lt;Components&gt;(e)...);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            }</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        }</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    }</div>
+</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>};</div>
+</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>}</div>
+<div class="ttc" id="aclassvex_1_1Registry_html"><div class="ttname"><a href="classvex_1_1Registry.html">vex::Registry</a></div><div class="ttdoc">Central registry for managing entities and their components in the ECS system.</div><div class="ttdef"><b>Definition</b> <a href="Registry_8hpp_source.html#l00029">Registry.hpp:29</a></div></div>
 <div class="ttc" id="aclassvex_1_1View_html_a18d35af5b7760e34759c2cb154140ec1"><div class="ttname"><a href="classvex_1_1View.html#a18d35af5b7760e34759c2cb154140ec1">vex::View::m_registry</a></div><div class="ttdeci">Registry &amp; m_registry</div><div class="ttdoc">Reference to the Registry containing the component data.</div><div class="ttdef"><b>Definition</b> <a href="#l00020">View.hpp:20</a></div></div>
 <div class="ttc" id="aclassvex_1_1View_html_a55f29d3f6f20460e55c7ac227f5f7f4b"><div class="ttname"><a href="classvex_1_1View.html#a55f29d3f6f20460e55c7ac227f5f7f4b">vex::View::View</a></div><div class="ttdeci">View(Registry &amp;reg)</div><div class="ttdoc">Constructs a View for querying entities with the specified component types.</div><div class="ttdef"><b>Definition</b> <a href="#l00025">View.hpp:25</a></div></div>
 <div class="ttc" id="aclassvex_1_1View_html_a59795c0a91ac09dc1064132771901801"><div class="ttname"><a href="classvex_1_1View.html#a59795c0a91ac09dc1064132771901801">vex::View::each</a></div><div class="ttdeci">void each(Func func)</div><div class="ttdoc">Iterates over all entities with the specified component types.</div><div class="ttdef"><b>Definition</b> <a href="#l00040">View.hpp:40</a></div></div>

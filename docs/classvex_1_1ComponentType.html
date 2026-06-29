@@ -109,18 +109,15 @@ $(function(){initNavTree('classvex_1_1ComponentType.html','','classvex_1_1Compon
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aa753d0889ef23a850e7e28544ce4c11c" id="r_aa753d0889ef23a850e7e28544ce4c11c"><td class="memItemLeft">static uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#aa753d0889ef23a850e7e28544ce4c11c">get_id_by_name</a> (const char *name)</td></tr>
 <tr class="memitem:a1a4ae6604d3163efba10c8e19bb01545" id="r_a1a4ae6604d3163efba10c8e19bb01545"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a1a4ae6604d3163efba10c8e19bb01545 template"><td class="memItemLeft">static uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#a1a4ae6604d3163efba10c8e19bb01545">get_id</a> ()</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:ab2db7e7b36c23e0acea8c75568a6d418" id="r_ab2db7e7b36c23e0acea8c75568a6d418"><td class="memItemLeft">static uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#ab2db7e7b36c23e0acea8c75568a6d418">next_type_id</a> = 0</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Manages unique type IDs for component types in the ECS system. </p>
 <p>Uses a static counter to assign unique identifiers to each component type at compile-time, enabling type-safe component management throughout the registry. </p>
 
-<p class="definition">Definition at line <a class="el" href="Registry_8hpp_source.html#l00013">13</a> of file <a class="el" href="Registry_8hpp_source.html">Registry.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Registry_8hpp_source.html#l00014">14</a> of file <a class="el" href="Registry_8hpp_source.html">Registry.hpp</a>.</p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="a1a4ae6604d3163efba10c8e19bb01545" name="a1a4ae6604d3163efba10c8e19bb01545"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a4ae6604d3163efba10c8e19bb01545">&#9670;&#160;</a></span>get_id()</h2>
@@ -147,13 +144,12 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Registry_8hpp_source.html#l00017">17</a> of file <a class="el" href="Registry_8hpp_source.html">Registry.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Registry_8hpp_source.html#l00019">19</a> of file <a class="el" href="Registry_8hpp_source.html">Registry.hpp</a>.</p>
 
 </div>
 </div>
-<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="ab2db7e7b36c23e0acea8c75568a6d418" name="ab2db7e7b36c23e0acea8c75568a6d418"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2db7e7b36c23e0acea8c75568a6d418">&#9670;&#160;</a></span>next_type_id</h2>
+<a id="aa753d0889ef23a850e7e28544ce4c11c" name="aa753d0889ef23a850e7e28544ce4c11c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa753d0889ef23a850e7e28544ce4c11c">&#9670;&#160;</a></span>get_id_by_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,22 +158,26 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t vex::ComponentType::next_type_id = 0</td>
+          <td class="memname">uint32_t vex::ComponentType::get_id_by_name </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Registry_8hpp_source.html#l00014">14</a> of file <a class="el" href="Registry_8hpp_source.html">Registry.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Registry_8cpp_source.html#l00007">7</a> of file <a class="el" href="Registry_8cpp_source.html">Registry.cpp</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>Core/include/components/ECS/<a class="el" href="Registry_8hpp_source.html">Registry.hpp</a></li>
+<li>Core/src/components/ECS/<a class="el" href="Registry_8cpp_source.html">Registry.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
