@@ -5,11 +5,11 @@
  ***********************************************/
 
 #pragma once
-  #include <entt/entt.hpp>
+  #include "components/ECS/ECS.hpp"
   //#include <nlohmann/json.hpp>
 
   #include "Engine.hpp"
-  #include "components/errorUtils.hpp"
+  #include "components/ErrorUtils.hpp"
 
   #include "components/GameComponents/BasicComponents.hpp"
   #include "../../../thirdparty/uuid/UUID.hpp"
@@ -33,7 +33,7 @@
     /// @brief Default constructor for GameObject.
     /// @details
     /// 1. Initializes the engine reference and marks object as valid.
-    /// 2. Creates a new `entt::entity` in the registry.
+    /// 2. Creates a new `vex::Entity` in the registry.
     /// 3. Adds a `NameComponent`.
     /// 4. Automatically registers the object with the current scene via `SceneManager::GetScene(lastSceneName)`.
     /// @param Engine& engine - Reference to the engine instance.
@@ -43,7 +43,7 @@
     /// @brief Destroys the GameObject and removes it from the engine's registry.
     /// @details
     /// 1. Checks validity to prevent double deletion.
-    /// 2. Iterates `TransformComponent`s to find children and unparents them (sets parent to `entt::null`).
+    /// 2. Iterates `TransformComponent`s to find children and unparents them (sets parent to `vex::NULL_ENTITY`).
     /// 3. Destroys the entity in the registry and marks this object as invalid.
     void Destroy();
 
@@ -56,7 +56,7 @@
 
     GameObject(GameObject&& other) noexcept
         : m_engine(other.m_engine), m_entity(other.m_entity), m_isValid(other.m_isValid) {
-        other.m_entity = entt::null;
+        other.m_entity = vex::NULL_ENTITY;
         other.m_isValid = false;
     }
 
@@ -65,7 +65,7 @@
       /// @brief virtual void function you override to implement custom behavior when the game updates (eg. every frame).
       virtual void Update(float deltaTime) {}
       /// @brief Function that returns entity object, which is the entity associated with this GameObject. Its mostly needed for parenting and other engine internal usage.
-      entt::entity GetEntity() const { return m_entity; }
+      vex::Entity GetEntity() const { return m_entity; }
       /// @brief Function that returns engine reference allowing your custom Object to use engine provided methods.
       /// @details Example usage:
       /// @code
@@ -77,21 +77,21 @@
       /// @return Requested component reference eg. InputComponent.
       template<typename T> T& GetComponent() { return m_engine.getRegistry().get<T>(m_entity); }
       /// @brief Function that adds a component to the GameObject.
-      template<typename T> void AddComponent(const T& comp) { m_engine.getRegistry().emplace_or_replace<T>(m_entity, comp); }
+      template<typename T> void AddComponent(const T& comp) { m_engine.getRegistry().add_or_replace<T>(m_entity, comp); }
       /// @brief Function that checks if the GameObject has a component.
       /// @return True if the GameObject has the component, false otherwise.
-      template<typename T> bool HasComponent() const { return m_engine.getRegistry().any_of<T>(m_entity); }
+      template<typename T> bool HasComponent() const { return m_engine.getRegistry().has<T>(m_entity); }
       bool isValid() const { return m_isValid; }
 
       /// @brief Function that parent this Object to another GameObject. You need to pass another GameObject's entity.
-      /// @param entt::entity entity - Entity of GameObject we want to parent to.
+      /// @param vex::Entity entity - Entity of GameObject we want to parent to.
       /// @details Helper function that retrieves the `TransformComponent` of this object and calls `setParent` with the provided entity ID.
       /// @code
       /// GameObject* parent = new GameObject();
       /// GameObject* child = new GameObject();
       /// child->ParentTo(parent->GetEntity());
       /// @endcode
-      void ParentTo(entt::entity entity){
+      void ParentTo(vex::Entity entity){
           GetComponent<TransformComponent>().setParent(entity);
       }
 
@@ -107,7 +107,7 @@
 
       protected:
       Engine& m_engine;
-      entt::entity m_entity;
+      vex::Entity m_entity;
       bool m_isValid;
       std::string objectType;
   };

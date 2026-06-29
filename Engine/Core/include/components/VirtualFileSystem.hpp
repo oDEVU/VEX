@@ -1,8 +1,10 @@
 /**
- *  @file   VirtualFileSystem.hpp
- *  @brief  This file defines VirtualFileSystem and VPKStream classes.
- *  @author Eryk Roszkowski
+ * @file   VirtualFileSystem.hpp
+ * @brief  This file defines VirtualFileSystem and VPKStream classes.
+ * @author Eryk Roszkowski
  ***********************************************/
+
+/// @todo Add chunking and multithreading support for compression.
 
 #pragma once
 
@@ -91,7 +93,15 @@ public:
     /// @brief Gets the base path of the virtual file system.
     /// @return std::string - base path.
     std::string get_base_path() const { return m_base_path; }
+
+    /// @brief Sets the VPAK decryption key.
+    static void SetVpakKey(const std::string& key);
+
+    /// @brief Gets the current VPAK decryption key.
+    static std::string GetVpakKey();
+
 private:
+    static std::string s_vpak_key;
     /// @brief struct defining vpak file header data, used to validate file integrity.
     struct VPKHeader {
         char magic[4];
@@ -99,13 +109,14 @@ private:
         uint32_t file_count;
         uint32_t names_offset;
         uint32_t data_offset;
+        uint32_t solid_compressed_size;
+        uint32_t solid_uncompressed_size;
     };
 
     /// @brief struct defining virtual file "header", used to identify files in the virtual file system.
     struct VPKFileEntry {
         uint32_t name_offset;
         uint32_t data_offset;
-        uint32_t data_size;
         uint32_t uncompressed_size;
     };
 
@@ -114,6 +125,7 @@ private:
         VPKHeader header;
         std::vector<VPKFileEntry> entries;
         std::vector<std::string> file_names;
+        std::vector<uint8_t> solid_data;
         std::ifstream file_stream;
         std::string file_path;
     };

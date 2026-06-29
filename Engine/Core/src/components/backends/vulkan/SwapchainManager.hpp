@@ -14,7 +14,7 @@
 #include <memory>
 
 #include "context.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 namespace vex {
     /// @brief Manages Vulkan swapchain resources.

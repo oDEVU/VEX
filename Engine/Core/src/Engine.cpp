@@ -2,10 +2,12 @@
 #include "Engine.hpp"
 #include "SDL3/SDL_events.h"
 
-#include "components/GameComponents/BasicComponents.hpp"
 #include "components/VirtualFileSystem.hpp"
 #include "components/Window.hpp"
-#include "components/pathUtils.hpp"
+#include "components/PathUtils.hpp"
+#include "components/EngineCommands.hpp"
+
+#include "components/GameComponents/BasicComponents.hpp"
 #include <components/GameComponents/UiComponent.hpp>
 
 #include "components/backends/vulkan/Interface.hpp"
@@ -13,8 +15,9 @@
 #include "components/backends/vulkan/PhysicsDebug.hpp"
 
 #include "components/SceneManager.hpp"
+#include "components/UtilitySystem.hpp"
 #include "components/backends/vulkan/context.hpp"
-#include "entt/entity/fwd.hpp"
+
 
 #include <cstdint>
 #include <filesystem>
@@ -23,6 +26,22 @@
 #include "VexBuildVersion.hpp"
 
 namespace vex {
+
+    int Engine::GetVersionMajor() {
+        return VEX_VERSION_MAJOR;
+    }
+
+    int Engine::GetVersionMinor() {
+        return VEX_VERSION_MINOR;
+    }
+
+    int Engine::GetVersionPatch() {
+        return VEX_VERSION_PATCH;
+    }
+
+    const char* Engine::GetVersionString() {
+        return VEX_VERSION_STRING;
+    }
 
 Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     std::filesystem::current_path(GetExecutableDir());
@@ -47,6 +66,10 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_vfs = std::make_shared<VirtualFileSystem>();
     m_vfs->initialize(GetExecutableDir().string());
 
+    std::string defaultUserDataDir = std::string(SDL_GetUserFolder(SDL_Folder::SDL_FOLDER_DOCUMENTS) + gInfo.projectName);
+    SetUserDataDir(defaultUserDataDir);
+    //vex::log("Setting user data dir: %s", defaultUserDataDir.c_str());
+
     m_physicsSystem = std::make_unique<PhysicsSystem>(m_registry);
     m_physicsSystem->init();
 
@@ -59,12 +82,16 @@ Engine::Engine(const char* title, int width, int height, GameInfo gInfo) {
     m_imgui = std::make_unique<VulkanImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
     m_imgui->init();
 
+    vex::DebugConsole::Get().Init();
+
     log("Initializing engine components...");
 
     m_inputSystem = std::make_unique<InputSystem>(m_registry, m_window->GetSDLWindow());
     m_sceneManager = std::make_unique<SceneManager>();
 
     getInterface()->getMeshManager().init(this);
+
+    RegisterEngineCommands(this);
     log("Engine initialized successfully");
 }
 
@@ -81,7 +108,7 @@ Interface* Engine::getInterface() {
 }
 
 std::shared_ptr<VexUI> Engine::createVexUI(){
-    return std::make_shared<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
+    return std::make_shared<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources(), m_resolutionManager.get());
 }
 
 void Engine::run(std::function<void()> onUpdateLoop) {
@@ -95,13 +122,12 @@ void Engine::run(std::function<void()> onUpdateLoop) {
         while (SDL_PollEvent(&event)) {
             processEvent(event, m_deltaTime);
             m_imgui->processEvent(&event);
-            auto uiView = m_registry.view<UiComponent>();
-            std::vector<UiComponent> uiObjects;
-            for (auto entity : uiView) {
-                if(uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                    uiView.get<UiComponent>(entity).m_vexUI->processEvent(event);
+            vex::View<UiComponent> uiView(m_registry);
+            uiView.each([&event](vex::Entity entity, UiComponent& uiComp) {
+                if(uiComp.m_vexUI->isInitialized()){
+                    uiComp.m_vexUI->processEvent(event);
                 }
-            }
+            });
             switch (event.type) {
                 case SDL_EVENT_GAMEPAD_ADDED:
                     SDL_OpenGamepad(event.gdevice.which);
@@ -129,12 +155,12 @@ void Engine::run(std::function<void()> onUpdateLoop) {
 
         if (!m_running) break;
 
-        auto transformView = m_registry.view<TransformComponent>();
-        for (auto entity : transformView) {
-            if(!transformView.get<TransformComponent>(entity).isReady()){
-                transformView.get<TransformComponent>(entity).setRegistry(m_registry);
+        vex::View<TransformComponent> transformView(m_registry);
+        transformView.each([this](vex::Entity entity, TransformComponent& transform) {
+            if(!transform.isReady()){
+                transform.setRegistry(m_registry);
             }
-        }
+        });
 
         update(m_deltaTime);
 
@@ -216,11 +242,11 @@ void Engine::setResolutionMode(ResolutionMode mode) {
     //m_interface->setRenderResolution(renderRes);
 }
 
-void Engine::setEnvironmentSettings(enviroment settings) {
+void Engine::setEnvironmentSettings(environment settings) {
     m_interface->setEnvironment(settings);
 }
 
-enviroment Engine::getEnvironmentSettings() {
+environment Engine::getEnvironmentSettings() {
     return m_interface->getEnvironment();
 }
 
@@ -246,36 +272,37 @@ void Engine::update(float deltaTime) {
     m_inputSystem->update(deltaTime);
 
     auto cameraEntity = getCamera();
-    if (cameraEntity != entt::null) {
+    if (cameraEntity != vex::NULL_ENTITY) {
         m_audioSystem->Update(cameraEntity);
     }
 
     if(m_frame > 0){
 
-        auto uiView = m_registry.view<UiComponent>();
-        std::vector<UiComponent> uiObjects;
-        for (auto entity : uiView) {
-            if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                //uiView.get<UiComponent>(entity).m_vexUI = std::make_unique<VexUI>(*m_interface->getContext(), m_vfs.get(), m_interface->getResources());
-                uiView.get<UiComponent>(entity).m_vexUI->init();
-                uiView.get<UiComponent>(entity).m_vexUI->update();
+        vex::View<UiComponent> uiView(m_registry);
+        uiView.each([this, deltaTime](vex::Entity entity, UiComponent& uiComp) {
+            if(!uiComp.m_vexUI->isInitialized()){
+                uiComp.m_vexUI->init();
+                uiComp.m_vexUI->update(deltaTime);
             }
-        }
+        });
 
+
+        if (m_paused && deltaTime == 0.0f) deltaTime = 0.016f;
+        ProcessParticles(m_registry, deltaTime);
         if(!(m_paused || m_internally_paused)){
+            ProcessUtilityComponents(m_registry, deltaTime, *this);
             m_sceneManager->scenesUpdate(deltaTime);
             m_physicsSystem->update(deltaTime);
         }
     }else{
 
-        auto uiView = m_registry.view<UiComponent>();
-        std::vector<UiComponent> uiObjects;
-        for (auto entity : uiView) {
-            if(!uiView.get<UiComponent>(entity).m_vexUI->isInitialized()){
-                uiView.get<UiComponent>(entity).m_vexUI->init();
-                uiView.get<UiComponent>(entity).m_vexUI->update();
+        vex::View<UiComponent> uiView(m_registry);
+        uiView.each([this, deltaTime](vex::Entity entity, UiComponent& uiComp) {
+            if(!uiComp.m_vexUI->isInitialized()){
+                uiComp.m_vexUI->init();
+                uiComp.m_vexUI->update(deltaTime);
             }
-        }
+        });
 
         beginGame();
     }
@@ -292,7 +319,7 @@ void Engine::render() {
     auto renderRes = m_resolutionManager->getRenderResolution();
     auto cameraEntity = getCamera();
 
-    if (cameraEntity == entt::null) {
+    if (cameraEntity == vex::NULL_ENTITY) {
         return;
     }
 

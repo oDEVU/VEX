@@ -4,14 +4,19 @@ project(VEX_BuildTools)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# VPAK Packer executable
+set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Core/thirdparty/zstd/build/cmake zstd SYSTEM)
+
 add_executable(VPAK_Packer
-    vpakPacker.cpp
+    VpakPacker.cpp
 )
 
-# Project Builder executable
+target_link_libraries(VPAK_Packer PRIVATE libzstd_static)
+
 add_executable(ProjectBuilder
-    projectBuilder.cpp
+    ProjectBuilder.cpp
 )
 
 add_executable(VexCrashDecoder
@@ -21,7 +26,7 @@ add_executable(VexCrashDecoder
 )
 
 if(WIN32)
-    target_link_libraries(VexCrashDecoder PRIVATE dbghelp)
+  target_link_libraries(VexCrashDecoder PRIVATE dbghelp)
 endif()
 
 target_include_directories(VexCrashDecoder PRIVATE

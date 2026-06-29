@@ -7,10 +7,12 @@
 #pragma once
 #include "uniforms.hpp"
 #include "context.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/VirtualFileSystem.hpp"
+#include "components/ThreadPool.hpp"
+#include "components/GameComponents/ParticleEmitterComponent.hpp"
 
-#include <components/types.hpp>
+#include <components/Types.hpp>
 #include <string>
 #include <array>
 #include <vector>
@@ -75,6 +77,10 @@ namespace vex {
         /// @return bool - True if loaded successfully or already exists.
         bool loadTexture(const std::string& path, const std::string& name) ;
 
+        /// @brief Loads multiple textures in batches.
+        /// @param const std::vector<std::string>& paths - List of file paths to load.
+        void loadTexturesBatched(const std::vector<std::string>& paths);
+
         /// @brief Unloads a texture.
         /// @details Destroys the image/view and pushes the index to the recycled queue. Resets descriptors to the default texture.
         /// @param const std::string& name - Identifier of the texture to unload.
@@ -98,7 +104,7 @@ namespace vex {
         /// @return VkDescriptorSet - The descriptor set.
         VkDescriptorSet getDescriptorSet(uint32_t frameIndex) const {
             if (frameIndex >= m_descriptorSets.size()) {
-                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+                log(LogLevel::ERROR,
                            "Invalid frame index %u (Max %zu)",
                            frameIndex, m_descriptorSets.size());
                 return VK_NULL_HANDLE;
@@ -108,13 +114,13 @@ namespace vex {
 
         /// @brief Returns a pointer to the descriptor set for the given frame index.
         /// @param uint32_t frameIndex - The index of the frame.
-        /// @return VkDescriptorSet* - The pointer to the descriptor set.
+        /// @return VkDescriptorSet* - The pointer to the descriptor set, or nullptr on invalid index.
         VkDescriptorSet* getDescriptorSetPtr(uint32_t frameIndex) {
             if (frameIndex >= m_descriptorSets.size()) {
-                SDL_LogError(SDL_LOG_CATEGORY_ERROR,
-                           "Invalid frame index %u (Max %zu)",
+                log(LogLevel::ERROR,
+                           "Invalid frame index %u (Max %zu). Returning nullptr.",
                            frameIndex, m_descriptorSets.size());
-                return VK_NULL_HANDLE;
+                return nullptr;
             }
             return &m_descriptorSets[frameIndex];
         }
@@ -154,6 +160,38 @@ namespace vex {
         /// @return VkDescriptorSetLayout - The bindless descriptor set layout.
         VkDescriptorSetLayout getBindlessLayout() const { return m_r_context.bindlessDescriptorSetLayout; }
 
+        /// @brief Returns the particle descriptor set for the given frame index.
+        /// @param frameIndex - The frame index.
+        /// @return VkDescriptorSet - The particle descriptor set, or VK_NULL_HANDLE on invalid index.
+        VkDescriptorSet getParticleDescriptorSet(uint32_t frameIndex) const {
+            if (frameIndex >= m_particleDescriptorSets.size()) {
+                log(LogLevel::ERROR,
+                           "Invalid frame index %u for particle descriptor set (Max %zu)",
+                           frameIndex, m_particleDescriptorSets.size());
+                return VK_NULL_HANDLE;
+            }
+            return m_particleDescriptorSets[frameIndex];
+        }
+
+        /// @brief Returns the mapped data for the particle SSBO for the given frame index.
+        /// @param frameIndex - The frame index.
+        /// @return void* - The mapped data, or nullptr on invalid index.
+        void* getParticleMappedData(uint32_t frameIndex) const {
+            if (frameIndex >= m_particleMappedData.size()) {
+                log(LogLevel::ERROR,
+                           "Invalid frame index %u for particle mapped data (Max %zu)",
+                           frameIndex, m_particleMappedData.size());
+                return nullptr;
+            }
+            return m_particleMappedData[frameIndex];
+        }
+
+        /// @brief Generates and uploads a 32x32x32 3D Lookup Texture (LUT) to the GPU.
+        /// Bakes PS1 5-bit color quantization, saturation, and brightness boost into a 3D texture.
+        /// The data is transferred via a staging buffer to a VK_IMAGE_TYPE_3D image stored in the
+        /// VulkanContext. This allows the composite shader to replace heavy color math with a
+        /// single hardware-accelerated trilinear texture fetch.
+        void createColorLUT();
     private:
         const std::string defaultTextureName = "default";
 
@@ -164,6 +202,12 @@ namespace vex {
         std::vector<VkBuffer> m_lightBuffers;
         std::vector<VmaAllocation> m_sceneAllocs;
         std::vector<VmaAllocation> m_lightAllocs;
+
+        std::vector<VkBuffer> m_particleSSBOs;
+        std::vector<VmaAllocation> m_particleAllocs;
+        std::vector<void*> m_particleMappedData;
+        VkDescriptorPool m_particleDescriptorPool = VK_NULL_HANDLE;
+        std::vector<VkDescriptorSet> m_particleDescriptorSets;
 
         VkDescriptorSetLayout m_descriptorSetLayout;
         std::vector<VkDescriptorSet> m_descriptorSets;
@@ -185,5 +229,7 @@ namespace vex {
         void createTextureSampler();
         /// @brief Internal function to create per-mesh texture sets.
         void createPerMeshTextureSets();
+        /// @brief Internal function to create particle SSBOs.
+        void createParticleSSBOs();
     };
 }

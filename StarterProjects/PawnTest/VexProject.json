@@ -3,7 +3,7 @@
     "main_scene": "Assets/scenes/main.json",
     "project_name": "PawnTest",
     "resolution_mode": 0,
-    "version": "1",
+    "version": "1.0.0",
     "vsync": true,
     "window_type": 0
 }

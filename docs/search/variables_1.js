@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['clearcolor_0',['clearColor',['../structvex_1_1enviroment.html#a787ebfd2502aa09f76ced24b3982730f',1,'vex::enviroment']]],
-  ['clipcache_1',['clipCache',['../classvex_1_1AudioSystem.html#ad877837214bcf9bdfe7db938d137bae9',1,'vex::AudioSystem']]],
-  ['color_2',['color',['../structvex_1_1UIVertex.html#aaf0ff94db964d29bc86404125a484444',1,'vex::UIVertex']]],
-  ['create_3',['Create',['../structBasicEditorWindow.html#a4e94e8a6862b8a614cdf0e25a518f604',1,'BasicEditorWindow']]]
+  ['beditorqueue_0',['bEditorQueue',['../classvex_1_1Renderer.html#a574591e72a83fa4cdf7c278b1e054c4b',1,'vex::Renderer']]],
+  ['bindlesstextures_1',['bindlessTextures',['../structvex_1_1VulkanFeatures.html#abc0ced3d669f59b5602df70e7198f612',1,'vex::VulkanFeatures']]],
+  ['bmaskedqueue_2',['bMaskedQueue',['../classvex_1_1Renderer.html#ac37843f50078d0b9e854d9440eb82a0b',1,'vex::Renderer']]],
+  ['borderwidth_3',['borderWidth',['../structvex_1_1LayoutNode.html#a5d0c8fe29146065d89b416f45221491f',1,'vex::LayoutNode']]],
+  ['bottom_4',['bottom',['../structvex_1_1LayoutNode.html#a74ac0bbe64d355a84a477bcf55cb6381',1,'vex::LayoutNode']]],
+  ['btransqueue_5',['bTransQueue',['../classvex_1_1Renderer.html#a4fd9ca2b26efdb76925034b8f2a6985d',1,'vex::Renderer']]]
 ];

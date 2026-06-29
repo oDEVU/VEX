@@ -7,5 +7,6 @@ var searchData=
   ['beginsingletimecommands_4',['beginSingleTimeCommands',['../structvex_1_1VulkanContext.html#a146427df3fc36f89efe374be84e960b8',1,'vex::VulkanContext']]],
   ['bindanddrawbatched_5',['bindAndDrawBatched',['../classvex_1_1VulkanMesh.html#ade013b77a1d009fe4126d21cb2d9f222',1,'vex::VulkanMesh']]],
   ['bindwindow_6',['bindWindow',['../classvex_1_1Interface.html#a2ade6ea1d65bd7460e47623d6a8376d0',1,'vex::Interface']]],
-  ['builddist_7',['BuildDist',['../classEditorMenuBar.html#ae15bcd914c5ce1871f08c031be192f43',1,'EditorMenuBar']]]
+  ['box_7',['Box',['../structvex_1_1PhysicsComponent.html#a411e6fdeae8423308bd1c482156de5ad',1,'vex::PhysicsComponent']]],
+  ['builddist_8',['BuildDist',['../classEditorMenuBar.html#ae15bcd914c5ce1871f08c031be192f43',1,'EditorMenuBar']]]
 ];

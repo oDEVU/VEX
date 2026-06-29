@@ -4,6 +4,11 @@
  *  @author Eryk Roszkowski
  ***********************************************/
 
+// Windows specific bugs (why they are there? because i visit this file unlike ErrorUtils or other stuff):
+// @todo (Windows only) Fix building in editor fails but succeds with cli ProjectBuilder.exe
+// @todo (Windows only) Fix console doubling every line
+// @todo (Windows only) Fix editor being vsynced despite vsync disabled but only when app started with vsync i think LMAO
+
 #pragma once
 
 #if defined(_WIN32)
@@ -14,17 +19,18 @@
 #include <memory>
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 
 #include "components/ResolutionManager.hpp"
 #include "components/GameInfo.hpp"
 #include "components/ImGUIWrapper.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/InputSystem.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 #include "components/UI/VexUI.hpp"
 #include "components/PhysicsSystem.hpp"
 #include "components/AudioSystem.hpp"
+#include "components/DebugConsole.hpp"
 
 #include "VEX/VEX_export.h"
 
@@ -43,6 +49,18 @@ public:
     /// @brief returns engine hash generated during build process.
     static const char* GetBuildHash();
 
+    /// @brief Returns the major version of the engine.
+    static int GetVersionMajor();
+
+    /// @brief Returns the minor version of the engine.
+    static int GetVersionMinor();
+
+    /// @brief Returns the patch version of the engine.
+    static int GetVersionPatch();
+
+    /// @brief Returns the version string of the engine.
+    static const char* GetVersionString();
+
     /// @brief Constructor for the Engine class.
     /// @details Initializes the core systems in the following order:
     /// 1. Window creation and ResolutionManager.
@@ -58,6 +76,9 @@ public:
     Engine(const char* title, int width, int height, GameInfo gInfo);
     ~Engine();
 
+    /// @brief Returns true if the engine is running in editor mode.
+    virtual bool IsEditor() { return false; }
+
     /// @brief Starts and runs the main game loop.
     /// @details Handles the lifecycle of the application, including:
     /// - Event polling (`SDL_PollEvent`) and dispatching.
@@ -68,10 +89,16 @@ public:
     void run(std::function<void()> onUpdateLoop = nullptr);
 
     /// @brief Function returning the entity of the camera.
-    /// @return entt::entity - Entity of the camera.
-    entt::entity getCamera() {
-        auto view = m_registry.view<CameraComponent>();
-        return view.empty() ? entt::null : view.front();
+    /// @return vex::Entity - Entity of the camera.
+    vex::Entity getCamera() {
+        vex::Entity cameraEntity = vex::NULL_ENTITY;
+        vex::View<CameraComponent> view(m_registry);
+        view.each([&cameraEntity](vex::Entity e, CameraComponent&) {
+            if (cameraEntity == vex::NULL_ENTITY) {
+                cameraEntity = e;
+            }
+        });
+        return cameraEntity;
     }
 
     /// @brief Sets the resolution mode and updates the resolution manager.
@@ -90,6 +117,10 @@ public:
     /// @return ResolutionMode - Current resolution mode.
     ResolutionMode getResolutionMode() const { return m_resolutionManager->getCurrentMode(); }
 
+    /// @brief returns a pointer to the resolution manager.
+    /// @return ResolutionManager* - Pointer to the resolution manager.
+    ResolutionManager* getResolutionManager() const { return m_resolutionManager.get(); }
+
     /// @brief Function allowing for changing input mode at runtime.
     /// @param InputMode mode - Enum storing input modes.
     void setInputMode(InputMode mode) { m_inputSystem->setInputMode(mode); }
@@ -99,12 +130,12 @@ public:
     InputMode getInputMode() const { return m_inputSystem->getInputMode(); }
 
     /// @brief Applies new global environment settings (lighting, shading) to the interface.
-    /// @param enviroment settings - The new environment configuration struct.
-    void setEnvironmentSettings(enviroment settings);
+    /// @param environment settings - The new environment configuration struct.
+    void setEnvironmentSettings(environment settings);
 
     /// @brief Returns the current environment settings.
-    /// @return enviroment - Current environment settings.
-    enviroment getEnvironmentSettings();
+    /// @return environment - Current environment settings.
+    environment getEnvironmentSettings();
 
     /// @brief Returns Interface, used internally.
     Interface* getInterface();
@@ -112,8 +143,8 @@ public:
     /// @brief Returns  std::shared_ptr of VirtualFileSystem.
     std::shared_ptr<VirtualFileSystem> getFileSystem() { return m_vfs; }
 
-    /// @brief Returns a reference to entt::registry.
-    entt::registry& getRegistry() { return m_registry; }
+    /// @brief Returns a reference to vex::Registry.
+    vex::Registry& getRegistry() { return m_registry; }
 
     /// @brief Returns pointer to PhysicsSystem.
     PhysicsSystem* getPhysicsSystem() { return m_physicsSystem.get(); }
@@ -219,7 +250,7 @@ protected:
     std::unique_ptr<PhysicsSystem> m_physicsSystem;
     std::unique_ptr<SceneManager> m_sceneManager;
 
-    entt::registry m_registry;
+    vex::Registry m_registry;
 
     bool m_running = true;
     bool m_paused = false;

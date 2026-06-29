@@ -1,16 +1,22 @@
 #include "components/SceneManager.hpp"
+#include "components/GameComponents/ComponentFactory.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameComponents/CharacterComponent.hpp"
 #include "components/GameComponents/AudioSourceComponent.hpp"
-#include "components/GameComponents/ComponentFactory.hpp"
+#include "components/GameComponents/EngineUtility.hpp"
+#include "components/GameComponents/UtilityComponents.hpp"
+#include "components/GameComponents/BillboardComponent.hpp"
+#include "components/GameComponents/ParticleEmitterComponent.hpp"
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/LightObject.hpp"
 #include "components/GameObjects/FogObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
 #include "components/PhysicsSystem.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 #include "components/VirtualFileSystem.hpp"
+#include "backends/vulkan/MeshManager.hpp"
+#include "backends/vulkan/Interface.hpp"
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <cstdint>
@@ -57,8 +63,12 @@ namespace vex {
         #if DEBUG
         template<>
             void vex::GenericComponentInspector<vex::PhysicsComponent>(GameObject& obj) {
-                std::string name = entt::type_id<vex::PhysicsComponent>().name().data();
-                std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+                std::string name = typeid(vex::PhysicsComponent).name();
+                size_t lastColon = name.rfind("::");
+                size_t lastBracket = name.find(']');
+                std::string extracted = (lastColon != std::string::npos)
+                    ? name.substr(lastColon + 2, (lastBracket != std::string::npos ? lastBracket : name.length()) - (lastColon + 2))
+                    : name;
 
                 ImGui::PushID(name.c_str());
                 if (obj.HasComponent<vex::PhysicsComponent>()) {
@@ -91,6 +101,7 @@ namespace vex {
                         if (ImReflect::Input("Angular Damping", pc.angularDamping).get<float>().is_changed()) changed = true;
                         if (ImReflect::Input("Sensor", pc.isSensor).get<bool>().is_changed()) changed = true;
                         if (ImReflect::Input("Allow Sleeping", pc.allowSleeping).get<bool>().is_changed()) changed = true;
+                        if (ImReflect::Input("Draw Debug", pc.debugDraw).get<bool>().is_changed()) changed = true;
 
                         pc.updated = changed;
 
@@ -115,8 +126,12 @@ namespace vex {
                     #if DEBUG
                     template<>
                         void vex::GenericComponentInspector<vex::TransformComponent>(GameObject& obj) {
-                            std::string name = entt::type_id<vex::TransformComponent>().name().data();
-                            std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+                            std::string name = typeid(vex::TransformComponent).name();
+                            size_t lastColon = name.rfind("::");
+                            size_t lastBracket = name.find(']');
+                            std::string extracted = (lastColon != std::string::npos)
+                                ? name.substr(lastColon + 2, (lastBracket != std::string::npos ? lastBracket : name.length()) - (lastColon + 2))
+                                : name;
 
                             ImGui::PushID(name.c_str());
                             if (obj.HasComponent<vex::TransformComponent>()) {
@@ -160,6 +175,12 @@ REGISTER_COMPONENT(vex::FogComponent, color, density, start, end);
 REGISTER_COMPONENT(vex::CharacterComponent, standingHeight, standingRadius, mass, maxSlopeAngle);
 REGISTER_COMPONENT(vex::AudioSourceComponent, audioFilePath, loop, is3D, autoPlay, volume, pitch, distance);
 
+REGISTER_COMPONENT(vex::LifetimeComponent, lifespan);
+REGISTER_COMPONENT(vex::OscillatorComponent, axis, amplitude, frequency, timeOffset);
+REGISTER_COMPONENT(vex::TweenComponent, targetLocalOffset, duration, pingPong);
+REGISTER_COMPONENT(vex::BillboardComponent, texturePath, size, color, isTransparent, isUnlit);
+REGISTER_COMPONENT(vex::ParticleEmitterComponent, texturePath, isTransparent, isUnlit, active, spawnRate, spawnTimer, gravity, initialVelocity, velocityVariation, particleLife, particleLifeVariation, startSize, endSize, startColor, endColor);
+
 //REGISTER_COMPONENT(vex::PhysicsComponent, shape, mass, friction, bounce, linearDamping, angularDamping, allowSleeping);
 
 REGISTER_COMPONENT(vex::PhysicsComponent,
@@ -167,6 +188,7 @@ REGISTER_COMPONENT(vex::PhysicsComponent,
     bodyType,
     isSensor,
     allowSleeping,
+    debugDraw,
 
     mass,
     friction,
@@ -191,10 +213,18 @@ namespace vex {
     REGISTER_GAME_OBJECT(FogObject);
     REGISTER_GAME_OBJECT(ModelObject);
 
-void SceneManager::loadScene(const std::string& path, Engine& engine) {
-    clearScenes();
-    loadSceneWithoutClearing(path, engine);
-}
+    void SceneManager::loadScene(const std::string& path, Engine& engine) {
+        if (m_isUpdating) {
+            m_pendingActions.push_back([this, path, &engine]() {
+                clearScenes(engine);
+                loadSceneWithoutClearing(path, engine);
+            });
+            return;
+        }
+
+        clearScenes(engine);
+        loadSceneWithoutClearing(path, engine);
+    }
 
 void SceneManager::unloadScene(const std::string& path) {
     m_scenes.erase(path);
@@ -206,13 +236,38 @@ void SceneManager::loadSceneWithoutClearing(const std::string& path, Engine& eng
     m_scenes[path]->sceneBegin();
 }
 
-void SceneManager::clearScenes() {
+void SceneManager::clearScenes(Engine& engine) {
+    engine.getInterface()->WaitForGPUToFinish();
     m_scenes.clear();
+
+    auto& registry = engine.getRegistry();
+    std::vector<vex::Entity> toDestroy;
+
+    vex::View<NameComponent>(registry).each([&](vex::Entity entity, NameComponent& comp) {
+        if (!registry.has<PersistentTag>(entity)) {
+            toDestroy.push_back(entity);
+        }
+    });
+
+    for (auto entity : toDestroy) {
+        registry.destroy(entity);
+    }
+
+    engine.getInterface()->getMeshManager().clearState();
 }
 
 void SceneManager::scenesUpdate(float deltaTime){
+    m_isUpdating = true;
     for (auto& scene : m_scenes) {
         scene.second->sceneUpdate(deltaTime);
+    }
+    m_isUpdating = false;
+
+    if (!m_pendingActions.empty()) {
+        for (auto& action : m_pendingActions) {
+            action();
+        }
+        m_pendingActions.clear();
     }
 }
 

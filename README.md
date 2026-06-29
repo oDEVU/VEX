@@ -1,6 +1,6 @@
 #  VEX (Vulkan Early eXperiences)
-![Vex logo rendered in engine](/RepoStuff/LogoAlpha1.png)
-A game engine built with Vulkan that aims to replicate the feel of PS1-era games. The main goal of this project is to learn graphics programming without the complexity of PBR and other modern techniques, while still building something visually appealing.
+![Vex logo rendered in engine](/RepoStuff/NewLogo/1_2/logo_1_2.gif)
+A game engine built with Vulkan that aims to replicate the feel of PS1-era games. The main goal of this project is to learn graphics programming without the complexity of PBR and other modern techniques, while still building something visually appealing. I'm currently taking a break to work on more modern engine.
 ![Vex screen_shot_low_res](/RepoStuff/logo_anim.gif)
 
 ## ⚠️ Installation Philosophy
@@ -35,7 +35,7 @@ Custom packing system that differentiates between development and deployment. De
 - **Transform Hierarchy:** Robust object parenting with a hierarchical transformation system.
 - **Object/ECS Hybrid:** A pragmatic architecture similar to Unreal's Actor system; you create Object C++ classes that hold ECS components.
 - **Scene System:** JSON-based serialization with the ability to load custom user classes (Player, Enemy, Gun) via a registration system.
-- **UI System:** JSON-based UI layout engine powered by **Facebook Yoga** for responsive design.
+- **UI System:** JSON-based UI layout engine.
 
 ---
 
@@ -47,13 +47,13 @@ You must install all the following dependencies for your specific operating syst
 #### Windows Requirements
 | Dependency | Recommended Installation | Notes |
 | :--- | :--- | :--- |
-| **Visual Studio Build Tools 2022** | [Download Installer](https://www.google.com/search?q=https://visualstudio.microsoft.com/visual-cpp-build-tools/) | **CRITICAL:** Run the installer and select the **"Desktop development with C++"** workload. Ensure **Windows 10/11 SDK** is checked in the sidebar. |
+| **Visual Studio Build Tools 2022** | [Download Installer](https://visualstudio.microsoft.com/visual-cpp-build-tools/) | **CRITICAL:** Run the installer and select the **"Desktop development with C++"** workload. Ensure **Windows 10/11 SDK** is checked in the sidebar. |
 | **Git** | [Official Installer](https://git-scm.com/download/win) | Standard installer. Used for version control. |
 | **CMake** | [Official Installer](https://cmake.org/download/) | Use the Windows x64 Installer (`.msi`). <br><br>**Important:** Select *"Add CMake to the system PATH for all users"* during installation. |
 | **LLVM (Clang)** | [GitHub Releases](https://github.com/llvm/llvm-project/releases) | Download the `LLVM-xx.x.x-win64.exe` <br><br>**Important:** Select *"Add LLVM to the system PATH"* during installation. |
 | **Ninja Build** | [GitHub Releases](https://github.com/ninja-build/ninja/releases) | Download `ninja-win.zip`. <br><br>**Action Required:** Extract `ninja.exe` to a folder (e.g., `C:\Program Files\Ninja\`) and manually add that folder to your System `PATH`. |
 | **Vulkan SDK** | [LunarG Website](https://vulkan.lunarg.com/sdk/home) | **Must include:** <br>• Validation Layers<br>• SlangC |
-| **ImageMagick** | [Official Installer](https://www.google.com/search?q=https://imagemagick.org/script/download.php%23windows) | Download the `Q16-HDRI-x64-dll.exe`. <br><br>**Important:** Check *"Add application directory to your system path"*. |
+| **ImageMagick** | [Official Installer](https://imagemagick.org/download/#gsc.tab=0) | Download the `Q16-HDRI-x64-dll.exe`. <br><br>**Important:** Check *"Add application directory to your system path"*. |
 
 ---
 
@@ -120,14 +120,12 @@ Argument | Description
 
 ## TODO:
 ### Must haves to create games:
-- Billboard rendering
-- Particle system
 - Support for animated 3D models
 ### Should be implemented but can make games without:
-- Vertex colors for models (for AO or fog effects)
+- Vertex colors for models (for AO or better model detail)
 ### Things that will make me happy but wont help me do games:
 - offscreen rendering (to a texture for example, with support for multiple render targets)
-- Better shader pipeline
+- Better shader pipeline (like custom user programamble shaders / custom materials)
 
 ## Libraries used by engine:
 All libraries are included as git submodules. Their respective licenses may differ from engine license but all of them are on some sort of opensource license.
@@ -140,12 +138,11 @@ All libraries are included as git submodules. Their respective licenses may diff
 - [assimp](https://github.com/assimp/assimp)
 - [cpptrace](https://github.com/jeremy-rifkin/cpptrace)
 - [cr](https://github.com/fungos/cr)
-- [entt](https://github.com/skypjack/entt)
 - [Dear ImGui](https://github.com/ocornut/imgui)
 - [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)
 - [ImReflect](https://github.com/Sven-vh/ImReflect)
 - [nlohmann/json](https://github.com/nlohmann/json/)
-- [yoga](https://github.com/facebook/yoga)
 - [JoltPhysics](https://github.com/jrouwe/JoltPhysics)
+- [ZSTD](https://github.com/facebook/zstd)
 
 ![Funny meme, really](/RepoStuff/meme.png)

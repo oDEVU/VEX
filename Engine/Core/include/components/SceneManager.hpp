@@ -8,6 +8,8 @@
 
 #include <components/Scene.hpp>
 #include <memory>
+#include <functional>
+
 #include "VEX/VEX_export.h"
 
 namespace vex {
@@ -36,7 +38,9 @@ void unloadScene(const std::string& path);
 void loadSceneWithoutClearing(const std::string& path, Engine& engine);
 
 /// @brief Function to clear the current scene.
-void clearScenes();
+/// @details Clears also all entities in the registry without PersistentTags and MeshManager.
+/// @details Clears the registry and then clears the `m_scenes` map.
+void clearScenes(Engine& engine);
 
 /// @brief Updates all currently loaded scenes.
 /// @details Iterates through the `m_scenes` map and calls `sceneUpdate(deltaTime)` on each active scene.
@@ -76,6 +80,9 @@ Scene* GetScene(const std::string& scene) const {
 private:
 std::map<std::string, std::shared_ptr<Scene>> m_scenes;
 std::string lastSceneName = "";
+
+bool m_isUpdating = false;
+std::vector<std::function<void()>> m_pendingActions;
 };
 
 } // namespace vex

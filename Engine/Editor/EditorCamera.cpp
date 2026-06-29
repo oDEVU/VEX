@@ -1,5 +1,6 @@
 #include "EditorCamera.hpp"
 #include <components/GameComponents/BasicComponents.hpp>
+#include <components/GameComponents/EngineUtility.hpp>
 
 
 EditorCameraObject::EditorCameraObject(vex::Engine& engine, const std::string& name, SDL_Window* window)
@@ -7,13 +8,14 @@ EditorCameraObject::EditorCameraObject(vex::Engine& engine, const std::string& n
         GetComponent<vex::CameraComponent>().fov = 60;
         GetComponent<vex::CameraComponent>().farPlane = 1000;
 
+        AddComponent(vex::PersistentTag());
 }
 
 void EditorCameraObject::processEvent(const SDL_Event& event, float deltaTime) {
     if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP) {
         bool isPressed = (event.type == SDL_EVENT_KEY_DOWN);
-        const SDL_KeyboardEvent& key_event = event.key;
-        keyStates[key_event.scancode] = isPressed;
+        const SDL_KeyboardEvent& keyEvent = event.key;
+        keyStates[keyEvent.scancode] = isPressed;
     }
 
     if (event.type == SDL_EVENT_MOUSE_WHEEL && m_isFlying) {

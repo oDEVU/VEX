@@ -16,16 +16,41 @@
 #include "components/UI/VexUI.hpp"
 #include "MeshManager.hpp"
 #include "PhysicsDebug.hpp"
-#include "entt/entity/fwd.hpp"
+
 #include <glm/glm.hpp>
 #include <chrono>
 #include <components/GameComponents/UiComponent.hpp>
+#include "components/GameComponents/BillboardComponent.hpp"
+#include "components/GameComponents/ParticleEmitterComponent.hpp"
 
 namespace vex {
     /// @brief Struct to hold information about a render item.
     struct RenderItem {
-        entt::entity entity;
+        vex::Entity entity;
         uint32_t modelIndex;
+    };
+
+    /// @brief Struct to hold information about a billboard render item.
+    struct BillboardItem {
+        vex::Entity entity;
+        uint32_t texID;
+    };
+
+    struct EditorBillboardItem {
+        vex::Entity entity;
+        uint32_t texID;
+        float offsetX;
+    };
+
+    /// @brief Struct to hold push data for billboard rendering.
+    struct BillboardPushData {
+        glm::vec3 pos;    ///< World position of the billboard.
+        float sx;         ///< Horizontal scale.
+        float sy;         ///< Vertical scale.
+        uint32_t tID;     ///< Texture ID for bindless access.
+        uint32_t unlit;   ///< Flag determining if the billboard is unlit.
+        float pad;        ///< Padding for 16-byte alignment.
+        glm::vec4 col;    ///< Tint color of the billboard.
     };
 
     /// @brief Data structure to pass state between render stages
@@ -47,6 +72,10 @@ namespace vex {
         /// @param std::unique_ptr<VulkanPipeline>& pipeline - Standard Opaque pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& transPipeline - Transparent pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& maskPipeline - Masked pipeline (alpha cutout).
+        /// @param std::unique_ptr<VulkanPipeline>& billboardTransPipeline - Transparent billboard pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& billboardMaskedPipeline - Masked billboard pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& particleTransPipeline - Transparent particle pipeline.
+        /// @param std::unique_ptr<VulkanPipeline>& particleMaskedPipeline - Masked particle pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& uiPipeline - User Interface pipeline.
         /// @param std::unique_ptr<VulkanPipeline>& fullscreenPipeline - Fullscreen/Post-process pipeline.
         /// @param std::unique_ptr<VulkanSwapchainManager>& swapchainManager - Swapchain manager.
@@ -56,8 +85,13 @@ namespace vex {
                  std::unique_ptr<VulkanPipeline>& pipeline,
                  std::unique_ptr<VulkanPipeline>& transPipeline,
                  std::unique_ptr<VulkanPipeline>& maskPipeline,
+                 std::unique_ptr<VulkanPipeline>& billboardTransPipeline,
+                 std::unique_ptr<VulkanPipeline>& billboardMaskedPipeline,
+                 std::unique_ptr<VulkanPipeline>& particleTransPipeline,
+                 std::unique_ptr<VulkanPipeline>& particleMaskedPipeline,
                  std::unique_ptr<VulkanPipeline>& uiPipeline,
                  std::unique_ptr<VulkanPipeline>& fullscreenPipeline,
+                 std::unique_ptr<VulkanPipeline>& compositePipeline,
                  std::unique_ptr<VulkanSwapchainManager>& swapchainManager,
                  std::unique_ptr<MeshManager>& meshManager);
 
@@ -81,14 +115,14 @@ namespace vex {
         /// 5. Executes draw calls (using MultiDraw for transparency if supported).
         /// 6. Renders UI components on top.
         /// @param SceneRenderData& data - Frame context data.
-        /// @param const entt::entity cameraEntity - The active camera entity.
-        /// @param entt::registry& registry - ECS registry to query objects.
+        /// @param const vex::Entity cameraEntity - The active camera entity.
+        /// @param vex::Registry& registry - ECS registry to query objects.
         /// @param int frame - Current frame number (used for animations/logic).
         /// @param const std::vector<DebugVertex>* debugLines - Optional debug lines to draw.
         /// @param bool isEditorMode - If true, applies editor-specific logic (e.g. gizmos, override camera).
         void renderScene(SceneRenderData& data,
-                         const entt::entity cameraEntity,
-                         entt::registry& registry,
+                         const vex::Entity cameraEntity,
+                         vex::Registry& registry,
                          int frame,
                          const std::vector<DebugVertex>* debugLines = nullptr,
                          bool isEditorMode = false);
@@ -156,10 +190,15 @@ namespace vex {
         VulkanContext& m_r_context;
         std::unique_ptr<VulkanResources>& m_p_resources;
         std::unique_ptr<VulkanPipeline>& m_p_pipeline;
-        std::unique_ptr<VulkanPipeline>& m_p_transPipeline;
-        std::unique_ptr<VulkanPipeline>& m_p_maskPipeline;
+        std::unique_ptr<VulkanPipeline>& m_p_transPipeline; ///< Standard transparent geometry pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_maskPipeline; ///< Standard masked geometry pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_billboardTransPipeline; ///< Transparent billboard rendering pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_billboardMaskedPipeline; ///< Masked billboard rendering pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_particleTransPipeline; ///< Transparent particle rendering pipeline.
+        std::unique_ptr<VulkanPipeline>& m_p_particleMaskedPipeline; ///< Masked particle rendering pipeline.
         std::unique_ptr<VulkanPipeline>& m_p_uiPipeline;
         std::unique_ptr<VulkanPipeline>& m_p_fullscreenPipeline;
+        std::unique_ptr<VulkanPipeline>& m_p_compositePipeline;
         std::unique_ptr<VulkanSwapchainManager>& m_p_swapchainManager;
         std::unique_ptr<MeshManager>& m_p_meshManager;
 
@@ -177,14 +216,22 @@ namespace vex {
         SceneUBO m_sceneUBO;
 
         VkDescriptorSet m_screenDescriptorSet = VK_NULL_HANDLE;
+        VkDescriptorSet m_crtDescriptorSet = VK_NULL_HANDLE;
         VkSampler m_screenSampler = VK_NULL_HANDLE;
+        VkSampler m_linearSampler = VK_NULL_HANDLE;
         VkImageView m_lastUsedView = VK_NULL_HANDLE;
         VkDescriptorSet m_cachedImGuiDescriptor = VK_NULL_HANDLE;
         std::vector<std::vector<VkDescriptorSet>> m_garbageDescriptors;
         VkDescriptorPool m_localPool = VK_NULL_HANDLE;
 
-        std::vector<RenderItem> opaqueQueue;
-        std::vector<RenderItem> maskedQueue;
+        std::vector<RenderItem> opaqueQueue;      ///< Queue of opaque 3D objects to render.
+        std::vector<RenderItem> maskedQueue;      ///< Queue of masked (alpha-cutout) 3D objects to render.
+        std::vector<RenderItem> transparentQueue; ///< Queue of transparent 3D objects to render.
+        std::vector<BillboardItem> bMaskedQueue;  ///< Queue of masked billboards to render.
+        std::vector<BillboardItem> bTransQueue;   ///< Queue of transparent billboards to render.
+        std::vector<EditorBillboardItem> bEditorQueue;  ///< Queue of editor billboards to render.
+        std::vector<vex::Entity> pMaskedQueue;   ///< Queue of entities with masked particle emitters.
+        std::vector<vex::Entity> pTransQueue;    ///< Queue of entities with transparent particle emitters.
 
         std::vector<VkBuffer> m_indirectBuffers;
         std::vector<VmaAllocation> m_indirectAllocations;

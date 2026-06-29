@@ -5,8 +5,18 @@ var hierarchy =
     [ "vex::AudioSourceComponent", "structvex_1_1AudioSourceComponent.html", null ],
     [ "vex::AudioSystem", "classvex_1_1AudioSystem.html", null ],
     [ "BasicEditorWindow", "structBasicEditorWindow.html", null ],
+    [ "vex::BatchedTextureData", "structvex_1_1BatchedTextureData.html", null ],
+    [ "vex::BillboardComponent", "structvex_1_1BillboardComponent.html", null ],
+    [ "vex::BillboardItem", "structvex_1_1BillboardItem.html", null ],
+    [ "vex::BillboardPushData", "structvex_1_1BillboardPushData.html", null ],
     [ "JPH::BodyActivationListener", null, [
       [ "vex::MyActivationListener", "classvex_1_1MyActivationListener.html", null ]
+    ] ],
+    [ "JPH::BodyDrawFilter", null, [
+      [ "vex::DebugDrawFilter", "classvex_1_1DebugDrawFilter.html", null ]
+    ] ],
+    [ "JPH::BodyFilter", null, [
+      [ "vex::IgnoreSensorFilter", "classvex_1_1IgnoreSensorFilter.html", null ]
     ] ],
     [ "vex::BodyIDHasher", "structvex_1_1BodyIDHasher.html", null ],
     [ "JPH::BroadPhaseLayerInterface", null, [
@@ -17,11 +27,15 @@ var hierarchy =
     [ "vex::CharacterComponent", "structvex_1_1CharacterComponent.html", null ],
     [ "vex::CollisionHit", "structvex_1_1CollisionHit.html", null ],
     [ "vex::ComponentRegistry", "classvex_1_1ComponentRegistry.html", null ],
+    [ "vex::ComponentType", "classvex_1_1ComponentType.html", null ],
     [ "JPH::ContactListener", null, [
       [ "vex::MyContactListener", "classvex_1_1MyContactListener.html", null ]
     ] ],
     [ "vex::Editor::CopiedObjectData", "structvex_1_1Editor_1_1CopiedObjectData.html", null ],
+    [ "vex::DebugConsole", "classvex_1_1DebugConsole.html", null ],
     [ "vex::DebugVertex", "structvex_1_1DebugVertex.html", null ],
+    [ "vex::EditorBillboardComponent", "structvex_1_1EditorBillboardComponent.html", null ],
+    [ "vex::EditorBillboardItem", "structvex_1_1EditorBillboardItem.html", null ],
     [ "EditorMenuBar", "classEditorMenuBar.html", null ],
     [ "EditorProperties", "structEditorProperties.html", null ],
     [ "vex::Engine", "classvex_1_1Engine.html", [
@@ -29,8 +43,9 @@ var hierarchy =
       [ "vex::Editor", "classvex_1_1Editor.html", null ],
       [ "vex::ProjectSelector", "classvex_1_1ProjectSelector.html", null ]
     ] ],
-    [ "vex::enviroment", "structvex_1_1enviroment.html", null ],
+    [ "vex::environment", "structvex_1_1environment.html", null ],
     [ "vex::VirtualFileSystem::FileData", "structvex_1_1VirtualFileSystem_1_1FileData.html", null ],
+    [ "vex::FlexValue", "structvex_1_1FlexValue.html", null ],
     [ "vex::FogComponent", "structvex_1_1FogComponent.html", null ],
     [ "vex::FontAtlas", "structvex_1_1FontAtlas.html", null ],
     [ "vex::Frustum", "structvex_1_1Frustum.html", null ],
@@ -53,6 +68,9 @@ var hierarchy =
       [ "vex::DeleteCommand", "classvex_1_1DeleteCommand.html", null ],
       [ "vex::TransformCommand", "classvex_1_1TransformCommand.html", null ]
     ] ],
+    [ "vex::IComponentStorage", "classvex_1_1IComponentStorage.html", [
+      [ "vex::ComponentStorage< T >", "classvex_1_1ComponentStorage.html", null ]
+    ] ],
     [ "vex::ImGUIWrapper", "classvex_1_1ImGUIWrapper.html", [
       [ "vex::VulkanImGUIWrapper", "classvex_1_1VulkanImGUIWrapper.html", [
         [ "EditorImGUIWrapper", "classEditorImGUIWrapper.html", null ]
@@ -62,6 +80,7 @@ var hierarchy =
     [ "vex::InputComponent", "structvex_1_1InputComponent.html", null ],
     [ "vex::InputSystem", "classvex_1_1InputSystem.html", null ],
     [ "vex::Interface", "classvex_1_1Interface.html", null ],
+    [ "vex::PhysicsSystem::InterpCache", "structvex_1_1PhysicsSystem_1_1InterpCache.html", null ],
     [ "Assimp::IOStream", null, [
       [ "vex::VPKAssimpStream", "classvex_1_1VPKAssimpStream.html", null ]
     ] ],
@@ -72,9 +91,12 @@ var hierarchy =
       [ "vex::VirtualFileSystem::VPKStream", "classvex_1_1VirtualFileSystem_1_1VPKStream.html", null ]
     ] ],
     [ "vex::InputSystem::KeyState", "structvex_1_1InputSystem_1_1KeyState.html", null ],
+    [ "vex::LayoutNode", "structvex_1_1LayoutNode.html", null ],
+    [ "vex::LifetimeComponent", "structvex_1_1LifetimeComponent.html", null ],
     [ "vex::Light", "structvex_1_1Light.html", null ],
     [ "vex::LightComponent", "structvex_1_1LightComponent.html", null ],
     [ "vex::VirtualFileSystem::LoadedVPK", "structvex_1_1VirtualFileSystem_1_1LoadedVPK.html", null ],
+    [ "vex::DebugConsole::LogEntry", "structvex_1_1DebugConsole_1_1LogEntry.html", null ],
     [ "vex::LogEntry", "structvex_1_1LogEntry.html", null ],
     [ "vex::MeshComponent", "structvex_1_1MeshComponent.html", null ],
     [ "vex::MeshData", "structvex_1_1MeshData.html", null ],
@@ -87,13 +109,20 @@ var hierarchy =
     [ "JPH::ObjectVsBroadPhaseLayerFilter", null, [
       [ "vex::ObjectVsBroadPhaseLayerFilterImpl", "classvex_1_1ObjectVsBroadPhaseLayerFilterImpl.html", null ]
     ] ],
+    [ "vex::OscillatorComponent", "structvex_1_1OscillatorComponent.html", null ],
+    [ "vex::Particle", "structvex_1_1Particle.html", null ],
+    [ "vex::ParticleEmitterComponent", "structvex_1_1ParticleEmitterComponent.html", null ],
+    [ "vex::ParticleGPUData", "structvex_1_1ParticleGPUData.html", null ],
+    [ "vex::PersistentTag", "structvex_1_1PersistentTag.html", null ],
     [ "vex::PhysicsComponent", "structvex_1_1PhysicsComponent.html", null ],
     [ "vex::PhysicsSystem", "classvex_1_1PhysicsSystem.html", null ],
     [ "vex::Plane", "structvex_1_1Plane.html", null ],
     [ "vex::ProjectMetadata", "structvex_1_1ProjectMetadata.html", null ],
     [ "ProjectProperties", "structProjectProperties.html", null ],
+    [ "ProjectVersion", "structProjectVersion.html", null ],
     [ "vex::PushConstants", "structvex_1_1PushConstants.html", null ],
     [ "vex::RaycastHit", "structvex_1_1RaycastHit.html", null ],
+    [ "vex::Registry", "classvex_1_1Registry.html", null ],
     [ "vex::Renderer", "classvex_1_1Renderer.html", null ],
     [ "vex::RenderItem", "structvex_1_1RenderItem.html", null ],
     [ "vex::ResolutionManager", "classvex_1_1ResolutionManager.html", null ],
@@ -105,6 +134,7 @@ var hierarchy =
     [ "vex::SceneUBO", "structvex_1_1SceneUBO.html", null ],
     [ "vex::SerializedObject", "structvex_1_1SerializedObject.html", null ],
     [ "vex::SkipInit", "structvex_1_1SkipInit.html", null ],
+    [ "vex::AudioSystem::StandaloneAudio", "structvex_1_1AudioSystem_1_1StandaloneAudio.html", null ],
     [ "std::streambuf", null, [
       [ "vex::VirtualFileSystem::VPKStream::VPKStreamBuf", "classvex_1_1VirtualFileSystem_1_1VPKStream_1_1VPKStreamBuf.html", null ]
     ] ],
@@ -117,12 +147,16 @@ var hierarchy =
     ] ],
     [ "vex::Submesh", "structvex_1_1Submesh.html", null ],
     [ "vex::VulkanMesh::SubmeshBuffers", "structvex_1_1VulkanMesh_1_1SubmeshBuffers.html", null ],
+    [ "vex::ThreadPool", "classvex_1_1ThreadPool.html", null ],
     [ "vex::TransformComponent", "structvex_1_1TransformComponent.html", null ],
     [ "vex::TransparentTriangle", "structvex_1_1TransparentTriangle.html", null ],
+    [ "vex::TweenComponent", "structvex_1_1TweenComponent.html", null ],
     [ "vex::UiComponent", "structvex_1_1UiComponent.html", null ],
     [ "vex::UIPushConstants", "structvex_1_1UIPushConstants.html", null ],
     [ "vex::UIQuad", "structvex_1_1UIQuad.html", null ],
     [ "vex::UIStyle", "structvex_1_1UIStyle.html", null ],
+    [ "vex::UIUnitValue", "structvex_1_1UIUnitValue.html", null ],
+    [ "vex::UIUnitVec2", "structvex_1_1UIUnitVec2.html", null ],
     [ "vex::UIVertex", "structvex_1_1UIVertex.html", null ],
     [ "glm::vec3", null, [
       [ "vex::rgb", "structvex_1_1rgb.html", null ]
@@ -132,10 +166,12 @@ var hierarchy =
     ] ],
     [ "vex::Vertex", "structvex_1_1Vertex.html", null ],
     [ "vex::VexUI", "classvex_1_1VexUI.html", null ],
+    [ "vex::View&lt; Components &gt;", "classvex_1_1View.html", null ],
     [ "vex::VirtualFileSystem", "classvex_1_1VirtualFileSystem.html", null ],
     [ "vex::VirtualFileSystem::VPKFileEntry", "structvex_1_1VirtualFileSystem_1_1VPKFileEntry.html", null ],
     [ "vex::VirtualFileSystem::VPKHeader", "structvex_1_1VirtualFileSystem_1_1VPKHeader.html", null ],
     [ "vex::VulkanContext", "structvex_1_1VulkanContext.html", null ],
+    [ "vex::VulkanFeatures", "structvex_1_1VulkanFeatures.html", null ],
     [ "vex::VulkanMesh", "classvex_1_1VulkanMesh.html", null ],
     [ "vex::VulkanPipeline", "classvex_1_1VulkanPipeline.html", null ],
     [ "vex::VulkanResources", "classvex_1_1VulkanResources.html", null ],

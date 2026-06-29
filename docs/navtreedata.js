@@ -26,8 +26,16 @@ var NAVTREE =
 [
   [ "VEX Engine", "index.html", [
     [ "Todo List", "todo.html", null ],
+    [ "Topics", "topics.html", "topics" ],
     [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
+        [ "Typedefs", "namespacemembers_type.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ]
+      ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -45,22 +53,23 @@ var NAVTREE =
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
         [ "Variables", "globals_vars.html", null ],
-        [ "Enumerations", "globals_enum.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
 "AssetBrowser_8cpp_source.html",
-"classvex_1_1AssetBrowser.html#a2f923d5050e53e6dc61de482804562c3",
-"classvex_1_1GameObject.html#ae98293f38a7f1bf387ea19366ff10d9f",
-"classvex_1_1ResolutionManager.html#a1dab58ae6c60cf30759c6a431ed63f1a",
-"classvex_1_1VulkanResources.html#a24b57ebdc8cf162323448e45674140c3",
-"structvex_1_1FontAtlas.html",
-"structvex_1_1mesh__asset__path.html"
+"classvex_1_1ComponentRegistry.html",
+"classvex_1_1GameObject.html#a4f7114d7490d411204d8508e338aa1b8",
+"classvex_1_1ProjectSelector.html#aca1b6e034e42319b09c02e176c97d74b",
+"classvex_1_1VexUI.html#ad473b0b2c29ea76fd2de94059fc12795",
+"dir_6b5c82f257008dd22d69d25c0d4f8c0c.html",
+"structvex_1_1LayoutNode.html#a1142241d86d601e1ce4b4258829f3fe0",
+"structvex_1_1TransformComponent.html#a820deaf69184d0c2050694e9721e1487"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

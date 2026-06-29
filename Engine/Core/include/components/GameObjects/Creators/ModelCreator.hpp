@@ -17,9 +17,9 @@ namespace vex {
     /// @param MeshComponent meshComponent Mesh component of the model object.
     /// @param TransformComponent transformComponent Transform component of the model object.
     /// @param Engine& engine Reference to the engine.
-    /// @param entt::entity parent Parent entity of the model object.
+    /// @param vex::Entity parent Parent entity of the model object.
     /// @return Pointer to the created model object.
-    ModelObject* createModelFromComponents(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, entt::entity parent = entt::null);
+    ModelObject* createModelFromComponents(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, Engine& engine, vex::Entity parent = vex::NULL_ENTITY);
 
     /// @brief Just creates meshcomponent from file. Copies meshData and texture paths for later backend specific processing.
     /// @param const std::string& path Path to the mesh file.
@@ -31,7 +31,7 @@ namespace vex {
     /// @param const std::string& path Path to the mesh file.
     /// @param const std::string& name Name of the model object.
     /// @param Engine& engine Reference to the engine.
-    /// @param entt::entity parent Parent entity of the model object.
+    /// @param vex::Entity parent Parent entity of the model object.
     /// @return Pointer to the created model object.
-    ModelObject* createModelFromPath(const std::string& path, const std::string& name, Engine& engine, entt::entity parent = entt::null);
+    ModelObject* createModelFromPath(const std::string& path, const std::string& name, Engine& engine, vex::Entity parent = vex::NULL_ENTITY);
 }

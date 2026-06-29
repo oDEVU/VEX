@@ -1,5 +1,6 @@
 var projectProperties_8hpp =
 [
+    [ "ProjectVersion", "structProjectVersion.html", null ],
     [ "ProjectProperties", "structProjectProperties.html", null ],
     [ "WindowType", "projectProperties_8hpp.html#a476342970f954b62d70552bcbb5ee509", [
       [ "Windowed", "projectProperties_8hpp.html#a476342970f954b62d70552bcbb5ee509ab13311ab51c4c34757f67f26580018dd", null ],

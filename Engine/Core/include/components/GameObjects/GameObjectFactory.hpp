@@ -6,7 +6,7 @@
 
 #pragma once
 #include "Engine.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "components/GameObjects/GameObject.hpp"
 #include "components/GameComponents/BasicComponents.hpp"
 

@@ -10,7 +10,7 @@ namespace vex {
     GameObject::GameObject(Engine& engine, const std::string& name)
         : m_engine(engine), m_entity(m_engine.getRegistry().create()), m_isValid(true)
     {
-        m_engine.getRegistry().emplace<NameComponent>(m_entity, name);
+        m_engine.getRegistry().add_or_replace<NameComponent>(m_entity, name);
         auto* scene = m_engine.getSceneManager()->GetScene(m_engine.getSceneManager()->getLastSceneName());
         if(scene){
             scene->RegisterGameObject(this);
@@ -22,18 +22,17 @@ namespace vex {
 
             log("[GameObject] Destroying entity ID: %d", (int)m_entity);
 
-            if (m_engine.getRegistry().valid(m_entity)) {
-                 auto view = m_engine.getRegistry().view<TransformComponent>();
-                 for (auto entity : view) {
-                     auto& transform = view.get<TransformComponent>(entity);
+            if (m_engine.getRegistry().has<TransformComponent>(m_entity)) {
+                 vex::View<TransformComponent> view(m_engine.getRegistry());
+                 view.each([this](vex::Entity entity, TransformComponent& transform) {
                      if (transform.getParent() == m_entity) {
-                         transform.setParent(entt::null);
+                         transform.setParent(vex::NULL_ENTITY);
                      }
-                 }
+                 });
                  m_engine.getRegistry().destroy(m_entity);
             }
 
-            m_entity = entt::null;
+            m_entity = vex::NULL_ENTITY;
             m_isValid = false;
         }
 

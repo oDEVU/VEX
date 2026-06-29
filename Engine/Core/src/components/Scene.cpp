@@ -4,8 +4,11 @@
 #include "components/GameObjects/GameObjectFactory.hpp"
 #include "components/GameObjects/CameraObject.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 #include "components/VirtualFileSystem.hpp"
+
+#include <thread>
+#include <chrono>
 
 #if defined(__cpp_lib_execution) && defined(__cpp_lib_parallel_algorithm)
     #include <execution>
@@ -39,16 +42,30 @@ void Scene::load(){
 
     try {
 
-    auto fileData = m_engine->getFileSystem()->load_file(realPath);
+    std::unique_ptr<VirtualFileSystem::FileData> fileData = nullptr;
+    const int maxRetries = 10;
+    const int retryDelayMs = 100;
 
-    log("Scene data: \n%s",fileData->data.data()); // It works on my PC lol, (this comment exists cause there was a compter that had seqfault here couple times)
+    for (int i = 0; i < maxRetries; ++i) {
+        fileData = m_engine->getFileSystem()->load_file(realPath);
+        if (fileData && !fileData->data.empty()) {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(retryDelayMs));
+    }
+
+    if (!fileData || fileData->data.empty()) {
+        throw_error("Failed to read scene file after 1 second of retries. File is empty, missing, or permanently locked by the OS: " + realPath);
+    }
+
+    //log("Scene data: \n%s",fileData->data.data()); // It works on my PC lol, (this comment exists cause there was a compter that had seqfault here couple times)
 
     nlohmann::json json;
     json = nlohmann::json::parse(fileData->data.begin(), fileData->data.end(), nullptr, true);
     //json = nlohmann::json::
     //file.close();
 
-    enviroment env;
+    environment env;
     if (json.contains("environment") && json["environment"].contains("shading")) {
         log("Loading shading settings from scene");
         const auto& shading = json["environment"]["shading"];
@@ -108,6 +125,9 @@ void Scene::load(){
         return;
     }
 
+    std::unordered_map<std::string, GameObject*> objectDirectory;
+    std::vector<std::pair<GameObject*, std::string>> pendingParenting;
+
     for (const auto& obj : objects) {
         std::string type = obj.value("type", "");
         std::string name = obj.value("name", "");
@@ -123,6 +143,8 @@ void Scene::load(){
             continue;
         }
 
+        objectDirectory[name] = gameObj;
+
         auto components = obj["components"];
         if (!components.is_array()) {
             log(LogLevel::WARNING, "Object '%s' has no components to load", name.c_str());
@@ -137,38 +159,24 @@ void Scene::load(){
             }
         }
 
-        std::string parent = obj.value("parent", "");
-                        if (!parent.empty()) {
-                            bool parentFound = false;
-                            for(const auto& m_obj : m_objects) {
-                                // FIX: Check if m_obj is valid and its entity exists in registry
-                                if (!m_obj || !m_obj->isValid() || !m_engine->getRegistry().valid(m_obj->GetEntity())) {
-                                    continue;
-                                }
+        std::string parentName = obj.value("parent", "");
+        if (!parentName.empty()) {
+            pendingParenting.push_back({gameObj, parentName});
+        }
+    }
+    for (auto& pair : pendingParenting) {
+        GameObject* child = pair.first;
+        const std::string& parentName = pair.second;
 
-                                entt::entity e = m_obj->GetEntity();
-                                bool valid = m_engine->getRegistry().valid(e);
-
-                                log("Checking Object at %p | Entity ID: %u (Hex: %X) | Valid in Registry: %d",
-                                        (void*)m_obj.get(), (uint32_t)e, (uint32_t)e, valid);
-
-                                // Safe to access component now
-                                if (m_obj->GetComponent<NameComponent>().name == parent) {
-                                    gameObj->ParentTo(m_obj->GetEntity());
-                                    log("Parented object '%s' to '%s'", name.c_str(), parent.c_str());
-                                    parentFound = true;
-                                    break;
-                                }
-                            }
-                            if (!parentFound) {
-                                log(LogLevel::WARNING, "Parent '%s' not found for object '%s'", parent.c_str(), name.c_str());
-                            }
-                        }
-
-        if (gameObj) {
-            //DestroyGameObject(*gameObj);
-            //auto ptr = std::shared_ptr<GameObject>(gameObj);
-            //m_objects.push_back(std::move(ptr));
+        auto it = objectDirectory.find(parentName);
+        if (it != objectDirectory.end()) {
+            GameObject* parentObj = it->second;
+            if (parentObj->isValid()) {
+                child->ParentTo(parentObj->GetEntity()); //
+                log("Parented object '%s' to '%s'", child->GetComponent<NameComponent>().name.c_str(), parentName.c_str());
+            }
+        } else {
+            log(LogLevel::WARNING, "Parent '%s' not found", parentName.c_str());
         }
     }
     } catch (const std::exception& e) {
@@ -185,15 +193,16 @@ void Scene::sceneBegin(){
 
     bool useParallel = false;
     #ifdef VEX_USE_PARALLEL_EXECUTION
-        if(size > 50) useParallel = true;
+    // TEMPORARILY DISABLED:
+    // if(size > 50) useParallel = true;
     #endif
 
     if(useParallel){
         #ifdef VEX_USE_PARALLEL_EXECUTION
-        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_objects.begin(), m_objects.end(), [&](auto& obj){
             try{ obj->BeginPlay(); } catch(const std::exception& e){ handle_exception(e); }
         });
-        std::for_each(std::execution::par_unseq, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
             try{ obj->BeginPlay(); } catch(const std::exception& e){ handle_exception(e); }
         });
         #endif
@@ -215,15 +224,16 @@ void Scene::sceneUpdate(float deltaTime){
 
     bool useParallel = false;
     #ifdef VEX_USE_PARALLEL_EXECUTION
-        if(size > 50) useParallel = true;
+    // TEMPORARILY DISABLED:
+    // if(size > 50) useParallel = true;
     #endif
 
     if(useParallel){
         #ifdef VEX_USE_PARALLEL_EXECUTION
-        std::for_each(std::execution::par_unseq, m_objects.begin(), m_objects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_objects.begin(), m_objects.end(), [&](auto& obj){
             try{ obj->Update(deltaTime); } catch(const std::exception& e){ log("Error: %s", e.what()); }
         });
-        std::for_each(std::execution::par_unseq, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
+        std::for_each(std::execution::par, m_addedObjects.begin(), m_addedObjects.end(), [&](auto& obj){
             try{ obj->Update(deltaTime); } catch(const std::exception& e){ log("Error: %s", e.what()); }
         });
         #endif
@@ -319,7 +329,7 @@ std::vector<GameObject*> Scene::GetAllGameObjectsByClassName(const std::string& 
     return returnVector;
 }
 
-GameObject* Scene::GetGameObjectByEntity(entt::entity& entity){
+GameObject* Scene::GetGameObjectByEntity(vex::Entity& entity){
     for(const auto& obj : m_objects){
         if(obj->GetEntity() == entity){
             return obj.get();
@@ -356,20 +366,20 @@ void Scene::Save(const std::string& path) {
         {"ntfsArtifacts", env.ntfsArtifacts}
     };
 
-    std::unordered_map<entt::entity, std::vector<GameObject*>> hierarchyMap;
+    std::unordered_map<vex::Entity, std::vector<GameObject*>> hierarchyMap;
     std::vector<GameObject*> rootObjects;
 
     for (const auto& objPtr : m_objects) {
         if (!objPtr || !objPtr->isValid()) continue;
 
         GameObject* obj = objPtr.get();
-        entt::entity parentEntity = entt::null;
+        vex::Entity parentEntity = vex::NULL_ENTITY;
 
         if (obj->HasComponent<TransformComponent>()) {
             parentEntity = obj->GetComponent<TransformComponent>().getParent();
         }
 
-        if (parentEntity != entt::null && m_engine->getRegistry().valid(parentEntity)) {
+        if (parentEntity != vex::NULL_ENTITY) {
             hierarchyMap[parentEntity].push_back(obj);
         } else {
             rootObjects.push_back(obj);
@@ -389,7 +399,7 @@ void Scene::Save(const std::string& path) {
 
         sortedObjects.push_back(currentObj);
 
-        entt::entity currentEntity = currentObj->GetEntity();
+        vex::Entity currentEntity = currentObj->GetEntity();
 
         if (hierarchyMap.find(currentEntity) != hierarchyMap.end()) {
             for (auto* child : hierarchyMap[currentEntity]) {
@@ -408,8 +418,8 @@ void Scene::Save(const std::string& path) {
         objJson["type"] = obj->getObjectType();
 
         if (obj->HasComponent<TransformComponent>()) {
-            entt::entity parentEntity = obj->GetComponent<TransformComponent>().getParent();
-            if (parentEntity != entt::null && m_engine->getRegistry().valid(parentEntity)) {
+            vex::Entity parentEntity = obj->GetComponent<TransformComponent>().getParent();
+            if (parentEntity != vex::NULL_ENTITY) {
                 GameObject* parentObj = GetGameObjectByEntity(parentEntity);
                 if (parentObj) {
                     objJson["parent"] = parentObj->GetComponent<NameComponent>().name;

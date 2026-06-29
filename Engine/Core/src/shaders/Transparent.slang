@@ -85,8 +85,15 @@ VSOutput vertMain(VSInput input, uint vertId: SV_VertexID) {
   return output;
 }
 
+struct WBOITOutput {
+  [[vk::location(0)]]
+  float4 accumulation : SV_Target0;
+  [[vk::location(1)]]
+  float revealage : SV_Target1;
+};
+
 [shader("fragment")]
-float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
+WBOITOutput fragMain(VSOutput input, float4 fragCoord: SV_Position) {
   float2 uv = applyAffineUV(input.fragUV, input.fragUVNum, input.fragInvW,
                             isEnabled(AFFINE_WARPING));
   float2 pixelCoord = fragCoord.xy;
@@ -134,7 +141,6 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   float4 finalColor = isUntextured ? (pushColor * float4(lighting, 1.0))
                                    : (texColor * float4(lighting, 1.0));
 
-
   float fogIntensity = scene.fogColorAndIntensity.w;
 
   if (fogIntensity > 0.0) {
@@ -153,17 +159,27 @@ float4 fragMain(VSOutput input, float4 fragCoord: SV_Position) : SV_Target {
   }
   // finalColor.a = 1.0;
 
-  if (isEnabled(COLOR_QUANTIZATION)) {
-    float4 c = finalColor;
-    c = applyQuantization(c, pixelCoord, true);
-    finalColor = c;
-  }
+  /*
+    if (isEnabled(COLOR_QUANTIZATION)) {
+      float4 c = finalColor;
+      c = applyQuantization(c, pixelCoord, true);
+      finalColor = c;
+    }
 
-  if (isEnabled(SCREEN_DITHER)) {
-    float3 c = finalColor.rgb;
-    c = applyDither(c, pixelCoord);
-    finalColor.rgb = c;
-  }
+    if (isEnabled(SCREEN_DITHER)) {
+      float3 c = finalColor.rgb;
+      c = applyDither(c, pixelCoord);
+      finalColor.rgb = c;
+    }
+  */
+  float a = finalColor.a;
+  float z = fragCoord.z;
+  float weight = clamp(
+      pow(min(1.0, a * 10.0) + 0.01, 3.0) * 1e8 * pow(1.0 - z, 3.0), 1e-2, 3e3);
 
-  return finalColor;
+  WBOITOutput output;
+  output.accumulation = float4(finalColor.rgb * a, a) * weight;
+  output.revealage = a;
+
+  return output;
 }

@@ -1,9 +1,9 @@
 var classvex_1_1VirtualFileSystem =
 [
     [ "FileData", "structvex_1_1VirtualFileSystem_1_1FileData.html", "structvex_1_1VirtualFileSystem_1_1FileData" ],
-    [ "LoadedVPK", "structvex_1_1VirtualFileSystem_1_1LoadedVPK.html", null ],
-    [ "VPKFileEntry", "structvex_1_1VirtualFileSystem_1_1VPKFileEntry.html", null ],
     [ "VPKHeader", "structvex_1_1VirtualFileSystem_1_1VPKHeader.html", null ],
+    [ "VPKFileEntry", "structvex_1_1VirtualFileSystem_1_1VPKFileEntry.html", null ],
+    [ "LoadedVPK", "structvex_1_1VirtualFileSystem_1_1LoadedVPK.html", null ],
     [ "VPKStream", "classvex_1_1VirtualFileSystem_1_1VPKStream.html", "classvex_1_1VirtualFileSystem_1_1VPKStream" ],
     [ "VirtualFileSystem", "classvex_1_1VirtualFileSystem.html#a36825cf97628d454a9ff9dc6c2143039", null ],
     [ "clean_path", "classvex_1_1VirtualFileSystem.html#a40eda351d98ffbeb3bda216100309b67", null ],

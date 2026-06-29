@@ -9,7 +9,7 @@
 #ifndef GLM_ENABLE_EXPERIMENTAL
     #define GLM_ENABLE_EXPERIMENTAL 1
 #endif
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -109,6 +109,7 @@ namespace vex {
         float angularDamping = 0.05f;
         bool isSensor = false;
         bool allowSleeping = true;
+        bool debugDraw = true;
 
         glm::vec3 boxHalfExtents = {0.5f, 0.5f, 0.5f};
         float roundedRadius = 0.05f;
@@ -122,9 +123,9 @@ namespace vex {
         std::vector<uint32_t> meshIndices;
 
         // Collision callbacks
-        std::function<void(entt::entity self, entt::entity other, const CollisionHit& hit)> onCollisionEnter;
-        std::function<void(entt::entity self, entt::entity other, const CollisionHit& hit)> onCollisionStay;
-        std::function<void(entt::entity self, entt::entity other)> onCollisionExit;
+        std::function<void(vex::Entity self, vex::Entity other, const CollisionHit& hit)> onCollisionEnter;
+        std::function<void(vex::Entity self, vex::Entity other, const CollisionHit& hit)> onCollisionStay;
+        std::function<void(vex::Entity self, vex::Entity other)> onCollisionExit;
 
         #if DEBUG
         bool updated = false;
@@ -135,12 +136,12 @@ namespace vex {
 
         explicit PhysicsComponent(ShapeType s) : shape(s) {}
 
-        // @brief Creates a box-shaped physics component.
-        // @param glm::vec3 halfExtents The half-extents of the box.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the box.
-        // @param float friction The friction coefficient of the box.
-        // @param float bounce The bounce coefficient of the box.
+        /// @brief Creates a box-shaped physics component.
+        /// @param glm::vec3 halfExtents The half-extents of the box.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the box.
+        /// @param float friction The friction coefficient of the box.
+        /// @param float bounce The bounce coefficient of the box.
         static PhysicsComponent Box(glm::vec3 halfExtents = {0.5f, 0.5f, 0.5f}, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::BOX;
@@ -152,13 +153,13 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a rounded box
-        // @param glm::vec3 halfExtents The half-extents of the rounded box.
-        // @param float radius The radius of the rounded corners.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the rounded box.
-        // @param float friction The friction coefficient of the rounded box.
-        // @param float bounce The bounce coefficient of the rounded box.
+        /// @brief Creates a rounded box
+        /// @param glm::vec3 halfExtents The half-extents of the rounded box.
+        /// @param float radius The radius of the rounded corners.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the rounded box.
+        /// @param float friction The friction coefficient of the rounded box.
+        /// @param float bounce The bounce coefficient of the rounded box.
             static PhysicsComponent RoundedBox(glm::vec3 halfExtents, float radius = 0.05f, BodyType bodyType = BodyType::DYNAMIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
                 PhysicsComponent pc;
                 pc.shape = ShapeType::ROUNDED_BOX;
@@ -171,12 +172,12 @@ namespace vex {
                 return pc;
             }
 
-        // @brief Creates a sphere-shaped physics component.
-        // @param float radius The radius of the sphere.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the sphere.
-        // @param float friction The friction coefficient of the sphere.
-        // @param float bounce The bounce coefficient of the sphere.
+        /// @brief Creates a sphere-shaped physics component.
+        /// @param float radius The radius of the sphere.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the sphere.
+        /// @param float friction The friction coefficient of the sphere.
+        /// @param float bounce The bounce coefficient of the sphere.
         static PhysicsComponent Sphere(float radius = 0.5f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::SPHERE;
@@ -188,13 +189,13 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a capsule-shaped physics component.
-        // @param float radius The radius of the capsule.
-        // @param float height The height of the capsule.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the capsule.
-        // @param float friction The friction coefficient of the capsule.
-        // @param float bounce The bounce coefficient of the capsule.
+        /// @brief Creates a capsule-shaped physics component.
+        /// @param float radius The radius of the capsule.
+        /// @param float height The height of the capsule.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the capsule.
+        /// @param float friction The friction coefficient of the capsule.
+        /// @param float bounce The bounce coefficient of the capsule.
         static PhysicsComponent Capsule(float radius = 0.5f, float height = 1.0f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::CAPSULE;
@@ -207,13 +208,13 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a cylinder-shaped physics component.
-        // @param float radius The radius of the cylinder.
-        // @param float height The height of the cylinder.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the cylinder.
-        // @param float friction The friction coefficient of the cylinder.
-        // @param float bounce The bounce coefficient of the cylinder.
+        /// @brief Creates a cylinder-shaped physics component.
+        /// @param float radius The radius of the cylinder.
+        /// @param float height The height of the cylinder.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the cylinder.
+        /// @param float friction The friction coefficient of the cylinder.
+        /// @param float bounce The bounce coefficient of the cylinder.
         static PhysicsComponent Cylinder(float radius = 0.5f, float height = 1.0f, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::CYLINDER;
@@ -226,12 +227,12 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a convex hull-shaped physics component.
-        // @param std::vector<JPH::Vec3> points The points defining the convex hull.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the convex hull.
-        // @param float friction The friction coefficient of the convex hull.
-        // @param float bounce The bounce coefficient of the convex hull.
+        /// @brief Creates a convex hull-shaped physics component.
+        /// @param std::vector<JPH::Vec3> points The points defining the convex hull.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the convex hull.
+        /// @param float friction The friction coefficient of the convex hull.
+        /// @param float bounce The bounce coefficient of the convex hull.
         static PhysicsComponent ConvexHull(std::vector<JPH::Vec3> points, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::CONVEX_HULL;
@@ -243,12 +244,12 @@ namespace vex {
             return pc;
         }
 
-        // @brief Creates a mesh-shaped physics component.
-        // @param MeshComponent& mesh The mesh component to create the physics component from.
-        // @param BodyType bodyType The type of body (static, dynamic, kinematic).
-        // @param float mass The mass of the mesh.
-        // @param float friction The friction coefficient of the mesh.
-        // @param float bounce The bounce coefficient of the mesh.
+        /// @brief Creates a mesh-shaped physics component.
+        /// @param MeshComponent& mesh The mesh component to create the physics component from.
+        /// @param BodyType bodyType The type of body (static, dynamic, kinematic).
+        /// @param float mass The mass of the mesh.
+        /// @param float friction The friction coefficient of the mesh.
+        /// @param float bounce The bounce coefficient of the mesh.
         static PhysicsComponent Mesh(MeshComponent& mesh, BodyType bodyType = BodyType::STATIC, float mass = 1.0f, float friction = 0.5f, float bounce = 0.1f) {
             PhysicsComponent pc;
             pc.shape = ShapeType::MESH;
@@ -275,21 +276,21 @@ namespace vex {
             return pc;
         }
 
-        // @brief Binds a callback for collision enter events.
-        // @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
-        void addCollisionEnterBinding(std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback) {
+        /// @brief Binds a callback for collision enter events.
+        /// @param std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback The callback function to bind.
+        void addCollisionEnterBinding(std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback) {
             onCollisionEnter = callback;
         }
 
-        // @brief Binds a callback for collision stay events.
-        // @param std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback The callback function to bind.
-        void addCollisionStayBinding(std::function<void(entt::entity, entt::entity, const CollisionHit&)> callback) {
+        /// @brief Binds a callback for collision stay events.
+        /// @param std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback The callback function to bind.
+        void addCollisionStayBinding(std::function<void(vex::Entity, vex::Entity, const CollisionHit&)> callback) {
             onCollisionStay = callback;
         }
 
-        // @brief Binds a callback for collision exit events.
-        // @param std::function<void(entt::entity, entt::entity)> callback The callback function to bind.
-        void addCollisionExitBinding(std::function<void(entt::entity, entt::entity)> callback) {
+        /// @brief Binds a callback for collision exit events.
+        /// @param std::function<void(vex::Entity, vex::Entity)> callback The callback function to bind.
+        void addCollisionExitBinding(std::function<void(vex::Entity, vex::Entity)> callback) {
             onCollisionExit = callback;
         }
     };
@@ -298,8 +299,8 @@ namespace vex {
     class PhysicsSystem {
     public:
         /// @brief Constructor, initializes physics system.
-        /// @param entt::registry& registry The registry to use for entity-component system.
-        PhysicsSystem(entt::registry& registry) : m_registry(registry) {}
+        /// @param vex::Registry& registry The registry to use for entity-component system.
+        PhysicsSystem(vex::Registry& registry) : m_registry(registry) {}
 
         /// @brief Destructor, simply calls shutdown()
         ~PhysicsSystem();
@@ -434,17 +435,17 @@ namespace vex {
         bool GetBodyActive(JPH::BodyID bodyId);
 
         /// @brief Allows to recreate physics body at runtime.
-        /// @param entt::entity e The entity to create the body for.
-        /// @param entt::registry& r The registry to get the entity data from.
+        /// @param vex::Entity e The entity to create the body for.
+        /// @param vex::Registry& r The registry to get the entity data from.
         /// @param PhysicsComponent& pc The physics component to update.
         /// @return std::optional<JPH::BodyID> The ID of the created body.
-        std::optional<JPH::BodyID> CreateBodyForEntity(entt::entity e, entt::registry& r, PhysicsComponent& pc);
+        std::optional<JPH::BodyID> CreateBodyForEntity(vex::Entity e, vex::Registry& r, PhysicsComponent& pc);
 
         /// @brief Allows to recreate physics body at runtime.
-        /// @param entt::entity e The entity to create the body for.
+        /// @param vex::Entity e The entity to create the body for.
         /// @param PhysicsComponent& pc The physics component to update.
         /// @return std::optional<JPH::BodyID> The ID of the created body.
-        std::optional<JPH::BodyID> RecreateBodyForEntity(entt::entity e, PhysicsComponent& pc);
+        std::optional<JPH::BodyID> RecreateBodyForEntity(vex::Entity e, PhysicsComponent& pc);
 
         /// @brief Destroys a physics body.
         /// @param PhysicsComponent& pc The physics component to update.
@@ -466,6 +467,20 @@ namespace vex {
         /// @param int steps - number of collision steps
         void setCollisionSteps(int steps) { collisionSteps = steps; }
 
+        /// @brief Allows for enabling/disabling smoothing.
+        /// @param bool enable - true to enable smoothing, false to disable
+        void setEnableSmoothing(bool enable) { enableSmoothing = enable; }
+
+        /// @brief Retrieves the physics position of a body.
+        /// @param JPH::BodyID bodyId - the body ID to retrieve the position for
+        /// @return glm::vec3 - the physics position of the body
+        glm::vec3 GetPhysicsPosition(JPH::BodyID bodyId);
+
+        /// @brief Retrieves the physics rotation of a body.
+        /// @param JPH::BodyID bodyId - the body ID to retrieve the rotation for
+        /// @return glm::quat - the physics rotation of the body
+        glm::quat GetPhysicsRotation(JPH::BodyID bodyId);
+
         // @brief Retrieves the physics component associated with a body ID.
         // @param JPH::BodyID id - the body ID to retrieve the physics component for
         // @return PhysicsComponent& - the physics component associated with the body ID
@@ -473,20 +488,21 @@ namespace vex {
 
         // @brief Retrieves the entity associated with a body ID.
         // @param JPH::BodyID id - the body ID to retrieve the entity for
-        // @return entt::entity - the entity associated with the body ID
-        entt::entity getEntityByBodyId(JPH::BodyID id);
+        // @return vex::Entity - the entity associated with the body ID
+        vex::Entity getEntityByBodyId(JPH::BodyID id);
 
     private:
         friend class MyContactListener;
 
         int collisionSteps = 3;
+        bool enableSmoothing = true;
 
         JPH::TempAllocatorImpl* m_tempAllocator = nullptr;
         JPH::JobSystem* m_jobSystem = nullptr;
         JPH::PhysicsSystem* m_physicsSystem = nullptr;
         JPH::DebugRenderer* m_debugRenderer = nullptr;
 
-        entt::registry& m_registry;
+        vex::Registry& m_registry;
 
         BPLayerInterfaceImpl m_bpInterface;
         ObjectVsBroadPhaseLayerFilterImpl m_objVsBpFilter;
@@ -494,9 +510,18 @@ namespace vex {
         std::unique_ptr<MyActivationListener> m_activationListener;
         std::unique_ptr<JPH::ContactListener> m_contactListener;
 
-        std::unordered_map<JPH::BodyID, entt::entity, BodyIDHasher> m_bodyToEntity;
+        std::unordered_map<JPH::BodyID, vex::Entity, BodyIDHasher> m_bodyToEntity;
 
-        entt::scoped_connection m_destroyConnection;
+        struct InterpCache {
+                glm::vec3 prevPos = {0.0f, 0.0f, 0.0f};
+                glm::quat prevRot = {1.0f, 0.0f, 0.0f, 0.0f};
+                glm::vec3 currPos = {0.0f, 0.0f, 0.0f};
+                glm::quat currRot = {1.0f, 0.0f, 0.0f, 0.0f};
+                glm::vec3 lastVisualPos = {0.0f, 0.0f, 0.0f};
+                glm::quat lastVisualRot = {1.0f, 0.0f, 0.0f, 0.0f};
+                bool desynced = false;
+        };
+        std::unordered_map<JPH::BodyID, InterpCache, BodyIDHasher> m_interpCache;
 
         float m_fixedDt = 1.0f / 60.0f;
         float m_accumulator = 0.0f;
@@ -510,20 +535,21 @@ namespace vex {
         // @return glm::vec3 - the resulting Euler angles in degrees
         static glm::vec3 QuatToEuler(const JPH::Quat& q);
         // @brief Synchronizes a body's transform with its entity's transform.
-        // @param entt::entity e - the entity to synchronize
-        // @param entt::registry& r - the registry containing the entity
+        // @param vex::Entity e - the entity to synchronize
+        // @param vex::Registry& r - the registry containing the entity
         // @param const JPH::BodyID& id - the ID of the body to synchronize
-        void SyncBodyToTransform(entt::entity e, entt::registry& r, const JPH::BodyID& id);
+        // @param float alpha - the interpolation factor (0.0f = no interpolation, 1.0f = full interpolation)
+        void SyncBodyToTransform(vex::Entity e, vex::Registry& r, const JPH::BodyID& id, float alpha = 1.0f);
 
         // @brief Handles physics component destruction.
-        // @param entt::registry& reg - the registry containing the entity
-        // @param entt::entity e - the entity to destroy
-        void onPhysicsComponentDestroy(entt::registry& reg, entt::entity e);
+        // @param vex::Registry& reg - the registry containing the entity
+        // @param vex::Entity e - the entity to destroy
+        void onPhysicsComponentDestroy(vex::Registry& reg, vex::Entity e);
 
         // @brief Initializes a character component.
-        // @param entt::entity e - the entity to initialize
+        // @param vex::Entity e - the entity to initialize
         // @param CharacterComponent& cc - the character component to initialize
-        void InitializeCharacter(entt::entity e, CharacterComponent& cc);
+        void InitializeCharacter(vex::Entity e, CharacterComponent& cc);
 
         #include <map>
 
@@ -564,4 +590,18 @@ namespace vex {
     private:
         PhysicsSystem& m_system;
     };
+
+        /// @brief Implementation of JPH::BodyDrawFilter for debugging physics bodies.
+        class DebugDrawFilter : public JPH::BodyDrawFilter {
+        public:
+            DebugDrawFilter(PhysicsSystem& system) : m_system(system) {}
+
+            virtual bool ShouldDraw(const JPH::Body& body) const override {
+                auto& pc = m_system.getPhysicsComponentByBodyId(body.GetID());
+                return pc.debugDraw;
+            }
+
+        private:
+            PhysicsSystem& m_system;
+        };
 }

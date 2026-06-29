@@ -1,6 +1,5 @@
 #include "components/InputSystem.hpp"
 #include <SDL3/SDL.h>
-#include <entt/entt.hpp>
 #include <unordered_map>
 #include "SDL3/SDL_mouse.h"
 #include "components/GameComponents/InputComponent.hpp"
@@ -8,7 +7,7 @@
 
 namespace vex {
 
-    InputSystem::InputSystem(entt::registry &registry, SDL_Window *window)
+    InputSystem::InputSystem(vex::Registry &registry, SDL_Window *window)
         : m_registry(registry), m_window(window), m_inputMode(InputMode::Game)
     {
         setInputMode(InputMode::Game);
@@ -30,15 +29,10 @@ namespace vex {
         }
     }
 
-
-    void InputSystem::processEvent(const SDL_Event& event, float deltaTime) {
-        if (m_inputMode == InputMode::UI && event.type != SDL_EVENT_KEY_DOWN && event.type != SDL_EVENT_KEY_UP) {
-            return;
-        }
-
+    void InputSystem::processEvent(const SDL_Event &event, float deltaTime) {
         if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP) {
-            SDL_Scancode scancode = event.key.scancode;
             bool isPressed = (event.type == SDL_EVENT_KEY_DOWN);
+            SDL_Scancode scancode = event.key.scancode;
 
             auto& keyState = keyStates[scancode];
             bool wasPressed = keyState.isPressed;
@@ -48,14 +42,12 @@ namespace vex {
                 keyState.wasProcessedAsPressed = false;
             }
 
-            auto view = m_registry.view<InputComponent>();
-            for (auto entity : view) {
-                auto& inputComp = view.get<InputComponent>(entity);
+            vex::View<InputComponent>(m_registry).each([&, this, scancode, isPressed, wasPressed](vex::Entity entity, InputComponent& inputComp) {
                 for (const auto& binding : inputComp.bindings) {
                     if (binding.scancode == scancode) {
-                        if (isPressed && binding.state == InputActionState::Pressed && !wasPressed && !keyState.wasProcessedAsPressed) {
+                        if (isPressed && binding.state == InputActionState::Pressed && !wasPressed && !keyStates[scancode].wasProcessedAsPressed) {
                             binding.action(deltaTime);
-                            keyState.wasProcessedAsPressed = true;
+                            keyStates[scancode].wasProcessedAsPressed = true;
                         } else if (!isPressed && binding.state == InputActionState::Released) {
                             binding.action(deltaTime);
                         } else if (!isPressed && binding.state == InputActionState::Held) {
@@ -63,25 +55,21 @@ namespace vex {
                         }
                     }
                 }
-            }
+            });
         } else if (event.type == SDL_EVENT_MOUSE_MOTION && m_inputMode != InputMode::UI) {
-            auto view = m_registry.view<InputComponent>();
-            for (auto entity : view) {
-                auto& inputComp = view.get<InputComponent>(entity);
+            vex::View<InputComponent>(m_registry).each([&, this](vex::Entity entity, InputComponent& inputComp) {
                 for (const auto& binding : inputComp.mouseAxisBindings) {
                     float delta = (binding.axis == MouseAxis::X) ? event.motion.xrel : event.motion.yrel;
                     binding.action(delta);
                 }
-            }
+            });
         } else if (event.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN || event.type == SDL_EVENT_GAMEPAD_BUTTON_UP) {
             bool isPressed = (event.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN);
             SDL_GamepadButton button = (SDL_GamepadButton)event.gbutton.button;
 
             gamepadButtonStates[button].isPressed = isPressed;
 
-            auto view = m_registry.view<InputComponent>();
-            for (auto entity : view) {
-                auto& inputComp = view.get<InputComponent>(entity);
+            vex::View<InputComponent>(m_registry).each([&, this, button, isPressed, deltaTime](vex::Entity entity, InputComponent& inputComp) {
                 for (const auto& binding : inputComp.gamepadButtonBindings) {
                     if (binding.button == button) {
                         if (isPressed && binding.state == InputActionState::Pressed) {
@@ -91,36 +79,29 @@ namespace vex {
                         }
                     }
                 }
-            }
+            });
         } else if (event.type == SDL_EVENT_GAMEPAD_AXIS_MOTION) {
             float normalizedValue = event.gaxis.value / 32767.0f;
-
-            auto view = m_registry.view<InputComponent>();
-            for (auto entity : view) {
-                auto& inputComp = view.get<InputComponent>(entity);
-                for (const auto& binding : inputComp.gamepadAxisBindings) {
-                    if (binding.axis == (SDL_GamepadAxis)event.gaxis.axis) {
-                        binding.action(normalizedValue);
-                    }
-                }
-            }
+            gamepadAxisStates[(SDL_GamepadAxis)event.gaxis.axis] = normalizedValue;
         }
     }
 
     void InputSystem::update(float deltaTime) {
-        auto view = m_registry.view<InputComponent>();
-        for (auto entity : view) {
-            auto& inputComp = view.get<InputComponent>(entity);
-            for (const auto& binding : inputComp.bindings) {
-                if (binding.state == InputActionState::Held && keyStates[binding.scancode].isPressed) {
-                    binding.action(deltaTime);
-                }
+        vex::View<InputComponent>(m_registry).each([&, this, deltaTime](vex::Entity entity, InputComponent& inputComp) {
+            for (const auto& binding : inputComp.gamepadAxisBindings) {
+                float currentValue = gamepadAxisStates[binding.axis];
+                binding.action(currentValue);
             }
             for (const auto& binding : inputComp.gamepadButtonBindings) {
                 if (binding.state == InputActionState::Held && gamepadButtonStates[binding.button].isPressed) {
                     binding.action(deltaTime);
                 }
             }
-        }
+            for (const auto& binding : inputComp.bindings) {
+                if (binding.state == InputActionState::Held && keyStates[binding.scancode].isPressed) {
+                    binding.action(deltaTime);
+                }
+            }
+        });
     }
 }

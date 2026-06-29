@@ -6,7 +6,6 @@
 #include <cstdlib>
 
 #include "components/PhysicsSystem.hpp"
-#include "entt/entity/entity.hpp"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -83,14 +82,14 @@ namespace vex {
         ImGui::SetNextWindowSize(viewport->Size);
         ImGui::SetNextWindowViewport(viewport->ID);
 
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
                                         ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus |
                                         ImGuiWindowFlags_NoNavFocus;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20.0f, 20.0f));
 
-        ImGui::Begin("SelectorSpace", nullptr, window_flags);
+        ImGui::Begin("SelectorSpace", nullptr, windowFlags);
 
         ImGui::Text("VEX ENGINE - PROJECTS");
         ImGui::Separator();

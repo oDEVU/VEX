@@ -65,7 +65,6 @@ namespace vex {
         createInfo.imageExtent = extent;
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-        //createInfo.oldSwapchain = oldSwapchain;
 
         uint32_t queueFamilyIndices[] = {m_r_context.graphicsQueueFamily, m_r_context.presentQueueFamily};
         if (m_r_context.graphicsQueueFamily != m_r_context.presentQueueFamily) {
@@ -162,7 +161,7 @@ namespace vex {
         VkImageCreateInfo imageInfo{};
         imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         imageInfo.imageType = VK_IMAGE_TYPE_2D;
-        imageInfo.extent = {m_r_context.swapchainExtent.width, m_r_context.swapchainExtent.height, 1};
+        imageInfo.extent = {std::max(m_r_context.swapchainExtent.width, m_r_context.currentRenderResolution.x), std::max(m_r_context.swapchainExtent.height, m_r_context.currentRenderResolution.y), 1};
         imageInfo.mipLevels = 1;
         imageInfo.arrayLayers = 1;
         imageInfo.format = depthFormat;
@@ -321,14 +320,14 @@ namespace vex {
         if (m_r_context.depthImageView) {
             createLowResResources();
         } else {
-            SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
+            log(LogLevel::WARNING,
                        "Deferring low-res resource creation - depth image not ready");
         }
     }
 
     void VulkanSwapchainManager::createLowResResources() {
         if (m_r_context.currentRenderResolution.x == 0 || m_r_context.currentRenderResolution.y == 0) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Invalid render resolution for low-res resources");
+            log(LogLevel::ERROR, "Invalid render resolution for low-res resources");
             return;
         }
 
@@ -351,7 +350,7 @@ namespace vex {
 
         if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo,
                           &m_r_context.lowResColorImage, &m_r_context.lowResColorAlloc, nullptr) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image");
+            log(LogLevel::ERROR, "Failed to create low-res color image");
             return;
         }
 
@@ -365,18 +364,114 @@ namespace vex {
         viewInfo.subresourceRange.layerCount = 1;
 
         if (vkCreateImageView(m_r_context.device, &viewInfo, nullptr, &m_r_context.lowResColorView) != VK_SUCCESS) {
-            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create low-res color image view");
+            log(LogLevel::ERROR, "Failed to create low-res color image view");
             vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
             m_r_context.lowResColorImage = VK_NULL_HANDLE;
             m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
             return;
         }
 
+        if (vmaCreateImage(m_r_context.allocator, &imageInfo, &allocInfo,
+                          &m_r_context.uiImage, &m_r_context.uiAlloc, nullptr) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create ui image");
+            return;
+        }
+
+        VkImageViewCreateInfo uiViewInfo = viewInfo;
+        uiViewInfo.image = m_r_context.uiImage;
+
+        if (vkCreateImageView(m_r_context.device, &uiViewInfo, nullptr, &m_r_context.uiView) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create ui image view");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.uiImage, m_r_context.uiAlloc);
+            m_r_context.uiImage = VK_NULL_HANDLE;
+            m_r_context.uiAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageCreateInfo accumInfo = imageInfo;
+        accumInfo.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        if(vmaCreateImage(m_r_context.allocator, &accumInfo, &allocInfo, &m_r_context.accumImage, &m_r_context.accumAlloc, nullptr) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create accum image");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
+            m_r_context.accumImage = VK_NULL_HANDLE;
+            m_r_context.accumAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageViewCreateInfo accumViewInfo = viewInfo;
+        accumViewInfo.image = m_r_context.accumImage;
+        accumViewInfo.format = VK_FORMAT_R16G16B16A16_SFLOAT;
+        if(vkCreateImageView(m_r_context.device, &accumViewInfo, nullptr, &m_r_context.accumView) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create accum image view");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
+            m_r_context.accumImage = VK_NULL_HANDLE;
+            m_r_context.accumAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageCreateInfo revealInfo = imageInfo;
+        revealInfo.format = VK_FORMAT_R8_UNORM;
+        if(vmaCreateImage(m_r_context.allocator, &revealInfo, &allocInfo, &m_r_context.revealImage, &m_r_context.revealAlloc, nullptr) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create reveal image");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
+            m_r_context.revealImage = VK_NULL_HANDLE;
+            m_r_context.revealAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        VkImageViewCreateInfo revealViewInfo = viewInfo;
+        revealViewInfo.image = m_r_context.revealImage;
+        revealViewInfo.format = VK_FORMAT_R8_UNORM;
+        if(vkCreateImageView(m_r_context.device, &revealViewInfo, nullptr, &m_r_context.revealView) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create reveal image view");
+            vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
+            m_r_context.revealImage = VK_NULL_HANDLE;
+            m_r_context.revealAlloc = VK_NULL_HANDLE;
+            return;
+        }
+
+        
+        VkImageCreateInfo compositeInfo = imageInfo;
+        compositeInfo.mipLevels = 3;
+        compositeInfo.usage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        if(vmaCreateImage(m_r_context.allocator, &compositeInfo, &allocInfo, &m_r_context.compositeImage, &m_r_context.compositeAlloc, nullptr) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create composite image");
+            return;
+        }
+
+        VkImageViewCreateInfo compositeViewInfo = viewInfo;
+        compositeViewInfo.image = m_r_context.compositeImage;
+        compositeViewInfo.subresourceRange.levelCount = 3;
+        if(vkCreateImageView(m_r_context.device, &compositeViewInfo, nullptr, &m_r_context.compositeView) != VK_SUCCESS) {
+            log(LogLevel::ERROR, "Failed to create composite image view");
+            return;
+        }
+
+        VkImageCreateInfo gameViewInfo = imageInfo;
+        gameViewInfo.format = m_r_context.swapchainImageFormat;
+        gameViewInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+        vmaCreateImage(m_r_context.allocator, &gameViewInfo, &allocInfo, &m_r_context.gameViewImage, &m_r_context.gameViewAlloc, nullptr);
+
+        VkImageViewCreateInfo gameViewViewInfo = viewInfo;
+        gameViewViewInfo.image = m_r_context.gameViewImage;
+        gameViewViewInfo.format = m_r_context.swapchainImageFormat;
+        vkCreateImageView(m_r_context.device, &gameViewViewInfo, nullptr, &m_r_context.gameViewView);
+
         m_r_context.lowResColorFormat = m_r_context.swapchainImageFormat;
     }
 
     void VulkanSwapchainManager::cleanupLowResResources() {
-        if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
+        
+        if (m_r_context.compositeView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.compositeView, nullptr);
+            m_r_context.compositeView = VK_NULL_HANDLE;
+        }
+        if (m_r_context.compositeImage != VK_NULL_HANDLE && m_r_context.compositeAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.compositeImage, m_r_context.compositeAlloc);
+            m_r_context.compositeImage = VK_NULL_HANDLE;
+            m_r_context.compositeAlloc = VK_NULL_HANDLE;
+        }
+if (m_r_context.lowResColorView != VK_NULL_HANDLE) {
             vkDestroyImageView(m_r_context.device, m_r_context.lowResColorView, nullptr);
             m_r_context.lowResColorView = VK_NULL_HANDLE;
         }
@@ -385,6 +480,47 @@ namespace vex {
             vmaDestroyImage(m_r_context.allocator, m_r_context.lowResColorImage, m_r_context.lowResColorAlloc);
             m_r_context.lowResColorImage = VK_NULL_HANDLE;
             m_r_context.lowResColorAlloc = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.uiView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.uiView, nullptr);
+            m_r_context.uiView = VK_NULL_HANDLE;
+        }
+
+        if (m_r_context.uiImage != VK_NULL_HANDLE && m_r_context.uiAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.uiImage, m_r_context.uiAlloc);
+            m_r_context.uiImage = VK_NULL_HANDLE;
+            m_r_context.uiAlloc = VK_NULL_HANDLE;
+        }
+
+        if(m_r_context.accumView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.accumView, nullptr);
+            m_r_context.accumView = VK_NULL_HANDLE;
+        }
+        if(m_r_context.accumImage != VK_NULL_HANDLE && m_r_context.accumAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.accumImage, m_r_context.accumAlloc);
+            m_r_context.accumImage = VK_NULL_HANDLE;
+            m_r_context.accumAlloc = VK_NULL_HANDLE;
+        }
+
+        if(m_r_context.revealView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.revealView, nullptr);
+            m_r_context.revealView = VK_NULL_HANDLE;
+        }
+        if(m_r_context.revealImage != VK_NULL_HANDLE && m_r_context.revealAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.revealImage, m_r_context.revealAlloc);
+            m_r_context.revealImage = VK_NULL_HANDLE;
+            m_r_context.revealAlloc = VK_NULL_HANDLE;
+        }
+
+        if(m_r_context.gameViewView != VK_NULL_HANDLE) {
+            vkDestroyImageView(m_r_context.device, m_r_context.gameViewView, nullptr);
+            m_r_context.gameViewView = VK_NULL_HANDLE;
+        }
+        if(m_r_context.gameViewImage != VK_NULL_HANDLE && m_r_context.gameViewAlloc != VK_NULL_HANDLE) {
+            vmaDestroyImage(m_r_context.allocator, m_r_context.gameViewImage, m_r_context.gameViewAlloc);
+            m_r_context.gameViewImage = VK_NULL_HANDLE;
+            m_r_context.gameViewAlloc = VK_NULL_HANDLE;
         }
     }
 
@@ -466,13 +602,6 @@ namespace vex {
         createSwapchain();
         createLowResResources();
         createSyncObjects();
-        //log("createImageViews");
-        //createImageViews();
-        //log("createCommandBuffers");
-        //createCommandPool();
-        //log("createLowResResources");
-        //createLowResResources();
-        //
         m_r_context.requestSwapchainRecreation = false;
     }
 

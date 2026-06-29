@@ -14,9 +14,11 @@ var searchData=
   ['loadimages_11',['loadImages',['../classvex_1_1VexUI.html#a286978b6084ce72404d2147288da3cab',1,'vex::VexUI']]],
   ['loadknownprojects_12',['loadKnownProjects',['../classvex_1_1ProjectSelector.html#aba78ce4510b08f34fab7cc194f550bee',1,'vex::ProjectSelector']]],
   ['loadmesh_13',['loadMesh',['../classvex_1_1MeshManager.html#a150a60fb93783cd6d7913f140c8fbcbf',1,'vex::MeshManager']]],
-  ['loadprojectconfig_14',['LoadProjectConfig',['../classvex_1_1Editor.html#a23b00ead29ed6c4630cc0387e34ded5b',1,'vex::Editor']]],
-  ['loadscene_15',['loadScene',['../classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953',1,'vex::SceneManager']]],
-  ['loadscenewithoutclearing_16',['loadSceneWithoutClearing',['../classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846',1,'vex::SceneManager']]],
-  ['loadtexture_17',['loadTexture',['../classvex_1_1VulkanResources.html#a46cf7cb8e3c1921551d473fb62b7c2b0',1,'vex::VulkanResources']]],
-  ['log_18',['log',['../errorUtils_8hpp.html#a96b5f80aadf7f282e8238912cbc9675a',1,'vex::log(const char *fmt,...)'],['../errorUtils_8hpp.html#a9e560a43e27b13f10c383ffff4a530c1',1,'vex::log(LogLevel level, const char *fmt,...)']]]
+  ['loadmeshesasync_14',['loadMeshesAsync',['../classvex_1_1MeshManager.html#ab3f3d7ab51780aa6f90cd45572932614',1,'vex::MeshManager']]],
+  ['loadprojectconfig_15',['LoadProjectConfig',['../classvex_1_1Editor.html#a23b00ead29ed6c4630cc0387e34ded5b',1,'vex::Editor']]],
+  ['loadscene_16',['loadScene',['../classvex_1_1SceneManager.html#a17bf28d146396ccc922252322ce6b953',1,'vex::SceneManager']]],
+  ['loadscenewithoutclearing_17',['loadSceneWithoutClearing',['../classvex_1_1SceneManager.html#ab38b9cd1f2f59c325b5591952a964846',1,'vex::SceneManager']]],
+  ['loadtexture_18',['loadTexture',['../classvex_1_1VulkanResources.html#a46cf7cb8e3c1921551d473fb62b7c2b0',1,'vex::VulkanResources']]],
+  ['loadtexturesbatched_19',['loadTexturesBatched',['../classvex_1_1VulkanResources.html#ac21e226e03dcc1939df08ca99b3bf2bf',1,'vex::VulkanResources']]],
+  ['log_20',['log',['../namespacevex.html#a96b5f80aadf7f282e8238912cbc9675a',1,'vex::log(const char *fmt,...)'],['../namespacevex.html#a9e560a43e27b13f10c383ffff4a530c1',1,'vex::log(LogLevel level, const char *fmt,...)']]]
 ];

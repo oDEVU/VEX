@@ -7,7 +7,7 @@
 #pragma once
 #include "context.hpp"
 #include "components/Mesh.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 #include "Resources.hpp"
 
 #include "components/GameComponents/BasicComponents.hpp"
@@ -39,14 +39,14 @@ namespace vex {
         // @param const glm::vec3& cameraPos - Position of the camera.
         // @param uint32_t modelIndex - Index of the current model.
         // @param uint32_t frameIndex - Index of the current frame.
-        // @param entt::entity entity - Entity associated with the mesh.
+        // @param vex::Entity entity - Entity associated with the mesh.
         // @param std::vector<TransparentTriangle>& outTriangles - Vector to store extracted transparent triangles.
         void extractTransparentTriangles(
             const glm::mat4& modelMatrix,
             const glm::vec3& cameraPos,
             uint32_t modelIndex,
             uint32_t frameIndex,
-            entt::entity entity,
+            vex::Entity entity,
             std::vector<TransparentTriangle>& outTriangles
         );
 
@@ -134,7 +134,7 @@ struct TransparentTriangle {
         uint32_t firstIndex;
         uint32_t submeshIndex;
         VulkanMesh* mesh;
-        entt::entity entity;
+        vex::Entity entity;
 
         //glm::mat4 modelMatrix;
     };

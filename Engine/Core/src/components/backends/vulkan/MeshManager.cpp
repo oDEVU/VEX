@@ -2,9 +2,9 @@
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/PhysicsSystem.hpp"
 #include "components/Mesh.hpp"
-#include "components/errorUtils.hpp"
-#include "entt/entity/entity.hpp"
-#include "entt/entity/fwd.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/ThreadPool.hpp"
+
 #include <fstream>
 #include <iterator>
 #include <unordered_set>
@@ -25,7 +25,7 @@ namespace vex {
         log("MeshManager destroyed");
     }
 
-    ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, entt::entity parent = entt::null){
+    ModelObject* MeshManager::createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, vex::Entity parent = vex::NULL_ENTITY){
         log("Constructing model: %s...", name.c_str());
 
         std::string tempName = name;
@@ -67,7 +67,7 @@ namespace vex {
             handle_exception(e);
         }
 
-        //entt::entity modelEntity = m_p_engine->getRegistry().create();
+        //vex::Entity modelEntity = m_p_engine->getRegistry()->.create();
         ModelObject* modelObject = new ModelObject(*m_p_engine, tempName, meshComponent, transformComponent);
         //modelObject->cleanup = [this](std::string& tempName, const MeshComponent& meshComponent) { destroyModel(tempName, meshComponent); };
         return modelObject;
@@ -114,11 +114,20 @@ namespace vex {
     }
 
     std::unique_ptr<VulkanMesh>& MeshManager::getVulkanMeshByMesh(MeshComponent& meshComponent) {
+        if (meshComponent.id == UINT32_MAX) {
+            if (!m_freeModelIds.empty()) {
+                meshComponent.id = m_freeModelIds.back();
+                m_freeModelIds.pop_back();
+            } else {
+                meshComponent.id = m_nextModelId++;
+            }
+        }
+
         std::string& installedPath = m_installedPaths[meshComponent.id];
         std::string requestedPath = meshComponent.meshData.meshPath;
 
         if (installedPath != requestedPath) [[unlikely]] {
-            log("Swapping mesh %s -> %s", installedPath.c_str(), requestedPath.c_str());
+            log("Swapping mesh %s -> %s for model %d", installedPath.c_str(), requestedPath.c_str(), meshComponent.id);
 
             releaseMeshReference(installedPath, meshComponent);
 
@@ -187,15 +196,10 @@ namespace vex {
 
         log("Lazy-loading %zu submesh textures for %s", uniqueTextures.size(), path.c_str());
 
-        for (const auto& texPath : uniqueTextures) {
-            if (!m_p_resources->textureExists(texPath)) {
-                try {
-                    m_p_resources->loadTexture(texPath, texPath);
-                    log("Loaded texture: %s", texPath.c_str());
-                } catch (const std::exception& e) {
-                    log(LogLevel::ERROR, "Failed to load texture %s", texPath.c_str());
-                }
-            }
+        if (!uniqueTextures.empty()) {
+            std::vector<std::string> texturesToLoad(uniqueTextures.begin(), uniqueTextures.end());
+            m_p_resources->loadTexturesBatched(texturesToLoad);
+            log("Batch Loaded textures");
         }
 
         try {
@@ -214,7 +218,78 @@ namespace vex {
         }
     }
 
-    void MeshManager::onMeshComponentConstruct(entt::registry& registry, entt::entity entity) {
+    void MeshManager::loadMeshesAsync(const std::vector<MeshComponent*>& pendingComponents) {
+        if (pendingComponents.empty()) return;
+
+        std::vector<std::future<std::pair<MeshComponent*, MeshComponent>>> futures;
+
+        for (MeshComponent* comp : pendingComponents) {
+            const std::string path = comp->meshData.meshPath;
+            futures.push_back(GetThreadPool().enqueue([this, comp, path]() {
+                return std::make_pair(comp, this->loadMesh(path));
+            }));
+        }
+
+        std::unordered_set<std::string> uniqueTextures;
+
+        for (auto& future : futures) {
+            auto result = future.get();
+            MeshComponent* originalComp = result.first;
+            MeshComponent loadedData = std::move(result.second);
+
+            uint32_t originalId = originalComp->id;
+            RenderType originalRenderType = originalComp->renderType;
+            vex::rgba originalColor = originalComp->color;
+            auto originalOverrides = originalComp->textureOverrides;
+
+            *originalComp = std::move(loadedData);
+
+            originalComp->id = originalId;
+            originalComp->renderType = originalRenderType;
+            originalComp->color = originalColor;
+            originalComp->textureOverrides = originalOverrides;
+
+            for (const auto& texPath : originalComp->textureNames) {
+                if (!texPath.empty()) {
+                    uniqueTextures.insert(texPath);
+                }
+            }
+        }
+
+        if (!uniqueTextures.empty()) {
+            std::vector<std::string> texturesToLoad(uniqueTextures.begin(), uniqueTextures.end());
+            m_p_resources->loadTexturesBatched(texturesToLoad);
+        }
+
+        for (MeshComponent* comp : pendingComponents) {
+            const std::string& path = comp->meshData.meshPath;
+
+            if (m_vulkanMeshes.find(path) == m_vulkanMeshes.end()) {
+                auto newVulkanMesh = std::make_unique<VulkanMesh>(m_r_context);
+                newVulkanMesh->upload(comp->meshData);
+                newVulkanMesh->addInstance();
+
+                m_meshBoundsCache[path] = { comp->localCenter, comp->localRadius };
+                m_vulkanMeshes.emplace(path, std::move(newVulkanMesh));
+
+                log("Async bulk loaded & registered mesh: %s", path.c_str());
+            } else {
+                m_vulkanMeshes[path]->addInstance();
+            }
+
+            comp->forceRefresh();
+        }
+    }
+
+    void MeshManager::clearState() {
+        m_freeModelIds.clear();
+        m_nextModelId = 0;
+        m_vulkanMeshes.clear();
+        m_installedPaths.clear();
+        m_meshBoundsCache.clear();
+    }
+
+    void MeshManager::onMeshComponentConstruct(vex::Registry& registry, vex::Entity entity) {
         auto& meshComponent = registry.get<MeshComponent>(entity);
 
         if (!m_freeModelIds.empty()) {
@@ -235,17 +310,17 @@ namespace vex {
             m_vulkanMeshes.at(path)->addInstance();
         }
 
-        if(registry.any_of<PhysicsComponent>(entity)) {
+        if(registry.has<PhysicsComponent>(entity)) {
             auto& oldPC = registry.get<PhysicsComponent>(entity);
             if(oldPC.shape == ShapeType::MESH){
                 PhysicsComponent newPC = PhysicsComponent::Mesh(meshComponent, oldPC.bodyType, oldPC.mass, oldPC.friction, oldPC.bounce);
-                registry.replace<PhysicsComponent>(entity, newPC);
+                registry.add_or_replace<PhysicsComponent>(entity, newPC);
             }
 
         }
     }
 
-    void MeshManager::onMeshComponentDestroy(entt::registry& registry, entt::entity entity) {
+    void MeshManager::onMeshComponentDestroy(vex::Registry& registry, vex::Entity entity) {
         auto& meshComponent = registry.get<MeshComponent>(entity);
 
         m_freeModelIds.push_back(meshComponent.id);

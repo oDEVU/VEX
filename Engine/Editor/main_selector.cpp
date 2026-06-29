@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -14,7 +14,7 @@
     #include <limits.h>
 #endif
 
-std::filesystem::path GetSelfDir() {
+std::filesystem::path getSelfDir() {
 #ifdef _WIN32
     char path[MAX_PATH];
     GetModuleFileNameA(NULL, path, MAX_PATH);
@@ -31,6 +31,7 @@ std::filesystem::path GetSelfDir() {
 
 int main(int argc, char* argv[]) {
     std::string selectedPath;
+    SDL_SetAppMetadata("Vex Engine", vex::Engine::GetVersionString(), "VexEngine");
 
     {
         try {
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    std::filesystem::path binDir = GetSelfDir();
+    std::filesystem::path binDir = getSelfDir();
 
 #ifdef _WIN32
     std::string exeName = "VexEditor.exe";

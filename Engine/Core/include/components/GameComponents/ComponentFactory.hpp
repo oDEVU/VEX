@@ -6,10 +6,10 @@
 
 #pragma once
 #include "components/GameComponents/BasicComponents.hpp"
-#include "components/errorUtils.hpp"
-#include "components/pathUtils.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/PathUtils.hpp"
 #include "components/GameObjects/GameObject.hpp"
-#include "components/colorTypes.hpp"
+#include "components/ColorTypes.hpp"
 #include "SerializationUtils.hpp"
 #include <nlohmann/json.hpp>
 #include <functional>
@@ -166,15 +166,15 @@ namespace vex
 
                 if constexpr (std::is_same_v<T, vex::mesh_asset_path>)
                 {
-                    valid = (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb");
+                    valid = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Mesh);
                 }
                 else if constexpr (std::is_same_v<T, vex::texture_asset_path>)
                 {
-                    valid = (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp");
+                    valid = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Texture);
                 }
                 else if constexpr (std::is_same_v<T, vex::audio_asset_path>)
                 {
-                    valid = (ext == ".wav" || ext == ".ogg" || ext == ".flac");
+                    valid = vex::AssetExtensions::IsValid(ext, vex::AssetExtensions::Audio);
                 }
 
                 if (valid)
@@ -261,8 +261,12 @@ namespace vex {
     void GenericComponentInspector(GameObject& obj) {
     #if DEBUG
         if (obj.HasComponent<T>()) {
-            std::string name = entt::type_id<T>().name().data();
-            std::string extracted = name.substr(name.rfind("::") + 2, name.find(']') - (name.rfind("::") + 2));
+            std::string name = typeid(T).name();
+            size_t lastColon = name.rfind("::");
+            size_t lastBracket = name.find(']');
+            std::string extracted = (lastColon != std::string::npos)
+                ? name.substr(lastColon + 2, (lastBracket != std::string::npos ? lastBracket : name.length()) - (lastColon + 2))
+                : name;
 
             ImGui::PushID(name.c_str());
             if (ImGui::CollapsingHeader(extracted.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {

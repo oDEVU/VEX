@@ -2,10 +2,11 @@
 #include <algorithm>
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <imgui_internal.h>
 
-#include "components/errorUtils.hpp"
-#include "components/pathUtils.hpp"
-#include "components/assetTypes.hpp"
+#include "components/ErrorUtils.hpp"
+#include "components/PathUtils.hpp"
+#include "components/AssetTypes.hpp"
 
 namespace vex {
 
@@ -41,51 +42,65 @@ namespace vex {
         return ext;
     }
 
-    int AssetBrowser::GetJSONAssetType(const std::string path){
-        std::ifstream f(path);
-        nlohmann::json data = nlohmann::json::parse(f);
-
-        if (data.contains("environment") || data.contains("objects")){
-            return 1;
-        } else if (data.contains("root")) {
-            return 2;
-        }
-        return 0;
-    }
-
-    std::string AssetBrowser::Draw(const BrowserIcons& icons) {
+    std::string AssetBrowser::Draw(const BrowserIcons& icons, float& thumbnailSize, bool showBottomBar, float height) {
         std::string selectedFile = "";
         std::string actionFile = "";
 
-        if (m_currentPath != m_rootPath) {
-            if (ImGui::Button(" < Back ")) {
-                m_currentPath = m_currentPath.parent_path();
-            }
+        std::filesystem::path relative = m_currentPath.lexically_relative(m_rootPath);
 
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 4.0f));
+
+        if (ImGui::Button("Assets")) {
+            m_currentPath = m_rootPath;
+        }
+
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
+                std::string sourcePathStr = (const char*)payload->Data;
+                std::filesystem::path sourcePath(sourcePathStr);
+                std::filesystem::path destPath = m_rootPath / sourcePath.filename();
+                try {
+                    if (sourcePath != destPath) {
+                        std::filesystem::rename(sourcePath, destPath);
+                    }
+                } catch (const std::filesystem::filesystem_error& e) {
+                    vex::log("Error moving file to root: %s", e.what());
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+
+        std::filesystem::path accumPath = m_rootPath;
+        for (auto it = relative.begin(); it != relative.end() && relative != "."; ++it) {
+            ImGui::SameLine();
+            ImGui::Text(">");
+            ImGui::SameLine();
+            accumPath /= *it;
+            if (ImGui::Button(it->string().c_str())) {
+                m_currentPath = accumPath;
+            }
             if (ImGui::BeginDragDropTarget()) {
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
                     std::string sourcePathStr = (const char*)payload->Data;
                     std::filesystem::path sourcePath(sourcePathStr);
-                    std::filesystem::path parentDir = m_currentPath.parent_path();
-                    std::filesystem::path destPath = parentDir / sourcePath.filename();
-
+                    std::filesystem::path destPath = accumPath / sourcePath.filename();
                     try {
                         if (sourcePath != destPath) {
                             std::filesystem::rename(sourcePath, destPath);
                         }
                     } catch (const std::filesystem::filesystem_error& e) {
-                        vex::log("Error moving file up: %s", e.what());
+                        vex::log("Error moving file to breadcrumb: %s", e.what());
                     }
                 }
                 ImGui::EndDragDropTarget();
             }
-            ImGui::SameLine();
         }
+        ImGui::PopStyleVar();
 
-        std::filesystem::path assetDir = GetAssetDir();
-        std::filesystem::path relative = m_currentPath.lexically_relative(assetDir);
+        ImGui::SameLine(ImGui::GetWindowWidth() - 200.0f);
+        ImGui::SetNextItemWidth(180.0f);
+        ImGui::InputTextWithHint("##Search", "Search...", m_searchBuffer, sizeof(m_searchBuffer));
 
-        ImGui::Text("Path: %s", relative.string().c_str());
         ImGui::Separator();
 
         if (ImGui::BeginPopupContextWindow("AssetBrowserBgContext", ImGuiMouseButton_Right | ImGuiPopupFlags_NoOpenOverItems)) {
@@ -115,7 +130,22 @@ namespace vex {
                 ImGui::EndPopup();
             }
 
-        float cellSize = m_thumbnailSize + m_padding;
+        bool isDialog = false;
+        if (ImGuiWindow* window = ImGui::GetCurrentWindow()) {
+            isDialog = (strcmp(window->Name, "Assets") != 0);
+        }
+        if (isDialog) showBottomBar = false;
+
+        float bottomBarHeight = showBottomBar ? (ImGui::GetFrameHeightWithSpacing() + 5.0f) : 0.0f;
+        float contentHeight = height;
+        if (contentHeight <= 0.0f) {
+            contentHeight = isDialog ? (ImGui::GetContentRegionAvail().y - 120.0f) : -bottomBarHeight;
+            if (contentHeight < 100.0f && isDialog) contentHeight = 100.0f;
+        }
+
+        ImGui::BeginChild("BrowserContent", ImVec2(0, contentHeight), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+        float cellSize = thumbnailSize + m_padding;
         float panelWidth = ImGui::GetContentRegionAvail().x;
         int columnCount = (int)(panelWidth / cellSize);
         if (columnCount < 1) columnCount = 1;
@@ -143,8 +173,18 @@ namespace vex {
             std::sort(files.begin(), files.end(), sortAlpha);
 
             auto renderEntry = [&](const std::filesystem::directory_entry& entry) {
-                ImGui::TableNextColumn();
                 std::string filename = entry.path().filename().string();
+                if (m_searchBuffer[0] != '\0') {
+                    std::string lowerFilename = filename;
+                    std::string lowerSearch = m_searchBuffer;
+                    std::transform(lowerFilename.begin(), lowerFilename.end(), lowerFilename.begin(), [](unsigned char c){ return std::tolower(c); });
+                    std::transform(lowerSearch.begin(), lowerSearch.end(), lowerSearch.begin(), [](unsigned char c){ return std::tolower(c); });
+                    if (lowerFilename.find(lowerSearch) == std::string::npos) {
+                        return;
+                    }
+                }
+
+                ImGui::TableNextColumn();
                 ImGui::PushID(filename.c_str());
 
                 float columnWidth = ImGui::GetContentRegionAvail().x;
@@ -154,7 +194,7 @@ namespace vex {
 
                 ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
-                ImGui::ImageButton("##Icon", iconID, { m_thumbnailSize, m_thumbnailSize });
+                ImGui::ImageButton("##Icon", iconID, { thumbnailSize, thumbnailSize });
 
                 if (ImGui::BeginDragDropSource()) {
                     std::string fullPath = entry.path().string();
@@ -162,7 +202,7 @@ namespace vex {
                     ImGui::SetDragDropPayload("ASSET_ITEM", fullPath.c_str(), fullPath.size() + 1);
 
                     ImGui::Text("Move %s", entry.path().filename().string().c_str());
-                    ImGui::Image(iconID, { m_thumbnailSize/2, m_thumbnailSize/2 });
+                    ImGui::Image(iconID, { thumbnailSize/2, thumbnailSize/2 });
 
                     ImGui::EndDragDropSource();
                 }
@@ -280,7 +320,28 @@ namespace vex {
 
             ImGui::EndTable();
         }
+        ImGui::EndChild();
+
+        if (showBottomBar) {
+            ImGui::Separator();
+            ImGui::SetNextItemWidth(150.0f);
+            ImGui::SliderFloat("Icon Size", &thumbnailSize, 16.0f, 256.0f, "%.0f");
+        }
 
         return actionFile;
     }
+
+    int AssetBrowser::GetJSONAssetType(const std::string path){
+        std::ifstream f(path);
+        nlohmann::json data = nlohmann::json::parse(f);
+
+        if (data.contains("environment") || data.contains("objects")){
+            return 1;
+        } else if (data.contains("root")) {
+            return 2;
+        }
+        return 0;
+    }
+
+
 }

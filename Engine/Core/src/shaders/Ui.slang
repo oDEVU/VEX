@@ -1,3 +1,5 @@
+import depends.texsampler;
+
 struct VSInput {
     [[vk::location(0)]] float2 inPosition : POSITION;
     [[vk::location(1)]] float2 inUV : TEXCOORD0;
@@ -16,9 +18,6 @@ struct VSOutput {
     float4x4 ortho;
 } pc;
 
-[[vk::binding(0, 1)]]
-Sampler2D<float4> texSampler;
-
 [shader("vertex")]
 VSOutput vertMain(VSInput input) {
     VSOutput output;
@@ -35,5 +34,5 @@ VSOutput vertMain(VSInput input) {
 float4 fragMain(VSOutput input) : SV_Target  {
     return (input.fragTexIndex < 0.0)
         ? input.fragColor
-        : texSampler.Sample(input.fragUV) * input.fragColor;
+        : SampleMaterialTexture(input.fragUV, (int)input.fragTexIndex) * input.fragColor;
 }

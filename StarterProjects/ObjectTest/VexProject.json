@@ -3,7 +3,7 @@
     "main_scene": "Assets/scenes/main.json",
     "project_name": "ObjectTest",
     "resolution_mode": 0,
-    "version": "1",
+    "version": "1.0.0",
     "vsync": false,
     "window_type": 0
 }

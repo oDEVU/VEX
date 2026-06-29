@@ -5,8 +5,8 @@
  ***********************************************/
 
 #pragma once
-#include "components/pathUtils.hpp"
-#include "components/assetTypes.hpp"
+#include "components/PathUtils.hpp"
+#include "components/AssetTypes.hpp"
 
 #include <filesystem>
 #include <glm/glm.hpp>

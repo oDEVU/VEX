@@ -1,13 +1,27 @@
 var classvex_1_1Renderer =
 [
-    [ "Renderer", "classvex_1_1Renderer.html#a0951329951325b397a7a347f45ad8f74", null ],
+    [ "Renderer", "classvex_1_1Renderer.html#adb593e90e946181e5eecc0e837c882c4", null ],
     [ "~Renderer", "classvex_1_1Renderer.html#ab647f7466e1195b57864a5ead4c51cad", null ],
     [ "beginFrame", "classvex_1_1Renderer.html#a12fe57afbc50cd54c32095a99b544518", null ],
     [ "composeFrame", "classvex_1_1Renderer.html#a3d76ea1772288bca785e7c8f70d128b9", null ],
     [ "endFrame", "classvex_1_1Renderer.html#adb6cce5b605d5027eb21a8de2feae2f1", null ],
     [ "getImGuiTextureID", "classvex_1_1Renderer.html#a806d1ad715ef403b147fffe4598fa5f1", null ],
     [ "issueMultiDrawIndexed", "classvex_1_1Renderer.html#a0d45abf4f7e9f067137602128ed79d16", null ],
-    [ "renderScene", "classvex_1_1Renderer.html#abc86f3773560ddc13a15e79f2b663c5b", null ],
+    [ "renderScene", "classvex_1_1Renderer.html#af6676191cba7a147465bd233dae3219d", null ],
     [ "transitionImageLayout", "classvex_1_1Renderer.html#a2f3486083d37afa6ab1d599ffae1ad11", null ],
-    [ "updateScreenDescriptor", "classvex_1_1Renderer.html#a432226c86a8d89f2131c7f17d768933d", null ]
+    [ "updateScreenDescriptor", "classvex_1_1Renderer.html#a432226c86a8d89f2131c7f17d768933d", null ],
+    [ "bEditorQueue", "classvex_1_1Renderer.html#a574591e72a83fa4cdf7c278b1e054c4b", null ],
+    [ "bMaskedQueue", "classvex_1_1Renderer.html#ac37843f50078d0b9e854d9440eb82a0b", null ],
+    [ "bTransQueue", "classvex_1_1Renderer.html#a4fd9ca2b26efdb76925034b8f2a6985d", null ],
+    [ "m_p_billboardMaskedPipeline", "classvex_1_1Renderer.html#a8c5868451ae6ec7be0bc0dbd2f9ab781", null ],
+    [ "m_p_billboardTransPipeline", "classvex_1_1Renderer.html#a170b4666f69ebd8ebeca447bc281928e", null ],
+    [ "m_p_maskPipeline", "classvex_1_1Renderer.html#a5610a386f5bced4ecb55df1a1b2b044a", null ],
+    [ "m_p_particleMaskedPipeline", "classvex_1_1Renderer.html#a638157ad1f74702215696fdd5aab4378", null ],
+    [ "m_p_particleTransPipeline", "classvex_1_1Renderer.html#aed171f6865ae71bac97dfce83ad38218", null ],
+    [ "m_p_transPipeline", "classvex_1_1Renderer.html#a10af581e6ffd663db96d0d52a817f596", null ],
+    [ "maskedQueue", "classvex_1_1Renderer.html#a8aa1291e30d97c54fe104037649f8974", null ],
+    [ "opaqueQueue", "classvex_1_1Renderer.html#af99f34584c4ca44bd3b151d95cb4715f", null ],
+    [ "pMaskedQueue", "classvex_1_1Renderer.html#a09e7766e4c822f4babbc9e9af6f01ac3", null ],
+    [ "pTransQueue", "classvex_1_1Renderer.html#ab1523b9b8a3d29e40747aeedb74c3621", null ],
+    [ "transparentQueue", "classvex_1_1Renderer.html#aeadbbe113ae37d4058e3eea81d20ff4b", null ]
 ];

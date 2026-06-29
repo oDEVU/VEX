@@ -1,11 +1,13 @@
 var errorUtils_8hpp =
 [
+    [ "vex::LogCallbackFn", "errorUtils_8hpp.html#a2664450bc0c062bee18cd0f5622ec0a4", null ],
     [ "vex::LogLevel", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43e", [
       [ "INFO", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea551b723eafd6a31d444fcb2f5920fbd3", null ],
       [ "WARNING", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea059e9861e0400dfbe05c98a841f3f96b", null ],
       [ "ERROR", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43eabb1ca97ec761fc37101737ba0aa2e7c5", null ],
       [ "CRITICAL", "errorUtils_8hpp.html#ae8216a00c20d22c391938395ef94f43ea99cd1c61610c76a57cb8d10d6df6b870", null ]
     ] ],
+    [ "vex::AddLogCallback", "errorUtils_8hpp.html#a33945e720f6b36ffc50d7e4c10d4dbc0", null ],
     [ "vex::handle_critical_exception", "errorUtils_8hpp.html#a98df6c0f2c25bb67d5d5852ff2744d48", null ],
     [ "vex::handle_exception", "errorUtils_8hpp.html#aa5548f25f6136e0f883252cfd09dd4b5", null ],
     [ "vex::InitCrashHandler", "errorUtils_8hpp.html#a3e538975c87c06bcaab5919e616677b0", null ],

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cstdint>
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
 #define VMA_DYNAMIC_VULKAN_FUNCTIONS 1
 
@@ -21,7 +22,7 @@
 #include <components/GameInfo.hpp>
 #include <components/UI/UIVertex.hpp>
 #include "components/VirtualFileSystem.hpp"
-#include "components/enviroment.hpp"
+#include "components/Environment.hpp"
 
 namespace vex {
     /// @brief Interface Class for vulkan backend.
@@ -75,12 +76,12 @@ namespace vex {
 
         /// @brief Allows to update Enviroment settings at runtime.
         /// @details Updates the internal environment struct in the context, which the Renderer later pushes to the Scene UBO (e.g., Lighting, PS1 effects).
-        /// @param enviroment env - The new environment settings.
-        void setEnvironment(enviroment env) {m_context.m_enviroment = env;}
+        /// @param environment env - The new environment settings.
+        void setEnvironment(environment env) {m_context.m_environment = env;}
 
         /// @brief Getter for Enviroment settings.
-        /// @return enviroment - A copy of the current environment settings.
-        enviroment getEnvironment() { return m_context.m_enviroment;}
+        /// @return environment - A copy of the current environment settings.
+        environment getEnvironment() { return m_context.m_environment;}
 
         /// @brief Helper function to wait for GPU to finish.
         /// @details Calls `vkDeviceWaitIdle`. Should be used before resizing or shutting down to prevent resource hazards.
@@ -105,10 +106,18 @@ namespace vex {
         std::unique_ptr<VulkanPipeline> m_p_pipeline;
         std::unique_ptr<VulkanPipeline> m_p_transPipeline;
         std::unique_ptr<VulkanPipeline> m_p_maskPipeline;
+        std::unique_ptr<VulkanPipeline> m_p_billboardMaskedPipeline;
+        std::unique_ptr<VulkanPipeline> m_p_billboardTransPipeline;
+        std::unique_ptr<VulkanPipeline> m_p_particleMaskedPipeline;
+        std::unique_ptr<VulkanPipeline> m_p_particleTransPipeline;
         std::unique_ptr<VulkanPipeline> m_p_uiPipeline;
+        std::unique_ptr<VulkanPipeline> m_p_compositePipeline;
         std::unique_ptr<VulkanPipeline> m_p_fullscreenPipeline;
         std::unique_ptr<MeshManager> m_p_meshManager;
         std::unique_ptr<Renderer> m_p_renderer;
+
+        uint32_t GetBestDeviceVersion();
+        bool CheckValidationLayerSupport();
 
         #if DEBUG
             std::unique_ptr<VulkanPipeline> m_p_debugPipeline;

@@ -5,14 +5,14 @@
 #include "components/GameObjects/ModelObject.hpp"
 #include "components/Mesh.hpp"
 #include "components/VirtualFileSystem.hpp"
-#include "entt/entity/fwd.hpp"
+
 #include "Engine.hpp"
 
 #include <unordered_map>
-#include <components/types.hpp>
+#include <components/Types.hpp>
 #include <vector>
 #include <memory>
-#include <entt/entt.hpp>
+#include "components/ECS/ECS.hpp"
 #include <string>
 #include <iostream>
 #include <cstring>
@@ -34,8 +34,12 @@ namespace vex {
             m_p_engine = engine;
 
             auto& registry = m_p_engine->getRegistry();
-            registry.on_construct<MeshComponent>().connect<&MeshManager::onMeshComponentConstruct>(this);
-            registry.on_destroy<MeshComponent>().connect<&MeshManager::onMeshComponentDestroy>(this);
+            registry.on_create<MeshComponent>([this](vex::Entity entity, MeshComponent& comp) {
+                onMeshComponentConstruct(m_p_engine->getRegistry(), entity);
+            });
+            registry.on_destroy<MeshComponent>([this](vex::Entity entity, MeshComponent& comp) {
+                onMeshComponentDestroy(m_p_engine->getRegistry(), entity);
+            });
         }
 
         /// @brief Loads mesh from a file, creates vulkan mesh and returns a MeshComponent.
@@ -47,9 +51,9 @@ namespace vex {
         /// @param const std::string& name
         /// @param MeshComponent meshComponent
         /// @param TransformComponent transformComponent
-        /// @param entt::entity parent
+        /// @param vex::Entity parent
         /// @return ModelObject*
-        ModelObject* createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, entt::entity parent);
+        ModelObject* createModel(const std::string& name, MeshComponent meshComponent, TransformComponent transformComponent, vex::Entity parent);
 
         /// @brief Destroys a model object by name and mesh component.
         /// @param std::string& name
@@ -65,6 +69,20 @@ namespace vex {
         /// @return std::unique_ptr<VulkanMesh>&
         std::unique_ptr<VulkanMesh>& getVulkanMeshByMesh(MeshComponent& meshComponent);
 
+        /// @brief Loads meshes asynchronously from the given paths.
+        /// @param const std::vector<MeshComponent*>& pendingComponents
+        void loadMeshesAsync(const std::vector<MeshComponent*>& pendingComponents);
+
+        /// @brief Checks if a mesh is loaded by path.
+        /// @param const std::string& path
+        /// @return bool
+        bool isMeshLoaded(const std::string& path) const {
+            return m_vulkanMeshes.find(path) != m_vulkanMeshes.end();
+        }
+
+        /// @brief Clears the state of the mesh manager, resetting model IDs and clearing the mesh map.
+        void clearState();
+
     private:
         VulkanContext& m_r_context;
         Engine* m_p_engine = nullptr;
@@ -78,10 +96,10 @@ namespace vex {
         std::unordered_map<std::string, std::pair<glm::vec3, float>> m_meshBoundsCache;
 
         /// @brief Internally handles the construction of a mesh component called by entt callbacks.
-        void onMeshComponentConstruct(entt::registry& registry, entt::entity entity);
+        void onMeshComponentConstruct(vex::Registry& registry, vex::Entity entity);
 
         /// @brief Internally handles the destruction of a mesh component called by entt callbacks.
-        void onMeshComponentDestroy(entt::registry& registry, entt::entity entity);
+        void onMeshComponentDestroy(vex::Registry& registry, vex::Entity entity);
 
         /// @brief Internally handles the release of a mesh reference called by entt callbacks.
         void releaseMeshReference(const std::string& path, MeshComponent& ownerComp);

@@ -1,5 +1,5 @@
 #include "components/GameComponents/ComponentFactory.hpp"
-#include "components/errorUtils.hpp"
+#include "components/ErrorUtils.hpp"
 
 namespace vex {
 

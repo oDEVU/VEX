@@ -1,8 +1,11 @@
+#include <components/GameComponents/AudioSourceComponent.hpp>
+#include <components/GameComponents/EditorBillboardComponent.hpp>
 #include "Editor.hpp"
+#include "components/UtilitySystem.hpp"
 #include "EditorImGUIWrapper.hpp"
 
 #include "Tools/PropertiesMenu.hpp"
-#include "Tools/worldSettingsMenu.hpp"
+#include "Tools/WorldSettingsMenu.hpp"
 #include "Tools/SceneMenu.hpp"
 
 #include <imgui.h>
@@ -15,7 +18,7 @@
 
 #include "components/GameComponents/BasicComponents.hpp"
 #include "components/GameObjects/Creators/ModelCreator.hpp"
-#include "components/assetTypes.hpp"
+#include "components/AssetTypes.hpp"
 #include "ImReflect.hpp"
 
 #include "../Core/include/components/SceneManager.hpp"
@@ -23,6 +26,7 @@
 #include "../Core/include/components/InputSystem.hpp"
 
 #include "../Core/src/components/Window.hpp"
+#include "components/EngineCommands.hpp"
 #include "../Core/src/components/backends/vulkan/Interface.hpp"
 #include "../Core/src/components/backends/vulkan/Renderer.hpp"
 #include "../Core/src/components/backends/vulkan/VulkanImGUIWrapper.hpp"
@@ -61,6 +65,10 @@ namespace vex {
         m_interface = std::make_unique<Interface>(m_window->GetSDLWindow(), renderRes, m_gameInfo, m_vfs.get());
         m_imgui = std::make_unique<EditorImGUIWrapper>(m_window->GetSDLWindow(), *m_interface->getContext());
         m_imgui->init();
+        
+        ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_ViewportsEnable;
+
+        vex::DebugConsole::Get().Init();
 
         log("Initializing engine components...");
 
@@ -69,6 +77,8 @@ namespace vex {
 
         getInterface()->getMeshManager().init(static_cast<Engine*>(this));
         setInputMode(InputMode::UI);
+
+        RegisterEngineCommands(this);
 
         log("Initializing editor components...");
 
@@ -122,7 +132,7 @@ namespace vex {
             if (shift && ImGui::IsKeyPressed(ImGuiKey_R)) m_currentGizmoOperation = ImGuizmo::SCALE;
 
             if (shift && ImGui::IsKeyPressed(ImGuiKey_F)) {
-                if (m_selectedObject.second && m_camera) {
+                if (m_selectedObject.second && m_camera && m_selectedObject.second->HasComponent<TransformComponent>()) {
                     auto& targetTC = m_selectedObject.second->GetComponent<TransformComponent>();
                     auto& camTC = m_camera->GetComponent<TransformComponent>();
                     glm::vec3 targetPos = targetTC.getWorldPosition();
@@ -149,7 +159,11 @@ namespace vex {
         void Editor::CopySelectedObject() {
             if (!m_selectedObject.second) return;
             m_clipboard.hasData = true;
-            m_clipboard.name = m_selectedObject.second->GetComponent<NameComponent>().name;
+            if (m_selectedObject.second->HasComponent<NameComponent>()) {
+                m_clipboard.name = m_selectedObject.second->GetComponent<NameComponent>().name;
+            } else {
+                m_clipboard.name = "Unnamed";
+            }
             m_clipboard.type = m_selectedObject.second->getObjectType();
             m_clipboard.components.clear();
 
@@ -220,8 +234,6 @@ namespace vex {
             SaveConfig(m_editorProperties, "editor_config.json");
             m_SavedEditorProperties = m_editorProperties;
 
-            m_assetBrowser->setThumbnailSize(m_editorProperties.assetBrowserThumbnailSize);
-
             if (m_editorProperties.editorCameraFov < 10.0f) m_editorProperties.editorCameraFov = 10.0f;
             if (m_editorProperties.editorCameraFov > 170.0f) m_editorProperties.editorCameraFov = 170.0f;
 
@@ -246,8 +258,23 @@ namespace vex {
             scene->FlushDestructionQueue();
         }
 
+        vex::View<vex::EditorBillboardComponent>(m_registry).each([&](vex::Entity entity, vex::EditorBillboardComponent& comp) {
+            m_registry.remove<vex::EditorBillboardComponent>(entity);
+        });
+
+        auto addIcon = [&](vex::Entity entity, const char* path) {
+            auto& comp = m_registry.add_or_replace<vex::EditorBillboardComponent>(entity);
+            comp.texturePaths.emplace_back(path);
+        };
+
+        vex::View<vex::LightComponent>(m_registry).each([&](vex::Entity entity, vex::LightComponent& comp) { addIcon(entity, "../Assets/icons/lightbulb-fill.png"); });
+        vex::View<vex::ParticleEmitterComponent>(m_registry).each([&](vex::Entity entity, vex::ParticleEmitterComponent& comp) { addIcon(entity, "../Assets/icons/sparkling-fill.png"); });
+        vex::View<vex::FogComponent>(m_registry).each([&](vex::Entity entity, vex::FogComponent& comp) { addIcon(entity, "../Assets/icons/foggy-fill.png"); });
+        vex::View<vex::AudioSourceComponent>(m_registry).each([&](vex::Entity entity, vex::AudioSourceComponent& comp) { addIcon(entity, "../Assets/icons/file-music-fill.png"); });
         m_camera->Update(deltaTime);
         m_physicsSystem->SyncBodies();
+
+        vex::ProcessParticles(m_registry, deltaTime);
 
         render();
         if(!m_refresh){
@@ -263,7 +290,7 @@ namespace vex {
 
     void Editor::render() {
         auto cameraEntity = m_camera->GetEntity();
-        if (cameraEntity == entt::null) return;
+        if (cameraEntity == vex::NULL_ENTITY) return;
 
         if(getResolutionMode() != ResolutionMode::NATIVE){
             setResolutionMode(ResolutionMode::NATIVE);
@@ -303,6 +330,10 @@ namespace vex {
 
             if (newRes != m_viewportSize && newRes.x > 0 && newRes.y > 0) {
                 m_viewportSize = newRes;
+            }
+
+            if (showConsole) {
+                vex::DebugConsole::Get().Draw(&showConsole, true);
             }
 
             m_imgui->endFrame();
@@ -367,7 +398,7 @@ namespace vex {
                 *targetPtr = (ImTextureID)ds;
             }
         }
-        
+
         vex::ComponentRegistry::getInstance().SetEditorIcon("mesh", m_icons.mesh);
         vex::ComponentRegistry::getInstance().SetEditorIcon("texture", m_icons.texture);
         vex::ComponentRegistry::getInstance().SetEditorIcon("audio", m_icons.audio);
@@ -377,8 +408,8 @@ namespace vex {
     void Editor::drawGizmo(const glm::vec2& viewportPos, const glm::vec2& viewportSize) {
         m_isHoveringGizmoUI = false;
 
-        auto selectedEntity = m_selectedObject.second ? m_selectedObject.second->GetEntity() : entt::null;
-        if (selectedEntity == entt::null || !m_registry.all_of<TransformComponent>(selectedEntity)) return;
+        auto selectedEntity = m_selectedObject.second ? m_selectedObject.second->GetEntity() : vex::NULL_ENTITY;
+        if (selectedEntity == vex::NULL_ENTITY || !m_registry.has<TransformComponent>(selectedEntity)) return;
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();
@@ -400,9 +431,9 @@ namespace vex {
         auto& tc = m_registry.get<TransformComponent>(selectedEntity);
         glm::mat4 transformMatrix = tc.matrix();
 
-        ImGui::SetCursorScreenPos(ImVec2(viewportPos.x + 10, viewportPos.y + 10));
+        ImGui::SetCursorScreenPos(ImVec2(viewportPos.x + 10, viewportPos.y + 32));
 
-        auto GizmoButton = [&](const char* label, ImGuizmo::OPERATION op) {
+        auto gizmoButton = [&](const char* label, ImGuizmo::OPERATION op) {
             bool wasActive = (m_currentGizmoOperation == op);
             if (wasActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.00f, 0.23f, 0.01f, 1.0f));
             if (ImGui::Button(label)) m_currentGizmoOperation = op;
@@ -411,9 +442,9 @@ namespace vex {
             ImGui::SameLine();
         };
 
-        GizmoButton("T", ImGuizmo::TRANSLATE);
-        GizmoButton("R", ImGuizmo::ROTATE);
-        GizmoButton("S", ImGuizmo::SCALE);
+        gizmoButton("T", ImGuizmo::TRANSLATE);
+        gizmoButton("R", ImGuizmo::ROTATE);
+        gizmoButton("S", ImGuizmo::SCALE);
 
         ImGui::Dummy(ImVec2(10, 0)); ImGui::SameLine();
 
@@ -468,8 +499,8 @@ namespace vex {
         if (manipulated) {
             glm::mat4 localMatrix = transformMatrix;
 
-            entt::entity parent = tc.getParent();
-            if (parent != entt::null && m_registry.valid(parent) && m_registry.all_of<TransformComponent>(parent)) {
+            vex::Entity parent = tc.getParent();
+            if (parent != vex::NULL_ENTITY && m_registry.has<vex::TransformComponent>(parent) && m_registry.has<TransformComponent>(parent)) {
                 glm::mat4 parentMatrix = m_registry.get<TransformComponent>(parent).matrix();
                 localMatrix = glm::inverse(parentMatrix) * transformMatrix;
             }
@@ -490,10 +521,10 @@ namespace vex {
     }
 
     float Editor::raySphereIntersect(const glm::vec3& rayOrigin, const glm::vec3& rayDir, const glm::vec3& sphereCenter, float sphereRadius) {
-        glm::vec3 L = sphereCenter - rayOrigin;
-        float tca = glm::dot(L, rayDir);
+        glm::vec3 l = sphereCenter - rayOrigin;
+        float tca = glm::dot(l, rayDir);
         if (tca < 0) return -1.0f;
-        float d2 = glm::dot(L, L) - tca * tca;
+        float d2 = glm::dot(l, l) - tca * tca;
         float radius2 = sphereRadius * sphereRadius;
         if (d2 > radius2) return -1.0f;
         float thc = sqrt(radius2 - d2);
@@ -504,13 +535,13 @@ namespace vex {
         const glm::vec3& rayOrigin, const glm::vec3& rayDir,
         const glm::vec3& v0, const glm::vec3& v1, const glm::vec3& v2)
     {
-        const float EPSILON = 0.0000001f;
+        const float epsilon = 0.0000001f;
         glm::vec3 edge1 = v1 - v0;
         glm::vec3 edge2 = v2 - v0;
         glm::vec3 h = glm::cross(rayDir, edge2);
         float a = glm::dot(edge1, h);
 
-        if (a > -EPSILON && a < EPSILON) return -1.0f;
+        if (a > -epsilon && a < epsilon) return -1.0f;
 
         float f = 1.0f / a;
         glm::vec3 s = rayOrigin - v0;
@@ -522,14 +553,14 @@ namespace vex {
         if (v < 0.0f || u + v > 1.0f) return -1.0f;
 
         float t = f * glm::dot(edge2, q);
-        if (t > EPSILON) return t;
+        if (t > epsilon) return t;
         else return -1.0f;
     }
 
-    void Editor::ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
+    void Editor::ExtractObjectByEntity(vex::Entity entity, std::pair<bool, vex::GameObject*>& selectedObject){
         auto* obj = getSceneManager()->GetScene(getSceneManager()->getLastSceneName())->GetGameObjectByEntity(entity);
         if(obj){
-            if (obj->GetComponent<TransformComponent>().getParent() != entt::null) {
+            if (obj->HasComponent<TransformComponent>() && obj->GetComponent<TransformComponent>().getParent() != vex::NULL_ENTITY) {
                 ExtractObjectByEntity(obj->GetComponent<TransformComponent>().getParent(), selectedObject);
             }else{
                 selectedObject.first = false;
@@ -538,7 +569,7 @@ namespace vex {
         }
     }
 
-    void Editor::HandleMeshDrop(const std::string& filepath, entt::entity parent) {
+    void Editor::HandleMeshDrop(const std::string& filepath, vex::Entity parent) {
         std::filesystem::path path(filepath);
         std::string filename = path.stem().string();
 
@@ -547,7 +578,7 @@ namespace vex {
 
         newObj->AddComponent(TransformComponent{});
 
-        if (parent != entt::null) {
+        if (parent != vex::NULL_ENTITY) {
             newObj->GetComponent<vex::TransformComponent>().setParent(parent);
         }
 
@@ -576,7 +607,7 @@ namespace vex {
         ImGui::SetNextWindowSize(viewport->Size);
         ImGui::SetNextWindowViewport(viewport->ID);
 
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                                         ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
                                         ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground |
@@ -586,43 +617,42 @@ namespace vex {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-        ImGui::Begin("EditorDockSpace", nullptr, window_flags);
+        ImGui::Begin("EditorDockSpace", nullptr, windowFlags);
         ImGui::PopStyleVar(3);
 
         m_editorMenuBar->DrawBar();
 
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
 
         ImGuiDockNodeFlags dockFlags = ImGuiDockNodeFlags_None;
-        dockFlags |= ImGuiDockNodeFlags_NoUndocking;
         dockFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
 
-        if (!ImGui::DockBuilderGetNode(dockspace_id)) {
-            ImGui::DockBuilderRemoveNode(dockspace_id);
-            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-            ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+        if (!ImGui::DockBuilderGetNode(dockspaceId)) {
+            ImGui::DockBuilderRemoveNode(dockspaceId);
+            ImGui::DockBuilderAddNode(dockspaceId, ImGuiDockNodeFlags_DockSpace);
+            ImGui::DockBuilderSetNodeSize(dockspaceId, viewport->Size);
 
-            ImGuiID dock_main_id = dockspace_id;
-            ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.3f, nullptr, &dock_main_id);
-            ImGuiID dock_bottom_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.45f, nullptr, &dock_main_id);
-            ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
-            ImGuiID dock_right_top_id, dock_right_bottom_id;
-            ImGui::DockBuilderSplitNode(dock_right_id, ImGuiDir_Down, 0.5f, &dock_right_bottom_id, &dock_right_top_id);
+            ImGuiID dockMainId = dockspaceId;
+            ImGuiID dockRightId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Right, 0.3f, nullptr, &dockMainId);
+            ImGuiID dockBottomId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Down, 0.45f, nullptr, &dockMainId);
+            ImGuiID dockLeftId = ImGui::DockBuilderSplitNode(dockMainId, ImGuiDir_Left, 0.2f, nullptr, &dockMainId);
+            ImGuiID dockRightTopId, dockRightBottomId;
+            ImGui::DockBuilderSplitNode(dockRightId, ImGuiDir_Down, 0.5f, &dockRightBottomId, &dockRightTopId);
 
-            ImGui::DockBuilderDockWindow("Viewport", dock_main_id);
-            ImGui::DockBuilderDockWindow("Game Objects", dock_left_id);
-            ImGui::DockBuilderDockWindow("Assets", dock_bottom_id);
-            ImGui::DockBuilderDockWindow("Scene", dock_right_top_id);
-            ImGui::DockBuilderDockWindow("Properties", dock_right_bottom_id);
-            ImGui::DockBuilderDockWindow("World Settings", dock_right_bottom_id);
+            ImGui::DockBuilderDockWindow("Viewport", dockMainId);
+            ImGui::DockBuilderDockWindow("Game Objects", dockLeftId);
+            ImGui::DockBuilderDockWindow("Assets", dockBottomId);
+            ImGui::DockBuilderDockWindow("Scene", dockRightTopId);
+            ImGui::DockBuilderDockWindow("Properties", dockRightBottomId);
+            ImGui::DockBuilderDockWindow("World Settings", dockRightBottomId);
 
-            ImGui::DockBuilderFinish(dockspace_id);
+            ImGui::DockBuilderFinish(dockspaceId);
         }
 
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockFlags);
+        ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockFlags);
         ImGui::End();
 
-        ImGuiWindowFlags childFlags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+        ImGuiWindowFlags childFlags = ImGuiWindowFlags_NoCollapse;
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
         ImGui::Begin("Viewport", nullptr, childFlags);
@@ -640,6 +670,7 @@ namespace vex {
         if (data.imguiTextureID) {
             ImGui::Image((ImTextureID)data.imguiTextureID, viewportPanelSize);
             bool isViewportHovered = ImGui::IsItemHovered();
+            auto* drawList = ImGui::GetWindowDrawList();
 
             if(m_editorProperties.showFPS) {
                 char fpsText[32];
@@ -654,11 +685,39 @@ namespace vex {
                     fpsColor = IM_COL32(255, 0, 0, 255);
                 }
 
-                ImVec2 textPos = ImVec2(cursorScreenPos.x + 10.0f, cursorScreenPos.y + 50.0f);
-                auto* drawList = ImGui::GetWindowDrawList();
+                ImVec2 textPos = ImVec2(cursorScreenPos.x + 10.0f, cursorScreenPos.y + 64.0f);
                 drawList->AddText(ImVec2(textPos.x + 1.0f, textPos.y + 1.0f), IM_COL32(0, 0, 0, 255), fpsText);
                 drawList->AddText(textPos, fpsColor, fpsText);
             }
+
+            std::string currentScenePath = getSceneManager()->getLastSceneName();
+            std::string sceneName = std::filesystem::path(currentScenePath).stem().string();
+
+            if (sceneName.empty()) sceneName = "Unnamed Scene";
+
+            ImVec2 iconSize = ImVec2(16.0f, 16.0f);
+            ImVec2 padding = ImVec2(8.0f, 6.0f);
+            float iconTextSpacing = 6.0f;
+
+            ImVec2 textSize = ImGui::CalcTextSize(sceneName.c_str());
+            float rectWidth = padding.x + iconSize.x + iconTextSpacing + textSize.x + padding.x;
+            float rectHeight = padding.y + std::max(iconSize.y, textSize.y) + padding.y;
+
+            ImVec2 rectMin = cursorScreenPos;
+            ImVec2 rectMax = ImVec2(rectMin.x + rectWidth, rectMin.y + rectHeight);
+
+            ImU32 bgColor = IM_COL32(20, 20, 20, 220);
+            drawList->AddRectFilled(rectMin, rectMax, bgColor, 12.0f, ImDrawFlags_RoundCornersBottomRight);
+
+            ImVec2 iconMin = ImVec2(rectMin.x + padding.x, rectMin.y + padding.y + std::max(0.0f, (textSize.y - iconSize.y) / 2.0f));
+            ImVec2 iconMax = ImVec2(iconMin.x + iconSize.x, iconMin.y + iconSize.y);
+
+            if (m_icons.scene) {
+                drawList->AddImage(m_icons.scene, iconMin, iconMax);
+            }
+
+            ImVec2 textPos = ImVec2(iconMax.x + iconTextSpacing, rectMin.y + padding.y + std::max(0.0f, (iconSize.y - textSize.y) / 2.0f));
+            drawList->AddText(textPos, IM_COL32(255, 255, 255, 255), sceneName.c_str());
 
             if (ImGui::BeginDragDropTarget()) {
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM")) {
@@ -666,8 +725,8 @@ namespace vex {
                     std::filesystem::path path(filepath);
                     std::string ext = path.extension().string();
 
-                    if (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb") {
-                        HandleMeshDrop(filepath, entt::null);
+                    if (AssetExtensions::IsValid(ext, AssetExtensions::Mesh)) {
+                        HandleMeshDrop(filepath, vex::NULL_ENTITY);
                     }
                 }
                 ImGui::EndDragDropTarget();
@@ -705,16 +764,11 @@ namespace vex {
                 glm::vec3 rayOrigin = glm::vec3(rayStartWorld);
 
                 float closestDist = std::numeric_limits<float>::max();
-                entt::entity hitEntity = entt::null;
+                vex::Entity hitEntity = vex::NULL_ENTITY;
 
-                auto viewGroup = m_registry.view<TransformComponent, MeshComponent>();
-
-                for (auto entity : viewGroup) {
-                    auto& mesh = viewGroup.get<MeshComponent>(entity);
-                    auto& transform = viewGroup.get<TransformComponent>(entity);
-
+                vex::View<TransformComponent, MeshComponent>(m_registry).each([&](vex::Entity entity, TransformComponent& transform, MeshComponent& mesh) {
                     if (raySphereIntersect(rayOrigin, rayDir, mesh.worldCenter, mesh.worldRadius) < 0.0f) {
-                        continue;
+                        return;
                     }
 
                     glm::mat4 modelMat = transform.matrix();
@@ -754,8 +808,8 @@ namespace vex {
                             hitEntity = entity;
                         }
                     }
-                }
-                if (hitEntity != entt::null) {
+                });
+                if (hitEntity != vex::NULL_ENTITY) {
                     ExtractObjectByEntity(hitEntity, m_selectedObject);
 
                     log("Selected Entity ID: %d", (uint32_t)hitEntity);
@@ -844,7 +898,7 @@ namespace vex {
         m_isAssetBrowserFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
 
         if (m_assetBrowser) {
-                std::string openedFile = m_assetBrowser->Draw(m_icons);
+                std::string openedFile = m_assetBrowser->Draw(m_icons, m_editorProperties.assetBrowserThumbnailSize);
 
                 if (!openedFile.empty()) {
                     log("Opening file: %s", openedFile.c_str());

@@ -8,6 +8,7 @@ var searchData=
   ['sceneubo_5',['SceneUBO',['../structvex_1_1SceneUBO.html',1,'vex']]],
   ['serializedobject_6',['SerializedObject',['../structvex_1_1SerializedObject.html',1,'vex']]],
   ['skipinit_7',['SkipInit',['../structvex_1_1SkipInit.html',1,'vex']]],
-  ['submesh_8',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
-  ['submeshbuffers_9',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]]
+  ['standaloneaudio_8',['StandaloneAudio',['../structvex_1_1AudioSystem_1_1StandaloneAudio.html',1,'vex::AudioSystem']]],
+  ['submesh_9',['Submesh',['../structvex_1_1Submesh.html',1,'vex']]],
+  ['submeshbuffers_10',['SubmeshBuffers',['../structvex_1_1VulkanMesh_1_1SubmeshBuffers.html',1,'vex::VulkanMesh']]]
 ];

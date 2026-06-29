@@ -78,13 +78,13 @@ public:
         cube = vex::createModelFromComponents("cube", floorCubeMesh, cubeTransform, GetEngine());
         vex::PhysicsComponent cubePhysics = vex::PhysicsComponent::Box({5.0f, 0.5f, 5.0f}, vex::BodyType::STATIC);
 
-        cubePhysics.addCollisionEnterBinding([this](entt::entity self, entt::entity other, const vex::CollisionHit& hit) {
+        cubePhysics.addCollisionEnterBinding([this](vex::Entity self, vex::Entity other, const vex::CollisionHit& hit) {
             log("Hit at (%f, %f, %f)", hit.position.x, hit.position.y, hit.position.z);
         });
-        cubePhysics.addCollisionStayBinding([this](entt::entity self, entt::entity other, const vex::CollisionHit& hit) {
+        cubePhysics.addCollisionStayBinding([this](vex::Entity self, vex::Entity other, const vex::CollisionHit& hit) {
             log("Still touching");
         });
-        cubePhysics.addCollisionExitBinding([this](entt::entity self, entt::entity other) {
+        cubePhysics.addCollisionExitBinding([this](vex::Entity self, vex::Entity other) {
             log("Stopped touching");
         });
 

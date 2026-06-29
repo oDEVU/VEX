@@ -308,7 +308,7 @@ namespace vex {
         rasterizer.rasterizerDiscardEnable = VK_FALSE;
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
         rasterizer.lineWidth = 1.0f;
-        rasterizer.cullMode = VK_CULL_MODE_NONE;
+        rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
         rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
 
@@ -318,25 +318,33 @@ namespace vex {
         multisampling.sampleShadingEnable = VK_FALSE;
         multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
-        VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-        colorBlendAttachment.colorWriteMask =
-            VK_COLOR_COMPONENT_R_BIT |
-            VK_COLOR_COMPONENT_G_BIT |
-            VK_COLOR_COMPONENT_B_BIT |
-            VK_COLOR_COMPONENT_A_BIT;
-        colorBlendAttachment.blendEnable = VK_TRUE;
-        colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-        colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-        colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-        colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-        colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-        colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+        VkPipelineColorBlendAttachmentState accumBlend{};
+        accumBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        accumBlend.blendEnable = VK_TRUE;
+        accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.colorBlendOp = VK_BLEND_OP_ADD;
+        accumBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+        accumBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+        VkPipelineColorBlendAttachmentState revealBlend{};
+        revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
+        revealBlend.blendEnable = VK_TRUE;
+        revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+        revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+        revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
+        revealBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+        revealBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        revealBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+        VkPipelineColorBlendAttachmentState colorBlendAttachments[] = { accumBlend, revealBlend };
 
         VkPipelineColorBlendStateCreateInfo colorBlending{};
         colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         colorBlending.logicOpEnable = VK_FALSE;
-        colorBlending.attachmentCount = 1;
-        colorBlending.pAttachments = &colorBlendAttachment;
+        colorBlending.attachmentCount = 2;
+        colorBlending.pAttachments = colorBlendAttachments;
 
             log("Creating Pipeline layout...");
             VkPushConstantRange pushConstantRange{};
@@ -385,10 +393,11 @@ namespace vex {
         dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
         dynamicState.pDynamicStates = dynamicStates.data();
 
+        VkFormat transFormats[] = { VK_FORMAT_R16G16B16A16_SFLOAT, VK_FORMAT_R8_UNORM };
         VkPipelineRenderingCreateInfo renderingCreateInfo{};
         renderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-        renderingCreateInfo.colorAttachmentCount = 1;
-        renderingCreateInfo.pColorAttachmentFormats = &m_r_context.swapchainImageFormat;
+        renderingCreateInfo.colorAttachmentCount = 2;
+        renderingCreateInfo.pColorAttachmentFormats = transFormats;
         renderingCreateInfo.depthAttachmentFormat = m_r_context.depthFormat;
 
         log("Creating Graphics pipeline...");
@@ -606,6 +615,163 @@ namespace vex {
             vkDestroyShaderModule(m_r_context.device, fragShaderModule, nullptr);
         }
 
+        void VulkanPipeline::createSpritePipeline(const std::string& vertPath, const std::string& fragPath, bool isTransparent, bool isInstanced) {
+            auto vertShaderCode = readFile(vertPath);
+            auto fragShaderCode = readFile(fragPath);
+
+            auto createShaderModule = [&](const std::vector<char>& code) {
+                VkShaderModuleCreateInfo createInfo{VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
+                createInfo.codeSize = code.size();
+                createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+                VkShaderModule mod;
+                vkCreateShaderModule(m_r_context.device, &createInfo, nullptr, &mod);
+                return mod;
+            };
+            VkShaderModule vertMod = createShaderModule(vertShaderCode);
+            VkShaderModule fragMod = createShaderModule(fragShaderCode);
+
+            VkPipelineShaderStageCreateInfo stages[] = {
+                {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, nullptr, 0, VK_SHADER_STAGE_VERTEX_BIT, vertMod, "main", nullptr},
+                {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, nullptr, 0, VK_SHADER_STAGE_FRAGMENT_BIT, fragMod, "main", nullptr}
+            };
+
+            VkPipelineVertexInputStateCreateInfo vertexInputInfo{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
+            vertexInputInfo.vertexBindingDescriptionCount = 0;
+            vertexInputInfo.pVertexBindingDescriptions = nullptr;
+            vertexInputInfo.vertexAttributeDescriptionCount = 0;
+            vertexInputInfo.pVertexAttributeDescriptions = nullptr;
+
+            VkPipelineInputAssemblyStateCreateInfo inputAssembly{VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO};
+            inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+            inputAssembly.primitiveRestartEnable = VK_FALSE;
+
+            VkViewport viewport{0, 0, (float)m_r_context.currentRenderResolution.x, (float)m_r_context.currentRenderResolution.y, 0.0f, 1.0f};
+            VkRect2D scissor{{0, 0}, {m_r_context.currentRenderResolution.x, m_r_context.currentRenderResolution.y}};
+            VkPipelineViewportStateCreateInfo viewportState{VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO, nullptr, 0, 1, &viewport, 1, &scissor};
+
+            VkPipelineRasterizationStateCreateInfo rasterizer{VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO};
+            rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+            rasterizer.cullMode = VK_CULL_MODE_NONE;
+            rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+            rasterizer.lineWidth = 1.0f;
+            rasterizer.depthClampEnable = VK_FALSE;
+            rasterizer.rasterizerDiscardEnable = VK_FALSE;
+            rasterizer.depthBiasEnable = VK_FALSE;
+
+            VkPipelineMultisampleStateCreateInfo multisampling{VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO};
+            multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+            multisampling.sampleShadingEnable = VK_FALSE;
+
+            VkPipelineColorBlendAttachmentState accumBlend{};
+            accumBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+
+            VkPipelineColorBlendAttachmentState revealBlend{};
+            revealBlend.colorWriteMask = VK_COLOR_COMPONENT_R_BIT;
+
+            VkPipelineColorBlendStateCreateInfo colorBlending{VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO};
+            colorBlending.logicOpEnable = VK_FALSE;
+
+            VkPipelineColorBlendAttachmentState transAttachments[2];
+
+            if (isTransparent) {
+                accumBlend.blendEnable = VK_TRUE;
+                accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
+                accumBlend.colorBlendOp = VK_BLEND_OP_ADD;
+                accumBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                accumBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                accumBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+                revealBlend.blendEnable = VK_TRUE;
+                revealBlend.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
+                revealBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+                revealBlend.colorBlendOp = VK_BLEND_OP_ADD;
+                revealBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                revealBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                revealBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+
+                transAttachments[0] = accumBlend;
+                transAttachments[1] = revealBlend;
+
+                colorBlending.attachmentCount = 2;
+                colorBlending.pAttachments = transAttachments;
+            } else {
+                accumBlend.blendEnable = VK_FALSE;
+                accumBlend.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+                accumBlend.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+                accumBlend.colorBlendOp = VK_BLEND_OP_ADD;
+                accumBlend.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+                accumBlend.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+                accumBlend.alphaBlendOp = VK_BLEND_OP_ADD;
+                colorBlending.attachmentCount = 1;
+                colorBlending.pAttachments = &accumBlend;
+            }
+
+            VkPipelineDepthStencilStateCreateInfo depthStencil{VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO};
+            depthStencil.depthTestEnable = VK_TRUE;
+            depthStencil.depthWriteEnable = isTransparent ? VK_FALSE : VK_TRUE;
+            depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+            depthStencil.depthBoundsTestEnable = VK_FALSE;
+            depthStencil.stencilTestEnable = VK_FALSE;
+            depthStencil.minDepthBounds = 0.0f;
+            depthStencil.maxDepthBounds = 1.0f;
+
+            std::vector<VkDynamicState> dynamicStates = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+            VkPipelineDynamicStateCreateInfo dynamicState{VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO, nullptr, 0, (uint32_t)dynamicStates.size(), dynamicStates.data()};
+
+            std::vector<VkDescriptorSetLayout> setLayouts = { m_r_context.uboDescriptorSetLayout };
+
+            if (m_r_context.supportsBindlessTextures) {
+                setLayouts.push_back(m_r_context.bindlessDescriptorSetLayout);
+            } else {
+                setLayouts.push_back(m_r_context.textureDescriptorSetLayout);
+            }
+
+            if (isInstanced) {
+                setLayouts.push_back(m_r_context.particleDescriptorSetLayout);
+            }
+
+            VkPushConstantRange pushConstantRange{};
+            pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+            pushConstantRange.offset = 0;
+            pushConstantRange.size = isInstanced ? 0 : 48;
+
+            VkPipelineLayoutCreateInfo layoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
+            layoutInfo.setLayoutCount = setLayouts.size();
+            layoutInfo.pSetLayouts = setLayouts.data();
+            layoutInfo.pushConstantRangeCount = isInstanced ? 0 : 1;
+            layoutInfo.pPushConstantRanges = isInstanced ? nullptr : &pushConstantRange;
+
+            vkCreatePipelineLayout(m_r_context.device, &layoutInfo, nullptr, &m_layout);
+
+            VkFormat transFormats[] = { VK_FORMAT_R16G16B16A16_SFLOAT, VK_FORMAT_R8_UNORM };
+            VkPipelineRenderingCreateInfo renderInfo{VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO};
+            renderInfo.colorAttachmentCount = isTransparent ? 2 : 1;
+            renderInfo.pColorAttachmentFormats = isTransparent ? transFormats : &m_r_context.swapchainImageFormat;
+            renderInfo.depthAttachmentFormat = m_r_context.depthFormat;
+
+            VkGraphicsPipelineCreateInfo pipelineInfo{VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};
+            pipelineInfo.pNext = &renderInfo;
+            pipelineInfo.stageCount = 2;
+            pipelineInfo.pStages = stages;
+            pipelineInfo.pVertexInputState = &vertexInputInfo;
+            pipelineInfo.pInputAssemblyState = &inputAssembly;
+            pipelineInfo.pViewportState = &viewportState;
+            pipelineInfo.pRasterizationState = &rasterizer;
+            pipelineInfo.pMultisampleState = &multisampling;
+            pipelineInfo.pColorBlendState = &colorBlending;
+            pipelineInfo.pDepthStencilState = &depthStencil;
+            pipelineInfo.pDynamicState = &dynamicState;
+            pipelineInfo.layout = m_layout;
+            pipelineInfo.subpass = 0;
+            pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+            vkCreateGraphicsPipelines(m_r_context.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline);
+
+            vkDestroyShaderModule(m_r_context.device, vertMod, nullptr);
+            vkDestroyShaderModule(m_r_context.device, fragMod, nullptr);
+        }
+
     void VulkanPipeline::createUIPipeline(
         const std::string& vertShaderPath,
         const std::string& fragShaderPath,
@@ -686,7 +852,7 @@ namespace vex {
         colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
         colorBlendAttachment.colorBlendOp        = VK_BLEND_OP_ADD;
         colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-        colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+        colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
         colorBlendAttachment.alphaBlendOp        = VK_BLEND_OP_ADD;
 
         VkPipelineColorBlendStateCreateInfo colorBlending{};
@@ -715,9 +881,13 @@ namespace vex {
         pushConstantRange.offset     = 0;
         pushConstantRange.size       = sizeof(UIPushConstants);
 
+        VkDescriptorSetLayout textureLayout = m_r_context.supportsBindlessTextures
+            ? m_r_context.bindlessDescriptorSetLayout
+            : m_r_context.textureDescriptorSetLayout;
+
         std::array<VkDescriptorSetLayout, 2> setLayouts = {
             m_r_context.uboDescriptorSetLayout,
-            m_r_context.textureDescriptorSetLayout
+            textureLayout
         };
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
@@ -824,7 +994,7 @@ namespace vex {
 
         std::array<VkDescriptorSetLayout, 2> setLayouts = {
             m_r_context.uboDescriptorSetLayout,
-            m_r_context.textureDescriptorSetLayout
+            m_r_context.screenDescriptorSetLayout
         };
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};

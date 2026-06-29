@@ -9,11 +9,13 @@
 #include "EditorCamera.hpp"
 #include "EditorCommands.hpp"
 
-#include "editorProperties.hpp"
-#include "projectProperties.hpp"
+#include "EditorProperties.hpp"
+#include "ProjectProperties.hpp"
 
 #include "Tools/EditorMenuBar.hpp"
 #include "Tools/AssetBrowser.hpp"
+
+#include "components/DebugConsole.hpp"
 
 #include <ImGuizmo.h>
 #include <nlohmann/json.hpp>
@@ -39,8 +41,7 @@ namespace vex {
         * @param const std::string& projectBinaryPath - Path to the project's binary directory.
         */
         Editor(const char* title, int width, int height, GameInfo gInfo, const std::string& projectBinaryPath);
-        ~Editor(){
-        }
+        ~Editor(){}
 
         /// @brief Overrides the Engine's render function to inject the Editor UI logic (dockspace, viewport, tools).
         void render() override;
@@ -83,8 +84,8 @@ namespace vex {
 
         /// @brief Handles the dropping of a mesh asset.
         /// @param const std::string& filepath - Path to the dropped mesh asset.
-        /// @param entt::entity parent - Optional parent entity for the instantiated mesh.
-        void HandleMeshDrop(const std::string& filepath, entt::entity parent = entt::null);
+        /// @param vex::Entity parent - Optional parent entity for the instantiated mesh.
+        void HandleMeshDrop(const std::string& filepath, vex::Entity parent = vex::NULL_ENTITY);
 
         /// @brief Handler for post-hot-reload operations.
         void OnHotReload();
@@ -115,6 +116,14 @@ namespace vex {
 
         /// @brief Redoes the last undone action in the editor.
         void Redo();
+
+        /// @brief Returns true if the engine is running in editor mode.
+        bool IsEditor() override { return true; }
+
+        /// @brief Shows the debug console.
+        void ShowConsole() {
+            showConsole = true;
+        }
     private:
         /**
         * @brief Helper to draw the ImGUI dockspace and viewport window for the editor.
@@ -156,10 +165,10 @@ namespace vex {
 
         /**
                  * @brief Retrieves the GameObject corresponding to a given entity ID and updates the selected object pair.
-                 * @param entt::entity entity - The entity ID to look up.
+                 * @param vex::Entity entity - The entity ID to look up.
                  * @param std::pair<bool, vex::GameObject*>& selectedObject - The pair to update with the selection status and pointer.
                  */
-        void ExtractObjectByEntity(entt::entity entity, std::pair<bool, vex::GameObject*>& selectedObject);
+        void ExtractObjectByEntity(vex::Entity entity, std::pair<bool, vex::GameObject*>& selectedObject);
 
         /**
                  * @brief Saves the current EditorProperties configuration to a JSON file.
@@ -278,6 +287,7 @@ namespace vex {
         int m_fps = 0;
 
         bool m_refresh = false;
+        bool showConsole = false;
     };
 
 }
